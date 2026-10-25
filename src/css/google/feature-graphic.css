@@ -1,0 +1,140 @@
+/* Feature Graphic Picker in Editor */
+.feature-wrap{
+  position:relative;width:100%;aspect-ratio:1024/500;border-radius:12px;overflow:hidden;
+  border:1px solid var(--line-hi);background:#0a101d;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);transition:transform .2s,border-color .2s;
+}
+.feature-wrap:hover{border-color:var(--ac);transform:scale(1.01)}
+.feature-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.feature-drop-overlay{
+  position:absolute;inset:0;background:rgba(0,179,126,.85);display:none;place-items:center;
+  font-size:13px;font-weight:700;color:#fff;text-align:center;
+}
+.feature-wrap.drag-over .feature-drop-overlay{display:grid}
+
+/* Feature Graphic in Google Play Mockup */
+.g-feature-banner{
+  width:100%;aspect-ratio:1024/500;border-radius:14px;overflow:hidden;margin-bottom:14px;
+  box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.14);background:var(--sf);position:relative;
+}
+.g-feature-banner img{width:100%;height:100%;object-fit:cover;display:block}
+.g-feature-banner .g-play-btn{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(0,0,0,.68);backdrop-filter:blur(8px);
+  border:1.5px solid rgba(255,255,255,.8);box-shadow:0 4px 16px rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  transition:transform .2s,background .2s;pointer-events:none;
+}
+.g-feature-banner:hover .g-play-btn{
+  transform:translate(-50%,-50%) scale(1.1);background:rgba(0,0,0,.85);
+}
+.g-feature-banner .g-play-btn svg{
+  width:20px;height:20px;fill:currentColor;margin-left:3px;
+}
+
+/* Feature Graphic Info Tooltip / Popover */
+.info-tip-btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:50%;color:var(--mut);cursor:pointer;
+  transition:color .2s ease,background .2s ease;
+  vertical-align:middle;outline:none;user-select:none;margin-left:5px;
+}
+.info-tip-btn:hover,.info-tip-btn.active,.info-tip-btn:focus-visible{
+  color:var(--ac);background:rgba(10,132,255,.14);
+}
+body[data-store=google] .info-tip-btn:hover,
+body[data-store=google] .info-tip-btn.active,
+body[data-store=google] .info-tip-btn:focus-visible{
+  color:#10b981;background:rgba(16,185,129,.14);
+}
+.info-tip-btn svg{width:14px;height:14px;stroke-width:2.2;display:block}
+
+/* Floating Info Popover - Positioned dynamically over stage / canvas */
+.info-popover{
+  position:fixed;
+  width:360px;max-width:calc(100vw - 32px);
+  background:linear-gradient(180deg,#182238 0%,#101726 100%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 18px 48px rgba(0,0,0,.75),0 6px 18px rgba(0,0,0,.45);
+  border-radius:14px;padding:14px 16px;z-index:99999;
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-6px) scale(0.98);
+  transition:opacity .2s cubic-bezier(.4,0,.2,1),transform .2s cubic-bezier(.4,0,.2,1),visibility .2s;
+  color:var(--tx);text-align:left;white-space:normal;font-weight:normal;
+  cursor:default;word-break:normal;
+}
+.info-popover.open{
+  opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1);
+}
+
+/* Arrow indicator pointing to button */
+.info-popover::before{
+  content:'';position:absolute;
+  top:var(--pop-arrow-top, 24px);left:-6px;
+  width:10px;height:10px;
+  background:#182238;
+  border-left:1px solid rgba(255,255,255,.16);
+  border-bottom:1px solid rgba(255,255,255,.16);
+  transform:rotate(45deg);
+}
+
+/* When popover is flipped to the left of the button */
+.info-popover.flip-left::before{
+  left:auto;right:-6px;
+  border-left:none;border-bottom:none;
+  border-right:1px solid rgba(255,255,255,.16);
+  border-top:1px solid rgba(255,255,255,.16);
+}
+
+.info-pop-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;
+}
+.info-pop-title{
+  display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;
+  color:#34d399;line-height:1.35;
+}
+.info-pop-title svg{width:15px;height:15px;stroke-width:2.4;flex-shrink:0}
+.info-pop-close{
+  background:none;border:none;color:var(--mut);font-size:14px;line-height:1;
+  padding:3px;border-radius:4px;cursor:pointer;transition:color .15s,background .15s;
+  display:inline-grid;place-items:center;
+}
+.info-pop-close svg{width:13px;height:13px;stroke:currentColor;display:block}
+.info-pop-close:hover{color:#fff;background:rgba(255,255,255,.1)}
+
+.info-pop-body{
+  display:flex;flex-direction:column;gap:8px;font-size:11.5px;line-height:1.5;color:#cbd5e1;
+}
+.info-pop-body p{margin:0}
+.info-pop-body b{color:#fff;font-weight:600}
+
+/* Safety: Automatically hide popover when sidebar is collapsed or on opposing store tab */
+body.sidebar-collapsed .info-popover,
+body[data-store=apple] #featureInfoPop,
+body[data-store=google] #iosIconInfoPop{
+  display:none!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+/* Light Theme support for info popover */
+:root[data-ui=light] .info-popover{
+  background:#ffffff;border:1px solid rgba(0,0,0,.14);
+  box-shadow:0 16px 40px rgba(15,23,42,.2),0 4px 12px rgba(0,0,0,.08);
+  color:#1e293b;
+}
+:root[data-ui=light] .info-popover::before{
+  background:#ffffff;border-color:rgba(0,0,0,.14);
+}
+:root[data-ui=light] #featureInfoPop .info-pop-title{color:#059669}
+:root[data-ui=light] #iosIconInfoPop .info-pop-title{color:#0284c7}
+:root[data-ui=light] .info-pop-body{color:#475569}
+:root[data-ui=light] .info-pop-body b{color:#0f172a}
+:root[data-ui=light] .info-pop-body code{background:rgba(0,0,0,.06);color:#0284c7}
+.info-pop-body code{background:rgba(255,255,255,.1);padding:1px 4px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
+:root[data-ui=light] .info-pop-note{border-top-color:rgba(0,0,0,.08)!important;color:#64748b!important}
+:root[data-ui=light] .info-pop-close:hover{color:#0f172a;background:rgba(0,0,0,.06)}
+
+.ico-sidebar{background:linear-gradient(135deg,#06b6d4,#0284c7);box-shadow:0 2px 8px rgba(2,132,199,.38)}
+

@@ -1,0 +1,7 @@
+{
+  "form": {
+    "name": "Multiline App",
+    "desc": "Line 1\n\nLine 3 after blank\n• Bullet A\n• Bullet B\n\n\nLine 7 after 2 blanks",
+    "new": "v1.0\n- A\n- B"
+  }
+}

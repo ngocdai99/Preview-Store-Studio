@@ -1,0 +1,13 @@
+{
+  "form": {
+    "name": "Bad Shots"
+  },
+  "shots": [
+    123,
+    null,
+    {
+      "x": 1
+    },
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+  ]
+}

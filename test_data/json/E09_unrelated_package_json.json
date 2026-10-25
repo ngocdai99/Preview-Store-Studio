@@ -1,0 +1,6 @@
+{
+  "name": "my-npm-package",
+  "version": "1.0.0",
+  "description": "A node library",
+  "main": "index.js"
+}

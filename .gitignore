@@ -1,0 +1,44 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+.agents/
+.agent/
+*.swp
+*.swo
+
+# Marketing, launch materials & documentation
+docs/
+cloudflare/
+package/
+*.xlsx
+marketing*.html
+og-image.png
+
+micro tool*.md
+*.bak
+*.tmp
+.system_generated/
+# Gumroad files
+GUMROAD_LISTING.md
+MARKETING_PLAYBOOK.md
+gumroad-assets.html
+/marketing.html
+gumroad-*
+*gumroad*
+start_marketing.command
+*.command
+
+# Build output
+store_preview_studio.html
+store_preview_studio.min.html
+dist/
+store-preview-studio-*.zip
+store-preview-studio-*/
+
+# Logs
+*.log
+npm-debug.log*

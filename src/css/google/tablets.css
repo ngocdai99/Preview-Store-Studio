@@ -1,0 +1,47 @@
+/* ---------- GOOGLE PLAY TABLET PREVIEW (7" / 10") ---------- */
+#gdt{display:none}
+body[data-store=google] #gdt{display:flex}
+#gdRotate{display:none}
+body[data-store=google] #gdRotate{display:inline-flex}
+body[data-store=google][data-google-device="tab7"] .dev.google,
+body[data-store=google][data-google-device="tab10"] .dev.google{display:none!important}
+body[data-store=google][data-google-device="tab7"] .dev.gtab7{display:block!important}
+body[data-store=google][data-google-device="tab10"] .dev.gtab10{display:block!important}
+body[data-store=apple] .card[data-only=google]{display:none}
+.card.hide{display:none}
+
+.dev.gtab{
+  --pad:16px;--sw:768px;--sh:480px;--gh:175px;
+  width:calc(var(--sw) + var(--pad)*2);height:calc(var(--sh) + var(--pad)*2);padding:var(--pad);border-radius:36px;
+  transition:width .32s cubic-bezier(.2,.9,.3,1.15), height .32s cubic-bezier(.2,.9,.3,1.15), border-radius .3s ease;
+  background:linear-gradient(145deg,#5f6065 0%,#242529 18%,#121316 50%,#2d2e33 82%,#4a4b51 100%);
+  box-shadow:0 0 0 1.5px #0b0b0d,0 35px 75px -15px rgba(0,0,0,.9),0 15px 32px -8px rgba(0,0,0,.6),0 0 100px -10px var(--glow),inset 0 0 0 2px rgba(255,255,255,.08);
+}
+.dev.gtab::before,.dev.gtab::after{display:none}
+.dev.gtab7{--sw:768px;--sh:480px;--gh:175px}
+.dev.gtab7.portrait{--sw:480px;--sh:768px;--gh:270px}
+.dev.gtab10{--sw:1024px;--sh:640px;--gh:250px;--pad:18px}
+.dev.gtab10.portrait{--sw:640px;--sh:1024px;--gh:380px}
+.phone.gtab-screen{width:var(--sw);height:var(--sh);border-radius:22px}
+.gtab-screen .gt-cam{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:9px;height:9px;border-radius:50%;background:#000;box-shadow:0 0 0 2px #15161a;z-index:8}
+.gtab-screen .sb{height:30px;padding:8px 24px 0;font-size:12px}
+.google.gtab-screen .scr{padding:0 32px 20px}
+.gtab-screen .gnav{height:56px;padding-bottom:6px}
+.gtab-screen .hi{width:120px;bottom:5px}
+.gtab-screen .g-top{padding:4px 0 8px;font-size:17px}
+.gt-head{display:flex;align-items:center;gap:18px;margin:2px 0 12px}
+.gt-info{flex:1;min-width:0}
+.gtab-screen .g-ico{width:80px;height:80px;border-radius:19px}
+.dev.gtab10 .g-ico{width:96px;height:96px;border-radius:22px}
+.gtab-screen .g-name{font-size:24px}
+.gtab-screen .inst.gt-inst{width:auto;min-width:150px;padding:10px 38px;margin:0;flex-shrink:0}
+.gtab-screen .gt-met{max-width:420px;padding:0 0 14px}
+.phone.gtab-screen .gt-gal{gap:12px;padding:2px 0 18px}
+.phone.gtab-screen .gt-gal img{flex:0 0 auto;width:auto;height:var(--gh);aspect-ratio:auto;object-fit:cover;border-radius:7px;box-shadow:0 0 0 1px var(--sp)}
+.gt-cols{display:flex;gap:32px}
+.gt-main{flex:1 1 0;min-width:0}
+.gt-side{flex:1.2 1 0;min-width:0}
+.dev.gtab.portrait .gt-cols{flex-direction:column;gap:0}
+.gtab-screen .gt-gal-label{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--s);text-transform:uppercase;margin:0 0 8px}
+
+

@@ -1,0 +1,33 @@
+{
+  "generator": "Store Preview Studio",
+  "version": "2.1.0",
+  "timestamp": "2026-10-19T00:00:00.000Z",
+  "store": "apple",
+  "theme": "dark",
+  "form": {
+    "name": "Custom Privacy & Metrics Test",
+    "sub": "Testing Age 17+ and Custom Data Safety",
+    "promo": "Special test promotional offer",
+    "short": "Short description for automated testing",
+    "dev": "Test Labs Inc",
+    "cat": "Utilities",
+    "keywords": "test,privacy,metrics,stats",
+    "ver": "2.5.0",
+    "rdate": "Oct 19, 2026",
+    "privLinked": "Financial Info (Credit Card), Location (Precise), Biometric Data",
+    "privNotLinked": "Crash Data, Performance Diagnostics",
+    "privGoogle": "Data collected: Financial & Precise Location, Data shared with third parties for analytics, Encrypted in transit",
+    "desc": "Testing custom privacy and stats card inputs."
+  },
+  "stats": {
+    "rating": "4.8",
+    "count": "2.5M",
+    "rank": "3",
+    "dl": "10M+",
+    "size": "142 MB",
+    "age": "17+",
+    "iap": "ads_iap",
+    "off": false,
+    "wm": true
+  }
+}

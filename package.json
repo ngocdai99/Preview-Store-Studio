@@ -1,0 +1,27 @@
+{
+  "name": "store-preview-studio",
+  "version": "2.1.0",
+  "description": "Zero-server offline app store preview & ASO mockup studio for Apple App Store and Google Play",
+  "main": "build.js",
+  "scripts": {
+    "dev": "node dev.js",
+    "dev:marketing": "node dev-marketing.js",
+    "build": "node build.js",
+    "release": "node release.js",
+    "showcase": "node scripts/build-showcase-data.js",
+    "build:marketing": "node scripts/build-marketing.js",
+    "build:marketing:vi": "node scripts/build-marketing-vi.js",
+    "deploy": "npx --yes surge docs preview-studio-app-vi.surge.sh",
+    "test": "node scripts/test-runner.js"
+  },
+  "keywords": [
+    "app-store",
+    "google-play",
+    "aso",
+    "mockup",
+    "screenshots",
+    "preview-studio"
+  ],
+  "author": "FlowCraft Studio Inc.",
+  "license": "Commercial"
+}

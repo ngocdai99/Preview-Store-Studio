@@ -1,0 +1,16 @@
+:root{
+  --bg:#060912;--p1:#0c1220;--p2:#121a2c;--p3:#182238;--line:#1d2842;--line-hi:#2f3e66;
+  --tx:#eef2f9;--mut:#8593b2;--ac:#0a84ff;--ac2:#6a5cff;--glow:rgba(10,132,255,.28);
+  --warn:#f59e0b;--warn-glow:rgba(245,158,11,.24);--err:#ef4444;--err-glow:rgba(239,68,68,.32);
+  --succ:#10b981;
+}
+body[data-store=google]{
+  --ac:#00b37e;--ac2:#00a3ff;--glow:rgba(0,179,126,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+button{font-family:inherit;cursor:pointer}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--tx);height:100vh;display:flex;flex-direction:column;overflow:hidden;
+  background:radial-gradient(900px 520px at 78% -10%,var(--glow),transparent 65%),radial-gradient(700px 450px at 10% 110%,rgba(106,92,255,.14),transparent 60%),var(--bg);
+  transition:background .5s cubic-bezier(.4,0,.2,1);
+}

@@ -1,0 +1,9 @@
+{
+  "form": {
+    "name": "<img src=x onerror=alert(1)>",
+    "sub": "<script>alert(2)</script>",
+    "promo": "\"><svg onload=alert(3)>",
+    "dev": "</div><b>X</b>",
+    "desc": "<h1>Big</h1><script>alert(4)</script>"
+  }
+}

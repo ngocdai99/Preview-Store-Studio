@@ -1,0 +1,15 @@
+{
+  "version": "9.9.9",
+  "author_notes": "ignored",
+  "form": {
+    "name": "Extra Keys App",
+    "unknownField": 123
+  },
+  "foo": {
+    "bar": [
+      1,
+      2,
+      3
+    ]
+  }
+}

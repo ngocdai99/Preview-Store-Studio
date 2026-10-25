@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="c3-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="c3-flame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <linearGradient id="c3-rocket" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Squircle -->
+  <rect width="32" height="32" rx="7" fill="url(#c3-bg)"/>
+  <!-- Thrust Flame -->
+  <path d="M7 25C9 23 10 20 11 18L14 21C12 22 9 23 7 25Z" fill="url(#c3-flame)"/>
+  <circle cx="8" cy="24" r="1.5" fill="#fef08a"/>
+  <!-- Rocket Body (Tilted 45deg) -->
+  <path d="M25 7C22 7 16 11 14 14L18 18C21 16 25 10 25 7Z" fill="url(#c3-rocket)"/>
+  <!-- Rocket Fin Left -->
+  <path d="M14 14L10 16L12 18Z" fill="#38bdf8"/>
+  <!-- Rocket Fin Right -->
+  <path d="M18 18L16 22L18 20Z" fill="#38bdf8"/>
+  <!-- Rocket Center Porthole / Window -->
+  <circle cx="18.5" cy="13.5" r="2" fill="#0284c7"/>
+  <circle cx="18.5" cy="13.5" r="1" fill="#ffffff"/>
+  <!-- Stars / Sparkles -->
+  <circle cx="8" cy="9" r="1" fill="#ffffff" opacity="0.8"/>
+  <circle cx="23" cy="23" r="1.2" fill="#ffffff" opacity="0.8"/>
+</svg>

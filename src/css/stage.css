@@ -1,0 +1,279 @@
+/* ---------- STAGE AREA ---------- */
+.stage{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px;overflow:auto;position:relative;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:36px 36px;
+  perspective:1400px;perspective-origin:50% 36%;
+}
+.stage-toolbar{display:flex;gap:12px;align-items:center;flex-shrink:0;z-index:20;flex-wrap:wrap;justify-content:center}
+.vt{
+  position:relative;display:flex;background:rgba(15,23,42,.88);backdrop-filter:blur(16px);border-radius:14px;padding:4px;gap:4px;
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:0 8px 24px -4px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.07);
+  align-items:center;
+}
+.vt-pill{
+  position:absolute;top:4px;bottom:4px;left:0;border-radius:10px;pointer-events:none;
+  background:#0071e3;
+  box-shadow:0 3px 14px rgba(0,113,227,.48),inset 0 1px 0 rgba(255,255,255,.35);
+  border:1px solid rgba(255,255,255,.3);
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.15), width .28s cubic-bezier(.2,.9,.3,1.15), opacity .2s ease, background .35s ease, box-shadow .35s ease, border-color .35s ease;
+  z-index:1;
+}
+body[data-store=google] .vt-pill{
+  background:#03875f;
+  box-shadow:0 3px 14px rgba(3,135,95,.48),inset 0 1px 0 rgba(255,255,255,.35);
+  border:1px solid rgba(255,255,255,.3);
+}
+.vt button{
+  position:relative;z-index:2;background:transparent!important;border:0;color:#cbd5e1;
+  padding:7px 15px;border-radius:10px;font-weight:700;font-size:12.5px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:color .2s ease, transform .15s ease;white-space:nowrap;
+}
+.vt button:hover:not(.on){color:#fff}
+.vt-ico{
+  display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;
+  color:currentColor;opacity:.88;transition:color .2s ease, opacity .2s ease, transform .25s ease;flex-shrink:0;
+}
+.vt-ico svg{width:16px;height:16px;stroke-width:2.1;display:block}
+.vt button:hover .vt-ico{opacity:1;transform:scale(1.08)}
+.vt button.on{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.vt button.on .vt-ico{opacity:1;color:#fff!important}
+.vt button:active{transform:scale(.95)}
+#adRotate,#gdRotate{
+  padding:7px 10px!important;border-radius:10px;margin-left:2px;
+  background:rgba(56,189,248,.14)!important;color:#38bdf8!important;
+  border:1px solid rgba(56,189,248,.28)!important;
+  transition:all .22s ease!important;
+}
+body[data-store=google] #gdRotate{
+  background:rgba(16,185,129,.14)!important;color:#34d399!important;
+  border-color:rgba(16,185,129,.28)!important;
+}
+#adRotate:hover,#gdRotate:hover{
+  background:rgba(56,189,248,.24)!important;color:#fff!important;
+  box-shadow:0 2px 10px rgba(10,132,255,.3);
+}
+body[data-store=google] #gdRotate:hover{
+  background:rgba(16,185,129,.25)!important;color:#fff!important;
+  box-shadow:0 2px 10px rgba(16,185,129,.3);
+}
+#adRotate:hover .vt-ico,#gdRotate:hover .vt-ico{color:#fff!important;opacity:1!important;transform:rotate(90deg) scale(1.08)}
+
+/* Device Theme Segment Switch inside Stage Toolbar */
+.vt.theme-seg{padding:4px;gap:4px;position:relative;box-sizing:border-box}
+.vt.theme-seg .vt-pill{
+  position:absolute;top:4px;bottom:4px;left:0;
+  height:32px!important;
+  border-radius:10px!important;
+  pointer-events:none;
+  background:#334155!important;
+  box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2)!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.15), width .28s cubic-bezier(.2,.9,.3,1.15), opacity .2s ease!important;
+  z-index:1;
+}
+.vt.theme-seg button{
+  position:relative;z-index:2;
+  width:38px!important;height:32px!important;min-width:38px!important;max-width:38px!important;
+  flex:0 0 38px!important;
+  padding:0!important;justify-content:center;
+  border-radius:10px!important;font-weight:600!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  color:#94a3b8!important;
+  transition:color .2s ease, transform .15s ease!important;
+  box-sizing:border-box!important;
+}
+.vt.theme-seg button:hover:not(.on){color:#f1f5f9!important}
+.vt.theme-seg button.on{
+  color:#ffffff!important;font-weight:700!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+}
+.vt.theme-seg button.on .vt-ico{color:#ffffff!important;opacity:1!important}
+
+/* Light Mode Overrides for Stage Toolbar Theme Segment */
+:root[data-ui=light] .vt.theme-seg .vt-pill{
+  background:#334155!important;
+  box-shadow:0 2px 6px rgba(51,65,85,.25),inset 0 1px 0 rgba(255,255,255,.2)!important;
+  border-color:#334155!important;
+}
+:root[data-ui=light] .vt.theme-seg button{color:#64748b!important}
+:root[data-ui=light] .vt.theme-seg button:hover:not(.on){color:#0f172a!important}
+:root[data-ui=light] .vt.theme-seg button.on{color:#ffffff!important}
+:root[data-ui=light] .vt.theme-seg button.on .vt-ico{color:#ffffff!important;opacity:1!important}
+
+/* Phone Device Frame */
+.dev{
+  display:none;position:relative;flex-shrink:0;width:416px;height:870px;padding:13px;border-radius:66px;
+  background:linear-gradient(145deg,#6b6c72 0%,#2a2b2f 18%,#16171a 50%,#34353a 82%,#5a5b61 100%);
+  box-shadow:0 0 0 1.5px #0b0b0d,0 30px 65px -15px rgba(0,0,0,.9),0 12px 28px -8px rgba(0,0,0,.6),0 0 90px -10px var(--glow),inset 0 0 0 2px rgba(255,255,255,.08);
+  transition:box-shadow .35s,border-radius .35s;transform-origin:center 30%;
+  transform-style:preserve-3d;will-change:transform,opacity;
+}
+.dev::before,.dev::after{content:'';position:absolute;width:4px;border-radius:3px;background:linear-gradient(90deg,#3a3b40,#1a1b1e)}
+.dev::before{left:-4px;top:150px;height:56px;box-shadow:0 78px 0 #2a2b2f,0 150px 0 #2a2b2f}
+.dev::after{right:-4px;top:230px;height:96px}
+.dev.google{border-radius:56px}
+
+/* Phone Device Frame - Landscape Game Mode */
+.dev:not(.ipad):not(.gtab).landscape{
+  width:870px;
+  height:416px;
+  padding:13px;
+  border-radius:56px;
+  transition:width .32s cubic-bezier(.2,.9,.3,1.15), height .32s cubic-bezier(.2,.9,.3,1.15), border-radius .3s ease;
+}
+.dev:not(.ipad):not(.gtab).landscape::before,
+.dev:not(.ipad):not(.gtab).landscape::after{
+  display:none;
+}
+.dev:not(.ipad):not(.gtab).landscape .phone{
+  width:844px;
+  height:390px;
+  border-radius:44px;
+}
+.dev:not(.ipad):not(.gtab).landscape .phone .sb{
+  height:28px;
+  padding:4px 28px 0;
+  font-size:12px;
+}
+.dev:not(.ipad):not(.gtab).landscape .phone .scr{
+  padding:0 28px 24px;
+}
+.dev:not(.ipad):not(.gtab).landscape .phone .hole{
+  top:50%;
+  left:16px;
+  transform:translateY(-50%);
+}
+.dev:not(.ipad):not(.gtab).landscape .phone.apple .di{
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  width:105px;
+  height:26px;
+}
+.dev:not(.ipad):not(.gtab).landscape .phone .gal img{
+  flex:0 0 340px;
+  width:340px;
+  aspect-ratio:16/9;
+  border-radius:16px;
+}
+
+/* 3D Spatial Transitions */
+
+/* Direction: NEXT (Swapping to a tab on the right) */
+@keyframes devExitNext {
+  0% {
+    opacity: 1;
+    transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(1400px) translateX(-65px) scale(0.91) rotateY(-13deg) translateZ(-70px);
+  }
+}
+
+@keyframes devEnterNext {
+  0% {
+    opacity: 0;
+    transform: perspective(1400px) translateX(75px) scale(0.91) rotateY(15deg) translateZ(-70px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0);
+  }
+}
+
+/* Direction: PREV (Swapping to a tab on the left) */
+@keyframes devExitPrev {
+  0% {
+    opacity: 1;
+    transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(1400px) translateX(65px) scale(0.91) rotateY(13deg) translateZ(-70px);
+  }
+}
+
+@keyframes devEnterPrev {
+  0% {
+    opacity: 0;
+    transform: perspective(1400px) translateX(-75px) scale(0.91) rotateY(-15deg) translateZ(-70px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0);
+  }
+}
+
+/* Direction: MORPH (Store switch / 3D Spatial Bloom) */
+@keyframes devExitMorph {
+  0% {
+    opacity: 1;
+    transform: perspective(1400px) scale(1) rotateX(0deg) rotateY(0deg) translateZ(0);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(1400px) scale(0.88) rotateX(12deg) rotateY(-10deg) translateY(16px) translateZ(-90px);
+  }
+}
+
+@keyframes devEnterMorph {
+  0% {
+    opacity: 0;
+    transform: perspective(1400px) scale(0.89) rotateX(-10deg) rotateY(10deg) translateY(-14px) translateZ(-70px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) scale(1) rotateX(0deg) rotateY(0deg) translateY(0) translateZ(0);
+  }
+}
+
+.dev.dev-exit-next {
+  animation: devExitNext 0.17s cubic-bezier(0.38, 0, 0.7, 0.2) forwards !important;
+  pointer-events: none !important;
+}
+.dev.dev-enter-next {
+  animation: devEnterNext 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  pointer-events: none !important;
+}
+
+.dev.dev-exit-prev {
+  animation: devExitPrev 0.17s cubic-bezier(0.38, 0, 0.7, 0.2) forwards !important;
+  pointer-events: none !important;
+}
+.dev.dev-enter-prev {
+  animation: devEnterPrev 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  pointer-events: none !important;
+}
+
+.dev.dev-exit-morph, .dev.dev-exit {
+  animation: devExitMorph 0.18s cubic-bezier(0.38, 0, 0.7, 0.2) forwards !important;
+  pointer-events: none !important;
+}
+.dev.dev-enter-morph, .dev.dev-enter {
+  animation: devEnterMorph 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  pointer-events: none !important;
+}
+
+/* Smooth view crossfade inside phone */
+@keyframes viewFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.view-enter {
+  animation: viewFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes in{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}

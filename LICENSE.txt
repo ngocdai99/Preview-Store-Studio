@@ -1,0 +1,20 @@
+COMMERCIAL END-USER LICENSE AGREEMENT (EULA)
+Product: Store Preview Studio
+Author / Licensor: Store Preview Studio Team
+
+Copyright (c) 2026 Store Preview Studio. All rights reserved.
+
+1. GRANT OF LICENSE
+By purchasing or downloading Store Preview Studio ("the Software"), you are granted a worldwide, non-exclusive, non-transferable, perpetual license to use the Software according to the terms of this Agreement.
+
+2. PERMITTED USES
+- You may use the Software to design, preview, validate, format, and export app store listings and promotional graphics for your personal projects, employer projects, or client deliverables.
+- You may export mockups (PNG), metadata files (Markdown, JSON, Text), and copy generated content without attribution.
+- You may modify the styling, layout, or code for your own internal use or client sign-off workflows.
+
+3. RESTRICTIONS
+- You may NOT resell, redistribute, sub-license, bundle, rent, or lease the raw source code of Store Preview Studio (in whole or in part) as a standalone template or competitor product on Gumroad, Lemon Squeezy, GitHub, ThemeForest, or any digital marketplace.
+- You may NOT publicly share un-obfuscated copies of the tool source code.
+
+4. DISCLAIMER OF WARRANTIES
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY.

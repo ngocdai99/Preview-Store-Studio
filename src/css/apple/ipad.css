@@ -1,0 +1,74 @@
+/* iPad Device Frame */
+.dev.ipad{
+  display:none;position:relative;flex-shrink:0;width:750px;height:980px;padding:16px;border-radius:42px;
+  background:linear-gradient(145deg,#5f6065 0%,#242529 18%,#121316 50%,#2d2e33 82%,#4a4b51 100%);
+  box-shadow:0 0 0 1.5px #0b0b0d,0 35px 75px -15px rgba(0,0,0,.9),0 15px 32px -8px rgba(0,0,0,.6),0 0 100px -10px var(--glow),inset 0 0 0 2px rgba(255,255,255,.08);
+  transition:width .32s cubic-bezier(.2,.9,.3,1.15),height .32s cubic-bezier(.2,.9,.3,1.15),box-shadow .35s,border-radius .35s;transform-origin:center top;
+}
+.dev.ipad::before{left:-4px;top:220px;height:70px}
+.dev.ipad::after{right:-4px;top:220px;height:120px}
+.dev.ipad.landscape{width:980px;height:750px}
+.dev.ipad.landscape::before,.dev.ipad.landscape::after{display:none}
+.phone.ipad{
+  width:718px;height:948px;border-radius:28px;overflow:hidden;position:relative;display:flex;flex-direction:column;
+  background:var(--bg);color:var(--t);font-family:system-ui,-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;
+  --bg:#fff;--cd:#f2f2f7;--t:#000;--s:#8e8e93;--sp:#e5e5ea;--bl:#0a84ff;--bar:rgba(249,249,249,.88);
+  transition:width .32s cubic-bezier(.2,.9,.3,1.15),height .32s cubic-bezier(.2,.9,.3,1.15),opacity .2s ease;
+}
+.dev.ipad.landscape .phone.ipad{width:948px;height:718px}
+.phone.ipad[data-theme=dark]{--bg:#000;--cd:#1c1c1e;--t:#fff;--s:#8e8e93;--sp:#2c2c2e;--bar:rgba(22,22,24,.88)}
+.ipad-cam{
+  position:absolute;top:7px;left:50%;transform:translateX(-50%);
+  width:8px;height:8px;border-radius:50%;background:#050508;border:1px solid #1a1a20;z-index:9;
+}
+.ipad-sb{
+  height:38px;padding:10px 24px 0;display:flex;justify-content:space-between;align-items:center;
+  font-size:13px;font-weight:600;flex-shrink:0;z-index:6;
+}
+.ipad-scr{padding:0 28px 28px}
+.ipad-nav{padding:10px 28px 14px;margin:0 -28px 10px;font-size:16px}
+.ipad-head{display:flex;gap:22px;margin-bottom:24px;align-items:flex-start}
+.ipad-ico{width:136px;height:136px;border-radius:32px;object-fit:cover;flex-shrink:0;box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 12px 28px rgba(0,0,0,.24)}
+.ipad-head-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.ipad-name{font-size:26px;font-weight:700;line-height:1.2;letter-spacing:-.4px;word-break:break-word}
+.ipad-sub{font-size:16px;color:var(--s);line-height:1.3}
+.ipad-dev-link{color:var(--bl);font-size:14px;font-weight:500;margin-top:2px}
+.ipad-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.ipad-get{padding:8px 32px;font-size:15px;border-radius:24px}
+.ipad-met{margin-bottom:24px;padding:14px 0}
+.ipad-met div small{font-size:10px}
+.ipad-met div b{font-size:19px}
+.ipad-shots-sec{margin-bottom:28px}
+.ipad-gal{gap:14px}
+.ipad-gal img{flex:0 0 250px;width:250px;border-radius:9px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.18)}
+.ipad-gal img.ipad-shot{aspect-ratio:2048/2732}
+.ipad-gal img.landscape-shot{aspect-ratio:2732/2048;flex:0 0 360px;width:360px}
+.dev.ipad.landscape .ipad-gal img{flex:0 0 215px;width:215px}
+.ipad-cols{display:flex;gap:28px}
+.ipad-main{flex:1.6;min-width:0}
+.dev.ipad.landscape .ipad-main{flex:1.85}
+.ipad-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:20px}
+.ipad-side .sec{border:1px solid var(--sp);border-radius:16px;padding:16px;background:var(--cd)}
+.ipad-side .sec:last-child{border:1px solid var(--sp)}
+.ipad-side .inf div{padding:9px 0}
+.ipad-supports{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.ipad-supports div{display:flex;flex-direction:column;gap:2px}
+.ipad-supports div span{font-size:20px}
+.ipad-supports div b{font-size:13.5px}
+.ipad-supports div small{font-size:11.5px;color:var(--s)}
+.ipad-tab{height:72px;padding-top:8px;padding-bottom:14px;box-sizing:border-box;flex-shrink:0;z-index:6}
+.ipad-tab div{font-size:10.5px;gap:3px}
+.ipad-tab div span svg{width:22px;height:22px}
+
+/* Screen container */
+.phone{
+  width:390px;height:844px;border-radius:53px;overflow:hidden;position:relative;display:flex;flex-direction:column;
+  background:var(--bg);color:var(--t);transition:opacity .2s ease;
+}
+.dev.google .phone{border-radius:44px}
+.sb{display:flex;justify-content:space-between;align-items:center;flex-shrink:0;font-weight:600;position:relative;z-index:6}
+.scr{flex:1;overflow-y:auto;scrollbar-width:none}.scr::-webkit-scrollbar{display:none}
+.hi{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:136px;height:5px;border-radius:5px;background:var(--t);opacity:.85;z-index:7}
+.gal{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;cursor:grab;user-select:none;scroll-snap-type:x proximity}.gal::-webkit-scrollbar{display:none}
+.gal img{pointer-events:none;object-fit:cover;aspect-ratio:460/996;scroll-snap-align:start}
+.pre{white-space:pre-line}

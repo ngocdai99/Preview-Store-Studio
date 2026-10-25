@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="c2-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="c2-screen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Squircle -->
+  <rect width="32" height="32" rx="7" fill="url(#c2-bg)"/>
+  <!-- Back Device (Tablet / Store Display) -->
+  <rect x="13" y="5" width="13.5" height="18" rx="2.5" fill="rgba(255,255,255,0.18)" stroke="#ffffff" stroke-width="1.2"/>
+  <rect x="15" y="7" width="9.5" height="7" rx="1.5" fill="rgba(255,255,255,0.3)"/>
+  <!-- Front Device (Phone) -->
+  <rect x="5.5" y="9" width="13" height="18" rx="3" fill="#090d16" stroke="#ffffff" stroke-width="1.3"/>
+  <rect x="8.5" y="10.5" width="7" height="1" rx="0.5" fill="rgba(255,255,255,0.6)"/>
+  <!-- Phone Screen Mockup Card -->
+  <rect x="7.5" y="13" width="9" height="10" rx="1.5" fill="url(#c2-screen)"/>
+  <circle cx="12" cy="18" r="2" fill="#ffffff" opacity="0.9"/>
+</svg>

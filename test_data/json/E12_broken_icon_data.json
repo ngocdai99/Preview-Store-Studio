@@ -1,0 +1,7 @@
+{
+  "form": {
+    "name": "Broken Icon"
+  },
+  "icon": "data:image/png;base64,AAAA-not-valid",
+  "featureGraphic": "not-a-url"
+}

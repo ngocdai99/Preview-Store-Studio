@@ -1,0 +1,29 @@
+{
+  "generator": "Store Preview Studio",
+  "version": "2.0.0",
+  "timestamp": "2026-10-18T09:00:00.000Z",
+  "store": "google",
+  "theme": "dark",
+  "form": {
+    "name": "PulseFit - Workout Tracker",
+    "sub": "Train smarter every day",
+    "promo": "New: AI workout plans are here!",
+    "short": "Track workouts, build streaks and reach your fitness goals.",
+    "dev": "PulseLabs Inc.",
+    "cat": "Health & Fitness",
+    "catApple": "Health & Fitness",
+    "catGoogle": "Health & Fitness",
+    "keywords": "workout,fitness,gym,tracker,hiit",
+    "new": "- Added AI plans\n- Bug fixes",
+    "desc": "PulseFit helps you train smarter.\n\nFEATURES:\n• Workout logger\n• Progress charts"
+  },
+  "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+  "featureGraphic": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+  "shots": [
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+  ],
+  "tab7Shots": [],
+  "tab10Shots": []
+}

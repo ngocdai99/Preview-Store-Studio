@@ -1,0 +1,6 @@
+{
+  "form": {
+    "name": "JS URL Icon"
+  },
+  "icon": "javascript:alert('XSS')"
+}
