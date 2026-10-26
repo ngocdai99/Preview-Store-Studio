@@ -17,7 +17,7 @@ icon_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width=
       <stop offset="100%" stop-color="#6366f1"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
+  <rect width="32" height="32" fill="url(#c6-bg)"/>
   <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
   <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
   <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>

@@ -169,6 +169,25 @@ function setStore(s, animate = true){
     }
   }
 
+  // Sync preset icon variant if using preset template
+  if(typeof IS_CUSTOM_ICON !== 'undefined' && !IS_CUSTOM_ICON){
+    let iconChanged = false;
+    if(typeof BLANK_ICON !== 'undefined' && (ICON === BLANK_ICON || (typeof BLANK_ICON_1024 !== 'undefined' && ICON === BLANK_ICON_1024) || (typeof BLANK_ICON_512 !== 'undefined' && ICON === BLANK_ICON_512))){
+      if(s === 'apple' && typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024){ ICON = BLANK_ICON_1024; iconChanged = true; }
+      else if(s === 'google' && typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512){ ICON = BLANK_ICON_512; iconChanged = true; }
+    } else if(typeof PRESETS !== 'undefined'){
+      for(const k in PRESETS){
+        const p = PRESETS[k];
+        if(p && (p.icon === ICON || p.icon1024 === ICON || p.icon512 === ICON)){
+          if(s === 'apple' && p.icon1024){ ICON = p.icon1024; iconChanged = true; }
+          else if(s === 'google' && p.icon512){ ICON = p.icon512; iconChanged = true; }
+          break;
+        }
+      }
+    }
+    if(iconChanged && typeof renderIcons === 'function') renderIcons();
+  }
+
   // Trigger validation immediately upon store switch
   if(typeof validateAppIcon === 'function') validateAppIcon();
   if(typeof validateScreenshots === 'function') validateScreenshots();

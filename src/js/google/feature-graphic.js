@@ -7,10 +7,25 @@ $('featureFile').onchange=e=>{
     FEATURE_GRAPHIC=d;
     renderFeature();
     saveState();
-    showToast('Feature graphic updated! (1,024 × 500 px)','🖼');
+    showToast('Feature graphic updated! (1,024 × 500 px)', 'ok');
   });
   e.target.value='';
 };
+if($('featureInspect')){
+  $('featureInspect').onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: FEATURE_GRAPHIC, type: 'feature', store: 'google' });
+    }
+  };
+}
+const featurePrevImg = $('featurePrev');
+if(featurePrevImg){
+  featurePrevImg.onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: FEATURE_GRAPHIC, type: 'feature', store: 'google' });
+    }
+  };
+}
 const featureDropZone = $('featureDropZone');
 featureDropZone.addEventListener('dragover',e=>{e.preventDefault();featureDropZone.classList.add('drag-over')});
 featureDropZone.addEventListener('dragleave',()=>{featureDropZone.classList.remove('drag-over')});
@@ -22,7 +37,7 @@ featureDropZone.addEventListener('drop',e=>{
       FEATURE_GRAPHIC=d;
       renderFeature();
       saveState();
-      showToast('Feature graphic dropped & applied! (1,024 × 500 px)','🖼');
+      showToast('Feature graphic dropped & applied! (1,024 × 500 px)', 'ok');
     });
   }
 });

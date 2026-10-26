@@ -81,8 +81,27 @@ function renderIpadSlist(){
     handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
-    // Thumbnail Preview
-    r.appendChild(mk(s || PH));
+    // Thumbnail Preview with Click-to-Inspect
+    const thumb = mk(s || PH);
+    thumb.style.cursor = 'pointer';
+    thumb.title = 'Click to inspect & view details';
+    thumb.onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'ipad',
+          store: 'apple',
+          index: i,
+          title: `iPad Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            IPAD_SHOTS[i] = dataUrl;
+            renderIpadShots();
+            saveState();
+          }
+        });
+      }
+    };
+    r.appendChild(thumb);
 
     // Input & Actions
     const col = document.createElement('div'); col.className = 'col';

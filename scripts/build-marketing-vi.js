@@ -426,12 +426,12 @@ function buildMarketingVi() {
     "if (m === 'apple') edTitle.textContent = 'Nội dung App Store';\n          else if (m === 'google') edTitle.textContent = 'Nội dung Google Play';\n          else edTitle.textContent = 'Nội dung trang giới thiệu ứng dụng';"
   );
   html = rep(html,
-    "modalUploadText.textContent = 'Upload New Icon';",
-    "modalUploadText.textContent = 'Tải icon app';"
+    "if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';",
+    "if (uploadBtnText) uploadBtnText.textContent = 'Tải icon app';"
   );
   html = rep(html,
-    "modalTitle.textContent = storeType === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';",
-    "modalTitle.textContent = storeType === 'apple' ? 'Kiểm tra thông số icon Apple' : 'Kiểm tra thông số icon Google Play';"
+    "if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';",
+    "if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Kiểm tra thông số icon Apple' : 'Kiểm tra thông số icon Google Play';"
   );
   html = rep(html, 
     "label: 'Your App', name: '', sub: '', short: '', promo: '',\n        dev: 'Developer Name', email: 'support@domain.com', phone: '+1 800-555-0199', catApple: 'Category', catGoogle: 'Category', desc: 'App description goes here...',",

@@ -1,0 +1,88 @@
+<!-- App Icon & Store Asset Inspector Modal (Single Source of Truth) -->
+<div class="icon-modal-backdrop" id="msIconModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="icon-modal-canvas" id="msIconModalCanvas">
+    <div class="icon-modal-header">
+      <span class="icon-modal-title" id="msIconModalTitle">App Icon Inspector</span>
+      <div class="icon-modal-header-right">
+        <div class="icon-modal-hint">
+          <span class="icon-modal-hint-drag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Drag & drop image</span>
+          </span>
+          <span class="icon-modal-hint-esc"><kbd>ESC</kbd> to close</span>
+        </div>
+        <button type="button" class="icon-modal-close-btn" id="msIconModalClose" aria-label="Close modal" title="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="icon-modal-body">
+      <div class="icon-modal-art" id="msIconModalArt">
+        <div class="icon-modal-img-wrap" id="msIconModalImgWrap">
+          <img class="icon-modal-img" id="msIconModalImg" alt="Asset Preview">
+        </div>
+      </div>
+      <div class="icon-modal-info-panel" id="msIconModalInfo">
+        <div class="icon-spec-row">
+          <span id="msIconModalStoreBadge" class="icon-modal-store-tag a">Apple</span>
+          <span class="icon-spec-target" id="msIconModalTarget">Standard: 1024×1024 px</span>
+        </div>
+        <div class="icon-metrics-grid">
+          <div class="icon-metric-tile">
+            <span class="icon-metric-lbl">Resolution</span>
+            <span class="icon-metric-val" id="msIconModalDim">--</span>
+          </div>
+          <div class="icon-metric-tile">
+            <span class="icon-metric-lbl">Aspect Ratio</span>
+            <span class="icon-metric-val" id="msIconModalRatio">--</span>
+          </div>
+          <div class="icon-metric-tile">
+            <span class="icon-metric-lbl">File Size</span>
+            <span class="icon-metric-val" id="msIconModalSize">--</span>
+          </div>
+          <div class="icon-metric-tile">
+            <span class="icon-metric-lbl">Format / Alpha</span>
+            <span class="icon-metric-val" id="msIconModalFormat">--</span>
+          </div>
+        </div>
+        <div class="icon-status-card">
+          <div class="icon-status-head">
+            <span class="icon-modal-field-label">Status</span>
+            <div id="msIconModalBadge" class="icon-modal-badge ok">Checking...</div>
+          </div>
+          <div class="icon-modal-warn-msg" id="msIconModalMsg"></div>
+        </div>
+        <div class="icon-modal-actions">
+          <button type="button" class="fit-btn" id="msIconModalUploadBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+            </svg>
+            <span id="msIconModalUploadText">Upload New Icon</span>
+          </button>
+          <input type="file" id="msIconModalInput" accept="image/*" hidden>
+        </div>
+        <div class="icon-modal-disclaimer">
+          <div class="icon-modal-disclaimer-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <div class="icon-modal-disclaimer-content">
+            <span class="icon-modal-disclaimer-title">Store Review Disclaimer</span>
+            <p class="icon-modal-disclaimer-desc">Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels on iOS, or file size limits).</p>
+            <p class="icon-modal-disclaimer-desc">However, passing these checks does not guarantee store approval — final acceptance is decided solely by Apple and Google review teams based on your complete submission and store guidelines.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

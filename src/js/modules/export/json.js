@@ -154,7 +154,31 @@ function parseAndApplyJSON(jsonString){
   if(mapped.new && $('f-new')) $('f-new').value = mapped.new;
   if(mapped.desc && $('f-desc')) $('f-desc').value = mapped.desc;
 
-  if(data.icon && typeof data.icon === 'string') ICON = data.icon;
+  IS_CUSTOM_ICON = false;
+  if(data.icon1024 || data.icon512) {
+    if(store === 'apple' && data.icon1024) ICON = data.icon1024;
+    else if(store === 'google' && data.icon512) ICON = data.icon512;
+    else if(data.icon) ICON = data.icon;
+  } else if(data.icon && typeof data.icon === 'string') {
+    ICON = data.icon;
+  }
+  if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && (ICON.startsWith('data:image/svg+xml') || ICON.includes('<svg'))){
+    const rawSvg = ICON;
+    rasterizeSvgToStorePng(rawSvg, 1024, png1024 => {
+      data.icon1024 = png1024;
+      if(store === 'apple' && !IS_CUSTOM_ICON){
+        ICON = png1024;
+        renderIcons();
+      }
+    });
+    rasterizeSvgToStorePng(rawSvg, 512, png512 => {
+      data.icon512 = png512;
+      if(store === 'google' && !IS_CUSTOM_ICON){
+        ICON = png512;
+        renderIcons();
+      }
+    });
+  }
   if(data.featureGraphic && typeof data.featureGraphic === 'string') FEATURE_GRAPHIC = data.featureGraphic;
   else if(data.feature && typeof data.feature === 'string') FEATURE_GRAPHIC = data.feature;
 

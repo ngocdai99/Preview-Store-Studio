@@ -3,18 +3,19 @@ let ICON_FILE_SIZE = 0;
 let ICON_FILE_TYPE = '';
 let ICON_FILE_NAME = '';
 
-function getIconMeta(){
+function getIconMeta(src = null){
+  const targetSrc = src || ICON;
   let size = ICON_FILE_SIZE || 0;
   let type = ICON_FILE_TYPE || '';
-  if((!size || !type) && typeof ICON === 'string' && ICON.startsWith('data:')){
-    const comma = ICON.indexOf(',');
+  if((!size || !type) && typeof targetSrc === 'string' && targetSrc.startsWith('data:')){
+    const comma = targetSrc.indexOf(',');
     if(comma !== -1){
       if(!type){
-        const semi = ICON.indexOf(';');
-        if(semi !== -1) type = ICON.substring(5, semi);
+        const semi = targetSrc.indexOf(';');
+        if(semi !== -1) type = targetSrc.substring(5, semi);
       }
       if(!size){
-        const base64 = ICON.slice(comma + 1);
+        const base64 = targetSrc.slice(comma + 1);
         const padding = (base64.endsWith('==') ? 2 : (base64.endsWith('=') ? 1 : 0));
         size = Math.round((base64.length * 3) / 4 - padding);
       }
@@ -37,16 +38,29 @@ let _iconValRunId = 0;
 function validateAppIcon(){
   const badge = $('iconStatusBadge');
   if(!badge || !ICON) return;
+  const targetDim = (store === 'google' ? 512 : 1024);
+  if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && ICON.startsWith('data:image/svg+xml')){
+    rasterizeSvgToStorePng(ICON, targetDim, pngSrc => {
+      runIconPixelAudit(pngSrc);
+    });
+    return;
+  }
+  runIconPixelAudit(ICON);
+}
+
+function runIconPixelAudit(iconSrc){
+  const badge = $('iconStatusBadge');
+  if(!badge || !iconSrc) return;
   const runId = ++_iconValRunId;
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onload = () => {
     if(runId !== _iconValRunId) return;
-    const w = img.naturalWidth || 1024;
-    const h = img.naturalHeight || 1024;
+    const w = img.naturalWidth || (store === 'google' ? 512 : 1024);
+    const h = img.naturalHeight || (store === 'google' ? 512 : 1024);
     const isSq = (w === h);
 
-    const meta = getIconMeta();
+    const meta = getIconMeta(iconSrc);
     const sizeBytes = meta.size || 0;
     const mimeType = (meta.type || '').toLowerCase();
     const isPng = !mimeType || mimeType === 'image/png';
@@ -190,7 +204,7 @@ function validateAppIcon(){
       if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
     }
   };
-  img.src = ICON;
+  img.src = iconSrc;
 }
 
 function downloadAppIcon(targetSize){
@@ -242,10 +256,35 @@ if($('icoUp')){
 if($('icoDown')){
   $('icoDown').onclick = () => downloadAppIcon();
 }
+if($('icoInspect')){
+  $('icoInspect').onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  };
+}
+if($('iconStatusBadge')){
+  $('iconStatusBadge').onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  };
+}
+const icoPrevImg = $('icoPrev');
+if(icoPrevImg){
+  icoPrevImg.style.cursor = 'pointer';
+  icoPrevImg.onclick = e => {
+    e.stopPropagation();
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  };
+}
 if($('icoFile')){
   $('icoFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    IS_CUSTOM_ICON = true;
     ICON_FILE_SIZE = f.size || 0;
     ICON_FILE_TYPE = f.type || '';
     ICON_FILE_NAME = f.name || '';
@@ -274,6 +313,7 @@ if(icoDropZone){
     icoDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file && file.type.startsWith('image/')){
+      IS_CUSTOM_ICON = true;
       ICON_FILE_SIZE = file.size || 0;
       ICON_FILE_TYPE = file.type || '';
       ICON_FILE_NAME = file.name || '';

@@ -665,6 +665,77 @@ function idbDelete(key) {
   }).catch(() => false);
 }
 
+// --- SVG to Store-Compliant PNG Rasterizer ---
+const SVG_STORE_PNG_CACHE = new Map();
+
+function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
+  if (!svgSrc || typeof svgSrc !== 'string') {
+    if (callback) callback(svgSrc);
+    return;
+  }
+  // If already a raster PNG/JPEG data URL or regular URL, pass through
+  if (!svgSrc.startsWith('data:image/svg+xml') && !svgSrc.includes('<svg')) {
+    if (callback) callback(svgSrc);
+    return;
+  }
+
+  const cacheKey = `${targetSize}_${svgSrc.length}_${svgSrc.slice(0, 80)}`;
+  if (SVG_STORE_PNG_CACHE.has(cacheKey)) {
+    if (callback) callback(SVG_STORE_PNG_CACHE.get(cacheKey));
+    return;
+  }
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = targetSize;
+      canvas.height = targetSize;
+      const ctx = canvas.getContext('2d');
+
+      // Draw SVG scaled to target resolution
+      ctx.drawImage(img, 0, 0, targetSize, targetSize);
+
+      // Check for transparency across pixels
+      const data = ctx.getImageData(0, 0, targetSize, targetSize).data;
+      let hasAlpha = false;
+      for (let i = 3; i < data.length; i += 4) {
+        if (data[i] < 250) { hasAlpha = true; break; }
+      }
+
+      let finalPng = '';
+      if (hasAlpha) {
+        // Flood background with opaque base color sampled from top edge or center
+        const solidCanvas = document.createElement('canvas');
+        solidCanvas.width = targetSize;
+        solidCanvas.height = targetSize;
+        const sCtx = solidCanvas.getContext('2d');
+        const topEdgeIdx = (Math.floor(targetSize * 0.05) * targetSize + Math.floor(targetSize / 2)) * 4;
+        const midIdx = (Math.floor(targetSize / 2) * targetSize + Math.floor(targetSize / 2)) * 4;
+        const r = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx] : (data[midIdx + 3] > 240 ? data[midIdx] : 255);
+        const g = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 1] : (data[midIdx + 3] > 240 ? data[midIdx + 1] : 255);
+        const b = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 2] : (data[midIdx + 3] > 240 ? data[midIdx + 2] : 255);
+        sCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        sCtx.fillRect(0, 0, targetSize, targetSize);
+        sCtx.drawImage(canvas, 0, 0);
+        finalPng = solidCanvas.toDataURL('image/png');
+      } else {
+        finalPng = canvas.toDataURL('image/png');
+      }
+
+      SVG_STORE_PNG_CACHE.set(cacheKey, finalPng);
+      if (callback) callback(finalPng);
+    } catch (e) {
+      if (callback) callback(svgSrc);
+    }
+  };
+  img.onerror = () => {
+    if (callback) callback(svgSrc);
+  };
+  img.src = svgSrc;
+}
+
 
 
 /* =========================================================================
@@ -2236,6 +2307,10 @@ const LINGUA_SHOT_4 = SKILL_SHOT_4;
 
 // --- Active State Model ---
 let ICON = BLANK_ICON;
+let BLANK_ICON_1024 = '';
+let BLANK_ICON_512 = '';
+let CURRENT_PRESET_KEY = 'none';
+let IS_CUSTOM_ICON = false;
 let FEATURE_GRAPHIC = DEFAULT_FEATURE;
 let SHOTS = [SHOT_1, SHOT_2, SHOT_3, SHOT_4];
 let IPAD_SHOTS = [];
@@ -2730,18 +2805,19 @@ let ICON_FILE_SIZE = 0;
 let ICON_FILE_TYPE = '';
 let ICON_FILE_NAME = '';
 
-function getIconMeta(){
+function getIconMeta(src = null){
+  const targetSrc = src || ICON;
   let size = ICON_FILE_SIZE || 0;
   let type = ICON_FILE_TYPE || '';
-  if((!size || !type) && typeof ICON === 'string' && ICON.startsWith('data:')){
-    const comma = ICON.indexOf(',');
+  if((!size || !type) && typeof targetSrc === 'string' && targetSrc.startsWith('data:')){
+    const comma = targetSrc.indexOf(',');
     if(comma !== -1){
       if(!type){
-        const semi = ICON.indexOf(';');
-        if(semi !== -1) type = ICON.substring(5, semi);
+        const semi = targetSrc.indexOf(';');
+        if(semi !== -1) type = targetSrc.substring(5, semi);
       }
       if(!size){
-        const base64 = ICON.slice(comma + 1);
+        const base64 = targetSrc.slice(comma + 1);
         const padding = (base64.endsWith('==') ? 2 : (base64.endsWith('=') ? 1 : 0));
         size = Math.round((base64.length * 3) / 4 - padding);
       }
@@ -2764,16 +2840,29 @@ let _iconValRunId = 0;
 function validateAppIcon(){
   const badge = $('iconStatusBadge');
   if(!badge || !ICON) return;
+  const targetDim = (store === 'google' ? 512 : 1024);
+  if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && ICON.startsWith('data:image/svg+xml')){
+    rasterizeSvgToStorePng(ICON, targetDim, pngSrc => {
+      runIconPixelAudit(pngSrc);
+    });
+    return;
+  }
+  runIconPixelAudit(ICON);
+}
+
+function runIconPixelAudit(iconSrc){
+  const badge = $('iconStatusBadge');
+  if(!badge || !iconSrc) return;
   const runId = ++_iconValRunId;
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onload = () => {
     if(runId !== _iconValRunId) return;
-    const w = img.naturalWidth || 1024;
-    const h = img.naturalHeight || 1024;
+    const w = img.naturalWidth || (store === 'google' ? 512 : 1024);
+    const h = img.naturalHeight || (store === 'google' ? 512 : 1024);
     const isSq = (w === h);
 
-    const meta = getIconMeta();
+    const meta = getIconMeta(iconSrc);
     const sizeBytes = meta.size || 0;
     const mimeType = (meta.type || '').toLowerCase();
     const isPng = !mimeType || mimeType === 'image/png';
@@ -2917,7 +3006,7 @@ function validateAppIcon(){
       if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
     }
   };
-  img.src = ICON;
+  img.src = iconSrc;
 }
 
 function downloadAppIcon(targetSize){
@@ -2969,10 +3058,35 @@ if($('icoUp')){
 if($('icoDown')){
   $('icoDown').onclick = () => downloadAppIcon();
 }
+if($('icoInspect')){
+  $('icoInspect').onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  };
+}
+if($('iconStatusBadge')){
+  $('iconStatusBadge').onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  };
+}
+const icoPrevImg = $('icoPrev');
+if(icoPrevImg){
+  icoPrevImg.style.cursor = 'pointer';
+  icoPrevImg.onclick = e => {
+    e.stopPropagation();
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  };
+}
 if($('icoFile')){
   $('icoFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    IS_CUSTOM_ICON = true;
     ICON_FILE_SIZE = f.size || 0;
     ICON_FILE_TYPE = f.type || '';
     ICON_FILE_NAME = f.name || '';
@@ -3001,6 +3115,7 @@ if(icoDropZone){
     icoDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file && file.type.startsWith('image/')){
+      IS_CUSTOM_ICON = true;
       ICON_FILE_SIZE = file.size || 0;
       ICON_FILE_TYPE = file.type || '';
       ICON_FILE_NAME = file.name || '';
@@ -3056,8 +3171,27 @@ function renderShots(){
     handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
-    // Thumbnail Preview
-    r.appendChild(mk(s || PH));
+    // Thumbnail Preview with Click-to-Inspect
+    const thumb = mk(s || PH);
+    thumb.style.cursor = 'pointer';
+    thumb.title = 'Click to inspect & view details';
+    thumb.onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'screenshot',
+          store,
+          index: i,
+          title: `Phone Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            SHOTS[i] = dataUrl;
+            renderShots();
+            saveState();
+          }
+        });
+      }
+    };
+    r.appendChild(thumb);
 
     // Input & Actions
     const col = document.createElement('div'); col.className = 'col';
@@ -3068,12 +3202,33 @@ function renderShots(){
     inp.onchange = () => { SHOTS[i] = inp.value.trim(); renderShots(); saveState(); };
 
     const act = document.createElement('div'); act.className = 'act';
-    act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" data-m="-1" title="Move Up">↑</button><button class="mini" data-m="1" title="Move Down">↓</button><button class="mini del" title="Delete">&times;</button><span class="shot-dim-tag" id="shotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
+    act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
+      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>' +
+      '<button class="mini" data-m="-1" title="Move Up">↑</button>' +
+      '<button class="mini" data-m="1" title="Move Down">↓</button>' +
+      '<button class="mini del" title="Delete">&times;</button>' +
+      '<span class="shot-dim-tag" id="shotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
-    b[1].onclick = () => mv(i, -1);
-    b[2].onclick = () => mv(i, 1);
-    b[3].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
+    b[1].onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'screenshot',
+          store,
+          index: i,
+          title: `Phone Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            SHOTS[i] = dataUrl;
+            renderShots();
+            saveState();
+          }
+        });
+      }
+    };
+    b[2].onclick = () => mv(i, -1);
+    b[3].onclick = () => mv(i, 1);
+    b[4].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
 
     col.append(inp, act);
     r.appendChild(col);
@@ -3470,8 +3625,27 @@ function renderIpadSlist(){
     handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
-    // Thumbnail Preview
-    r.appendChild(mk(s || PH));
+    // Thumbnail Preview with Click-to-Inspect
+    const thumb = mk(s || PH);
+    thumb.style.cursor = 'pointer';
+    thumb.title = 'Click to inspect & view details';
+    thumb.onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'ipad',
+          store: 'apple',
+          index: i,
+          title: `iPad Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            IPAD_SHOTS[i] = dataUrl;
+            renderIpadShots();
+            saveState();
+          }
+        });
+      }
+    };
+    r.appendChild(thumb);
 
     // Input & Actions
     const col = document.createElement('div'); col.className = 'col';
@@ -4111,6 +4285,548 @@ if(ipadShotFile){
 
 
 /* =========================================================================
+   Module: src/js/modules/modal.js
+   ========================================================================= */
+// Store Preview Studio - Unified Asset Inspector Modal Controller (Single Source of Truth)
+// Used seamlessly by both Core Studio and Marketing Showcase
+(function (global) {
+  'use strict';
+
+  let _activeModalAsset = null;
+  let _activeModalType = 'icon';
+  let _activeModalStore = 'apple';
+  let _activeModalIndex = -1;
+  let _activeModalOnReplace = null;
+  let _activeModalTitle = '';
+  let _modalValRunId = 0;
+  let _isInitialized = false;
+
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function getAssetMeta(src, file) {
+    if (file && typeof file.size === 'number') {
+      return { size: file.size, type: file.type || 'image/png', name: file.name || '' };
+    }
+    let size = 0;
+    let type = 'image/png';
+    if (typeof src === 'string' && src.startsWith('data:')) {
+      const comma = src.indexOf(',');
+      if (comma !== -1) {
+        const semi = src.indexOf(';');
+        if (semi !== -1) type = src.substring(5, semi);
+        const base64 = src.slice(comma + 1);
+        const padding = base64.endsWith('==') ? 2 : (base64.endsWith('=') ? 1 : 0);
+        size = Math.round((base64.length * 3) / 4 - padding);
+      }
+    }
+    return { size, type };
+  }
+
+  const SVG_STORE_PNG_CACHE = new Map();
+  function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
+    if (!svgSrc || typeof svgSrc !== 'string') {
+      if (callback) callback(svgSrc);
+      return;
+    }
+    if (!svgSrc.startsWith('data:image/svg+xml') && !svgSrc.includes('<svg')) {
+      if (callback) callback(svgSrc);
+      return;
+    }
+
+    const cacheKey = `${targetSize}_${svgSrc.length}_${svgSrc.slice(0, 80)}`;
+    if (SVG_STORE_PNG_CACHE.has(cacheKey)) {
+      if (callback) callback(SVG_STORE_PNG_CACHE.get(cacheKey));
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = targetSize;
+        canvas.height = targetSize;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, targetSize, targetSize);
+
+        const data = ctx.getImageData(0, 0, targetSize, targetSize).data;
+        let hasAlpha = false;
+        for (let i = 3; i < data.length; i += 4) {
+          if (data[i] < 250) { hasAlpha = true; break; }
+        }
+
+        let finalPng = '';
+        if (hasAlpha) {
+          const solidCanvas = document.createElement('canvas');
+          solidCanvas.width = targetSize;
+          solidCanvas.height = targetSize;
+          const sCtx = solidCanvas.getContext('2d');
+          const topEdgeIdx = (Math.floor(targetSize * 0.05) * targetSize + Math.floor(targetSize / 2)) * 4;
+          const midIdx = (Math.floor(targetSize / 2) * targetSize + Math.floor(targetSize / 2)) * 4;
+          const r = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx] : (data[midIdx + 3] > 240 ? data[midIdx] : 255);
+          const g = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 1] : (data[midIdx + 3] > 240 ? data[midIdx + 1] : 255);
+          const b = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 2] : (data[midIdx + 3] > 240 ? data[midIdx + 2] : 255);
+          sCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+          sCtx.fillRect(0, 0, targetSize, targetSize);
+          sCtx.drawImage(canvas, 0, 0);
+          finalPng = solidCanvas.toDataURL('image/png');
+        } else {
+          finalPng = canvas.toDataURL('image/png');
+        }
+
+        SVG_STORE_PNG_CACHE.set(cacheKey, finalPng);
+        if (callback) callback(finalPng);
+      } catch (e) {
+        if (callback) callback(svgSrc);
+      }
+    };
+    img.onerror = () => {
+      if (callback) callback(svgSrc);
+    };
+    img.src = svgSrc;
+  }
+  global.rasterizeSvgToStorePng = rasterizeSvgToStorePng;
+
+  function closeIconModal() {
+    const modal = $('msIconModal') || $('imageDetailModal');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }
+
+  function openIconModal(arg1, arg2) {
+    let opts = {};
+    if (typeof arg1 === 'string') {
+      opts.src = arg1;
+      opts.store = arg2 || (typeof store !== 'undefined' ? store : (typeof currentMode !== 'undefined' ? currentMode : 'apple'));
+      opts.type = 'icon';
+    } else if (arg1 && typeof arg1 === 'object') {
+      opts = Object.assign({}, arg1);
+    }
+
+    const modal = $('msIconModal') || $('imageDetailModal');
+    if (!modal) return;
+
+    _activeModalType = opts.type || 'icon';
+    _activeModalStore = opts.store || (typeof store !== 'undefined' ? store : (typeof currentMode !== 'undefined' ? currentMode : 'apple'));
+    _activeModalIndex = typeof opts.index === 'number' ? opts.index : -1;
+    _activeModalOnReplace = typeof opts.onReplace === 'function' ? opts.onReplace : null;
+    _activeModalTitle = opts.title || '';
+
+    let src = opts.src;
+    if (!src) {
+      if (_activeModalType === 'icon') {
+        src = (typeof ICON !== 'undefined' ? ICON : (typeof S !== 'undefined' && S ? (S[_activeModalStore === 'apple' ? 'iconApple' : 'iconGoogle'] || S.icon) : ''));
+      } else if (_activeModalType === 'feature') {
+        src = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
+      } else if (_activeModalType === 'ipad' && _activeModalIndex >= 0) {
+        src = (typeof IPAD_SHOTS !== 'undefined' && IPAD_SHOTS[_activeModalIndex] ? IPAD_SHOTS[_activeModalIndex] : '');
+      } else if (_activeModalType === 'screenshot' && _activeModalIndex >= 0) {
+        src = (typeof SHOTS !== 'undefined' && SHOTS[_activeModalIndex] ? SHOTS[_activeModalIndex] : '');
+      }
+    }
+    _activeModalAsset = src || '';
+
+    modal.dataset.storeType = _activeModalStore;
+    const canvas = $('msIconModalCanvas') || $('imageDetailModalCanvas');
+    if (canvas) canvas.dataset.storeType = _activeModalStore;
+
+    // Header & Titles Setup
+    const titleEl = $('msIconModalTitle') || $('imageDetailModalTitle');
+    const storeBadge = $('msIconModalStoreBadge') || $('imageDetailModalStoreBadge');
+    const targetSpec = $('msIconModalTarget') || $('imageDetailModalTarget');
+    const uploadBtnText = $('msIconModalUploadText') || $('imageDetailModalUploadText');
+
+    if (storeBadge) {
+      storeBadge.className = 'icon-modal-store-tag ' + (_activeModalStore === 'google' ? 'g' : 'a');
+      storeBadge.textContent = _activeModalStore === 'google' ? 'Google' : 'Apple';
+    }
+
+    if (_activeModalType === 'icon') {
+      if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';
+      if (targetSpec) targetSpec.textContent = _activeModalStore === 'apple' ? 'Standard: 1024×1024 px (1:1 · Opaque)' : 'Standard: 512×512 px (1:1 · ≤1024 KB)';
+      if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';
+    } else if (_activeModalType === 'ipad') {
+      if (titleEl) titleEl.textContent = 'Apple iPad Pro 13" Screenshot Inspector';
+      if (targetSpec) targetSpec.textContent = 'Standard: 2048×2732 px (3:4 Portrait)';
+      if (uploadBtnText) uploadBtnText.textContent = 'Upload New iPad Screenshot';
+    } else if (_activeModalType === 'feature') {
+      if (titleEl) titleEl.textContent = 'Google Play Feature Graphic Inspector';
+      if (targetSpec) targetSpec.textContent = 'Standard: 1024×500 px (Landscape · ≤15 MB)';
+      if (uploadBtnText) uploadBtnText.textContent = 'Upload New Feature Graphic';
+    } else {
+      if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'iPhone Screenshot Inspector' : 'Android Screenshot Inspector';
+      if (targetSpec) targetSpec.textContent = _activeModalStore === 'apple' ? 'Standard: 1290×2796 px (Portrait 9:19.5)' : 'Standard: 1080×1920 px (Portrait 9:16)';
+      if (uploadBtnText) uploadBtnText.textContent = 'Upload New Screenshot';
+    }
+
+    if (_activeModalTitle && titleEl) {
+      titleEl.textContent = _activeModalTitle;
+    }
+
+    const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
+    if (_activeModalType === 'icon' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
+      const targetDim = (_activeModalStore === 'google' ? 512 : 1024);
+      rasterizeSvgToStorePng(_activeModalAsset, targetDim, pngDataUrl => {
+        _activeModalAsset = pngDataUrl;
+        if (imgEl) imgEl.src = pngDataUrl;
+        inspectModalAsset(pngDataUrl, null);
+      });
+    } else {
+      if (imgEl && _activeModalAsset) {
+        imgEl.src = _activeModalAsset;
+      }
+      inspectModalAsset(_activeModalAsset, opts.file);
+    }
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    initModalEventListeners();
+  }
+
+  function inspectModalAsset(src, file) {
+    const dimEl = $('msIconModalDim') || $('imageDetailModalDim');
+    const ratioEl = $('msIconModalRatio') || $('imageDetailModalRatio');
+    const sizeEl = $('msIconModalSize') || $('imageDetailModalSize');
+    const formatEl = $('msIconModalFormat') || $('imageDetailModalFormat');
+    const badgeEl = $('msIconModalBadge') || $('imageDetailModalBadge');
+    const msgEl = $('msIconModalMsg') || $('imageDetailModalMsg');
+
+    if (!src) {
+      if (dimEl) dimEl.textContent = '--';
+      if (ratioEl) ratioEl.textContent = '--';
+      if (sizeEl) sizeEl.textContent = '--';
+      if (formatEl) formatEl.textContent = '--';
+      if (badgeEl) { badgeEl.className = 'icon-modal-badge warn'; badgeEl.textContent = 'No Asset'; }
+      if (msgEl) { msgEl.className = 'icon-modal-warn-msg'; msgEl.textContent = ''; }
+      return;
+    }
+
+    const runId = ++_modalValRunId;
+    const meta = getAssetMeta(src, file);
+    const mimeType = (meta.type || '').toLowerCase();
+    const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg';
+    const sizeBytes = meta.size || 0;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      if (runId !== _modalValRunId) return;
+
+      const w = img.naturalWidth || 1024;
+      const h = img.naturalHeight || 1024;
+      const isSq = (w === h);
+
+      // Pixel audit (alpha channel & apex corners)
+      let hasAlpha = false;
+      let hasPreRoundedCorners = false;
+      try {
+        const c = document.createElement('canvas');
+        c.width = 64; c.height = 64;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, 64, 64);
+        const data = ctx.getImageData(0, 0, 64, 64).data;
+        for (let i = 3; i < data.length; i += 4) {
+          if (data[i] < 250) { hasAlpha = true; break; }
+        }
+        const cornerIdx = [
+          (0 * 64 + 0) * 4 + 3,
+          (0 * 64 + 63) * 4 + 3,
+          (63 * 64 + 0) * 4 + 3,
+          (63 * 64 + 63) * 4 + 3
+        ];
+        hasPreRoundedCorners = cornerIdx.some(idx => data[idx] < 200);
+      } catch (e) {}
+
+      // Update 2x2 Metrics Grid
+      if (dimEl) {
+        dimEl.textContent = `${w} × ${h} px`;
+        let dimOk = false;
+        if (_activeModalType === 'icon') {
+          dimOk = (_activeModalStore === 'apple' && w === 1024 && h === 1024) ||
+                  (_activeModalStore === 'google' && w === 512 && h === 512);
+        } else if (_activeModalType === 'feature') {
+          dimOk = (w === 1024 && h === 500);
+        } else if (_activeModalType === 'ipad') {
+          dimOk = (w === 2048 && h === 2732);
+        } else {
+          dimOk = isSq ? false : true;
+        }
+        dimEl.className = 'icon-metric-val ' + (dimOk ? 'ok' : 'warn');
+      }
+
+      if (ratioEl) {
+        if (isSq) {
+          ratioEl.textContent = '1:1 Square';
+          ratioEl.className = 'icon-metric-val ok';
+        } else {
+          const r = (w / (h || 1)).toFixed(2);
+          ratioEl.textContent = `${r}:1`;
+          ratioEl.className = 'icon-metric-val ' + (_activeModalType === 'icon' ? 'err' : 'ok');
+        }
+      }
+
+      if (sizeEl) {
+        if (sizeBytes > 0) {
+          const kb = (sizeBytes / 1024).toFixed(0);
+          sizeEl.textContent = `${kb} KB`;
+          sizeEl.title = `${sizeBytes.toLocaleString('en-US')} bytes`;
+          const sizeErr = (_activeModalType === 'icon' && _activeModalStore === 'google' && sizeBytes > 1024 * 1024);
+          sizeEl.className = 'icon-metric-val ' + (sizeErr ? 'err' : 'ok');
+        } else {
+          sizeEl.textContent = 'Optimized';
+          sizeEl.className = 'icon-metric-val ok';
+        }
+      }
+
+      if (formatEl) {
+        const fmt = (mimeType || 'image/png').replace('image/', '').toUpperCase();
+        if (hasAlpha) {
+          formatEl.textContent = `${fmt} · Alpha`;
+          formatEl.className = 'icon-metric-val ' + (_activeModalType === 'icon' && _activeModalStore === 'apple' ? 'err' : 'ok');
+        } else if (isJpeg) {
+          formatEl.textContent = 'JPEG';
+          formatEl.className = 'icon-metric-val warn';
+        } else {
+          formatEl.textContent = `${fmt} · Opaque`;
+          formatEl.className = 'icon-metric-val ok';
+        }
+      }
+
+      // Compliance Evaluator State
+      let level = 'ok';
+      let badgeText = '';
+      let detailsHtml = '';
+
+      if (_activeModalType === 'icon') {
+        if (_activeModalStore === 'apple') {
+          if (!isSq) {
+            level = 'err';
+            badgeText = `Non-square (${w}×${h} px) · 1:1 square required`;
+            detailsHtml = '<p>Apple App Store requires a 1:1 square icon (1024×1024 px).</p><p class="icon-modal-warn-hint">Please re-export a 1:1 square image from Figma, Sketch, or Photoshop.</p>';
+          } else if (hasAlpha) {
+            level = 'err';
+            badgeText = 'ITMS-90717: Alpha detected · 100% Opaque required';
+            detailsHtml = '<p>ITMS-90717 Error: Xcode and App Store Connect reject icons with alpha channels. The icon must be 100% opaque without transparency.</p><p class="icon-modal-warn-hint">Flatten background layers and export as PNG without an alpha channel.</p>';
+          } else if (isJpeg) {
+            level = 'warn';
+            badgeText = 'Not recommended: PNG preferred per store guidelines';
+            detailsHtml = '<p>JPEG format is not part of official store specifications. Export as PNG to avoid submission risk.</p><p class="icon-modal-warn-hint">Apple documentation specifies standard PNG format with sRGB or Display P3.</p>';
+          } else if (w !== 1024) {
+            level = 'warn';
+            badgeText = `${w}×${h} px · Apple recommends 1024×1024 px`;
+            detailsHtml = '<p>Apple App Store recommends standard 1024×1024 px resolution to ensure clarity across all Retina displays.</p><p class="icon-modal-warn-hint">Re-export at 1024×1024 px from your design tool.</p>';
+          } else {
+            level = 'ok';
+            badgeText = '1024×1024 px · App Store Compliant';
+            detailsHtml = '';
+          }
+        } else {
+          // Google Store Icon
+          const MAX_GOOGLE_ICON_BYTES = 1024 * 1024;
+          if (!isSq) {
+            level = 'err';
+            badgeText = `Non-square (${w}×${h} px) · 1:1 square required`;
+            detailsHtml = '<p>Google Play requires a 1:1 square icon (512×512 px).</p><p class="icon-modal-warn-hint">Please re-export a 1:1 square image from your design tool.</p>';
+          } else if (sizeBytes > MAX_GOOGLE_ICON_BYTES) {
+            const kb = (sizeBytes / 1024).toFixed(0);
+            level = 'err';
+            badgeText = `File size error: ${kb} KB · Exceeds maximum 1024 KB`;
+            detailsHtml = `<p>Google Play Console strictly enforces a maximum file size of 1024 KB (1,048,576 bytes). Your file is currently ${kb} KB and will be rejected upon upload.</p><p class="icon-modal-warn-hint">Please compress or optimize the image before submitting.</p>`;
+          } else if (isJpeg) {
+            level = 'warn';
+            badgeText = 'Not recommended: PNG preferred per store guidelines';
+            detailsHtml = '<p>JPEG format is not part of official Google Play specifications (requires 32-bit PNG). Export as PNG to avoid submission risk.</p><p class="icon-modal-warn-hint">Export standard 32-bit PNG (sRGB).</p>';
+          } else if (hasPreRoundedCorners) {
+            level = 'warn';
+            badgeText = 'Not recommended: Pre-rounded corners or shadow';
+            detailsHtml = '<p>Pre-rounded corners or drop shadows are not recommended: Google Play dynamically applies a 20% corner radius mask and drop shadow on store listings.</p><p class="icon-modal-warn-hint">Export a full-bleed square image without rounded corners.</p>';
+          } else if (w !== 512) {
+            level = 'warn';
+            badgeText = `${w}×${h} px · Google Play recommends 512×512 px`;
+            detailsHtml = '<p>Google Play Console requires standard 512×512 px dimensions.</p><p class="icon-modal-warn-hint">Export standard 512×512 px from Figma or Photoshop.</p>';
+          } else {
+            const sizeNote = sizeBytes ? ` (${(sizeBytes / 1024).toFixed(0)} KB)` : '';
+            level = 'ok';
+            badgeText = `512×512 px · Google Play Compliant${sizeNote}`;
+            detailsHtml = '';
+          }
+        }
+      } else if (_activeModalType === 'feature') {
+        if (w === 1024 && h === 500) {
+          level = 'ok';
+          badgeText = '1024×500 px · Google Play Compliant';
+        } else {
+          level = 'warn';
+          badgeText = `Dimension Notice (${w}×${h} px) · Google Play requires 1024×500 px`;
+          detailsHtml = '<p>Google Play requires a landscape Feature Graphic of exactly 1024×500 px.</p><p class="icon-modal-warn-hint">Export standard 1024×500 px to display properly on the Play Store banner.</p>';
+        }
+      } else if (_activeModalType === 'ipad') {
+        if (w === 2048 && h === 2732) {
+          level = 'ok';
+          badgeText = '2048×2732 px · iPad Pro 13" Compliant';
+        } else {
+          level = 'warn';
+          badgeText = `Dimension Notice (${w}×${h} px) · Target: 2048×2732 px`;
+          detailsHtml = '<p>Apple recommends 2048×2732 px for 13" iPad Pro screenshots (Portrait).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
+        }
+      } else {
+        // Phone Screenshot
+        level = 'ok';
+        badgeText = `${w}×${h} px · Active Screenshot`;
+      }
+
+      if (badgeEl) {
+        badgeEl.className = 'icon-modal-badge ' + level;
+        badgeEl.textContent = badgeText;
+      }
+
+      if (msgEl) {
+        if (detailsHtml) {
+          msgEl.className = 'icon-modal-warn-msg visible' + (level === 'warn' ? ' warn-mode' : '');
+          msgEl.innerHTML = detailsHtml;
+        } else {
+          msgEl.className = 'icon-modal-warn-msg';
+          msgEl.textContent = '';
+        }
+      }
+
+      // Synchronize with Marketing Showcase state if present
+      if (typeof iconValidationState !== 'undefined' && _activeModalType === 'icon') {
+        iconValidationState[_activeModalStore] = {
+          src, width: w, height: h, isSquare: isSq, sizeBytes,
+          mimeType, isJpeg, hasAlpha, hasPreRoundedCorners,
+          level, badgeText, modalBadgeText: badgeText, detailsHtml, isCustom: true
+        };
+        if (typeof applyIconCardBadge === 'function') {
+          applyIconCardBadge(_activeModalStore === 'apple' ? 'msIconBadgeApple' : 'msIconBadgeGoogle', iconValidationState[_activeModalStore]);
+        }
+      }
+    };
+    img.src = src;
+  }
+
+  function handleFileReplacement(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataUrl = e.target.result;
+      _activeModalAsset = dataUrl;
+
+      const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
+      if (imgEl) imgEl.src = dataUrl;
+
+      // Notify callback or host module
+      if (typeof _activeModalOnReplace === 'function') {
+        _activeModalOnReplace(file, dataUrl);
+      } else if (typeof handleIconUpload === 'function') {
+        // Marketing showcase integration
+        const storeKey = _activeModalStore === 'apple' ? 'iconApple' : 'iconGoogle';
+        if (typeof customUploadedMeta !== 'undefined') {
+          customUploadedMeta[_activeModalStore] = { size: file.size, type: file.type, name: file.name };
+        }
+        handleIconUpload(storeKey, _activeModalStore, dataUrl);
+      } else if (_activeModalType === 'icon') {
+        // Core studio fallback
+        if (typeof ICON !== 'undefined') {
+          ICON = dataUrl;
+          if (typeof renderIcons === 'function') renderIcons();
+          if (typeof saveState === 'function') saveState();
+        }
+      }
+
+      inspectModalAsset(dataUrl, file);
+      if (typeof showToast === 'function') {
+        showToast('Asset updated & verified successfully!', 'ok');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function initModalEventListeners() {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
+    const modal = $('msIconModal') || $('imageDetailModal');
+    if (!modal) return;
+
+    // Dismiss on backdrop click
+    modal.addEventListener('click', e => {
+      if (!e.target.closest('#msIconModalCanvas') && !e.target.closest('#imageDetailModalCanvas')) {
+        closeIconModal();
+      }
+    });
+
+    // Close button
+    const closeBtn = $('msIconModalClose') || $('imageDetailModalClose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        closeIconModal();
+      });
+    }
+
+    // Escape key
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) {
+        closeIconModal();
+      }
+    });
+
+    // Upload button & hidden input
+    const uploadBtn = $('msIconModalUploadBtn') || $('imageDetailModalUploadBtn');
+    const fileInput = $('msIconModalInput') || $('imageDetailModalInput');
+    if (uploadBtn && fileInput) {
+      uploadBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        fileInput.click();
+      });
+      fileInput.addEventListener('change', e => {
+        if (e.target.files && e.target.files[0]) {
+          handleFileReplacement(e.target.files[0]);
+        }
+        e.target.value = '';
+      });
+    }
+
+    // Drag and Drop on Art Container
+    const artContainer = $('msIconModalArt') || $('imageDetailModalArt');
+    if (artContainer) {
+      artContainer.addEventListener('dragover', e => {
+        e.preventDefault();
+        artContainer.classList.add('drag-over');
+      });
+      artContainer.addEventListener('dragleave', () => {
+        artContainer.classList.remove('drag-over');
+      });
+      artContainer.addEventListener('drop', e => {
+        e.preventDefault();
+        artContainer.classList.remove('drag-over');
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleFileReplacement(e.dataTransfer.files[0]);
+        }
+      });
+    }
+  }
+
+  // Export to global scope
+  global.openIconModal = openIconModal;
+  global.openImageDetailModal = openIconModal;
+  global.closeIconModal = closeIconModal;
+  global.closeImageDetailModal = closeIconModal;
+
+})(typeof window !== 'undefined' ? window : this);
+
+
+/* =========================================================================
    Module: src/js/google/feature-graphic.js
    ========================================================================= */
 // Store Preview Studio · Google Play Feature Graphic
@@ -4122,10 +4838,25 @@ $('featureFile').onchange=e=>{
     FEATURE_GRAPHIC=d;
     renderFeature();
     saveState();
-    showToast('Feature graphic updated! (1,024 × 500 px)','🖼');
+    showToast('Feature graphic updated! (1,024 × 500 px)', 'ok');
   });
   e.target.value='';
 };
+if($('featureInspect')){
+  $('featureInspect').onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: FEATURE_GRAPHIC, type: 'feature', store: 'google' });
+    }
+  };
+}
+const featurePrevImg = $('featurePrev');
+if(featurePrevImg){
+  featurePrevImg.onclick = () => {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: FEATURE_GRAPHIC, type: 'feature', store: 'google' });
+    }
+  };
+}
 const featureDropZone = $('featureDropZone');
 featureDropZone.addEventListener('dragover',e=>{e.preventDefault();featureDropZone.classList.add('drag-over')});
 featureDropZone.addEventListener('dragleave',()=>{featureDropZone.classList.remove('drag-over')});
@@ -4137,7 +4868,7 @@ featureDropZone.addEventListener('drop',e=>{
       FEATURE_GRAPHIC=d;
       renderFeature();
       saveState();
-      showToast('Feature graphic dropped & applied! (1,024 × 500 px)','🖼');
+      showToast('Feature graphic dropped & applied! (1,024 × 500 px)', 'ok');
     });
   }
 });
@@ -5395,6 +6126,25 @@ function setStore(s, animate = true){
     }
   }
 
+  // Sync preset icon variant if using preset template
+  if(typeof IS_CUSTOM_ICON !== 'undefined' && !IS_CUSTOM_ICON){
+    let iconChanged = false;
+    if(typeof BLANK_ICON !== 'undefined' && (ICON === BLANK_ICON || (typeof BLANK_ICON_1024 !== 'undefined' && ICON === BLANK_ICON_1024) || (typeof BLANK_ICON_512 !== 'undefined' && ICON === BLANK_ICON_512))){
+      if(s === 'apple' && typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024){ ICON = BLANK_ICON_1024; iconChanged = true; }
+      else if(s === 'google' && typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512){ ICON = BLANK_ICON_512; iconChanged = true; }
+    } else if(typeof PRESETS !== 'undefined'){
+      for(const k in PRESETS){
+        const p = PRESETS[k];
+        if(p && (p.icon === ICON || p.icon1024 === ICON || p.icon512 === ICON)){
+          if(s === 'apple' && p.icon1024){ ICON = p.icon1024; iconChanged = true; }
+          else if(s === 'google' && p.icon512){ ICON = p.icon512; iconChanged = true; }
+          break;
+        }
+      }
+    }
+    if(iconChanged && typeof renderIcons === 'function') renderIcons();
+  }
+
   // Trigger validation immediately upon store switch
   if(typeof validateAppIcon === 'function') validateAppIcon();
   if(typeof validateScreenshots === 'function') validateScreenshots();
@@ -5702,6 +6452,48 @@ const PRESET_ICONS = {
   /* @pro-only-end */
 };
 
+function prewarmPresetIcons() {
+  if (typeof rasterizeSvgToStorePng !== 'function') return;
+  if (typeof BLANK_ICON === 'string' && (BLANK_ICON.startsWith('data:image/svg+xml') || BLANK_ICON.includes('<svg'))) {
+    rasterizeSvgToStorePng(BLANK_ICON, 1024, png => {
+      BLANK_ICON_1024 = png;
+      if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'apple') {
+        ICON = png;
+        renderIcons();
+      }
+    });
+    rasterizeSvgToStorePng(BLANK_ICON, 512, png => {
+      BLANK_ICON_512 = png;
+      if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'google') {
+        ICON = png;
+        renderIcons();
+      }
+    });
+  }
+  if (typeof PRESETS === 'object') {
+    Object.keys(PRESETS).forEach(key => {
+      const p = PRESETS[key];
+      if (!p || typeof p.icon !== 'string') return;
+      if (p.icon.startsWith('data:image/svg+xml') || p.icon.includes('<svg')) {
+        rasterizeSvgToStorePng(p.icon, 1024, png1024 => {
+          p.icon1024 = png1024;
+          if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key && store === 'apple') {
+            ICON = png1024;
+            renderIcons();
+          }
+        });
+        rasterizeSvgToStorePng(p.icon, 512, png512 => {
+          p.icon512 = png512;
+          if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key && store === 'google') {
+            ICON = png512;
+            renderIcons();
+          }
+        });
+      }
+    });
+  }
+}
+
 function initPresetThumbnails() {
   $$('#menuPresets [data-preset]').forEach(b => {
     const key = b.dataset.preset;
@@ -5710,6 +6502,7 @@ function initPresetThumbnails() {
       img.src = PRESET_ICONS[key];
     }
   });
+  prewarmPresetIcons();
 }
 initPresetThumbnails();
 
@@ -5721,6 +6514,7 @@ $$('[data-preset]').forEach(b=>{
 });
 
 function loadPreset(key){
+  CURRENT_PRESET_KEY = key;
   if(key === 'none'){
     $('f-name').value = '';
     $('f-sub').value = '';
@@ -5740,7 +6534,35 @@ function loadPreset(key){
     CURRENT_PRIVACY = { linked: '', notLinked: '', google: '' };
     $('f-new').value = '';
     $('f-desc').value = '';
-    ICON = BLANK_ICON;
+    IS_CUSTOM_ICON = false;
+    ICON_FILE_SIZE = 0; ICON_FILE_TYPE = ''; ICON_FILE_NAME = '';
+    if (store === 'apple' && BLANK_ICON_1024) {
+      ICON = BLANK_ICON_1024;
+    } else if (store === 'google' && BLANK_ICON_512) {
+      ICON = BLANK_ICON_512;
+    } else {
+      ICON = BLANK_ICON;
+    }
+    if(typeof rasterizeSvgToStorePng === 'function' && typeof BLANK_ICON === 'string' && (BLANK_ICON.startsWith('data:image/svg+xml') || BLANK_ICON.includes('<svg'))){
+      if(!BLANK_ICON_1024){
+        rasterizeSvgToStorePng(BLANK_ICON, 1024, png => {
+          BLANK_ICON_1024 = png;
+          if(!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'apple'){
+            ICON = png;
+            renderIcons();
+          }
+        });
+      }
+      if(!BLANK_ICON_512){
+        rasterizeSvgToStorePng(BLANK_ICON, 512, png => {
+          BLANK_ICON_512 = png;
+          if(!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'google'){
+            ICON = png;
+            renderIcons();
+          }
+        });
+      }
+    }
     FEATURE_GRAPHIC = BLANK_FEATURE;
     SHOTS = [];
     IPAD_SHOTS = [];
@@ -5802,7 +6624,35 @@ function loadPreset(key){
   }
   $('f-new').value = p.whatsNew;
   $('f-desc').value = p.desc;
-  ICON = p.icon;
+  IS_CUSTOM_ICON = false;
+  ICON_FILE_SIZE = 0; ICON_FILE_TYPE = ''; ICON_FILE_NAME = '';
+  if (store === 'apple' && p.icon1024) {
+    ICON = p.icon1024;
+  } else if (store === 'google' && p.icon512) {
+    ICON = p.icon512;
+  } else {
+    ICON = p.icon;
+  }
+  if(typeof rasterizeSvgToStorePng === 'function' && typeof p.icon === 'string' && (p.icon.startsWith('data:image/svg+xml') || p.icon.includes('<svg'))){
+    if(!p.icon1024){
+      rasterizeSvgToStorePng(p.icon, 1024, png1024 => {
+        p.icon1024 = png1024;
+        if(store === 'apple' && !IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key){
+          ICON = png1024;
+          renderIcons();
+        }
+      });
+    }
+    if(!p.icon512){
+      rasterizeSvgToStorePng(p.icon, 512, png512 => {
+        p.icon512 = png512;
+        if(store === 'google' && !IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key){
+          ICON = png512;
+          renderIcons();
+        }
+      });
+    }
+  }
   FEATURE_GRAPHIC = p.feature || DEFAULT_FEATURE;
   SHOTS = [...p.shots];
   IPAD_SHOTS = [];
@@ -6508,7 +7358,31 @@ function parseAndApplyJSON(jsonString){
   if(mapped.new && $('f-new')) $('f-new').value = mapped.new;
   if(mapped.desc && $('f-desc')) $('f-desc').value = mapped.desc;
 
-  if(data.icon && typeof data.icon === 'string') ICON = data.icon;
+  IS_CUSTOM_ICON = false;
+  if(data.icon1024 || data.icon512) {
+    if(store === 'apple' && data.icon1024) ICON = data.icon1024;
+    else if(store === 'google' && data.icon512) ICON = data.icon512;
+    else if(data.icon) ICON = data.icon;
+  } else if(data.icon && typeof data.icon === 'string') {
+    ICON = data.icon;
+  }
+  if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && (ICON.startsWith('data:image/svg+xml') || ICON.includes('<svg'))){
+    const rawSvg = ICON;
+    rasterizeSvgToStorePng(rawSvg, 1024, png1024 => {
+      data.icon1024 = png1024;
+      if(store === 'apple' && !IS_CUSTOM_ICON){
+        ICON = png1024;
+        renderIcons();
+      }
+    });
+    rasterizeSvgToStorePng(rawSvg, 512, png512 => {
+      data.icon512 = png512;
+      if(store === 'google' && !IS_CUSTOM_ICON){
+        ICON = png512;
+        renderIcons();
+      }
+    });
+  }
   if(data.featureGraphic && typeof data.featureGraphic === 'string') FEATURE_GRAPHIC = data.featureGraphic;
   else if(data.feature && typeof data.feature === 'string') FEATURE_GRAPHIC = data.feature;
 

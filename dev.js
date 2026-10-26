@@ -33,6 +33,10 @@ let buildMarketing = null;
 try {
   buildMarketing = require('./scripts/build-marketing.js').buildMarketing;
 } catch (_) {}
+let buildMarketingVi = null;
+try {
+  buildMarketingVi = require('./scripts/build-marketing-vi.js').buildMarketingVi;
+} catch (_) {}
 
 /**
  * Broadcasts reload event to all open browser tabs
@@ -47,7 +51,7 @@ function triggerReload() {
     }
   }
   if (count > 0) {
-    console.log(`[⚡] Reload event sent to ${count} active tab(s).`);
+    console.log(`[LIVE] Reload event sent to ${count} active tab(s).`);
   }
 }
 
@@ -157,7 +161,7 @@ function startServer(port) {
       console.log(`[i] Port ${port} is in use, trying port ${port + 1}...`);
       startServer(port + 1);
     } else {
-      console.error('[✗] Server error:', err);
+      console.error('[ERR] Server error:', err);
     }
   });
 
@@ -181,7 +185,7 @@ function startServer(port) {
     // Initial build
     const res = build();
     if (res.success) {
-      console.log(`[✓] Initial build completed (${res.duration}ms)`);
+      console.log(`[OK] Initial build completed (${res.duration}ms)`);
     }
     const MARKETING_SRC_DIR = path.join(ROOT_DIR, 'docs', 'src', 'marketing');
     if (typeof buildMarketing === 'function' && fs.existsSync(MARKETING_SRC_DIR)) {
@@ -197,8 +201,14 @@ function startServer(port) {
         const fileInfo = filename ? `[${filename}]` : 'files';
         console.log(`\n[i] Change detected in ${fileInfo}, rebuilding...`);
         const b = build();
+        if (typeof buildMarketing === 'function') {
+          try { buildMarketing(); } catch (_) {}
+        }
+        if (typeof buildMarketingVi === 'function') {
+          try { buildMarketingVi(); } catch (_) {}
+        }
         if (b.success) {
-          console.log(`[✓] Bundled store_preview_studio.html (${b.duration}ms)`);
+          console.log(`[OK] Bundled store_preview_studio.html (${b.duration}ms)`);
           triggerReload();
         }
       }, 150);

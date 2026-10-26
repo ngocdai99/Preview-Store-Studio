@@ -1564,6 +1564,10 @@ const LINGUA_SHOT_4 = SKILL_SHOT_4;
 
 // --- Active State Model ---
 let ICON = BLANK_ICON;
+let BLANK_ICON_1024 = '';
+let BLANK_ICON_512 = '';
+let CURRENT_PRESET_KEY = 'none';
+let IS_CUSTOM_ICON = false;
 let FEATURE_GRAPHIC = DEFAULT_FEATURE;
 let SHOTS = [SHOT_1, SHOT_2, SHOT_3, SHOT_4];
 let IPAD_SHOTS = [];

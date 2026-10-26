@@ -662,3 +662,74 @@ function idbDelete(key) {
   }).catch(() => false);
 }
 
+// --- SVG to Store-Compliant PNG Rasterizer ---
+const SVG_STORE_PNG_CACHE = new Map();
+
+function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
+  if (!svgSrc || typeof svgSrc !== 'string') {
+    if (callback) callback(svgSrc);
+    return;
+  }
+  // If already a raster PNG/JPEG data URL or regular URL, pass through
+  if (!svgSrc.startsWith('data:image/svg+xml') && !svgSrc.includes('<svg')) {
+    if (callback) callback(svgSrc);
+    return;
+  }
+
+  const cacheKey = `${targetSize}_${svgSrc.length}_${svgSrc.slice(0, 80)}`;
+  if (SVG_STORE_PNG_CACHE.has(cacheKey)) {
+    if (callback) callback(SVG_STORE_PNG_CACHE.get(cacheKey));
+    return;
+  }
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = targetSize;
+      canvas.height = targetSize;
+      const ctx = canvas.getContext('2d');
+
+      // Draw SVG scaled to target resolution
+      ctx.drawImage(img, 0, 0, targetSize, targetSize);
+
+      // Check for transparency across pixels
+      const data = ctx.getImageData(0, 0, targetSize, targetSize).data;
+      let hasAlpha = false;
+      for (let i = 3; i < data.length; i += 4) {
+        if (data[i] < 250) { hasAlpha = true; break; }
+      }
+
+      let finalPng = '';
+      if (hasAlpha) {
+        // Flood background with opaque base color sampled from top edge or center
+        const solidCanvas = document.createElement('canvas');
+        solidCanvas.width = targetSize;
+        solidCanvas.height = targetSize;
+        const sCtx = solidCanvas.getContext('2d');
+        const topEdgeIdx = (Math.floor(targetSize * 0.05) * targetSize + Math.floor(targetSize / 2)) * 4;
+        const midIdx = (Math.floor(targetSize / 2) * targetSize + Math.floor(targetSize / 2)) * 4;
+        const r = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx] : (data[midIdx + 3] > 240 ? data[midIdx] : 255);
+        const g = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 1] : (data[midIdx + 3] > 240 ? data[midIdx + 1] : 255);
+        const b = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 2] : (data[midIdx + 3] > 240 ? data[midIdx + 2] : 255);
+        sCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        sCtx.fillRect(0, 0, targetSize, targetSize);
+        sCtx.drawImage(canvas, 0, 0);
+        finalPng = solidCanvas.toDataURL('image/png');
+      } else {
+        finalPng = canvas.toDataURL('image/png');
+      }
+
+      SVG_STORE_PNG_CACHE.set(cacheKey, finalPng);
+      if (callback) callback(finalPng);
+    } catch (e) {
+      if (callback) callback(svgSrc);
+    }
+  };
+  img.onerror = () => {
+    if (callback) callback(svgSrc);
+  };
+  img.src = svgSrc;
+}
+

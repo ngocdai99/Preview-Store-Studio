@@ -83,6 +83,7 @@ function getBundledJs() {
     'modules/shots/icon.js',
     'modules/shots/phone.js',
     'modules/shots/ipad.js',
+    'modules/modal.js',
     'google/feature-graphic.js',
     'google/google.js',
     'modules/form/categories.js',

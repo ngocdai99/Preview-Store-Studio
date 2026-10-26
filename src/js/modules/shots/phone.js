@@ -36,8 +36,27 @@ function renderShots(){
     handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
-    // Thumbnail Preview
-    r.appendChild(mk(s || PH));
+    // Thumbnail Preview with Click-to-Inspect
+    const thumb = mk(s || PH);
+    thumb.style.cursor = 'pointer';
+    thumb.title = 'Click to inspect & view details';
+    thumb.onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'screenshot',
+          store,
+          index: i,
+          title: `Phone Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            SHOTS[i] = dataUrl;
+            renderShots();
+            saveState();
+          }
+        });
+      }
+    };
+    r.appendChild(thumb);
 
     // Input & Actions
     const col = document.createElement('div'); col.className = 'col';
@@ -48,12 +67,33 @@ function renderShots(){
     inp.onchange = () => { SHOTS[i] = inp.value.trim(); renderShots(); saveState(); };
 
     const act = document.createElement('div'); act.className = 'act';
-    act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" data-m="-1" title="Move Up">↑</button><button class="mini" data-m="1" title="Move Down">↓</button><button class="mini del" title="Delete">&times;</button><span class="shot-dim-tag" id="shotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
+    act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
+      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>' +
+      '<button class="mini" data-m="-1" title="Move Up">↑</button>' +
+      '<button class="mini" data-m="1" title="Move Down">↓</button>' +
+      '<button class="mini del" title="Delete">&times;</button>' +
+      '<span class="shot-dim-tag" id="shotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
-    b[1].onclick = () => mv(i, -1);
-    b[2].onclick = () => mv(i, 1);
-    b[3].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
+    b[1].onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'screenshot',
+          store,
+          index: i,
+          title: `Phone Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            SHOTS[i] = dataUrl;
+            renderShots();
+            saveState();
+          }
+        });
+      }
+    };
+    b[2].onclick = () => mv(i, -1);
+    b[3].onclick = () => mv(i, 1);
+    b[4].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
 
     col.append(inp, act);
     r.appendChild(col);
