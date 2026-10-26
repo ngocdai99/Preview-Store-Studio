@@ -1169,6 +1169,12 @@ assert(!/if\s*\(\s*confirm\s*\(/.test(bundledHtml), 'Native browser confirm() di
 assert(!bundledHtml.includes('showToast(SUPPORTS_IPAD'), 'iPad destination toggle does not trigger toast notification');
 assert(bundledHtml.includes('btnToggleSidebar.onclick = (e) =>'), 'btnToggleSidebar has single dedicated onclick binding avoiding double-toggle cancelation');
 
+// 10. Dual Store Phone Preview (iPhone + Android Phone Side-by-Side) & PNG Export
+assert(bundledHtml.includes('id="stageDevices"'), 'Stage wraps device mockups in #stageDevices flex container');
+assert(bundledHtml.includes('data-d="dual"') && bundledHtml.includes('data-gd="dual"'), 'Both Apple (#dt) and Google (#gdt) device selectors include Dual View toggle button');
+assert(bundledHtml.includes('body[data-dual="true"] .dev.apple.single') && bundledHtml.includes('body[data-dual="true"] #dev-phone.dev.google'), 'CSS rules display both iPhone and Android Phone side-by-side when data-dual="true"');
+assert(bundledHtml.includes("devSlug = 'dual-store-phone'"), 'exportPNG supports capturing dual-store-phone comparison image');
+
 
 // ---------------------------------------------------------------------
 // Summary Report

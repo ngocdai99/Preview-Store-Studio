@@ -47,8 +47,13 @@ function computeDeviceZoom(s, d){
   const st = document.querySelector('.stage'), m = isM(), pad = m ? 20 : 40;
   const tb = document.querySelector('.stage-toolbar');
   const vt = (tb ? tb.offsetHeight : 40) + (m ? 14 : 18);
+  const isDual = d === 'dual' || document.body.dataset.dual === 'true';
   let baseW = 416, baseH = 870;
-  if(s === 'apple'){
+  if(isDual){
+    const isLand = !!document.querySelector('.dev.apple.single.landscape');
+    baseW = (isLand ? 870 : 416) * 2 + 28;
+    baseH = isLand ? 416 : 870;
+  } else if(s === 'apple'){
     if(d === 'ipad'){
       baseW = 750;
       baseH = 980;
@@ -189,11 +194,32 @@ function setStore(s, animate = true){
   if(typeof validateAppIcon === 'function') validateAppIcon();
   if(typeof validateScreenshots === 'function') validateScreenshots();
 
-  const targetDev = (s === 'apple' ? appleDevice : googleDevice);
+  const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
+  const targetDev = isDual ? 'dual' : (s === 'apple' ? appleDevice : googleDevice);
+
+  if(isDual){
+    clearDevTransitions();
+    document.body.dataset.appleDevice = 'iphone';
+    document.body.dataset.googleDevice = 'phone';
+    document.body.dataset.dual = 'true';
+    if(s === 'apple'){
+      if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
+      if(typeof renderIpadShots === 'function') renderIpadShots();
+    } else {
+      if($('ipadCard')) $('ipadCard').style.display = 'none';
+    }
+    if(typeof validateAppIcon === 'function') validateAppIcon();
+    if(typeof validateScreenshots === 'function') validateScreenshots();
+    update();
+    saveState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
 
   transitionDevice(s, targetDev, () => {
-    document.body.dataset.appleDevice = appleDevice;
-    document.body.dataset.googleDevice = googleDevice;
+    document.body.dataset.appleDevice = appleDevice === 'dual' ? 'iphone' : appleDevice;
+    document.body.dataset.googleDevice = googleDevice === 'dual' ? 'phone' : googleDevice;
 
     if(s === 'apple'){
       if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';

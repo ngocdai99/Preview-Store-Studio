@@ -101,7 +101,7 @@ function applyStateObject(s){
     IPAD_FIT_MODE = s.ipadFitMode;
     if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
   }
-  if(s.googleDevice === 'tab7' || s.googleDevice === 'tab10' || s.googleDevice === 'phone') googleDevice = s.googleDevice;
+  if(s.googleDevice === 'tab7' || s.googleDevice === 'tab10' || s.googleDevice === 'phone' || s.googleDevice === 'dual') googleDevice = s.googleDevice;
   if(typeof tabOrient !== 'undefined'){
     tabOrient.tab7 = 'landscape';
     tabOrient.tab10 = 'landscape';

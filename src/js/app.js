@@ -4748,21 +4748,41 @@ function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
 function applyGoogleDevice(){
-  document.body.dataset.googleDevice = googleDevice;
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
+  const isDual = googleDevice === 'dual' || appleDevice === 'dual';
+  document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
+  document.body.dataset.dual = isDual ? 'true' : 'false';
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isDual ? 'dual' : googleDevice)));
+  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isDual ? 'dual' : appleDevice)));
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){
-  const nextDev = (d === 'tab7' || d === 'tab10') ? d : 'phone';
-  if(googleDevice === nextDev && document.body.dataset.googleDevice === nextDev){
+  const nextDev = (d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone';
+  const wasDual = document.body.dataset.dual === 'true';
+  const nextDual = nextDev === 'dual';
+  if(googleDevice === nextDev && document.body.dataset.googleDevice === (nextDual ? 'phone' : nextDev) && wasDual === nextDual){
     syncAllVtPills();
     return;
   }
-  transitionDevice('google', nextDev, () => {
+  const applyState = () => {
     googleDevice = nextDev;
+    if(nextDual){
+      appleDevice = 'dual';
+      document.body.dataset.appleDevice = 'iphone';
+    } else if(wasDual && appleDevice === 'dual'){
+      appleDevice = 'iphone';
+      document.body.dataset.appleDevice = 'iphone';
+    }
     applyGoogleDevice();
     saveState();
-  }, animate);
+  };
+  if(nextDual || wasDual){
+    clearDevTransitions();
+    applyState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
+  transitionDevice('google', nextDev, applyState, animate);
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === nextDev));
   syncAllVtPills();
 }
@@ -5119,7 +5139,11 @@ function update(){
     // Synchronize to Mockup Displays (clamped to official store limits)
     $$('[data-b="'+k+'"]').forEach(e => {
       const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : ''))));
-      const displayVal = (max && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, max) : v.slice(0, max)) : (v || fallback);
+      let elemMax = max;
+      if(k === 'new'){
+        elemMax = e.closest('.dev.google, .dev.gtab') ? 500 : 4000;
+      }
+      const displayVal = (elemMax && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, elemMax) : v.slice(0, elemMax)) : (v || fallback);
       e.textContent = displayVal || fallback;
     });
   }
@@ -5127,13 +5151,18 @@ function update(){
   // Developer, Category, Version, Release Date, Support Email & Location dynamic bindings
   const devVal = ($('f-dev') && $('f-dev').value.trim()) || 'Developer Name';
   const catVal = ($('f-cat') && $('f-cat').value.trim()) || 'Category';
+  const appleCatVal = (typeof CAT === 'object' && CAT.apple) ? CAT.apple.replace(/^Games · /, '') : catVal;
+  const googleCatVal = (typeof CAT === 'object' && CAT.google) ? CAT.google.replace(/^Games · /, '') : catVal;
   const verVal = ($('f-ver') && $('f-ver').value.trim()) || '1.0.0';
   const rdateVal = ($('f-rdate') && $('f-rdate').value.trim()) || (typeof getCurrentMonthDateStr === 'function' ? getCurrentMonthDateStr(2, true) : 'Current Date');
   const emailVal = ($('f-email') && $('f-email').value.trim()) || 'support@domain.com';
   const phoneVal = ($('f-phone') && $('f-phone').value.trim()) || '+1 800-555-0199';
   const addrVal = ($('f-addr') && $('f-addr').value.trim()) || 'Vietnam';
   $$('[data-b="dev"]').forEach(e=>e.textContent=devVal);
-  $$('[data-b="cat"]').forEach(e=>e.textContent=catVal);
+  $$('[data-b="cat"]').forEach(e=>{
+    const isGoogle = !!e.closest('.dev.google, .dev.gtab');
+    e.textContent = (isGoogle ? googleCatVal : appleCatVal) || catVal;
+  });
   $$('[data-b="ver"]').forEach(e=>e.textContent=verVal);
   $$('[data-b="rdate"]').forEach(e=>e.textContent=rdateVal);
   $$('[data-b="email"]').forEach(e=>e.textContent=emailVal);
@@ -5436,8 +5465,13 @@ function computeDeviceZoom(s, d){
   const st = document.querySelector('.stage'), m = isM(), pad = m ? 20 : 40;
   const tb = document.querySelector('.stage-toolbar');
   const vt = (tb ? tb.offsetHeight : 40) + (m ? 14 : 18);
+  const isDual = d === 'dual' || document.body.dataset.dual === 'true';
   let baseW = 416, baseH = 870;
-  if(s === 'apple'){
+  if(isDual){
+    const isLand = !!document.querySelector('.dev.apple.single.landscape');
+    baseW = (isLand ? 870 : 416) * 2 + 28;
+    baseH = isLand ? 416 : 870;
+  } else if(s === 'apple'){
     if(d === 'ipad'){
       baseW = 750;
       baseH = 980;
@@ -5578,11 +5612,32 @@ function setStore(s, animate = true){
   if(typeof validateAppIcon === 'function') validateAppIcon();
   if(typeof validateScreenshots === 'function') validateScreenshots();
 
-  const targetDev = (s === 'apple' ? appleDevice : googleDevice);
+  const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
+  const targetDev = isDual ? 'dual' : (s === 'apple' ? appleDevice : googleDevice);
+
+  if(isDual){
+    clearDevTransitions();
+    document.body.dataset.appleDevice = 'iphone';
+    document.body.dataset.googleDevice = 'phone';
+    document.body.dataset.dual = 'true';
+    if(s === 'apple'){
+      if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
+      if(typeof renderIpadShots === 'function') renderIpadShots();
+    } else {
+      if($('ipadCard')) $('ipadCard').style.display = 'none';
+    }
+    if(typeof validateAppIcon === 'function') validateAppIcon();
+    if(typeof validateScreenshots === 'function') validateScreenshots();
+    update();
+    saveState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
 
   transitionDevice(s, targetDev, () => {
-    document.body.dataset.appleDevice = appleDevice;
-    document.body.dataset.googleDevice = googleDevice;
+    document.body.dataset.appleDevice = appleDevice === 'dual' ? 'iphone' : appleDevice;
+    document.body.dataset.googleDevice = googleDevice === 'dual' ? 'phone' : googleDevice;
 
     if(s === 'apple'){
       if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
@@ -5664,25 +5719,43 @@ setTimeout(() => {
    ========================================================================= */
 // Store Preview Studio · Apple App Store & Devices
 // --- Apple Device Mode & Store Switchers ---
-let appleDevice = 'iphone'; // 'iphone' | 'ipad'
+let appleDevice = 'iphone'; // 'iphone' | 'ipad' | 'dual'
 
 function setAppleDevice(d, animate = true){
-  if(d !== 'ipad') d = 'iphone';
-  if(appleDevice === d && document.body.dataset.appleDevice === d){
+  if(d !== 'ipad' && d !== 'dual') d = 'iphone';
+  const wasDual = document.body.dataset.dual === 'true';
+  const nextDual = d === 'dual';
+  if(appleDevice === d && document.body.dataset.appleDevice === d && wasDual === nextDual){
     syncAllVtPills();
     return;
   }
-  transitionDevice('apple', d, () => {
+  const applyState = () => {
     appleDevice = d;
-    document.body.dataset.appleDevice = d;
+    document.body.dataset.appleDevice = d === 'dual' ? 'iphone' : d;
+    document.body.dataset.dual = nextDual ? 'true' : 'false';
+    if(nextDual){
+      googleDevice = 'dual';
+    } else if(wasDual && googleDevice === 'dual'){
+      googleDevice = 'phone';
+      document.body.dataset.googleDevice = 'phone';
+    }
     $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
     renderIcons();
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();
     update();
     syncAppleNavScroll();
     saveState();
-  }, animate);
+  };
+  if(nextDual || wasDual){
+    clearDevTransitions();
+    applyState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
+  transitionDevice('apple', d, applyState, animate);
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
   syncAllVtPills();
 }
@@ -6362,7 +6435,7 @@ function applyStateObject(s){
     IPAD_FIT_MODE = s.ipadFitMode;
     if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
   }
-  if(s.googleDevice === 'tab7' || s.googleDevice === 'tab10' || s.googleDevice === 'phone') googleDevice = s.googleDevice;
+  if(s.googleDevice === 'tab7' || s.googleDevice === 'tab10' || s.googleDevice === 'phone' || s.googleDevice === 'dual') googleDevice = s.googleDevice;
   if(typeof tabOrient !== 'undefined'){
     tabOrient.tab7 = 'landscape';
     tabOrient.tab10 = 'landscape';
@@ -7285,9 +7358,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     return;
   }
 
+  const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
   let devToCapture;
   let devSlug = store;
-  if(store === 'apple'){
+  if(isDual){
+    devToCapture = $('stageDevices') || document.querySelector('.stage-devices');
+    devSlug = 'dual-store-phone';
+  }else if(store === 'apple'){
     if(appleDevice === 'ipad'){
       devToCapture = document.querySelector('.dev.ipad');
       devSlug = 'apple-ipad-pro';
@@ -7306,7 +7383,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   if(!devToCapture) return;
 
   // Screen only: capture the inner screen (.phone) instead of the whole device frame
-  const target = opts.frameless ? (devToCapture.querySelector('.phone') || devToCapture) : devToCapture;
+  const target = (!isDual && opts.frameless) ? (devToCapture.querySelector('.phone') || devToCapture) : devToCapture;
 
   showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`, 'info', 4000);
 
@@ -7314,7 +7391,17 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   isExporting = true;
   if(typeof clearDevTransitions === 'function') clearDevTransitions();
   const prevZoom = devToCapture.style.zoom;
+  const prevGap = devToCapture.style.gap;
+  const dualPhones = isDual ? [...devToCapture.querySelectorAll('.dev:not(.ipad):not(.gtab)')] : [];
+  const prevDualZooms = dualPhones.map(d => d.style.zoom);
   devToCapture.style.zoom = '1';
+  if(isDual){
+    devToCapture.style.gap = '28px';
+    dualPhones.forEach(d => {
+      d.style.zoom = '1';
+      d.classList.remove('dev-enter', 'dev-exit');
+    });
+  }
   devToCapture.classList.remove('dev-enter', 'dev-exit');
   void devToCapture.offsetHeight; // Force synchronous reflow before measuring bounding rects
 
@@ -7325,6 +7412,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     }
     restoreImages = await rasterizeSvgImages(target, scaleFactor);
     devToCapture.style.zoom = '1';
+    if(isDual) dualPhones.forEach(d => { d.style.zoom = '1'; });
     void devToCapture.offsetHeight;
 
     const w = target.offsetWidth;
@@ -7345,11 +7433,21 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.transform = 'none';
         clonedEl.style.animation = 'none';
         clonedEl.style.transition = 'none';
+        if(isDual){
+          clonedEl.style.gap = '28px';
+        }
         clonedDoc.querySelectorAll('.dev').forEach(d => {
           d.classList.remove('dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
           d.style.zoom = '1';
           d.style.animation = 'none';
           d.style.transition = 'none';
+          if(isDual && opts.frameless){
+            d.style.padding = '0';
+            d.style.background = 'none';
+            d.style.boxShadow = 'none';
+            d.style.width = 'auto';
+            d.style.height = 'auto';
+          }
         });
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
@@ -7380,6 +7478,10 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     restoreImages();
     isExporting = false;
     devToCapture.style.zoom = prevZoom;
+    if(isDual){
+      devToCapture.style.gap = prevGap;
+      dualPhones.forEach((d, idx) => { d.style.zoom = prevDualZooms[idx]; });
+    }
     fit();
   }
 }
@@ -7397,9 +7499,14 @@ function fit(){
   const st=document.querySelector('.stage'),m=isM(),pad=m?20:40;
   const tb=document.querySelector('.stage-toolbar');
   const vt=(tb?tb.offsetHeight:40)+(m?14:18);
+  const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
 
   let baseW = 416, baseH = 870;
-  if(store === 'apple'){
+  if(isDual){
+    const isLand = !!document.querySelector('.dev.apple.single.landscape');
+    baseW = (isLand ? 870 : 416) * 2 + 28;
+    baseH = isLand ? 416 : 870;
+  }else if(store === 'apple'){
     if(appleDevice === 'ipad'){
       baseW = 750;
       baseH = 980;
@@ -7421,10 +7528,13 @@ function fit(){
   const zh=m?9:(st.clientHeight-pad-vt)/(baseH+8);
   const z=Math.max(.28,Math.min(1,zw,zh));
 
-  if(store === 'apple' && appleDevice === 'ipad'){
+  const sd = $('stageDevices');
+  if(sd) sd.style.gap = Math.round(28 * z) + 'px';
+
+  if(!isDual && store === 'apple' && appleDevice === 'ipad'){
     const ipad = document.querySelector('.dev.ipad');
     if(ipad) ipad.style.zoom = z;
-  }else if(store === 'google' && googleDevice !== 'phone'){
+  }else if(!isDual && store === 'google' && googleDevice !== 'phone'){
     const t = $('dev-' + googleDevice);
     if(t) t.style.zoom = z;
   }else{

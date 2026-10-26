@@ -15,3 +15,11 @@ body[data-store=apple][data-apple-device="iphone"] #vt{display:flex}
 body[data-store=apple][data-apple-device="ipad"] .dev.ipad{display:block!important}
 body[data-store=apple][data-apple-device="ipad"] .dev.apple.single{display:none!important}
 body[data-store=apple][data-apple-device="ipad"] #vt{display:flex!important}
+
+/* Dual Store Phone Preview (iPhone + Android Phone Side-by-Side) */
+body[data-dual="true"] .dev.apple.single,
+body[data-dual="true"] #dev-phone.dev.google{display:block!important}
+body[data-dual="true"] .dev.ipad,
+body[data-dual="true"] .dev.gtab7,
+body[data-dual="true"] .dev.gtab10{display:none!important}
+body[data-dual="true"] #vt{display:flex!important}

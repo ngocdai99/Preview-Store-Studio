@@ -210,21 +210,41 @@ function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
 function applyGoogleDevice(){
-  document.body.dataset.googleDevice = googleDevice;
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
+  const isDual = googleDevice === 'dual' || appleDevice === 'dual';
+  document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
+  document.body.dataset.dual = isDual ? 'true' : 'false';
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isDual ? 'dual' : googleDevice)));
+  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isDual ? 'dual' : appleDevice)));
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){
-  const nextDev = (d === 'tab7' || d === 'tab10') ? d : 'phone';
-  if(googleDevice === nextDev && document.body.dataset.googleDevice === nextDev){
+  const nextDev = (d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone';
+  const wasDual = document.body.dataset.dual === 'true';
+  const nextDual = nextDev === 'dual';
+  if(googleDevice === nextDev && document.body.dataset.googleDevice === (nextDual ? 'phone' : nextDev) && wasDual === nextDual){
     syncAllVtPills();
     return;
   }
-  transitionDevice('google', nextDev, () => {
+  const applyState = () => {
     googleDevice = nextDev;
+    if(nextDual){
+      appleDevice = 'dual';
+      document.body.dataset.appleDevice = 'iphone';
+    } else if(wasDual && appleDevice === 'dual'){
+      appleDevice = 'iphone';
+      document.body.dataset.appleDevice = 'iphone';
+    }
     applyGoogleDevice();
     saveState();
-  }, animate);
+  };
+  if(nextDual || wasDual){
+    clearDevTransitions();
+    applyState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
+  transitionDevice('google', nextDev, applyState, animate);
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === nextDev));
   syncAllVtPills();
 }

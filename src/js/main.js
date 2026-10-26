@@ -7,9 +7,14 @@ function fit(){
   const st=document.querySelector('.stage'),m=isM(),pad=m?20:40;
   const tb=document.querySelector('.stage-toolbar');
   const vt=(tb?tb.offsetHeight:40)+(m?14:18);
+  const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
 
   let baseW = 416, baseH = 870;
-  if(store === 'apple'){
+  if(isDual){
+    const isLand = !!document.querySelector('.dev.apple.single.landscape');
+    baseW = (isLand ? 870 : 416) * 2 + 28;
+    baseH = isLand ? 416 : 870;
+  }else if(store === 'apple'){
     if(appleDevice === 'ipad'){
       baseW = 750;
       baseH = 980;
@@ -31,10 +36,13 @@ function fit(){
   const zh=m?9:(st.clientHeight-pad-vt)/(baseH+8);
   const z=Math.max(.28,Math.min(1,zw,zh));
 
-  if(store === 'apple' && appleDevice === 'ipad'){
+  const sd = $('stageDevices');
+  if(sd) sd.style.gap = Math.round(28 * z) + 'px';
+
+  if(!isDual && store === 'apple' && appleDevice === 'ipad'){
     const ipad = document.querySelector('.dev.ipad');
     if(ipad) ipad.style.zoom = z;
-  }else if(store === 'google' && googleDevice !== 'phone'){
+  }else if(!isDual && store === 'google' && googleDevice !== 'phone'){
     const t = $('dev-' + googleDevice);
     if(t) t.style.zoom = z;
   }else{

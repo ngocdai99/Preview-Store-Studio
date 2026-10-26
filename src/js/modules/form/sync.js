@@ -51,7 +51,11 @@ function update(){
     // Synchronize to Mockup Displays (clamped to official store limits)
     $$('[data-b="'+k+'"]').forEach(e => {
       const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : ''))));
-      const displayVal = (max && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, max) : v.slice(0, max)) : (v || fallback);
+      let elemMax = max;
+      if(k === 'new'){
+        elemMax = e.closest('.dev.google, .dev.gtab') ? 500 : 4000;
+      }
+      const displayVal = (elemMax && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, elemMax) : v.slice(0, elemMax)) : (v || fallback);
       e.textContent = displayVal || fallback;
     });
   }
@@ -59,13 +63,18 @@ function update(){
   // Developer, Category, Version, Release Date, Support Email & Location dynamic bindings
   const devVal = ($('f-dev') && $('f-dev').value.trim()) || 'Developer Name';
   const catVal = ($('f-cat') && $('f-cat').value.trim()) || 'Category';
+  const appleCatVal = (typeof CAT === 'object' && CAT.apple) ? CAT.apple.replace(/^Games · /, '') : catVal;
+  const googleCatVal = (typeof CAT === 'object' && CAT.google) ? CAT.google.replace(/^Games · /, '') : catVal;
   const verVal = ($('f-ver') && $('f-ver').value.trim()) || '1.0.0';
   const rdateVal = ($('f-rdate') && $('f-rdate').value.trim()) || (typeof getCurrentMonthDateStr === 'function' ? getCurrentMonthDateStr(2, true) : 'Current Date');
   const emailVal = ($('f-email') && $('f-email').value.trim()) || 'support@domain.com';
   const phoneVal = ($('f-phone') && $('f-phone').value.trim()) || '+1 800-555-0199';
   const addrVal = ($('f-addr') && $('f-addr').value.trim()) || 'Vietnam';
   $$('[data-b="dev"]').forEach(e=>e.textContent=devVal);
-  $$('[data-b="cat"]').forEach(e=>e.textContent=catVal);
+  $$('[data-b="cat"]').forEach(e=>{
+    const isGoogle = !!e.closest('.dev.google, .dev.gtab');
+    e.textContent = (isGoogle ? googleCatVal : appleCatVal) || catVal;
+  });
   $$('[data-b="ver"]').forEach(e=>e.textContent=verVal);
   $$('[data-b="rdate"]').forEach(e=>e.textContent=rdateVal);
   $$('[data-b="email"]').forEach(e=>e.textContent=emailVal);

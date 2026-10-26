@@ -1,24 +1,42 @@
 // Store Preview Studio · Apple App Store & Devices
 // --- Apple Device Mode & Store Switchers ---
-let appleDevice = 'iphone'; // 'iphone' | 'ipad'
+let appleDevice = 'iphone'; // 'iphone' | 'ipad' | 'dual'
 
 function setAppleDevice(d, animate = true){
-  if(d !== 'ipad') d = 'iphone';
-  if(appleDevice === d && document.body.dataset.appleDevice === d){
+  if(d !== 'ipad' && d !== 'dual') d = 'iphone';
+  const wasDual = document.body.dataset.dual === 'true';
+  const nextDual = d === 'dual';
+  if(appleDevice === d && document.body.dataset.appleDevice === d && wasDual === nextDual){
     syncAllVtPills();
     return;
   }
-  transitionDevice('apple', d, () => {
+  const applyState = () => {
     appleDevice = d;
-    document.body.dataset.appleDevice = d;
+    document.body.dataset.appleDevice = d === 'dual' ? 'iphone' : d;
+    document.body.dataset.dual = nextDual ? 'true' : 'false';
+    if(nextDual){
+      googleDevice = 'dual';
+    } else if(wasDual && googleDevice === 'dual'){
+      googleDevice = 'phone';
+      document.body.dataset.googleDevice = 'phone';
+    }
     $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
     renderIcons();
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();
     update();
     syncAppleNavScroll();
     saveState();
-  }, animate);
+  };
+  if(nextDual || wasDual){
+    clearDevTransitions();
+    applyState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
+  transitionDevice('apple', d, applyState, animate);
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
   syncAllVtPills();
 }

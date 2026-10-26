@@ -80,9 +80,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     return;
   }
 
+  const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
   let devToCapture;
   let devSlug = store;
-  if(store === 'apple'){
+  if(isDual){
+    devToCapture = $('stageDevices') || document.querySelector('.stage-devices');
+    devSlug = 'dual-store-phone';
+  }else if(store === 'apple'){
     if(appleDevice === 'ipad'){
       devToCapture = document.querySelector('.dev.ipad');
       devSlug = 'apple-ipad-pro';
@@ -101,7 +105,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   if(!devToCapture) return;
 
   // Screen only: capture the inner screen (.phone) instead of the whole device frame
-  const target = opts.frameless ? (devToCapture.querySelector('.phone') || devToCapture) : devToCapture;
+  const target = (!isDual && opts.frameless) ? (devToCapture.querySelector('.phone') || devToCapture) : devToCapture;
 
   showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`, 'info', 4000);
 
@@ -109,7 +113,17 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   isExporting = true;
   if(typeof clearDevTransitions === 'function') clearDevTransitions();
   const prevZoom = devToCapture.style.zoom;
+  const prevGap = devToCapture.style.gap;
+  const dualPhones = isDual ? [...devToCapture.querySelectorAll('.dev:not(.ipad):not(.gtab)')] : [];
+  const prevDualZooms = dualPhones.map(d => d.style.zoom);
   devToCapture.style.zoom = '1';
+  if(isDual){
+    devToCapture.style.gap = '28px';
+    dualPhones.forEach(d => {
+      d.style.zoom = '1';
+      d.classList.remove('dev-enter', 'dev-exit');
+    });
+  }
   devToCapture.classList.remove('dev-enter', 'dev-exit');
   void devToCapture.offsetHeight; // Force synchronous reflow before measuring bounding rects
 
@@ -120,6 +134,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     }
     restoreImages = await rasterizeSvgImages(target, scaleFactor);
     devToCapture.style.zoom = '1';
+    if(isDual) dualPhones.forEach(d => { d.style.zoom = '1'; });
     void devToCapture.offsetHeight;
 
     const w = target.offsetWidth;
@@ -140,11 +155,21 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.transform = 'none';
         clonedEl.style.animation = 'none';
         clonedEl.style.transition = 'none';
+        if(isDual){
+          clonedEl.style.gap = '28px';
+        }
         clonedDoc.querySelectorAll('.dev').forEach(d => {
           d.classList.remove('dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
           d.style.zoom = '1';
           d.style.animation = 'none';
           d.style.transition = 'none';
+          if(isDual && opts.frameless){
+            d.style.padding = '0';
+            d.style.background = 'none';
+            d.style.boxShadow = 'none';
+            d.style.width = 'auto';
+            d.style.height = 'auto';
+          }
         });
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
@@ -175,6 +200,10 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     restoreImages();
     isExporting = false;
     devToCapture.style.zoom = prevZoom;
+    if(isDual){
+      devToCapture.style.gap = prevGap;
+      dualPhones.forEach((d, idx) => { d.style.zoom = prevDualZooms[idx]; });
+    }
     fit();
   }
 }
