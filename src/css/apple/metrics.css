@@ -1,6 +1,7 @@
 /* ---------- APPLE METRICS RIBBON ---------- */
 .a-met{display:flex;border-block:1px solid var(--sp);padding:12px 0;margin-bottom:20px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;user-select:none}
 .a-met::-webkit-scrollbar{display:none}
+.a-met.is-dragging{cursor:grabbing!important;user-select:none;scroll-behavior:auto!important}
 .phone.apple:not(.ipad) .a-met > div{flex:0 0 33.333333%;min-width:33.333333%;max-width:33.333333%;box-sizing:border-box;text-align:center;border-right:1px solid var(--sp);padding:0 6px}
 .phone.apple:not(.ipad) .a-met > div:last-child{border-right:0}
 .phone.ipad .a-met > div,.dev.landscape .phone.apple:not(.ipad) .a-met > div{flex:1;min-width:0;max-width:none;text-align:center;border-right:1px solid var(--sp);padding:0 4px}

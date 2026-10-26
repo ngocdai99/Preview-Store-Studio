@@ -2,16 +2,7 @@
 // Encapsulates Sidebar Toggle, Store Switcher, and Header Dropdown Navigation
 
 function initHeader() {
-  // 1. Sidebar Collapse / Expand Toggle
-  const btnToggle = $('btnToggleSidebar');
-  if (btnToggle) {
-    btnToggle.onclick = (e) => {
-      e.stopPropagation();
-      if (typeof toggleSidebar === 'function') {
-        toggleSidebar();
-      }
-    };
-  }
+  // 1. Sidebar Collapse / Expand Toggle is handled in core/resizer.js
 
   // 2. Store Switcher (App Store vs Google Play Segmented Control)
   const storeBtns = $$('.seg button');

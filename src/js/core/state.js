@@ -1592,7 +1592,6 @@ const PRESETS = {
     phone: "+1 800-555-0199",
     addr: "San Francisco, CA",
     category: "Productivity",
-    keywords: "habit tracker,task planner,to do list,productivity,focus timer,pomodoro,daily routine,organizer",
     whatsNew: "Version 2.4.0 Update:\n- Interactive Home Screen and Lock Screen widgets\n- Smart habit streak reminders with custom vibration\n- Refined dark theme with pure OLED black mode\n- Faster cloud sync and performance improvements\n- Minor bug fixes and localization updates",
     desc: `Transform your daily routine with TaskFlow — the all-in-one productivity planner and habit tracker designed to help you stay focused, organized, and motivated.
 
@@ -1658,7 +1657,6 @@ TaskFlow Pro is available as an optional monthly ($3.99/mo) or yearly ($29.99/yr
     phone: "+1 888-555-0142",
     addr: "Boulder, CO",
     category: "Health & Fitness",
-    keywords: "workout tracker,gym planner,calorie counter,fitness,macro tracker,hiit,exercise log,bodybuilding",
     whatsNew: "Version 3.1.2:\n- Added 45 new bodyweight HIIT workouts\n- Real-time heart rate zone monitoring with Apple Watch & Wear OS\n- Custom meal macro presets and barcode scanner enhancements\n- Improved rest timer audio cues\n- Bug fixes and battery life optimizations",
     desc: `Crush your health goals with PulseFit — the ultimate workout logger, strength tracker, and nutrition companion built for athletes and fitness beginners alike.
 
@@ -1720,7 +1718,6 @@ PulseFit provides fitness and dietary tracking for educational and wellness purp
     phone: "+1 800-555-0177",
     addr: "Portland, OR",
     category: "Health & Fitness",
-    keywords: "meditation,sleep sounds,anxiety relief,mindfulness,breathwork,relax,white noise,calm",
     whatsNew: "Version 1.8.0:\n- 12 new immersive bedtime soundscapes (Binaural beats & rain)\n- Customizable breathwork exercises for anxiety relief\n- Offline listening support for premium journeys\n- Polished interface and sleep timer countdown",
     desc: `Quiet your mind and sleep soundly with ZenMind. Discover hundreds of evidence-based guided meditations, relaxing soundscapes, and breathing exercises crafted by leading mindfulness experts.
 
@@ -1779,7 +1776,6 @@ WHAT YOU'LL EXPERIENCE:
     phone: "+81 3 5555 0188",
     addr: "Tokyo, Japan",
     category: "Role Playing",
-    keywords: "action rpg,cyberpunk,mech combat,open world,sci fi game,online co op,pvp arena,battle royale",
     whatsNew: "Version 4.2.0 - Neon Uprising:\n- New Open World Sector: Neo-Shinjuku District\n- 5 new Legendary Cybernetic Weapons & Exosuits\n- 10-player Co-op Raid Boss: Titan Dreadnought\n- 120 FPS Ultra Mode on supported devices\n- Gamepad & Razer Kishi / Backbone controller support\n- Engine optimizations and faster asset loading",
     desc: `Step into the year 2088. Welcome to CyberStrike — the groundbreaking open-world sci-fi Action RPG that delivers console-grade combat and breathtaking cybernetic visuals right to your mobile device.
 
@@ -1842,7 +1838,6 @@ Download CyberStrike today and forge your legend in the neon underworld!`,
     phone: "+44 20 7946 0912",
     addr: "San Francisco, CA",
     category: "Education",
-    keywords: "online courses,learn coding,python,ai,video tutorials,coursera,certificates,classes",
     whatsNew: "Version 4.1.0:\n- Enhanced HD video player with custom playback speeds (0.5x - 2.5x)\n- Background audio mode & offline video download manager\n- Interactive coding exercises & real-time syntax checking\n- Shareable digital certificates direct to LinkedIn\n- Performance enhancements and smoother video streaming",
     desc: `Advance your career and master in-demand technical, creative, and business skills with SkillSphere — the premier video learning marketplace trusted by over 5 million students worldwide.
 

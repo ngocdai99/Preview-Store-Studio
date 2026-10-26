@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
-<title>Store Preview Studio · Dual-Store Listing Optimizer & Preview</title>
+<title>Store Preview Studio · Mockup & Preview for App Store & Google Play</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3ClinearGradient id='front' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='url(%23bg)'/%3E%3Crect x='10.5' y='4.5' width='16.5' height='18' rx='2.5' fill='rgba(255,255,255,0.2)' stroke='%23ffffff' stroke-width='1.6'/%3E%3Ccircle cx='18.75' cy='6.2' r='0.65' fill='%23ffffff'/%3E%3Crect x='12.5' y='8.5' width='6' height='7' rx='1' fill='%23ffffff' opacity='0.35'/%3E%3Crect x='19.5' y='8.5' width='5.5' height='7' rx='1' fill='%23ffffff' opacity='0.35'/%3E%3Crect x='12.5' y='17' width='12.5' height='3' rx='0.8' fill='%23ffffff' opacity='0.5'/%3E%3Crect x='5' y='8' width='11.5' height='19.5' rx='3' fill='url(%23front)'/%3E%3Crect x='5' y='8' width='11.5' height='19.5' rx='3' fill='rgba(255,255,255,0.22)' stroke='%23ffffff' stroke-width='1.8'/%3E%3Crect x='8.5' y='9.8' width='4.5' height='1.2' rx='0.6' fill='%23ffffff'/%3E%3Crect x='6.8' y='12.5' width='8' height='7.5' rx='1' fill='%23ffffff' opacity='0.35'/%3E%3Crect x='6.8' y='21.5' width='8' height='3.5' rx='0.8' fill='%23ffffff' opacity='0.6'/%3E%3C/svg%3E">
 <!-- 100% Offline Standalone: Native System Font Stack (San Francisco / Segoe UI / Roboto) -->
 <script src="lib/html2canvas.min.js"></script>
@@ -18,6 +18,9 @@ try{document.documentElement.dataset.ui = localStorage.getItem("store_preview_st
 <!-- Header Component -->
 <!-- @include "components/header.html" -->
 
+<!-- Workspace Control Bar (Above Form & Canvas) -->
+<!-- @include "components/workspace-bar.html" -->
+
 <main>
   <!-- Editor Panel (Left Sidebar) -->
   <section class="editor" id="editorPanel">
@@ -29,6 +32,23 @@ try{document.documentElement.dataset.ui = localStorage.getItem("store_preview_st
 
   <!-- Stage Area (Right Canvas / Device Mockups) -->
   <section class="stage">
+    <!-- Non-destructive Preset Preview Banner -->
+    <div class="preset-banner" id="presetBanner" style="display: none;">
+      <div class="preset-banner-info">
+        <span class="preset-banner-dot"></span>
+        <span class="preset-banner-text" id="presetBannerText">
+          Viewing preset: <strong id="presetBannerName">TaskFlow</strong> · Your draft is saved safely.
+        </span>
+      </div>
+      <button type="button" class="preset-banner-btn" id="btnReturnToDraft" title="Return to your saved draft">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 14 4 9 9 4"></polyline>
+          <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+        </svg>
+        <span>Return to My Draft</span>
+      </button>
+    </div>
+
     <!-- @include "components/stage-toolbar.html" -->
     <!-- @include "components/mockups/apple/iphone.html" -->
     <!-- @include "components/mockups/apple/ipad.html" -->
@@ -47,6 +67,7 @@ try{document.documentElement.dataset.ui = localStorage.getItem("store_preview_st
 
 <!-- Image Detail & Asset Inspector Modal -->
 <!-- @include "components/modals/icon-modal.html" -->
+<!-- @include "components/modals/confirm-modal.html" -->
 
 <!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>

@@ -93,6 +93,10 @@ body[data-store=google] .info-tip-btn:focus-visible{
   display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;
   color:#34d399;line-height:1.35;
 }
+#descInfoPop .info-pop-title{color:#60a5fa}
+#privacyInfoPop .info-pop-title{color:#34d399}
+#whatsNewInfoPop .info-pop-title{color:#c084fc}
+#metricsInfoPop .info-pop-title{color:#fbbf24}
 .info-pop-title svg{width:15px;height:15px;stroke-width:2.4;flex-shrink:0}
 .info-pop-close{
   background:none;border:none;color:var(--mut);font-size:14px;line-height:1;
@@ -129,7 +133,35 @@ body[data-store=google] #iosIconInfoPop{
 }
 :root[data-ui=light] #featureInfoPop .info-pop-title{color:#059669}
 :root[data-ui=light] #iosIconInfoPop .info-pop-title{color:#0284c7}
-:root[data-ui=light] .info-pop-body{color:#475569}
+:root[data-ui=light] #descInfoPop .info-pop-title{color:#1e3a8a!important;font-weight:750}
+:root[data-ui=light] #descInfoPop .info-pop-title svg{color:#1d4ed8!important}
+:root[data-ui=light] #privacyInfoPop .info-pop-title{color:#047857!important;font-weight:750}
+:root[data-ui=light] #privacyInfoPop .info-pop-title svg{color:#059669!important}
+:root[data-ui=light] #whatsNewInfoPop .info-pop-title{color:#7e22ce!important;font-weight:750}
+:root[data-ui=light] #whatsNewInfoPop .info-pop-title svg{color:#9333ea!important}
+:root[data-ui=light] .info-tip-btn{color:#475569;background:rgba(15,23,42,.06)}
+:root[data-ui=light] .info-tip-btn:hover,
+:root[data-ui=light] .info-tip-btn.active,
+:root[data-ui=light] .info-tip-btn:focus-visible{color:#1d4ed8;background:rgba(29,78,216,.14)}
+:root[data-ui=light] #descInfoBtn{color:#1e40af!important;background:rgba(30,64,175,.09)!important;border:1px solid rgba(30,64,175,.2)!important}
+:root[data-ui=light] #descInfoBtn:hover,
+:root[data-ui=light] #descInfoBtn.active,
+:root[data-ui=light] #descInfoBtn:focus-visible{color:#1e3a8a!important;background:rgba(30,64,175,.18)!important;border-color:rgba(30,64,175,.4)!important}
+:root[data-ui=light] #privacyInfoBtn{color:#047857!important;background:rgba(5,150,105,.09)!important;border:1px solid rgba(5,150,105,.2)!important}
+:root[data-ui=light] #privacyInfoBtn:hover,
+:root[data-ui=light] #privacyInfoBtn.active,
+:root[data-ui=light] #privacyInfoBtn:focus-visible{color:#065f46!important;background:rgba(5,150,105,.18)!important;border-color:rgba(5,150,105,.4)!important}
+:root[data-ui=light] #whatsNewInfoBtn{color:#7e22ce!important;background:rgba(126,34,206,.09)!important;border:1px solid rgba(126,34,206,.2)!important}
+:root[data-ui=light] #whatsNewInfoBtn:hover,
+:root[data-ui=light] #whatsNewInfoBtn.active,
+:root[data-ui=light] #whatsNewInfoBtn:focus-visible{color:#6b21a8!important;background:rgba(126,34,206,.18)!important;border-color:rgba(126,34,206,.4)!important}
+:root[data-ui=light] #metricsInfoPop .info-pop-title{color:#b45309!important;font-weight:750}
+:root[data-ui=light] #metricsInfoPop .info-pop-title svg{color:#d97706!important}
+:root[data-ui=light] #metricsInfoBtn{color:#b45309!important;background:rgba(217,119,6,.09)!important;border:1px solid rgba(217,119,6,.2)!important}
+:root[data-ui=light] #metricsInfoBtn:hover,
+:root[data-ui=light] #metricsInfoBtn.active,
+:root[data-ui=light] #metricsInfoBtn:focus-visible{color:#92400e!important;background:rgba(217,119,6,.18)!important;border-color:rgba(217,119,6,.4)!important}
+:root[data-ui=light] .info-pop-body{color:#334155}
 :root[data-ui=light] .info-pop-body b{color:#0f172a}
 :root[data-ui=light] .info-pop-body code{background:rgba(0,0,0,.06);color:#0284c7}
 .info-pop-body code{background:rgba(255,255,255,.1);padding:1px 4px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}

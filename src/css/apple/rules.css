@@ -15,5 +15,3 @@ body[data-store=apple][data-apple-device="iphone"] #vt{display:flex}
 body[data-store=apple][data-apple-device="ipad"] .dev.ipad{display:block!important}
 body[data-store=apple][data-apple-device="ipad"] .dev.apple.single{display:none!important}
 body[data-store=apple][data-apple-device="ipad"] #vt{display:flex!important}
-#adRotate{display:none}
-body[data-store=apple] #adRotate{display:inline-flex}

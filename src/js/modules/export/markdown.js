@@ -1,23 +1,4 @@
 // Store Preview Studio - Markdown Metadata Exporter (LISTING_METADATA.md)
-if($('optExportIcon')) $('optExportIcon').onclick = () => downloadAppIcon();
-if($('optExportIpadShots')) $('optExportIpadShots').onclick = () => {
-  if(typeof downloadAllIpadScreenshots === 'function') downloadAllIpadScreenshots();
-};
-if($('optExportPhoneShots')) $('optExportPhoneShots').onclick = () => {
-  if(typeof downloadAllPhoneScreenshots === 'function') downloadAllPhoneScreenshots();
-};
-if($('optExportTab7Shots')) $('optExportTab7Shots').onclick = () => {
-  if(typeof downloadAllTab7Screenshots === 'function') downloadAllTab7Screenshots();
-};
-if($('optExportTab10Shots')) $('optExportTab10Shots').onclick = () => {
-  if(typeof downloadAllTab10Screenshots === 'function') downloadAllTab10Screenshots();
-};
-if($('optExportAllTablets')) $('optExportAllTablets').onclick = () => {
-  if(typeof downloadAllTabletsScreenshots === 'function') downloadAllTabletsScreenshots();
-};
-if($('optExportGooglePlayBundle')) $('optExportGooglePlayBundle').onclick = () => {
-  if(typeof downloadAllGooglePlayBundle === 'function') downloadAllGooglePlayBundle();
-};
 if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;
 
 function exportMarkdown(){
@@ -38,7 +19,6 @@ function exportMarkdown(){
   const dev = $('f-dev') ? $('f-dev').value : '';
   const cat = CAT.apple || '-';
   const catG = CAT.google || '-';
-  const kw = $('f-keywords') ? $('f-keywords').value : '';
   const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
   const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
   const email = $('f-email') ? $('f-email').value : '-';
@@ -75,7 +55,6 @@ function exportMarkdown(){
 | **App Title** | Both | 30 chars | ${countChars(name)} | ${countChars(name) <= 30 ? 'PASS' : 'EXCEEDED'} |
 | **Subtitle** | App Store | 30 chars | ${countChars(sub)} | ${countChars(sub) <= 30 ? 'PASS' : 'EXCEEDED'} |
 | **Promotional Text** | App Store | 170 chars | ${countChars(promo)} | ${countChars(promo) <= 170 ? 'PASS' : 'EXCEEDED'} |
-| **Keywords** | App Store | 100 chars | ${countChars(kw)} | ${countChars(kw) <= 100 ? 'PASS' : 'EXCEEDED'} |
 | **Short Description** | Google Play | 80 chars | ${countChars(short)} | ${countChars(short) <= 80 ? 'PASS' : 'EXCEEDED'} |
 | **Full Description** | Both | 4,000 chars | ${countChars(desc)} | ${countChars(desc) <= 4000 ? 'PASS' : 'EXCEEDED'} |
 
@@ -117,9 +96,6 @@ ${safeFence(sub)}
 ### Promotional Text
 ${safeFence(promo)}
 
-### Keywords (ASO)
-${safeFence(kw)}
-
 ### Category
 * **Primary:** \`${cat}\`
 * **Developer:** \`${dev}\`
@@ -154,7 +130,6 @@ ${safeFence(wn)}
 - \`fastlane/metadata/ios/en-US/name.txt\` -> App Title
 - \`fastlane/metadata/ios/en-US/subtitle.txt\` -> Subtitle
 - \`fastlane/metadata/ios/en-US/promotional_text.txt\` -> Promotional Text
-- \`fastlane/metadata/ios/en-US/keywords.txt\` -> Keywords
 - \`fastlane/metadata/ios/en-US/description.txt\` -> Full Description
 `;
 

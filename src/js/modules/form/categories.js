@@ -69,7 +69,14 @@ function setCategory(val, only){
 
 ['apple','google'].forEach(st => {
   if (CAT_SEL[st]) {
-    CAT_SEL[st].onchange = () => { CAT[st] = CAT_SEL[st].value; syncCategoryUI(); if (typeof update === 'function') update(); if (typeof saveState === 'function') saveState(); };
+    CAT_SEL[st].onchange = () => {
+      CAT[st] = CAT_SEL[st].value;
+      syncCategoryUI();
+      if (typeof update === 'function') update();
+      if (typeof saveState === 'function') saveState();
+      if (typeof flashField === 'function') flashField('cat');
+      if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
+    };
   }
 });
 setCategory('Productivity');

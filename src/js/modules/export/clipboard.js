@@ -8,7 +8,6 @@ function copyAllText(){
   const short = $('f-short') ? $('f-short').value : '';
   const dev = $('f-dev') ? $('f-dev').value : '';
   const cat = 'App Store: ' + (CAT.apple || '-') + '  |  Google Play: ' + (CAT.google || '-');
-  const kw = $('f-keywords') ? $('f-keywords').value : '';
   const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
   const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
   const email = $('f-email') ? $('f-email').value : '';
@@ -57,9 +56,6 @@ ${sub} [${countChars(sub)}/30]
 
 PROMOTIONAL TEXT (170 chars max):
 ${promo} [${countChars(promo)}/170]
-
-KEYWORDS (100 chars max):
-${kw} [${countChars(kw)}/100]
 
 APP PRIVACY (Data Linked to You):
 ${privLinked || 'None'}

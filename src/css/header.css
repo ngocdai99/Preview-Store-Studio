@@ -1,5 +1,6 @@
 /* Store Preview Studio · Modular Header Stylesheet Entrypoint */
 @import "header/brand.css";
+@import "header/workspace-bar.css";
 @import "header/store-switcher.css";
 @import "header/actions.css";
 @import "header/dropdowns.css";

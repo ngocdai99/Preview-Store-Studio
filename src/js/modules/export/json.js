@@ -18,7 +18,6 @@ function exportJSON(){
       cat: $('f-cat') ? $('f-cat').value : '',
       catApple: CAT.apple,
       catGoogle: CAT.google,
-      keywords: $('f-keywords') ? $('f-keywords').value : '',
       ver: $('f-ver') ? $('f-ver').value : '2.4.0',
       rdate: $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true),
       email: $('f-email') ? $('f-email').value : '',
@@ -98,7 +97,6 @@ function parseAndApplyJSON(jsonString){
     short: getStr(src.short || src.shortDesc || src.shortDescription),
     dev: getStr(src.dev || src.developer || src.developerName || src.author),
     cat: getStr(src.cat || src.category),
-    keywords: getStr(src.keywords || src.keywordsList),
     ver: getStr(src.ver || src.appVersion),
     rdate: getStr(src.rdate || src.releaseDate),
     email: getStr(src.email || src.supportEmail),
@@ -110,7 +108,7 @@ function parseAndApplyJSON(jsonString){
     desc: getStr(src.desc || src.description || src.fullDescription)
   };
 
-  const hasMobileSpecificFields = !!(mapped.sub || mapped.promo || mapped.short || mapped.keywords || src.catApple || src.catGoogle);
+  const hasMobileSpecificFields = !!(mapped.sub || mapped.promo || mapped.short || src.catApple || src.catGoogle);
 
   // Strict Schema Check: Reject generic flat JSON files that lack Store Preview Studio schema or mobile fields
   if(!isKnownGenerator && !hasAppWrapper && !hasStoreKeys && !hasMobileSpecificFields){
@@ -134,7 +132,6 @@ function parseAndApplyJSON(jsonString){
   if(mapped.cat) setCategory(mapped.cat);
   if(src.catApple && typeof src.catApple === 'string') setCategory(src.catApple, 'apple');
   if(src.catGoogle && typeof src.catGoogle === 'string') setCategory(src.catGoogle, 'google');
-  if(mapped.keywords && $('f-keywords')) $('f-keywords').value = mapped.keywords;
   if(mapped.ver && $('f-ver')) $('f-ver').value = mapped.ver;
   if(mapped.rdate && $('f-rdate')) $('f-rdate').value = mapped.rdate;
   if(mapped.email && $('f-email')) $('f-email').value = mapped.email;
@@ -259,11 +256,19 @@ window.addEventListener('drop', e => {
 // Reset to Default State
 if($('optResetDefault')){
   $('optResetDefault').onclick = () => {
-    if(confirm('Are you sure you want to reset all inputs to the default template?')){
-      localStorage.removeItem(STORAGE_KEY);
-      if(typeof idbDelete === 'function') idbDelete(STORAGE_KEY);
+    showResetConfirmModal(() => {
+      userDraft = null;
+      try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      if(typeof idbDelete === 'function'){
+        idbDelete(DRAFT_STORAGE_KEY);
+        idbDelete(STORAGE_KEY);
+      }
       resetStats();
       loadPreset('taskflow');
-    }
+      if(typeof updatePresetBanner === 'function') updatePresetBanner();
+      if(typeof updateDraftPill === 'function') updateDraftPill();
+      showToast('Draft cleared and reset to default.', 'ok');
+    });
   };
 }

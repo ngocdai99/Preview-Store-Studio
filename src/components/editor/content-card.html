@@ -1,18 +1,33 @@
 <!-- Card 2: Content & Updates -->
 <div class="card">
-  <h2><i class="card-ico c-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></i>Description &amp; Release Notes</h2>
-  <div class="form-row-2col" style="margin-bottom:12px">
+  <h2><span class="card-num" title="Card 2">2</span><i class="card-ico c-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></i>Description &amp; Release Notes</h2>
+  
+  <!-- Promotional Text (Apple, 170 chars) -->
+  <div class="fg" data-only="apple">
+    <div class="lr"><label>Promotional Text<span class="tag a">APPLE</span></label><span class="cc" id="c-promo"></span></div>
+    <textarea id="f-promo" rows="3" placeholder="e.g. Special offer, seasonal update, or headline...">Spring Productivity Sale: Unlock TaskFlow Pro with smart recurring habits, Pomodoro focus timer, and seamless cloud sync.</textarea>
+  </div>
+
+  <div class="form-row-2col" data-only="apple" style="margin-bottom:12px">
     <div class="fg" style="margin:0">
       <div class="lr"><label>Version<span class="tag a" title="App Store">APPLE</span></label></div>
       <input type="text" id="f-ver" value="2.4.0" placeholder="e.g. 1.0.1">
     </div>
     <div class="fg" style="margin:0">
-      <div class="lr"><label>Release Date<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label></div>
+      <div class="lr"><label>Release Date<span class="tag a" title="App Store">APPLE</span></label></div>
       <input type="text" id="f-rdate" value="" placeholder="e.g. Current release date">
     </div>
   </div>
   <div class="fg">
-    <div class="lr"><label>What's New<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label><span class="cc" id="c-new"></span></div>
+    <div class="lr">
+      <div style="display:inline-flex;align-items:center;gap:6px">
+        <label>What's New<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label>
+        <span class="info-tip-btn" id="whatsNewInfoBtn" tabindex="0" role="button" aria-label="What's New Display Guidelines" title="How What's New Appears on App Store &amp; Google Play">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+      </div>
+      <span class="cc" id="c-new"></span>
+    </div>
     <textarea id="f-new" rows="5" placeholder="Version updates, improvements, bug fixes...">Version 2.4.0 Update:
 - Interactive Home Screen and Lock Screen widgets
 - Smart habit streak reminders with custom vibration
@@ -22,7 +37,15 @@
   </div>
 
   <div class="fg">
-    <div class="lr"><label>Full Description<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label><span class="cc" id="c-desc"></span></div>
+    <div class="lr">
+      <div style="display:inline-flex;align-items:center;gap:6px">
+        <label>Full Description<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label>
+        <span class="info-tip-btn" id="descInfoBtn" tabindex="0" role="button" aria-label="Description Display Guidelines" title="How Description Appears on App Store &amp; Google Play">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+      </div>
+      <span class="cc" id="c-desc"></span>
+    </div>
     <textarea id="f-desc" rows="12" placeholder="Write compelling description, bullet points, privacy note, and pricing terms...">Transform your daily routine with TaskFlow — the all-in-one productivity planner and habit tracker designed to help you stay focused, organized, and motivated.
 
 Whether you're building a new morning routine, tracking daily fitness goals, or managing complex project milestones, TaskFlow adapts to your workflow with elegance and simplicity.

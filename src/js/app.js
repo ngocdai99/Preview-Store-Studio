@@ -9,12 +9,10 @@
 
 const $=id=>document.getElementById(id), $$=s=>[...document.querySelectorAll(s)];
 let store = 'apple';
-let isFloating = true;
 
 // --- Reusable Crisp Vector Action Icons ---
 const ICO_SPARKLE = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.4 5.4 5.6 2.1-5.6 2.1-2.4 5.4-2.4-5.4-5.6-2.1 5.6-2.1 2.4-5.4zm7.5 12.5l1.2 2.7 2.8 1-2.8 1-1.2 2.8-1.2-2.8-2.8-1 2.8-1 1.2-2.7z"></path></svg></span>`;
 const ICO_DL = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span>`;
-const ICO_ZIP = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><polyline points="9 14 12 17 15 14"></polyline></svg></span>`;
 const ICO_UPLOAD = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>`;
 
 // --- Dynamic Date & Clock Helpers (Zero Hardcoded Dates or 9:41 Clocks) ---
@@ -140,7 +138,6 @@ function ensureSvgDimensions(uri){
 let _lastDownloadTime = 0;
 let _lastUploadTime = 0;
 let _lastActionTime = 0;
-let _isZipExporting = false;
 
 function canDownload(cooldownMs = 1000) {
   const now = Date.now();
@@ -267,12 +264,24 @@ const mk=(src,alt='')=>{
 };
 
 
-// --- Accurate Unicode & Emoji Grapheme Counter ---
+// --- Accurate Unicode & Emoji Grapheme Counter & Clamper ---
 const graphemeSegmenter = (typeof Intl !== 'undefined' && Intl.Segmenter) ? new Intl.Segmenter('en', { granularity: 'grapheme' }) : null;
 function countChars(str){
   if(!str) return 0;
   if(graphemeSegmenter) return [...graphemeSegmenter.segment(str)].length;
   return Array.from(str).length;
+}
+
+function clampGraphemes(str, max){
+  if(!str || typeof max !== 'number' || max <= 0) return '';
+  if(graphemeSegmenter){
+    const segs = Array.from(graphemeSegmenter.segment(str));
+    if(segs.length <= max) return str;
+    return segs.slice(0, max).map(s => s.segment).join('');
+  }
+  const chars = Array.from(str);
+  if(chars.length <= max) return str;
+  return chars.slice(0, max).join('');
 }
 
 
@@ -292,9 +301,9 @@ function showToast(msg, icon='', duration=3200){
   const c = $('toastContainer');
   if(!c) return;
   const t = document.createElement('div');
-  const isErr = icon === '⚠️' || icon === 'err' || icon === 'warn' || icon === 'error';
+  const isErr = icon === 'err' || icon === 'warn' || icon === 'error';
   t.className = isErr ? 'toast error' : 'toast success';
-  const iconHtml = (icon && icon !== '✓' && icon !== '⚠️' && icon !== 'err' && icon !== 'warn' && icon !== 'error')
+  const iconHtml = (icon && icon !== 'ok' && icon !== 'err' && icon !== 'warn' && icon !== 'error')
     ? `<i>${escapeHtml(icon)}</i>`
     : '';
   t.innerHTML = `${iconHtml}<span>${escapeHtml(msg)}</span>`;
@@ -470,111 +479,6 @@ function initInfoPopover(btnId, popId, closeId, allowedStore = null) {
   });
 }
 
-// --- Client-side ZIP Package Generator (Store/Uncompressed format, 100% Offline & Zero-dependency) ---
-const _crcTable = new Uint32Array(256);
-for (let i = 0; i < 256; i++) {
-  let c = i;
-  for (let k = 0; k < 8; k++) {
-    c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-  }
-  _crcTable[i] = c >>> 0;
-}
-
-function crc32(buf) {
-  let c = 0xFFFFFFFF;
-  for (let i = 0; i < buf.length; i++) {
-    c = _crcTable[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
-  }
-  return (c ^ 0xFFFFFFFF) >>> 0;
-}
-
-function dataUrlToUint8Array(dataUrl) {
-  const parts = dataUrl.split(',');
-  const binStr = (typeof atob !== 'undefined') ? atob(parts[1] || '') : Buffer.from(parts[1] || '', 'base64').toString('binary');
-  const len = binStr.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binStr.charCodeAt(i);
-  }
-  return bytes;
-}
-
-function createZipBlob(files) {
-  const encoder = (typeof TextEncoder !== 'undefined') ? new TextEncoder() : { encode: s => Buffer.from(s, 'utf8') };
-  const fileEntries = [];
-  let offset = 0;
-  const parts = [];
-
-  for (const f of files) {
-    const nameBytes = encoder.encode(f.name);
-    const data = f.data instanceof Uint8Array ? f.data : new Uint8Array(f.data);
-    const crc = crc32(data);
-    const size = data.length;
-
-    const lh = new Uint8Array(30);
-    const dv = new DataView(lh.buffer);
-    dv.setUint32(0, 0x04034b50, true); // Local file header signature
-    dv.setUint16(4, 20, true);         // Version needed (2.0)
-    dv.setUint16(6, 0, true);          // Flags
-    dv.setUint16(8, 0, true);          // Compression (0 = STORE)
-    dv.setUint16(10, 0x4000, true);    // Time
-    dv.setUint16(12, 0x5421, true);    // Date
-    dv.setUint32(14, crc, true);       // CRC32
-    dv.setUint32(18, size, true);      // Compressed size
-    dv.setUint32(22, size, true);      // Uncompressed size
-    dv.setUint16(26, nameBytes.length, true); // Name length
-    dv.setUint16(28, 0, true);         // Extra length
-
-    fileEntries.push({ nameBytes, crc, size, offset });
-    parts.push(lh, nameBytes, data);
-    offset += 30 + nameBytes.length + size;
-  }
-
-  const cdOffset = offset;
-  for (const f of fileEntries) {
-    const cd = new Uint8Array(46);
-    const dv = new DataView(cd.buffer);
-    dv.setUint32(0, 0x02014b50, true); // Central header signature
-    dv.setUint16(4, 20, true);         // Version made by
-    dv.setUint16(6, 20, true);         // Version needed
-    dv.setUint16(8, 0, true);          // Flags
-    dv.setUint16(10, 0, true);         // Compression (0 = STORE)
-    dv.setUint16(12, 0x4000, true);    // Time
-    dv.setUint16(14, 0x5421, true);    // Date
-    dv.setUint32(16, f.crc, true);     // CRC32
-    dv.setUint32(20, f.size, true);    // Compressed size
-    dv.setUint32(24, f.size, true);    // Uncompressed size
-    dv.setUint16(28, f.nameBytes.length, true); // Name length
-    dv.setUint16(30, 0, true);         // Extra length
-    dv.setUint16(32, 0, true);         // Comment length
-    dv.setUint16(34, 0, true);         // Disk start
-    dv.setUint16(36, 0, true);         // Internal attr
-    dv.setUint32(38, 0, true);         // External attr
-    dv.setUint32(42, f.offset, true);  // Local header offset
-
-    parts.push(cd, f.nameBytes);
-    offset += 46 + f.nameBytes.length;
-  }
-
-  const cdSize = offset - cdOffset;
-  const eocd = new Uint8Array(22);
-  const dv = new DataView(eocd.buffer);
-  dv.setUint32(0, 0x06054b50, true);  // EOCD signature
-  dv.setUint16(4, 0, true);           // Disk number
-  dv.setUint16(6, 0, true);           // Start disk
-  dv.setUint16(8, fileEntries.length, true);  // Disk entries
-  dv.setUint16(10, fileEntries.length, true); // Total entries
-  dv.setUint32(12, cdSize, true);     // CD size
-  dv.setUint32(16, cdOffset, true);   // CD offset
-  dv.setUint16(20, 0, true);          // Comment length
-
-  parts.push(eocd);
-  if (typeof Blob !== 'undefined') {
-    return new Blob(parts, { type: 'application/zip' });
-  }
-  return parts;
-}
-
 // --- IndexedDB High-Capacity Storage Engine (Virtually unlimited quota for high-res screenshots) ---
 const IDB_DB_NAME = 'StorePreviewStudioDB';
 const IDB_STORE_NAME = 'keyval';
@@ -734,6 +638,50 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
     if (callback) callback(svgSrc);
   };
   img.src = svgSrc;
+}
+
+/**
+ * Modern Reset and Confirmation Modal
+ * Replaces native browser confirm dialog with custom modal popup.
+ *
+ * @param {Function} onConfirm - Callback executed when user confirms reset
+ */
+function showResetConfirmModal(onConfirm) {
+  const modal = $('resetConfirmModal');
+  if (!modal) {
+    if (typeof onConfirm === 'function') onConfirm();
+    return;
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', handleKey);
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Escape') closeModal();
+  }
+
+  const cancelBtn = modal.querySelector('#resetConfirmCancel');
+  if (cancelBtn) cancelBtn.onclick = closeModal;
+
+  modal.onclick = e => {
+    if (e.target === modal) closeModal();
+  };
+
+  const okBtn = modal.querySelector('#resetConfirmOk');
+  if (okBtn) {
+    okBtn.onclick = () => {
+      closeModal();
+      if (typeof onConfirm === 'function') onConfirm();
+    };
+  }
+
+  document.addEventListener('keydown', handleKey);
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  if (cancelBtn) cancelBtn.focus();
 }
 
 
@@ -2335,7 +2283,6 @@ const PRESETS = {
     phone: "+1 800-555-0199",
     addr: "San Francisco, CA",
     category: "Productivity",
-    keywords: "habit tracker,task planner,to do list,productivity,focus timer,pomodoro,daily routine,organizer",
     whatsNew: "Version 2.4.0 Update:\n- Interactive Home Screen and Lock Screen widgets\n- Smart habit streak reminders with custom vibration\n- Refined dark theme with pure OLED black mode\n- Faster cloud sync and performance improvements\n- Minor bug fixes and localization updates",
     desc: `Transform your daily routine with TaskFlow — the all-in-one productivity planner and habit tracker designed to help you stay focused, organized, and motivated.
 
@@ -2401,7 +2348,6 @@ TaskFlow Pro is available as an optional monthly ($3.99/mo) or yearly ($29.99/yr
     phone: "+1 888-555-0142",
     addr: "Boulder, CO",
     category: "Health & Fitness",
-    keywords: "workout tracker,gym planner,calorie counter,fitness,macro tracker,hiit,exercise log,bodybuilding",
     whatsNew: "Version 3.1.2:\n- Added 45 new bodyweight HIIT workouts\n- Real-time heart rate zone monitoring with Apple Watch & Wear OS\n- Custom meal macro presets and barcode scanner enhancements\n- Improved rest timer audio cues\n- Bug fixes and battery life optimizations",
     desc: `Crush your health goals with PulseFit — the ultimate workout logger, strength tracker, and nutrition companion built for athletes and fitness beginners alike.
 
@@ -2463,7 +2409,6 @@ PulseFit provides fitness and dietary tracking for educational and wellness purp
     phone: "+1 800-555-0177",
     addr: "Portland, OR",
     category: "Health & Fitness",
-    keywords: "meditation,sleep sounds,anxiety relief,mindfulness,breathwork,relax,white noise,calm",
     whatsNew: "Version 1.8.0:\n- 12 new immersive bedtime soundscapes (Binaural beats & rain)\n- Customizable breathwork exercises for anxiety relief\n- Offline listening support for premium journeys\n- Polished interface and sleep timer countdown",
     desc: `Quiet your mind and sleep soundly with ZenMind. Discover hundreds of evidence-based guided meditations, relaxing soundscapes, and breathing exercises crafted by leading mindfulness experts.
 
@@ -2522,7 +2467,6 @@ WHAT YOU'LL EXPERIENCE:
     phone: "+81 3 5555 0188",
     addr: "Tokyo, Japan",
     category: "Role Playing",
-    keywords: "action rpg,cyberpunk,mech combat,open world,sci fi game,online co op,pvp arena,battle royale",
     whatsNew: "Version 4.2.0 - Neon Uprising:\n- New Open World Sector: Neo-Shinjuku District\n- 5 new Legendary Cybernetic Weapons & Exosuits\n- 10-player Co-op Raid Boss: Titan Dreadnought\n- 120 FPS Ultra Mode on supported devices\n- Gamepad & Razer Kishi / Backbone controller support\n- Engine optimizations and faster asset loading",
     desc: `Step into the year 2088. Welcome to CyberStrike — the groundbreaking open-world sci-fi Action RPG that delivers console-grade combat and breathtaking cybernetic visuals right to your mobile device.
 
@@ -2585,7 +2529,6 @@ Download CyberStrike today and forge your legend in the neon underworld!`,
     phone: "+44 20 7946 0912",
     addr: "San Francisco, CA",
     category: "Education",
-    keywords: "online courses,learn coding,python,ai,video tutorials,coursera,certificates,classes",
     whatsNew: "Version 4.1.0:\n- Enhanced HD video player with custom playback speeds (0.5x - 2.5x)\n- Background audio mode & offline video download manager\n- Interactive coding exercises & real-time syntax checking\n- Shareable digital certificates direct to LinkedIn\n- Performance enhancements and smoother video streaming",
     desc: `Advance your career and master in-demand technical, creative, and business skills with SkillSphere — the premier video learning marketplace trusted by over 5 million students worldwide.
 
@@ -2753,7 +2696,10 @@ function toggleSidebar(forceOpen) {
 }
 
 if (btnToggleSidebar) {
-  btnToggleSidebar.addEventListener('click', () => toggleSidebar());
+  btnToggleSidebar.onclick = (e) => {
+    if (e) e.stopPropagation();
+    toggleSidebar();
+  };
 }
 
 // Global Keyboard Shortcut: Cmd+B (Mac) / Ctrl+B (Windows/Linux)
@@ -2933,17 +2879,13 @@ function runIconPixelAudit(iconSrc){
       // Rule 4: Exact 1024×1024 px dimensions
       if(w !== 1024 || h !== 1024){
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Xcode &amp; App Store require exact <strong>1024×1024 px</strong>.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
-        const dlBtn = $('btnDlIconBadge');
-        if(dlBtn) dlBtn.onclick = () => downloadAppIcon(1024);
+        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Xcode &amp; App Store require exact <strong>1024×1024 px</strong>.</span>`;
         return;
       }
 
       // Compliant: All Apple criteria met.
       badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> 1024×1024 px · PNG · 100% Opaque (sRGB/Display P3)</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge">${ICO_DL}Download 1024px</button></div>`;
-      const dlBtn = $('btnDlIconBadge');
-      if(dlBtn) dlBtn.onclick = () => downloadAppIcon(1024);
+      badge.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> 1024×1024 px · PNG · 100% Opaque (sRGB/Display P3)</span>`;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -2983,69 +2925,24 @@ function runIconPixelAudit(iconSrc){
       // Rule 4: Do not include rounded corners or drop shadows in artwork
       if(hasPreRoundedCorners){
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Pre-rounded Corners / Shadow Notice:</strong> Do not include rounded corners or drop shadows in artwork; Google Play dynamically applies corner radius (20%) and drop shadow upon upload.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
-        const dlBtn = $('btnDlIconBadge');
-        if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
+        badge.innerHTML = `${SB_WARN}<span><strong>Pre-rounded Corners / Shadow Notice:</strong> Do not include rounded corners or drop shadows in artwork; Google Play dynamically applies corner radius (20%) and drop shadow upon upload.</span>`;
         return;
       }
 
       // Rule 5: Target dimensions 512×512 px
       if(w !== 512 || h !== 512){
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
-        const dlBtn = $('btnDlIconBadge');
-        if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
+        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span>`;
         return;
       }
 
       // Compliant: All Google Play specifications passed
       const sizeNote = sizeBytes ? ` · ${(sizeBytes / 1024).toFixed(0)} KB (≤ 1024 KB)` : '';
       badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> 512×512 px · 32-bit PNG (sRGB)${sizeNote}</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge">${ICO_DL}Download 512px</button></div>`;
-      const dlBtn = $('btnDlIconBadge');
-      if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
+      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> 512×512 px · 32-bit PNG (sRGB)${sizeNote}</span>`;
     }
   };
   img.src = iconSrc;
-}
-
-function downloadAppIcon(targetSize){
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const size = targetSize || (store === 'google' ? 512 : 1024);
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const c = document.createElement('canvas');
-    c.width = size;
-    c.height = size;
-    const ctx = c.getContext('2d');
-    if (store === 'apple') {
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(0, 0, size, size);
-    }
-    ctx.drawImage(img, 0, 0, size, size);
-    c.toBlob(blob => {
-      if(!blob){
-        showToast('Error creating icon file', 'warn');
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${name}-icon-${size}x${size}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded ${size}×${size} px App Icon!`, 'ok');
-    }, 'image/png');
-  };
-  img.onerror = () => {
-    showToast('Failed to load icon for download', 'warn');
-  };
-  img.src = ICON;
 }
 
 // Icon Upload & Drag-and-drop Listeners
@@ -3054,9 +2951,6 @@ if($('icoUp')){
     if(typeof canUpload === 'function' && !canUpload(1000)) return;
     if($('icoFile')) $('icoFile').click();
   };
-}
-if($('icoDown')){
-  $('icoDown').onclick = () => downloadAppIcon();
 }
 if($('icoInspect')){
   $('icoInspect').onclick = () => {
@@ -3193,21 +3087,17 @@ function renderShots(){
     };
     r.appendChild(thumb);
 
-    // Input & Actions
+    // Row Title & Actions
     const col = document.createElement('div'); col.className = 'col';
-    const inp = document.createElement('input'); inp.type = 'text';
-    inp.value = s.startsWith('data:') ? '(Embedded / Uploaded Image)' : s;
-    inp.placeholder = 'https://… image URL or upload';
-    inp.disabled = s.startsWith('data:');
-    inp.onchange = () => { SHOTS[i] = inp.value.trim(); renderShots(); saveState(); };
+    const head = document.createElement('div'); head.className = 'shot-row-head';
+    head.innerHTML = `<span class="shot-row-title">Screenshot #${i + 1}</span><span class="shot-dim-tag" id="shotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
-      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>' +
-      '<button class="mini" data-m="-1" title="Move Up">↑</button>' +
-      '<button class="mini" data-m="1" title="Move Down">↓</button>' +
-      '<button class="mini del" title="Delete">&times;</button>' +
-      '<span class="shot-dim-tag" id="shotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
+      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>' +
+      '<button class="mini" data-m="-1" title="Move Up">&uarr;</button>' +
+      '<button class="mini" data-m="1" title="Move Down">&darr;</button>' +
+      '<button class="mini del" title="Delete">&times;</button>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
     b[1].onclick = () => {
@@ -3230,7 +3120,7 @@ function renderShots(){
     b[3].onclick = () => mv(i, 1);
     b[4].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
 
-    col.append(inp, act);
+    col.append(head, act);
     r.appendChild(col);
 
     // Drag & Drop event handlers for row reordering
@@ -3281,11 +3171,24 @@ function validateScreenshots(){
   const runId = ++_phoneValRunId;
   const validShots = SHOTS.filter(s => s && s.trim());
   const validCount = validShots.length;
+  const maxAllowed = store === 'apple' ? 10 : 8;
+  const minRequired = store === 'apple' ? 1 : 2;
+
   const counterEl = $('shotCounter');
   if(counterEl){
-    counterEl.textContent = `${validCount} / 8 screenshots`;
-    counterEl.className = 'cc' + (validCount < 2 ? ' warn' : validCount > 8 ? ' err' : '');
+    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
+    counterEl.className = 'cc' + (validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
   }
+
+  const hintEl = $('shotHint');
+  if(hintEl){
+    if(store === 'apple'){
+      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px). PNG or JPEG, no alpha transparency. Drag ⠿ handle to reorder.';
+    } else {
+      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots. PNG or JPEG, up to 8 MB each, 16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px. Drag ⠿ handle to reorder.';
+    }
+  }
+
   const badgeEl = $('shotStatusBadge');
   if(!badgeEl) return;
 
@@ -3293,30 +3196,14 @@ function validateScreenshots(){
   const SB_WARN = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>`;
   const SB_ERR = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></span>`;
 
-  const dlBtnHtml = validCount > 0 ? `<button class="mini dl-btn" id="btnDlAllPhone" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>` : '';
-
-  if(validCount < 2){
+  if(validCount < minRequired){
     badgeEl.className = 'shot-status-badge warn';
-    badgeEl.innerHTML = `${SB_WARN}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Notice:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'}. Stores require at least <strong>2 screenshots</strong>.</span>${dlBtnHtml}`;
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
-    }
+    badgeEl.innerHTML = `${SB_WARN}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Notice:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'}. Stores require at least <strong>${minRequired} screenshot${minRequired === 1 ? '' : 's'}</strong>.</span>`;
     return;
   }
-  if(validCount > 8 && store === 'google'){
+  if(validCount > maxAllowed){
     badgeEl.className = 'shot-status-badge err';
-    badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Rejection Risk:</strong> ${validCount} screenshots. Google Play allows a maximum of <strong>8 screenshots</strong>.</span>${dlBtnHtml}`;
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
-    }
-    return;
-  }
-  if(validCount > 10 && store === 'apple'){
-    badgeEl.className = 'shot-status-badge err';
-    badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> ${validCount} screenshots. Apple allows a maximum of <strong>10 screenshots</strong> per display.</span>${dlBtnHtml}`;
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
-    }
+    badgeEl.innerHTML = `${SB_ERR}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Rejection Risk:</strong> ${validCount} screenshots. ${store === 'apple' ? 'Apple' : 'Google Play'} allows a maximum of <strong>${maxAllowed} screenshots</strong>.</span>`;
     return;
   }
 
@@ -3394,32 +3281,28 @@ function validateScreenshots(){
 
   function finalizeBadge(){
     const maxAllowed = store === 'apple' ? 10 : 8;
-    const dlBtn = `<button class="mini dl-btn" id="btnDlAllPhone" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>`;
     if(squareIndices.length > 0){
       const items = squareIndices.map(n => `#${n}`).join(', ');
       if(store === 'apple'){
         badgeEl.className = 'shot-status-badge err';
-        badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>${dlBtn}`;
+        badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>`;
       } else {
         badgeEl.className = 'shot-status-badge warn';
-        badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> Screenshot ${items} is square (1:1). Standard phone screenshots should be portrait (9:16 or 9:19.5). Square photos will be cropped or letterboxed in phone mockups.</span>${dlBtn}`;
+        badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> Screenshot ${items} is square (1:1). Standard phone screenshots should be portrait (9:16 or 9:19.5). Square photos will be cropped or letterboxed in phone mockups.</span>`;
       }
     } else if(nonPhoneIndices.length > 0){
       const items = nonPhoneIndices.map(n => `#${n}`).join(', ');
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Aspect Ratio Notice:</strong> Screenshot ${items} has non-standard ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>${dlBtn}`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Aspect Ratio Notice:</strong> Screenshot ${items} has non-standard ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>`;
     } else if(sizeIssueIndices.length > 0){
       const items = sizeIssueIndices.map(n => `#${n}`).join(', ');
       const noun = sizeIssueIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       const verb = sizeIssueIndices.length > 1 ? 'have' : 'has';
       badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Error:</strong> ${noun} ${items} ${verb} side length outside 320–3,840 px.</span>${dlBtn}`;
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Error:</strong> ${noun} ${items} ${verb} side length outside 320–3,840 px.</span>`;
     } else {
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Compliant:</strong> ${validCount} screenshots (Valid range: 2–${maxAllowed}) · All portrait phone aspect ratios.</span>${dlBtn}`;
-    }
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
+      badgeEl.innerHTML = `${SB_OK}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Compliant:</strong> ${validCount} screenshots (Valid range: ${minRequired}–${maxAllowed}) · All portrait phone aspect ratios.</span>`;
     }
   }
 }
@@ -3447,95 +3330,6 @@ if($('addShot')){
     const ins = $$('.srow input');
     if(ins.length) ins[ins.length - 1].focus();
   };
-}
-
-function downloadAllPhoneScreenshots(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const validEntries = [];
-  SHOTS.forEach((s, idx) => {
-    if(s && s.trim()) validEntries.push({ src: s, index: idx });
-  });
-
-  if(validEntries.length === 0){
-    showToast('No phone screenshots to export', 'warn');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAllPhone');
-  const optBtn = $('optExportPhoneShots');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${validEntries.length} phone screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, 'info', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packPromise = Promise.all(validEntries.map((entry, order) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1290;
-          canvas.height = img.naturalHeight || 2796;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          const fileName = `${name}-phone-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
-          resolve({ name: fileName, data: bytes });
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-phone-screenshots.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} phone screenshots in 1 ZIP package!`, 'ok');
-  }).catch(err => {
-    console.error('Phone ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
 }
 
 
@@ -3647,31 +3441,25 @@ function renderIpadSlist(){
     };
     r.appendChild(thumb);
 
-    // Input & Actions
+    // Row Title & Actions
     const col = document.createElement('div'); col.className = 'col';
-    const inp = document.createElement('input'); inp.type = 'text';
-    inp.value = s.startsWith('data:') ? '(Embedded / Uploaded Image)' : s;
-    inp.placeholder = 'https://… image URL or upload';
-    inp.disabled = s.startsWith('data:');
-    inp.onchange = () => { IPAD_SHOTS[i] = inp.value.trim(); renderIpadShots(); saveState(); };
+    const head = document.createElement('div'); head.className = 'shot-row-head';
+    head.innerHTML = `<span class="shot-row-title">iPad Screenshot #${i + 1}</span><span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
-      '<button class="mini" data-m="-1" title="Move Up">↑</button>' +
-      '<button class="mini" data-m="1" title="Move Down">↓</button>' +
+      '<button class="mini" data-m="-1" title="Move Up">&uarr;</button>' +
+      '<button class="mini" data-m="1" title="Move Down">&darr;</button>' +
       '<button class="mini fit-btn" id="btnFitIpad_' + i + '" title="Resize / Fit to Apple iPad Pro 13&quot; (2048×2732 px)">' + ICO_SPARKLE + 'Fit</button>' +
-      '<button class="mini dl-btn" id="btnDlIpad_' + i + '" title="Download 2048×2732 px PNG">' + ICO_DL + '</button>' +
-      '<button class="mini del" title="Delete">&times;</button>' +
-      '<span class="shot-dim-tag" id="ipadShotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
+      '<button class="mini del" title="Delete">&times;</button>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
     b[1].onclick = () => mvIpad(i, -1);
     b[2].onclick = () => mvIpad(i, 1);
     b[3].onclick = () => fixIpadScreenshot(i);
-    b[4].onclick = () => downloadIpadScreenshot(i);
-    b[5].onclick = () => { IPAD_SHOTS.splice(i, 1); renderIpadShots(); saveState(); };
+    b[4].onclick = () => { IPAD_SHOTS.splice(i, 1); renderIpadShots(); saveState(); };
 
-    col.append(inp, act);
+    col.append(head, act);
     r.appendChild(col);
 
     // Drag & Drop event handlers for row reordering
@@ -3819,10 +3607,8 @@ function validateIpadScreenshots(){
   });
 
   function finalizeIpadBadge(){
-    const actionBtns = `<div class="sb-actions" style="margin-left:auto;display:inline-flex;gap:6px;align-items:center;">` +
-      (nonCompliantIndices.length > 0 ? `<button type="button" class="mini fit-btn" id="btnFixAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Auto-resize all non-standard screenshots to iPad Pro 13&quot; 2048×2732 px">${ICO_SPARKLE}Resize All (2048px)</button>` : '') +
-      `<button type="button" class="mini dl-btn" id="btnDlAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>` +
-      `</div>`;
+    const actionBtns = nonCompliantIndices.length > 0 ?
+      `<div class="sb-actions" style="margin-left:auto;display:inline-flex;gap:6px;align-items:center;"><button type="button" class="mini fit-btn" id="btnFixAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Auto-resize all non-standard screenshots to iPad Pro 13&quot; 2048×2732 px">${ICO_SPARKLE}Resize All (2048px)</button></div>` : '';
 
     if(nonCompliantIndices.length > 0){
       const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
@@ -3836,9 +3622,6 @@ function validateIpadScreenshots(){
 
     if($('btnFixAllIpad')){
       $('btnFixAllIpad').onclick = () => fixAllIpadScreenshots();
-    }
-    if($('btnDlAllIpad')){
-      $('btnDlAllIpad').onclick = () => downloadAllIpadScreenshots();
     }
   }
 }
@@ -4101,133 +3884,6 @@ function generateIpadFromPhone(){
   });
 }
 
-function downloadIpadScreenshot(index){
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const src = IPAD_SHOTS[index];
-  if(!src || !src.trim()){
-    showToast('No screenshot to download', 'warn');
-    return;
-  }
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const canvas = fitToIpadProCanvas(img, mode);
-    if(!canvas){
-      showToast('Error preparing screenshot download', 'warn');
-      return;
-    }
-    canvas.toBlob(blob => {
-      if(!blob){
-        showToast('Error generating image file', 'warn');
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${name}-ipad-shot-${index + 1}-${canvas.width}x${canvas.height}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded iPad Screenshot #${index + 1} (${canvas.width}×${canvas.height})!`, 'ok');
-    }, 'image/png');
-  };
-  img.onerror = () => showToast('Failed to load image for download', 'warn');
-  img.src = ensureSvgDimensions(src);
-}
-
-function downloadAllIpadScreenshots(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const validEntries = [];
-  IPAD_SHOTS.forEach((s, idx) => {
-    if(s && s.trim()) validEntries.push({ src: s, index: idx });
-  });
-
-  if(validEntries.length === 0){
-    showToast('No iPad screenshots to export', 'warn');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAllIpad');
-  const optBtn = $('optExportIpadShots');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${validEntries.length} iPad screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, 'info', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packPromise = Promise.all(validEntries.map((entry, order) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = fitToIpadProCanvas(img, mode);
-          if (canvas) {
-            const dataUrl = canvas.toDataURL('image/png');
-            const bytes = dataUrlToUint8Array(dataUrl);
-            const fileName = `${name}-ipad-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
-            resolve({ name: fileName, data: bytes });
-          } else {
-            resolve(null);
-          }
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-ipad-screenshots-2048x2732.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} iPad screenshots in 1 ZIP package!`, 'ok');
-  }).catch(err => {
-    console.error('ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export All (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
 
 // Event Listeners for iPad Destination & Screenshots
 let ipadPick = -1;
@@ -4237,7 +3893,6 @@ if(fDestIpad){
   fDestIpad.onchange = (e) => {
     setSupportsIpad(e.target.checked);
     saveState();
-    showToast(SUPPORTS_IPAD ? 'Universal App enabled! iPad screenshots unlocked.' : 'Switched to iPhone-only mode.', 'ok');
   };
 }
 
@@ -4884,12 +4539,11 @@ initInfoPopover("featureInfoBtn", "featureInfoPop", "featureInfoClose", "google"
 // Store Preview Studio · Google Play Devices & Tablet Orientation
 // --- Google Play Tablet Screenshots (7-inch & 10-inch) ---
 let googleDevice = 'phone'; // 'phone' | 'tab7' | 'tab10'
-let phoneOrient = 'portrait'; // 'portrait' | 'landscape'
 const tabOrient = {tab7:'landscape', tab10:'landscape'};
 const MAX_TAB = 8;
 const TAB_CFG = {
-  tab7:  {name:'7-inch',  min:320,  max:3840, list:'tab7List',  counter:'tab7Counter',  badge:'tab7Badge',  file:'tab7File',  add:'tab7Add',  url:'tab7Url',  gal:'galTab7',  dev:'dev-tab7'},
-  tab10: {name:'10-inch', min:1080, max:7680, list:'tab10List', counter:'tab10Counter', badge:'tab10Badge', file:'tab10File', add:'tab10Add', url:'tab10Url', gal:'galTab10', dev:'dev-tab10'}
+  tab7:  {name:'7-inch',  min:320,  max:3840, list:'tab7List',  counter:'tab7Counter',  badge:'tab7Badge',  file:'tab7File',  add:'tab7Add',  gal:'galTab7',  dev:'dev-tab7'},
+  tab10: {name:'10-inch', min:1080, max:7680, list:'tab10List', counter:'tab10Counter', badge:'tab10Badge', file:'tab10File', add:'tab10Add', gal:'galTab10', dev:'dev-tab10'}
 };
 const TABS = {tab7:[], tab10:[]};  // items: {src, meta:{type,bytes,w,h}}
 let tabPick = {key:null, idx:-1};
@@ -4961,19 +4615,15 @@ function renderTablets(){
     ce.className = 'cc' + (valid.length > MAX_TAB ? ' err' : '');
 
     const be = $(c.badge);
-    const dlBtn = valid.length > 0 ? `<button class="mini dl-btn" id="btnDlAll_${key}" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>` : '';
     if(!valid.length){
       be.className = 'shot-status-badge warn';
       be.innerHTML = `${SB_INFO}<span><strong>No ${c.name} screenshots yet.</strong> The preview shows placeholders. Upload up to ${MAX_TAB}.</span>`;
     }else if(bad){
       be.className = 'shot-status-badge err';
-      be.innerHTML = `${SB_ERR}<span><strong>${bad} of ${valid.length} screenshot${valid.length===1?'':'s'} would be rejected</strong> by Play Console. See details below.</span>${dlBtn}`;
+      be.innerHTML = `${SB_ERR}<span><strong>${bad} of ${valid.length} screenshot${valid.length===1?'':'s'} would be rejected</strong> by Play Console. See details below.</span>`;
     }else{
       be.className = 'shot-status-badge ok';
-      be.innerHTML = `${SB_OK}<span><strong>${c.name} tablet assets look good:</strong> ${valid.length} screenshot${valid.length===1?'':'s'}.</span>${dlBtn}`;
-    }
-    if($('btnDlAll_' + key)){
-      $('btnDlAll_' + key).onclick = () => downloadAllTabScreenshots(key);
+      be.innerHTML = `${SB_OK}<span><strong>${c.name} tablet assets look good:</strong> ${valid.length} screenshot${valid.length===1?'':'s'}.</span>`;
     }
 
     // Editor list
@@ -4998,7 +4648,7 @@ function renderTablets(){
       const meta = document.createElement('div'); meta.className = 'tab-meta';
       if(it.meta && it.meta.w){
         const probs = tabIssues(key, it);
-        meta.textContent = `${it.meta.w}×${it.meta.h} · ${ratioLabel(it.meta.w, it.meta.h)}` + (it.meta.bytes ? ' · ' + fmtSize(it.meta.bytes) : '') + (probs.length ? ' — ' + probs.join('; ') : ' ✓');
+        meta.textContent = `${it.meta.w}×${it.meta.h} · ${ratioLabel(it.meta.w, it.meta.h)}` + (it.meta.bytes ? ' · ' + fmtSize(it.meta.bytes) : '') + (probs.length ? ' — ' + probs.join('; ') : ' OK');
         meta.classList.add(probs.length ? 'bad' : 'ok');
       }else if(it.meta && it.meta.bad){
         meta.textContent = 'Image could not be loaded'; meta.classList.add('bad');
@@ -5007,13 +4657,12 @@ function renderTablets(){
       }
 
       const act = document.createElement('div'); act.className = 'act';
-      act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" title="Move Up">↑</button><button class="mini" title="Move Down">↓</button><button class="mini dl-btn" title="Download PNG">' + ICO_DL + '</button><button class="mini del" title="Delete">✕</button>';
+      act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" title="Move Up">↑</button><button class="mini" title="Move Down">↓</button><button class="mini del" title="Delete">&times;</button>';
       const b = act.children;
       b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
       b[1].onclick = () => mvTab(key, i, -1);
       b[2].onclick = () => mvTab(key, i, 1);
-      b[3].onclick = () => downloadTabScreenshot(key, i);
-      b[4].onclick = () => { TABS[key].splice(i, 1); renderTablets(); saveState(); };
+      b[3].onclick = () => { TABS[key].splice(i, 1); renderTablets(); saveState(); };
       col.append(inp, meta, act);
       r.appendChild(col);
 
@@ -5067,7 +4716,7 @@ function addTabFiles(key, files){
     if(++done === files.length){
       out.forEach(s => TABS[key].push(makeTabItem(s)));
       renderTablets(); saveState();
-      showToast(`Added ${files.length} ${TAB_CFG[key].name} tablet screenshot${files.length===1?'':'s'}`, '📸');
+      showToast(`Added ${files.length} ${TAB_CFG[key].name} tablet screenshot${files.length===1?'':'s'}`, 'ok');
     }
   }));
 }
@@ -5080,19 +4729,13 @@ Object.keys(TAB_CFG).forEach(key => {
     if(!files.length) return;
     if(tabPick.key === key && tabPick.idx >= 0){
       const idx = tabPick.idx; tabPick = {key:null, idx:-1};
-      readFile(files[0], d => { TABS[key][idx] = makeTabItem(d); renderTablets(); saveState(); showToast('Screenshot replaced', '📸'); });
+      readFile(files[0], d => { TABS[key][idx] = makeTabItem(d); renderTablets(); saveState(); showToast('Screenshot replaced', 'ok'); });
     }else{
       tabPick = {key:null, idx:-1};
       addTabFiles(key, files);
     }
   };
   $(c.add).onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key:null, idx:-1}; $(c.file).click(); };
-  $(c.url).onclick = () => {
-    if(TABS[key].length >= MAX_TAB){ showToast(`${c.name} tablets allow up to ${MAX_TAB} screenshots`, 'warn'); return; }
-    TABS[key].push(makeTabItem(''));
-    renderTablets(); saveState();
-    const ins = $(c.list).querySelectorAll('input'); if(ins.length) ins[ins.length-1].focus();
-  };
   const sec = $(c.list).parentElement;
   sec.addEventListener('dragover', e => e.preventDefault());
   sec.addEventListener('drop', e => {
@@ -5101,10 +4744,6 @@ Object.keys(TAB_CFG).forEach(key => {
   });
 });
 
-function applyGooglePhoneOrient(){
-  const phone = document.querySelector('.dev.google');
-  if(phone) phone.classList.toggle('landscape', phoneOrient === 'landscape');
-}
 function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
@@ -5128,18 +4767,6 @@ function setGoogleDevice(d, animate = true){
   syncAllVtPills();
 }
 $$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));
-$('gdRotate').onclick = () => {
-  if(googleDevice === 'phone'){
-    phoneOrient = phoneOrient === 'landscape' ? 'portrait' : 'landscape';
-    applyGooglePhoneOrient();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); });
-    saveState();
-  } else {
-    tabOrient[googleDevice] = tabOrient[googleDevice] === 'landscape' ? 'portrait' : 'landscape';
-    applyTabOrient(); renderTablets();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); }); saveState();
-  }
-};
 function tabStatus(key){
   const v = TABS[key].filter(i => i.src), bad = v.filter(i => tabIssues(key, i).length).length;
   if(!v.length) return 'None uploaded (optional)';
@@ -5147,420 +4774,6 @@ function tabStatus(key){
   return bad ? `${bad} of ${v.length} would be rejected` : `PASS (${v.length} screenshot${v.length===1?'':'s'})`;
 }
 
-// --- Google Play Screenshot Downloads & Bulk ZIP Exports ---
-function downloadTabScreenshot(key, index){
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const it = TABS[key] && TABS[key][index];
-  if(!it || !it.src || !it.src.trim()){
-    showToast('No screenshot to download', 'warn');
-    return;
-  }
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.naturalWidth || (key === 'tab7' ? 1280 : 1920);
-    canvas.height = img.naturalHeight || (key === 'tab7' ? 800 : 1200);
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    canvas.toBlob(blob => {
-      if(!blob){
-        showToast('Error generating image file', 'warn');
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${name}-google-play-${key}-shot-${index + 1}-${canvas.width}x${canvas.height}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded ${TAB_CFG[key].name} Screenshot #${index + 1} (${canvas.width}×${canvas.height})!`, '⬇️');
-    }, 'image/png');
-  };
-  img.onerror = () => showToast('Failed to load image for download', 'warn');
-  img.src = ensureSvgDimensions(it.src);
-}
-
-function downloadAllTabScreenshots(key){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const cfg = TAB_CFG[key];
-  if(!cfg) return;
-  const validEntries = [];
-  (TABS[key] || []).forEach((it, idx) => {
-    if(it && it.src && it.src.trim()) validEntries.push({ src: it.src, index: idx });
-  });
-
-  if(validEntries.length === 0){
-    showToast(`No ${cfg.name} tablet screenshots to export`, 'ℹ️');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAll_' + key);
-  const optBtn = $(key === 'tab7' ? 'optExportTab7Shots' : 'optExportTab10Shots');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${validEntries.length} ${cfg.name} tablet screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, '⏳', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packPromise = Promise.all(validEntries.map((entry, order) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || (key === 'tab7' ? 1280 : 1920);
-          canvas.height = img.naturalHeight || (key === 'tab7' ? 800 : 1200);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          const fileName = `${name}-google-play-${key}-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
-          resolve({ name: fileName, data: bytes });
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-google-play-${key}-tablet-screenshots.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} ${cfg.name} tablet screenshots in 1 ZIP package! ✨`, '⬇️');
-  }).catch(err => {
-    console.error(`${key} ZIP export error:`, err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
-
-function downloadAllTab7Screenshots(){
-  return downloadAllTabScreenshots('tab7');
-}
-
-function downloadAllTab10Screenshots(){
-  return downloadAllTabScreenshots('tab10');
-}
-
-function downloadAllTabletsScreenshots(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-
-  const tab7Valid = (TABS.tab7 || []).filter(it => it && it.src && it.src.trim());
-  const tab10Valid = (TABS.tab10 || []).filter(it => it && it.src && it.src.trim());
-  const totalCount = tab7Valid.length + tab10Valid.length;
-
-  if(totalCount === 0){
-    showToast('No tablet screenshots to export', 'ℹ️');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAllTablets');
-  const optBtn = $('optExportAllTablets');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${totalCount} tablet screenshot${totalCount === 1 ? '' : 's'} into ZIP (please wait)...`, '⏳', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packEntries = [];
-  tab7Valid.forEach((entry, order) => {
-    packEntries.push({
-      folder: '7-inch-tablet',
-      key: 'tab7',
-      order,
-      src: entry.src
-    });
-  });
-  tab10Valid.forEach((entry, order) => {
-    packEntries.push({
-      folder: '10-inch-tablet',
-      key: 'tab10',
-      order,
-      src: entry.src
-    });
-  });
-
-  const packPromise = Promise.all(packEntries.map((item) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || (item.key === 'tab7' ? 1280 : 1920);
-          canvas.height = img.naturalHeight || (item.key === 'tab7' ? 800 : 1200);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          const fileName = `${item.folder}/${name}-${item.key}-shot-${item.order + 1}-${canvas.width}x${canvas.height}.png`;
-          resolve({ name: fileName, data: bytes });
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(item.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-google-play-tablets-screenshots.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} tablet screenshots in 1 ZIP package! ✨`, '⬇️');
-  }).catch(err => {
-    console.error('Tablets ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export All Tablets (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
-
-function downloadAllGooglePlayBundle(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-
-  const phoneValid = (typeof SHOTS !== 'undefined' ? SHOTS : []).filter(s => typeof s === 'string' && s.trim());
-  const tab7Valid = (TABS.tab7 || []).filter(it => it && it.src && it.src.trim());
-  const tab10Valid = (TABS.tab10 || []).filter(it => it && it.src && it.src.trim());
-  const hasFeature = typeof FEATURE_GRAPHIC === 'string' && FEATURE_GRAPHIC.trim().length > 0;
-  const hasIcon = typeof ICON === 'string' && ICON.trim().length > 0;
-
-  const totalItems = phoneValid.length + tab7Valid.length + tab10Valid.length + (hasFeature ? 1 : 0) + (hasIcon ? 1 : 0);
-  if(totalItems === 0){
-    showToast('No Google Play assets to export', 'ℹ️');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const optBtn = $('optExportGooglePlayBundle');
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${totalItems} Google Play assets into ZIP (please wait)...`, '⏳', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const tasks = [];
-
-  // 1. Phone Screenshots
-  phoneValid.forEach((src, order) => {
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1080;
-          canvas.height = img.naturalHeight || 1920;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `01-phone-screenshots/${name}-phone-shot-${order + 1}-${canvas.width}x${canvas.height}.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(src);
-    }));
-  });
-
-  // 2. 7-inch Tablet Screenshots
-  tab7Valid.forEach((entry, order) => {
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1280;
-          canvas.height = img.naturalHeight || 800;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `02-tablet-7inch/${name}-7inch-shot-${order + 1}-${canvas.width}x${canvas.height}.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    }));
-  });
-
-  // 3. 10-inch Tablet Screenshots
-  tab10Valid.forEach((entry, order) => {
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1920;
-          canvas.height = img.naturalHeight || 1200;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `03-tablet-10inch/${name}-10inch-shot-${order + 1}-${canvas.width}x${canvas.height}.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    }));
-  });
-
-  // 4. Feature Graphic (1024×500)
-  if(hasFeature){
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = 1024;
-          canvas.height = 500;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, 1024, 500);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `04-feature-graphic/${name}-feature-graphic-1024x500.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(FEATURE_GRAPHIC);
-    }));
-  }
-
-  // 5. App Icon (512×512)
-  if(hasIcon){
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = 512;
-          canvas.height = 512;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, 512, 512);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `05-app-icon/${name}-app-icon-512x512.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(ICON);
-    }));
-  }
-
-  Promise.all([Promise.all(tasks), minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing Google Play bundle for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-google-play-all-assets.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded complete Google Play bundle (${files.length} assets) in 1 ZIP package! ✨`, '⬇️');
-  }).catch(err => {
-    console.error('Google Play bundle ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
-
-if($('btnDlAllTablets')){
-  $('btnDlAllTablets').onclick = () => downloadAllTabletsScreenshots();
-}
 
 
 
@@ -5638,7 +4851,14 @@ function setCategory(val, only){
 
 ['apple','google'].forEach(st => {
   if (CAT_SEL[st]) {
-    CAT_SEL[st].onchange = () => { CAT[st] = CAT_SEL[st].value; syncCategoryUI(); if (typeof update === 'function') update(); if (typeof saveState === 'function') saveState(); };
+    CAT_SEL[st].onchange = () => {
+      CAT[st] = CAT_SEL[st].value;
+      syncCategoryUI();
+      if (typeof update === 'function') update();
+      if (typeof saveState === 'function') saveState();
+      if (typeof flashField === 'function') flashField('cat');
+      if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
+    };
   }
 });
 setCategory('Productivity');
@@ -5706,7 +4926,10 @@ function renderPrivacy(){
 
   const linkedItems = parsePrivItems(linkedStr);
   const notLinkedItems = parsePrivItems(notLinkedStr);
-  const googleItems = parsePrivItems(googleStr);
+  const rawGoogleItems = parsePrivItems(googleStr);
+  const googleItems = rawGoogleItems.length > 0
+    ? rawGoogleItems
+    : ['No data shared with third parties', 'Data is encrypted in transit', 'You can request data deletion'];
 
   // Render Apple Privacy Section (Single "Data Not Collected" card or multi-category cards)
   $$('[data-apple-priv-wrap]').forEach(wrap => {
@@ -5851,7 +5074,6 @@ const LIMITS = {
   sub: ()=>30,
   promo: ()=>170,
   short: ()=>80,
-  keywords: ()=>100,
   new: ()=>store==='google'?500:4000,
   desc: ()=>4000
 };
@@ -5894,10 +5116,11 @@ function update(){
       }
     }
 
-    // Synchronize to Mockup Displays
+    // Synchronize to Mockup Displays (clamped to official store limits)
     $$('[data-b="'+k+'"]').forEach(e => {
       const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : ''))));
-      e.textContent = v || fallback;
+      const displayVal = (max && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, max) : v.slice(0, max)) : (v || fallback);
+      e.textContent = displayVal || fallback;
     });
   }
 
@@ -5924,32 +5147,241 @@ function update(){
   if($('promoBox')) $('promoBox').style.display = hasPromo ? 'block' : 'none';
   $$('.promo[data-b="promo"]').forEach(el => { el.style.display = hasPromo ? 'block' : 'none'; });
 
-  // Dynamic Google Play Keyword Chips (derived from first 2 comma-separated keywords)
-  const kwRaw = ($('f-keywords') && $('f-keywords').value) || '';
-  const kwList = kwRaw.split(',').map(s => s.trim()).filter(Boolean).map(w => {
-    return w.split(/\s+/).map(part => {
-      if(/^(ai|rpg|hiit|pvp|ar|vr|3d|hd|ui|ux|ios|api|sql)$/i.test(part)) return part.toUpperCase();
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    }).join(' ');
-  });
-  $$('[data-kw-chip]').forEach(el => {
-    const idx = parseInt(el.dataset.kwChip, 10) || 0;
-    const val = kwList[idx] || '';
-    el.textContent = val;
-    el.style.display = val ? '' : 'none';
-  });
-
   // Render App Privacy & Data Safety
   if (typeof renderPrivacy === 'function') renderPrivacy();
   if (typeof renderReviews === 'function') renderReviews();
+
+  // Re-sync focus highlight if field is currently active
+  if (typeof setFieldFocus === 'function' && activeFieldFocusKey) {
+    setFieldFocus(activeFieldFocusKey, false);
+  }
 }
 
+// --- Field ↔ Device Mockup Focus & Scroll Linking ---
+function getFieldMockupTargets(key) {
+  if (!key) return [];
+  switch (key) {
+    case 'name':
+      return $$('.stage [data-b="name"]');
+    case 'sub':
+      return $$('.stage [data-b="sub"]');
+    case 'promo':
+      return $$('.stage [data-b="promo"], .stage #promoBox');
+    case 'short':
+      return $$('.stage [data-b="short"]');
+    case 'desc':
+      return $$('.stage [data-b="desc"]:not([hidden]), .stage .g-desc-arrow');
+    case 'new':
+      return $$('.stage [data-b="new"]:not([hidden])');
+    case 'dev':
+      return $$('.stage [data-b="dev"]');
+    case 'cat':
+    case 'cat-apple':
+    case 'cat-google':
+      return $$('.stage [data-b="cat"]');
+    case 'ver':
+      return $$('.stage [data-b="ver"]');
+    case 'rdate':
+      return $$('.stage [data-b="rdate"]');
+    case 'email':
+      return $$('.stage [data-b="email"]');
+    case 'phone':
+      return $$('.stage [data-b="phone"]');
+    case 'addr':
+      return $$('.stage [data-b="addr"]');
+    case 'icon':
+      return $$('.stage [data-icon]');
+    case 'shots':
+      return $$('.stage .gal, .stage [data-shots]');
+    case 'privacy':
+      return $$('.stage [data-google-safety], .stage [data-apple-priv-wrap]');
+    case 'priv-google':
+      return $$('.stage [data-google-safety]');
+    case 'priv-linked':
+      return $$('.stage [data-apple-priv-wrap] .pc:first-child, .stage [data-apple-priv-wrap]');
+    case 'priv-notlinked':
+      return $$('.stage [data-apple-priv-wrap] .pc:last-child, .stage [data-apple-priv-wrap]');
+    case 'reviews':
+      return $$('.stage .reviews, .stage .ratings-reviews, .stage .a-rev, .stage .g-rev');
+    default:
+      return $$('.stage [data-b="' + key + '"]');
+  }
+}
+
+let activeFieldFocusKey = null;
+
+function setFieldFocus(key, shouldScroll = true) {
+  activeFieldFocusKey = key;
+  
+  // Clear previous focus highlight on all targets
+  $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+
+  if (!key) return;
+
+  const targets = getFieldMockupTargets(key);
+  if (!targets.length) return;
+
+  // Add highlight border to all matching targets
+  targets.forEach(el => el.classList.add('hl-target'));
+
+  if (!shouldScroll) return;
+
+  // Smoothly scroll active device screens (.scr) to the target position
+  targets.forEach(target => {
+    const dev = target.closest('.dev');
+    if (!dev) return;
+    
+    // Check if device mockup is currently visible
+    const devStyle = window.getComputedStyle(dev);
+    if (devStyle.display === 'none' || devStyle.visibility === 'hidden' || parseFloat(devStyle.opacity) === 0) {
+      return;
+    }
+    // Check if target element itself is rendered
+    if (target.offsetParent === null && target.offsetWidth === 0 && target.offsetHeight === 0) {
+      return;
+    }
+
+    // Scroll the device's inner screen (.scr)
+    const scr = target.closest('.scr');
+    if (scr) {
+      const scrRect = scr.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+
+      // Relative position within scroll container
+      const relativeTop = (targetRect.top - scrRect.top) + scr.scrollTop;
+      
+      // Center the target element in the visible height of the phone/tablet screen
+      const targetCenter = relativeTop - (scr.clientHeight / 2) + (targetRect.height / 2);
+      const scrollToY = Math.max(0, targetCenter);
+
+      scr.scrollTo({
+        top: scrollToY,
+        behavior: 'smooth'
+      });
+    }
+  });
+}
+
+function flashField(key) {
+  if (!key) return;
+  const targets = getFieldMockupTargets(key);
+  targets.forEach(el => {
+    el.classList.remove('hl-flash');
+    void el.offsetWidth;
+    el.classList.add('hl-flash');
+    clearTimeout(el._flashTimer);
+    el._flashTimer = setTimeout(() => {
+      el.classList.remove('hl-flash');
+    }, 1150);
+  });
+}
+
+function initFieldFocusLinking() {
+  const formElements = $$('.editor input, .editor textarea, .editor select');
+  formElements.forEach(input => {
+    const rawId = input.id || '';
+    if (rawId === 'f-st-off' || rawId === 'f-st-wm') return;
+    let key = '';
+    if (rawId.startsWith('f-')) {
+      key = rawId.replace('f-', '');
+    } else if (rawId.startsWith('sw-')) {
+      key = 'privacy';
+    }
+
+    if (key.startsWith('cat')) key = 'cat';
+
+    if (!key) return;
+
+    input.addEventListener('focus', () => {
+      setFieldFocus(key, true);
+    });
+
+    input.addEventListener('blur', () => {
+      setFieldFocus(null);
+    });
+
+    if (input.tagName === 'SELECT') {
+      input.addEventListener('change', () => {
+        flashField(key);
+        setFieldFocus(key, true);
+      });
+    }
+  });
+
+  // App icon interaction zones
+  const iconZones = $$('#icoDropZone, #icoUp, #icoFile, #iconStatusBadge, #dropApple, #dropGoogle');
+  iconZones.forEach(el => {
+    el.addEventListener('focus', () => setFieldFocus('icon', true));
+    el.addEventListener('blur', () => setFieldFocus(null));
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('icon', true);
+    });
+    el.addEventListener('mouseleave', () => {
+      if (activeFieldFocusKey === 'icon') setFieldFocus(null);
+    });
+  });
+
+  // Screenshots dropzones
+  const shotZones = $$('#dropZ, #dropZ-ipad, #dropZ-tab7, #dropZ-tab10, .drop-shots');
+  shotZones.forEach(el => {
+    el.addEventListener('focus', () => setFieldFocus('shots', true));
+    el.addEventListener('blur', () => setFieldFocus(null));
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('shots', true);
+    });
+    el.addEventListener('mouseleave', () => {
+      if (activeFieldFocusKey === 'shots') setFieldFocus(null);
+    });
+  });
+}
+
+// Bind input listeners
 $$('input[type=text],textarea').forEach(e => {
   e.addEventListener('input', () => {
     update();
-    debouncedSave();
+    const rawId = e.id || '';
+    if (rawId.startsWith('f-')) {
+      flashField(rawId.replace('f-', ''));
+    }
+    if(typeof handleUserFormEdit === 'function'){
+      handleUserFormEdit();
+    } else {
+      debouncedSave();
+    }
   });
 });
+
+function initPrivacyBanner() {
+  const banner = $('privacyMockBanner');
+  if (banner) {
+    banner.addEventListener('click', () => {
+      setFieldFocus('privacy', true);
+    });
+    banner.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setFieldFocus('privacy', true);
+      }
+    });
+  }
+}
+
+function initDescFeatures() {
+  initFieldFocusLinking();
+  initPrivacyBanner();
+  if (typeof initInfoPopover === 'function') {
+    initInfoPopover("descInfoBtn", "descInfoPop", "descInfoClose");
+    initInfoPopover("privacyInfoBtn", "privacyInfoPop", "privacyInfoClose");
+    initInfoPopover("whatsNewInfoBtn", "whatsNewInfoPop", "whatsNewInfoClose");
+    initInfoPopover("metricsInfoBtn", "metricsInfoPop", "metricsInfoClose");
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDescFeatures);
+} else {
+  initDescFeatures();
+}
 
 
 /* =========================================================================
@@ -6007,13 +5439,11 @@ function computeDeviceZoom(s, d){
   let baseW = 416, baseH = 870;
   if(s === 'apple'){
     if(d === 'ipad'){
-      const land = ipadOrient === 'landscape';
-      baseW = land ? 980 : 750;
-      baseH = land ? 750 : 980;
+      baseW = 750;
+      baseH = 980;
     } else {
-      const land = (typeof iphoneOrient !== 'undefined' && iphoneOrient === 'landscape');
-      baseW = land ? 870 : 416;
-      baseH = land ? 416 : 870;
+      baseW = 416;
+      baseH = 870;
     }
   } else if(d !== 'phone'){
     const land = tabOrient[d] === 'landscape';
@@ -6021,9 +5451,8 @@ function computeDeviceZoom(s, d){
     baseW = land ? lw : lh;
     baseH = land ? lh : lw;
   } else {
-    const land = (typeof phoneOrient !== 'undefined' && phoneOrient === 'landscape');
-    baseW = land ? 870 : 416;
-    baseH = land ? 416 : 870;
+    baseW = 416;
+    baseH = 870;
   }
   const zw = (st.clientWidth - pad) / baseW;
   const zh = m ? 9 : (st.clientHeight - pad - vt) / (baseH + 8);
@@ -6038,7 +5467,7 @@ function syncVtPill(container){
     pill.className = 'vt-pill';
     container.prepend(pill);
   }
-  const activeBtn = container.querySelector('button.on:not(#gdRotate):not(#adRotate)');
+  const activeBtn = container.querySelector('button.on');
   if(activeBtn && container.offsetParent !== null && activeBtn.offsetWidth > 0){
     pill.style.width = activeBtn.offsetWidth + 'px';
     pill.style.transform = 'translateX(' + activeBtn.offsetLeft + 'px)';
@@ -6236,18 +5665,6 @@ setTimeout(() => {
 // Store Preview Studio · Apple App Store & Devices
 // --- Apple Device Mode & Store Switchers ---
 let appleDevice = 'iphone'; // 'iphone' | 'ipad'
-let ipadOrient = 'portrait'; // 'portrait' | 'landscape'
-let iphoneOrient = 'portrait'; // 'portrait' | 'landscape'
-
-function applyIpadOrient(){
-  const ipad = document.querySelector('.dev.ipad');
-  if(ipad) ipad.classList.toggle('landscape', ipadOrient === 'landscape');
-}
-
-function applyIphoneOrient(){
-  const iphone = document.querySelector('.dev.apple.single');
-  if(iphone) iphone.classList.toggle('landscape', iphoneOrient === 'landscape');
-}
 
 function setAppleDevice(d, animate = true){
   if(d !== 'ipad') d = 'iphone';
@@ -6270,19 +5687,6 @@ function setAppleDevice(d, animate = true){
   syncAllVtPills();
 }
 $$('#dt [data-d]').forEach(b => b.onclick = () => setAppleDevice(b.dataset.d));
-$('adRotate').onclick = () => {
-  if(appleDevice === 'ipad'){
-    ipadOrient = ipadOrient === 'landscape' ? 'portrait' : 'landscape';
-    applyIpadOrient();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); });
-    saveState();
-  } else {
-    iphoneOrient = iphoneOrient === 'landscape' ? 'portrait' : 'landscape';
-    applyIphoneOrient();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); });
-    saveState();
-  }
-};
 
 // iOS App Icon Info Popover
 initInfoPopover("iosIconInfoBtn", "iosIconInfoPop", "iosIconInfoClose", "apple");
@@ -6374,14 +5778,116 @@ const stOffEl = $('f-st-off'), stWmEl = $('f-st-wm');
 if(stOffEl) stOffEl.addEventListener('change', () => { STATS_OFF = stOffEl.checked; renderStats(); debouncedSave(); });
 if(stWmEl) stWmEl.addEventListener('change', () => { EXPORT_WM = stWmEl.checked; debouncedSave(); });
 
-// Drag-to-scroll horizontal screenshots carousel & stats ribbon
-$$('.gal, .a-met').forEach(g=>{
-  let down=false,x0=0,s0=0;
-  g.addEventListener('mousedown',e=>{down=true;x0=e.pageX;s0=g.scrollLeft;g.style.cursor='grabbing'});
-  ['mouseup','mouseleave'].forEach(t=>g.addEventListener(t,()=>{down=false;g.style.cursor='grab'}));
-  g.addEventListener('mousemove',e=>{if(down){e.preventDefault();g.scrollLeft=s0-(e.pageX-x0)*1.6}});
-  g.addEventListener('wheel',e=>{if(e.deltaY){e.preventDefault();g.scrollLeft+=e.deltaY*1.5}},{passive:false});
-});
+// Smooth, Hardware-Accelerated Drag-to-Scroll & Intelligent Wheel for Carousels (.gal, .a-met)
+function initSmoothCarousel(el) {
+  if (!el || el._smoothCarouselInited) return;
+  el._smoothCarouselInited = true;
+
+  let isDown = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+  let lastX = 0;
+  let lastTime = 0;
+  let velocity = 0;
+  let rafId = null;
+
+  const getZoom = () => {
+    const dev = el.closest('.dev') || el;
+    const computedZoom = parseFloat(getComputedStyle(dev).zoom);
+    return (!isNaN(computedZoom) && computedZoom > 0) ? computedZoom : 1;
+  };
+
+  const stopMomentum = () => {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  };
+
+  el.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return; // Only primary mouse button (left click)
+    stopMomentum();
+    isDown = true;
+    el.classList.add('is-dragging');
+    el.style.scrollSnapType = 'none';
+    el.style.scrollBehavior = 'auto';
+
+    const zoom = getZoom();
+    startX = e.clientX / zoom;
+    startScrollLeft = el.scrollLeft;
+    lastX = startX;
+    lastTime = performance.now();
+    velocity = 0;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    const zoom = getZoom();
+    const currentX = e.clientX / zoom;
+    const deltaX = currentX - startX;
+    el.scrollLeft = startScrollLeft - deltaX;
+
+    const now = performance.now();
+    const dt = now - lastTime;
+    if (dt > 8) {
+      velocity = (currentX - lastX) / dt;
+      lastX = currentX;
+      lastTime = now;
+    }
+  });
+
+  const onDragEnd = () => {
+    if (!isDown) return;
+    isDown = false;
+    el.classList.remove('is-dragging');
+    el.style.scrollSnapType = '';
+    el.style.scrollBehavior = '';
+
+    // Apply gentle kinetic momentum if released with velocity
+    if (Math.abs(velocity) > 0.12) {
+      let currentVelocity = velocity * 15;
+      const friction = 0.92;
+      const step = () => {
+        if (Math.abs(currentVelocity) < 0.5 || isDown) {
+          stopMomentum();
+          return;
+        }
+        el.scrollLeft -= currentVelocity;
+        currentVelocity *= friction;
+        rafId = requestAnimationFrame(step);
+      };
+      stopMomentum();
+      rafId = requestAnimationFrame(step);
+    }
+  };
+
+  window.addEventListener('mouseup', onDragEnd);
+
+  // Wheel handling:
+  // 1. Two-finger horizontal trackpad gestures (deltaX) pass through untouched for 120Hz native compositor scrolling.
+  // 2. Vertical mouse wheels only translate to horizontal scroll within bounds without locking vertical page scroll.
+  el.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) {
+      return; // Native trackpad horizontal scroll passes through
+    }
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 2) return;
+
+    const atStart = el.scrollLeft <= 1;
+    const atEnd = el.scrollLeft >= maxScroll - 1;
+
+    if ((e.deltaY > 0 && !atEnd) || (e.deltaY < 0 && !atStart)) {
+      e.preventDefault();
+      stopMomentum();
+      el.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
+}
+
+function initAllCarousels() {
+  $$('.gal, .a-met').forEach(initSmoothCarousel);
+}
+initAllCarousels();
 
 
 
@@ -6392,16 +5898,7 @@ $$('.gal, .a-met').forEach(g=>{
 // Encapsulates Sidebar Toggle, Store Switcher, and Header Dropdown Navigation
 
 function initHeader() {
-  // 1. Sidebar Collapse / Expand Toggle
-  const btnToggle = $('btnToggleSidebar');
-  if (btnToggle) {
-    btnToggle.onclick = (e) => {
-      e.stopPropagation();
-      if (typeof toggleSidebar === 'function') {
-        toggleSidebar();
-      }
-    };
-  }
+  // 1. Sidebar Collapse / Expand Toggle is handled in core/resizer.js
 
   // 2. Store Switcher (App Store vs Google Play Segmented Control)
   const storeBtns = $$('.seg button');
@@ -6514,7 +6011,53 @@ $$('[data-preset]').forEach(b=>{
 });
 
 function loadPreset(key){
+  if(key === 'draft'){
+    if(!userDraft){
+      loadPreset('none');
+      CURRENT_PRESET_KEY = 'draft';
+      isPresetModified = false;
+      userDraft = getCurrentStateObject();
+      userDraft.isCustomized = true;
+      if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+      if(typeof updatePresetBanner === 'function') updatePresetBanner();
+      if(typeof updateDraftPill === 'function') updateDraftPill();
+      if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+      return;
+    }
+    CURRENT_PRESET_KEY = 'draft';
+    isPresetModified = false;
+    if(userDraft){
+      restoring = true;
+      try{
+        applyStateObject(userDraft);
+      }finally{
+        restoring = false;
+      }
+      renderIcons();
+      renderFeature();
+      renderShots();
+      renderIpadShots();
+      renderTablets();
+      syncStatInputs();
+      renderStats();
+      if(typeof applyGoogleDevice === 'function') applyGoogleDevice();
+      if(typeof applyTabOrient === 'function') applyTabOrient();
+      update();
+      fit();
+    }
+    if(typeof updatePresetBanner === 'function') updatePresetBanner();
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+    return;
+  }
+
+  // Before switching to a preset, if we were in draft mode, ensure draft is persisted
+  if(CURRENT_PRESET_KEY === 'draft' && typeof hasUserDraft === 'function' && hasUserDraft()){
+    if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+  }
+
   CURRENT_PRESET_KEY = key;
+  isPresetModified = false;
   if(key === 'none'){
     $('f-name').value = '';
     $('f-sub').value = '';
@@ -6522,16 +6065,18 @@ function loadPreset(key){
     $('f-short').value = '';
     $('f-dev').value = '';
     setCategory('');
-    $('f-keywords').value = '';
     if($('f-ver')) $('f-ver').value = '1.0.0';
     if($('f-rdate')) $('f-rdate').value = getCurrentMonthDateStr(2, true);
     if($('f-email')) $('f-email').value = '';
     if($('f-phone')) $('f-phone').value = '';
     if($('f-addr')) $('f-addr').value = '';
-    if($('f-priv-linked')) $('f-priv-linked').value = '';
-    if($('f-priv-notlinked')) $('f-priv-notlinked').value = '';
-    if($('f-priv-google')) $('f-priv-google').value = '';
-    CURRENT_PRIVACY = { linked: '', notLinked: '', google: '' };
+    const defaultPrivLinked = 'Identifiers, Usage Data';
+    const defaultPrivNotLinked = 'Diagnostics, Performance Data';
+    const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion';
+    if($('f-priv-linked')) $('f-priv-linked').value = defaultPrivLinked;
+    if($('f-priv-notlinked')) $('f-priv-notlinked').value = defaultPrivNotLinked;
+    if($('f-priv-google')) $('f-priv-google').value = defaultPrivGoogle;
+    CURRENT_PRIVACY = { linked: defaultPrivLinked, notLinked: defaultPrivNotLinked, google: defaultPrivGoogle };
     $('f-new').value = '';
     $('f-desc').value = '';
     IS_CUSTOM_ICON = false;
@@ -6566,7 +6111,26 @@ function loadPreset(key){
     FEATURE_GRAPHIC = BLANK_FEATURE;
     SHOTS = [];
     IPAD_SHOTS = [];
-    REVIEWS = [];
+    REVIEWS = [
+      {
+        author: 'Alex Morgan',
+        avatar: 'A',
+        avatarBg: '#0284c7',
+        stars: 5,
+        title: 'Intuitive & beautifully designed',
+        text: 'Super smooth user experience and clean interface. Does exactly what it promises without any unnecessary friction.',
+        helpful: 84
+      },
+      {
+        author: 'Jordan Lee',
+        avatar: 'J',
+        avatarBg: '#8b5cf6',
+        stars: 5,
+        title: 'Reliable and well built',
+        text: 'Fast performance, thoughtful details, and easy to navigate. Quickly became an essential tool in my workflow.',
+        helpful: 52
+      }
+    ];
     TABS.tab7 = []; TABS.tab10 = [];
     Object.assign(STATS, STATS_DEFAULT);
     syncStatInputs();
@@ -6577,7 +6141,12 @@ function loadPreset(key){
     renderShots();
     renderReviews();
     update();
-    saveState();
+    if(CURRENT_PRESET_KEY === 'draft'){
+      saveState();
+    }
+    if(typeof updatePresetBanner === 'function') updatePresetBanner();
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
     setTimeout(() => {
       const el = $('f-name');
       if(el) el.focus({ preventScroll: true });
@@ -6592,7 +6161,6 @@ function loadPreset(key){
   $('f-short').value = p.short;
   $('f-dev').value = p.dev;
   setCategory(p.category);
-  $('f-keywords').value = p.keywords;
   if($('f-ver')) $('f-ver').value = key === 'cyberstrike' ? '4.2.0' : (key === 'pulsefit' ? '3.1.2' : (key === 'zenmind' ? '1.8.0' : (key === 'edulearn' ? '4.1.0' : '2.4.0')));
   if($('f-rdate')) $('f-rdate').value = (p && p.rdate) ? p.rdate : getCurrentMonthDateStr(2, true);
   if($('f-email')) $('f-email').value = (p && p.email) ? p.email : (key === 'cyberstrike' ? 'support@omniarcade.games' : (key === 'pulsefit' ? 'support@pulsefit.io' : (key === 'zenmind' ? 'hello@zenmind.app' : (key === 'edulearn' ? 'support@skillsphere.edu' : 'support@flowcraft.studio'))));
@@ -6664,7 +6232,26 @@ function loadPreset(key){
   renderShots();
   renderReviews();
   update();
-  saveState();
+  if(CURRENT_PRESET_KEY === 'draft'){
+    saveState();
+  }
+  if(typeof updatePresetBanner === 'function') updatePresetBanner();
+  if(typeof updateDraftPill === 'function') updateDraftPill();
+  if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+}
+
+const btnReturn = $('btnReturnToDraft');
+if(btnReturn){
+  btnReturn.onclick = () => {
+    loadPreset('draft');
+  };
+}
+
+const btnDraft = $('btnDraft');
+if(btnDraft){
+  btnDraft.onclick = () => {
+    loadPreset('draft');
+  };
 }
 
 
@@ -6674,6 +6261,9 @@ function loadPreset(key){
    ========================================================================= */
 // Store Preview Studio - Storage & State Persistence (LocalStorage & IndexedDB)
 const STORAGE_KEY = 'store_preview_studio_state_v2';
+const DRAFT_STORAGE_KEY = 'sps_core_user_draft';
+let userDraft = null;
+let isPresetModified = false;
 let saveTimer = null;
 let restoring = false; // saveState() is a no-op while loadState() is applying saved values
 
@@ -6724,15 +6314,7 @@ function applyStateObject(s){
   if(s.store) setStore(s.store, false);
   if(s.appleDevice) setAppleDevice(s.appleDevice, false);
   else if(document.body) document.body.dataset.appleDevice = appleDevice;
-  if(s.ipadOrient === 'portrait' || s.ipadOrient === 'landscape') ipadOrient = s.ipadOrient;
-  if((s.iphoneOrient === 'portrait' || s.iphoneOrient === 'landscape') && typeof iphoneOrient !== 'undefined') iphoneOrient = s.iphoneOrient;
-  if((s.phoneOrient === 'portrait' || s.phoneOrient === 'landscape') && typeof phoneOrient !== 'undefined') phoneOrient = s.phoneOrient;
   if(s.theme && $$('.phone').length) (typeof setDeviceTheme === 'function' ? setDeviceTheme(s.theme, false) : $$('.phone').forEach(p => p.dataset.theme = s.theme));
-  if(typeof s.isFloating === 'boolean'){
-    isFloating = s.isFloating;
-    $$('.dev').forEach(d => d.classList.toggle('floating', isFloating));
-    if($('btnFloat')) $('btnFloat').classList.toggle('active', isFloating);
-  }
   if(s.form){
     if(s.form.name !== undefined && $('f-name')) $('f-name').value = s.form.name;
     if(s.form.sub !== undefined && $('f-sub')) $('f-sub').value = s.form.sub;
@@ -6742,7 +6324,6 @@ function applyStateObject(s){
     if(s.form.cat !== undefined) setCategory(s.form.cat);
     if(s.form.catApple !== undefined) setCategory(s.form.catApple, 'apple');
     if(s.form.catGoogle !== undefined) setCategory(s.form.catGoogle, 'google');
-    if(s.form.keywords !== undefined && $('f-keywords')) $('f-keywords').value = s.form.keywords;
     if(s.form.ver !== undefined && $('f-ver')) $('f-ver').value = s.form.ver;
     if(s.form.rdate !== undefined && $('f-rdate')) $('f-rdate').value = s.form.rdate;
     if(s.form.email !== undefined && $('f-email')) $('f-email').value = s.form.email;
@@ -6782,8 +6363,9 @@ function applyStateObject(s){
     if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
   }
   if(s.googleDevice === 'tab7' || s.googleDevice === 'tab10' || s.googleDevice === 'phone') googleDevice = s.googleDevice;
-  if(s.tabOrient){
-    ['tab7', 'tab10'].forEach(k => { if(s.tabOrient[k] === 'portrait' || s.tabOrient[k] === 'landscape') tabOrient[k] = s.tabOrient[k]; });
+  if(typeof tabOrient !== 'undefined'){
+    tabOrient.tab7 = 'landscape';
+    tabOrient.tab10 = 'landscape';
   }
   if(Array.isArray(s.tab7Shots) && typeof makeTabItem === 'function') TABS.tab7 = s.tab7Shots.slice(0, MAX_TAB).map(makeTabItem);
   if(Array.isArray(s.tab10Shots) && typeof makeTabItem === 'function') TABS.tab10 = s.tab10Shots.slice(0, MAX_TAB).map(makeTabItem);
@@ -6795,16 +6377,11 @@ function applyStateObject(s){
   return true;
 }
 
-function saveState(){
-  if(restoring) return;
-  const state = {
+function getCurrentStateObject(){
+  return {
     store,
     appleDevice,
-    ipadOrient,
-    iphoneOrient: typeof iphoneOrient !== 'undefined' ? iphoneOrient : 'portrait',
-    phoneOrient: typeof phoneOrient !== 'undefined' ? phoneOrient : 'portrait',
     theme: document.querySelector('.phone') ? (document.querySelector('.phone').dataset.theme || 'light') : 'light',
-    isFloating,
     form: {
       name: $('f-name') ? $('f-name').value : '',
       sub: $('f-sub') ? $('f-sub').value : '',
@@ -6814,7 +6391,6 @@ function saveState(){
       cat: $('f-cat') ? $('f-cat').value : '',
       catApple: CAT.apple,
       catGoogle: CAT.google,
-      keywords: $('f-keywords') ? $('f-keywords').value : '',
       ver: $('f-ver') ? $('f-ver').value : '2.4.0',
       rdate: $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true),
       email: $('f-email') ? $('f-email').value : 'support@flowcraft.studio',
@@ -6837,8 +6413,186 @@ function saveState(){
     tab7Shots: TABS.tab7.map(i => i.src),
     tab10Shots: TABS.tab10.map(i => i.src),
     reviews: REVIEWS,
-    stats: (typeof statsToObject === 'function') ? statsToObject() : {}
+    stats: (typeof statsToObject === 'function') ? statsToObject() : {},
+    isCustomized: true
   };
+}
+
+function hasUserDraft(){
+  if(userDraft && typeof userDraft === 'object'){
+    const f = userDraft.form || {};
+    const hasText = !!((f.name && f.name.trim()) || (f.sub && f.sub.trim()) || (f.short && f.short.trim()) || (f.desc && f.desc.trim()));
+    const hasShots = Array.isArray(userDraft.shots) && userDraft.shots.length > 0;
+    return hasText || hasShots || !!userDraft.isCustomized;
+  }
+  return false;
+}
+
+function ensureDraft(){
+  if(!userDraft){
+    userDraft = getCurrentStateObject();
+  }
+  return userDraft;
+}
+
+function saveDraftToStorage(){
+  if(!userDraft) return;
+  if(typeof idbSave === 'function'){
+    idbSave(DRAFT_STORAGE_KEY, userDraft);
+  }
+  try{
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(userDraft));
+  }catch(e){
+    try{
+      const sanitized = sanitizeStateForLocalStorage(userDraft);
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(sanitized));
+    }catch(err2){}
+  }
+}
+
+function loadDraftFromStorage(){
+  try{
+    if(typeof localStorage !== 'undefined'){
+      const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if(raw){
+        const parsed = JSON.parse(raw);
+        if(parsed && typeof parsed === 'object'){
+          userDraft = parsed;
+        }
+      }
+    }
+  }catch(e){}
+
+  if(typeof idbGet === 'function'){
+    idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
+      if(idbDraft && typeof idbDraft === 'object'){
+        userDraft = idbDraft;
+        updateDraftPill();
+      }
+    }).catch(()=>{});
+  }
+}
+
+function initDraftFromCurrentPreset(){
+  userDraft = getCurrentStateObject();
+  CURRENT_PRESET_KEY = 'draft';
+  isPresetModified = false;
+  saveDraftToStorage();
+  updateDraftPill();
+  updatePresetBanner();
+  updatePresetMenuSelection();
+}
+
+function updateDraftPill(){
+  const pill = $('btnDraft');
+  if(!pill) return;
+  const hasDraft = hasUserDraft();
+
+  if(hasDraft && userDraft){
+    pill.classList.add('has-draft');
+    pill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
+    const iconSrc = userDraft.icon || ICON || BLANK_ICON;
+    const f = userDraft.form || {};
+    const appTitle = (f.name && f.name.trim()) ? (typeof clampGraphemes === 'function' ? clampGraphemes(f.name.trim(), 30) : f.name.trim()) : 'Your App';
+    
+    pill.setAttribute('title', appTitle + (CURRENT_PRESET_KEY === 'draft' ? ' (Active Workspace)' : ' (Saved Draft - Click to Return)'));
+    pill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
+      '<span id="draftBtnTitle">' + escapeHtml(appTitle) + '</span>' +
+      '<small id="draftBtnBadge">Draft</small>' +
+      '<button type="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</button>';
+
+    const resetBtn = pill.querySelector('#msPillResetBtn');
+    if(resetBtn){
+      resetBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        showResetConfirmModal(function(){
+          userDraft = null;
+          try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
+          try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+          if(typeof idbDelete === 'function'){
+            idbDelete(DRAFT_STORAGE_KEY);
+            idbDelete(STORAGE_KEY);
+          }
+          if(typeof resetStats === 'function') resetStats();
+          loadPreset('taskflow');
+          updateDraftPill();
+          updatePresetBanner();
+          showToast('Draft cleared and reset.', 'ok');
+        });
+      });
+    }
+  } else {
+    pill.classList.remove('has-draft');
+    pill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
+    pill.textContent = '+ Your App';
+    pill.setAttribute('title', 'Start your custom app draft');
+  }
+
+  updatePresetMenuSelection();
+}
+
+function updatePresetMenuSelection(){
+  $$('#menuPresets [data-preset]').forEach(b => {
+    const k = b.dataset.preset;
+    b.classList.toggle('active', k === CURRENT_PRESET_KEY);
+  });
+}
+
+function updatePresetBanner(){
+  const banner = $('presetBanner');
+  if(!banner) return;
+  
+  const hasDraft = hasUserDraft();
+  if(CURRENT_PRESET_KEY !== 'draft' && hasDraft && userDraft){
+    banner.style.display = 'inline-flex';
+    banner.classList.toggle('is-modified', !!isPresetModified);
+    const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
+    const pName = CURRENT_PRESET_KEY === 'none' ? 'None (Blank)' : (CURRENT_PRESET_KEY ? (CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1)) : 'Preset');
+    
+    if(textEl){
+      if(isPresetModified){
+        textEl.innerHTML = '<strong>Preview only: edits won\'t be saved</strong> · Your draft is saved safely.';
+      } else {
+        textEl.innerHTML = 'Viewing preset: <strong id="presetBannerName">' + escapeHtml(pName) + '</strong> · Your draft is saved safely.';
+      }
+    }
+  } else {
+    banner.style.display = 'none';
+    banner.classList.remove('is-modified');
+  }
+}
+
+function handleUserFormEdit(){
+  if(!hasUserDraft()){
+    if(CURRENT_PRESET_KEY !== 'draft'){
+      initDraftFromCurrentPreset();
+      return;
+    }
+  } else if(CURRENT_PRESET_KEY !== 'draft'){
+    isPresetModified = true;
+    updatePresetBanner();
+    return;
+  }
+  debouncedSave();
+}
+
+function saveState(){
+  if(restoring) return;
+  const state = getCurrentStateObject();
+
+  if(CURRENT_PRESET_KEY === 'draft'){
+    userDraft = JSON.parse(JSON.stringify(state));
+    saveDraftToStorage();
+    updateDraftPill();
+  } else if(!hasUserDraft()){
+    initDraftFromCurrentPreset();
+    return;
+  } else {
+    // Ephemeral mode on preset: do not overwrite draft
+    isPresetModified = true;
+    updatePresetBanner();
+    return;
+  }
 
   // 1. Asynchronously persist complete state to IndexedDB (virtually unlimited quota for high-res images)
   let idbPromise = null;
@@ -6912,9 +6666,6 @@ function loadState(){
           if(typeof syncStatInputs === 'function') syncStatInputs();
           if(typeof renderStats === 'function') renderStats();
           if(typeof applyGoogleDevice === 'function') applyGoogleDevice();
-          if(typeof applyIpadOrient === 'function') applyIpadOrient();
-          if(typeof applyIphoneOrient === 'function') applyIphoneOrient();
-          if(typeof applyGooglePhoneOrient === 'function') applyGooglePhoneOrient();
           if(typeof applyTabOrient === 'function') applyTabOrient();
           if(typeof update === 'function') update();
           if(typeof fit === 'function') fit();
@@ -6945,7 +6696,6 @@ function copyAllText(){
   const short = $('f-short') ? $('f-short').value : '';
   const dev = $('f-dev') ? $('f-dev').value : '';
   const cat = 'App Store: ' + (CAT.apple || '-') + '  |  Google Play: ' + (CAT.google || '-');
-  const kw = $('f-keywords') ? $('f-keywords').value : '';
   const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
   const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
   const email = $('f-email') ? $('f-email').value : '';
@@ -6995,9 +6745,6 @@ ${sub} [${countChars(sub)}/30]
 PROMOTIONAL TEXT (170 chars max):
 ${promo} [${countChars(promo)}/170]
 
-KEYWORDS (100 chars max):
-${kw} [${countChars(kw)}/100]
-
 APP PRIVACY (Data Linked to You):
 ${privLinked || 'None'}
 
@@ -7035,25 +6782,6 @@ ${desc}
    Module: src/js/modules/export/markdown.js
    ========================================================================= */
 // Store Preview Studio - Markdown Metadata Exporter (LISTING_METADATA.md)
-if($('optExportIcon')) $('optExportIcon').onclick = () => downloadAppIcon();
-if($('optExportIpadShots')) $('optExportIpadShots').onclick = () => {
-  if(typeof downloadAllIpadScreenshots === 'function') downloadAllIpadScreenshots();
-};
-if($('optExportPhoneShots')) $('optExportPhoneShots').onclick = () => {
-  if(typeof downloadAllPhoneScreenshots === 'function') downloadAllPhoneScreenshots();
-};
-if($('optExportTab7Shots')) $('optExportTab7Shots').onclick = () => {
-  if(typeof downloadAllTab7Screenshots === 'function') downloadAllTab7Screenshots();
-};
-if($('optExportTab10Shots')) $('optExportTab10Shots').onclick = () => {
-  if(typeof downloadAllTab10Screenshots === 'function') downloadAllTab10Screenshots();
-};
-if($('optExportAllTablets')) $('optExportAllTablets').onclick = () => {
-  if(typeof downloadAllTabletsScreenshots === 'function') downloadAllTabletsScreenshots();
-};
-if($('optExportGooglePlayBundle')) $('optExportGooglePlayBundle').onclick = () => {
-  if(typeof downloadAllGooglePlayBundle === 'function') downloadAllGooglePlayBundle();
-};
 if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;
 
 function exportMarkdown(){
@@ -7074,7 +6802,6 @@ function exportMarkdown(){
   const dev = $('f-dev') ? $('f-dev').value : '';
   const cat = CAT.apple || '-';
   const catG = CAT.google || '-';
-  const kw = $('f-keywords') ? $('f-keywords').value : '';
   const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
   const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
   const email = $('f-email') ? $('f-email').value : '-';
@@ -7111,7 +6838,6 @@ function exportMarkdown(){
 | **App Title** | Both | 30 chars | ${countChars(name)} | ${countChars(name) <= 30 ? 'PASS' : 'EXCEEDED'} |
 | **Subtitle** | App Store | 30 chars | ${countChars(sub)} | ${countChars(sub) <= 30 ? 'PASS' : 'EXCEEDED'} |
 | **Promotional Text** | App Store | 170 chars | ${countChars(promo)} | ${countChars(promo) <= 170 ? 'PASS' : 'EXCEEDED'} |
-| **Keywords** | App Store | 100 chars | ${countChars(kw)} | ${countChars(kw) <= 100 ? 'PASS' : 'EXCEEDED'} |
 | **Short Description** | Google Play | 80 chars | ${countChars(short)} | ${countChars(short) <= 80 ? 'PASS' : 'EXCEEDED'} |
 | **Full Description** | Both | 4,000 chars | ${countChars(desc)} | ${countChars(desc) <= 4000 ? 'PASS' : 'EXCEEDED'} |
 
@@ -7153,9 +6879,6 @@ ${safeFence(sub)}
 ### Promotional Text
 ${safeFence(promo)}
 
-### Keywords (ASO)
-${safeFence(kw)}
-
 ### Category
 * **Primary:** \`${cat}\`
 * **Developer:** \`${dev}\`
@@ -7190,7 +6913,6 @@ ${safeFence(wn)}
 - \`fastlane/metadata/ios/en-US/name.txt\` -> App Title
 - \`fastlane/metadata/ios/en-US/subtitle.txt\` -> Subtitle
 - \`fastlane/metadata/ios/en-US/promotional_text.txt\` -> Promotional Text
-- \`fastlane/metadata/ios/en-US/keywords.txt\` -> Keywords
 - \`fastlane/metadata/ios/en-US/description.txt\` -> Full Description
 `;
 
@@ -7222,7 +6944,6 @@ function exportJSON(){
       cat: $('f-cat') ? $('f-cat').value : '',
       catApple: CAT.apple,
       catGoogle: CAT.google,
-      keywords: $('f-keywords') ? $('f-keywords').value : '',
       ver: $('f-ver') ? $('f-ver').value : '2.4.0',
       rdate: $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true),
       email: $('f-email') ? $('f-email').value : '',
@@ -7302,7 +7023,6 @@ function parseAndApplyJSON(jsonString){
     short: getStr(src.short || src.shortDesc || src.shortDescription),
     dev: getStr(src.dev || src.developer || src.developerName || src.author),
     cat: getStr(src.cat || src.category),
-    keywords: getStr(src.keywords || src.keywordsList),
     ver: getStr(src.ver || src.appVersion),
     rdate: getStr(src.rdate || src.releaseDate),
     email: getStr(src.email || src.supportEmail),
@@ -7314,7 +7034,7 @@ function parseAndApplyJSON(jsonString){
     desc: getStr(src.desc || src.description || src.fullDescription)
   };
 
-  const hasMobileSpecificFields = !!(mapped.sub || mapped.promo || mapped.short || mapped.keywords || src.catApple || src.catGoogle);
+  const hasMobileSpecificFields = !!(mapped.sub || mapped.promo || mapped.short || src.catApple || src.catGoogle);
 
   // Strict Schema Check: Reject generic flat JSON files that lack Store Preview Studio schema or mobile fields
   if(!isKnownGenerator && !hasAppWrapper && !hasStoreKeys && !hasMobileSpecificFields){
@@ -7338,7 +7058,6 @@ function parseAndApplyJSON(jsonString){
   if(mapped.cat) setCategory(mapped.cat);
   if(src.catApple && typeof src.catApple === 'string') setCategory(src.catApple, 'apple');
   if(src.catGoogle && typeof src.catGoogle === 'string') setCategory(src.catGoogle, 'google');
-  if(mapped.keywords && $('f-keywords')) $('f-keywords').value = mapped.keywords;
   if(mapped.ver && $('f-ver')) $('f-ver').value = mapped.ver;
   if(mapped.rdate && $('f-rdate')) $('f-rdate').value = mapped.rdate;
   if(mapped.email && $('f-email')) $('f-email').value = mapped.email;
@@ -7463,12 +7182,20 @@ window.addEventListener('drop', e => {
 // Reset to Default State
 if($('optResetDefault')){
   $('optResetDefault').onclick = () => {
-    if(confirm('Are you sure you want to reset all inputs to the default template?')){
-      localStorage.removeItem(STORAGE_KEY);
-      if(typeof idbDelete === 'function') idbDelete(STORAGE_KEY);
+    showResetConfirmModal(() => {
+      userDraft = null;
+      try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      if(typeof idbDelete === 'function'){
+        idbDelete(DRAFT_STORAGE_KEY);
+        idbDelete(STORAGE_KEY);
+      }
       resetStats();
       loadPreset('taskflow');
-    }
+      if(typeof updatePresetBanner === 'function') updatePresetBanner();
+      if(typeof updateDraftPill === 'function') updateDraftPill();
+      showToast('Draft cleared and reset to default.', 'ok');
+    });
   };
 }
 
@@ -7587,9 +7314,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   isExporting = true;
   if(typeof clearDevTransitions === 'function') clearDevTransitions();
   const prevZoom = devToCapture.style.zoom;
-  const hadFloat = devToCapture.classList.contains('floating');
   devToCapture.style.zoom = '1';
-  devToCapture.classList.remove('floating', 'dev-enter', 'dev-exit');
+  devToCapture.classList.remove('dev-enter', 'dev-exit');
   void devToCapture.offsetHeight; // Force synchronous reflow before measuring bounding rects
 
   let restoreImages = () => {};
@@ -7620,7 +7346,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.animation = 'none';
         clonedEl.style.transition = 'none';
         clonedDoc.querySelectorAll('.dev').forEach(d => {
-          d.classList.remove('floating', 'dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
+          d.classList.remove('dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
           d.style.zoom = '1';
           d.style.animation = 'none';
           d.style.transition = 'none';
@@ -7628,6 +7354,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
           el.style.letterSpacing = '0px';
+        });
+        // Strip focus highlight from export capture
+        clonedDoc.querySelectorAll('.hl-target, .hl-flash').forEach(el => {
+          el.classList.remove('hl-target', 'hl-flash');
+          el.style.outline = 'none';
+          el.style.boxShadow = 'none';
         });
       }
     });
@@ -7649,7 +7381,6 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     isExporting = false;
     devToCapture.style.zoom = prevZoom;
     fit();
-    if(hadFloat && isFloating) devToCapture.classList.add('floating');
   }
 }
 
@@ -7670,13 +7401,11 @@ function fit(){
   let baseW = 416, baseH = 870;
   if(store === 'apple'){
     if(appleDevice === 'ipad'){
-      const land = ipadOrient === 'landscape';
-      baseW = land ? 980 : 750;
-      baseH = land ? 750 : 980;
+      baseW = 750;
+      baseH = 980;
     } else {
-      const land = (typeof iphoneOrient !== 'undefined' && iphoneOrient === 'landscape');
-      baseW = land ? 870 : 416;
-      baseH = land ? 416 : 870;
+      baseW = 416;
+      baseH = 870;
     }
   }else if(googleDevice !== 'phone'){
     const land = tabOrient[googleDevice] === 'landscape';
@@ -7684,9 +7413,8 @@ function fit(){
     baseW = land ? lw : lh;
     baseH = land ? lh : lw;
   } else {
-    const land = (typeof phoneOrient !== 'undefined' && phoneOrient === 'landscape');
-    baseW = land ? 870 : 416;
-    baseH = land ? 416 : 870;
+    baseW = 416;
+    baseH = 870;
   }
 
   const zw=(st.clientWidth-pad)/baseW;
@@ -7722,27 +7450,33 @@ addEventListener('orientationchange', () => setTimeout(onStageResize, 200));
 document.body.dataset.appleDevice = appleDevice;
 document.body.dataset.googleDevice = googleDevice;
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
-if(!loadState()){
+
+if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
+
+if(typeof hasUserDraft === 'function' && hasUserDraft()){
+  CURRENT_PRESET_KEY = 'draft';
+  loadPreset('draft');
+} else if(!loadState()){
   restoring = true;
   try{
     loadPreset('none');
   }finally{
     restoring = false;
   }
-}else{
+} else {
+  if(typeof initDraftFromCurrentPreset === 'function') initDraftFromCurrentPreset();
   renderIcons();
   renderFeature();
   renderShots();
   renderIpadShots();
   update();
 }
+if(typeof updatePresetBanner === 'function') updatePresetBanner();
+if(typeof updateDraftPill === 'function') updateDraftPill();
 setSupportsIpad(SUPPORTS_IPAD);
 syncStatInputs();
 renderStats();
 applyGoogleDevice();
-applyIpadOrient();
-if(typeof applyIphoneOrient === 'function') applyIphoneOrient();
-if(typeof applyGooglePhoneOrient === 'function') applyGooglePhoneOrient();
 applyTabOrient();
 renderTablets();
 if(typeof renderReviews === 'function') renderReviews();

@@ -50,13 +50,11 @@ function computeDeviceZoom(s, d){
   let baseW = 416, baseH = 870;
   if(s === 'apple'){
     if(d === 'ipad'){
-      const land = ipadOrient === 'landscape';
-      baseW = land ? 980 : 750;
-      baseH = land ? 750 : 980;
+      baseW = 750;
+      baseH = 980;
     } else {
-      const land = (typeof iphoneOrient !== 'undefined' && iphoneOrient === 'landscape');
-      baseW = land ? 870 : 416;
-      baseH = land ? 416 : 870;
+      baseW = 416;
+      baseH = 870;
     }
   } else if(d !== 'phone'){
     const land = tabOrient[d] === 'landscape';
@@ -64,9 +62,8 @@ function computeDeviceZoom(s, d){
     baseW = land ? lw : lh;
     baseH = land ? lh : lw;
   } else {
-    const land = (typeof phoneOrient !== 'undefined' && phoneOrient === 'landscape');
-    baseW = land ? 870 : 416;
-    baseH = land ? 416 : 870;
+    baseW = 416;
+    baseH = 870;
   }
   const zw = (st.clientWidth - pad) / baseW;
   const zh = m ? 9 : (st.clientHeight - pad - vt) / (baseH + 8);
@@ -81,7 +78,7 @@ function syncVtPill(container){
     pill.className = 'vt-pill';
     container.prepend(pill);
   }
-  const activeBtn = container.querySelector('button.on:not(#gdRotate):not(#adRotate)');
+  const activeBtn = container.querySelector('button.on');
   if(activeBtn && container.offsetParent !== null && activeBtn.offsetWidth > 0){
     pill.style.width = activeBtn.offsetWidth + 'px';
     pill.style.transform = 'translateX(' + activeBtn.offsetLeft + 'px)';

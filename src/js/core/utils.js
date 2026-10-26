@@ -6,12 +6,10 @@
 
 const $=id=>document.getElementById(id), $$=s=>[...document.querySelectorAll(s)];
 let store = 'apple';
-let isFloating = true;
 
 // --- Reusable Crisp Vector Action Icons ---
 const ICO_SPARKLE = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.4 5.4 5.6 2.1-5.6 2.1-2.4 5.4-2.4-5.4-5.6-2.1 5.6-2.1 2.4-5.4zm7.5 12.5l1.2 2.7 2.8 1-2.8 1-1.2 2.8-1.2-2.8-2.8-1 2.8-1 1.2-2.7z"></path></svg></span>`;
 const ICO_DL = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span>`;
-const ICO_ZIP = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><polyline points="9 14 12 17 15 14"></polyline></svg></span>`;
 const ICO_UPLOAD = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>`;
 
 // --- Dynamic Date & Clock Helpers (Zero Hardcoded Dates or 9:41 Clocks) ---
@@ -137,7 +135,6 @@ function ensureSvgDimensions(uri){
 let _lastDownloadTime = 0;
 let _lastUploadTime = 0;
 let _lastActionTime = 0;
-let _isZipExporting = false;
 
 function canDownload(cooldownMs = 1000) {
   const now = Date.now();
@@ -264,12 +261,24 @@ const mk=(src,alt='')=>{
 };
 
 
-// --- Accurate Unicode & Emoji Grapheme Counter ---
+// --- Accurate Unicode & Emoji Grapheme Counter & Clamper ---
 const graphemeSegmenter = (typeof Intl !== 'undefined' && Intl.Segmenter) ? new Intl.Segmenter('en', { granularity: 'grapheme' }) : null;
 function countChars(str){
   if(!str) return 0;
   if(graphemeSegmenter) return [...graphemeSegmenter.segment(str)].length;
   return Array.from(str).length;
+}
+
+function clampGraphemes(str, max){
+  if(!str || typeof max !== 'number' || max <= 0) return '';
+  if(graphemeSegmenter){
+    const segs = Array.from(graphemeSegmenter.segment(str));
+    if(segs.length <= max) return str;
+    return segs.slice(0, max).map(s => s.segment).join('');
+  }
+  const chars = Array.from(str);
+  if(chars.length <= max) return str;
+  return chars.slice(0, max).join('');
 }
 
 
@@ -289,9 +298,9 @@ function showToast(msg, icon='', duration=3200){
   const c = $('toastContainer');
   if(!c) return;
   const t = document.createElement('div');
-  const isErr = icon === '⚠️' || icon === 'err' || icon === 'warn' || icon === 'error';
+  const isErr = icon === 'err' || icon === 'warn' || icon === 'error';
   t.className = isErr ? 'toast error' : 'toast success';
-  const iconHtml = (icon && icon !== '✓' && icon !== '⚠️' && icon !== 'err' && icon !== 'warn' && icon !== 'error')
+  const iconHtml = (icon && icon !== 'ok' && icon !== 'err' && icon !== 'warn' && icon !== 'error')
     ? `<i>${escapeHtml(icon)}</i>`
     : '';
   t.innerHTML = `${iconHtml}<span>${escapeHtml(msg)}</span>`;
@@ -467,111 +476,6 @@ function initInfoPopover(btnId, popId, closeId, allowedStore = null) {
   });
 }
 
-// --- Client-side ZIP Package Generator (Store/Uncompressed format, 100% Offline & Zero-dependency) ---
-const _crcTable = new Uint32Array(256);
-for (let i = 0; i < 256; i++) {
-  let c = i;
-  for (let k = 0; k < 8; k++) {
-    c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-  }
-  _crcTable[i] = c >>> 0;
-}
-
-function crc32(buf) {
-  let c = 0xFFFFFFFF;
-  for (let i = 0; i < buf.length; i++) {
-    c = _crcTable[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
-  }
-  return (c ^ 0xFFFFFFFF) >>> 0;
-}
-
-function dataUrlToUint8Array(dataUrl) {
-  const parts = dataUrl.split(',');
-  const binStr = (typeof atob !== 'undefined') ? atob(parts[1] || '') : Buffer.from(parts[1] || '', 'base64').toString('binary');
-  const len = binStr.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binStr.charCodeAt(i);
-  }
-  return bytes;
-}
-
-function createZipBlob(files) {
-  const encoder = (typeof TextEncoder !== 'undefined') ? new TextEncoder() : { encode: s => Buffer.from(s, 'utf8') };
-  const fileEntries = [];
-  let offset = 0;
-  const parts = [];
-
-  for (const f of files) {
-    const nameBytes = encoder.encode(f.name);
-    const data = f.data instanceof Uint8Array ? f.data : new Uint8Array(f.data);
-    const crc = crc32(data);
-    const size = data.length;
-
-    const lh = new Uint8Array(30);
-    const dv = new DataView(lh.buffer);
-    dv.setUint32(0, 0x04034b50, true); // Local file header signature
-    dv.setUint16(4, 20, true);         // Version needed (2.0)
-    dv.setUint16(6, 0, true);          // Flags
-    dv.setUint16(8, 0, true);          // Compression (0 = STORE)
-    dv.setUint16(10, 0x4000, true);    // Time
-    dv.setUint16(12, 0x5421, true);    // Date
-    dv.setUint32(14, crc, true);       // CRC32
-    dv.setUint32(18, size, true);      // Compressed size
-    dv.setUint32(22, size, true);      // Uncompressed size
-    dv.setUint16(26, nameBytes.length, true); // Name length
-    dv.setUint16(28, 0, true);         // Extra length
-
-    fileEntries.push({ nameBytes, crc, size, offset });
-    parts.push(lh, nameBytes, data);
-    offset += 30 + nameBytes.length + size;
-  }
-
-  const cdOffset = offset;
-  for (const f of fileEntries) {
-    const cd = new Uint8Array(46);
-    const dv = new DataView(cd.buffer);
-    dv.setUint32(0, 0x02014b50, true); // Central header signature
-    dv.setUint16(4, 20, true);         // Version made by
-    dv.setUint16(6, 20, true);         // Version needed
-    dv.setUint16(8, 0, true);          // Flags
-    dv.setUint16(10, 0, true);         // Compression (0 = STORE)
-    dv.setUint16(12, 0x4000, true);    // Time
-    dv.setUint16(14, 0x5421, true);    // Date
-    dv.setUint32(16, f.crc, true);     // CRC32
-    dv.setUint32(20, f.size, true);    // Compressed size
-    dv.setUint32(24, f.size, true);    // Uncompressed size
-    dv.setUint16(28, f.nameBytes.length, true); // Name length
-    dv.setUint16(30, 0, true);         // Extra length
-    dv.setUint16(32, 0, true);         // Comment length
-    dv.setUint16(34, 0, true);         // Disk start
-    dv.setUint16(36, 0, true);         // Internal attr
-    dv.setUint32(38, 0, true);         // External attr
-    dv.setUint32(42, f.offset, true);  // Local header offset
-
-    parts.push(cd, f.nameBytes);
-    offset += 46 + f.nameBytes.length;
-  }
-
-  const cdSize = offset - cdOffset;
-  const eocd = new Uint8Array(22);
-  const dv = new DataView(eocd.buffer);
-  dv.setUint32(0, 0x06054b50, true);  // EOCD signature
-  dv.setUint16(4, 0, true);           // Disk number
-  dv.setUint16(6, 0, true);           // Start disk
-  dv.setUint16(8, fileEntries.length, true);  // Disk entries
-  dv.setUint16(10, fileEntries.length, true); // Total entries
-  dv.setUint32(12, cdSize, true);     // CD size
-  dv.setUint32(16, cdOffset, true);   // CD offset
-  dv.setUint16(20, 0, true);          // Comment length
-
-  parts.push(eocd);
-  if (typeof Blob !== 'undefined') {
-    return new Blob(parts, { type: 'application/zip' });
-  }
-  return parts;
-}
-
 // --- IndexedDB High-Capacity Storage Engine (Virtually unlimited quota for high-res screenshots) ---
 const IDB_DB_NAME = 'StorePreviewStudioDB';
 const IDB_STORE_NAME = 'keyval';
@@ -731,5 +635,49 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
     if (callback) callback(svgSrc);
   };
   img.src = svgSrc;
+}
+
+/**
+ * Modern Reset and Confirmation Modal
+ * Replaces native browser confirm dialog with custom modal popup.
+ *
+ * @param {Function} onConfirm - Callback executed when user confirms reset
+ */
+function showResetConfirmModal(onConfirm) {
+  const modal = $('resetConfirmModal');
+  if (!modal) {
+    if (typeof onConfirm === 'function') onConfirm();
+    return;
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', handleKey);
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Escape') closeModal();
+  }
+
+  const cancelBtn = modal.querySelector('#resetConfirmCancel');
+  if (cancelBtn) cancelBtn.onclick = closeModal;
+
+  modal.onclick = e => {
+    if (e.target === modal) closeModal();
+  };
+
+  const okBtn = modal.querySelector('#resetConfirmOk');
+  if (okBtn) {
+    okBtn.onclick = () => {
+      closeModal();
+      if (typeof onConfirm === 'function') onConfirm();
+    };
+  }
+
+  document.addEventListener('keydown', handleKey);
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  if (cancelBtn) cancelBtn.focus();
 }
 

@@ -49,7 +49,6 @@ function updatePresetJson(filename, presetKey) {
   const isGameSubcat = GAME_CATEGORIES.includes(preset.category);
   data.form.catApple = isGameSubcat ? 'Games' : preset.category;
   data.form.catGoogle = isGameSubcat ? ('Games · ' + preset.category) : preset.category;
-  data.form.keywords = preset.keywords;
   if (preset.ver) data.form.ver = preset.ver;
   if (preset.rdate) data.form.rdate = preset.rdate;
   if (preset.email) data.form.email = preset.email;

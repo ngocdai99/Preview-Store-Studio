@@ -1,23 +1,31 @@
 <!-- Card 3: App Privacy & Data Safety -->
 <div class="card" id="privacyCard">
-  <h2><i class="card-ico c-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></i>App Privacy &amp; Data Safety</h2>
-  <p class="hint">Customizes privacy labels displayed on App Store (Nutritional cards) and Google Play (Data safety section).</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+    <h2 style="margin:0"><span class="card-num" title="Card 3">3</span><i class="card-ico c-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></i>App Privacy &amp; Data Safety</h2>
+    <span class="info-tip-btn" id="privacyInfoBtn" tabindex="0" role="button" aria-label="Privacy &amp; Data Safety Guidelines" title="Console Questionnaire Guidelines">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    </span>
+  </div>
   
-  <div class="fg">
-    <div class="lr"><label>Apple Privacy: Data Linked to You<span class="tag a">APPLE</span></label></div>
-    <input type="text" id="f-priv-linked" value="User Content (Tasks &amp; Habits), Identifiers, Usage Data" placeholder="e.g. Purchases, Contact Info, User Content, Identifiers">
-    <span class="hint" style="font-size:10.5px">Items separated by commas shown in Apple "Data Linked to You"</span>
+  <div class="privacy-compact-box" id="privacyMockBanner" role="button" tabindex="0" title="Click to view Privacy section on device">
+    <div class="pcb-left">
+      <span class="pcb-shield">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+      </span>
+      <div class="pcb-meta">
+        <div class="pcb-title">
+          <span id="privacyStatusLabel">Store Compliance Profile</span>
+          <span class="tag a" title="App Store Nutrition Labels">APPLE</span>
+          <span class="tag g" title="Google Play Data Safety">GOOGLE</span>
+        </div>
+        <div class="pcb-sub">Standard store disclosures included automatically for your draft &amp; presets</div>
+      </div>
+    </div>
+    <span class="pcb-action">Inspect &rarr;</span>
   </div>
 
-  <div class="fg">
-    <div class="lr"><label>Apple Privacy: Data Not Linked<span class="tag a">APPLE</span></label></div>
-    <input type="text" id="f-priv-notlinked" value="Diagnostics, Performance Data" placeholder="e.g. Diagnostics, Approximate Location, Usage Data">
-    <span class="hint" style="font-size:10.5px">Items shown in Apple "Data Not Linked to You"</span>
-  </div>
-
-  <div class="fg">
-    <div class="lr"><label>Google Play: Data Safety Practices<span class="tag g">GOOGLE</span></label></div>
-    <input type="text" id="f-priv-google" value="No data shared with third parties, Data is encrypted in transit, You can request data deletion" placeholder="e.g. Data shared with third parties, Data encrypted in transit">
-    <span class="hint" style="font-size:10.5px">Key bullet points (separated by commas) rendered in Google Play Data Safety</span>
-  </div>
+  <!-- Hidden state inputs to maintain 100% backward compatibility for export & presets -->
+  <input type="hidden" id="f-priv-linked" value="User Content (Tasks &amp; Habits), Identifiers, Usage Data">
+  <input type="hidden" id="f-priv-notlinked" value="Diagnostics, Performance Data">
+  <input type="hidden" id="f-priv-google" value="No data shared with third parties, Data is encrypted in transit, You can request data deletion">
 </div>

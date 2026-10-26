@@ -131,17 +131,13 @@ function runIconPixelAudit(iconSrc){
       // Rule 4: Exact 1024×1024 px dimensions
       if(w !== 1024 || h !== 1024){
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Xcode &amp; App Store require exact <strong>1024×1024 px</strong>.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
-        const dlBtn = $('btnDlIconBadge');
-        if(dlBtn) dlBtn.onclick = () => downloadAppIcon(1024);
+        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Xcode &amp; App Store require exact <strong>1024×1024 px</strong>.</span>`;
         return;
       }
 
       // Compliant: All Apple criteria met.
       badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> 1024×1024 px · PNG · 100% Opaque (sRGB/Display P3)</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge">${ICO_DL}Download 1024px</button></div>`;
-      const dlBtn = $('btnDlIconBadge');
-      if(dlBtn) dlBtn.onclick = () => downloadAppIcon(1024);
+      badge.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> 1024×1024 px · PNG · 100% Opaque (sRGB/Display P3)</span>`;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -181,69 +177,24 @@ function runIconPixelAudit(iconSrc){
       // Rule 4: Do not include rounded corners or drop shadows in artwork
       if(hasPreRoundedCorners){
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Pre-rounded Corners / Shadow Notice:</strong> Do not include rounded corners or drop shadows in artwork; Google Play dynamically applies corner radius (20%) and drop shadow upon upload.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
-        const dlBtn = $('btnDlIconBadge');
-        if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
+        badge.innerHTML = `${SB_WARN}<span><strong>Pre-rounded Corners / Shadow Notice:</strong> Do not include rounded corners or drop shadows in artwork; Google Play dynamically applies corner radius (20%) and drop shadow upon upload.</span>`;
         return;
       }
 
       // Rule 5: Target dimensions 512×512 px
       if(w !== 512 || h !== 512){
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
-        const dlBtn = $('btnDlIconBadge');
-        if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
+        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span>`;
         return;
       }
 
       // Compliant: All Google Play specifications passed
       const sizeNote = sizeBytes ? ` · ${(sizeBytes / 1024).toFixed(0)} KB (≤ 1024 KB)` : '';
       badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> 512×512 px · 32-bit PNG (sRGB)${sizeNote}</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge">${ICO_DL}Download 512px</button></div>`;
-      const dlBtn = $('btnDlIconBadge');
-      if(dlBtn) dlBtn.onclick = () => downloadAppIcon(512);
+      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> 512×512 px · 32-bit PNG (sRGB)${sizeNote}</span>`;
     }
   };
   img.src = iconSrc;
-}
-
-function downloadAppIcon(targetSize){
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const size = targetSize || (store === 'google' ? 512 : 1024);
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const c = document.createElement('canvas');
-    c.width = size;
-    c.height = size;
-    const ctx = c.getContext('2d');
-    if (store === 'apple') {
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(0, 0, size, size);
-    }
-    ctx.drawImage(img, 0, 0, size, size);
-    c.toBlob(blob => {
-      if(!blob){
-        showToast('Error creating icon file', 'warn');
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${name}-icon-${size}x${size}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded ${size}×${size} px App Icon!`, 'ok');
-    }, 'image/png');
-  };
-  img.onerror = () => {
-    showToast('Failed to load icon for download', 'warn');
-  };
-  img.src = ICON;
 }
 
 // Icon Upload & Drag-and-drop Listeners
@@ -252,9 +203,6 @@ if($('icoUp')){
     if(typeof canUpload === 'function' && !canUpload(1000)) return;
     if($('icoFile')) $('icoFile').click();
   };
-}
-if($('icoDown')){
-  $('icoDown').onclick = () => downloadAppIcon();
 }
 if($('icoInspect')){
   $('icoInspect').onclick = () => {

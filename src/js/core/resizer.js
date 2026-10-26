@@ -92,7 +92,10 @@ function toggleSidebar(forceOpen) {
 }
 
 if (btnToggleSidebar) {
-  btnToggleSidebar.addEventListener('click', () => toggleSidebar());
+  btnToggleSidebar.onclick = (e) => {
+    if (e) e.stopPropagation();
+    toggleSidebar();
+  };
 }
 
 // Global Keyboard Shortcut: Cmd+B (Mac) / Ctrl+B (Windows/Linux)

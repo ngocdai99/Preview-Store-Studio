@@ -103,31 +103,25 @@ function renderIpadSlist(){
     };
     r.appendChild(thumb);
 
-    // Input & Actions
+    // Row Title & Actions
     const col = document.createElement('div'); col.className = 'col';
-    const inp = document.createElement('input'); inp.type = 'text';
-    inp.value = s.startsWith('data:') ? '(Embedded / Uploaded Image)' : s;
-    inp.placeholder = 'https://… image URL or upload';
-    inp.disabled = s.startsWith('data:');
-    inp.onchange = () => { IPAD_SHOTS[i] = inp.value.trim(); renderIpadShots(); saveState(); };
+    const head = document.createElement('div'); head.className = 'shot-row-head';
+    head.innerHTML = `<span class="shot-row-title">iPad Screenshot #${i + 1}</span><span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
-      '<button class="mini" data-m="-1" title="Move Up">↑</button>' +
-      '<button class="mini" data-m="1" title="Move Down">↓</button>' +
+      '<button class="mini" data-m="-1" title="Move Up">&uarr;</button>' +
+      '<button class="mini" data-m="1" title="Move Down">&darr;</button>' +
       '<button class="mini fit-btn" id="btnFitIpad_' + i + '" title="Resize / Fit to Apple iPad Pro 13&quot; (2048×2732 px)">' + ICO_SPARKLE + 'Fit</button>' +
-      '<button class="mini dl-btn" id="btnDlIpad_' + i + '" title="Download 2048×2732 px PNG">' + ICO_DL + '</button>' +
-      '<button class="mini del" title="Delete">&times;</button>' +
-      '<span class="shot-dim-tag" id="ipadShotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
+      '<button class="mini del" title="Delete">&times;</button>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
     b[1].onclick = () => mvIpad(i, -1);
     b[2].onclick = () => mvIpad(i, 1);
     b[3].onclick = () => fixIpadScreenshot(i);
-    b[4].onclick = () => downloadIpadScreenshot(i);
-    b[5].onclick = () => { IPAD_SHOTS.splice(i, 1); renderIpadShots(); saveState(); };
+    b[4].onclick = () => { IPAD_SHOTS.splice(i, 1); renderIpadShots(); saveState(); };
 
-    col.append(inp, act);
+    col.append(head, act);
     r.appendChild(col);
 
     // Drag & Drop event handlers for row reordering
@@ -275,10 +269,8 @@ function validateIpadScreenshots(){
   });
 
   function finalizeIpadBadge(){
-    const actionBtns = `<div class="sb-actions" style="margin-left:auto;display:inline-flex;gap:6px;align-items:center;">` +
-      (nonCompliantIndices.length > 0 ? `<button type="button" class="mini fit-btn" id="btnFixAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Auto-resize all non-standard screenshots to iPad Pro 13&quot; 2048×2732 px">${ICO_SPARKLE}Resize All (2048px)</button>` : '') +
-      `<button type="button" class="mini dl-btn" id="btnDlAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>` +
-      `</div>`;
+    const actionBtns = nonCompliantIndices.length > 0 ?
+      `<div class="sb-actions" style="margin-left:auto;display:inline-flex;gap:6px;align-items:center;"><button type="button" class="mini fit-btn" id="btnFixAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Auto-resize all non-standard screenshots to iPad Pro 13&quot; 2048×2732 px">${ICO_SPARKLE}Resize All (2048px)</button></div>` : '';
 
     if(nonCompliantIndices.length > 0){
       const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
@@ -292,9 +284,6 @@ function validateIpadScreenshots(){
 
     if($('btnFixAllIpad')){
       $('btnFixAllIpad').onclick = () => fixAllIpadScreenshots();
-    }
-    if($('btnDlAllIpad')){
-      $('btnDlAllIpad').onclick = () => downloadAllIpadScreenshots();
     }
   }
 }
@@ -557,133 +546,6 @@ function generateIpadFromPhone(){
   });
 }
 
-function downloadIpadScreenshot(index){
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const src = IPAD_SHOTS[index];
-  if(!src || !src.trim()){
-    showToast('No screenshot to download', 'warn');
-    return;
-  }
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const canvas = fitToIpadProCanvas(img, mode);
-    if(!canvas){
-      showToast('Error preparing screenshot download', 'warn');
-      return;
-    }
-    canvas.toBlob(blob => {
-      if(!blob){
-        showToast('Error generating image file', 'warn');
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${name}-ipad-shot-${index + 1}-${canvas.width}x${canvas.height}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded iPad Screenshot #${index + 1} (${canvas.width}×${canvas.height})!`, 'ok');
-    }, 'image/png');
-  };
-  img.onerror = () => showToast('Failed to load image for download', 'warn');
-  img.src = ensureSvgDimensions(src);
-}
-
-function downloadAllIpadScreenshots(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const validEntries = [];
-  IPAD_SHOTS.forEach((s, idx) => {
-    if(s && s.trim()) validEntries.push({ src: s, index: idx });
-  });
-
-  if(validEntries.length === 0){
-    showToast('No iPad screenshots to export', 'warn');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAllIpad');
-  const optBtn = $('optExportIpadShots');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${validEntries.length} iPad screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, 'info', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packPromise = Promise.all(validEntries.map((entry, order) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = fitToIpadProCanvas(img, mode);
-          if (canvas) {
-            const dataUrl = canvas.toDataURL('image/png');
-            const bytes = dataUrlToUint8Array(dataUrl);
-            const fileName = `${name}-ipad-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
-            resolve({ name: fileName, data: bytes });
-          } else {
-            resolve(null);
-          }
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-ipad-screenshots-2048x2732.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} iPad screenshots in 1 ZIP package!`, 'ok');
-  }).catch(err => {
-    console.error('ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export All (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
 
 // Event Listeners for iPad Destination & Screenshots
 let ipadPick = -1;
@@ -693,7 +555,6 @@ if(fDestIpad){
   fDestIpad.onchange = (e) => {
     setSupportsIpad(e.target.checked);
     saveState();
-    showToast(SUPPORTS_IPAD ? 'Universal App enabled! iPad screenshots unlocked.' : 'Switched to iPhone-only mode.', 'ok');
   };
 }
 

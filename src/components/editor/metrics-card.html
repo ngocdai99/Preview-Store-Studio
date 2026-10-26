@@ -1,34 +1,18 @@
-<!-- Card 4: Illustrative Metrics & Store Badges -->
+<!-- Card 4: Mockup Display Settings & Metrics -->
 <div class="card" id="statsCard">
-  <h2><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Illustrative Metrics &amp; Store Badges</h2>
-  <p class="hint">Ratings, chart ranks, age ratings, and downloads in the mockup are <strong>sample numbers only</strong>, not live store data. Edit or hide them before client handoff.</p>
-  <div class="stat-grid">
-    <div class="fg"><div class="lr"><label>Rating</label></div><input type="text" id="f-st-rating" maxlength="4" placeholder="4.9"></div>
-    <div class="fg"><div class="lr"><label>Ratings Count</label></div><input type="text" id="f-st-count" maxlength="8" placeholder="1.8K"></div>
-    <div class="fg"><div class="lr"><label>Chart Rank (#)</label></div><input type="text" id="f-st-rank" maxlength="4" placeholder="1"></div>
-    <div class="fg"><div class="lr"><label>Downloads (Google)</label></div><input type="text" id="f-st-dl" maxlength="10" placeholder="50K+"></div>
-    <div class="fg"><div class="lr"><label>App Size</label></div><input type="text" id="f-st-size" maxlength="10" placeholder="86 MB"></div>
-    <div class="fg">
-      <div class="lr"><label>Age Rating</label></div>
-      <select class="fsel" id="f-st-age" aria-label="Age Rating">
-        <option value="4+">4+ / Everyone (E)</option>
-        <option value="9+">9+ / Everyone 10+ (E10+)</option>
-        <option value="12+">12+ / Teen (T)</option>
-        <option value="17+">17+ / Mature 17+ (M)</option>
-      </select>
-    </div>
-    <div class="fg" style="grid-column:1 / -1">
-      <div class="lr"><label>Monetization / In-App Purchases Badge</label></div>
-      <select class="fsel" id="f-st-iap" aria-label="Monetization Badge">
-        <option value="iap">In-App Purchases (No Ads)</option>
-        <option value="ads_iap">Contains Ads · In-App Purchases</option>
-        <option value="ads">Contains Ads Only</option>
-        <option value="free">None (100% Free / Paid Upfront)</option>
-      </select>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
+    <h2 style="margin:0"><span class="card-num" title="Card 4">4</span><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Mockup Settings &amp; Metrics</h2>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span class="tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:0.04em">MOCKUP ONLY</span>
+      <span class="info-tip-btn" id="metricsInfoBtn" tabindex="0" role="button" aria-label="Mockup Metrics Display Guidelines" title="How Metrics &amp; Badges Work in Preview Studio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </span>
     </div>
   </div>
-  <div class="sw-group">
-    <label class="sw-row">
+  <p class="hint" style="margin-bottom:12px">Store ratings, download milestones, and badges in the mockup use <strong>illustrative sample numbers</strong> automatically for your custom draft and all presets.</p>
+  
+  <div class="sw-group" style="margin-bottom:0">
+    <label class="sw-row" id="swRowMetricsOff">
       <span class="sw-lbl">Hide illustrative metrics (rating, chart, downloads) from mockup</span>
       <span class="sw-box">
         <input type="checkbox" id="f-st-off" class="sw-inp">
@@ -43,4 +27,13 @@
       </span>
     </label>
   </div>
+
+  <!-- Hidden state inputs to maintain 100% backward compatibility for export & presets -->
+  <input type="hidden" id="f-st-rating" value="4.9">
+  <input type="hidden" id="f-st-count" value="1.8K">
+  <input type="hidden" id="f-st-rank" value="1">
+  <input type="hidden" id="f-st-dl" value="50K+">
+  <input type="hidden" id="f-st-size" value="86 MB">
+  <input type="hidden" id="f-st-age" value="4+">
+  <input type="hidden" id="f-st-iap" value="iap">
 </div>

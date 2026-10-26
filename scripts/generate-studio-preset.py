@@ -361,7 +361,6 @@ preset_data = {
     "cat": "Developer Tools",
     "catApple": "Developer Tools",
     "catGoogle": "Tools",
-    "keywords": "app store mockup,google play preview,screenshot generator,metadata editor,aso studio,app store connect,indie dev tools",
     "ver": "2.1.0",
     "rdate": "Oct 25, 2026",
     "email": "support@previewstudio.app",

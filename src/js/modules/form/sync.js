@@ -6,7 +6,6 @@ const LIMITS = {
   sub: ()=>30,
   promo: ()=>170,
   short: ()=>80,
-  keywords: ()=>100,
   new: ()=>store==='google'?500:4000,
   desc: ()=>4000
 };
@@ -49,10 +48,11 @@ function update(){
       }
     }
 
-    // Synchronize to Mockup Displays
+    // Synchronize to Mockup Displays (clamped to official store limits)
     $$('[data-b="'+k+'"]').forEach(e => {
       const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : ''))));
-      e.textContent = v || fallback;
+      const displayVal = (max && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, max) : v.slice(0, max)) : (v || fallback);
+      e.textContent = displayVal || fallback;
     });
   }
 
@@ -79,29 +79,238 @@ function update(){
   if($('promoBox')) $('promoBox').style.display = hasPromo ? 'block' : 'none';
   $$('.promo[data-b="promo"]').forEach(el => { el.style.display = hasPromo ? 'block' : 'none'; });
 
-  // Dynamic Google Play Keyword Chips (derived from first 2 comma-separated keywords)
-  const kwRaw = ($('f-keywords') && $('f-keywords').value) || '';
-  const kwList = kwRaw.split(',').map(s => s.trim()).filter(Boolean).map(w => {
-    return w.split(/\s+/).map(part => {
-      if(/^(ai|rpg|hiit|pvp|ar|vr|3d|hd|ui|ux|ios|api|sql)$/i.test(part)) return part.toUpperCase();
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    }).join(' ');
-  });
-  $$('[data-kw-chip]').forEach(el => {
-    const idx = parseInt(el.dataset.kwChip, 10) || 0;
-    const val = kwList[idx] || '';
-    el.textContent = val;
-    el.style.display = val ? '' : 'none';
-  });
-
   // Render App Privacy & Data Safety
   if (typeof renderPrivacy === 'function') renderPrivacy();
   if (typeof renderReviews === 'function') renderReviews();
+
+  // Re-sync focus highlight if field is currently active
+  if (typeof setFieldFocus === 'function' && activeFieldFocusKey) {
+    setFieldFocus(activeFieldFocusKey, false);
+  }
 }
 
+// --- Field ↔ Device Mockup Focus & Scroll Linking ---
+function getFieldMockupTargets(key) {
+  if (!key) return [];
+  switch (key) {
+    case 'name':
+      return $$('.stage [data-b="name"]');
+    case 'sub':
+      return $$('.stage [data-b="sub"]');
+    case 'promo':
+      return $$('.stage [data-b="promo"], .stage #promoBox');
+    case 'short':
+      return $$('.stage [data-b="short"]');
+    case 'desc':
+      return $$('.stage [data-b="desc"]:not([hidden]), .stage .g-desc-arrow');
+    case 'new':
+      return $$('.stage [data-b="new"]:not([hidden])');
+    case 'dev':
+      return $$('.stage [data-b="dev"]');
+    case 'cat':
+    case 'cat-apple':
+    case 'cat-google':
+      return $$('.stage [data-b="cat"]');
+    case 'ver':
+      return $$('.stage [data-b="ver"]');
+    case 'rdate':
+      return $$('.stage [data-b="rdate"]');
+    case 'email':
+      return $$('.stage [data-b="email"]');
+    case 'phone':
+      return $$('.stage [data-b="phone"]');
+    case 'addr':
+      return $$('.stage [data-b="addr"]');
+    case 'icon':
+      return $$('.stage [data-icon]');
+    case 'shots':
+      return $$('.stage .gal, .stage [data-shots]');
+    case 'privacy':
+      return $$('.stage [data-google-safety], .stage [data-apple-priv-wrap]');
+    case 'priv-google':
+      return $$('.stage [data-google-safety]');
+    case 'priv-linked':
+      return $$('.stage [data-apple-priv-wrap] .pc:first-child, .stage [data-apple-priv-wrap]');
+    case 'priv-notlinked':
+      return $$('.stage [data-apple-priv-wrap] .pc:last-child, .stage [data-apple-priv-wrap]');
+    case 'reviews':
+      return $$('.stage .reviews, .stage .ratings-reviews, .stage .a-rev, .stage .g-rev');
+    default:
+      return $$('.stage [data-b="' + key + '"]');
+  }
+}
+
+let activeFieldFocusKey = null;
+
+function setFieldFocus(key, shouldScroll = true) {
+  activeFieldFocusKey = key;
+  
+  // Clear previous focus highlight on all targets
+  $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+
+  if (!key) return;
+
+  const targets = getFieldMockupTargets(key);
+  if (!targets.length) return;
+
+  // Add highlight border to all matching targets
+  targets.forEach(el => el.classList.add('hl-target'));
+
+  if (!shouldScroll) return;
+
+  // Smoothly scroll active device screens (.scr) to the target position
+  targets.forEach(target => {
+    const dev = target.closest('.dev');
+    if (!dev) return;
+    
+    // Check if device mockup is currently visible
+    const devStyle = window.getComputedStyle(dev);
+    if (devStyle.display === 'none' || devStyle.visibility === 'hidden' || parseFloat(devStyle.opacity) === 0) {
+      return;
+    }
+    // Check if target element itself is rendered
+    if (target.offsetParent === null && target.offsetWidth === 0 && target.offsetHeight === 0) {
+      return;
+    }
+
+    // Scroll the device's inner screen (.scr)
+    const scr = target.closest('.scr');
+    if (scr) {
+      const scrRect = scr.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+
+      // Relative position within scroll container
+      const relativeTop = (targetRect.top - scrRect.top) + scr.scrollTop;
+      
+      // Center the target element in the visible height of the phone/tablet screen
+      const targetCenter = relativeTop - (scr.clientHeight / 2) + (targetRect.height / 2);
+      const scrollToY = Math.max(0, targetCenter);
+
+      scr.scrollTo({
+        top: scrollToY,
+        behavior: 'smooth'
+      });
+    }
+  });
+}
+
+function flashField(key) {
+  if (!key) return;
+  const targets = getFieldMockupTargets(key);
+  targets.forEach(el => {
+    el.classList.remove('hl-flash');
+    void el.offsetWidth;
+    el.classList.add('hl-flash');
+    clearTimeout(el._flashTimer);
+    el._flashTimer = setTimeout(() => {
+      el.classList.remove('hl-flash');
+    }, 1150);
+  });
+}
+
+function initFieldFocusLinking() {
+  const formElements = $$('.editor input, .editor textarea, .editor select');
+  formElements.forEach(input => {
+    const rawId = input.id || '';
+    if (rawId === 'f-st-off' || rawId === 'f-st-wm') return;
+    let key = '';
+    if (rawId.startsWith('f-')) {
+      key = rawId.replace('f-', '');
+    } else if (rawId.startsWith('sw-')) {
+      key = 'privacy';
+    }
+
+    if (key.startsWith('cat')) key = 'cat';
+
+    if (!key) return;
+
+    input.addEventListener('focus', () => {
+      setFieldFocus(key, true);
+    });
+
+    input.addEventListener('blur', () => {
+      setFieldFocus(null);
+    });
+
+    if (input.tagName === 'SELECT') {
+      input.addEventListener('change', () => {
+        flashField(key);
+        setFieldFocus(key, true);
+      });
+    }
+  });
+
+  // App icon interaction zones
+  const iconZones = $$('#icoDropZone, #icoUp, #icoFile, #iconStatusBadge, #dropApple, #dropGoogle');
+  iconZones.forEach(el => {
+    el.addEventListener('focus', () => setFieldFocus('icon', true));
+    el.addEventListener('blur', () => setFieldFocus(null));
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('icon', true);
+    });
+    el.addEventListener('mouseleave', () => {
+      if (activeFieldFocusKey === 'icon') setFieldFocus(null);
+    });
+  });
+
+  // Screenshots dropzones
+  const shotZones = $$('#dropZ, #dropZ-ipad, #dropZ-tab7, #dropZ-tab10, .drop-shots');
+  shotZones.forEach(el => {
+    el.addEventListener('focus', () => setFieldFocus('shots', true));
+    el.addEventListener('blur', () => setFieldFocus(null));
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('shots', true);
+    });
+    el.addEventListener('mouseleave', () => {
+      if (activeFieldFocusKey === 'shots') setFieldFocus(null);
+    });
+  });
+}
+
+// Bind input listeners
 $$('input[type=text],textarea').forEach(e => {
   e.addEventListener('input', () => {
     update();
-    debouncedSave();
+    const rawId = e.id || '';
+    if (rawId.startsWith('f-')) {
+      flashField(rawId.replace('f-', ''));
+    }
+    if(typeof handleUserFormEdit === 'function'){
+      handleUserFormEdit();
+    } else {
+      debouncedSave();
+    }
   });
 });
+
+function initPrivacyBanner() {
+  const banner = $('privacyMockBanner');
+  if (banner) {
+    banner.addEventListener('click', () => {
+      setFieldFocus('privacy', true);
+    });
+    banner.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setFieldFocus('privacy', true);
+      }
+    });
+  }
+}
+
+function initDescFeatures() {
+  initFieldFocusLinking();
+  initPrivacyBanner();
+  if (typeof initInfoPopover === 'function') {
+    initInfoPopover("descInfoBtn", "descInfoPop", "descInfoClose");
+    initInfoPopover("privacyInfoBtn", "privacyInfoPop", "privacyInfoClose");
+    initInfoPopover("whatsNewInfoBtn", "whatsNewInfoPop", "whatsNewInfoClose");
+    initInfoPopover("metricsInfoBtn", "metricsInfoPop", "metricsInfoClose");
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDescFeatures);
+} else {
+  initDescFeatures();
+}

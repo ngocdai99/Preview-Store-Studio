@@ -73,7 +73,53 @@ $$('[data-preset]').forEach(b=>{
 });
 
 function loadPreset(key){
+  if(key === 'draft'){
+    if(!userDraft){
+      loadPreset('none');
+      CURRENT_PRESET_KEY = 'draft';
+      isPresetModified = false;
+      userDraft = getCurrentStateObject();
+      userDraft.isCustomized = true;
+      if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+      if(typeof updatePresetBanner === 'function') updatePresetBanner();
+      if(typeof updateDraftPill === 'function') updateDraftPill();
+      if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+      return;
+    }
+    CURRENT_PRESET_KEY = 'draft';
+    isPresetModified = false;
+    if(userDraft){
+      restoring = true;
+      try{
+        applyStateObject(userDraft);
+      }finally{
+        restoring = false;
+      }
+      renderIcons();
+      renderFeature();
+      renderShots();
+      renderIpadShots();
+      renderTablets();
+      syncStatInputs();
+      renderStats();
+      if(typeof applyGoogleDevice === 'function') applyGoogleDevice();
+      if(typeof applyTabOrient === 'function') applyTabOrient();
+      update();
+      fit();
+    }
+    if(typeof updatePresetBanner === 'function') updatePresetBanner();
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+    return;
+  }
+
+  // Before switching to a preset, if we were in draft mode, ensure draft is persisted
+  if(CURRENT_PRESET_KEY === 'draft' && typeof hasUserDraft === 'function' && hasUserDraft()){
+    if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+  }
+
   CURRENT_PRESET_KEY = key;
+  isPresetModified = false;
   if(key === 'none'){
     $('f-name').value = '';
     $('f-sub').value = '';
@@ -81,16 +127,18 @@ function loadPreset(key){
     $('f-short').value = '';
     $('f-dev').value = '';
     setCategory('');
-    $('f-keywords').value = '';
     if($('f-ver')) $('f-ver').value = '1.0.0';
     if($('f-rdate')) $('f-rdate').value = getCurrentMonthDateStr(2, true);
     if($('f-email')) $('f-email').value = '';
     if($('f-phone')) $('f-phone').value = '';
     if($('f-addr')) $('f-addr').value = '';
-    if($('f-priv-linked')) $('f-priv-linked').value = '';
-    if($('f-priv-notlinked')) $('f-priv-notlinked').value = '';
-    if($('f-priv-google')) $('f-priv-google').value = '';
-    CURRENT_PRIVACY = { linked: '', notLinked: '', google: '' };
+    const defaultPrivLinked = 'Identifiers, Usage Data';
+    const defaultPrivNotLinked = 'Diagnostics, Performance Data';
+    const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion';
+    if($('f-priv-linked')) $('f-priv-linked').value = defaultPrivLinked;
+    if($('f-priv-notlinked')) $('f-priv-notlinked').value = defaultPrivNotLinked;
+    if($('f-priv-google')) $('f-priv-google').value = defaultPrivGoogle;
+    CURRENT_PRIVACY = { linked: defaultPrivLinked, notLinked: defaultPrivNotLinked, google: defaultPrivGoogle };
     $('f-new').value = '';
     $('f-desc').value = '';
     IS_CUSTOM_ICON = false;
@@ -125,7 +173,26 @@ function loadPreset(key){
     FEATURE_GRAPHIC = BLANK_FEATURE;
     SHOTS = [];
     IPAD_SHOTS = [];
-    REVIEWS = [];
+    REVIEWS = [
+      {
+        author: 'Alex Morgan',
+        avatar: 'A',
+        avatarBg: '#0284c7',
+        stars: 5,
+        title: 'Intuitive & beautifully designed',
+        text: 'Super smooth user experience and clean interface. Does exactly what it promises without any unnecessary friction.',
+        helpful: 84
+      },
+      {
+        author: 'Jordan Lee',
+        avatar: 'J',
+        avatarBg: '#8b5cf6',
+        stars: 5,
+        title: 'Reliable and well built',
+        text: 'Fast performance, thoughtful details, and easy to navigate. Quickly became an essential tool in my workflow.',
+        helpful: 52
+      }
+    ];
     TABS.tab7 = []; TABS.tab10 = [];
     Object.assign(STATS, STATS_DEFAULT);
     syncStatInputs();
@@ -136,7 +203,12 @@ function loadPreset(key){
     renderShots();
     renderReviews();
     update();
-    saveState();
+    if(CURRENT_PRESET_KEY === 'draft'){
+      saveState();
+    }
+    if(typeof updatePresetBanner === 'function') updatePresetBanner();
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
     setTimeout(() => {
       const el = $('f-name');
       if(el) el.focus({ preventScroll: true });
@@ -151,7 +223,6 @@ function loadPreset(key){
   $('f-short').value = p.short;
   $('f-dev').value = p.dev;
   setCategory(p.category);
-  $('f-keywords').value = p.keywords;
   if($('f-ver')) $('f-ver').value = key === 'cyberstrike' ? '4.2.0' : (key === 'pulsefit' ? '3.1.2' : (key === 'zenmind' ? '1.8.0' : (key === 'edulearn' ? '4.1.0' : '2.4.0')));
   if($('f-rdate')) $('f-rdate').value = (p && p.rdate) ? p.rdate : getCurrentMonthDateStr(2, true);
   if($('f-email')) $('f-email').value = (p && p.email) ? p.email : (key === 'cyberstrike' ? 'support@omniarcade.games' : (key === 'pulsefit' ? 'support@pulsefit.io' : (key === 'zenmind' ? 'hello@zenmind.app' : (key === 'edulearn' ? 'support@skillsphere.edu' : 'support@flowcraft.studio'))));
@@ -223,6 +294,25 @@ function loadPreset(key){
   renderShots();
   renderReviews();
   update();
-  saveState();
+  if(CURRENT_PRESET_KEY === 'draft'){
+    saveState();
+  }
+  if(typeof updatePresetBanner === 'function') updatePresetBanner();
+  if(typeof updateDraftPill === 'function') updateDraftPill();
+  if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+}
+
+const btnReturn = $('btnReturnToDraft');
+if(btnReturn){
+  btnReturn.onclick = () => {
+    loadPreset('draft');
+  };
+}
+
+const btnDraft = $('btnDraft');
+if(btnDraft){
+  btnDraft.onclick = () => {
+    loadPreset('draft');
+  };
 }
 

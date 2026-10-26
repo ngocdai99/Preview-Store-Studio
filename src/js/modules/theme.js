@@ -34,12 +34,114 @@ const stOffEl = $('f-st-off'), stWmEl = $('f-st-wm');
 if(stOffEl) stOffEl.addEventListener('change', () => { STATS_OFF = stOffEl.checked; renderStats(); debouncedSave(); });
 if(stWmEl) stWmEl.addEventListener('change', () => { EXPORT_WM = stWmEl.checked; debouncedSave(); });
 
-// Drag-to-scroll horizontal screenshots carousel & stats ribbon
-$$('.gal, .a-met').forEach(g=>{
-  let down=false,x0=0,s0=0;
-  g.addEventListener('mousedown',e=>{down=true;x0=e.pageX;s0=g.scrollLeft;g.style.cursor='grabbing'});
-  ['mouseup','mouseleave'].forEach(t=>g.addEventListener(t,()=>{down=false;g.style.cursor='grab'}));
-  g.addEventListener('mousemove',e=>{if(down){e.preventDefault();g.scrollLeft=s0-(e.pageX-x0)*1.6}});
-  g.addEventListener('wheel',e=>{if(e.deltaY){e.preventDefault();g.scrollLeft+=e.deltaY*1.5}},{passive:false});
-});
+// Smooth, Hardware-Accelerated Drag-to-Scroll & Intelligent Wheel for Carousels (.gal, .a-met)
+function initSmoothCarousel(el) {
+  if (!el || el._smoothCarouselInited) return;
+  el._smoothCarouselInited = true;
+
+  let isDown = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+  let lastX = 0;
+  let lastTime = 0;
+  let velocity = 0;
+  let rafId = null;
+
+  const getZoom = () => {
+    const dev = el.closest('.dev') || el;
+    const computedZoom = parseFloat(getComputedStyle(dev).zoom);
+    return (!isNaN(computedZoom) && computedZoom > 0) ? computedZoom : 1;
+  };
+
+  const stopMomentum = () => {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  };
+
+  el.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return; // Only primary mouse button (left click)
+    stopMomentum();
+    isDown = true;
+    el.classList.add('is-dragging');
+    el.style.scrollSnapType = 'none';
+    el.style.scrollBehavior = 'auto';
+
+    const zoom = getZoom();
+    startX = e.clientX / zoom;
+    startScrollLeft = el.scrollLeft;
+    lastX = startX;
+    lastTime = performance.now();
+    velocity = 0;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    const zoom = getZoom();
+    const currentX = e.clientX / zoom;
+    const deltaX = currentX - startX;
+    el.scrollLeft = startScrollLeft - deltaX;
+
+    const now = performance.now();
+    const dt = now - lastTime;
+    if (dt > 8) {
+      velocity = (currentX - lastX) / dt;
+      lastX = currentX;
+      lastTime = now;
+    }
+  });
+
+  const onDragEnd = () => {
+    if (!isDown) return;
+    isDown = false;
+    el.classList.remove('is-dragging');
+    el.style.scrollSnapType = '';
+    el.style.scrollBehavior = '';
+
+    // Apply gentle kinetic momentum if released with velocity
+    if (Math.abs(velocity) > 0.12) {
+      let currentVelocity = velocity * 15;
+      const friction = 0.92;
+      const step = () => {
+        if (Math.abs(currentVelocity) < 0.5 || isDown) {
+          stopMomentum();
+          return;
+        }
+        el.scrollLeft -= currentVelocity;
+        currentVelocity *= friction;
+        rafId = requestAnimationFrame(step);
+      };
+      stopMomentum();
+      rafId = requestAnimationFrame(step);
+    }
+  };
+
+  window.addEventListener('mouseup', onDragEnd);
+
+  // Wheel handling:
+  // 1. Two-finger horizontal trackpad gestures (deltaX) pass through untouched for 120Hz native compositor scrolling.
+  // 2. Vertical mouse wheels only translate to horizontal scroll within bounds without locking vertical page scroll.
+  el.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) {
+      return; // Native trackpad horizontal scroll passes through
+    }
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 2) return;
+
+    const atStart = el.scrollLeft <= 1;
+    const atEnd = el.scrollLeft >= maxScroll - 1;
+
+    if ((e.deltaY > 0 && !atEnd) || (e.deltaY < 0 && !atStart)) {
+      e.preventDefault();
+      stopMomentum();
+      el.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
+}
+
+function initAllCarousels() {
+  $$('.gal, .a-met').forEach(initSmoothCarousel);
+}
+initAllCarousels();
 

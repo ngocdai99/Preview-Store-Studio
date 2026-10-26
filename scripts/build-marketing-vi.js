@@ -86,10 +86,6 @@ function buildMarketingVi() {
   html = rep(html, '<small>Live device stage · Retina 2x</small>', '<small>Màn hình stage thực tế · Retina 2x</small>');
   html = rep(html, '<span class="mi-name">Save as image (No phone frame)</span>', '<span class="mi-name">Lưu ảnh (Không khung điện thoại)</span>');
   html = rep(html, '<small>Store page UI without device bezel · 3x</small>', '<small>Giao diện store không viền máy · 3x</small>');
-  html = rep(html, '<span class="mi-name">Export iPad Screenshots</span>', '<span class="mi-name">Xuất iPad Screenshots</span>');
-  html = rep(html, '<small>All 2048×2732 px PNGs in single .zip package</small>', '<small>Tất cả PNG 2048×2732 px trong file .zip</small>');
-  html = rep(html, '<span class="mi-name">Export Phone Screenshots</span>', '<span class="mi-name">Xuất Phone Screenshots</span>');
-  html = rep(html, '<small>All phone screenshots in single .zip package</small>', '<small>Tất cả ảnh chụp màn hình trong file .zip</small>');
   html = rep(html, '<span class="dot dot-purple"></span>Store Metadata', '<span class="dot dot-purple"></span>Metadata Store');
   html = rep(html, '<span class="mi-name">Copy Metadata to Clipboard</span>', '<span class="mi-name">Sao chép Metadata vào Clipboard</span>');
   html = rep(html, '<small>App name, subtitle, descriptions,...</small>', '<small>Tên app, phụ đề, mô tả,...</small>');
@@ -114,7 +110,9 @@ function buildMarketingVi() {
 
   // 5. Mini Studio Form
   html = rep(html, '<h3 id="msEdTitle">Listing Content</h3>', '<h3 id="msEdTitle">Nội dung trang giới thiệu ứng dụng</h3>');
-  html = repAll(html, '<span>Upload</span>', '<span>Tải ảnh lên</span>');
+  html = repAll(html, '<span>Upload Icon</span>', '<span>Tải Icon lên</span>');
+  html = repAll(html, '<span>Inspect</span>', '<span>Kiểm tra</span>');
+  html = repAll(html, 'title="Inspect Icon Details &amp; Store Compliance"', 'title="Kiểm tra chi tiết Icon &amp; tiêu chuẩn Store"');
   html = repAll(html, '<span>App Name</span>', '<span>Tên ứng dụng</span>');
   html = repAll(html, '<span>Subtitle</span>', '<span>Phụ đề</span>');
   html = repAll(html, '<span>Short Description</span>', '<span>Mô tả ngắn</span>');

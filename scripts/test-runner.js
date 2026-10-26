@@ -50,7 +50,7 @@ function createMockEl(id, val = '') {
   return mockElements[id];
 }
 
-['f-name', 'f-sub', 'f-promo', 'f-short', 'f-dev', 'f-cat', 'f-keywords', 'f-ver', 'f-rdate', 'f-email', 'f-addr', 'f-priv-linked', 'f-priv-notlinked', 'f-priv-google', 'f-new', 'f-desc', 'f-st-rating', 'f-st-count', 'f-st-rank', 'f-st-dl', 'f-st-size', 'f-st-age', 'f-st-iap'].forEach(id => createMockEl(id));
+['f-name', 'f-sub', 'f-promo', 'f-short', 'f-dev', 'f-cat', 'f-ver', 'f-rdate', 'f-email', 'f-addr', 'f-priv-linked', 'f-priv-notlinked', 'f-priv-google', 'f-new', 'f-desc', 'f-st-rating', 'f-st-count', 'f-st-rank', 'f-st-dl', 'f-st-size', 'f-st-age', 'f-st-iap'].forEach(id => createMockEl(id));
 
 const toasts = [];
 const sandbox = {
@@ -74,6 +74,70 @@ vm.runInContext(stateCode + '\nglobalThis.PRESETS = PRESETS;\nglobalThis.GOOGLE_
 
 const PRESETS = sandbox.PRESETS;
 const GOOGLE_AGE_MAP = sandbox.GOOGLE_AGE_MAP;
+
+// ---------------------------------------------------------------------
+// Suite 0: JavaScript Syntax & Compilation Validation
+// ---------------------------------------------------------------------
+console.log('[SUITE 0]: JavaScript Syntax & Compilation Validation');
+
+function getAllJsFiles(dir) {
+  let list = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      list = list.concat(getAllJsFiles(fullPath));
+    } else if (entry.isFile() && entry.name.endsWith('.js') && entry.name !== 'app.js') {
+      list.push(fullPath);
+    }
+  }
+  return list;
+}
+
+const jsFiles = getAllJsFiles(path.join(ROOT_DIR, 'src', 'js'));
+for (const jsFile of jsFiles) {
+  const relPath = path.relative(ROOT_DIR, jsFile);
+  let isValid = false;
+  try {
+    const code = fs.readFileSync(jsFile, 'utf8');
+    new vm.Script(code, { filename: relPath });
+    isValid = true;
+  } catch (err) {
+    console.error(`  [SYNTAX ERROR] ${relPath}: ${err.message}`);
+  }
+  assert(isValid, `Syntax valid for module ${relPath}`);
+}
+
+// Validate bundled app.js
+let appJsValid = false;
+try {
+  const appJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'app.js'), 'utf8');
+  new vm.Script(appJsCode, { filename: 'src/js/app.js' });
+  appJsValid = true;
+} catch (err) {
+  console.error(`  [SYNTAX ERROR] src/js/app.js: ${err.message}`);
+}
+assert(appJsValid, 'Syntax valid for bundled app.js');
+
+// Validate inline scripts in core.html
+let coreScriptsValid = true;
+const coreHtmlContent = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
+const scriptTagRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
+let scriptTagMatch;
+let scriptIdx = 0;
+while ((scriptTagMatch = scriptTagRegex.exec(coreHtmlContent)) !== null) {
+  const code = scriptTagMatch[1];
+  if (code.trim()) {
+    try {
+      new vm.Script(code, { filename: `core.html:script[${scriptIdx}]` });
+    } catch (err) {
+      coreScriptsValid = false;
+      console.error(`  [SYNTAX ERROR] core.html:script[${scriptIdx}]: ${err.message}`);
+    }
+  }
+  scriptIdx++;
+}
+assert(coreScriptsValid, 'Syntax valid for all inline scripts in core.html');
 
 // ---------------------------------------------------------------------
 // Suite 1: Presets & Distinct Assets Suite
@@ -156,9 +220,9 @@ assert(bundledHtml.includes('class="preset-thumb-blank"'), 'Preset dropdown incl
 assert(bundledHtml.includes('PRESET_ICONS'), 'Preset module defines PRESET_ICONS map for dynamic icon synchronization');
 assert(bundledHtml.includes('initPresetThumbnails'), 'Preset module executes initPresetThumbnails to sync app icons');
 
-// Verify App Icon Download feature
-assert(bundledHtml.includes('id="icoDown"'), 'Icon section includes #icoDown Download Icon button');
-assert(bundledHtml.includes('function downloadAppIcon'), 'Shots module includes downloadAppIcon function');
+// Verify App Icon Download feature removed in favor of clean streamline
+assert(!bundledHtml.includes('id="icoDown"'), 'Icon section no longer includes redundant #icoDown Download Icon button');
+assert(!bundledHtml.includes('function downloadAppIcon'), 'Shots module no longer bundles downloadAppIcon function');
 
 // Verify Real-time Screenshot Aspect Ratio Inspector
 assert(bundledHtml.includes('function validateScreenshots'), 'Shots module includes validateScreenshots function');
@@ -195,6 +259,25 @@ assert(countChars('🧘‍♀️') === 1, 'Complex multi-codepoint emoji 🧘‍
 assert(countChars('👨‍👩‍👧‍👦') === 1, 'Family ZWJ sequence emoji 👨‍👩‍👧‍👦 counts as 1 character');
 assert(countChars('❤️‍🔥') === 1, 'Heart on fire ZWJ emoji ❤️‍🔥 counts as 1 character');
 assert(countChars('TaskFlow 🔥 2026') === 15, 'Mixed text and emoji counts accurately (15)');
+
+function clampGraphemes(str, max) {
+  if (!str || typeof max !== 'number' || max <= 0) return '';
+  if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+    const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
+    const segs = Array.from(segmenter.segment(str));
+    if (segs.length <= max) return str;
+    return segs.slice(0, max).map(s => s.segment).join('');
+  }
+  const chars = Array.from(str);
+  if (chars.length <= max) return str;
+  return chars.slice(0, max).join('');
+}
+
+assert(clampGraphemes('CyberStrike: 2088 Cyber RPGffefefeefefefefefefefefeffefefefe', 30) === 'CyberStrike: 2088 Cyber RPGffe', 'clampGraphemes accurately clamps 62-char title to official 30-char limit');
+assert(clampGraphemes('TaskFlow', 30) === 'TaskFlow', 'clampGraphemes preserves text within limit');
+assert(countChars(clampGraphemes('Ứng dụng theo dõi thói quen hằng ngày mỗi sáng và tối', 30)) === 30, 'clampGraphemes clamps Vietnamese Unicode string to 30 graphemes');
+assert(clampGraphemes('👨‍👩‍👧‍👦🧘‍♀️❤️‍🔥🚀🌟', 3) === '👨‍👩‍👧‍👦🧘‍♀️❤️‍🔥', 'clampGraphemes safely preserves complex multi-codepoint ZWJ emoji boundaries without corruption');
+assert(bundledHtml.includes('clampGraphemes'), 'Bundled application defines and uses clampGraphemes for device mockup limits');
 
 // ---------------------------------------------------------------------
 // Suite 3: JSON Import Engine (parseAndApplyJSON)
@@ -242,7 +325,6 @@ function testParseAndApplyJSON(text) {
     short: getStr(src.short || src.shortDesc || src.shortDescription),
     dev: getStr(src.dev || src.developer || src.developerName || src.author),
     cat: getStr(src.cat || src.category),
-    keywords: getStr(src.keywords || src.keywordsList),
     ver: getStr(src.ver || src.appVersion),
     rdate: getStr(src.rdate || src.releaseDate),
     email: getStr(src.email || src.supportEmail),
@@ -254,7 +336,7 @@ function testParseAndApplyJSON(text) {
     desc: getStr(src.desc || src.description || src.fullDescription)
   };
   
-  const hasMobileSpecificFields = !!(mapped.sub || mapped.promo || mapped.short || mapped.keywords || src.catApple || src.catGoogle);
+  const hasMobileSpecificFields = !!(mapped.sub || mapped.promo || mapped.short || src.catApple || src.catGoogle);
   
   if (!isKnownGenerator && !hasAppWrapper && !hasStoreKeys && !hasMobileSpecificFields) {
     return { success: false, reason: 'unrecognized_schema' };
@@ -483,15 +565,12 @@ assert(bundledHtml.includes('function fitIpadScreenshotAsync'), 'Bundled app def
 assert(bundledHtml.includes('function fixIpadScreenshot'), 'Bundled app defines fixIpadScreenshot');
 assert(bundledHtml.includes('function fixAllIpadScreenshots'), 'Bundled app defines fixAllIpadScreenshots');
 assert(bundledHtml.includes('function generateIpadFromPhone'), 'Bundled app defines generateIpadFromPhone');
-assert(bundledHtml.includes('function downloadIpadScreenshot'), 'Bundled app defines downloadIpadScreenshot');
-assert(bundledHtml.includes('function downloadAllIpadScreenshots'), 'Bundled app defines downloadAllIpadScreenshots');
 assert(bundledHtml.includes('id="btnGenIpadFromPhone"'), 'Common editor includes #btnGenIpadFromPhone button');
-assert(bundledHtml.includes('id="optExportIpadShots"'), 'Export menu includes #optExportIpadShots button');
 assert(bundledHtml.includes('id="f-ipad-fit-mode"'), 'Editor includes #f-ipad-fit-mode dropdown selector');
-assert(bundledHtml.includes('btnFitIpad_'), 'Editor slist renders row-level ✨ Fit button');
-assert(bundledHtml.includes('btnDlIpad_'), 'Editor slist renders row-level ⬇ Download button');
-assert(bundledHtml.includes('btnFixAllIpad'), 'Status badge supports ✨ Resize All (2048px) button');
-assert(bundledHtml.includes('btnDlAllIpad'), 'Status badge supports ⬇ Export All button');
+assert(bundledHtml.includes('btnFitIpad_'), 'Editor slist renders row-level Fit button');
+assert(bundledHtml.includes('btnFixAllIpad'), 'Status badge supports Resize All (2048px) button');
+assert(!bundledHtml.includes('btnDlIpad_'), 'Redundant raw screenshot download button is removed from iPad list');
+assert(!bundledHtml.includes('btnDlAllIpad'), 'Redundant ZIP download button is removed from iPad badge');
 
 // 2. Unit Test: Target Dimension & Smart Fit Geometry Calculations (Cover vs Contain)
 function calculateIpadFitDimensions(origW, origH, mode = 'cover') {
@@ -546,144 +625,39 @@ const landscapeFit = calculateIpadFitDimensions(2560, 1600);
 assert(landscapeFit.targetW === 2732 && landscapeFit.targetH === 2048, 'Landscape screenshot targets iPad Pro landscape (2732×2048 px)');
 
 // ---------------------------------------------------------------------
-// Suite 10: Client-side ZIP Package Generator & Bulk Export
+// Suite 10: Streamlined Export Menu & Removal of Redundant Raw Downloads
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 10]: Client-side ZIP Package Generator & Bulk Export');
+console.log('\n[SUITE 10]: Streamlined Export Menu & Removal of Redundant Raw Downloads');
 
-// 1. Verify UI controls & function signatures exist in bundled HTML
-assert(bundledHtml.includes('function createZipBlob'), 'Bundled app defines createZipBlob utility');
-assert(bundledHtml.includes('function crc32'), 'Bundled app defines crc32 checksum calculator');
-assert(bundledHtml.includes('function dataUrlToUint8Array'), 'Bundled app defines dataUrlToUint8Array converter');
-assert(bundledHtml.includes('function downloadAllPhoneScreenshots'), 'Bundled app defines downloadAllPhoneScreenshots');
-assert(bundledHtml.includes('function downloadAllIpadScreenshots'), 'Bundled app defines downloadAllIpadScreenshots');
-assert(bundledHtml.includes('function downloadAllTabScreenshots'), 'Bundled app defines downloadAllTabScreenshots');
-assert(bundledHtml.includes('function downloadAllTabletsScreenshots'), 'Bundled app defines downloadAllTabletsScreenshots');
-assert(bundledHtml.includes('function downloadAllGooglePlayBundle'), 'Bundled app defines downloadAllGooglePlayBundle');
-assert(bundledHtml.includes('id="optExportPhoneShots"'), 'Export menu includes #optExportPhoneShots ZIP button');
-assert(bundledHtml.includes('id="optExportIpadShots"'), 'Export menu includes #optExportIpadShots ZIP button');
-assert(bundledHtml.includes('id="optExportTab7Shots"'), 'Export menu includes #optExportTab7Shots ZIP button');
-assert(bundledHtml.includes('id="optExportTab10Shots"'), 'Export menu includes #optExportTab10Shots ZIP button');
-assert(bundledHtml.includes('id="optExportAllTablets"'), 'Export menu includes #optExportAllTablets ZIP button');
-assert(bundledHtml.includes('id="optExportGooglePlayBundle"'), 'Export menu includes #optExportGooglePlayBundle ZIP button');
-assert(bundledHtml.includes('btnDlAllPhone'), 'Phone status badge supports Export (ZIP) button');
-assert(bundledHtml.includes('btnDlAllIpad'), 'iPad status badge supports Export All (ZIP) button');
-assert(bundledHtml.includes('btnDlAllTablets'), 'Google Play tablet header supports Export All Tablets (ZIP) button');
+// 1. Verify redundant raw file downloads & ZIP routines are eliminated from the app bundle
+assert(!bundledHtml.includes('id="optExportPhoneShots"'), 'Redundant #optExportPhoneShots ZIP button is removed from Export menu');
+assert(!bundledHtml.includes('id="optExportIpadShots"'), 'Redundant #optExportIpadShots ZIP button is removed from Export menu');
+assert(!bundledHtml.includes('id="optExportTab7Shots"'), 'Redundant split #optExportTab7Shots ZIP row is removed from Export menu');
+assert(!bundledHtml.includes('id="optExportTab10Shots"'), 'Redundant split #optExportTab10Shots ZIP row is removed from Export menu');
+assert(!bundledHtml.includes('id="optExportAllTablets"'), 'Redundant #optExportAllTablets ZIP button is removed from Export menu');
+assert(!bundledHtml.includes('id="optExportGooglePlayBundle"'), 'Redundant #optExportGooglePlayBundle ZIP button is removed from Export menu');
+assert(!bundledHtml.includes('id="icoDown"'), 'Redundant #icoDown download button is removed from identity card');
+assert(!bundledHtml.includes('id="btnDlAllTablets"'), 'Redundant #btnDlAllTablets button is removed from tablet screenshots card');
+assert(!bundledHtml.includes('btnDlAllPhone'), 'Redundant ZIP export button is removed from phone status badge');
+assert(!bundledHtml.includes('btnDlAllIpad'), 'Redundant ZIP export button is removed from iPad status badge');
+assert(!bundledHtml.includes('btnDlIpad_'), 'Redundant raw screenshot download button is removed from iPad rows');
+assert(!bundledHtml.includes('function createZipBlob'), 'createZipBlob utility is removed from bundle to eliminate bloat');
+assert(!bundledHtml.includes('function dataUrlToUint8Array'), 'dataUrlToUint8Array converter is removed from bundle');
+assert(!bundledHtml.includes('function downloadAllPhoneScreenshots'), 'downloadAllPhoneScreenshots routine is removed from bundle');
+assert(!bundledHtml.includes('function downloadAllIpadScreenshots'), 'downloadAllIpadScreenshots routine is removed from bundle');
+assert(!bundledHtml.includes('function downloadAllTabScreenshots'), 'downloadAllTabScreenshots routine is removed from bundle');
+assert(!bundledHtml.includes('function downloadAllTabletsScreenshots'), 'downloadAllTabletsScreenshots routine is removed from bundle');
+assert(!bundledHtml.includes('function downloadAllGooglePlayBundle'), 'downloadAllGooglePlayBundle routine is removed from bundle');
 
-// 2. Functional ZIP Generation & CRC-32 Validation in Sandbox
-const _crcTableTest = new Uint32Array(256);
-for (let i = 0; i < 256; i++) {
-  let c = i;
-  for (let k = 0; k < 8; k++) {
-    c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-  }
-  _crcTableTest[i] = c >>> 0;
-}
-function testCrc32(buf) {
-  let c = 0xFFFFFFFF;
-  for (let i = 0; i < buf.length; i++) {
-    c = _crcTableTest[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
-  }
-  return (c ^ 0xFFFFFFFF) >>> 0;
-}
-
-// Known standard CRC-32 check value: '123456789' -> 0xCBF43926 (3421780262)
-const crcTestBytes = Buffer.from('123456789', 'utf8');
-assert(testCrc32(crcTestBytes) === 0xCBF43926, 'CRC-32 produces standard compliant checksum for 123456789');
-
-function testCreateZipBuffer(files) {
-  const fileEntries = [];
-  let offset = 0;
-  const parts = [];
-
-  for (const f of files) {
-    const nameBytes = Buffer.from(f.name, 'utf8');
-    const data = Buffer.from(f.data);
-    const crc = testCrc32(data);
-    const size = data.length;
-
-    const lh = Buffer.alloc(30);
-    lh.writeUInt32LE(0x04034b50, 0); // Local file header signature
-    lh.writeUInt16LE(20, 4);         // Version needed
-    lh.writeUInt16LE(0, 6);          // Flags
-    lh.writeUInt16LE(0, 8);          // Compression (0 = STORE)
-    lh.writeUInt16LE(0x4000, 10);    // Time
-    lh.writeUInt16LE(0x5421, 12);    // Date
-    lh.writeUInt32LE(crc, 14);       // CRC32
-    lh.writeUInt32LE(size, 18);      // Compressed size
-    lh.writeUInt32LE(size, 22);      // Uncompressed size
-    lh.writeUInt16LE(nameBytes.length, 26); // Name length
-    lh.writeUInt16LE(0, 28);         // Extra length
-
-    fileEntries.push({ nameBytes, crc, size, offset });
-    parts.push(lh, nameBytes, data);
-    offset += 30 + nameBytes.length + size;
-  }
-
-  const cdOffset = offset;
-  for (const f of fileEntries) {
-    const cd = Buffer.alloc(46);
-    cd.writeUInt32LE(0x02014b50, 0); // Central header signature
-    cd.writeUInt16LE(20, 4);         // Version made by
-    cd.writeUInt16LE(20, 6);         // Version needed
-    cd.writeUInt16LE(0, 8);          // Flags
-    cd.writeUInt16LE(0, 10);         // Compression (0 = STORE)
-    cd.writeUInt16LE(0x4000, 12);    // Time
-    cd.writeUInt16LE(0x5421, 14);    // Date
-    cd.writeUInt32LE(f.crc, 16);     // CRC32
-    cd.writeUInt32LE(f.size, 20);    // Compressed size
-    cd.writeUInt32LE(f.size, 24);    // Uncompressed size
-    cd.writeUInt16LE(f.nameBytes.length, 28); // Name length
-    cd.writeUInt16LE(0, 30);         // Extra length
-    cd.writeUInt16LE(0, 32);         // Comment length
-    cd.writeUInt16LE(0, 34);         // Disk start
-    cd.writeUInt16LE(0, 36);         // Internal attr
-    cd.writeUInt32LE(0, 38);         // External attr
-    cd.writeUInt32LE(f.offset, 42);  // Local header offset
-
-    parts.push(cd, f.nameBytes);
-    offset += 46 + f.nameBytes.length;
-  }
-
-  const cdSize = offset - cdOffset;
-  const eocd = Buffer.alloc(22);
-  eocd.writeUInt32LE(0x06054b50, 0);  // EOCD signature
-  eocd.writeUInt16LE(0, 4);           // Disk number
-  eocd.writeUInt16LE(0, 6);           // Start disk
-  eocd.writeUInt16LE(fileEntries.length, 8);  // Disk entries
-  eocd.writeUInt16LE(fileEntries.length, 10); // Total entries
-  eocd.writeUInt32LE(cdSize, 12);     // CD size
-  eocd.writeUInt32LE(cdOffset, 16);   // CD offset
-  eocd.writeUInt16LE(0, 20);          // Comment length
-
-  parts.push(eocd);
-  return Buffer.concat(parts);
-}
-
-const testZipBuf = testCreateZipBuffer([
-  { name: 'app-ipad-shot-1.png', data: Buffer.from('mock-png-data-1') },
-  { name: 'app-ipad-shot-2.png', data: Buffer.from('mock-png-data-2') }
-]);
-
-assert(testZipBuf.readUInt32LE(0) === 0x04034b50, 'ZIP starts with valid Local File Header signature (0x04034b50)');
-assert(testZipBuf.includes(Buffer.from('app-ipad-shot-1.png')), 'ZIP archive contains first file name in binary stream');
-assert(testZipBuf.includes(Buffer.from('app-ipad-shot-2.png')), 'ZIP archive contains second file name in binary stream');
-assert(testZipBuf.readUInt32LE(testZipBuf.length - 22) === 0x06054b50, 'ZIP ends with valid End of Central Directory signature (0x06054b50)');
-
-// Test Google Play Complete Bundle ZIP with directory structures
-const testGpBundleZip = testCreateZipBuffer([
-  { name: '01-phone-screenshots/taskflow-phone-shot-1-1080x1920.png', data: Buffer.from('phone-1') },
-  { name: '02-tablet-7inch/taskflow-7inch-shot-1-1280x800.png', data: Buffer.from('tab7-1') },
-  { name: '03-tablet-10inch/taskflow-10inch-shot-1-1920x1200.png', data: Buffer.from('tab10-1') },
-  { name: '04-feature-graphic/taskflow-feature-graphic-1024x500.png', data: Buffer.from('feature') },
-  { name: '05-app-icon/taskflow-app-icon-512x512.png', data: Buffer.from('icon') }
-]);
-assert(testGpBundleZip.readUInt32LE(0) === 0x04034b50, 'Google Play Bundle ZIP starts with valid Local File Header signature');
-assert(testGpBundleZip.includes(Buffer.from('01-phone-screenshots/')), 'Google Play Bundle ZIP contains 01-phone-screenshots directory');
-assert(testGpBundleZip.includes(Buffer.from('02-tablet-7inch/')), 'Google Play Bundle ZIP contains 02-tablet-7inch directory');
-assert(testGpBundleZip.includes(Buffer.from('03-tablet-10inch/')), 'Google Play Bundle ZIP contains 03-tablet-10inch directory');
-assert(testGpBundleZip.includes(Buffer.from('04-feature-graphic/')), 'Google Play Bundle ZIP contains 04-feature-graphic directory');
-assert(testGpBundleZip.includes(Buffer.from('05-app-icon/')), 'Google Play Bundle ZIP contains 05-app-icon directory');
-assert(testGpBundleZip.readUInt32LE(testGpBundleZip.length - 22) === 0x06054b50, 'Google Play Bundle ZIP ends with valid End of Central Directory signature');
+// 2. Verify high-value presentation exports, metadata copies, and project backup options are intact
+assert(bundledHtml.includes('id="optExportPNG3x"'), 'Export menu preserves 3x PNG device frame export (#optExportPNG3x)');
+assert(bundledHtml.includes('id="optExportScreen"'), 'Export menu preserves frameless store page export (#optExportScreen)');
+assert(bundledHtml.includes('id="btnCopyText"'), 'Export menu preserves clipboard metadata copy (#btnCopyText)');
+assert(bundledHtml.includes('id="optExportMD"'), 'Export menu preserves Markdown listing export (#optExportMD)');
+assert(bundledHtml.includes('id="optExportJSON"'), 'Export menu preserves Project JSON export (#optExportJSON)');
+assert(bundledHtml.includes('id="optImportJSON"'), 'Export menu preserves Project JSON import (#optImportJSON)');
+assert(bundledHtml.includes('id="optResetDefault"'), 'Export menu preserves draft reset (#optResetDefault)');
+assert(bundledHtml.includes('Presentation Mockups'), 'Export dropdown header is clearly labeled Presentation Mockups');
 
 // ---------------------------------------------------------------------
 // SUITE 11: High-Capacity Storage Engine & LocalStorage Quota Exceeded Protection
@@ -819,6 +793,64 @@ function testGetDisplaySrc(src, cache) {
   return src;
 }
 
+// Test Core Studio Single Active Draft & Non-destructive Preset Sandboxing (SRS Flow)
+assert(bundledHtml.includes('sps_core_user_draft'), 'Bundled application defines sps_core_user_draft storage key');
+assert(bundledHtml.includes('btnDraft'), 'Header contains My App (Draft) button placed next to Presets');
+assert(bundledHtml.includes('draftBtnBadge'), 'Draft button renders Draft status indicator pill');
+assert(bundledHtml.includes('presetBanner'), 'Stage DOM contains non-destructive Preset Preview Banner');
+assert(bundledHtml.includes('btnReturnToDraft'), 'Preset Preview Banner contains Return to My Draft restore button');
+
+// Simulation of Non-destructive Preset Sandboxing State Machine
+let simUserDraft = {
+  form: { name: 'My Unique App', dev: 'Author' },
+  shots: ['https://example.com/shot.png'],
+  isCustomized: true
+};
+let simActivePreset = 'draft';
+let simIsPresetModified = false;
+let simDraftStorage = { sps_core_user_draft: JSON.stringify(simUserDraft) };
+
+function simLoadPreset(key) {
+  if (key === 'draft') {
+    simActivePreset = 'draft';
+    simIsPresetModified = false;
+    return JSON.parse(simDraftStorage['sps_core_user_draft']);
+  }
+  simActivePreset = key;
+  simIsPresetModified = false;
+  return { form: { name: key.toUpperCase(), dev: 'Preset' }, shots: [] };
+}
+
+function simUserEdit(newName) {
+  if (simActivePreset !== 'draft') {
+    simIsPresetModified = true;
+    return;
+  }
+  simUserDraft.form.name = newName;
+  simDraftStorage['sps_core_user_draft'] = JSON.stringify(simUserDraft);
+}
+
+// 1. User is on draft and modifies name
+simUserEdit('My Renamed App');
+assert(JSON.parse(simDraftStorage['sps_core_user_draft']).form.name === 'My Renamed App', 'Draft mutations persist to draft storage when activeKey is draft');
+
+// 2. User switches to preset TaskFlow
+let loadedTaskflow = simLoadPreset('taskflow');
+assert(simActivePreset === 'taskflow', 'Active preset switches to taskflow');
+assert(loadedTaskflow.form.name === 'TASKFLOW', 'Preset loads template content');
+assert(JSON.parse(simDraftStorage['sps_core_user_draft']).form.name === 'My Renamed App', 'Switching to preset preserves saved draft in storage without overwriting');
+
+// 3. User edits while viewing Taskflow (Ephemeral Preview)
+simUserEdit('Accidental Overwrite Attempt');
+assert(simIsPresetModified === true, 'Modifying form while on preset triggers ephemeral modified state');
+assert(JSON.parse(simDraftStorage['sps_core_user_draft']).form.name === 'My Renamed App', 'Draft storage is permanently immune to edits made while viewing presets');
+
+// 4. User clicks Return to My Draft
+let restoredDraft = simLoadPreset('draft');
+assert(simActivePreset === 'draft', 'Active preset returns to draft');
+assert(restoredDraft.form.name === 'My Renamed App', 'Returning to draft completely restores original user work');
+assert(simIsPresetModified === false, 'Preset modified state resets cleanly upon returning to draft');
+
 assert(testGetDisplaySrc('https://example.com/icon.png', mockThumbCache) === 'https://example.com/icon.png', 'HTTP URL returns as-is without cache lookups');
 assert(testGetDisplaySrc('data:image/svg+xml;utf8,<svg></svg>', mockThumbCache).startsWith('data:image/svg+xml'), 'SVG data URI bypasses thumbnail cache to maintain vector sharpness');
 assert(testGetDisplaySrc(heavyDataUrl, mockThumbCache) === mockThumb, 'Heavy multi-MB screenshot resolved to lightweight ~600px thumbnail in DOM, saving 90%+ RAM');
@@ -927,11 +959,17 @@ assert(testMatchCat('Role Playing', testAppleCats, 'apple') === 'Games', 'Game s
 assert(testMatchCat('Role Playing', testGoogleAll, 'google') === 'Games · Role Playing', 'Game subcategory "Role Playing" maps to "Games · Role Playing" on Google Play');
 assert(testMatchCat('Games · Role Playing', testAppleCats, 'apple') === 'Games', 'Prefixed "Games · Role Playing" maps cleanly to "Games" on Apple App Store');
 
-// 3. Dynamic Google Play Keyword Chips & iPad Promo Hiding
-assert(bundledHtml.includes('data-kw-chip="0"') && bundledHtml.includes('data-kw-chip="1"'), 'Google Play mockups use dynamic data-kw-chip attributes instead of static Habit Tracker chips');
+// 3. Removal of Invisible Keywords Field & iPad Promo Hiding
+assert(!bundledHtml.includes('id="f-keywords"'), 'Invisible backend #f-keywords field is eliminated from editor');
 assert(bundledHtml.includes('$$(\'.promo[data-b="promo"]\')'), 'update() toggles visibility across all .promo[data-b="promo"] containers (both iPhone and iPad)');
 
-// 4. Marketing Mini Studio Transition Determinism & FLIP AnimatedSize
+// 4. Field ↔ Device Mockup Focus Highlight & Smooth Screen Scrolling
+assert(bundledHtml.includes('setFieldFocus'), 'Bundled application defines setFieldFocus function for field linking');
+assert(bundledHtml.includes('flashField'), 'Bundled application defines flashField for real-time keystroke amber pulse');
+assert(bundledHtml.includes('initFieldFocusLinking'), 'Bundled application initializes form field focus listeners on startup');
+assert(bundledHtml.includes('hl-target'), 'Bundled stylesheet includes .hl-target styling for yellow device border');
+
+// 5. Marketing Mini Studio Transition Determinism & FLIP AnimatedSize
 const marketingHtml = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'marketing.html'), 'utf8');
 assert(marketingHtml.includes('animatedSizeForm'), 'Marketing page bundles animatedSizeForm engine for fluid card transitions');
 assert(marketingHtml.includes('fromMode === \'apple\'') && marketingHtml.includes('devApple.hidden = false') && marketingHtml.includes('devGoogle.hidden = true'), 'transitionStoreMode enforces deterministic initial visibility for fromMode === "apple"');
@@ -1024,6 +1062,113 @@ assert(appleBackCheck.status === 'warn', 'Step D: Switching back to Apple detect
 // 4. Bundled Source Code Integrity Check
 assert(bundledHtml.includes('Google Play requires <strong>512×512 px</strong>'), 'Bundled HTML contains exact Google Play 512px dimension requirement string');
 assert(bundledHtml.includes('validateAppIcon()') && bundledHtml.includes('setStore'), 'setStore triggers validateAppIcon immediately upon store switch');
+
+// ---------------------------------------------------------------------
+// Module 14: Version Field Store Visibility & Full Description Tooltip Popover
+// ---------------------------------------------------------------------
+console.log('[SUITE 14]: Version Store Visibility & Full Description Tooltip Popover');
+
+// 1. Version & Release Date Store Isolation
+assert(
+  /<div[^>]*data-only="apple"[^>]*>[\s\S]*?id="f-ver"/.test(bundledHtml),
+  'Version field #f-ver is wrapped in data-only="apple" so Google Play hides it'
+);
+assert(
+  /<div[^>]*data-only="apple"[^>]*>[\s\S]*?id="f-rdate"/.test(bundledHtml),
+  'Release Date field #f-rdate is wrapped in data-only="apple" so Google Play hides it'
+);
+
+// 2. Full Description Info Tooltip Button & Popover
+assert(bundledHtml.includes('id="descInfoBtn"'), 'Full Description label contains info tooltip button #descInfoBtn');
+assert(bundledHtml.includes('id="descInfoPop"'), 'Floating popover #descInfoPop exists in DOM');
+assert(bundledHtml.includes('id="descInfoClose"'), 'Popover close button #descInfoClose exists');
+assert(bundledHtml.includes('Full Description Display Guidelines'), 'Popover contains Full Description Display Guidelines title');
+assert(bundledHtml.includes('Google Play Store:'), 'Popover explains Google Play Store short vs full description behavior');
+assert(bundledHtml.includes('Apple App Store:'), 'Popover explains Apple App Store description display rules');
+
+// 3. Google Play Listing DOM Integrity & Arrow Focus Linking
+assert(
+  /<span[^>]*data-b="desc"[^>]*hidden/.test(bundledHtml),
+  'Google Play main listing DOM keeps full description hidden (requires navigating to separate screen)'
+);
+assert(!bundledHtml.includes('g-full-desc'), 'Google Play main listing does not inject unnatural inline full desc element');
+assert(bundledHtml.includes('g-desc-arrow'), 'Google Play About header contains class .g-desc-arrow for arrow icon button');
+assert(bundledHtml.includes('.g-desc-arrow.hl-target') && bundledHtml.includes('border-radius: 50% !important;'), 'Focus highlight preserves 50% circular radius with yellow border for .g-desc-arrow');
+assert(bundledHtml.includes('.stage .g-desc-arrow'), 'getFieldMockupTargets maps desc field to .g-desc-arrow on Google Play');
+assert(bundledHtml.includes('descInfoBtn') && bundledHtml.includes('descInfoPop'), 'Bundled JS wires up descInfoBtn to descInfoPop');
+
+// 4. Privacy & Data Safety Compact Banner, Tooltip Popover and Focus Linking
+assert(bundledHtml.includes('id="privacyInfoBtn"'), 'Privacy card header contains info tooltip button #privacyInfoBtn');
+assert(bundledHtml.includes('id="privacyInfoPop"'), 'Floating popover #privacyInfoPop exists in DOM');
+assert(bundledHtml.includes('id="privacyInfoClose"'), 'Popover close button #privacyInfoClose exists');
+assert(bundledHtml.includes('Store Privacy &amp; Data Safety Guidelines'), 'Popover contains Store Privacy & Data Safety Guidelines title');
+assert(bundledHtml.includes('Questionnaires on Store Consoles:'), 'Popover explains console questionnaire compliance process');
+assert(bundledHtml.includes('id="privacyMockBanner"'), 'Privacy card renders compact interactive banner #privacyMockBanner');
+assert(
+  bundledHtml.includes('type="hidden" id="f-priv-linked"') &&
+  bundledHtml.includes('type="hidden" id="f-priv-notlinked"') &&
+  bundledHtml.includes('type="hidden" id="f-priv-google"'),
+  'Backward compatible hidden inputs preserved for export & preset engines'
+);
+assert(
+  bundledHtml.includes("case 'privacy':") && bundledHtml.includes('[data-google-safety]'),
+  'getFieldMockupTargets maps privacy to data-google-safety and data-apple-priv-wrap'
+);
+assert(
+  bundledHtml.includes('.safe[data-google-safety].hl-target') && bundledHtml.includes('border-radius: 14px !important;'),
+  'Data Safety card focus highlight maintains 14px border radius with yellow border'
+);
+
+// 5. What's New Info Tooltip Popover & Dual Store Behavior
+assert(bundledHtml.includes('id="whatsNewInfoBtn"'), "What's New field header contains info tooltip button #whatsNewInfoBtn");
+assert(bundledHtml.includes('id="whatsNewInfoPop"'), "Floating popover #whatsNewInfoPop exists in DOM");
+assert(bundledHtml.includes('id="whatsNewInfoClose"'), "Popover close button #whatsNewInfoClose exists");
+assert(bundledHtml.includes("What's New Display Guidelines"), "Popover contains What's New Display Guidelines title");
+assert(bundledHtml.includes("Google Play Store (Update State Only):"), "Popover explains Google Play Store update-state only behavior");
+assert(bundledHtml.includes("Apple App Store (Public Listing):"), "Popover explains Apple App Store public listing behavior");
+assert(bundledHtml.includes("500 characters"), "Popover notes Google Play 500 characters limit");
+assert(bundledHtml.includes('initInfoPopover("whatsNewInfoBtn"'), "Bundled JS initializes whatsNewInfoBtn popover");
+
+// 6. Mockup Display Settings & Metrics Card Modernization
+assert(bundledHtml.includes('id="metricsInfoBtn"'), "Metrics card header contains info tooltip button #metricsInfoBtn");
+assert(bundledHtml.includes('id="metricsInfoPop"'), "Floating popover #metricsInfoPop exists in DOM");
+assert(bundledHtml.includes('id="metricsInfoClose"'), "Popover close button #metricsInfoClose exists");
+assert(bundledHtml.includes("Mockup Metrics &amp; Badges Guidelines"), "Popover contains Mockup Metrics & Badges Guidelines title");
+assert(!bundledHtml.includes('id="metricsDetails"'), "Manual sample metrics accordion #metricsDetails is removed from UI");
+assert(bundledHtml.includes('MOCKUP ONLY'), "Metrics card displays MOCKUP ONLY badge");
+assert(bundledHtml.includes('id="f-st-off"') && bundledHtml.includes('id="f-st-wm"'), "Metrics toggle switches are preserved in DOM");
+assert(bundledHtml.includes('type="hidden" id="f-st-rating"') && bundledHtml.includes('type="hidden" id="f-st-iap"'), "Sample input elements converted to hidden state inputs for backward compatibility");
+assert(bundledHtml.includes('initInfoPopover("metricsInfoBtn"'), "Bundled JS initializes metricsInfoBtn popover");
+assert(!bundledHtml.includes('id="tab7Url"') && !bundledHtml.includes('id="tab10Url"'), "By URL buttons (#tab7Url, #tab10Url) are removed from Tablet Screenshots card");
+assert(!bundledHtml.includes('let isFloating') && !bundledHtml.includes('btnFloat'), "Orphaned isFloating / btnFloat dead code is removed from bundle");
+assert(bundledHtml.includes("const defaultPrivLinked = 'Identifiers, Usage Data'") && bundledHtml.includes("const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion'"), "Custom blank draft initializes with standard App Privacy and Google Play Data Safety disclosures");
+
+// 7. Preview Toggles Pure State Behavior (No Conflicting Scroll Jumps)
+assert(bundledHtml.includes("rawId === 'f-st-off' || rawId === 'f-st-wm'"), 'Preview toggles excluded from field focus scroll linking to prevent conflicting scroll jumps across multi-location metrics');
+
+// 8. Device Selector Fixed Orientations & Rotation Buttons Removal
+assert(!bundledHtml.includes('id="adRotate"'), 'Rotate button #adRotate is removed from Apple device selector (#dt)');
+assert(!bundledHtml.includes('id="gdRotate"'), 'Rotate button #gdRotate is removed from Google device selector (#gdt)');
+assert(bundledHtml.includes('id="dt"') && bundledHtml.includes('data-d="iphone"') && bundledHtml.includes('data-d="ipad"'), 'Apple device selector preserves iPhone and iPad switcher options');
+assert(bundledHtml.includes('id="gdt"') && bundledHtml.includes('data-gd="phone"') && bundledHtml.includes('data-gd="tab7"') && bundledHtml.includes('data-gd="tab10"'), 'Google device selector preserves Phone, 7" Tablet and 10" Tablet switcher options');
+
+// ---------------------------------------------------------------------
+// Suite 15: Modern Reset Draft Confirmation Modal
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 15]: Modern Reset Draft Confirmation Modal');
+
+assert(bundledHtml.includes('id="resetConfirmModal"'), 'Confirmation modal #resetConfirmModal exists in DOM');
+assert(bundledHtml.includes('id="resetConfirmCancel"'), 'Cancel button #resetConfirmCancel exists in confirmation modal');
+assert(bundledHtml.includes('id="resetConfirmOk"') && /<button[^>]*id="resetConfirmOk"[^>]*>Reset<\/button>/.test(bundledHtml), 'Action button #resetConfirmOk exists with exact button text "Reset"');
+assert(bundledHtml.includes('Reset App Draft?'), 'Modal title "Reset App Draft?" exists in DOM');
+assert(bundledHtml.includes('function showResetConfirmModal'), 'Helper function showResetConfirmModal is defined in bundled script');
+assert(bundledHtml.includes('.confirm-modal-backdrop') && bundledHtml.includes('.confirm-modal-card'), 'Modal backdrop and card styles are present in bundled CSS');
+assert(!/if\s*\(\s*confirm\s*\(/.test(bundledHtml), 'Native browser confirm() dialog is replaced across all reset triggers');
+
+// 9. Clean Destination & Single-binding Sidebar Toggle
+assert(!bundledHtml.includes('showToast(SUPPORTS_IPAD'), 'iPad destination toggle does not trigger toast notification');
+assert(bundledHtml.includes('btnToggleSidebar.onclick = (e) =>'), 'btnToggleSidebar has single dedicated onclick binding avoiding double-toggle cancelation');
+
 
 // ---------------------------------------------------------------------
 // Summary Report

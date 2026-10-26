@@ -109,9 +109,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   isExporting = true;
   if(typeof clearDevTransitions === 'function') clearDevTransitions();
   const prevZoom = devToCapture.style.zoom;
-  const hadFloat = devToCapture.classList.contains('floating');
   devToCapture.style.zoom = '1';
-  devToCapture.classList.remove('floating', 'dev-enter', 'dev-exit');
+  devToCapture.classList.remove('dev-enter', 'dev-exit');
   void devToCapture.offsetHeight; // Force synchronous reflow before measuring bounding rects
 
   let restoreImages = () => {};
@@ -142,7 +141,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.animation = 'none';
         clonedEl.style.transition = 'none';
         clonedDoc.querySelectorAll('.dev').forEach(d => {
-          d.classList.remove('floating', 'dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
+          d.classList.remove('dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
           d.style.zoom = '1';
           d.style.animation = 'none';
           d.style.transition = 'none';
@@ -150,6 +149,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
           el.style.letterSpacing = '0px';
+        });
+        // Strip focus highlight from export capture
+        clonedDoc.querySelectorAll('.hl-target, .hl-flash').forEach(el => {
+          el.classList.remove('hl-target', 'hl-flash');
+          el.style.outline = 'none';
+          el.style.boxShadow = 'none';
         });
       }
     });
@@ -171,6 +176,5 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     isExporting = false;
     devToCapture.style.zoom = prevZoom;
     fit();
-    if(hadFloat && isFloating) devToCapture.classList.add('floating');
   }
 }

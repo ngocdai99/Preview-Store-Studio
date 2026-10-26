@@ -57,7 +57,10 @@ function renderPrivacy(){
 
   const linkedItems = parsePrivItems(linkedStr);
   const notLinkedItems = parsePrivItems(notLinkedStr);
-  const googleItems = parsePrivItems(googleStr);
+  const rawGoogleItems = parsePrivItems(googleStr);
+  const googleItems = rawGoogleItems.length > 0
+    ? rawGoogleItems
+    : ['No data shared with third parties', 'Data is encrypted in transit', 'You can request data deletion'];
 
   // Render Apple Privacy Section (Single "Data Not Collected" card or multi-category cards)
   $$('[data-apple-priv-wrap]').forEach(wrap => {

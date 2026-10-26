@@ -58,21 +58,17 @@ function renderShots(){
     };
     r.appendChild(thumb);
 
-    // Input & Actions
+    // Row Title & Actions
     const col = document.createElement('div'); col.className = 'col';
-    const inp = document.createElement('input'); inp.type = 'text';
-    inp.value = s.startsWith('data:') ? '(Embedded / Uploaded Image)' : s;
-    inp.placeholder = 'https://… image URL or upload';
-    inp.disabled = s.startsWith('data:');
-    inp.onchange = () => { SHOTS[i] = inp.value.trim(); renderShots(); saveState(); };
+    const head = document.createElement('div'); head.className = 'shot-row-head';
+    head.innerHTML = `<span class="shot-row-title">Screenshot #${i + 1}</span><span class="shot-dim-tag" id="shotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
-      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>' +
-      '<button class="mini" data-m="-1" title="Move Up">↑</button>' +
-      '<button class="mini" data-m="1" title="Move Down">↓</button>' +
-      '<button class="mini del" title="Delete">&times;</button>' +
-      '<span class="shot-dim-tag" id="shotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
+      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>' +
+      '<button class="mini" data-m="-1" title="Move Up">&uarr;</button>' +
+      '<button class="mini" data-m="1" title="Move Down">&darr;</button>' +
+      '<button class="mini del" title="Delete">&times;</button>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
     b[1].onclick = () => {
@@ -95,7 +91,7 @@ function renderShots(){
     b[3].onclick = () => mv(i, 1);
     b[4].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
 
-    col.append(inp, act);
+    col.append(head, act);
     r.appendChild(col);
 
     // Drag & Drop event handlers for row reordering
@@ -146,11 +142,24 @@ function validateScreenshots(){
   const runId = ++_phoneValRunId;
   const validShots = SHOTS.filter(s => s && s.trim());
   const validCount = validShots.length;
+  const maxAllowed = store === 'apple' ? 10 : 8;
+  const minRequired = store === 'apple' ? 1 : 2;
+
   const counterEl = $('shotCounter');
   if(counterEl){
-    counterEl.textContent = `${validCount} / 8 screenshots`;
-    counterEl.className = 'cc' + (validCount < 2 ? ' warn' : validCount > 8 ? ' err' : '');
+    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
+    counterEl.className = 'cc' + (validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
   }
+
+  const hintEl = $('shotHint');
+  if(hintEl){
+    if(store === 'apple'){
+      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px). PNG or JPEG, no alpha transparency. Drag ⠿ handle to reorder.';
+    } else {
+      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots. PNG or JPEG, up to 8 MB each, 16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px. Drag ⠿ handle to reorder.';
+    }
+  }
+
   const badgeEl = $('shotStatusBadge');
   if(!badgeEl) return;
 
@@ -158,30 +167,14 @@ function validateScreenshots(){
   const SB_WARN = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>`;
   const SB_ERR = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></span>`;
 
-  const dlBtnHtml = validCount > 0 ? `<button class="mini dl-btn" id="btnDlAllPhone" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>` : '';
-
-  if(validCount < 2){
+  if(validCount < minRequired){
     badgeEl.className = 'shot-status-badge warn';
-    badgeEl.innerHTML = `${SB_WARN}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Notice:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'}. Stores require at least <strong>2 screenshots</strong>.</span>${dlBtnHtml}`;
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
-    }
+    badgeEl.innerHTML = `${SB_WARN}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Notice:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'}. Stores require at least <strong>${minRequired} screenshot${minRequired === 1 ? '' : 's'}</strong>.</span>`;
     return;
   }
-  if(validCount > 8 && store === 'google'){
+  if(validCount > maxAllowed){
     badgeEl.className = 'shot-status-badge err';
-    badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Rejection Risk:</strong> ${validCount} screenshots. Google Play allows a maximum of <strong>8 screenshots</strong>.</span>${dlBtnHtml}`;
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
-    }
-    return;
-  }
-  if(validCount > 10 && store === 'apple'){
-    badgeEl.className = 'shot-status-badge err';
-    badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> ${validCount} screenshots. Apple allows a maximum of <strong>10 screenshots</strong> per display.</span>${dlBtnHtml}`;
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
-    }
+    badgeEl.innerHTML = `${SB_ERR}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Rejection Risk:</strong> ${validCount} screenshots. ${store === 'apple' ? 'Apple' : 'Google Play'} allows a maximum of <strong>${maxAllowed} screenshots</strong>.</span>`;
     return;
   }
 
@@ -259,32 +252,28 @@ function validateScreenshots(){
 
   function finalizeBadge(){
     const maxAllowed = store === 'apple' ? 10 : 8;
-    const dlBtn = `<button class="mini dl-btn" id="btnDlAllPhone" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>`;
     if(squareIndices.length > 0){
       const items = squareIndices.map(n => `#${n}`).join(', ');
       if(store === 'apple'){
         badgeEl.className = 'shot-status-badge err';
-        badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>${dlBtn}`;
+        badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>`;
       } else {
         badgeEl.className = 'shot-status-badge warn';
-        badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> Screenshot ${items} is square (1:1). Standard phone screenshots should be portrait (9:16 or 9:19.5). Square photos will be cropped or letterboxed in phone mockups.</span>${dlBtn}`;
+        badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> Screenshot ${items} is square (1:1). Standard phone screenshots should be portrait (9:16 or 9:19.5). Square photos will be cropped or letterboxed in phone mockups.</span>`;
       }
     } else if(nonPhoneIndices.length > 0){
       const items = nonPhoneIndices.map(n => `#${n}`).join(', ');
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Aspect Ratio Notice:</strong> Screenshot ${items} has non-standard ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>${dlBtn}`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Aspect Ratio Notice:</strong> Screenshot ${items} has non-standard ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>`;
     } else if(sizeIssueIndices.length > 0){
       const items = sizeIssueIndices.map(n => `#${n}`).join(', ');
       const noun = sizeIssueIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       const verb = sizeIssueIndices.length > 1 ? 'have' : 'has';
       badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Error:</strong> ${noun} ${items} ${verb} side length outside 320–3,840 px.</span>${dlBtn}`;
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Error:</strong> ${noun} ${items} ${verb} side length outside 320–3,840 px.</span>`;
     } else {
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Compliant:</strong> ${validCount} screenshots (Valid range: 2–${maxAllowed}) · All portrait phone aspect ratios.</span>${dlBtn}`;
-    }
-    if($('btnDlAllPhone')){
-      $('btnDlAllPhone').onclick = () => downloadAllPhoneScreenshots();
+      badgeEl.innerHTML = `${SB_OK}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Compliant:</strong> ${validCount} screenshots (Valid range: ${minRequired}–${maxAllowed}) · All portrait phone aspect ratios.</span>`;
     }
   }
 }
@@ -312,93 +301,4 @@ if($('addShot')){
     const ins = $$('.srow input');
     if(ins.length) ins[ins.length - 1].focus();
   };
-}
-
-function downloadAllPhoneScreenshots(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const validEntries = [];
-  SHOTS.forEach((s, idx) => {
-    if(s && s.trim()) validEntries.push({ src: s, index: idx });
-  });
-
-  if(validEntries.length === 0){
-    showToast('No phone screenshots to export', 'warn');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAllPhone');
-  const optBtn = $('optExportPhoneShots');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${validEntries.length} phone screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, 'info', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packPromise = Promise.all(validEntries.map((entry, order) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1290;
-          canvas.height = img.naturalHeight || 2796;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          const fileName = `${name}-phone-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
-          resolve({ name: fileName, data: bytes });
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-phone-screenshots.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} phone screenshots in 1 ZIP package!`, 'ok');
-  }).catch(err => {
-    console.error('Phone ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
 }

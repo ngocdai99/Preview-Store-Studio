@@ -1,18 +1,6 @@
 // Store Preview Studio · Apple App Store & Devices
 // --- Apple Device Mode & Store Switchers ---
 let appleDevice = 'iphone'; // 'iphone' | 'ipad'
-let ipadOrient = 'portrait'; // 'portrait' | 'landscape'
-let iphoneOrient = 'portrait'; // 'portrait' | 'landscape'
-
-function applyIpadOrient(){
-  const ipad = document.querySelector('.dev.ipad');
-  if(ipad) ipad.classList.toggle('landscape', ipadOrient === 'landscape');
-}
-
-function applyIphoneOrient(){
-  const iphone = document.querySelector('.dev.apple.single');
-  if(iphone) iphone.classList.toggle('landscape', iphoneOrient === 'landscape');
-}
 
 function setAppleDevice(d, animate = true){
   if(d !== 'ipad') d = 'iphone';
@@ -35,19 +23,6 @@ function setAppleDevice(d, animate = true){
   syncAllVtPills();
 }
 $$('#dt [data-d]').forEach(b => b.onclick = () => setAppleDevice(b.dataset.d));
-$('adRotate').onclick = () => {
-  if(appleDevice === 'ipad'){
-    ipadOrient = ipadOrient === 'landscape' ? 'portrait' : 'landscape';
-    applyIpadOrient();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); });
-    saveState();
-  } else {
-    iphoneOrient = iphoneOrient === 'landscape' ? 'portrait' : 'landscape';
-    applyIphoneOrient();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); });
-    saveState();
-  }
-};
 
 // iOS App Icon Info Popover
 initInfoPopover("iosIconInfoBtn", "iosIconInfoPop", "iosIconInfoClose", "apple");

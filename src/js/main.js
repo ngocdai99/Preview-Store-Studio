@@ -11,13 +11,11 @@ function fit(){
   let baseW = 416, baseH = 870;
   if(store === 'apple'){
     if(appleDevice === 'ipad'){
-      const land = ipadOrient === 'landscape';
-      baseW = land ? 980 : 750;
-      baseH = land ? 750 : 980;
+      baseW = 750;
+      baseH = 980;
     } else {
-      const land = (typeof iphoneOrient !== 'undefined' && iphoneOrient === 'landscape');
-      baseW = land ? 870 : 416;
-      baseH = land ? 416 : 870;
+      baseW = 416;
+      baseH = 870;
     }
   }else if(googleDevice !== 'phone'){
     const land = tabOrient[googleDevice] === 'landscape';
@@ -25,9 +23,8 @@ function fit(){
     baseW = land ? lw : lh;
     baseH = land ? lh : lw;
   } else {
-    const land = (typeof phoneOrient !== 'undefined' && phoneOrient === 'landscape');
-    baseW = land ? 870 : 416;
-    baseH = land ? 416 : 870;
+    baseW = 416;
+    baseH = 870;
   }
 
   const zw=(st.clientWidth-pad)/baseW;
@@ -63,27 +60,33 @@ addEventListener('orientationchange', () => setTimeout(onStageResize, 200));
 document.body.dataset.appleDevice = appleDevice;
 document.body.dataset.googleDevice = googleDevice;
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
-if(!loadState()){
+
+if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
+
+if(typeof hasUserDraft === 'function' && hasUserDraft()){
+  CURRENT_PRESET_KEY = 'draft';
+  loadPreset('draft');
+} else if(!loadState()){
   restoring = true;
   try{
     loadPreset('none');
   }finally{
     restoring = false;
   }
-}else{
+} else {
+  if(typeof initDraftFromCurrentPreset === 'function') initDraftFromCurrentPreset();
   renderIcons();
   renderFeature();
   renderShots();
   renderIpadShots();
   update();
 }
+if(typeof updatePresetBanner === 'function') updatePresetBanner();
+if(typeof updateDraftPill === 'function') updateDraftPill();
 setSupportsIpad(SUPPORTS_IPAD);
 syncStatInputs();
 renderStats();
 applyGoogleDevice();
-applyIpadOrient();
-if(typeof applyIphoneOrient === 'function') applyIphoneOrient();
-if(typeof applyGooglePhoneOrient === 'function') applyGooglePhoneOrient();
 applyTabOrient();
 renderTablets();
 if(typeof renderReviews === 'function') renderReviews();

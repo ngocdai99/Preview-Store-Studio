@@ -69,6 +69,7 @@
 .sb{display:flex;justify-content:space-between;align-items:center;flex-shrink:0;font-weight:600;position:relative;z-index:6}
 .scr{flex:1;overflow-y:auto;scrollbar-width:none}.scr::-webkit-scrollbar{display:none}
 .hi{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:136px;height:5px;border-radius:5px;background:var(--t);opacity:.85;z-index:7}
-.gal{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;cursor:grab;user-select:none;scroll-snap-type:x proximity}.gal::-webkit-scrollbar{display:none}
-.gal img{pointer-events:none;object-fit:cover;aspect-ratio:460/996;scroll-snap-align:start}
+.gal{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;cursor:grab;user-select:none;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y}.gal::-webkit-scrollbar{display:none}
+.gal.is-dragging{cursor:grabbing!important;scroll-snap-type:none!important;scroll-behavior:auto!important;user-select:none}
+.gal img{pointer-events:none;user-select:none;-webkit-user-drag:none;object-fit:cover;aspect-ratio:460/996;scroll-snap-align:start}
 .pre{white-space:pre-line}

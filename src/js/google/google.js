@@ -1,12 +1,11 @@
 // Store Preview Studio · Google Play Devices & Tablet Orientation
 // --- Google Play Tablet Screenshots (7-inch & 10-inch) ---
 let googleDevice = 'phone'; // 'phone' | 'tab7' | 'tab10'
-let phoneOrient = 'portrait'; // 'portrait' | 'landscape'
 const tabOrient = {tab7:'landscape', tab10:'landscape'};
 const MAX_TAB = 8;
 const TAB_CFG = {
-  tab7:  {name:'7-inch',  min:320,  max:3840, list:'tab7List',  counter:'tab7Counter',  badge:'tab7Badge',  file:'tab7File',  add:'tab7Add',  url:'tab7Url',  gal:'galTab7',  dev:'dev-tab7'},
-  tab10: {name:'10-inch', min:1080, max:7680, list:'tab10List', counter:'tab10Counter', badge:'tab10Badge', file:'tab10File', add:'tab10Add', url:'tab10Url', gal:'galTab10', dev:'dev-tab10'}
+  tab7:  {name:'7-inch',  min:320,  max:3840, list:'tab7List',  counter:'tab7Counter',  badge:'tab7Badge',  file:'tab7File',  add:'tab7Add',  gal:'galTab7',  dev:'dev-tab7'},
+  tab10: {name:'10-inch', min:1080, max:7680, list:'tab10List', counter:'tab10Counter', badge:'tab10Badge', file:'tab10File', add:'tab10Add', gal:'galTab10', dev:'dev-tab10'}
 };
 const TABS = {tab7:[], tab10:[]};  // items: {src, meta:{type,bytes,w,h}}
 let tabPick = {key:null, idx:-1};
@@ -78,19 +77,15 @@ function renderTablets(){
     ce.className = 'cc' + (valid.length > MAX_TAB ? ' err' : '');
 
     const be = $(c.badge);
-    const dlBtn = valid.length > 0 ? `<button class="mini dl-btn" id="btnDlAll_${key}" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>` : '';
     if(!valid.length){
       be.className = 'shot-status-badge warn';
       be.innerHTML = `${SB_INFO}<span><strong>No ${c.name} screenshots yet.</strong> The preview shows placeholders. Upload up to ${MAX_TAB}.</span>`;
     }else if(bad){
       be.className = 'shot-status-badge err';
-      be.innerHTML = `${SB_ERR}<span><strong>${bad} of ${valid.length} screenshot${valid.length===1?'':'s'} would be rejected</strong> by Play Console. See details below.</span>${dlBtn}`;
+      be.innerHTML = `${SB_ERR}<span><strong>${bad} of ${valid.length} screenshot${valid.length===1?'':'s'} would be rejected</strong> by Play Console. See details below.</span>`;
     }else{
       be.className = 'shot-status-badge ok';
-      be.innerHTML = `${SB_OK}<span><strong>${c.name} tablet assets look good:</strong> ${valid.length} screenshot${valid.length===1?'':'s'}.</span>${dlBtn}`;
-    }
-    if($('btnDlAll_' + key)){
-      $('btnDlAll_' + key).onclick = () => downloadAllTabScreenshots(key);
+      be.innerHTML = `${SB_OK}<span><strong>${c.name} tablet assets look good:</strong> ${valid.length} screenshot${valid.length===1?'':'s'}.</span>`;
     }
 
     // Editor list
@@ -115,7 +110,7 @@ function renderTablets(){
       const meta = document.createElement('div'); meta.className = 'tab-meta';
       if(it.meta && it.meta.w){
         const probs = tabIssues(key, it);
-        meta.textContent = `${it.meta.w}×${it.meta.h} · ${ratioLabel(it.meta.w, it.meta.h)}` + (it.meta.bytes ? ' · ' + fmtSize(it.meta.bytes) : '') + (probs.length ? ' — ' + probs.join('; ') : ' ✓');
+        meta.textContent = `${it.meta.w}×${it.meta.h} · ${ratioLabel(it.meta.w, it.meta.h)}` + (it.meta.bytes ? ' · ' + fmtSize(it.meta.bytes) : '') + (probs.length ? ' — ' + probs.join('; ') : ' OK');
         meta.classList.add(probs.length ? 'bad' : 'ok');
       }else if(it.meta && it.meta.bad){
         meta.textContent = 'Image could not be loaded'; meta.classList.add('bad');
@@ -124,13 +119,12 @@ function renderTablets(){
       }
 
       const act = document.createElement('div'); act.className = 'act';
-      act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" title="Move Up">↑</button><button class="mini" title="Move Down">↓</button><button class="mini dl-btn" title="Download PNG">' + ICO_DL + '</button><button class="mini del" title="Delete">✕</button>';
+      act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" title="Move Up">↑</button><button class="mini" title="Move Down">↓</button><button class="mini del" title="Delete">&times;</button>';
       const b = act.children;
       b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
       b[1].onclick = () => mvTab(key, i, -1);
       b[2].onclick = () => mvTab(key, i, 1);
-      b[3].onclick = () => downloadTabScreenshot(key, i);
-      b[4].onclick = () => { TABS[key].splice(i, 1); renderTablets(); saveState(); };
+      b[3].onclick = () => { TABS[key].splice(i, 1); renderTablets(); saveState(); };
       col.append(inp, meta, act);
       r.appendChild(col);
 
@@ -184,7 +178,7 @@ function addTabFiles(key, files){
     if(++done === files.length){
       out.forEach(s => TABS[key].push(makeTabItem(s)));
       renderTablets(); saveState();
-      showToast(`Added ${files.length} ${TAB_CFG[key].name} tablet screenshot${files.length===1?'':'s'}`, '📸');
+      showToast(`Added ${files.length} ${TAB_CFG[key].name} tablet screenshot${files.length===1?'':'s'}`, 'ok');
     }
   }));
 }
@@ -197,19 +191,13 @@ Object.keys(TAB_CFG).forEach(key => {
     if(!files.length) return;
     if(tabPick.key === key && tabPick.idx >= 0){
       const idx = tabPick.idx; tabPick = {key:null, idx:-1};
-      readFile(files[0], d => { TABS[key][idx] = makeTabItem(d); renderTablets(); saveState(); showToast('Screenshot replaced', '📸'); });
+      readFile(files[0], d => { TABS[key][idx] = makeTabItem(d); renderTablets(); saveState(); showToast('Screenshot replaced', 'ok'); });
     }else{
       tabPick = {key:null, idx:-1};
       addTabFiles(key, files);
     }
   };
   $(c.add).onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key:null, idx:-1}; $(c.file).click(); };
-  $(c.url).onclick = () => {
-    if(TABS[key].length >= MAX_TAB){ showToast(`${c.name} tablets allow up to ${MAX_TAB} screenshots`, 'warn'); return; }
-    TABS[key].push(makeTabItem(''));
-    renderTablets(); saveState();
-    const ins = $(c.list).querySelectorAll('input'); if(ins.length) ins[ins.length-1].focus();
-  };
   const sec = $(c.list).parentElement;
   sec.addEventListener('dragover', e => e.preventDefault());
   sec.addEventListener('drop', e => {
@@ -218,10 +206,6 @@ Object.keys(TAB_CFG).forEach(key => {
   });
 });
 
-function applyGooglePhoneOrient(){
-  const phone = document.querySelector('.dev.google');
-  if(phone) phone.classList.toggle('landscape', phoneOrient === 'landscape');
-}
 function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
@@ -245,18 +229,6 @@ function setGoogleDevice(d, animate = true){
   syncAllVtPills();
 }
 $$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));
-$('gdRotate').onclick = () => {
-  if(googleDevice === 'phone'){
-    phoneOrient = phoneOrient === 'landscape' ? 'portrait' : 'landscape';
-    applyGooglePhoneOrient();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); });
-    saveState();
-  } else {
-    tabOrient[googleDevice] = tabOrient[googleDevice] === 'landscape' ? 'portrait' : 'landscape';
-    applyTabOrient(); renderTablets();
-    requestAnimationFrame(() => { fit(); syncAllVtPills(); }); saveState();
-  }
-};
 function tabStatus(key){
   const v = TABS[key].filter(i => i.src), bad = v.filter(i => tabIssues(key, i).length).length;
   if(!v.length) return 'None uploaded (optional)';
@@ -264,418 +236,4 @@ function tabStatus(key){
   return bad ? `${bad} of ${v.length} would be rejected` : `PASS (${v.length} screenshot${v.length===1?'':'s'})`;
 }
 
-// --- Google Play Screenshot Downloads & Bulk ZIP Exports ---
-function downloadTabScreenshot(key, index){
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const it = TABS[key] && TABS[key][index];
-  if(!it || !it.src || !it.src.trim()){
-    showToast('No screenshot to download', 'warn');
-    return;
-  }
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.naturalWidth || (key === 'tab7' ? 1280 : 1920);
-    canvas.height = img.naturalHeight || (key === 'tab7' ? 800 : 1200);
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    canvas.toBlob(blob => {
-      if(!blob){
-        showToast('Error generating image file', 'warn');
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${name}-google-play-${key}-shot-${index + 1}-${canvas.width}x${canvas.height}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded ${TAB_CFG[key].name} Screenshot #${index + 1} (${canvas.width}×${canvas.height})!`, '⬇️');
-    }, 'image/png');
-  };
-  img.onerror = () => showToast('Failed to load image for download', 'warn');
-  img.src = ensureSvgDimensions(it.src);
-}
-
-function downloadAllTabScreenshots(key){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const cfg = TAB_CFG[key];
-  if(!cfg) return;
-  const validEntries = [];
-  (TABS[key] || []).forEach((it, idx) => {
-    if(it && it.src && it.src.trim()) validEntries.push({ src: it.src, index: idx });
-  });
-
-  if(validEntries.length === 0){
-    showToast(`No ${cfg.name} tablet screenshots to export`, 'ℹ️');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAll_' + key);
-  const optBtn = $(key === 'tab7' ? 'optExportTab7Shots' : 'optExportTab10Shots');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${validEntries.length} ${cfg.name} tablet screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, '⏳', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packPromise = Promise.all(validEntries.map((entry, order) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || (key === 'tab7' ? 1280 : 1920);
-          canvas.height = img.naturalHeight || (key === 'tab7' ? 800 : 1200);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          const fileName = `${name}-google-play-${key}-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
-          resolve({ name: fileName, data: bytes });
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-google-play-${key}-tablet-screenshots.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} ${cfg.name} tablet screenshots in 1 ZIP package! ✨`, '⬇️');
-  }).catch(err => {
-    console.error(`${key} ZIP export error:`, err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
-
-function downloadAllTab7Screenshots(){
-  return downloadAllTabScreenshots('tab7');
-}
-
-function downloadAllTab10Screenshots(){
-  return downloadAllTabScreenshots('tab10');
-}
-
-function downloadAllTabletsScreenshots(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-
-  const tab7Valid = (TABS.tab7 || []).filter(it => it && it.src && it.src.trim());
-  const tab10Valid = (TABS.tab10 || []).filter(it => it && it.src && it.src.trim());
-  const totalCount = tab7Valid.length + tab10Valid.length;
-
-  if(totalCount === 0){
-    showToast('No tablet screenshots to export', 'ℹ️');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAllTablets');
-  const optBtn = $('optExportAllTablets');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${totalCount} tablet screenshot${totalCount === 1 ? '' : 's'} into ZIP (please wait)...`, '⏳', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packEntries = [];
-  tab7Valid.forEach((entry, order) => {
-    packEntries.push({
-      folder: '7-inch-tablet',
-      key: 'tab7',
-      order,
-      src: entry.src
-    });
-  });
-  tab10Valid.forEach((entry, order) => {
-    packEntries.push({
-      folder: '10-inch-tablet',
-      key: 'tab10',
-      order,
-      src: entry.src
-    });
-  });
-
-  const packPromise = Promise.all(packEntries.map((item) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || (item.key === 'tab7' ? 1280 : 1920);
-          canvas.height = img.naturalHeight || (item.key === 'tab7' ? 800 : 1200);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          const fileName = `${item.folder}/${name}-${item.key}-shot-${item.order + 1}-${canvas.width}x${canvas.height}.png`;
-          resolve({ name: fileName, data: bytes });
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(item.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-google-play-tablets-screenshots.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} tablet screenshots in 1 ZIP package! ✨`, '⬇️');
-  }).catch(err => {
-    console.error('Tablets ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export All Tablets (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
-
-function downloadAllGooglePlayBundle(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-
-  const phoneValid = (typeof SHOTS !== 'undefined' ? SHOTS : []).filter(s => typeof s === 'string' && s.trim());
-  const tab7Valid = (TABS.tab7 || []).filter(it => it && it.src && it.src.trim());
-  const tab10Valid = (TABS.tab10 || []).filter(it => it && it.src && it.src.trim());
-  const hasFeature = typeof FEATURE_GRAPHIC === 'string' && FEATURE_GRAPHIC.trim().length > 0;
-  const hasIcon = typeof ICON === 'string' && ICON.trim().length > 0;
-
-  const totalItems = phoneValid.length + tab7Valid.length + tab10Valid.length + (hasFeature ? 1 : 0) + (hasIcon ? 1 : 0);
-  if(totalItems === 0){
-    showToast('No Google Play assets to export', 'ℹ️');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const optBtn = $('optExportGooglePlayBundle');
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${totalItems} Google Play assets into ZIP (please wait)...`, '⏳', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const tasks = [];
-
-  // 1. Phone Screenshots
-  phoneValid.forEach((src, order) => {
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1080;
-          canvas.height = img.naturalHeight || 1920;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `01-phone-screenshots/${name}-phone-shot-${order + 1}-${canvas.width}x${canvas.height}.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(src);
-    }));
-  });
-
-  // 2. 7-inch Tablet Screenshots
-  tab7Valid.forEach((entry, order) => {
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1280;
-          canvas.height = img.naturalHeight || 800;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `02-tablet-7inch/${name}-7inch-shot-${order + 1}-${canvas.width}x${canvas.height}.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    }));
-  });
-
-  // 3. 10-inch Tablet Screenshots
-  tab10Valid.forEach((entry, order) => {
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1920;
-          canvas.height = img.naturalHeight || 1200;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `03-tablet-10inch/${name}-10inch-shot-${order + 1}-${canvas.width}x${canvas.height}.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    }));
-  });
-
-  // 4. Feature Graphic (1024×500)
-  if(hasFeature){
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = 1024;
-          canvas.height = 500;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, 1024, 500);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `04-feature-graphic/${name}-feature-graphic-1024x500.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(FEATURE_GRAPHIC);
-    }));
-  }
-
-  // 5. App Icon (512×512)
-  if(hasIcon){
-    tasks.push(new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = 512;
-          canvas.height = 512;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, 512, 512);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          resolve({ name: `05-app-icon/${name}-app-icon-512x512.png`, data: bytes });
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(ICON);
-    }));
-  }
-
-  Promise.all([Promise.all(tasks), minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing Google Play bundle for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-google-play-all-assets.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded complete Google Play bundle (${files.length} assets) in 1 ZIP package! ✨`, '⬇️');
-  }).catch(err => {
-    console.error('Google Play bundle ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
-
-if($('btnDlAllTablets')){
-  $('btnDlAllTablets').onclick = () => downloadAllTabletsScreenshots();
-}
 

@@ -1,0 +1,107 @@
+/* ---------- Field Focus Highlight & Scroll Linking (Form <-> Device Mockups) ---------- */
+.hl-target {
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 3px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45) !important;
+  transition: outline 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+}
+
+/* For rounded app icons */
+img.hl-target {
+  outline: 2.5px solid #f59e0b !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+}
+
+/* Google Play About App circular arrow button: maintain 50% circle radius with crisp yellow border */
+.g-desc-arrow.hl-target,
+.g-h span.g-desc-arrow.hl-target {
+  border-radius: 50% !important;
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.55) !important;
+}
+
+.g-desc-arrow.hl-flash,
+.g-h span.g-desc-arrow.hl-flash {
+  border-radius: 50% !important;
+}
+
+/* Google Play Data Safety container */
+.safe[data-google-safety].hl-target,
+[data-google-safety].hl-target {
+  border-radius: 14px !important;
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+}
+
+.safe[data-google-safety].hl-flash,
+[data-google-safety].hl-flash {
+  border-radius: 14px !important;
+}
+
+/* Apple Privacy Cards */
+[data-apple-priv-wrap] .pc.hl-target {
+  border-radius: 16px !important;
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+}
+
+[data-apple-priv-wrap] .pc.hl-flash {
+  border-radius: 16px !important;
+}
+
+/* Specific Category Pill & Chips: cleanly change the white border to orange/yellow without modifying text or background */
+.chips span[data-b="cat"].hl-target,
+.chips [data-b="cat"].hl-target,
+span[data-b="cat"].hl-target {
+  border-color: #f59e0b !important;
+  outline: none !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5) !important;
+}
+
+/* Apple Metrics Ribbon & Information Category */
+.a-met [data-b="cat"].hl-target,
+.a-info [data-b="cat"].hl-target {
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 2px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.45) !important;
+}
+
+/* Typing Flash animation */
+.hl-flash {
+  animation: fieldHlFlash 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+}
+
+@keyframes fieldHlFlash {
+  0% {
+    outline: 2px solid #f59e0b !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.55) !important;
+  }
+  100% {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+.chips span[data-b="cat"].hl-flash {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6) !important;
+  outline: none !important;
+}
+
+/* Clean export protection: exports NEVER render the focus highlight */
+.stage.is-exporting .hl-target,
+.stage.is-exporting .hl-flash,
+.is-exporting .hl-target,
+.is-exporting .hl-flash {
+  outline: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+  border-color: inherit !important;
+}
