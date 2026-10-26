@@ -1,0 +1,25 @@
+/* ---------- FORM INPUTS, TEXTAREAS & METERS ---------- */
+.cc{font-size:11px;font-weight:700;color:var(--mut);font-variant-numeric:tabular-nums;transition:color .25s ease;margin-left:auto;white-space:nowrap;flex-shrink:0}
+.cc.warn{color:var(--warn)}
+.cc.err,.counter-exceeded{color:var(--err);animation:shake-overlimit .3s ease-in-out both}
+
+@keyframes shake-overlimit{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-3px)}
+  40%,80%{transform:translateX(3px)}
+}
+
+input[type=text],textarea{
+  width:100%;min-width:0;box-sizing:border-box;background:#0a101d;border:1px solid var(--line);border-radius:11px;padding:9px 12px;color:#fff;
+  font-family:inherit;font-size:13px;line-height:1.55;resize:vertical;transition:border-color .25s,box-shadow .25s,background .25s;
+}
+input::placeholder,textarea::placeholder{color:#4a5779}
+input:focus,textarea:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px var(--glow);background:#0c1322}
+.fg.overlimit input,.fg.overlimit textarea{border-color:var(--err)!important;box-shadow:0 0 0 3px var(--err-glow)!important}
+.fg.warning input,.fg.warning textarea{border-color:var(--warn)!important;box-shadow:0 0 0 3px var(--warn-glow)!important}
+
+/* Meter Bar */
+.meter{height:3px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:-2px}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:3px;transition:width .2s,background .3s}
+.meter.warn i{background:linear-gradient(90deg,var(--warn),#fde047)}
+.meter.err i{background:var(--err);box-shadow:0 0 8px var(--err)}

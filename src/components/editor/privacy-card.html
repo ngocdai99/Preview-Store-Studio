@@ -1,0 +1,23 @@
+<!-- Card 3: App Privacy & Data Safety -->
+<div class="card" id="privacyCard">
+  <h2><i class="card-ico c-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></i>App Privacy &amp; Data Safety</h2>
+  <p class="hint">Customizes privacy labels displayed on App Store (Nutritional cards) and Google Play (Data safety section).</p>
+  
+  <div class="fg">
+    <div class="lr"><label>Apple Privacy: Data Linked to You<span class="tag a">APPLE</span></label></div>
+    <input type="text" id="f-priv-linked" value="User Content (Tasks &amp; Habits), Identifiers, Usage Data" placeholder="e.g. Purchases, Contact Info, User Content, Identifiers">
+    <span class="hint" style="font-size:10.5px">Items separated by commas shown in Apple "Data Linked to You"</span>
+  </div>
+
+  <div class="fg">
+    <div class="lr"><label>Apple Privacy: Data Not Linked<span class="tag a">APPLE</span></label></div>
+    <input type="text" id="f-priv-notlinked" value="Diagnostics, Performance Data" placeholder="e.g. Diagnostics, Approximate Location, Usage Data">
+    <span class="hint" style="font-size:10.5px">Items shown in Apple "Data Not Linked to You"</span>
+  </div>
+
+  <div class="fg">
+    <div class="lr"><label>Google Play: Data Safety Practices<span class="tag g">GOOGLE</span></label></div>
+    <input type="text" id="f-priv-google" value="No data shared with third parties, Data is encrypted in transit, You can request data deletion" placeholder="e.g. Data shared with third parties, Data encrypted in transit">
+    <span class="hint" style="font-size:10.5px">Key bullet points (separated by commas) rendered in Google Play Data Safety</span>
+  </div>
+</div>

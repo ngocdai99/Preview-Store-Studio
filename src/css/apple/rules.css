@@ -1,0 +1,19 @@
+/* Device & Store View Display Rules */
+body[data-store=google] .dev.apple,
+body[data-store=google] .dev.ipad{display:none!important}
+body[data-store=google] .dev.google{display:block}
+body[data-store=google] #dt{display:none!important}
+body[data-store=google] #vt{display:flex!important}
+
+body[data-store=apple] .dev.google{display:none!important}
+body[data-store=apple] #dt{display:flex}
+
+body[data-store=apple][data-apple-device="iphone"] .dev.apple.single{display:block}
+body[data-store=apple][data-apple-device="iphone"] .dev.ipad{display:none!important}
+body[data-store=apple][data-apple-device="iphone"] #vt{display:flex}
+
+body[data-store=apple][data-apple-device="ipad"] .dev.ipad{display:block!important}
+body[data-store=apple][data-apple-device="ipad"] .dev.apple.single{display:none!important}
+body[data-store=apple][data-apple-device="ipad"] #vt{display:flex!important}
+#adRotate{display:none}
+body[data-store=apple] #adRotate{display:inline-flex}

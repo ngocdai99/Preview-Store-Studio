@@ -1,0 +1,46 @@
+/* ---------- 3D SPATIAL TRANSITIONS & KEYFRAMES ---------- */
+@keyframes devExitNext {
+  0% { opacity: 1; transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0); }
+  100% { opacity: 0; transform: perspective(1400px) translateX(-65px) scale(0.91) rotateY(-13deg) translateZ(-70px); }
+}
+@keyframes devEnterNext {
+  0% { opacity: 0; transform: perspective(1400px) translateX(75px) scale(0.91) rotateY(15deg) translateZ(-70px); }
+  50% { opacity: 1; }
+  100% { opacity: 1; transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0); }
+}
+@keyframes devExitPrev {
+  0% { opacity: 1; transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0); }
+  100% { opacity: 0; transform: perspective(1400px) translateX(65px) scale(0.91) rotateY(13deg) translateZ(-70px); }
+}
+@keyframes devEnterPrev {
+  0% { opacity: 0; transform: perspective(1400px) translateX(-75px) scale(0.91) rotateY(-15deg) translateZ(-70px); }
+  50% { opacity: 1; }
+  100% { opacity: 1; transform: perspective(1400px) translateX(0) scale(1) rotateY(0deg) translateZ(0); }
+}
+@keyframes devExitMorph {
+  0% { opacity: 1; transform: perspective(1400px) scale(1) rotateX(0deg) rotateY(0deg) translateZ(0); }
+  100% { opacity: 0; transform: perspective(1400px) scale(0.88) rotateX(12deg) rotateY(-10deg) translateY(16px) translateZ(-90px); }
+}
+@keyframes devEnterMorph {
+  0% { opacity: 0; transform: perspective(1400px) scale(0.89) rotateX(-10deg) rotateY(10deg) translateY(-14px) translateZ(-70px); }
+  50% { opacity: 1; }
+  100% { opacity: 1; transform: perspective(1400px) scale(1) rotateX(0deg) rotateY(0deg) translateY(0) translateZ(0); }
+}
+
+.dev.dev-exit-next { animation: devExitNext 0.17s cubic-bezier(0.38, 0, 0.7, 0.2) forwards !important; pointer-events: none !important; }
+.dev.dev-enter-next { animation: devEnterNext 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; pointer-events: none !important; }
+.dev.dev-exit-prev { animation: devExitPrev 0.17s cubic-bezier(0.38, 0, 0.7, 0.2) forwards !important; pointer-events: none !important; }
+.dev.dev-enter-prev { animation: devEnterPrev 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; pointer-events: none !important; }
+.dev.dev-exit-morph, .dev.dev-exit { animation: devExitMorph 0.18s cubic-bezier(0.38, 0, 0.7, 0.2) forwards !important; pointer-events: none !important; }
+.dev.dev-enter-morph, .dev.dev-enter { animation: devEnterMorph 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; pointer-events: none !important; }
+
+/* Smooth view crossfade inside phone */
+@keyframes viewFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.view-enter {
+  animation: viewFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes in{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}

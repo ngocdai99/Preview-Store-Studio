@@ -1,0 +1,66 @@
+/* ---------- APPLE SECTIONS (GALLERY, DESCRIPTION, PRIVACY, INFO) ---------- */
+.sec{border-bottom:1px solid var(--sp);padding-bottom:20px;margin-bottom:20px}.sec:last-child{border:0}
+.sec h3{font-size:21px;font-weight:700;margin-bottom:10px;letter-spacing:-.4px;display:flex;justify-content:space-between;align-items:baseline}
+.sec h3 a{font-size:15px;font-weight:400;color:var(--bl)}
+.wn-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.vm{display:flex;flex-direction:column;align-items:flex-end;gap:2px;color:var(--s);font-size:12.5px;line-height:1.45;flex-shrink:0;text-align:right}
+.a-txt{font-size:14.5px;line-height:1.5}
+.promo{background:var(--cd);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45;margin-bottom:20px;position:relative;padding-left:18px}
+.promo::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3.5px;border-radius:3px;background:var(--bl)}
+.apple .gal img{flex:0 0 222px;width:222px;border-radius:11px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.18)}
+.apple .gal img.landscape-shot{flex:0 0 340px;width:340px;aspect-ratio:16/9;border-radius:9px}
+.pg{display:flex;gap:12px;margin-top:14px}
+.pc{flex:1;min-width:0;background:#ffffff;border-radius:18px;padding:20px 16px;display:flex;flex-direction:column;box-shadow:0 12px 38px rgba(0,0,0,.12),0 3px 10px rgba(0,0,0,.06);box-sizing:border-box}
+.phone.apple[data-theme=dark] .pc{background:#1c1c1e;box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 0 .5px rgba(255,255,255,.1)}
+.pc.pc-single{align-items:center;text-align:center;padding:24px 20px 22px}
+.pc-top-ico{width:32px;height:32px;margin:0 auto 10px;color:var(--bl);display:flex;align-items:center;justify-content:center}
+.pc-top-ico svg{width:28px;height:28px;display:block}
+.pc-check-ico{width:36px;height:36px;margin:0 auto 10px}
+.pc-check-ico svg{width:34px;height:34px;stroke-width:2.2}
+.pc h4{font-size:14px;font-weight:700;text-align:center;margin:0 0 5px;line-height:1.25;color:var(--t)}
+.pc.pc-single h4{font-size:15px;margin-bottom:6px}
+.pc-desc{font-size:11px;color:var(--s);text-align:center;line-height:1.35;margin-bottom:12px;display:block}
+.pc.pc-single .pc-desc,
+.pc.pc-single p.pc-desc{font-size:13px;font-weight:400;color:var(--s)!important;line-height:1.42;margin:0;max-width:270px}
+.pc-footnote{font-size:11.5px;color:var(--s);margin-top:12px;line-height:1.4}
+.pc-list{display:flex;flex-direction:column;gap:9px}
+.ipad-main .pc-list{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px;align-items:center}
+.pc-list p{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;margin:0;line-height:1.25;color:var(--t)}
+.pc-ico{width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--t)}
+.pc-ico svg{width:15px;height:15px;display:block}
+.inf div{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:11px 0;border-bottom:1px solid var(--sp)}.inf span{color:var(--s)}.inf b{font-weight:400;text-align:right;color:var(--t)}
+.inf .inf-privacy{border-bottom:0;cursor:pointer;transition:opacity .15s ease}
+.inf .inf-privacy:hover{opacity:.8}
+.inf .inf-privacy span{color:var(--bl);font-weight:400}
+.inf .inf-privacy .inf-hand{display:inline-flex;align-items:center;justify-content:center;color:var(--bl)}
+.inf .inf-privacy .inf-hand svg{width:14px;height:18px;display:block}
+
+/* Search results view */
+.sr{display:flex;align-items:center;gap:12px;margin-bottom:14px}.sr img{width:62px;height:62px;border-radius:15px;object-fit:cover;box-shadow:0 0 0 .5px rgba(0,0,0,.12)}
+.sr .n{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shots{display:flex;gap:8px}.shots img{flex:1;min-width:0;border-radius:6px;aspect-ratio:460/996;object-fit:cover;box-shadow:0 0 0 1px var(--sp)}
+.sbox{display:flex;align-items:center;gap:8px;background:var(--cd);border-radius:11px;padding:9px 12px;font-size:15px;color:var(--s);margin-bottom:18px}
+.sbox svg{width:16px;height:16px;stroke-width:2.2;flex-shrink:0;color:var(--s)}
+.ipad-sbox svg{width:19px;height:19px}
+
+/* Apple Platforms Badge */
+.a-platforms-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+  padding-bottom:12px;
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--t);
+  letter-spacing:-.1px;
+  border-bottom:1px solid var(--sp);
+  width:100%;
+}
+.a-plat-ico{
+  width:16px;
+  height:18px;
+  stroke:currentColor;
+  color:var(--s);
+  flex-shrink:0;
+}

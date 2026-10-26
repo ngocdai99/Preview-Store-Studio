@@ -1,0 +1,11 @@
+/* ---------- APPLE METRICS RIBBON ---------- */
+.a-met{display:flex;border-block:1px solid var(--sp);padding:12px 0;margin-bottom:20px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;user-select:none}
+.a-met::-webkit-scrollbar{display:none}
+.phone.apple:not(.ipad) .a-met > div{flex:0 0 33.333333%;min-width:33.333333%;max-width:33.333333%;box-sizing:border-box;text-align:center;border-right:1px solid var(--sp);padding:0 6px}
+.phone.apple:not(.ipad) .a-met > div:last-child{border-right:0}
+.phone.ipad .a-met > div,.dev.landscape .phone.apple:not(.ipad) .a-met > div{flex:1;min-width:0;max-width:none;text-align:center;border-right:1px solid var(--sp);padding:0 4px}
+.phone.ipad .a-met > div:last-child,.dev.landscape .phone.apple:not(.ipad) .a-met > div:last-child{border-right:0}
+.a-met small{display:block;font-size:9px;font-weight:700;color:var(--s);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a-met b{font-size:17px;display:block;margin:3px 0 1px;font-weight:700;color:#5a5a5f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a-met b[data-b="dev"]{font-size:12px;margin:3px 0 1px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.2}
+.apple[data-theme=dark] .a-met b{color:#aeaeb2}.a-met i{font-style:normal;font-size:10px;color:var(--s);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

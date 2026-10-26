@@ -1,0 +1,7 @@
+/* ---------- STAGE CANVAS AREA ---------- */
+.stage{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px;overflow:auto;position:relative;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:36px 36px;
+  perspective:1400px;perspective-origin:50% 36%;
+}

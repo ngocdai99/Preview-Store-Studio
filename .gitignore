@@ -34,6 +34,8 @@ start_marketing.command
 *.command
 
 # Build output
+core.html
+core.min.html
 store_preview_studio.html
 store_preview_studio.min.html
 dist/

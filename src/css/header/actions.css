@@ -1,0 +1,241 @@
+/* ---------- Header Right Actions & Buttons ---------- */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.btn {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f1f5f9;
+  border-radius: 11px;
+  padding: 7px 11px;
+  font-weight: 700;
+  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  user-select: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.btn .btn-ico {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.btn .btn-ico svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  stroke: currentColor;
+}
+
+.btn .arr {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  margin-left: 2px;
+  opacity: 0.8;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn .arr svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+  stroke: currentColor;
+}
+
+.btn:hover .arr {
+  opacity: 1;
+}
+
+.dropdown:has(.menu.show) .btn .arr {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+.btn:hover {
+  border-color: var(--ac);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 3px var(--glow);
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--ac), var(--ac2));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: 0 4px 166px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn.primary:hover {
+  opacity: 0.96;
+  box-shadow: 0 6px 22px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+#btnExport {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 55%, #8b5cf6 100%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+  padding: 7px 14px;
+  font-weight: 650;
+  box-shadow: 0 3px 12px rgba(99, 102, 241, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+#btnExport:hover {
+  opacity: 0.96;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transform: scale(1.04);
+}
+
+#btnExport:active {
+  transform: scale(0.98);
+}
+
+:root[data-ui=light] #btnExport {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 55%, #8b5cf6 100%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(99, 102, 241, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+:root[data-ui=light] #btnExport:hover {
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+}
+
+#btnPresets {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f1f5f9;
+  padding: 7px 13px;
+  font-weight: 650;
+  border-radius: 11px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#btnPresets:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: scale(1.04);
+}
+
+#btnPresets:active {
+  transform: scale(0.98);
+}
+
+:root[data-ui=light] #btnPresets {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  color: #0f172a;
+  padding: 7px 13px;
+  font-weight: 650;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1px 0 #ffffff;
+}
+
+:root[data-ui=light] #btnPresets .btn-ico {
+  color: #0f172a;
+}
+
+:root[data-ui=light] #btnPresets .btn-ico svg {
+  stroke: #0f172a;
+  color: #0f172a;
+}
+
+:root[data-ui=light] #btnPresets:hover {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.24);
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.09), inset 0 1px 0 #ffffff;
+  transform: scale(1.04);
+}
+
+:root[data-ui=light] #btnPresets:hover .btn-ico svg {
+  stroke: #0f172a;
+}
+
+.btn.active {
+  border-color: rgba(167, 139, 250, 0.55);
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.28) 0%, rgba(88, 28, 135, 0.38) 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Page Theme Toggle Button (Neutral Utility Style) */
+.theme-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  flex-shrink: 0;
+  user-select: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+:root[data-ui=light] .theme-toggle-btn {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  color: #334155;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+:root[data-ui=light] .theme-toggle-btn:hover {
+  transform: scale(1.08);
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.2);
+  color: #0f172a;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
+}
+
+.theme-toggle-btn .sun-icon {
+  display: block;
+}
+
+.theme-toggle-btn .moon-icon {
+  display: none;
+}
+
+:root[data-ui=light] .theme-toggle-btn .sun-icon {
+  display: none;
+}
+
+:root[data-ui=light] .theme-toggle-btn .moon-icon {
+  display: block;
+}

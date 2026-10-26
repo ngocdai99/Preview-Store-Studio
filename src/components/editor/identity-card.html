@@ -1,0 +1,141 @@
+<!-- Card 1: App Identity -->
+<div class="card">
+  <h2><i class="card-ico c-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></i><span id="edTitle">Core Listing Information</span></h2>
+  
+  <!-- Icon Picker -->
+  <div class="icorow">
+    <div class="ico-wrap" id="icoDropZone" title="Click or Drag & Drop image here">
+      <img id="icoPrev" data-icon alt="App Icon">
+      <div class="ico-drop-overlay">Drop image</div>
+    </div>
+    <div class="fg" style="flex:1;min-width:0;margin-bottom:0">
+      <div class="lr">
+        <div style="display:inline-flex;align-items:center;gap:6px">
+          <label id="iconSpecLabel">App Icon (1024×1024 px)</label>
+          <span class="info-tip-btn" id="iosIconInfoBtn" data-only="apple" tabindex="0" role="button" aria-label="iOS App Icon &amp; Xcode Guidelines" title="iOS App Icon &amp; Xcode Guidelines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </span>
+        </div>
+      </div>
+      <p class="hint" id="iconSpecHint" style="font-size:10.5px;margin-bottom:6px">PNG · 1024×1024 px (Apple, opaque) / 32-bit PNG · 512×512 px · Max 1024 KB (Google Play)</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="mini" id="icoUp"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>Upload Icon</button>
+        <button type="button" class="mini" id="icoDown" title="Download Store-ready Icon (PNG)"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span>Download Icon</button>
+        <input type="file" id="icoFile" accept="image/*" hidden>
+      </div>
+    </div>
+  </div>
+  <div id="iconStatusBadge" class="shot-status-badge ok" style="margin-top:10px;margin-bottom:0">
+    <span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+    <span><strong>Icon Validated:</strong> 1024×1024 px · Opaque (No Alpha)</span>
+  </div>
+
+  <!-- App Name (30 chars) -->
+  <div class="fg">
+    <div class="lr"><label>App Name / Title<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label><span class="cc" id="c-name"></span></div>
+    <input type="text" id="f-name" value="TaskFlow: Daily Habit Planner" placeholder="e.g. My App Name">
+  </div>
+
+  <!-- Subtitle (Apple, 30 chars) -->
+  <div class="fg" data-only="apple">
+    <div class="lr"><label>Subtitle<span class="tag a">APPLE</span></label><span class="cc" id="c-sub"></span></div>
+    <input type="text" id="f-sub" value="Build habits & boost focus" placeholder="e.g. 30-character punchy subtitle">
+  </div>
+
+  <!-- Promotional Text (Apple, 170 chars) -->
+  <div class="fg" data-only="apple">
+    <div class="lr"><label>Promotional Text<span class="tag a">APPLE</span></label><span class="cc" id="c-promo"></span></div>
+    <textarea id="f-promo" rows="3" placeholder="e.g. Special offer, seasonal update, or headline...">Spring Productivity Sale: Unlock TaskFlow Pro with smart recurring habits, Pomodoro focus timer, and seamless cloud sync.</textarea>
+  </div>
+
+  <!-- Short Description (Google, 80 chars) -->
+  <div class="fg" data-only="google">
+    <div class="lr"><label>Short Description<span class="tag g">GOOGLE</span></label><span class="cc" id="c-short"></span></div>
+    <textarea id="f-short" rows="3" placeholder="e.g. 80-character hook for Google Play Store...">Organize daily tasks, build lasting habits, and track your focus effortlessly.</textarea>
+  </div>
+
+  <!-- Developer & Category -->
+  <div class="form-row-2col">
+    <div class="fg">
+      <div class="lr"><label>Developer<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label></div>
+      <input type="text" id="f-dev" value="FlowCraft Studio Inc." placeholder="e.g. Company or Studio">
+    </div>
+    <div class="fg">
+      <div class="lr"><label>Category<span class="tag a" id="catTag">APPLE</span></label></div>
+      <input type="hidden" id="f-cat" value="Productivity">
+      <select class="fsel" id="f-cat-apple" aria-label="App Store primary category"></select>
+      <select class="fsel" id="f-cat-google" aria-label="Google Play category"></select>
+    </div>
+  </div>
+
+  <!-- Support Email, Phone & Location (Google Play App Support) -->
+  <div class="form-row-2col" data-only="google">
+    <div class="fg">
+      <div class="lr"><label>Email<span class="tag g">GOOGLE</span></label></div>
+      <input type="text" id="f-email" value="support@flowcraft.studio" placeholder="e.g. support@domain.com">
+    </div>
+    <div class="fg">
+      <div class="lr"><label>Phone Number<span class="tag g">GOOGLE</span></label></div>
+      <input type="text" id="f-phone" value="+1 800-555-0199" placeholder="e.g. +1 800-555-0199">
+    </div>
+  </div>
+  <div class="fg" data-only="google" style="margin-top:12px">
+    <div class="lr"><label>Developer Location<span class="tag g">GOOGLE</span></label></div>
+    <input type="text" id="f-addr" value="Vietnam" placeholder="e.g. Vietnam">
+  </div>
+
+  <!-- Keywords (Apple, 100 chars) -->
+  <div class="fg" data-only="apple">
+    <div class="lr"><label>Keywords (Comma separated)<span class="tag a">APPLE</span></label><span class="cc" id="c-keywords"></span></div>
+    <input type="text" id="f-keywords" value="habit tracker,task planner,to do list,productivity,focus timer,pomodoro,daily routine,organizer" placeholder="e.g. keyword1,keyword2,keyword3">
+  </div>
+
+  <!-- Supported Devices / App Store Destination (Apple) -->
+  <div class="fg" data-only="apple" id="destAppleGroup">
+    <div class="lr">
+      <label>Supported Devices (App Store Destination)<span class="tag a">APPLE</span></label>
+      <span class="dest-badge" id="destStatusBadge">iPhone Only</span>
+    </div>
+
+    <div class="dest-grid">
+      <!-- iPhone Tile (Primary / Required) -->
+      <label class="dest-tile active locked" id="destTileIphone" title="iPhone is required for all iOS App Store listings">
+        <input type="checkbox" id="f-dest-iphone" checked disabled class="dest-input">
+        <div class="dest-check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div class="dest-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"></rect><line x1="10.5" y1="5" x2="13.5" y2="5"></line><line x1="10" y1="19" x2="14" y2="19"></line></svg>
+        </div>
+        <div class="dest-info">
+          <div class="dest-name">iPhone <span class="dest-tag-req">Required</span></div>
+          <div class="dest-sub">6.9" &amp; 6.5" Display</div>
+        </div>
+      </label>
+
+      <!-- iPad Tile (Universal App) -->
+      <label class="dest-tile" id="destTileIpad" title="Check to support iPad (Universal App) &amp; unlock iPad 13&quot; screenshots">
+        <input type="checkbox" id="f-dest-ipad" class="dest-input">
+        <div class="dest-check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div class="dest-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg>
+        </div>
+        <div class="dest-info">
+          <div class="dest-name">iPad <span class="dest-tag-opt">Universal</span></div>
+          <div class="dest-sub">13" Pro Display (4:3)</div>
+        </div>
+      </label>
+    </div>
+
+    <div class="dest-desc-bar" id="destDescBar">
+      <span class="dest-desc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </span>
+      <span class="dest-desc-text" id="destIpadHint">
+        <strong>iPhone-only Mode:</strong> Apple does not require iPad screenshots. Enable <strong>iPad</strong> if your Xcode target supports iPad.
+      </span>
+    </div>
+  </div>
+</div>

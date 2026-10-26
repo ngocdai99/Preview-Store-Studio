@@ -1,0 +1,173 @@
+/* ---------- SUPPORTED DESTINATIONS DEVICE TILES (APPLE) ---------- */
+.dest-badge{
+  font-size:10.5px;
+  font-weight:700;
+  padding:2px 8px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.06);
+  color:var(--mut);
+  border:1px solid var(--line);
+  transition:all .2s ease;
+}
+.dest-badge.universal{
+  background:rgba(10,132,255,0.15);
+  color:#38bdf8;
+  border-color:rgba(56,189,248,0.3);
+}
+.dest-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:4px;
+}
+.dest-tile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line);
+  border-radius:10px;
+  cursor:pointer;
+  user-select:none;
+  position:relative;
+  transition:all .2s cubic-bezier(.2,.9,.3,1);
+}
+.dest-tile:hover:not(.locked){
+  border-color:var(--line-hi);
+  background:rgba(255,255,255,0.06);
+}
+.dest-tile.active{
+  border-color:#0a84ff;
+  background:rgba(10,132,255,0.08);
+  box-shadow:0 0 12px rgba(10,132,255,0.15);
+}
+.dest-tile.locked{
+  cursor:default;
+  opacity:0.9;
+}
+.dest-input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+  width:0;
+  height:0;
+  margin:0;
+}
+.dest-check-box{
+  width:18px;
+  height:18px;
+  border-radius:5px;
+  border:1.5px solid var(--line-hi);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  background:rgba(255,255,255,0.04);
+  transition:all .2s ease;
+}
+.dest-check-box svg{
+  width:12px;
+  height:12px;
+  opacity:0;
+  stroke:#fff;
+  stroke-width:3;
+  transition:all .15s ease;
+}
+.dest-tile.active .dest-check-box{
+  background:#0a84ff;
+  border-color:#0a84ff;
+}
+.dest-tile.active .dest-check-box svg{
+  opacity:1;
+}
+.dest-icon-wrap{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  background:rgba(255,255,255,0.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  color:var(--mut);
+  transition:all .2s ease;
+}
+.dest-icon-wrap svg{
+  width:18px;
+  height:18px;
+}
+.dest-tile.active .dest-icon-wrap{
+  background:rgba(10,132,255,0.18);
+  color:#0a84ff;
+}
+.dest-info{
+  flex:1;
+  min-width:0;
+}
+.dest-name{
+  font-size:12.5px;
+  font-weight:700;
+  color:var(--tx);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.dest-sub{
+  font-size:10px;
+  color:var(--mut);
+  margin-top:1px;
+}
+.dest-tag-req{
+  font-size:9px;
+  font-weight:700;
+  padding:1px 5px;
+  border-radius:4px;
+  background:rgba(255,255,255,0.08);
+  color:var(--mut);
+}
+.dest-tag-opt{
+  font-size:9px;
+  font-weight:700;
+  padding:1px 5px;
+  border-radius:4px;
+  background:rgba(10,132,255,0.15);
+  color:#38bdf8;
+}
+.dest-desc-bar{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  font-size:11px;
+  padding:8px 12px;
+  border-radius:8px;
+  margin-top:8px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line);
+  line-height:1.45;
+  color:var(--mut);
+  transition:all .2s ease;
+}
+.dest-desc-icon svg{
+  width:14px;
+  height:14px;
+  margin-top:2px;
+  flex-shrink:0;
+  color:var(--mut);
+}
+.dest-desc-bar.active-universal{
+  border-color:rgba(10,132,255,0.25);
+  background:rgba(10,132,255,0.05);
+  color:var(--tx);
+}
+.dest-desc-bar.active-universal .dest-desc-icon svg{
+  color:#0a84ff;
+}
+
+:root[data-ui=light] .dest-badge{background:#e2e8f0;color:#475569;border-color:#cbd5e1}
+:root[data-ui=light] .dest-badge.universal{background:rgba(10,132,255,0.12);color:#0071e3;border-color:rgba(10,132,255,0.25)}
+:root[data-ui=light] .dest-tile{background:#fff;border-color:rgba(0,0,0,0.1)}
+:root[data-ui=light] .dest-tile:hover:not(.locked){background:#f8fafc;border-color:rgba(0,0,0,0.2)}
+:root[data-ui=light] .dest-tile.active{background:rgba(10,132,255,0.06);border-color:#0a84ff}
+:root[data-ui=light] .dest-desc-bar{background:#f8fafc;border-color:rgba(0,0,0,0.08);color:#64748b}
+:root[data-ui=light] .dest-desc-bar.active-universal{background:rgba(10,132,255,0.04);border-color:rgba(10,132,255,0.2);color:#1e293b}

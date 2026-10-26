@@ -4,7 +4,7 @@
  * 
  * Features:
  *   - 100% Zero Dependencies (Uses native Node.js HTTP & File System modules)
- *   - Auto-rebuilds store_preview_studio.html on any edit in src/
+ *   - Auto-rebuilds core.html on any edit in src/
  *   - Auto-reloads all connected browsers instantly via Server-Sent Events (SSE)
  *   - Auto-opens default browser on startup
  * 
@@ -20,7 +20,7 @@ const { exec } = require('child_process');
 
 const ROOT_DIR = __dirname;
 const SRC_DIR = path.join(ROOT_DIR, 'src');
-const OUTPUT_FILE = path.join(ROOT_DIR, 'store_preview_studio.html');
+const OUTPUT_FILE = path.join(ROOT_DIR, 'core.html');
 
 let DEFAULT_PORT = parseInt(process.argv[2], 10) || 3000;
 
@@ -77,7 +77,7 @@ function startServer(port) {
     }
 
     // 2. Serve the Studio HTML at root
-    if (pathname === '/' || pathname === '/index.html' || pathname === '/store_preview_studio.html') {
+    if (pathname === '/' || pathname === '/index.html' || pathname === '/core.html' || pathname === '/store_preview_studio.html') {
       if (!fs.existsSync(OUTPUT_FILE)) {
         build();
       }

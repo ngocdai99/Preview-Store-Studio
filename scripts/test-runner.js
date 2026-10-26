@@ -124,7 +124,10 @@ presetFiles.forEach(file => {
 });
 
 // Verify Preset Menu Dropdown uses real app icon thumbnails
-const bundledHtml = fs.readFileSync(path.join(ROOT_DIR, 'store_preview_studio.html'), 'utf8');
+const bundledHtmlPath = fs.existsSync(path.join(ROOT_DIR, 'core.html'))
+  ? path.join(ROOT_DIR, 'core.html')
+  : path.join(ROOT_DIR, 'store_preview_studio.html');
+const bundledHtml = fs.readFileSync(bundledHtmlPath, 'utf8');
 
 // Verify Domain-specific English reviews on all presets
 const testNow = new Date();
@@ -356,7 +359,14 @@ assert(routeDroppedFile('script.exe') === 'ACTION_REJECT_UNSUPPORTED', '.exe is 
 // ---------------------------------------------------------------------
 console.log('\n[SUITE 7]: App Store Ribbon Viewport (3 Items on Phone)');
 
-const iosCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'ios.css'), 'utf8');
+function resolveTestCssImports(content, baseDir) {
+  return content.replace(/@import\s+["']([^"']+)["'];?/gi, (match, importPath) => {
+    const fullPath = path.join(baseDir, importPath);
+    if (!fs.existsSync(fullPath)) return '';
+    return resolveTestCssImports(fs.readFileSync(fullPath, 'utf8'), path.dirname(fullPath));
+  });
+}
+const iosCss = resolveTestCssImports(fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'ios.css'), 'utf8'), path.join(ROOT_DIR, 'src', 'css', 'apple'));
 assert(iosCss.includes('.a-met{display:flex') && iosCss.includes('overflow-x:auto'), '.a-met is horizontally scrollable with overflow-x:auto');
 assert(iosCss.includes('scrollbar-width:none'), '.a-met scrollbar is hidden');
 assert(iosCss.includes('flex:0 0 33.333333%'), '.a-met item width is flex:0 0 33.333333% (exactly 3 items on phone viewport)');
@@ -369,9 +379,16 @@ assert(themeJs.includes('.a-met'), 'Drag-to-scroll handler is attached to .a-met
 // ---------------------------------------------------------------------
 console.log('\n[SUITE 8]: Apple Universal Destination & iPad Prioritized Preview');
 
-const commonHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'common.html'), 'utf8');
-const ipadHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'ipad.html'), 'utf8');
-const stageTbHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage-toolbar.html'), 'utf8');
+function resolveTestHtmlIncludes(content) {
+  return content.replace(/<!--\s*@include\s*["']([^"']+)["']\s*-->/gi, (match, includePath) => {
+    const fullPath = path.join(ROOT_DIR, 'src', includePath);
+    if (!fs.existsSync(fullPath)) return '';
+    return resolveTestHtmlIncludes(fs.readFileSync(fullPath, 'utf8'));
+  });
+}
+const commonHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'common.html'), 'utf8'));
+const ipadHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'ipad.html'), 'utf8'));
+const stageTbHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage-toolbar.html'), 'utf8'));
 const shotsJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots.js'), 'utf8');
 const appleJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'apple', 'apple.js'), 'utf8');
 

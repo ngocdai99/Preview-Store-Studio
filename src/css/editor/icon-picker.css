@@ -1,0 +1,12 @@
+/* ---------- APP ICON PICKER & DROPZONE ---------- */
+.icorow{display:flex;gap:12px;align-items:center;min-width:0}
+.ico-wrap{position:relative;width:66px;height:66px;flex-shrink:0;cursor:pointer}
+.ico-wrap img{
+  width:66px;height:66px;border-radius:16px;object-fit:cover;box-shadow:0 4px 16px rgba(0,0,0,.5);
+  background:#fff;border:1px solid var(--line-hi);transition:transform .2s;
+}
+.ico-wrap:hover img{transform:scale(1.03)}
+.ico-drop-overlay{
+  position:absolute;inset:0;background:rgba(10,132,255,.75);border-radius:16px;display:none;place-items:center;font-size:11px;font-weight:700;color:#fff;text-align:center;padding:4px;
+}
+.ico-wrap.drag-over .ico-drop-overlay{display:grid}

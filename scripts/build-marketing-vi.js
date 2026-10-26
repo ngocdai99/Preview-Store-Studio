@@ -238,11 +238,12 @@ function buildMarketingVi() {
   );
 
   // 7. Pricing Section
-  html = rep(html, '<span class="section-badge">Transparent Pricing</span>', '<span class="section-badge">Bảng Giá Minh Bạch</span>');
+  html = rep(html, '<span class="announcement-tag">EARLY BIRD IS LIVE</span>', '<span class="announcement-tag">ƯU ĐÃI EARLY BIRD</span>');
+  html = rep(html, 'Special launch pricing for early supporters · Instant offline delivery', 'Mức giá ưu đãi mở bán dành cho người ủng hộ sớm · Nhận file tải về ngay');
   html = rep(html, '<h2 class="section-title">One-time purchase. No subscription.</h2>', '<h2 class="section-title">Mua một lần. Không phí định kỳ.</h2>');
   html = rep(html, 
-    '<p class="section-desc">Pay once. Zero recurring fees. Keep your copy forever.</p>',
-    '<p class="section-desc">Thanh toán 1 lần duy nhất. Không phí duy trì hàng tháng. Sở hữu bản quyền mãi mãi.</p>'
+    '<p class="section-desc">Zero recurring fees. Standalone offline HTML studio. Pay once, keep your copy forever.</p>',
+    '<p class="section-desc">Không phí định kỳ. File HTML studio offline độc lập. Mua một lần, sở hữu bản quyền mãi mãi.</p>'
   );
   html = rep(html, 
     'For indie developers and creators who need a fast, standalone offline preview studio.',

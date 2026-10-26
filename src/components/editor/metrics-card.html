@@ -1,0 +1,46 @@
+<!-- Card 4: Illustrative Metrics & Store Badges -->
+<div class="card" id="statsCard">
+  <h2><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Illustrative Metrics &amp; Store Badges</h2>
+  <p class="hint">Ratings, chart ranks, age ratings, and downloads in the mockup are <strong>sample numbers only</strong>, not live store data. Edit or hide them before client handoff.</p>
+  <div class="stat-grid">
+    <div class="fg"><div class="lr"><label>Rating</label></div><input type="text" id="f-st-rating" maxlength="4" placeholder="4.9"></div>
+    <div class="fg"><div class="lr"><label>Ratings Count</label></div><input type="text" id="f-st-count" maxlength="8" placeholder="1.8K"></div>
+    <div class="fg"><div class="lr"><label>Chart Rank (#)</label></div><input type="text" id="f-st-rank" maxlength="4" placeholder="1"></div>
+    <div class="fg"><div class="lr"><label>Downloads (Google)</label></div><input type="text" id="f-st-dl" maxlength="10" placeholder="50K+"></div>
+    <div class="fg"><div class="lr"><label>App Size</label></div><input type="text" id="f-st-size" maxlength="10" placeholder="86 MB"></div>
+    <div class="fg">
+      <div class="lr"><label>Age Rating</label></div>
+      <select class="fsel" id="f-st-age" aria-label="Age Rating">
+        <option value="4+">4+ / Everyone (E)</option>
+        <option value="9+">9+ / Everyone 10+ (E10+)</option>
+        <option value="12+">12+ / Teen (T)</option>
+        <option value="17+">17+ / Mature 17+ (M)</option>
+      </select>
+    </div>
+    <div class="fg" style="grid-column:1 / -1">
+      <div class="lr"><label>Monetization / In-App Purchases Badge</label></div>
+      <select class="fsel" id="f-st-iap" aria-label="Monetization Badge">
+        <option value="iap">In-App Purchases (No Ads)</option>
+        <option value="ads_iap">Contains Ads · In-App Purchases</option>
+        <option value="ads">Contains Ads Only</option>
+        <option value="free">None (100% Free / Paid Upfront)</option>
+      </select>
+    </div>
+  </div>
+  <div class="sw-group">
+    <label class="sw-row">
+      <span class="sw-lbl">Hide illustrative metrics (rating, chart, downloads) from mockup</span>
+      <span class="sw-box">
+        <input type="checkbox" id="f-st-off" class="sw-inp">
+        <span class="sw-track"><span class="sw-thumb"></span></span>
+      </span>
+    </label>
+    <label class="sw-row">
+      <span class="sw-lbl">Add a small “Illustrative mockup” caption below exported images</span>
+      <span class="sw-box">
+        <input type="checkbox" id="f-st-wm" class="sw-inp">
+        <span class="sw-track"><span class="sw-thumb"></span></span>
+      </span>
+    </label>
+  </div>
+</div>

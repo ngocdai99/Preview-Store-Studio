@@ -1,0 +1,176 @@
+// Store Preview Studio - PNG Image Exporter via html2canvas
+if($('optExportPNG')) $('optExportPNG').onclick = () => exportPNG(2);
+const optExport3x = $('optExportPNG3x');
+if(optExport3x) optExport3x.onclick = () => exportPNG(3);
+const optExportScreen = $('optExportScreen');
+if(optExportScreen) optExportScreen.onclick = () => exportPNG(3, {frameless:true});
+
+// html2canvas can drop parts of SVG images (filters, glow). Rasterize SVG data-URI images to PNG first,
+// swap them in for the capture, and return a function that puts the originals back.
+async function rasterizeSvgImages(root, scale){
+  const swaps = [];
+  const imgs = [...root.querySelectorAll('img')].filter(i => /^data:image\/svg\+xml/i.test(i.currentSrc || i.src || ''));
+  await Promise.all(imgs.map(async img => {
+    try{
+      const box = img.getBoundingClientRect();
+      if(!box.width || !box.height) return;
+      const original = img.src;
+      let svgText = '';
+      const commaIdx = original.indexOf(',');
+      if(commaIdx !== -1){
+        const header = original.slice(0, commaIdx);
+        const body = original.slice(commaIdx + 1);
+        if(typeof decodeSvgDataUri === 'function'){
+          svgText = decodeSvgDataUri(body, /;base64/i.test(header)) || '';
+        }else{
+          try{ svgText = decodeURIComponent(body); }catch(_){}
+        }
+      }
+      const vb = svgText.match(/viewBox\s*=\s*["']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*["']/);
+      const vw = vb ? parseFloat(vb[1]) : box.width, vh = vb ? parseFloat(vb[2]) : box.height;
+      const tmp = new Image();
+      const safeSrc = typeof ensureSvgDimensions === 'function' ? ensureSvgDimensions(original) : original;
+      await new Promise((res, rej) => { tmp.onload = res; tmp.onerror = rej; tmp.src = safeSrc; });
+      // 1) draw the vector at its own aspect ratio
+      const k = Math.max(box.width * scale / vw, box.height * scale / vh);
+      const sw = Math.max(1, Math.round(vw * k)), sh = Math.max(1, Math.round(vh * k));
+      const c1 = document.createElement('canvas'); c1.width = sw; c1.height = sh;
+      c1.getContext('2d').drawImage(tmp, 0, 0, sw, sh);
+      // 2) crop to the element box like object-fit: cover
+      const w = Math.max(1, Math.round(box.width * scale)), h = Math.max(1, Math.round(box.height * scale));
+      const c2 = document.createElement('canvas'); c2.width = w; c2.height = h;
+      const f = Math.max(w / sw, h / sh);
+      const dw = sw * f, dh = sh * f;
+      c2.getContext('2d').drawImage(c1, (w - dw) / 2, (h - dh) / 2, dw, dh);
+      const png = c2.toDataURL('image/png');
+      swaps.push([img, original]);
+      img.src = png;
+      if(img.decode) await img.decode().catch(() => {});
+    }catch(err){ /* keep the original image if anything fails */ }
+  }));
+  return () => swaps.forEach(([img, original]) => { img.src = original; });
+}
+
+function addMockupNote(canvas, scaleFactor){
+  const pad = Math.round(34 * scaleFactor);
+  const out = document.createElement('canvas');
+  out.width = canvas.width;
+  out.height = canvas.height + pad;
+  const ctx = out.getContext('2d');
+  ctx.drawImage(canvas, 0, 0);
+  const text = 'Illustrative mockup — not live store data';
+  let size = 11 * scaleFactor;
+  const family = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+  ctx.font = `600 ${size}px ${family}`;
+  while(ctx.measureText(text).width > out.width * 0.92 && size > 6 * scaleFactor){
+    size -= 0.5; ctx.font = `600 ${size}px ${family}`;
+  }
+  ctx.fillStyle = 'rgba(128,132,142,.95)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, out.width / 2, canvas.height + pad / 2);
+  return out;
+}
+
+async function exportPNG(scaleFactor = 2, opts = {}){
+  if(typeof canDownload === 'function' && !canDownload(1000)) return;
+  if(typeof scaleFactor !== 'number') scaleFactor = 3;
+  if(typeof html2canvas === 'undefined'){
+    showToast('Mockup generator library is still loading. Please try again in a few seconds.', 'warn', 3500);
+    return;
+  }
+
+  let devToCapture;
+  let devSlug = store;
+  if(store === 'apple'){
+    if(appleDevice === 'ipad'){
+      devToCapture = document.querySelector('.dev.ipad');
+      devSlug = 'apple-ipad-pro';
+    }else{
+      devToCapture = document.querySelector('.dev.apple.single');
+      devSlug = 'apple-iphone';
+    }
+  }else if(googleDevice !== 'phone'){
+    devToCapture = $('dev-' + googleDevice);
+    devSlug = googleDevice === 'tab7' ? 'google-play-7-inch-tablet' : 'google-play-10-inch-tablet';
+  }else{
+    devToCapture = document.querySelector('.dev.google');
+    devSlug = 'google-play-phone';
+  }
+
+  if(!devToCapture) return;
+
+  // Screen only: capture the inner screen (.phone) instead of the whole device frame
+  const target = opts.frameless ? (devToCapture.querySelector('.phone') || devToCapture) : devToCapture;
+
+  showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`, 'info', 4000);
+
+  // Lock fit() and temporarily reset zoom & animations so html2canvas measures unzoomed 1:1 layout
+  isExporting = true;
+  if(typeof clearDevTransitions === 'function') clearDevTransitions();
+  const prevZoom = devToCapture.style.zoom;
+  const hadFloat = devToCapture.classList.contains('floating');
+  devToCapture.style.zoom = '1';
+  devToCapture.classList.remove('floating', 'dev-enter', 'dev-exit');
+  void devToCapture.offsetHeight; // Force synchronous reflow before measuring bounding rects
+
+  let restoreImages = () => {};
+  try{
+    if(document.fonts && document.fonts.ready){
+      await document.fonts.ready.catch(() => {});
+    }
+    restoreImages = await rasterizeSvgImages(target, scaleFactor);
+    devToCapture.style.zoom = '1';
+    void devToCapture.offsetHeight;
+
+    const w = target.offsetWidth;
+    const h = target.offsetHeight;
+
+    let canvas = await html2canvas(target, {
+      backgroundColor: null,
+      scale: scaleFactor,
+      width: w,
+      height: h,
+      windowWidth: Math.max(document.documentElement.clientWidth, w + 120),
+      windowHeight: Math.max(document.documentElement.clientHeight, h + 120),
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      onclone: (clonedDoc, clonedEl) => {
+        clonedEl.style.zoom = '1';
+        clonedEl.style.transform = 'none';
+        clonedEl.style.animation = 'none';
+        clonedEl.style.transition = 'none';
+        clonedDoc.querySelectorAll('.dev').forEach(d => {
+          d.classList.remove('floating', 'dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
+          d.style.zoom = '1';
+          d.style.animation = 'none';
+          d.style.transition = 'none';
+        });
+        // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
+        clonedEl.querySelectorAll('*').forEach(el => {
+          el.style.letterSpacing = '0px';
+        });
+      }
+    });
+    if(EXPORT_WM) canvas = addMockupNote(canvas, scaleFactor);
+
+    const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
+    let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    if(!slug) slug = 'app';
+    const link = document.createElement('a');
+    link.download = `${slug}-${devSlug}-${opts.frameless ? 'screen' : 'preview'}-${scaleFactor}x.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : ''}) downloaded!`, 'ok');
+  }catch(err){
+    console.error('Export PNG failed:', err);
+    showToast('Failed to generate image: ' + err.message, 'warn', 4000);
+  }finally{
+    restoreImages();
+    isExporting = false;
+    devToCapture.style.zoom = prevZoom;
+    fit();
+    if(hadFloat && isFloating) devToCapture.classList.add('floating');
+  }
+}

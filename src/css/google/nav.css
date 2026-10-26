@@ -1,0 +1,13 @@
+/* ---------- GOOGLE PLAY BOTTOM NAVIGATION & SEARCH VIEW ---------- */
+.gnav{height:70px;flex-shrink:0;display:flex;justify-content:space-around;align-items:center;background:var(--sf);padding:4px 0 10px;border-top:1px solid rgba(0,0,0,.04)}
+.gnav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--s);font-weight:500}
+.gnav div span{height:30px;padding:0 20px;border-radius:15px;display:inline-flex;align-items:center;justify-content:center;color:currentColor}
+.gnav div span svg{width:20px;height:20px;stroke-width:2;display:block}
+.gnav .on{color:#0b57d0;font-weight:600}.gnav .on span{background:#c2e7ff;color:#001d35}
+.phone.google[data-theme=dark] .gnav .on{color:#a8c7fa}.phone.google[data-theme=dark] .gnav .on span{background:#004a77;color:#c2e7ff}
+.gsb{display:flex;align-items:center;gap:10px;background:var(--sf);border-radius:28px;padding:12px 18px;font-size:14.5px;color:var(--s);margin:6px 0 20px}
+.gsb svg{width:18px;height:18px;stroke-width:2.1;flex-shrink:0;color:var(--s)}
+.gsr{display:flex;align-items:center;gap:12px;margin-bottom:12px}.gsr img{width:58px;height:58px;border-radius:14px;object-fit:cover;box-shadow:0 0 0 1px var(--sp)}
+.gsr .n{font-size:15.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gsr .d{font-size:12.5px;color:var(--g)}.gsr .r{font-size:11.5px;color:var(--s)}
+.gsr button{background:var(--g);color:#fff;border:0;padding:7px 18px;border-radius:18px;font-weight:500;font-size:13px}
+.phone.google[data-theme=dark] .gsr button{color:#062e6f}

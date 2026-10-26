@@ -356,7 +356,7 @@ preset_data = {
     "name": "Store Preview Studio",
     "sub": "Store Mockup Pro",
     "promo": "🔥 Design, audit & export pixel-perfect App Store & Google Play metadata completely offline with zero recurring subscription fees.",
-    "short": "Design, audit & export pixel-perfect App Store & Google Play metadata offline.",
+    "short": "Design, audit & export App Store & Google Play metadata offline.",
     "dev": "Store Mockup Pro",
     "cat": "Developer Tools",
     "catApple": "Developer Tools",

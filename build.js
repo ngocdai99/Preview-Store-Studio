@@ -8,7 +8,7 @@
  *   - JavaScript Modules: Concatenates src/js/core, src/js/apple, src/js/google, src/js/modules
  *   - Vendors: Inlines src/lib/html2canvas.min.js
  * 
- * Generates single standalone offline file: store_preview_studio.html (~3-5ms)
+ * Generates single standalone offline file: core.html (~3-5ms)
  */
 
 const fs = require('fs');
@@ -16,7 +16,8 @@ const path = require('path');
 
 const ROOT_DIR = __dirname;
 const SRC_DIR = path.join(ROOT_DIR, 'src');
-const OUTPUT_FILE = path.join(ROOT_DIR, 'store_preview_studio.html');
+const OUTPUT_FILE = path.join(ROOT_DIR, 'core.html');
+const LEGACY_OUTPUT_FILE = path.join(ROOT_DIR, 'store_preview_studio.html');
 
 // ANSI Terminal Colors
 const c = {
@@ -79,15 +80,25 @@ function getBundledJs() {
     'core/utils.js',
     'core/state.js',
     'core/resizer.js',
-    'modules/shots.js',
+    'modules/shots/icon.js',
+    'modules/shots/phone.js',
+    'modules/shots/ipad.js',
     'google/feature-graphic.js',
     'google/google.js',
-    'modules/form-sync.js',
+    'modules/form/categories.js',
+    'modules/form/privacy.js',
+    'modules/form/reviews.js',
+    'modules/form/sync.js',
     'modules/transitions.js',
     'apple/apple.js',
     'modules/theme.js',
+    'modules/header.js',
     'modules/presets.js',
-    'modules/export.js',
+    'modules/export/storage.js',
+    'modules/export/clipboard.js',
+    'modules/export/markdown.js',
+    'modules/export/json.js',
+    'modules/export/png.js',
     'main.js'
   ];
 
@@ -189,6 +200,11 @@ function build(options = {}) {
     const outTarget = options.outFile || OUTPUT_FILE;
     fs.writeFileSync(outTarget, html, 'utf8');
 
+    // Also sync store_preview_studio.html for backward compatibility if default bundle was built
+    if (outTarget === OUTPUT_FILE) {
+      fs.copyFileSync(OUTPUT_FILE, LEGACY_OUTPUT_FILE);
+    }
+
     // Also sync to package/ if it exists and outTarget is the default bundle or minified bundle
     const pkgDir = path.join(ROOT_DIR, 'package');
     if (fs.existsSync(pkgDir)) {
@@ -221,7 +237,7 @@ function buildAll() {
   console.log(`${c.bold}Compiling Standalone HTML Assets:${c.reset}`);
   build({ isRelease: true });
   build({ minify: true, outFile: path.join(ROOT_DIR, 'store_preview_studio.min.html'), isRelease: true });
-  console.log(`\n${c.bold}${c.brightGreen}Build complete! Open store_preview_studio.html in any browser.${c.reset}\n`);
+  console.log(`\n${c.bold}${c.brightGreen}Build complete! Open core.html in any browser.${c.reset}\n`);
 }
 
 // Export for dev.js and release.js

@@ -1,0 +1,47 @@
+<!-- Export Dropdown & File Utilities -->
+<div class="dropdown">
+  <button class="btn primary" id="btnExport" title="Export Deliverables">
+    <span class="btn-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+    </span>
+    <span class="lbl">Export</span>
+    <span class="arr" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </span>
+  </button>
+  <div class="menu" id="menuExport">
+    <div class="menu-label">
+      <span class="dot dot-blue"></span>Images &amp; Screenshots
+    </div>
+    <button class="menu-item" id="optExportPNG3x"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Save as image</span><small>Device frame + store page · 3x</small></span><span class="mi-pill mi-pill-blue">3x PNG</span></button>
+    <button class="menu-item" id="optExportScreen"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Save as image (No phone frame)</span><small>Store page UI without device bezel · 3x</small></span><span class="mi-pill mi-pill-blue">3x PNG</span></button>
+    <button class="menu-item" id="optExportIpadShots" data-only="apple"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export iPad Screenshots</span><small>All 2048×2732 px PNGs in single .zip package</small></span><span class="mi-pill mi-pill-green">ZIP</span></button>
+    <button class="menu-item" id="optExportPhoneShots"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export Phone Screenshots</span><small>All phone screenshots in single .zip package</small></span><span class="mi-pill mi-pill-green">ZIP</span></button>
+    <button class="menu-item" id="optExportTab7Shots" data-only="google"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export 7" Tablet Screenshots</span><small>All 7-inch tablet screenshots in single .zip package</small></span><span class="mi-pill mi-pill-green">ZIP</span></button>
+    <button class="menu-item" id="optExportTab10Shots" data-only="google"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export 10" Tablet Screenshots</span><small>All 10-inch tablet screenshots in single .zip package</small></span><span class="mi-pill mi-pill-green">ZIP</span></button>
+    <button class="menu-item" id="optExportAllTablets" data-only="google"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export All Tablets</span><small>All 7" and 10" tablet screenshots combined</small></span><span class="mi-pill mi-pill-green">ZIP</span></button>
+    <button class="menu-item" id="optExportGooglePlayBundle" data-only="google"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export All Assets (Google Play)</span><small>Phone + Tablets + Feature Graphic + App Icon bundle</small></span><span class="mi-pill mi-pill-emerald">Bundle</span></button>
+    
+    <div class="menu-div"></div>
+    <div class="menu-label">
+      <span class="dot dot-purple"></span>Store Metadata
+    </div>
+    <button class="menu-item" id="btnCopyText"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Copy Metadata to Clipboard</span><small>App name, subtitle, descriptions,...</small></span><span class="mi-pill mi-pill-accent">Copy</span></button>
+    <button class="menu-item" id="optExportMD"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export Metadata (LISTING_METADATA.md)</span><small>Complete store listing document</small></span><span class="mi-pill mi-pill-code">MD</span></button>
+    <button class="menu-item" id="optExportJSON"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export Project</span><small>Save full backup of text, images &amp; settings</small></span><span class="mi-pill mi-pill-code">JSON</span></button>
+    
+    <div class="menu-div"></div>
+    <div class="menu-label">
+      <span class="dot dot-emerald"></span>Import &amp; Reset
+    </div>
+    <button class="menu-item" id="optImportJSON"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Import Project</span><small>Open project from .json file</small></span><span class="mi-pill mi-pill-code">JSON</span></button>
+    <button class="menu-item" id="optResetDefault"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Reset</span><small>Clear local draft and reload</small></span><span class="mi-pill mi-pill-danger">Reset</span></button>
+  </div>
+</div>
+<input type="file" id="jsonFileInput" accept=".json" hidden>

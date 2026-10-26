@@ -2723,9 +2723,9 @@ slistArea.addEventListener('drop',e=>{
 
 
 /* =========================================================================
-   Module: src/js/modules/shots.js
+   Module: src/js/modules/shots/icon.js
    ========================================================================= */
-// Store Preview Studio · Phone Screenshots Manager & Icon Validator
+// Store Preview Studio - Icon Manager & Real-Time Store Validator
 let ICON_FILE_SIZE = 0;
 let ICON_FILE_TYPE = '';
 let ICON_FILE_NAME = '';
@@ -2754,6 +2754,10 @@ function getIconMeta(){
 function renderIcons(){
   $$('[data-icon]').forEach(i=>{safe(i);i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(ICON, i):ICON)});
   validateAppIcon();
+}
+
+function renderFeature(){
+  $$('[data-feature]').forEach(i=>{safe(i);i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(FEATURE_GRAPHIC, i):FEATURE_GRAPHIC)});
 }
 
 let _iconValRunId = 0;
@@ -2810,14 +2814,13 @@ function validateAppIcon(){
     // Specification:
     // - Dimensions: 1024 × 1024 px, 1:1 square
     // - Format: PNG, 100% opaque (no alpha channel), sRGB or Display P3
-    // - File Size: KHÔNG kiểm tra dung lượng MB (Apple không công bố giới hạn)
+    // - File Size: KHONG kiem tra dung luong MB (Apple khong cong bo gioi han)
     // Official guidelines:
     // - https://developer.apple.com/help/app-store-connect/reference/app-icon-specifications/
     // - https://developer.apple.com/design/human-interface-guidelines/app-icons
     // ─────────────────────────────────────────────────────────────────────────
     if(store === 'apple'){
       // Rule 1: 1:1 Square aspect ratio
-      // Official Apple Spec: https://developer.apple.com/help/app-store-connect/reference/app-icon-specifications/
       if(!isSq){
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>Non-Square Aspect Ratio (${w}×${h} px):</strong> Apple App Store requires a 1:1 square icon (1024×1024 px).</span>`;
@@ -2825,7 +2828,6 @@ function validateAppIcon(){
       }
 
       // Rule 2: PNG format required
-      // Official Apple Spec: https://developer.apple.com/help/app-store-connect/reference/app-icon-specifications/
       if(mimeType && !isPng){
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Format Notice:</strong> App Store icon must be PNG format (sRGB or Display P3).</span>`;
@@ -2833,8 +2835,6 @@ function validateAppIcon(){
       }
 
       // Rule 3: 100% Opaque (no alpha channel)
-      // "The icon cannot be transparent nor contain an alpha channel."
-      // Official Apple Spec: https://developer.apple.com/help/app-store-connect/reference/app-icon-specifications/
       if(hasAlpha){
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>Xcode Rejection Risk (${w}×${h} px):</strong> Alpha transparency detected. iOS icons must be 100% opaque.</span>`;
@@ -2842,7 +2842,6 @@ function validateAppIcon(){
       }
 
       // Rule 4: Exact 1024×1024 px dimensions
-      // Official Apple Spec: https://developer.apple.com/help/app-store-connect/reference/app-icon-specifications/
       if(w !== 1024 || h !== 1024){
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Xcode &amp; App Store require exact <strong>1024×1024 px</strong>.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
@@ -2851,8 +2850,7 @@ function validateAppIcon(){
         return;
       }
 
-      // Compliant: All Apple criteria met. Note: Apple does NOT publish a file size MB limit, so no MB check is performed.
-      // Official Apple Spec: https://developer.apple.com/help/app-store-connect/reference/app-icon-specifications/
+      // Compliant: All Apple criteria met.
       badge.className = 'shot-status-badge ok';
       badge.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> 1024×1024 px · PNG · 100% Opaque (sRGB/Display P3)</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge">${ICO_DL}Download 1024px</button></div>`;
       const dlBtn = $('btnDlIconBadge');
@@ -2865,22 +2863,19 @@ function validateAppIcon(){
     // - Dimensions: 512 × 512 px, 1:1 square
     // - Format: 32-bit PNG, sRGB
     // - File Size: Max 1024 KB (1 MB) - red error if exceeded
-    // - Shape: Không bo góc, không đổ bóng trong file (Google tự áp dynamic corner radius 20% & shadow)
+    // - Shape: Khong bo goc, khong do bong trong file (Google tu ap dynamic corner radius 20% & shadow)
     // Official guidelines:
     // - https://support.google.com/googleplay/android-developer/answer/9866130
     // ─────────────────────────────────────────────────────────────────────────
     else {
       // Rule 1: 1:1 Square aspect ratio
-      // Official Google Spec: https://support.google.com/googleplay/android-developer/answer/9866130
       if(!isSq){
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>Google Play Error (${w}×${h} px):</strong> Icon must be a 1:1 square (512×512 px).</span>`;
         return;
       }
 
-      // Rule 2: Max file size 1024 KB (1 MB). Red error if exceeded.
-      // "Max file size: 1024 KB" - Google Play Console rejects uploads > 1024 KB.
-      // Official Google Spec: https://support.google.com/googleplay/android-developer/answer/9866130
+      // Rule 2: Max file size 1024 KB (1 MB)
       const MAX_GOOGLE_ICON_BYTES = 1024 * 1024; // 1024 KB = 1,048,576 bytes
       if(sizeBytes > MAX_GOOGLE_ICON_BYTES){
         const sizeKb = (sizeBytes / 1024).toFixed(1);
@@ -2890,7 +2885,6 @@ function validateAppIcon(){
       }
 
       // Rule 3: 32-bit PNG format (sRGB color space)
-      // Official Google Spec: https://support.google.com/googleplay/android-developer/answer/9866130
       if(mimeType && !isPng){
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>Format Error:</strong> Google Play requires 32-bit PNG format (sRGB color space).</span>`;
@@ -2898,9 +2892,6 @@ function validateAppIcon(){
       }
 
       // Rule 4: Do not include rounded corners or drop shadows in artwork
-      // "Do not submit artwork with rounded corners or drop shadows."
-      // "Google Play dynamically applies corner radius (20% of icon size) and drop shadow upon upload."
-      // Official Google Spec: https://support.google.com/googleplay/android-developer/answer/9866130
       if(hasPreRoundedCorners){
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Pre-rounded Corners / Shadow Notice:</strong> Do not include rounded corners or drop shadows in artwork; Google Play dynamically applies corner radius (20%) and drop shadow upon upload.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
@@ -2910,7 +2901,6 @@ function validateAppIcon(){
       }
 
       // Rule 5: Target dimensions 512×512 px
-      // Official Google Spec: https://support.google.com/googleplay/android-developer/answer/9866130
       if(w !== 512 || h !== 512){
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge" title="Download icon">${ICO_DL}Download</button></div>`;
@@ -2920,7 +2910,6 @@ function validateAppIcon(){
       }
 
       // Compliant: All Google Play specifications passed
-      // Official Google Spec: https://support.google.com/googleplay/android-developer/answer/9866130
       const sizeNote = sizeBytes ? ` · ${(sizeBytes / 1024).toFixed(0)} KB (≤ 1024 KB)` : '';
       badge.className = 'shot-status-badge ok';
       badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> 512×512 px · 32-bit PNG (sRGB)${sizeNote}</span><div class="sb-actions"><button type="button" class="mini dl-btn" id="btnDlIconBadge">${ICO_DL}Download 512px</button></div>`;
@@ -2961,7 +2950,7 @@ function downloadAppIcon(targetSize){
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded ${size}×${size} px App Icon!`, '⬇️');
+      showToast(`Downloaded ${size}×${size} px App Icon!`, 'ok');
     }, 'image/png');
   };
   img.onerror = () => {
@@ -2970,22 +2959,80 @@ function downloadAppIcon(targetSize){
   img.src = ICON;
 }
 
-function renderFeature(){
-  $$('[data-feature]').forEach(i=>{safe(i);i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(FEATURE_GRAPHIC, i):FEATURE_GRAPHIC)});
+// Icon Upload & Drag-and-drop Listeners
+if($('icoUp')){
+  $('icoUp').onclick = () => {
+    if(typeof canUpload === 'function' && !canUpload(1000)) return;
+    if($('icoFile')) $('icoFile').click();
+  };
 }
+if($('icoDown')){
+  $('icoDown').onclick = () => downloadAppIcon();
+}
+if($('icoFile')){
+  $('icoFile').onchange = e => {
+    const f = e.target.files[0];
+    if(!f) return;
+    ICON_FILE_SIZE = f.size || 0;
+    ICON_FILE_TYPE = f.type || '';
+    ICON_FILE_NAME = f.name || '';
+    readFile(f, d => {
+      ICON = d;
+      renderIcons();
+      saveState();
+      showToast('App icon updated!', 'ok');
+    });
+    e.target.value = '';
+  };
+}
+
+// Drag & drop local image directly onto Icon zone
+const icoDropZone = $('icoDropZone');
+if(icoDropZone){
+  icoDropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    icoDropZone.classList.add('drag-over');
+  });
+  icoDropZone.addEventListener('dragleave', () => {
+    icoDropZone.classList.remove('drag-over');
+  });
+  icoDropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    icoDropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if(file && file.type.startsWith('image/')){
+      ICON_FILE_SIZE = file.size || 0;
+      ICON_FILE_TYPE = file.type || '';
+      ICON_FILE_NAME = file.name || '';
+      readFile(file, d => {
+        ICON = d;
+        renderIcons();
+        saveState();
+        showToast('App icon dropped & applied!', 'ok');
+      });
+    }
+  });
+}
+
+
+/* =========================================================================
+   Module: src/js/modules/shots/phone.js
+   ========================================================================= */
+// Store Preview Studio - Phone Screenshots Manager & Validator
+let pick = -1;
 
 function renderShots(){
   // Sanitize SHOTS array to ensure strings only
   SHOTS = SHOTS.filter(s => typeof s === 'string');
 
   // Update Phone Mockup Carousels
-  $$('[data-shots=gal]').forEach(c=>{
-    c.innerHTML='';
-    SHOTS.filter(s=>s.trim()).forEach((s,i)=>c.appendChild(mk(s,'Screenshot '+(i+1))));
+  $$('[data-shots=gal]').forEach(c => {
+    c.innerHTML = '';
+    SHOTS.filter(s => s.trim()).forEach((s, i) => c.appendChild(mk(s, 'Screenshot ' + (i + 1))));
   });
-  $$('[data-shots=shots]').forEach(c=>{
-    c.innerHTML='';
-    SHOTS.slice(0,3).forEach((s,i)=>c.appendChild(mk(s||PH,'Result '+(i+1))));
+  $$('[data-shots=shots]').forEach(c => {
+    c.innerHTML = '';
+    SHOTS.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
   });
 
   // Validate screenshots count & aspect ratios
@@ -2993,69 +3040,70 @@ function renderShots(){
   if(typeof renderIpadShots === 'function') renderIpadShots();
 
   // Update Editor Screenshot List with Drag & Drop Sorting
-  const L=$('slist');
-  L.innerHTML='';
-  SHOTS.forEach((s,i)=>{
-    const r=document.createElement('div');
-    r.className='srow';
-    r.draggable=true;
-    r.dataset.index=i;
+  const L = $('slist');
+  if(!L) return;
+  L.innerHTML = '';
+  SHOTS.forEach((s, i) => {
+    const r = document.createElement('div');
+    r.className = 'srow';
+    r.draggable = true;
+    r.dataset.index = i;
 
     // Drag Handle
-    const handle=document.createElement('div');
-    handle.className='drag-handle';
-    handle.textContent='⠿';
-    handle.title='Drag to reorder';
+    const handle = document.createElement('div');
+    handle.className = 'drag-handle';
+    handle.textContent = '⠿';
+    handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
     // Thumbnail Preview
-    r.appendChild(mk(s||PH));
+    r.appendChild(mk(s || PH));
 
     // Input & Actions
-    const col=document.createElement('div');col.className='col';
-    const inp=document.createElement('input');inp.type='text';
-    inp.value=s.startsWith('data:')?'(Embedded / Uploaded Image)':s;
-    inp.placeholder='https://… image URL or upload';
-    inp.disabled=s.startsWith('data:');
-    inp.onchange=()=>{SHOTS[i]=inp.value.trim();renderShots();saveState()};
+    const col = document.createElement('div'); col.className = 'col';
+    const inp = document.createElement('input'); inp.type = 'text';
+    inp.value = s.startsWith('data:') ? '(Embedded / Uploaded Image)' : s;
+    inp.placeholder = 'https://… image URL or upload';
+    inp.disabled = s.startsWith('data:');
+    inp.onchange = () => { SHOTS[i] = inp.value.trim(); renderShots(); saveState(); };
 
-    const act=document.createElement('div');act.className='act';
-    act.innerHTML='<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" data-m="-1" title="Move Up">↑</button><button class="mini" data-m="1" title="Move Down">↓</button><button class="mini del" title="Delete">✕</button><span class="shot-dim-tag" id="shotDimTag_'+i+'" style="margin-left:auto;display:none"></span>';
-    const b=act.children;
-    b[0].onclick=()=>{if(typeof canUpload === 'function' && !canUpload(1000)) return; pick=i;$('shotFile').click()};
-    b[1].onclick=()=>mv(i,-1);
-    b[2].onclick=()=>mv(i,1);
-    b[3].onclick=()=>{SHOTS.splice(i,1);renderShots();saveState()};
+    const act = document.createElement('div'); act.className = 'act';
+    act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" data-m="-1" title="Move Up">↑</button><button class="mini" data-m="1" title="Move Down">↓</button><button class="mini del" title="Delete">&times;</button><span class="shot-dim-tag" id="shotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
+    const b = act.children;
+    b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
+    b[1].onclick = () => mv(i, -1);
+    b[2].onclick = () => mv(i, 1);
+    b[3].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
 
-    col.append(inp,act);
+    col.append(inp, act);
     r.appendChild(col);
 
     // Drag & Drop event handlers for row reordering
-    r.addEventListener('dragstart',e=>{
+    r.addEventListener('dragstart', e => {
       r.classList.add('dragging');
-      e.dataTransfer.effectAllowed='move';
-      e.dataTransfer.setData('text/plain',i);
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', i);
     });
-    r.addEventListener('dragend',()=>{
+    r.addEventListener('dragend', () => {
       r.classList.remove('dragging');
-      $$('.srow').forEach(row=>row.classList.remove('drag-over'));
+      $$('.srow').forEach(row => row.classList.remove('drag-over'));
     });
-    r.addEventListener('dragover',e=>{
+    r.addEventListener('dragover', e => {
       e.preventDefault();
-      e.dataTransfer.dropEffect='move';
+      e.dataTransfer.dropEffect = 'move';
       r.classList.add('drag-over');
     });
-    r.addEventListener('dragleave',()=>{
+    r.addEventListener('dragleave', () => {
       r.classList.remove('drag-over');
     });
-    r.addEventListener('drop',e=>{
+    r.addEventListener('drop', e => {
       e.preventDefault();
       r.classList.remove('drag-over');
-      const fromIdx=parseInt(e.dataTransfer.getData('text/plain'),10);
-      const toIdx=i;
-      if(!isNaN(fromIdx)&&fromIdx!==toIdx){
-        const item=SHOTS.splice(fromIdx,1)[0];
-        SHOTS.splice(toIdx,0,item);
+      const fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
+      const toIdx = i;
+      if(!isNaN(fromIdx) && fromIdx !== toIdx){
+        const item = SHOTS.splice(fromIdx, 1)[0];
+        SHOTS.splice(toIdx, 0, item);
         renderShots();
         saveState();
       }
@@ -3065,9 +3113,10 @@ function renderShots(){
   });
 }
 
-function mv(i,d){
-  const j=i+d;if(j<0||j>=SHOTS.length)return;
-  [SHOTS[i],SHOTS[j]]=[SHOTS[j],SHOTS[i]];
+function mv(i, d){
+  const j = i + d;
+  if(j < 0 || j >= SHOTS.length) return;
+  [SHOTS[i], SHOTS[j]] = [SHOTS[j], SHOTS[i]];
   renderShots();
   saveState();
 }
@@ -3075,7 +3124,7 @@ function mv(i,d){
 let _phoneValRunId = 0;
 function validateScreenshots(){
   const runId = ++_phoneValRunId;
-  const validShots = SHOTS.filter(s=>s && s.trim());
+  const validShots = SHOTS.filter(s => s && s.trim());
   const validCount = validShots.length;
   const counterEl = $('shotCounter');
   if(counterEl){
@@ -3220,60 +3269,125 @@ function validateScreenshots(){
   }
 }
 
-let pick=-1;
-// (readFile is provided by core/utils.js)
+if($('shotFile')){
+  $('shotFile').onchange = e => {
+    const f = e.target.files[0];
+    if(!f) return;
+    readFile(f, d => {
+      pick < 0 ? SHOTS.push(d) : SHOTS[pick] = d;
+      pick = -1;
+      renderShots();
+      saveState();
+      showToast('Screenshot uploaded!', 'ok');
+    });
+    e.target.value = '';
+  };
+}
 
-$('shotFile').onchange=e=>{
-  const f=e.target.files[0];if(!f)return;
-  readFile(f,d=>{
-    pick<0?SHOTS.push(d):SHOTS[pick]=d;
-    pick=-1;
+if($('addShot')){
+  $('addShot').onclick = () => {
+    SHOTS.push('');
     renderShots();
     saveState();
-    showToast('Screenshot uploaded!','📸');
-  });
-  e.target.value='';
-};
-$('addShot').onclick=()=>{
-  SHOTS.push('');
-  renderShots();
-  saveState();
-  const ins=$$('.srow input');if(ins.length)ins[ins.length-1].focus();
-};
-$('icoUp').onclick=()=>{if(typeof canUpload === 'function' && !canUpload(1000)) return; $('icoFile').click()};
-if($('icoDown')) $('icoDown').onclick = () => downloadAppIcon();
-$('icoFile').onchange=e=>{
-  const f=e.target.files[0];if(!f)return;
-  ICON_FILE_SIZE = f.size || 0;
-  ICON_FILE_TYPE = f.type || '';
-  ICON_FILE_NAME = f.name || '';
-  readFile(f,d=>{
-    ICON=d;
-    renderIcons();
-    saveState();
-    showToast('App icon updated!','🎨');
-  });
-  e.target.value='';
-};
+    const ins = $$('.srow input');
+    if(ins.length) ins[ins.length - 1].focus();
+  };
+}
 
-// Drag & drop local image directly onto Icon zone
-const icoDropZone = $('icoDropZone');
-if(icoDropZone){
-  icoDropZone.addEventListener('dragover',e=>{e.preventDefault();icoDropZone.classList.add('drag-over')});
-  icoDropZone.addEventListener('dragleave',()=>{icoDropZone.classList.remove('drag-over')});
-  icoDropZone.addEventListener('drop',e=>{
-    e.preventDefault();icoDropZone.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if(file && file.type.startsWith('image/')){
-      ICON_FILE_SIZE = file.size || 0;
-      ICON_FILE_TYPE = file.type || '';
-      ICON_FILE_NAME = file.name || '';
-      readFile(file,d=>{ICON=d;renderIcons();saveState();showToast('App icon dropped & applied!','🎨')});
+function downloadAllPhoneScreenshots(){
+  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
+  if(typeof canDownload === 'function' && !canDownload(1000)) return;
+  const validEntries = [];
+  SHOTS.forEach((s, idx) => {
+    if(s && s.trim()) validEntries.push({ src: s, index: idx });
+  });
+
+  if(validEntries.length === 0){
+    showToast('No phone screenshots to export', 'warn');
+    return;
+  }
+
+  _isZipExporting = true;
+  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
+
+  const dlBtn = $('btnDlAllPhone');
+  const optBtn = $('optExportPhoneShots');
+  let origDlHtml = '';
+  if(dlBtn){
+    origDlHtml = dlBtn.innerHTML;
+    dlBtn.classList.add('loading');
+    dlBtn.disabled = true;
+    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
+  }
+  if(optBtn) optBtn.classList.add('loading');
+
+  showToast(`Packaging ${validEntries.length} phone screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, 'info', 2200);
+
+  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
+    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
+
+  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
+
+  const packPromise = Promise.all(validEntries.map((entry, order) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth || 1290;
+          canvas.height = img.naturalHeight || 2796;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          const dataUrl = canvas.toDataURL('image/png');
+          const bytes = dataUrlToUint8Array(dataUrl);
+          const fileName = `${name}-phone-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
+          resolve({ name: fileName, data: bytes });
+        } catch(e) {
+          resolve(null);
+        }
+      };
+      img.onerror = () => resolve(null);
+      img.src = ensureSvgDimensions(entry.src);
+    });
+  }));
+
+  Promise.all([packPromise, minDelay]).then(([results]) => {
+    const files = results.filter(f => f && f.data);
+    if(files.length === 0){
+      showToast('Error preparing screenshots for ZIP', 'warn');
+      return;
     }
+
+    const zipBlob = createZipBlob(files);
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${name}-phone-screenshots.zip`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    showToast(`Downloaded ${files.length} phone screenshots in 1 ZIP package!`, 'ok');
+  }).catch(err => {
+    console.error('Phone ZIP export error:', err);
+    showToast('Failed to generate ZIP archive', 'warn');
+  }).finally(() => {
+    if(dlBtn){
+      dlBtn.classList.remove('loading');
+      dlBtn.disabled = false;
+      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export (ZIP)`;
+    }
+    if(optBtn) optBtn.classList.remove('loading');
+    _isZipExporting = false;
   });
 }
 
-// --- Supported Devices (Apple Destination: iPhone vs Universal iPad) ---
+
+/* =========================================================================
+   Module: src/js/modules/shots/ipad.js
+   ========================================================================= */
+// Store Preview Studio - Apple iPad Pro 13" Screenshots Manager & Tools
 function setSupportsIpad(val){
   SUPPORTS_IPAD = !!val;
   const chk = $('f-dest-ipad');
@@ -3373,7 +3487,7 @@ function renderIpadSlist(){
       '<button class="mini" data-m="1" title="Move Down">↓</button>' +
       '<button class="mini fit-btn" id="btnFitIpad_' + i + '" title="Resize / Fit to Apple iPad Pro 13&quot; (2048×2732 px)">' + ICO_SPARKLE + 'Fit</button>' +
       '<button class="mini dl-btn" id="btnDlIpad_' + i + '" title="Download 2048×2732 px PNG">' + ICO_DL + '</button>' +
-      '<button class="mini del" title="Delete">✕</button>' +
+      '<button class="mini del" title="Delete">&times;</button>' +
       '<span class="shot-dim-tag" id="ipadShotDimTag_' + i + '" style="margin-left:auto;display:none"></span>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
@@ -3464,65 +3578,55 @@ function validateIpadScreenshots(){
   }
 
   let checked = 0;
-  const squareIndices = [];
-  const phoneRatioIndices = [];
-  const nonIpadIndices = [];
+  const nonCompliantIndices = [];
+  const compliantIndices = [];
 
   IPAD_SHOTS.forEach((s, idx) => {
-    const tag = $('ipadShotDimTag_' + idx);
     if(!s || !s.trim()){
+      const tag = $('ipadShotDimTag_' + idx);
       if(tag) tag.style.display = 'none';
       return;
     }
-
+    const resolvedSrc = ensureSvgDimensions(s);
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       if(runId !== _ipadValRunId) return;
       const w = img.naturalWidth;
       const h = img.naturalHeight;
+      const tag = $('ipadShotDimTag_' + idx);
 
-      if(w > 0 && h > 0){
-        const isSquare = (Math.abs(w - h) / Math.max(w, h)) < 0.12;
-        const ratio = w / h;
-        // iPad 4:3 Portrait: ratio ~ 0.70 to 0.80 (2048x2732 is 0.7496, 2064x2752 is 0.75)
-        const isIpadPortrait = (ratio >= 0.68 && ratio <= 0.82);
-        // iPad 4:3 Landscape: ratio ~ 1.25 to 1.45 (2732x2048 is 1.3333, 2752x2064 is 1.3333)
-        const isIpadLandscape = (ratio >= 1.22 && ratio <= 1.45);
-        // Phone aspect ratio: Portrait 9:16 (~0.56) or 9:19.5 (~0.46)
-        const isPhonePortrait = (ratio < 0.62);
+      const isExactIpad = (
+        (w === 2048 && h === 2732) || 
+        (w === 2064 && h === 2752) || 
+        (w === 2732 && h === 2048) || 
+        (w === 2752 && h === 2064)
+      );
 
-        if(tag){
-          tag.style.display = 'inline-flex';
-          if(isSquare){
-            tag.className = 'shot-dim-tag err';
-            tag.textContent = `1:1 Square (${w}×${h})`;
-          } else if(isPhonePortrait){
-            tag.className = 'shot-dim-tag err';
-            tag.textContent = `Phone Ratio (${w}×${h})`;
-          } else if(isIpadPortrait){
-            tag.className = 'shot-dim-tag ok';
-            tag.textContent = (w === 2048 && h === 2732) || (w === 2064 && h === 2752)
-              ? `iPad 13" 4:3 (${w}×${h})`
-              : `iPad 4:3 (${w}×${h})`;
-          } else if(isIpadLandscape){
-            tag.className = 'shot-dim-tag info';
-            tag.textContent = (w === 2732 && h === 2048) || (w === 2752 && h === 2064)
-              ? `iPad 13" Landscape (${w}×${h})`
-              : `iPad Landscape (${w}×${h})`;
-          } else {
-            tag.className = 'shot-dim-tag warn';
-            tag.textContent = `Non-iPad (${w}×${h})`;
-          }
+      const ratio = w / h;
+      const is3to4 = (Math.abs(ratio - (3/4)) < 0.05) || (Math.abs(ratio - (4/3)) < 0.05);
+
+      if(tag){
+        tag.style.display = 'inline-flex';
+        if(isExactIpad){
+          tag.className = 'shot-dim-tag ok';
+          tag.textContent = `iPad Pro 13" (${w}×${h})`;
+        } else if(is3to4){
+          tag.className = 'shot-dim-tag info';
+          tag.textContent = `4:3 Ratio (${w}×${h})`;
+        } else if(h > w * 1.5){
+          tag.className = 'shot-dim-tag warn';
+          tag.textContent = `Phone Ratio (${w}×${h})`;
+        } else {
+          tag.className = 'shot-dim-tag warn';
+          tag.textContent = `Non-standard (${w}×${h})`;
         }
+      }
 
-        if(isSquare){
-          squareIndices.push(idx + 1);
-        } else if(isPhonePortrait){
-          phoneRatioIndices.push(idx + 1);
-        } else if(!isIpadPortrait && !isIpadLandscape){
-          nonIpadIndices.push(idx + 1);
-        }
+      if(isExactIpad){
+        compliantIndices.push(idx + 1);
+      } else {
+        nonCompliantIndices.push(idx + 1);
       }
 
       checked++;
@@ -3530,7 +3634,6 @@ function validateIpadScreenshots(){
         finalizeIpadBadge();
       }
     };
-
     img.onerror = () => {
       if(runId !== _ipadValRunId) return;
       checked++;
@@ -3538,30 +3641,23 @@ function validateIpadScreenshots(){
         finalizeIpadBadge();
       }
     };
-
-    img.src = ensureSvgDimensions(s);
+    img.src = resolvedSrc;
   });
 
   function finalizeIpadBadge(){
-    const hasIssues = squareIndices.length > 0 || phoneRatioIndices.length > 0 || nonIpadIndices.length > 0;
-    const fixAllBtn = `<button class="mini fit-btn" id="btnFixAllIpad" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_SPARKLE}Resize All (2048px)</button>`;
-    const dlAllBtn = `<button class="mini dl-btn" id="btnDlAllIpad" style="margin-left:auto;white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export All (ZIP)</button>`;
+    const actionBtns = `<div class="sb-actions" style="margin-left:auto;display:inline-flex;gap:6px;align-items:center;">` +
+      (nonCompliantIndices.length > 0 ? `<button type="button" class="mini fit-btn" id="btnFixAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Auto-resize all non-standard screenshots to iPad Pro 13&quot; 2048×2732 px">${ICO_SPARKLE}Resize All (2048px)</button>` : '') +
+      `<button type="button" class="mini dl-btn" id="btnDlAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px">${ICO_ZIP}Export (ZIP)</button>` +
+      `</div>`;
 
-    if(squareIndices.length > 0){
-      const items = squareIndices.map(n => `#${n}`).join(', ');
-      badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple Connect requires <strong>iPad Pro 13" resolutions (2048×2732 px, 4:3)</strong>.</span>${fixAllBtn}`;
-    } else if(phoneRatioIndices.length > 0){
-      const items = phoneRatioIndices.map(n => `#${n}`).join(', ');
-      badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} has a phone aspect ratio (9:19.5 or 9:16). Apple Connect will reject phone screenshots for iPad Pro. Required: <strong>2048×2732 px (4:3)</strong>.</span>${fixAllBtn}`;
-    } else if(nonIpadIndices.length > 0){
-      const items = nonIpadIndices.map(n => `#${n}`).join(', ');
+    if(nonCompliantIndices.length > 0){
+      const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
+      const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Aspect Ratio Notice:</strong> Screenshot ${items} has non-standard iPad ratio. Apple recommends <strong>2048×2732 px (3:4 portrait)</strong> or <strong>2732×2048 px (4:3 landscape)</strong>.</span>${fixAllBtn}`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px). Click <strong>Resize All</strong> to convert.</span>${actionBtns}`;
     } else {
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>iPad &amp; Universal Compliant:</strong> ${validCount} dedicated iPad screenshot${validCount === 1 ? '' : 's'} (Range: 1–10) · All 4:3 iPad Pro aspect ratios.</span>${dlAllBtn}`;
+      badgeEl.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'} matching iPad Pro 13" standard (2048×2732 px).</span>${actionBtns}`;
     }
 
     if($('btnFixAllIpad')){
@@ -3576,12 +3672,6 @@ function validateIpadScreenshots(){
 /**
  * Smart fits any image into standard Apple iPad Pro 13" dimensions
  * (Portrait 2048×2732 px, or Landscape 2732×2048 px).
- * 
- * Supports two clean modes:
- * - 'cover' (Default / Full Bleed): Scales image to completely cover the iPad canvas (2048×2732),
- *   centered with zero black bars, zero blur, and no artificial borders. Best for photos, wallpapers, games.
- * - 'contain' (Fit / Soft Blur): Expands image edge-to-edge without cropping any part, with vibrant
- *   frosted blur extension in matching brightness (no dark black overlay or artificial frame).
  */
 function fitToIpadProCanvas(img, mode){
   const origW = img.naturalWidth || img.width;
@@ -3625,7 +3715,6 @@ function fitToIpadProCanvas(img, mode){
   }
 
   // Mode Contain: Fit edge-to-edge with vibrant frosted blurred backdrop
-  // Step 1: Draw vibrant blurred background with matching brightness
   const bgScale = Math.max(targetW / origW, targetH / origH);
   const bgW = origW * bgScale;
   const bgH = origH * bgScale;
@@ -3646,18 +3735,18 @@ function fitToIpadProCanvas(img, mode){
   }
   ctx.restore();
 
-  // Subtle soft contrast overlay (very light, preserves vibrant colors)
+  // Subtle soft contrast overlay
   ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
   ctx.fillRect(0, 0, targetW, targetH);
 
-  // Step 2: Draw foreground edge-to-edge (no 88% shrink)
+  // Draw foreground edge-to-edge
   const fgScale = Math.min(targetW / origW, targetH / origH);
   const fgW = Math.round(origW * fgScale);
   const fgH = Math.round(origH * fgScale);
   const fgX = Math.round((targetW - fgW) / 2);
   const fgY = Math.round((targetH - fgH) / 2);
 
-  // For phone screenshots (tall & narrow, ratio < 0.65), add soft shadow so it stands out against backdrop
+  // For phone screenshots, add soft shadow so it stands out against backdrop
   if (origRatio < 0.65) {
     ctx.save();
     ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
@@ -3738,18 +3827,18 @@ function fixIpadScreenshot(index){
       (w === 2752 && h === 2064)
     );
     if(isAlreadyCompliant){
-      showToast(`Screenshot #${index + 1} is already standard iPad Pro 13" (${w}×${h} px)!`, '✓', 3000);
+      showToast(`Screenshot #${index + 1} is already standard iPad Pro 13" (${w}×${h} px)!`, 'ok', 3000);
       return;
     }
 
     const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
     const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-    showToast(`Resizing iPad screenshot (${modeLabel})...`, '⏳');
+    showToast(`Resizing iPad screenshot (${modeLabel})...`, 'info');
     fitIpadScreenshotAsync(src, mode).then(dataUrl => {
       IPAD_SHOTS[index] = dataUrl;
       renderIpadShots();
       saveState();
-      showToast(`Screenshot resized to 2048×2732 px (${modeLabel})! ✨`, '✨');
+      showToast(`Screenshot resized to 2048×2732 px (${modeLabel})!`, 'ok');
     }).catch(err => {
       console.error('Resize error:', err);
       showToast('Could not resize screenshot', 'warn');
@@ -3766,7 +3855,7 @@ function fixAllIpadScreenshots(){
     if(s && s.trim()) validIndices.push(idx);
   });
   if(validIndices.length === 0){
-    showToast('No iPad screenshots to resize', 'ℹ️');
+    showToast('No iPad screenshots to resize', 'warn');
     return;
   }
 
@@ -3793,20 +3882,20 @@ function fixAllIpadScreenshots(){
   Promise.all(checkPromises).then(checks => {
     const needResizeIndices = checks.filter(c => c.needsResize).map(c => c.idx);
     if(needResizeIndices.length === 0){
-      showToast('All screenshots are already compliant with iPad Pro 13" standard!', '✓', 3000);
+      showToast('All screenshots are already compliant with iPad Pro 13" standard!', 'ok', 3000);
       return;
     }
 
     const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
     const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-    showToast(`Resizing ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} (${modeLabel})...`, '⏳');
+    showToast(`Resizing ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} (${modeLabel})...`, 'info');
     Promise.all(needResizeIndices.map(idx => fitIpadScreenshotAsync(IPAD_SHOTS[idx], mode))).then(results => {
       needResizeIndices.forEach((shotIdx, resIdx) => {
         IPAD_SHOTS[shotIdx] = results[resIdx];
       });
       renderIpadShots();
       saveState();
-      showToast(`All ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} resized (${modeLabel})! ✨`, '✨');
+      showToast(`All ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} resized (${modeLabel})!`, 'ok');
     }).catch(err => {
       console.error('Fix all error:', err);
       showToast('Some screenshots could not be resized', 'warn');
@@ -3818,12 +3907,12 @@ function generateIpadFromPhone(){
   if(typeof canAction === 'function' && !canAction(1000)) return;
   const validPhoneShots = (SHOTS || []).filter(s => typeof s === 'string' && s.trim());
   if(validPhoneShots.length === 0){
-    showToast('Please add phone screenshots first!', 'ℹ️');
+    showToast('Please add phone screenshots first!', 'warn');
     return;
   }
   const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
   const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-  showToast(`Generating ${validPhoneShots.length} iPad Pro screenshot${validPhoneShots.length === 1 ? '' : 's'} (${modeLabel})...`, '⏳');
+  showToast(`Generating ${validPhoneShots.length} iPad Pro screenshot${validPhoneShots.length === 1 ? '' : 's'} (${modeLabel})...`, 'info');
   Promise.all(validPhoneShots.map(s => fitIpadScreenshotAsync(s, mode))).then(results => {
     IPAD_SHOTS = results;
     if(!SUPPORTS_IPAD){
@@ -3831,7 +3920,7 @@ function generateIpadFromPhone(){
     }
     renderIpadShots();
     saveState();
-    showToast(`Generated ${results.length} iPad Pro 13" screenshot${results.length === 1 ? '' : 's'} (${modeLabel})! ✨`, '📱');
+    showToast(`Generated ${results.length} iPad Pro 13" screenshot${results.length === 1 ? '' : 's'} (${modeLabel})!`, 'ok');
   }).catch(err => {
     console.error('Generate from phone error:', err);
     showToast('Failed to generate iPad screenshots', 'warn');
@@ -3869,7 +3958,7 @@ function downloadIpadScreenshot(index){
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 2000);
-      showToast(`Downloaded iPad Screenshot #${index + 1} (${canvas.width}×${canvas.height})!`, '⬇️');
+      showToast(`Downloaded iPad Screenshot #${index + 1} (${canvas.width}×${canvas.height})!`, 'ok');
     }, 'image/png');
   };
   img.onerror = () => showToast('Failed to load image for download', 'warn');
@@ -3885,7 +3974,7 @@ function downloadAllIpadScreenshots(){
   });
 
   if(validEntries.length === 0){
-    showToast('No iPad screenshots to export', 'ℹ️');
+    showToast('No iPad screenshots to export', 'warn');
     return;
   }
 
@@ -3903,7 +3992,7 @@ function downloadAllIpadScreenshots(){
   }
   if(optBtn) optBtn.classList.add('loading');
 
-  showToast(`Packaging ${validEntries.length} iPad screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, '⏳', 2200);
+  showToast(`Packaging ${validEntries.length} iPad screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, 'info', 2200);
 
   const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
     .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
@@ -3951,7 +4040,7 @@ function downloadAllIpadScreenshots(){
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} iPad screenshots in 1 ZIP package! ✨`, '⬇️');
+    showToast(`Downloaded ${files.length} iPad screenshots in 1 ZIP package!`, 'ok');
   }).catch(err => {
     console.error('ZIP export error:', err);
     showToast('Failed to generate ZIP archive', 'warn');
@@ -3966,95 +4055,6 @@ function downloadAllIpadScreenshots(){
   });
 }
 
-function downloadAllPhoneScreenshots(){
-  if(typeof _isZipExporting !== 'undefined' && _isZipExporting) return;
-  if(typeof canDownload === 'function' && !canDownload(1000)) return;
-  const validEntries = [];
-  SHOTS.forEach((s, idx) => {
-    if(s && s.trim()) validEntries.push({ src: s, index: idx });
-  });
-
-  if(validEntries.length === 0){
-    showToast('No phone screenshots to export', 'ℹ️');
-    return;
-  }
-
-  _isZipExporting = true;
-  if(typeof _lastDownloadTime !== 'undefined') _lastDownloadTime = Date.now();
-
-  const dlBtn = $('btnDlAllPhone');
-  const optBtn = $('optExportPhoneShots');
-  let origDlHtml = '';
-  if(dlBtn){
-    origDlHtml = dlBtn.innerHTML;
-    dlBtn.classList.add('loading');
-    dlBtn.disabled = true;
-    dlBtn.innerHTML = '<span class="btn-spinner"></span> Packaging...';
-  }
-  if(optBtn) optBtn.classList.add('loading');
-
-  showToast(`Packaging ${validEntries.length} phone screenshot${validEntries.length === 1 ? '' : 's'} into ZIP (please wait)...`, '⏳', 2200);
-
-  const name = ($('f-name') && $('f-name').value ? $('f-name').value : 'app')
-    .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'app';
-
-  const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
-
-  const packPromise = Promise.all(validEntries.map((entry, order) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || 1290;
-          canvas.height = img.naturalHeight || 2796;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const dataUrl = canvas.toDataURL('image/png');
-          const bytes = dataUrlToUint8Array(dataUrl);
-          const fileName = `${name}-phone-shot-${order + 1}-${canvas.width}x${canvas.height}.png`;
-          resolve({ name: fileName, data: bytes });
-        } catch(e) {
-          resolve(null);
-        }
-      };
-      img.onerror = () => resolve(null);
-      img.src = ensureSvgDimensions(entry.src);
-    });
-  }));
-
-  Promise.all([packPromise, minDelay]).then(([results]) => {
-    const files = results.filter(f => f && f.data);
-    if(files.length === 0){
-      showToast('Error preparing screenshots for ZIP', 'warn');
-      return;
-    }
-
-    const zipBlob = createZipBlob(files);
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${name}-phone-screenshots.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded ${files.length} phone screenshots in 1 ZIP package! ✨`, '⬇️');
-  }).catch(err => {
-    console.error('Phone ZIP export error:', err);
-    showToast('Failed to generate ZIP archive', 'warn');
-  }).finally(() => {
-    if(dlBtn){
-      dlBtn.classList.remove('loading');
-      dlBtn.disabled = false;
-      dlBtn.innerHTML = origDlHtml || `${ICO_ZIP}Export (ZIP)`;
-    }
-    if(optBtn) optBtn.classList.remove('loading');
-    _isZipExporting = false;
-  });
-}
-
 // Event Listeners for iPad Destination & Screenshots
 let ipadPick = -1;
 
@@ -4063,7 +4063,7 @@ if(fDestIpad){
   fDestIpad.onchange = (e) => {
     setSupportsIpad(e.target.checked);
     saveState();
-    showToast(SUPPORTS_IPAD ? 'Universal App enabled! iPad screenshots unlocked.' : 'Switched to iPhone-only mode.', '📱');
+    showToast(SUPPORTS_IPAD ? 'Universal App enabled! iPad screenshots unlocked.' : 'Switched to iPhone-only mode.', 'ok');
   };
 }
 
@@ -4073,7 +4073,7 @@ if(fIpadFitMode){
   fIpadFitMode.onchange = (e) => {
     IPAD_FIT_MODE = e.target.value;
     saveState();
-    showToast('Fit mode: ' + (IPAD_FIT_MODE === 'cover' ? 'Fill / Cover (Full Bleed)' : 'Fit / Contain (Soft Blur)'), '🎨');
+    showToast('Fit mode: ' + (IPAD_FIT_MODE === 'cover' ? 'Fill / Cover (Full Bleed)' : 'Fit / Contain (Soft Blur)'), 'ok');
   };
 }
 
@@ -4103,13 +4103,11 @@ if(ipadShotFile){
       ipadPick = -1;
       renderIpadShots();
       saveState();
-      showToast('iPad screenshot uploaded!', '📸');
+      showToast('iPad screenshot uploaded!', 'ok');
     });
     e.target.value = '';
   };
 }
-
-
 
 
 /* =========================================================================
@@ -4836,10 +4834,9 @@ if($('btnDlAllTablets')){
 
 
 /* =========================================================================
-   Module: src/js/modules/form-sync.js
+   Module: src/js/modules/form/categories.js
    ========================================================================= */
-// Store Preview Studio · Form Synchronization & Validation
-// --- Category dropdowns (App Store vs Google Play) ---
+// Store Preview Studio · Category Dropdowns & Normalization (App Store vs Google Play)
 const APPLE_CATEGORIES = ['Books','Business','Developer Tools','Education','Entertainment','Finance','Food & Drink','Games','Graphics & Design','Health & Fitness','Lifestyle','Magazines & Newspapers','Medical','Music','Navigation','News','Photo & Video','Productivity','Reference','Shopping','Social Networking','Sports','Stickers','Travel','Utilities','Weather'];
 const GOOGLE_APP_CATEGORIES = ['Art & Design','Auto & Vehicles','Beauty','Books & Reference','Business','Comics','Communication','Dating','Education','Entertainment','Events','Finance','Food & Drink','Health & Fitness','House & Home','Lifestyle','Maps & Navigation','Medical','Music & Audio','News & Magazines','Parenting','Personalization','Photography','Productivity','Shopping','Social','Sports','Tools','Travel & Local','Video Players & Editors','Weather'];
 const GOOGLE_GAME_CATEGORIES = ['Action','Adventure','Arcade','Board','Card','Casino','Casual','Educational','Music','Puzzle','Racing','Role Playing','Simulation','Sports','Strategy','Trivia','Word'];
@@ -4854,6 +4851,7 @@ const catNorm = v => (v||'').toLowerCase().replace(/&/g,'and').replace(/\s+/g,' 
 (function buildCategorySelects(){
   const opt = (v, t) => { const o = document.createElement('option'); o.value = v; o.textContent = t || v; return o; };
   const a = CAT_SEL.apple, g = CAT_SEL.google;
+  if (!a || !g) return;
   a.appendChild(opt('', 'Select primary category…'));
   APPLE_CATEGORIES.forEach(c => a.appendChild(opt(c)));
   g.appendChild(opt('', 'Select category…'));
@@ -4881,16 +4879,19 @@ function matchCat(st, val){
   }
   return '';
 }
+
 function syncCategoryUI(){
-  $('f-cat').value = (CAT[store] || '').replace(/^Games · /, '');
+  if($('f-cat')) $('f-cat').value = (CAT[store] || '').replace(/^Games · /, '');
   const t = $('catTag');
   if(t){ t.textContent = store === 'apple' ? 'APPLE' : 'GOOGLE'; t.className = 'tag ' + (store === 'apple' ? 'a' : 'g'); }
 }
+
 function setCategory(val, only){
   val = (val || '').trim();
   ['apple','google'].forEach(st => {
     if(only && only !== st) return;
     const sel = CAT_SEL[st];
+    if(!sel) return;
     sel.querySelectorAll('option[data-custom]').forEach(o => o.remove());
     let m = val ? matchCat(st, val) : '';
     if(val && !m){
@@ -4903,113 +4904,19 @@ function setCategory(val, only){
   });
   syncCategoryUI();
 }
+
 ['apple','google'].forEach(st => {
-  CAT_SEL[st].onchange = () => { CAT[st] = CAT_SEL[st].value; syncCategoryUI(); update(); saveState(); };
+  if (CAT_SEL[st]) {
+    CAT_SEL[st].onchange = () => { CAT[st] = CAT_SEL[st].value; syncCategoryUI(); if (typeof update === 'function') update(); if (typeof saveState === 'function') saveState(); };
+  }
 });
 setCategory('Productivity');
 
-// --- Official Character Limits per Store ---
-const LIMITS = {
-  name: ()=>30,
-  sub: ()=>30,
-  promo: ()=>170,
-  short: ()=>80,
-  keywords: ()=>100,
-  new: ()=>store==='google'?500:4000,
-  desc: ()=>4000
-};
 
-// Initialize progress meters under each field
-$$('.fg').forEach(g=>{
-  if(g.querySelector('.cc')){
-    const m=document.createElement('div');
-    m.className='meter';
-    m.innerHTML='<i></i>';
-    g.appendChild(m);
-  }
-});
-
-
-
-function update(){
-  // Update Fields with character limits
-  for(const k in LIMITS){
-    const inp = $('f-'+k);
-    if(!inp) continue;
-    const v = inp.value;
-    const max = LIMITS[k]();
-    const c = $('c-'+k);
-    const fg = inp.closest('.fg');
-    const mt = fg ? fg.querySelector('.meter') : null;
-
-    if(c){
-      const vLen = countChars(v);
-      c.textContent = vLen + ' / ' + max;
-      const isExceeded = vLen > max;
-      const isWarning = !isExceeded && vLen >= max * 0.9;
-
-      c.className = 'cc' + (isExceeded ? ' err' : isWarning ? ' warn' : '');
-      if(fg){
-        fg.classList.toggle('overlimit', isExceeded);
-        fg.classList.toggle('warning', isWarning);
-      }
-      if(mt){
-        mt.className = 'meter' + (isExceeded ? ' err' : isWarning ? ' warn' : '');
-        mt.firstChild.style.width = Math.min(100, (vLen / max) * 100) + '%';
-      }
-    }
-
-    // Synchronize to Mockup Displays
-    $$('[data-b="'+k+'"]').forEach(e => {
-      const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : ''))));
-      e.textContent = v || fallback;
-    });
-  }
-
-  // Developer, Category, Version, Release Date, Support Email & Location dynamic bindings
-  const devVal = $('f-dev').value.trim() || 'Developer Name';
-  const catVal = $('f-cat').value.trim() || 'Category';
-  const verVal = ($('f-ver') && $('f-ver').value.trim()) || '1.0.0';
-  const rdateVal = ($('f-rdate') && $('f-rdate').value.trim()) || getCurrentMonthDateStr(2, true);
-  const emailVal = ($('f-email') && $('f-email').value.trim()) || 'support@domain.com';
-  const phoneVal = ($('f-phone') && $('f-phone').value.trim()) || '+1 800-555-0199';
-  const addrVal = ($('f-addr') && $('f-addr').value.trim()) || 'Vietnam';
-  $$('[data-b="dev"]').forEach(e=>e.textContent=devVal);
-  $$('[data-b="cat"]').forEach(e=>e.textContent=catVal);
-  $$('[data-b="ver"]').forEach(e=>e.textContent=verVal);
-  $$('[data-b="rdate"]').forEach(e=>e.textContent=rdateVal);
-  $$('[data-b="email"]').forEach(e=>e.textContent=emailVal);
-  $$('[data-b="phone"]').forEach(e=>e.textContent=phoneVal);
-  $$('[data-b="addr"]').forEach(e=>e.textContent=addrVal);
-
-  if (typeof updateMockupClocks === 'function') updateMockupClocks();
-
-  // Toggle Promotional Text banner in Apple Detail (both iPhone and iPad)
-  const hasPromo = !!$('f-promo').value.trim();
-  if($('promoBox')) $('promoBox').style.display = hasPromo ? 'block' : 'none';
-  $$('.promo[data-b="promo"]').forEach(el => { el.style.display = hasPromo ? 'block' : 'none'; });
-
-  // Dynamic Google Play Keyword Chips (derived from first 2 comma-separated keywords)
-  const kwRaw = ($('f-keywords') && $('f-keywords').value) || '';
-  const kwList = kwRaw.split(',').map(s => s.trim()).filter(Boolean).map(w => {
-    return w.split(/\s+/).map(part => {
-      if(/^(ai|rpg|hiit|pvp|ar|vr|3d|hd|ui|ux|ios|api|sql)$/i.test(part)) return part.toUpperCase();
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    }).join(' ');
-  });
-  $$('[data-kw-chip]').forEach(el => {
-    const idx = parseInt(el.dataset.kwChip, 10) || 0;
-    const val = kwList[idx] || '';
-    el.textContent = val;
-    el.style.display = val ? '' : 'none';
-  });
-
-  // Render App Privacy & Data Safety
-  renderPrivacy();
-  renderReviews();
-}
-
-// --- App Privacy & Data Safety Dynamic Rendering ---
+/* =========================================================================
+   Module: src/js/modules/form/privacy.js
+   ========================================================================= */
+// Store Preview Studio · App Privacy & Data Safety Dynamic Rendering
 const APPLE_PRIV_ICONS = {
   purchase: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
   health: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.2 8.8c0 2.3-4.2 5-4.2 5s-4.2-2.7-4.2-5c0-1.3 1-2.3 2.2-2.3.8 0 1.6.4 2 1.1.4-.7 1.2-1.1 2-1.1 1.2 0 2.2 1 2.2 2.3z"/></svg>`,
@@ -5134,6 +5041,11 @@ function renderPrivacy(){
   });
 }
 
+
+/* =========================================================================
+   Module: src/js/modules/form/reviews.js
+   ========================================================================= */
+// Store Preview Studio · Review Cards Dynamic Rendering (Mockups)
 function renderReviews(){
   const esc = (typeof escapeHtml === 'function') ? escapeHtml : (s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
   const list = Array.isArray(REVIEWS) ? REVIEWS : [];
@@ -5196,13 +5108,117 @@ function renderReviews(){
   });
 }
 
+
+/* =========================================================================
+   Module: src/js/modules/form/sync.js
+   ========================================================================= */
+// Store Preview Studio · Form Synchronization & Validation Loop
+
+// Official Character Limits per Store
+const LIMITS = {
+  name: ()=>30,
+  sub: ()=>30,
+  promo: ()=>170,
+  short: ()=>80,
+  keywords: ()=>100,
+  new: ()=>store==='google'?500:4000,
+  desc: ()=>4000
+};
+
+// Initialize progress meters under each field
+$$('.fg').forEach(g=>{
+  if(g.querySelector('.cc') && !g.querySelector('.meter')){
+    const m=document.createElement('div');
+    m.className='meter';
+    m.innerHTML='<i></i>';
+    g.appendChild(m);
+  }
+});
+
+function update(){
+  // Update Fields with character limits
+  for(const k in LIMITS){
+    const inp = $('f-'+k);
+    if(!inp) continue;
+    const v = inp.value;
+    const max = LIMITS[k]();
+    const c = $('c-'+k);
+    const fg = inp.closest('.fg');
+    const mt = fg ? fg.querySelector('.meter') : null;
+
+    if(c){
+      const vLen = countChars(v);
+      c.textContent = vLen + ' / ' + max;
+      const isExceeded = vLen > max;
+      const isWarning = !isExceeded && vLen >= max * 0.9;
+
+      c.className = 'cc' + (isExceeded ? ' err' : isWarning ? ' warn' : '');
+      if(fg){
+        fg.classList.toggle('overlimit', isExceeded);
+        fg.classList.toggle('warning', isWarning);
+      }
+      if(mt){
+        mt.className = 'meter' + (isExceeded ? ' err' : isWarning ? ' warn' : '');
+        mt.firstChild.style.width = Math.min(100, (vLen / max) * 100) + '%';
+      }
+    }
+
+    // Synchronize to Mockup Displays
+    $$('[data-b="'+k+'"]').forEach(e => {
+      const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : ''))));
+      e.textContent = v || fallback;
+    });
+  }
+
+  // Developer, Category, Version, Release Date, Support Email & Location dynamic bindings
+  const devVal = ($('f-dev') && $('f-dev').value.trim()) || 'Developer Name';
+  const catVal = ($('f-cat') && $('f-cat').value.trim()) || 'Category';
+  const verVal = ($('f-ver') && $('f-ver').value.trim()) || '1.0.0';
+  const rdateVal = ($('f-rdate') && $('f-rdate').value.trim()) || (typeof getCurrentMonthDateStr === 'function' ? getCurrentMonthDateStr(2, true) : 'Current Date');
+  const emailVal = ($('f-email') && $('f-email').value.trim()) || 'support@domain.com';
+  const phoneVal = ($('f-phone') && $('f-phone').value.trim()) || '+1 800-555-0199';
+  const addrVal = ($('f-addr') && $('f-addr').value.trim()) || 'Vietnam';
+  $$('[data-b="dev"]').forEach(e=>e.textContent=devVal);
+  $$('[data-b="cat"]').forEach(e=>e.textContent=catVal);
+  $$('[data-b="ver"]').forEach(e=>e.textContent=verVal);
+  $$('[data-b="rdate"]').forEach(e=>e.textContent=rdateVal);
+  $$('[data-b="email"]').forEach(e=>e.textContent=emailVal);
+  $$('[data-b="phone"]').forEach(e=>e.textContent=phoneVal);
+  $$('[data-b="addr"]').forEach(e=>e.textContent=addrVal);
+
+  if (typeof updateMockupClocks === 'function') updateMockupClocks();
+
+  // Toggle Promotional Text banner in Apple Detail (both iPhone and iPad)
+  const hasPromo = !!($('f-promo') && $('f-promo').value.trim());
+  if($('promoBox')) $('promoBox').style.display = hasPromo ? 'block' : 'none';
+  $$('.promo[data-b="promo"]').forEach(el => { el.style.display = hasPromo ? 'block' : 'none'; });
+
+  // Dynamic Google Play Keyword Chips (derived from first 2 comma-separated keywords)
+  const kwRaw = ($('f-keywords') && $('f-keywords').value) || '';
+  const kwList = kwRaw.split(',').map(s => s.trim()).filter(Boolean).map(w => {
+    return w.split(/\s+/).map(part => {
+      if(/^(ai|rpg|hiit|pvp|ar|vr|3d|hd|ui|ux|ios|api|sql)$/i.test(part)) return part.toUpperCase();
+      return part.charAt(0).toUpperCase() + part.slice(1);
+    }).join(' ');
+  });
+  $$('[data-kw-chip]').forEach(el => {
+    const idx = parseInt(el.dataset.kwChip, 10) || 0;
+    const val = kwList[idx] || '';
+    el.textContent = val;
+    el.style.display = val ? '' : 'none';
+  });
+
+  // Render App Privacy & Data Safety
+  if (typeof renderPrivacy === 'function') renderPrivacy();
+  if (typeof renderReviews === 'function') renderReviews();
+}
+
 $$('input[type=text],textarea').forEach(e => {
   e.addEventListener('input', () => {
     update();
     debouncedSave();
   });
 });
-
 
 
 /* =========================================================================
@@ -5620,6 +5636,57 @@ $$('.gal, .a-met').forEach(g=>{
 
 
 /* =========================================================================
+   Module: src/js/modules/header.js
+   ========================================================================= */
+// Store Preview Studio · Header Component Module
+// Encapsulates Sidebar Toggle, Store Switcher, and Header Dropdown Navigation
+
+function initHeader() {
+  // 1. Sidebar Collapse / Expand Toggle
+  const btnToggle = $('btnToggleSidebar');
+  if (btnToggle) {
+    btnToggle.onclick = (e) => {
+      e.stopPropagation();
+      if (typeof toggleSidebar === 'function') {
+        toggleSidebar();
+      }
+    };
+  }
+
+  // 2. Store Switcher (App Store vs Google Play Segmented Control)
+  const storeBtns = $$('.seg button');
+  storeBtns.forEach(btn => {
+    btn.onclick = () => {
+      const targetStore = btn.dataset.s;
+      if (targetStore && typeof setStore === 'function') {
+        setStore(targetStore);
+      }
+    };
+  });
+
+  // 3. Header Dropdowns (Presets Menu & Export Menu)
+  if (typeof setupDropdown === 'function') {
+    setupDropdown('btnPresets', 'menuPresets');
+    setupDropdown('btnExport', 'menuExport');
+  }
+
+  // 4. Global Keyboard Dismissal for Header Dropdowns (ESC key)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      $$('.menu.show').forEach(m => m.classList.remove('show'));
+    }
+  });
+}
+
+// Auto-initialize header when DOM is ready or module is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHeader);
+} else {
+  initHeader();
+}
+
+
+/* =========================================================================
    Module: src/js/modules/presets.js
    ========================================================================= */
 // Store Preview Studio · Preset Template Switcher
@@ -5753,12 +5820,28 @@ function loadPreset(key){
 
 
 /* =========================================================================
-   Module: src/js/modules/export.js
+   Module: src/js/modules/export/storage.js
    ========================================================================= */
-// --- LocalStorage & IndexedDB State Management ---
+// Store Preview Studio - Storage & State Persistence (LocalStorage & IndexedDB)
 const STORAGE_KEY = 'store_preview_studio_state_v2';
 let saveTimer = null;
 let restoring = false; // saveState() is a no-op while loadState() is applying saved values
+
+// Download helper utility for export modules
+function downloadFile(filename, content, type){
+  const blob = new Blob([content], {type});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
+}
+
 function debouncedSave(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveState, 300);
@@ -5998,16 +6081,21 @@ function loadState(){
   return loadedFromLs;
 }
 
-// --- 1-Click Copy All Text ---
-$('btnCopyText').onclick = copyAllText;
+
+/* =========================================================================
+   Module: src/js/modules/export/clipboard.js
+   ========================================================================= */
+// Store Preview Studio - 1-Click Clipboard Export
+if($('btnCopyText')) $('btnCopyText').onclick = copyAllText;
+
 function copyAllText(){
-  const name = $('f-name').value;
-  const sub = $('f-sub').value;
-  const promo = $('f-promo').value;
-  const short = $('f-short').value;
-  const dev = $('f-dev').value;
+  const name = $('f-name') ? $('f-name').value : '';
+  const sub = $('f-sub') ? $('f-sub').value : '';
+  const promo = $('f-promo') ? $('f-promo').value : '';
+  const short = $('f-short') ? $('f-short').value : '';
+  const dev = $('f-dev') ? $('f-dev').value : '';
   const cat = 'App Store: ' + (CAT.apple || '-') + '  |  Google Play: ' + (CAT.google || '-');
-  const kw = $('f-keywords').value;
+  const kw = $('f-keywords') ? $('f-keywords').value : '';
   const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
   const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
   const email = $('f-email') ? $('f-email').value : '';
@@ -6015,8 +6103,8 @@ function copyAllText(){
   const privLinked = $('f-priv-linked') ? $('f-priv-linked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.linked : '');
   const privNotLinked = $('f-priv-notlinked') ? $('f-priv-notlinked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.notLinked : '');
   const privGoogle = $('f-priv-google') ? $('f-priv-google').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.google : '');
-  const wn = $('f-new').value;
-  const desc = $('f-desc').value;
+  const wn = $('f-new') ? $('f-new').value : '';
+  const desc = $('f-desc') ? $('f-desc').value : '';
   const ageVal = STATS.age || '4+';
   const gAge = GOOGLE_AGE_MAP[ageVal] || GOOGLE_AGE_MAP['4+'];
   const iapLabels = {
@@ -6086,13 +6174,17 @@ ${desc}
 =====================================================`;
 
   navigator.clipboard.writeText(text).then(()=>{
-    showToast('Metadata copied to clipboard!','📋');
+    showToast('Metadata copied to clipboard!', 'ok');
   }).catch(()=>{
-    showToast('Clipboard access denied, check permissions','warn');
+    showToast('Clipboard access denied, check permissions', 'warn');
   });
 }
 
-// --- Export Markdown (LISTING_METADATA.md) ---
+
+/* =========================================================================
+   Module: src/js/modules/export/markdown.js
+   ========================================================================= */
+// Store Preview Studio - Markdown Metadata Exporter (LISTING_METADATA.md)
 if($('optExportIcon')) $('optExportIcon').onclick = () => downloadAppIcon();
 if($('optExportIpadShots')) $('optExportIpadShots').onclick = () => {
   if(typeof downloadAllIpadScreenshots === 'function') downloadAllIpadScreenshots();
@@ -6112,7 +6204,8 @@ if($('optExportAllTablets')) $('optExportAllTablets').onclick = () => {
 if($('optExportGooglePlayBundle')) $('optExportGooglePlayBundle').onclick = () => {
   if(typeof downloadAllGooglePlayBundle === 'function') downloadAllGooglePlayBundle();
 };
-$('optExportMD').onclick = exportMarkdown;
+if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;
+
 function exportMarkdown(){
   if(typeof canDownload === 'function' && !canDownload(1000)) return;
 
@@ -6124,14 +6217,14 @@ function exportMarkdown(){
     return fence + lang + '\n' + (text||'') + '\n' + fence;
   }
 
-  const name = $('f-name').value;
-  const sub = $('f-sub').value;
-  const promo = $('f-promo').value;
-  const short = $('f-short').value;
-  const dev = $('f-dev').value;
+  const name = $('f-name') ? $('f-name').value : '';
+  const sub = $('f-sub') ? $('f-sub').value : '';
+  const promo = $('f-promo') ? $('f-promo').value : '';
+  const short = $('f-short') ? $('f-short').value : '';
+  const dev = $('f-dev') ? $('f-dev').value : '';
   const cat = CAT.apple || '-';
   const catG = CAT.google || '-';
-  const kw = $('f-keywords').value;
+  const kw = $('f-keywords') ? $('f-keywords').value : '';
   const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
   const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
   const email = $('f-email') ? $('f-email').value : '-';
@@ -6139,8 +6232,8 @@ function exportMarkdown(){
   const privLinked = $('f-priv-linked') ? $('f-priv-linked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.linked || 'None') : 'None');
   const privNotLinked = $('f-priv-notlinked') ? $('f-priv-notlinked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.notLinked || 'None') : 'None');
   const privGoogle = $('f-priv-google') ? $('f-priv-google').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.google || 'None') : 'None');
-  const wn = $('f-new').value;
-  const desc = $('f-desc').value;
+  const wn = $('f-new') ? $('f-new').value : '';
+  const desc = $('f-desc') ? $('f-desc').value : '';
   const ageVal = STATS.age || '4+';
   const gAge = GOOGLE_AGE_MAP[ageVal] || GOOGLE_AGE_MAP['4+'];
   const iapLabels = {
@@ -6240,23 +6333,28 @@ ${safeFence(wn)}
 
 ---
 
-## 🛠 Fastlane CLI Mapping Cheat-Sheet
-- \`fastlane/metadata/android/en-US/title.txt\` ➔ App Title
-- \`fastlane/metadata/android/en-US/short_description.txt\` ➔ Short Description
-- \`fastlane/metadata/android/en-US/full_description.txt\` ➔ Full Description
-- \`fastlane/metadata/ios/en-US/name.txt\` ➔ App Title
-- \`fastlane/metadata/ios/en-US/subtitle.txt\` ➔ Subtitle
-- \`fastlane/metadata/ios/en-US/promotional_text.txt\` ➔ Promotional Text
-- \`fastlane/metadata/ios/en-US/keywords.txt\` ➔ Keywords
-- \`fastlane/metadata/ios/en-US/description.txt\` ➔ Full Description
+## Fastlane CLI Mapping Cheat-Sheet
+- \`fastlane/metadata/android/en-US/title.txt\` -> App Title
+- \`fastlane/metadata/android/en-US/short_description.txt\` -> Short Description
+- \`fastlane/metadata/android/en-US/full_description.txt\` -> Full Description
+- \`fastlane/metadata/ios/en-US/name.txt\` -> App Title
+- \`fastlane/metadata/ios/en-US/subtitle.txt\` -> Subtitle
+- \`fastlane/metadata/ios/en-US/promotional_text.txt\` -> Promotional Text
+- \`fastlane/metadata/ios/en-US/keywords.txt\` -> Keywords
+- \`fastlane/metadata/ios/en-US/description.txt\` -> Full Description
 `;
 
   downloadFile('LISTING_METADATA.md', md, 'text/markdown');
-  showToast('Downloaded LISTING_METADATA.md!','📄');
+  showToast('Downloaded LISTING_METADATA.md!', 'ok');
 }
 
-// --- Export & Import JSON Config ---
-$('optExportJSON').onclick = exportJSON;
+
+/* =========================================================================
+   Module: src/js/modules/export/json.js
+   ========================================================================= */
+// Store Preview Studio - JSON Configuration Exporter, Importer & Drag-and-Drop Handler
+if($('optExportJSON')) $('optExportJSON').onclick = exportJSON;
+
 function exportJSON(){
   if(typeof canDownload === 'function' && !canDownload(1000)) return;
   const config = {
@@ -6264,17 +6362,17 @@ function exportJSON(){
     version: "2.1.0",
     timestamp: new Date().toISOString(),
     store,
-    theme: document.querySelector('.phone').dataset.theme || 'light',
+    theme: document.querySelector('.phone') ? (document.querySelector('.phone').dataset.theme || 'light') : 'light',
     form: {
-      name: $('f-name').value,
-      sub: $('f-sub').value,
-      promo: $('f-promo').value,
-      short: $('f-short').value,
-      dev: $('f-dev').value,
-      cat: $('f-cat').value,
+      name: $('f-name') ? $('f-name').value : '',
+      sub: $('f-sub') ? $('f-sub').value : '',
+      promo: $('f-promo') ? $('f-promo').value : '',
+      short: $('f-short') ? $('f-short').value : '',
+      dev: $('f-dev') ? $('f-dev').value : '',
+      cat: $('f-cat') ? $('f-cat').value : '',
       catApple: CAT.apple,
       catGoogle: CAT.google,
-      keywords: $('f-keywords').value,
+      keywords: $('f-keywords') ? $('f-keywords').value : '',
       ver: $('f-ver') ? $('f-ver').value : '2.4.0',
       rdate: $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true),
       email: $('f-email') ? $('f-email').value : '',
@@ -6282,8 +6380,8 @@ function exportJSON(){
       privLinked: $('f-priv-linked') ? $('f-priv-linked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.linked : ''),
       privNotLinked: $('f-priv-notlinked') ? $('f-priv-notlinked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.notLinked : ''),
       privGoogle: $('f-priv-google') ? $('f-priv-google').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.google : ''),
-      new: $('f-new').value,
-      desc: $('f-desc').value
+      new: $('f-new') ? $('f-new').value : '',
+      desc: $('f-desc') ? $('f-desc').value : ''
     },
     icon: ICON,
     featureGraphic: FEATURE_GRAPHIC,
@@ -6293,17 +6391,17 @@ function exportJSON(){
     ipadFitMode: IPAD_FIT_MODE || 'cover',
     tab7Shots: TABS.tab7.map(i => i.src),
     tab10Shots: TABS.tab10.map(i => i.src),
-    stats: statsToObject()
+    stats: (typeof statsToObject === 'function') ? statsToObject() : {}
   };
   const jsonStr = JSON.stringify(config, null, 2);
-  const rawName = ($('f-name').value || '').trim();
+  const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
   let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   if(!slug) slug = 'app';
   downloadFile(`${slug}-store-config.json`, jsonStr, 'application/json');
-  showToast('Exported store configuration JSON!','💾');
+  showToast('Exported store configuration JSON!', 'ok');
 }
 
-// --- Smart & Fault-Tolerant JSON Import Parser ---
+// Smart & Fault-Tolerant JSON Import Parser
 function parseAndApplyJSON(jsonString){
   if(typeof jsonString === 'string'){
     // Strip UTF-8 BOM if present
@@ -6316,18 +6414,18 @@ function parseAndApplyJSON(jsonString){
   try{
     data = typeof jsonString === 'string' ? JSON.parse(jsonString) : jsonString;
   }catch(err){
-    showToast('Invalid JSON file format (Syntax Error)','warn');
+    showToast('Invalid JSON file format (Syntax Error)', 'warn');
     return false;
   }
 
   if(!data || typeof data !== 'object' || Array.isArray(data)){
-    showToast('Invalid file: JSON root must be an object','warn');
+    showToast('Invalid file: JSON root must be an object', 'warn');
     return false;
   }
 
   // Reject unrelated JSON schemas like package.json or library manifests
   if(!data.form && !data.app && (data.main || data.scripts || (data.version && data.main) || data.dependencies || data.devDependencies)){
-    showToast('File does not contain valid App Listing metadata','warn');
+    showToast('File does not contain valid App Listing metadata', 'warn');
     return false;
   }
 
@@ -6370,27 +6468,27 @@ function parseAndApplyJSON(jsonString){
 
   // Strict Schema Check: Reject generic flat JSON files that lack Store Preview Studio schema or mobile fields
   if(!isKnownGenerator && !hasAppWrapper && !hasStoreKeys && !hasMobileSpecificFields){
-    showToast('Unrecognized format: Missing Store Preview Studio schema or listing fields','warn');
+    showToast('Unrecognized format: Missing Store Preview Studio schema or listing fields', 'warn');
     return false;
   }
 
   // Check if at least one meaningful app listing field exists
   const hasFields = Object.values(mapped).some(v => v.trim().length > 0);
   if(!hasFields && !data.icon && !Array.isArray(data.shots)){
-    showToast('File does not contain valid App Listing metadata','warn');
+    showToast('File does not contain valid App Listing metadata', 'warn');
     return false;
   }
 
   // Safely populate available fields without erasing existing ones if absent
-  if(mapped.name) $('f-name').value = mapped.name;
-  if(mapped.sub) $('f-sub').value = mapped.sub;
-  if(mapped.promo) $('f-promo').value = mapped.promo;
-  if(mapped.short) $('f-short').value = mapped.short;
-  if(mapped.dev) $('f-dev').value = mapped.dev;
+  if(mapped.name && $('f-name')) $('f-name').value = mapped.name;
+  if(mapped.sub && $('f-sub')) $('f-sub').value = mapped.sub;
+  if(mapped.promo && $('f-promo')) $('f-promo').value = mapped.promo;
+  if(mapped.short && $('f-short')) $('f-short').value = mapped.short;
+  if(mapped.dev && $('f-dev')) $('f-dev').value = mapped.dev;
   if(mapped.cat) setCategory(mapped.cat);
   if(src.catApple && typeof src.catApple === 'string') setCategory(src.catApple, 'apple');
   if(src.catGoogle && typeof src.catGoogle === 'string') setCategory(src.catGoogle, 'google');
-  if(mapped.keywords) $('f-keywords').value = mapped.keywords;
+  if(mapped.keywords && $('f-keywords')) $('f-keywords').value = mapped.keywords;
   if(mapped.ver && $('f-ver')) $('f-ver').value = mapped.ver;
   if(mapped.rdate && $('f-rdate')) $('f-rdate').value = mapped.rdate;
   if(mapped.email && $('f-email')) $('f-email').value = mapped.email;
@@ -6407,8 +6505,8 @@ function parseAndApplyJSON(jsonString){
     if($('f-priv-google')) $('f-priv-google').value = mapped.privGoogle;
     if(typeof CURRENT_PRIVACY !== 'undefined') CURRENT_PRIVACY.google = mapped.privGoogle;
   }
-  if(mapped.new) $('f-new').value = mapped.new;
-  if(mapped.desc) $('f-desc').value = mapped.desc;
+  if(mapped.new && $('f-new')) $('f-new').value = mapped.new;
+  if(mapped.desc && $('f-desc')) $('f-desc').value = mapped.desc;
 
   if(data.icon && typeof data.icon === 'string') ICON = data.icon;
   if(data.featureGraphic && typeof data.featureGraphic === 'string') FEATURE_GRAPHIC = data.featureGraphic;
@@ -6418,8 +6516,8 @@ function parseAndApplyJSON(jsonString){
     const cleanShots = data.shots.filter(x => typeof x === 'string' && x.trim().length > 0);
     if(cleanShots.length > 0) SHOTS = cleanShots;
   }
-  if(Array.isArray(data.tab7Shots)) TABS.tab7 = data.tab7Shots.filter(x => typeof x === 'string').slice(0, MAX_TAB).map(makeTabItem);
-  if(Array.isArray(data.tab10Shots)) TABS.tab10 = data.tab10Shots.filter(x => typeof x === 'string').slice(0, MAX_TAB).map(makeTabItem);
+  if(Array.isArray(data.tab7Shots) && typeof makeTabItem === 'function') TABS.tab7 = data.tab7Shots.filter(x => typeof x === 'string').slice(0, MAX_TAB).map(makeTabItem);
+  if(Array.isArray(data.tab10Shots) && typeof makeTabItem === 'function') TABS.tab10 = data.tab10Shots.filter(x => typeof x === 'string').slice(0, MAX_TAB).map(makeTabItem);
   if(data.store && (data.store === 'apple' || data.store === 'google')) setStore(data.store);
   if(data.theme && (data.theme === 'light' || data.theme === 'dark')){
     if(typeof setDeviceTheme === 'function') setDeviceTheme(data.theme, false);
@@ -6427,7 +6525,7 @@ function parseAndApplyJSON(jsonString){
   }
   if(data.stats){ applyStatsFromObject(data.stats); syncStatInputs(); renderStats(); }
 
-  if(typeof data.supportsIpad === 'boolean') setSupportsIpad(data.supportsIpad);
+  if(typeof data.supportsIpad === 'boolean' && typeof setSupportsIpad === 'function') setSupportsIpad(data.supportsIpad);
   if(data.ipadFitMode === 'cover' || data.ipadFitMode === 'contain'){
     IPAD_FIT_MODE = data.ipadFitMode;
     if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
@@ -6436,33 +6534,40 @@ function parseAndApplyJSON(jsonString){
     IPAD_SHOTS = data.ipadShots.filter(x => typeof x === 'string');
   }
 
-  renderIcons();
-  renderFeature();
-  renderShots();
-  renderIpadShots();
-  renderTablets();
-  update();
+  if(typeof renderIcons === 'function') renderIcons();
+  if(typeof renderFeature === 'function') renderFeature();
+  if(typeof renderShots === 'function') renderShots();
+  if(typeof renderIpadShots === 'function') renderIpadShots();
+  if(typeof renderTablets === 'function') renderTablets();
+  if(typeof update === 'function') update();
   saveState();
 
   if(hadWrongTypes){
-    showToast('Imported config (Note: invalid non-string fields were ignored)','warn', 3500);
+    showToast('Imported config (Note: invalid non-string fields were ignored)', 'warn', 3500);
   } else {
-    showToast('Configuration imported successfully!','📂');
+    showToast('Configuration imported successfully!', 'ok');
   }
   return true;
 }
 
-$('optImportJSON').onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; $('jsonFileInput').click(); };
-$('jsonFileInput').onchange = (e) => {
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    parseAndApplyJSON(reader.result);
+if($('optImportJSON')){
+  $('optImportJSON').onclick = () => {
+    if(typeof canUpload === 'function' && !canUpload(1000)) return;
+    if($('jsonFileInput')) $('jsonFileInput').click();
   };
-  reader.readAsText(file);
-  e.target.value = '';
-};
+}
+if($('jsonFileInput')){
+  $('jsonFileInput').onchange = (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      parseAndApplyJSON(reader.result);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+}
 
 // Drag & Drop JSON anywhere onto the page
 window.addEventListener('dragover', e => e.preventDefault());
@@ -6477,21 +6582,27 @@ window.addEventListener('drop', e => {
     };
     reader.readAsText(file);
   } else if (!e.target.closest('#icoDropZone') && !e.target.closest('#featureDropZone') && !e.target.closest('#shotDropZone') && !e.target.closest('#ipadDropZone') && !e.target.closest('#bundleDropZone') && !e.target.closest('.drop-zone') && !e.target.closest('.sl') && !e.target.closest('.tabsec')) {
-    showToast('Unsupported file type. Please drop a .json configuration file.','warn');
+    showToast('Unsupported file type. Please drop a .json configuration file.', 'warn');
   }
 });
 
 // Reset to Default State
-$('optResetDefault').onclick = () => {
-  if(confirm('Are you sure you want to reset all inputs to the default template?')){
-    localStorage.removeItem(STORAGE_KEY);
-    if(typeof idbDelete === 'function') idbDelete(STORAGE_KEY);
-    resetStats();
-    loadPreset('taskflow');
-  }
-};
+if($('optResetDefault')){
+  $('optResetDefault').onclick = () => {
+    if(confirm('Are you sure you want to reset all inputs to the default template?')){
+      localStorage.removeItem(STORAGE_KEY);
+      if(typeof idbDelete === 'function') idbDelete(STORAGE_KEY);
+      resetStats();
+      loadPreset('taskflow');
+    }
+  };
+}
 
-// --- Export PNG via html2canvas (with frame, or screen only) ---
+
+/* =========================================================================
+   Module: src/js/modules/export/png.js
+   ========================================================================= */
+// Store Preview Studio - PNG Image Exporter via html2canvas
 if($('optExportPNG')) $('optExportPNG').onclick = () => exportPNG(2);
 const optExport3x = $('optExportPNG3x');
 if(optExport3x) optExport3x.onclick = () => exportPNG(3);
@@ -6569,7 +6680,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   if(typeof canDownload === 'function' && !canDownload(1000)) return;
   if(typeof scaleFactor !== 'number') scaleFactor = 3;
   if(typeof html2canvas === 'undefined'){
-    showToast('Mockup generator library is still loading. Please try again in a few seconds.', '⏳', 3500);
+    showToast('Mockup generator library is still loading. Please try again in a few seconds.', 'warn', 3500);
     return;
   }
 
@@ -6596,7 +6707,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   // Screen only: capture the inner screen (.phone) instead of the whole device frame
   const target = opts.frameless ? (devToCapture.querySelector('.phone') || devToCapture) : devToCapture;
 
-  showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`,'⏳', 4000);
+  showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`, 'info', 4000);
 
   // Lock fit() and temporarily reset zoom & animations so html2canvas measures unzoomed 1:1 layout
   isExporting = true;
@@ -6648,14 +6759,14 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     });
     if(EXPORT_WM) canvas = addMockupNote(canvas, scaleFactor);
 
-    const rawName = ($('f-name').value || '').trim();
+    const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
     let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     if(!slug) slug = 'app';
     const link = document.createElement('a');
     link.download = `${slug}-${devSlug}-${opts.frameless ? 'screen' : 'preview'}-${scaleFactor}x.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
-    showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : ''}) downloaded!`,'📸');
+    showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : ''}) downloaded!`, 'ok');
   }catch(err){
     console.error('Export PNG failed:', err);
     showToast('Failed to generate image: ' + err.message, 'warn', 4000);
@@ -6667,22 +6778,6 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     if(hadFloat && isFloating) devToCapture.classList.add('floating');
   }
 }
-
-// Download helper
-function downloadFile(filename, content, type){
-  const blob = new Blob([content], {type});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(()=>{
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 100);
-}
-
 
 
 /* =========================================================================

@@ -1,0 +1,28 @@
+/* ---------- GOOGLE PLAY RATINGS BREAKDOWN & REVIEW CARDS ---------- */
+.g-rating-breakdown{display:flex;gap:20px;align-items:center;margin:10px 0 16px}
+.g-rb-left{display:flex;flex-direction:column;align-items:center;min-width:75px}
+.g-rb-num{font-size:38px;font-weight:700;line-height:1;color:var(--t)}
+.g-rb-stars{font-size:12px;color:#0b57d0;letter-spacing:1px;margin:5px 0 3px}
+.phone.google[data-theme=dark] .g-rb-stars{color:#a8c7fa}
+.g-rb-cnt{font-size:11.5px;color:var(--s)}
+.g-rb-bars{flex:1;display:flex;flex-direction:column;gap:5px}
+.g-bar-row{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--s);font-weight:500}
+.g-bar-track{flex:1;height:7px;background:var(--sp);border-radius:4px;overflow:hidden}
+.g-bar-fill{height:100%;background:#0b57d0;border-radius:4px}
+.phone.google[data-theme=dark] .g-bar-fill{background:#a8c7fa}
+
+/* Review cards */
+.g-reviews-list{display:flex;flex-direction:column;gap:14px;margin-bottom:18px}
+.g-rev-card{border-top:1px solid var(--sp);padding-top:14px}
+.g-rev-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.g-rev-avatar{width:28px;height:28px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.g-rev-author{font-size:13px;font-weight:500;color:var(--t);flex:1}
+.g-rev-more{color:var(--s);cursor:pointer}
+.g-rev-stars{font-size:11px;color:#0b57d0;margin-bottom:6px}
+.phone.google[data-theme=dark] .g-rev-stars{color:#a8c7fa}
+.g-rev-date{font-size:11.5px;color:var(--s);margin-left:6px}
+.g-rev-body{font-size:13px;line-height:1.45;color:var(--t);margin-bottom:8px}
+.g-rev-helpful{font-size:11.5px;color:var(--s);margin-bottom:8px}
+.g-rev-actions{font-size:12px;color:var(--s);display:flex;align-items:center;gap:8px}
+.g-chip-btn{background:transparent;border:1px solid var(--sp);border-radius:14px;padding:3px 12px;font-size:11.5px;color:var(--t);cursor:pointer}
+.g-chip-btn:hover{background:var(--sf)}

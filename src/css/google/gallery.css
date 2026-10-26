@@ -1,0 +1,6 @@
+/* ---------- GOOGLE PLAY SCREENSHOTS GALLERY ---------- */
+.google .gal{gap:10px;padding:2px 0 18px}
+.google .gal img{flex:0 0 190px;width:190px;border-radius:7px;box-shadow:0 0 0 1px var(--sp)}
+.google .gal img.landscape-shot{flex:0 0 330px;width:330px;aspect-ratio:16/9;border-radius:7px}
+.google .shots{gap:6px}
+.google .shots img{border-radius:5px;box-shadow:0 0 0 1px var(--sp)}

@@ -7,8 +7,8 @@
 
 ## Quick Start
 
-1. Open **`store_preview_studio.html`** in **Brave Browser** (or any modern web browser: Brave, Safari, Edge, Chrome, Firefox).
-   - Or run via terminal: `open -a "Brave Browser" store_preview_studio.html`
+1. Open **`core.html`** (or `store_preview_studio.html`) in **Brave Browser** (or any modern web browser: Brave, Safari, Edge, Chrome, Firefox).
+   - Or run via terminal: `open core.html`
 2. **Zero installation required** — no Node.js, no Docker, and no server configuration when simply using the studio.
 3. Everything runs **100% Client-Side** with zero tracking and zero telemetry. Your confidential metadata, pre-release screenshots, and strategy remain strictly private on your machine.
 
@@ -26,7 +26,7 @@ If you are customizing the modular source code in `src/`:
   *(Automatically opens `http://localhost:3000`. Any code change in `src/` triggers an instant browser reload via SSE without manual refresh).*
 - **Bundle & Package Commercial Release**:
   ```bash
-  node build.js           # Bundle standalone store_preview_studio.html
+  node build.js           # Bundle standalone core.html (and store_preview_studio.html)
   node build.js --watch   # Auto-bundle on file change
   node build.js --release # Minify & package store-preview-studio-v1.0.zip for Gumroad
   ```
