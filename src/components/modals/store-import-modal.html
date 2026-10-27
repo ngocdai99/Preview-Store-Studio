@@ -1,4 +1,4 @@
-<!-- Universal Store Import Modal (App Store & Google Play) -->
+<!-- Official Apple App Store Import Modal -->
 <div class="confirm-modal-backdrop" id="storeImportModal" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="confirm-modal-card store-import-card">
     <div class="confirm-modal-header">
@@ -10,25 +10,26 @@
         </svg>
       </div>
       <div class="confirm-modal-meta">
-        <h4 class="confirm-modal-title">Import App from Store</h4>
-        <p class="confirm-modal-desc">Paste an App Store or Google Play link, Apple App ID, or Android package name to instantly fetch real metadata, icons, and screenshots.</p>
+        <h4 class="confirm-modal-title">Import from App Store</h4>
+        <p class="confirm-modal-desc">Paste an App Store link or Apple App ID to instantly fetch official metadata, Retina icons, and screenshots.</p>
       </div>
     </div>
 
     <div class="store-import-body">
       <div class="store-import-input-wrap">
-        <input type="text" id="storeImportInput" class="store-import-input" placeholder="e.g. https://apps.apple.com/... or com.spotify.music or 324684580" autocomplete="off" spellcheck="false">
+        <input type="text" id="storeImportInput" class="store-import-input" placeholder="e.g. https://apps.apple.com/... or 324684580" autocomplete="off" spellcheck="false">
       </div>
 
       <div class="store-import-chips">
         <span class="store-import-chips-label">Quick test:</span>
-        <button type="button" class="store-import-chip" data-import-val="324684580">Spotify (iOS)</button>
-        <button type="button" class="store-import-chip" data-import-val="com.spotify.music">Spotify (Android)</button>
+        <button type="button" class="store-import-chip" data-import-val="324684580">Spotify</button>
         <button type="button" class="store-import-chip" data-import-val="570060128">Duolingo</button>
-        <button type="button" class="store-import-chip" data-import-val="org.telegram.messenger">Telegram</button>
+        <button type="button" class="store-import-chip" data-import-val="1232780281">Notion</button>
+        <button type="button" class="store-import-chip" data-import-val="686449807">Telegram</button>
       </div>
 
       <div id="storeImportStatus" class="store-import-status" style="display:none;"></div>
+      <div class="store-import-disclaimer">Uses official Apple iTunes public API. App assets belong to their respective copyright owners and are fetched solely for preview and mockup generation.</div>
     </div>
 
     <div class="confirm-modal-actions">

@@ -93,6 +93,13 @@
   color: #6ee7b7;
 }
 
+.store-import-disclaimer {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #64748b;
+  margin-top: 4px;
+}
+
 /* Light Theme */
 :root[data-ui=light] .store-import-input {
   background: #ffffff;
@@ -133,4 +140,8 @@
   background: #ecfdf5;
   border-color: #a7f3d0;
   color: #065f46;
+}
+
+:root[data-ui=light] .store-import-disclaimer {
+  color: #94a3b8;
 }
