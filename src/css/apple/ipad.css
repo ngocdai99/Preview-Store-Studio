@@ -101,7 +101,7 @@
   display:inline-flex;align-items:center;gap:8px;
   margin-top:14px;padding:6px 0 16px;
   font-size:13.5px;font-weight:600;color:var(--s);
-  cursor:pointer;user-select:none;border-bottom:0.5px solid var(--sp);width:100%;
+  cursor:pointer;user-select:none;width:100%;
 }
 .ipad-plat-icons{display:inline-flex;align-items:center;gap:4px;color:var(--s)}
 .ipad-plat-tablet{width:16px;height:16px}
@@ -110,14 +110,20 @@
 
 /* iPad Description & Developer Row */
 .ipad-desc-row{
-  display:flex;gap:36px;margin:20px 0 28px;padding-bottom:24px;border-bottom:0.5px solid var(--sp);
+  display:flex;gap:36px;margin:20px 0 28px;
 }
 .ipad-desc-col{flex:1.8;min-width:0}
-.ipad-desc-txt{font-size:14.5px;line-height:1.5;color:var(--t);margin-bottom:12px}
+.ipad-desc-txt{
+  font-size:14.5px;line-height:1.45;color:var(--t);margin-bottom:12px;
+  word-break:break-word;
+}
+.ipad-desc-more{
+  color:var(--bl);font-weight:400;cursor:pointer;margin-left:4px;
+}
 .ipad-cat-pill-wrap{margin-top:10px}
 .ipad-cat-pill{
   display:inline-block;padding:5px 14px;border-radius:999px;
-  background:var(--cd);color:var(--bl);font-size:13px;font-weight:500;
+  background:var(--cd);color:var(--t);font-size:13px;font-weight:500;
 }
 .ipad-dev-col{
   flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;text-align:right;

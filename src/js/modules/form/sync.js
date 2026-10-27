@@ -50,12 +50,19 @@ function update(){
 
     // Synchronize to Mockup Displays (clamped to official store limits)
     $$('[data-b="'+k+'"]').forEach(e => {
-      const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : ''))));
+      const fallback = k==='name' ? 'App Name' : (k==='sub' ? 'App Subtitle' : (k==='short' ? 'Short description...' : (k==='desc' ? 'App description goes here...' : (k==='new' ? 'Release notes...' : (k==='promo' ? 'Special offer, seasonal update, or headline...' : '')))));
       let elemMax = max;
       if(k === 'new'){
         elemMax = e.closest('.dev.google, .dev.gtab') ? 500 : 4000;
       }
-      const displayVal = (elemMax && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, elemMax) : v.slice(0, elemMax)) : (v || fallback);
+      let displayVal = (elemMax && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, elemMax) : v.slice(0, elemMax)) : (v || fallback);
+      if(k === 'promo' && !v){
+        const descInp = $('f-desc');
+        const descFallback = descInp && descInp.value.trim();
+        if(descFallback){
+          displayVal = typeof clampGraphemes === 'function' ? clampGraphemes(descFallback, 170) : descFallback.slice(0, 170);
+        }
+      }
       e.textContent = displayVal || fallback;
     });
   }
