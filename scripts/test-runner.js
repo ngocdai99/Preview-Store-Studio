@@ -471,6 +471,7 @@ function resolveTestHtmlIncludes(content) {
 const commonHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'common.html'), 'utf8'));
 const ipadHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'ipad.html'), 'utf8'));
 const stageTbHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage-toolbar.html'), 'utf8'));
+const brandHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'header', 'brand.html'), 'utf8'));
 const shotsJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots.js'), 'utf8');
 const appleJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'apple', 'apple.js'), 'utf8');
 
@@ -486,6 +487,7 @@ assert(commonHtml.includes('id="ipadSlist"') && commonHtml.includes('id="addIpad
 assert(ipadHtml.includes('data-shots="ipad-gal"'), 'ipad.html uses data-shots="ipad-gal" for isolated iPad gallery');
 assert(ipadHtml.includes('data-shots="ipad-shots"'), 'ipad.html uses data-shots="ipad-shots" for search gallery');
 assert(stageTbHtml.includes('data-d="iphone"') && stageTbHtml.includes('data-d="ipad"'), 'stage-toolbar.html provides both iPhone and iPad device selectors');
+assert(brandHtml.includes('class="window-dots"') && brandHtml.includes('dot red') && brandHtml.includes('dot yellow') && brandHtml.includes('dot green'), 'brand.html in Header includes macOS window traffic light decoration dots');
 
 // 3. Decoupled Preview Logic
 assert(!appleJs.includes('if(d === \'ipad\' && !SUPPORTS_IPAD)'), 'apple.js does NOT block switching to iPad in iPhone-only mode');
@@ -555,20 +557,14 @@ assert(classifyIpadScreenshotRatio(1024, 1024) === 'SQUARE_REJECT', '1024×1024 
 assert(classifyIpadScreenshotRatio(1000, 1500) === 'NON_IPAD_RATIO', 'Non-standard ratio flagged as NON_IPAD_RATIO');
 
 // ---------------------------------------------------------------------
-// Suite 9: iPad Pro 13" Resize Engine & Smart Canvas Fit
+// Suite 9: iPad Pro 13" Pure Preview & Validation (No Risky Resize)
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 9]: iPad Pro 13" Resize Engine & Smart Canvas Fit');
+console.log('\n[SUITE 9]: iPad Pro 13" Pure Preview & Validation (No Risky Resize)');
 
-// 1. Verify UI controls & function signatures exist in bundled HTML
-assert(bundledHtml.includes('function fitToIpadProCanvas'), 'Bundled app defines fitToIpadProCanvas engine');
-assert(bundledHtml.includes('function fitIpadScreenshotAsync'), 'Bundled app defines fitIpadScreenshotAsync');
-assert(bundledHtml.includes('function fixIpadScreenshot'), 'Bundled app defines fixIpadScreenshot');
-assert(bundledHtml.includes('function fixAllIpadScreenshots'), 'Bundled app defines fixAllIpadScreenshots');
-assert(bundledHtml.includes('function generateIpadFromPhone'), 'Bundled app defines generateIpadFromPhone');
-assert(bundledHtml.includes('id="btnGenIpadFromPhone"'), 'Common editor includes #btnGenIpadFromPhone button');
-assert(bundledHtml.includes('id="f-ipad-fit-mode"'), 'Editor includes #f-ipad-fit-mode dropdown selector');
-assert(bundledHtml.includes('btnFitIpad_'), 'Editor slist renders row-level Fit button');
-assert(bundledHtml.includes('btnFixAllIpad'), 'Status badge supports Resize All (2048px) button');
+assert(!bundledHtml.includes('id="btnGenIpadFromPhone"'), 'Risky #btnGenIpadFromPhone button is removed from editor');
+assert(!bundledHtml.includes('id="f-ipad-fit-mode"'), 'Risky #f-ipad-fit-mode dropdown selector is removed from editor');
+assert(!bundledHtml.includes('btnFitIpad_'), 'Risky row-level Fit button is removed from iPad list');
+assert(!bundledHtml.includes('btnFixAllIpad'), 'Risky Resize All (2048px) button is removed from iPad status badge');
 assert(!bundledHtml.includes('btnDlIpad_'), 'Redundant raw screenshot download button is removed from iPad list');
 assert(!bundledHtml.includes('btnDlAllIpad'), 'Redundant ZIP download button is removed from iPad badge');
 
@@ -1171,9 +1167,22 @@ assert(bundledHtml.includes('btnToggleSidebar.onclick = (e) =>'), 'btnToggleSide
 
 // 10. Dual Store Phone Preview (iPhone + Android Phone Side-by-Side) & PNG Export
 assert(bundledHtml.includes('id="stageDevices"'), 'Stage wraps device mockups in #stageDevices flex container');
-assert(bundledHtml.includes('data-d="dual"') && bundledHtml.includes('data-gd="dual"'), 'Both Apple (#dt) and Google (#gdt) device selectors include Dual View toggle button');
+assert(bundledHtml.includes('data-s="dual"') && bundledHtml.includes('Dual Store Phone Preview (iPhone &amp; Android Phone side-by-side)'), 'Store switcher (.seg) includes Dual View tab with clear side-by-side phone tooltip');
+assert(bundledHtml.includes('class="seg-tooltip"') && bundledHtml.includes('class="seg-tt-badge"') && bundledHtml.includes('Phone Only'), 'Store switcher tab includes custom instant tooltip with Phone Only badge for Dual View');
+assert(bundledHtml.includes('Side-by-side preview of <b>iPhone</b> and <b>Android Phone</b> on one canvas.'), 'Dual View tooltip provides clean concise preview description');
 assert(bundledHtml.includes('body[data-dual="true"] .dev.apple.single') && bundledHtml.includes('body[data-dual="true"] #dev-phone.dev.google'), 'CSS rules display both iPhone and Android Phone side-by-side when data-dual="true"');
 assert(bundledHtml.includes("devSlug = 'dual-store-phone'"), 'exportPNG supports capturing dual-store-phone comparison image');
+assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes('GOOGLE PLAY &middot; Android'), 'Devices render marketing-style platform header labels (APP STORE · iPhone / GOOGLE PLAY · Android)');
+assert(bundledHtml.includes('.dev-label') && bundledHtml.includes('.dev-title'), 'Stage stylesheet includes .dev-label and .dev-title presentation styling');
+
+// 11. Marketing-Aligned Placeholder App Icon & Silent Validation in Core Studio
+assert(bundledHtml.includes('class="ico-wrap is-placeholder"') && bundledHtml.includes('id="icoDropZone"'), 'App icon drop container in Listing Details starts with .is-placeholder class');
+assert(bundledHtml.includes('<div class="ico-ov">') && bundledHtml.includes('circle cx="11" cy="11" r="8"'), 'App icon drop container contains .ico-ov overlay with blue zoom/lens icon');
+assert(bundledHtml.includes('linearGradient id="c6-bg"') && bundledHtml.includes('stop-color="#3b82f6"'), 'BLANK_ICON matches marketing Concept 6 vibrant dual-device vector gradient (#3b82f6 -> #8b5cf6)');
+assert(bundledHtml.includes('function isPlaceholderIcon'), 'Core studio includes isPlaceholderIcon helper function to silence validation badge on unedited drafts');
+assert(bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed #3b82f6') || bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed'), 'CSS defines dashed border for .ico-wrap.is-placeholder');
+assert(bundledHtml.includes('.ico-wrap.is-placeholder .ico-ov') && bundledHtml.includes('background:rgba(8,12,24,0.65);color:#38bdf8'), 'CSS defines subtle dark overlay and blue zoom icon for placeholder state');
+assert(bundledHtml.includes("iconSrc = userDraft.icon") && bundledHtml.includes("userDraft.isCustomIcon"), 'Draft pill resolves to original vibrant BLANK_ICON and sanitizes legacy pastel icons');
 
 
 // ---------------------------------------------------------------------

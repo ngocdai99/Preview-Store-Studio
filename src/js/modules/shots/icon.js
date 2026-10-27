@@ -3,6 +3,49 @@ let ICON_FILE_SIZE = 0;
 let ICON_FILE_TYPE = '';
 let ICON_FILE_NAME = '';
 
+function isPlaceholderIcon(){
+  if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) return false;
+  if(typeof CURRENT_PRESET_KEY !== 'undefined'){
+    if(CURRENT_PRESET_KEY === 'none') return true;
+    if(CURRENT_PRESET_KEY === 'draft') return !IS_CUSTOM_ICON;
+  }
+  if(!ICON || ICON === BLANK_ICON) return true;
+  if(typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024 && ICON === BLANK_ICON_1024) return true;
+  if(typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512 && ICON === BLANK_ICON_512) return true;
+  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('studioBg') || ICON.includes('stdBg'))) return true;
+  return false;
+}
+
+function updateIconDropZoneUi(){
+  const dropZone = $('icoDropZone');
+  const inspectBtn = $('icoInspect');
+  const badge = $('iconStatusBadge');
+  const placeholder = isPlaceholderIcon();
+
+  if(dropZone){
+    if(placeholder){
+      dropZone.classList.add('is-placeholder');
+      dropZone.classList.remove('has');
+      dropZone.setAttribute('title', 'Click to upload custom app icon');
+    } else {
+      dropZone.classList.remove('is-placeholder');
+      dropZone.classList.add('has');
+      dropZone.setAttribute('title', 'Click to inspect icon in high resolution');
+    }
+  }
+
+  if(inspectBtn){
+    inspectBtn.disabled = placeholder;
+    inspectBtn.classList.toggle('disabled', placeholder);
+    inspectBtn.setAttribute('title', placeholder ? 'Upload an app icon to inspect store compliance' : 'Inspect Icon Details & Store Compliance');
+  }
+
+  if(badge && placeholder){
+    badge.style.display = 'none';
+    badge.innerHTML = '';
+  }
+}
+
 function getIconMeta(src = null){
   const targetSrc = src || ICON;
   let size = ICON_FILE_SIZE || 0;
@@ -36,11 +79,23 @@ function renderFeature(){
 
 let _iconValRunId = 0;
 function validateAppIcon(){
+  updateIconDropZoneUi();
   const badge = $('iconStatusBadge');
   if(!badge || !ICON) return;
+  if(isPlaceholderIcon()){
+    badge.style.display = 'none';
+    badge.innerHTML = '';
+    return;
+  }
+  badge.style.display = '';
   const targetDim = (store === 'google' ? 512 : 1024);
   if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && ICON.startsWith('data:image/svg+xml')){
     rasterizeSvgToStorePng(ICON, targetDim, pngSrc => {
+      if(isPlaceholderIcon()){
+        badge.style.display = 'none';
+        badge.innerHTML = '';
+        return;
+      }
       runIconPixelAudit(pngSrc);
     });
     return;
@@ -198,6 +253,17 @@ function runIconPixelAudit(iconSrc){
 }
 
 // Icon Upload & Drag-and-drop Listeners
+function handleIconSlotClick(e){
+  if(e) e.stopPropagation();
+  if(isPlaceholderIcon()){
+    if($('icoFile')) $('icoFile').click();
+  } else {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  }
+}
+
 if($('icoUp')){
   $('icoUp').onclick = () => {
     if(typeof canUpload === 'function' && !canUpload(1000)) return;
@@ -205,7 +271,12 @@ if($('icoUp')){
   };
 }
 if($('icoInspect')){
-  $('icoInspect').onclick = () => {
+  $('icoInspect').onclick = (e) => {
+    if(e) e.stopPropagation();
+    if(isPlaceholderIcon()){
+      if($('icoFile')) $('icoFile').click();
+      return;
+    }
     if(typeof openImageDetailModal === 'function'){
       openImageDetailModal({ src: ICON, type: 'icon', store });
     }
@@ -213,6 +284,7 @@ if($('icoInspect')){
 }
 if($('iconStatusBadge')){
   $('iconStatusBadge').onclick = () => {
+    if(isPlaceholderIcon()) return;
     if(typeof openImageDetailModal === 'function'){
       openImageDetailModal({ src: ICON, type: 'icon', store });
     }
@@ -221,12 +293,7 @@ if($('iconStatusBadge')){
 const icoPrevImg = $('icoPrev');
 if(icoPrevImg){
   icoPrevImg.style.cursor = 'pointer';
-  icoPrevImg.onclick = e => {
-    e.stopPropagation();
-    if(typeof openImageDetailModal === 'function'){
-      openImageDetailModal({ src: ICON, type: 'icon', store });
-    }
-  };
+  icoPrevImg.onclick = handleIconSlotClick;
 }
 if($('icoFile')){
   $('icoFile').onchange = e => {
@@ -238,8 +305,13 @@ if($('icoFile')){
     ICON_FILE_NAME = f.name || '';
     readFile(f, d => {
       ICON = d;
+      if(typeof userDraft !== 'undefined' && userDraft){
+        userDraft.icon = d;
+        userDraft.isCustomIcon = true;
+      }
       renderIcons();
       saveState();
+      if(typeof updateDraftPill === 'function') updateDraftPill();
       showToast('App icon updated!', 'ok');
     });
     e.target.value = '';
@@ -249,6 +321,13 @@ if($('icoFile')){
 // Drag & drop local image directly onto Icon zone
 const icoDropZone = $('icoDropZone');
 if(icoDropZone){
+  icoDropZone.onclick = handleIconSlotClick;
+  icoDropZone.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      handleIconSlotClick(e);
+    }
+  });
   icoDropZone.addEventListener('dragover', e => {
     e.preventDefault();
     icoDropZone.classList.add('drag-over');
@@ -267,8 +346,13 @@ if(icoDropZone){
       ICON_FILE_NAME = file.name || '';
       readFile(file, d => {
         ICON = d;
+        if(typeof userDraft !== 'undefined' && userDraft){
+          userDraft.icon = d;
+          userDraft.isCustomIcon = true;
+        }
         renderIcons();
         saveState();
+        if(typeof updateDraftPill === 'function') updateDraftPill();
         showToast('App icon dropped & applied!', 'ok');
       });
     }

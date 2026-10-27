@@ -24,6 +24,9 @@ const ORDER = [
   { file: 'store-preview-studio-template.json', key: 'studio', tag: 'Studio' },
   { file: 'saas-app-template.json', key: 'taskflow', tag: 'SaaS' },
   { file: 'fitness-tracker-template.json', key: 'pulsefit', tag: 'Fitness' },
+  { file: 'zenmind-meditation-template.json', key: 'zenmind', tag: 'Health' },
+  { file: 'cyberstrike-rpg-game-template.json', key: 'cyberstrike', tag: 'Game' },
+  { file: 'education-language-template.json', key: 'edulearn', tag: 'Edu' },
 ];
 
 function slim(entry) {

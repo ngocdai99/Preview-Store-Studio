@@ -6,7 +6,7 @@ function fit(){
   if(isExporting) return;
   const st=document.querySelector('.stage'),m=isM(),pad=m?20:40;
   const tb=document.querySelector('.stage-toolbar');
-  const vt=(tb?tb.offsetHeight:40)+(m?14:18);
+  const vt=(tb?tb.offsetHeight:40)+(m?14:18)+44;
   const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
 
   let baseW = 416, baseH = 870;

@@ -82,16 +82,14 @@
 :root[data-ui=light] .srow.dragging{box-shadow:0 10px 24px rgba(0,0,0,.15)}
 :root[data-ui=light] .feature-wrap{background:#f2f2f5;box-shadow:0 2px 10px rgba(0,0,0,.08)}
 :root[data-ui=light] .ico-wrap{background:transparent}
-:root[data-ui=light] .ico-wrap.has,
-:root[data-ui=light] .ico-wrap:not(.is-placeholder){box-shadow:0 4px 14px rgba(15,23,42,.08);border:0}
+:root[data-ui=light] .ico-wrap.has{box-shadow:0 4px 14px rgba(15,23,42,.08);border:0}
 :root[data-ui=light] .ico-wrap.has:hover{box-shadow:0 8px 20px rgba(0,0,0,.12)}
-:root[data-ui=light] .ico-wrap.is-placeholder{border:1.5px dashed rgba(59,130,246,.7);background:transparent;box-shadow:0 4px 14px rgba(59,130,246,0.15)}
-:root[data-ui=light] .ico-wrap.is-placeholder:hover{border-color:#2563eb;box-shadow:0 0 18px rgba(37,99,235,.25)}
-:root[data-ui=light] .ico-wrap.is-placeholder .ico-drop-overlay{display:flex !important;opacity:1;background:transparent;color:#2563eb}
-:root[data-ui=light] .ico-wrap.is-placeholder:hover .ico-drop-overlay{color:#1d4ed8}
-:root[data-ui=light] .ico-wrap.has .ico-drop-overlay,
-:root[data-ui=light] .ico-wrap:hover .ico-drop-overlay,
-:root[data-ui=light] .ico-wrap.drag-over .ico-drop-overlay{background:rgba(15,23,42,.75);color:#f8fafc}
+:root[data-ui=light] .ico-wrap.is-placeholder{border:1.5px dashed #3b82f6;background:rgba(59,130,246,.04);box-shadow:none}
+:root[data-ui=light] .ico-wrap.is-placeholder:hover{border-color:#2563eb;background:rgba(59,130,246,.08);box-shadow:0 0 18px rgba(59,130,246,.2)}
+:root[data-ui=light] .ico-wrap.is-placeholder .ico-ov{background:rgba(15,23,42,0.45);color:#38bdf8}
+:root[data-ui=light] .ico-wrap.has .ico-ov,
+:root[data-ui=light] .ico-wrap:hover .ico-ov,
+:root[data-ui=light] .ico-wrap.drag-over .ico-ov{background:rgba(15,23,42,.75);color:#f8fafc}
 :root[data-ui=light] .menu{background:rgba(255,255,255,.97);box-shadow:0 16px 36px rgba(15,23,42,.16)}
 :root[data-ui=light] .menu-item:hover{background:rgba(0,0,0,.05);color:var(--tx)}
 :root[data-ui=light] .sw-row{
@@ -129,6 +127,7 @@
 :root[data-ui=light] .seg button:hover:not(.on){
   color:#0f172a;
 }
+:root[data-ui=light] .seg button[data-s="dual"]:not(.on) .s-ico{color:#2563eb}
 :root[data-ui=light] .seg button[data-s="apple"]:not(.on) .s-ico{color:#0066ff}
 :root[data-ui=light] .seg button[data-s="google"]:not(.on) .s-ico{color:#059669}
 :root[data-ui=light] .seg button.on{color:#fff!important}

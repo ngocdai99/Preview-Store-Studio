@@ -1,14 +1,13 @@
 /* ---------- Store Switcher Segmented Control ---------- */
 .seg {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 14px;
   padding: 4px;
-  width: 320px;
-  min-width: 204px;
+  width: 350px;
+  min-width: 280px;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.25);
   flex-shrink: 0;
 }
@@ -17,20 +16,28 @@
   position: absolute;
   top: 4px;
   bottom: 4px;
-  left: 4px;
-  width: calc(50% - 4px);
+  left: 0;
   border-radius: 10px;
   background: #0071e3;
   box-shadow: 0 3px 14px rgba(0, 113, 227, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.35s, box-shadow 0.35s, border-color 0.35s;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.35s, box-shadow 0.35s, border-color 0.35s;
+  pointer-events: none;
 }
 
-body[data-store=google] .pill {
-  transform: translateX(100%);
+body[data-store=apple]:not([data-dual=true]) .pill {
+  background: #0071e3;
+  box-shadow: 0 3px 14px rgba(0, 113, 227, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+body[data-store=google]:not([data-dual=true]) .pill {
   background: #03875f;
   box-shadow: 0 3px 14px rgba(3, 135, 95, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+body[data-dual=true] .pill {
+  background: linear-gradient(135deg, #0071e3 0%, #03875f 100%);
+  box-shadow: 0 3px 14px rgba(59, 130, 246, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .seg button {
@@ -40,12 +47,14 @@ body[data-store=google] .pill {
   border: 0;
   color: #94a3b8;
   font-weight: 700;
-  font-size: 13px;
-  padding: 7px 10px;
+  font-size: 12.5px;
+  padding: 6px 4px;
+  flex: 1 1 0;
+  width: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 6px;
   border-radius: 10px;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -78,6 +87,10 @@ body[data-store=google] .pill {
   display: block;
 }
 
+.seg button[data-s="dual"]:not(.on) .s-ico {
+  color: #60a5fa;
+}
+
 .seg button[data-s="apple"]:not(.on) .s-ico {
   color: #38bdf8;
 }
@@ -89,4 +102,140 @@ body[data-store=google] .pill {
 .seg button.on .s-ico {
   color: #fff;
   transform: scale(1.05);
+}
+
+/* ---------- Custom Instant Tooltip for Dual View Tab ---------- */
+.seg button[data-s="dual"]:hover {
+  z-index: 10;
+}
+
+.seg-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  transform: translateY(-6px);
+  width: 275px;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 11px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+  transition-delay: 80ms;
+  z-index: 250;
+  text-align: left;
+  white-space: normal;
+  line-height: 1.45;
+  cursor: default;
+}
+
+.seg-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 45px;
+  width: 10px;
+  height: 10px;
+  background: rgba(15, 23, 42, 0.96);
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  transform: rotate(45deg);
+}
+
+/* Hover & Focus state for Dual View */
+.seg button[data-s="dual"]:hover .seg-tooltip,
+.seg button[data-s="dual"]:focus-visible .seg-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Hide instantly on click/active */
+.seg button[data-s="dual"]:active .seg-tooltip {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s;
+}
+
+/* Tooltip layout & typography */
+.seg-tt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.seg-tt-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: -0.01em;
+}
+
+.seg-tt-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.seg-tt-body {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.seg-tt-body b {
+  color: #e2e8f0;
+  font-weight: 550;
+}
+
+/* Light Theme Support */
+:root[data-ui=light] .seg-tooltip {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+:root[data-ui=light] .seg-tooltip::before {
+  background: rgba(255, 255, 255, 0.98);
+  border-left-color: rgba(0, 0, 0, 0.08);
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-ui=light] .seg-tt-title {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+:root[data-ui=light] .seg-tt-body {
+  color: #64748b;
+}
+
+:root[data-ui=light] .seg-tt-body b {
+  color: #334155;
+  font-weight: 550;
+}
+
+:root[data-ui=light] .seg-tt-badge {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+  font-weight: 600;
 }

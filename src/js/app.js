@@ -826,34 +826,28 @@ const STUDIO_ICON = makeSvgDataUri(`
 `);
 
 const BLANK_ICON = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
   <defs>
-    <linearGradient id="studioBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#bfd1fd"/>
-      <stop offset="45%" stop-color="#dee0fe"/>
-      <stop offset="100%" stop-color="#d2c7fc"/>
+    <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
     </linearGradient>
-    <linearGradient id="phoneFill" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-      <stop offset="100%" stop-color="#eff6ff" stop-opacity="0.75"/>
+    <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#6366f1"/>
     </linearGradient>
   </defs>
-  <!-- Background Pastel Soft Blue-to-Lavender Squircle -->
-  <rect width="512" height="512" fill="url(#studioBg)"/>
-
-  <!-- Back Layer Device: iPad Tablet -->
-  <rect x="168" y="72" width="264" height="288" rx="40" fill="rgba(255,255,255,0.45)" stroke="#ffffff" stroke-width="26"/>
-  <circle cx="300" cy="99" r="10" fill="#ffffff"/>
-  <rect x="200" y="136" width="96" height="112" rx="16" fill="#ffffff" opacity="0.65"/>
-  <rect x="312" y="136" width="88" height="112" rx="16" fill="#ffffff" opacity="0.65"/>
-  <rect x="200" y="272" width="200" height="48" rx="12" fill="#ffffff" opacity="0.75"/>
-
-  <!-- Front Layer Device: Phone -->
-  <rect x="80" y="128" width="184" height="312" rx="48" fill="url(#phoneFill)"/>
-  <rect x="80" y="128" width="184" height="312" rx="48" fill="none" stroke="#ffffff" stroke-width="28"/>
-  <rect x="136" y="156" width="72" height="18" rx="9" fill="#ffffff"/>
-  <rect x="108" y="200" width="128" height="120" rx="16" fill="#ffffff" opacity="0.4"/>
-  <rect x="108" y="344" width="128" height="56" rx="14" fill="#ffffff" opacity="0.75"/>
+  <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
+  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
+  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
+  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
+  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
+  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
+  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
+  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
 </svg>
 `);
 
@@ -2751,6 +2745,49 @@ let ICON_FILE_SIZE = 0;
 let ICON_FILE_TYPE = '';
 let ICON_FILE_NAME = '';
 
+function isPlaceholderIcon(){
+  if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) return false;
+  if(typeof CURRENT_PRESET_KEY !== 'undefined'){
+    if(CURRENT_PRESET_KEY === 'none') return true;
+    if(CURRENT_PRESET_KEY === 'draft') return !IS_CUSTOM_ICON;
+  }
+  if(!ICON || ICON === BLANK_ICON) return true;
+  if(typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024 && ICON === BLANK_ICON_1024) return true;
+  if(typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512 && ICON === BLANK_ICON_512) return true;
+  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('studioBg') || ICON.includes('stdBg'))) return true;
+  return false;
+}
+
+function updateIconDropZoneUi(){
+  const dropZone = $('icoDropZone');
+  const inspectBtn = $('icoInspect');
+  const badge = $('iconStatusBadge');
+  const placeholder = isPlaceholderIcon();
+
+  if(dropZone){
+    if(placeholder){
+      dropZone.classList.add('is-placeholder');
+      dropZone.classList.remove('has');
+      dropZone.setAttribute('title', 'Click to upload custom app icon');
+    } else {
+      dropZone.classList.remove('is-placeholder');
+      dropZone.classList.add('has');
+      dropZone.setAttribute('title', 'Click to inspect icon in high resolution');
+    }
+  }
+
+  if(inspectBtn){
+    inspectBtn.disabled = placeholder;
+    inspectBtn.classList.toggle('disabled', placeholder);
+    inspectBtn.setAttribute('title', placeholder ? 'Upload an app icon to inspect store compliance' : 'Inspect Icon Details & Store Compliance');
+  }
+
+  if(badge && placeholder){
+    badge.style.display = 'none';
+    badge.innerHTML = '';
+  }
+}
+
 function getIconMeta(src = null){
   const targetSrc = src || ICON;
   let size = ICON_FILE_SIZE || 0;
@@ -2784,11 +2821,23 @@ function renderFeature(){
 
 let _iconValRunId = 0;
 function validateAppIcon(){
+  updateIconDropZoneUi();
   const badge = $('iconStatusBadge');
   if(!badge || !ICON) return;
+  if(isPlaceholderIcon()){
+    badge.style.display = 'none';
+    badge.innerHTML = '';
+    return;
+  }
+  badge.style.display = '';
   const targetDim = (store === 'google' ? 512 : 1024);
   if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && ICON.startsWith('data:image/svg+xml')){
     rasterizeSvgToStorePng(ICON, targetDim, pngSrc => {
+      if(isPlaceholderIcon()){
+        badge.style.display = 'none';
+        badge.innerHTML = '';
+        return;
+      }
       runIconPixelAudit(pngSrc);
     });
     return;
@@ -2946,6 +2995,17 @@ function runIconPixelAudit(iconSrc){
 }
 
 // Icon Upload & Drag-and-drop Listeners
+function handleIconSlotClick(e){
+  if(e) e.stopPropagation();
+  if(isPlaceholderIcon()){
+    if($('icoFile')) $('icoFile').click();
+  } else {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: ICON, type: 'icon', store });
+    }
+  }
+}
+
 if($('icoUp')){
   $('icoUp').onclick = () => {
     if(typeof canUpload === 'function' && !canUpload(1000)) return;
@@ -2953,7 +3013,12 @@ if($('icoUp')){
   };
 }
 if($('icoInspect')){
-  $('icoInspect').onclick = () => {
+  $('icoInspect').onclick = (e) => {
+    if(e) e.stopPropagation();
+    if(isPlaceholderIcon()){
+      if($('icoFile')) $('icoFile').click();
+      return;
+    }
     if(typeof openImageDetailModal === 'function'){
       openImageDetailModal({ src: ICON, type: 'icon', store });
     }
@@ -2961,6 +3026,7 @@ if($('icoInspect')){
 }
 if($('iconStatusBadge')){
   $('iconStatusBadge').onclick = () => {
+    if(isPlaceholderIcon()) return;
     if(typeof openImageDetailModal === 'function'){
       openImageDetailModal({ src: ICON, type: 'icon', store });
     }
@@ -2969,12 +3035,7 @@ if($('iconStatusBadge')){
 const icoPrevImg = $('icoPrev');
 if(icoPrevImg){
   icoPrevImg.style.cursor = 'pointer';
-  icoPrevImg.onclick = e => {
-    e.stopPropagation();
-    if(typeof openImageDetailModal === 'function'){
-      openImageDetailModal({ src: ICON, type: 'icon', store });
-    }
-  };
+  icoPrevImg.onclick = handleIconSlotClick;
 }
 if($('icoFile')){
   $('icoFile').onchange = e => {
@@ -2986,8 +3047,13 @@ if($('icoFile')){
     ICON_FILE_NAME = f.name || '';
     readFile(f, d => {
       ICON = d;
+      if(typeof userDraft !== 'undefined' && userDraft){
+        userDraft.icon = d;
+        userDraft.isCustomIcon = true;
+      }
       renderIcons();
       saveState();
+      if(typeof updateDraftPill === 'function') updateDraftPill();
       showToast('App icon updated!', 'ok');
     });
     e.target.value = '';
@@ -2997,6 +3063,13 @@ if($('icoFile')){
 // Drag & drop local image directly onto Icon zone
 const icoDropZone = $('icoDropZone');
 if(icoDropZone){
+  icoDropZone.onclick = handleIconSlotClick;
+  icoDropZone.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      handleIconSlotClick(e);
+    }
+  });
   icoDropZone.addEventListener('dragover', e => {
     e.preventDefault();
     icoDropZone.classList.add('drag-over');
@@ -3015,8 +3088,13 @@ if(icoDropZone){
       ICON_FILE_NAME = file.name || '';
       readFile(file, d => {
         ICON = d;
+        if(typeof userDraft !== 'undefined' && userDraft){
+          userDraft.icon = d;
+          userDraft.isCustomIcon = true;
+        }
         renderIcons();
         saveState();
+        if(typeof updateDraftPill === 'function') updateDraftPill();
         showToast('App icon dropped & applied!', 'ok');
       });
     }
@@ -3448,15 +3526,30 @@ function renderIpadSlist(){
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
+      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>' +
       '<button class="mini" data-m="-1" title="Move Up">&uarr;</button>' +
       '<button class="mini" data-m="1" title="Move Down">&darr;</button>' +
-      '<button class="mini fit-btn" id="btnFitIpad_' + i + '" title="Resize / Fit to Apple iPad Pro 13&quot; (2048×2732 px)">' + ICO_SPARKLE + 'Fit</button>' +
       '<button class="mini del" title="Delete">&times;</button>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
-    b[1].onclick = () => mvIpad(i, -1);
-    b[2].onclick = () => mvIpad(i, 1);
-    b[3].onclick = () => fixIpadScreenshot(i);
+    b[1].onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'ipad',
+          store: 'apple',
+          index: i,
+          title: `iPad Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            IPAD_SHOTS[i] = dataUrl;
+            renderIpadShots();
+            saveState();
+          }
+        });
+      }
+    };
+    b[2].onclick = () => mvIpad(i, -1);
+    b[3].onclick = () => mvIpad(i, 1);
     b[4].onclick = () => { IPAD_SHOTS.splice(i, 1); renderIpadShots(); saveState(); };
 
     col.append(head, act);
@@ -3607,283 +3700,17 @@ function validateIpadScreenshots(){
   });
 
   function finalizeIpadBadge(){
-    const actionBtns = nonCompliantIndices.length > 0 ?
-      `<div class="sb-actions" style="margin-left:auto;display:inline-flex;gap:6px;align-items:center;"><button type="button" class="mini fit-btn" id="btnFixAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Auto-resize all non-standard screenshots to iPad Pro 13&quot; 2048×2732 px">${ICO_SPARKLE}Resize All (2048px)</button></div>` : '';
-
     if(nonCompliantIndices.length > 0){
       const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
       const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px). Click <strong>Resize All</strong> to convert.</span>${actionBtns}`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px or 2064×2752 px).</span>`;
     } else {
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'} matching iPad Pro 13" standard (2048×2732 px).</span>${actionBtns}`;
-    }
-
-    if($('btnFixAllIpad')){
-      $('btnFixAllIpad').onclick = () => fixAllIpadScreenshots();
+      badgeEl.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'} matching iPad Pro 13" standard.</span>`;
     }
   }
 }
-
-/**
- * Smart fits any image into standard Apple iPad Pro 13" dimensions
- * (Portrait 2048×2732 px, or Landscape 2732×2048 px).
- */
-function fitToIpadProCanvas(img, mode){
-  const origW = img.naturalWidth || img.width;
-  const origH = img.naturalHeight || img.height;
-  if (!origW || !origH) return null;
-
-  const isWide = origW > origH * 1.15;
-  const targetW = isWide ? 2732 : 2048;
-  const targetH = isWide ? 2048 : 2732;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = targetW;
-  canvas.height = targetH;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
-
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
-
-  const origRatio = origW / origH;
-  const targetRatio = targetW / targetH;
-
-  // Case 1: If aspect ratio is already close to 4:3 / 3:4 (within 12% diff)
-  if (Math.abs(origRatio - targetRatio) < 0.12) {
-    ctx.drawImage(img, 0, 0, targetW, targetH);
-    return canvas;
-  }
-
-  // Determine fit mode (can be passed or read from UI selector #f-ipad-fit-mode)
-  const fitMode = mode || ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover'));
-
-  if (fitMode === 'cover') {
-    // Mode Cover: Scale to cover entire 2048x2732 canvas, centered crop, clean full bleed
-    const scale = Math.max(targetW / origW, targetH / origH);
-    const w = origW * scale;
-    const h = origH * scale;
-    const x = (targetW - w) / 2;
-    const y = (targetH - h) / 2;
-    ctx.drawImage(img, x, y, w, h);
-    return canvas;
-  }
-
-  // Mode Contain: Fit edge-to-edge with vibrant frosted blurred backdrop
-  const bgScale = Math.max(targetW / origW, targetH / origH);
-  const bgW = origW * bgScale;
-  const bgH = origH * bgScale;
-  const bgX = (targetW - bgW) / 2;
-  const bgY = (targetH - bgH) / 2;
-
-  ctx.save();
-  if ('filter' in ctx) {
-    try {
-      ctx.filter = 'blur(45px) brightness(0.95)';
-      ctx.drawImage(img, bgX - 30, bgY - 30, bgW + 60, bgH + 60);
-      ctx.filter = 'none';
-    } catch (e) {
-      ctx.drawImage(img, bgX, bgY, bgW, bgH);
-    }
-  } else {
-    ctx.drawImage(img, bgX, bgY, bgW, bgH);
-  }
-  ctx.restore();
-
-  // Subtle soft contrast overlay
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-  ctx.fillRect(0, 0, targetW, targetH);
-
-  // Draw foreground edge-to-edge
-  const fgScale = Math.min(targetW / origW, targetH / origH);
-  const fgW = Math.round(origW * fgScale);
-  const fgH = Math.round(origH * fgScale);
-  const fgX = Math.round((targetW - fgW) / 2);
-  const fgY = Math.round((targetH - fgH) / 2);
-
-  // For phone screenshots, add soft shadow so it stands out against backdrop
-  if (origRatio < 0.65) {
-    ctx.save();
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
-    ctx.shadowBlur = 40;
-    ctx.shadowOffsetY = 12;
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(fgX, fgY, fgW, fgH);
-    ctx.restore();
-  }
-
-  ctx.drawImage(img, fgX, fgY, fgW, fgH);
-  return canvas;
-}
-
-function fitIpadScreenshotAsync(src, mode){
-  return new Promise((resolve, reject) => {
-    if(!src || !src.trim()){
-      reject(new Error('Empty screenshot source'));
-      return;
-    }
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const canvas = fitToIpadProCanvas(img, mode);
-        if(canvas){
-          const fullPng = canvas.toDataURL('image/png');
-          try {
-            const maxDim = 600;
-            const tw = canvas.width >= canvas.height ? maxDim : Math.round((canvas.width * maxDim) / canvas.height);
-            const th = canvas.width >= canvas.height ? Math.round((canvas.height * maxDim) / canvas.width) : maxDim;
-            const tc = document.createElement('canvas');
-            tc.width = tw;
-            tc.height = th;
-            const tctx = tc.getContext('2d');
-            if(tctx){
-              tctx.imageSmoothingEnabled = true;
-              tctx.imageSmoothingQuality = 'high';
-              tctx.drawImage(canvas, 0, 0, tw, th);
-              let thumb = tc.toDataURL('image/webp', 0.85);
-              if(!thumb.startsWith('data:image/webp')){
-                thumb = tc.toDataURL('image/jpeg', 0.85);
-              }
-              if(typeof THUMB_CACHE !== 'undefined'){
-                THUMB_CACHE.set(fullPng, thumb);
-              }
-            }
-          } catch(e){}
-          resolve(fullPng);
-        } else {
-          reject(new Error('Canvas creation failed'));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    };
-    img.onerror = () => reject(new Error('Image failed to load'));
-    img.src = ensureSvgDimensions(src);
-  });
-}
-
-function fixIpadScreenshot(index){
-  if(typeof canAction === 'function' && !canAction(1000)) return;
-  const src = IPAD_SHOTS[index];
-  if(!src || !src.trim()){
-    showToast('No screenshot to resize', 'warn');
-    return;
-  }
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const w = img.naturalWidth;
-    const h = img.naturalHeight;
-    const isAlreadyCompliant = (
-      (w === 2048 && h === 2732) || 
-      (w === 2064 && h === 2752) || 
-      (w === 2732 && h === 2048) || 
-      (w === 2752 && h === 2064)
-    );
-    if(isAlreadyCompliant){
-      showToast(`Screenshot #${index + 1} is already standard iPad Pro 13" (${w}×${h} px)!`, 'ok', 3000);
-      return;
-    }
-
-    const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-    const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-    showToast(`Resizing iPad screenshot (${modeLabel})...`, 'info');
-    fitIpadScreenshotAsync(src, mode).then(dataUrl => {
-      IPAD_SHOTS[index] = dataUrl;
-      renderIpadShots();
-      saveState();
-      showToast(`Screenshot resized to 2048×2732 px (${modeLabel})!`, 'ok');
-    }).catch(err => {
-      console.error('Resize error:', err);
-      showToast('Could not resize screenshot', 'warn');
-    });
-  };
-  img.onerror = () => showToast('Failed to load image for resizing', 'warn');
-  img.src = ensureSvgDimensions(src);
-}
-
-function fixAllIpadScreenshots(){
-  if(typeof canAction === 'function' && !canAction(1000)) return;
-  const validIndices = [];
-  IPAD_SHOTS.forEach((s, idx) => {
-    if(s && s.trim()) validIndices.push(idx);
-  });
-  if(validIndices.length === 0){
-    showToast('No iPad screenshots to resize', 'warn');
-    return;
-  }
-
-  const checkPromises = validIndices.map(idx => {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        const w = img.naturalWidth;
-        const h = img.naturalHeight;
-        const isCompliant = (
-          (w === 2048 && h === 2732) || 
-          (w === 2064 && h === 2752) || 
-          (w === 2732 && h === 2048) || 
-          (w === 2752 && h === 2064)
-        );
-        resolve({ idx, needsResize: !isCompliant });
-      };
-      img.onerror = () => resolve({ idx, needsResize: false });
-      img.src = ensureSvgDimensions(IPAD_SHOTS[idx]);
-    });
-  });
-
-  Promise.all(checkPromises).then(checks => {
-    const needResizeIndices = checks.filter(c => c.needsResize).map(c => c.idx);
-    if(needResizeIndices.length === 0){
-      showToast('All screenshots are already compliant with iPad Pro 13" standard!', 'ok', 3000);
-      return;
-    }
-
-    const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-    const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-    showToast(`Resizing ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} (${modeLabel})...`, 'info');
-    Promise.all(needResizeIndices.map(idx => fitIpadScreenshotAsync(IPAD_SHOTS[idx], mode))).then(results => {
-      needResizeIndices.forEach((shotIdx, resIdx) => {
-        IPAD_SHOTS[shotIdx] = results[resIdx];
-      });
-      renderIpadShots();
-      saveState();
-      showToast(`All ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} resized (${modeLabel})!`, 'ok');
-    }).catch(err => {
-      console.error('Fix all error:', err);
-      showToast('Some screenshots could not be resized', 'warn');
-    });
-  });
-}
-
-function generateIpadFromPhone(){
-  if(typeof canAction === 'function' && !canAction(1000)) return;
-  const validPhoneShots = (SHOTS || []).filter(s => typeof s === 'string' && s.trim());
-  if(validPhoneShots.length === 0){
-    showToast('Please add phone screenshots first!', 'warn');
-    return;
-  }
-  const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-  const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-  showToast(`Generating ${validPhoneShots.length} iPad Pro screenshot${validPhoneShots.length === 1 ? '' : 's'} (${modeLabel})...`, 'info');
-  Promise.all(validPhoneShots.map(s => fitIpadScreenshotAsync(s, mode))).then(results => {
-    IPAD_SHOTS = results;
-    if(!SUPPORTS_IPAD){
-      setSupportsIpad(true);
-    }
-    renderIpadShots();
-    saveState();
-    showToast(`Generated ${results.length} iPad Pro 13" screenshot${results.length === 1 ? '' : 's'} (${modeLabel})!`, 'ok');
-  }).catch(err => {
-    console.error('Generate from phone error:', err);
-    showToast('Failed to generate iPad screenshots', 'warn');
-  });
-}
-
 
 // Event Listeners for iPad Destination & Screenshots
 let ipadPick = -1;
@@ -3896,16 +3723,6 @@ if(fDestIpad){
   };
 }
 
-const fIpadFitMode = $('f-ipad-fit-mode');
-if(fIpadFitMode){
-  if(typeof IPAD_FIT_MODE !== 'undefined') fIpadFitMode.value = IPAD_FIT_MODE;
-  fIpadFitMode.onchange = (e) => {
-    IPAD_FIT_MODE = e.target.value;
-    saveState();
-    showToast('Fit mode: ' + (IPAD_FIT_MODE === 'cover' ? 'Fill / Cover (Full Bleed)' : 'Fit / Contain (Soft Blur)'), 'ok');
-  };
-}
-
 const addIpadShot = $('addIpadShot');
 if(addIpadShot){
   addIpadShot.onclick = () => {
@@ -3915,11 +3732,6 @@ if(addIpadShot){
     const ins = $$('#ipadSlist input');
     if(ins.length) ins[ins.length - 1].focus();
   };
-}
-
-const btnGenIpad = $('btnGenIpadFromPhone');
-if(btnGenIpad){
-  btnGenIpad.onclick = () => generateIpadFromPhone();
 }
 
 const ipadShotFile = $('ipadShotFile');
@@ -4753,6 +4565,7 @@ function applyGoogleDevice(){
   document.body.dataset.dual = isDual ? 'true' : 'false';
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isDual ? 'dual' : googleDevice)));
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isDual ? 'dual' : appleDevice)));
+  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === (isDual ? 'dual' : 'google')));
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){
@@ -5464,7 +5277,7 @@ function getActiveDeviceEl(s = store, d = (s === 'apple' ? appleDevice : googleD
 function computeDeviceZoom(s, d){
   const st = document.querySelector('.stage'), m = isM(), pad = m ? 20 : 40;
   const tb = document.querySelector('.stage-toolbar');
-  const vt = (tb ? tb.offsetHeight : 40) + (m ? 14 : 18);
+  const vt = (tb ? tb.offsetHeight : 40) + (m ? 14 : 18) + 44;
   const isDual = d === 'dual' || document.body.dataset.dual === 'true';
   let baseW = 416, baseH = 870;
   if(isDual){
@@ -5511,12 +5324,25 @@ function syncVtPill(container){
   }
 }
 
+function syncSegPill(){
+  const seg = document.querySelector('.seg');
+  if(!seg) return;
+  const pill = seg.querySelector('.pill');
+  const activeBtn = seg.querySelector('button.on');
+  if(pill && activeBtn && activeBtn.offsetWidth > 0){
+    pill.style.width = activeBtn.offsetWidth + 'px';
+    pill.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+    pill.style.opacity = '1';
+  }
+}
+
 function syncAllVtPills(){
   requestAnimationFrame(() => {
     ['dt', 'gdt', 'vt', 'theme'].forEach(id => {
       const el = $(id);
       if(el) syncVtPill(el);
     });
+    syncSegPill();
   });
 }
 
@@ -5565,7 +5391,36 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
 
 // --- Store & View Switchers ---
 function setStore(s, animate = true){
-  if(store === s && document.body.dataset.store === s){
+  if(s === 'dual'){
+    document.body.dataset.dual = 'true';
+    document.body.dataset.store = 'dual';
+    appleDevice = 'dual';
+    googleDevice = 'dual';
+    document.body.dataset.appleDevice = 'iphone';
+    document.body.dataset.googleDevice = 'phone';
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'dual'));
+    $$('[data-only]').forEach(e => e.classList.remove('hide'));
+    if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
+    clearDevTransitions();
+    if(typeof renderIcons === 'function') renderIcons();
+    if(typeof renderShots === 'function') renderShots();
+    if(typeof renderIpadShots === 'function') renderIpadShots();
+    if(typeof validateAppIcon === 'function') validateAppIcon();
+    if(typeof validateScreenshots === 'function') validateScreenshots();
+    update();
+    saveState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
+
+  // Single store mode (apple or google)
+  document.body.dataset.dual = 'false';
+  if(appleDevice === 'dual') appleDevice = 'iphone';
+  if(googleDevice === 'dual') googleDevice = 'phone';
+
+  if(store === s && document.body.dataset.store === s && document.body.dataset.dual !== 'true'){
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
     syncAllVtPills();
     return;
   }
@@ -5741,6 +5596,7 @@ function setAppleDevice(d, animate = true){
     }
     $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
     $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === (nextDual ? 'dual' : 'apple')));
     renderIcons();
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();
@@ -6027,14 +5883,14 @@ function prewarmPresetIcons() {
   if (typeof BLANK_ICON === 'string' && (BLANK_ICON.startsWith('data:image/svg+xml') || BLANK_ICON.includes('<svg'))) {
     rasterizeSvgToStorePng(BLANK_ICON, 1024, png => {
       BLANK_ICON_1024 = png;
-      if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'apple') {
+      if (!IS_CUSTOM_ICON && (CURRENT_PRESET_KEY === 'none' || CURRENT_PRESET_KEY === 'draft') && store === 'apple') {
         ICON = png;
         renderIcons();
       }
     });
     rasterizeSvgToStorePng(BLANK_ICON, 512, png => {
       BLANK_ICON_512 = png;
-      if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'google') {
+      if (!IS_CUSTOM_ICON && (CURRENT_PRESET_KEY === 'none' || CURRENT_PRESET_KEY === 'draft') && store === 'google') {
         ICON = png;
         renderIcons();
       }
@@ -6165,7 +6021,7 @@ function loadPreset(key){
       if(!BLANK_ICON_1024){
         rasterizeSvgToStorePng(BLANK_ICON, 1024, png => {
           BLANK_ICON_1024 = png;
-          if(!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'apple'){
+          if(!IS_CUSTOM_ICON && (CURRENT_PRESET_KEY === 'none' || CURRENT_PRESET_KEY === 'draft') && store === 'apple'){
             ICON = png;
             renderIcons();
           }
@@ -6174,7 +6030,7 @@ function loadPreset(key){
       if(!BLANK_ICON_512){
         rasterizeSvgToStorePng(BLANK_ICON, 512, png => {
           BLANK_ICON_512 = png;
-          if(!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === 'none' && store === 'google'){
+          if(!IS_CUSTOM_ICON && (CURRENT_PRESET_KEY === 'none' || CURRENT_PRESET_KEY === 'draft') && store === 'google'){
             ICON = png;
             renderIcons();
           }
@@ -6418,10 +6274,12 @@ function applyStateObject(s){
     if(s.form.desc !== undefined && $('f-desc')) $('f-desc').value = s.form.desc;
   }
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('studioBg') || s.icon.includes('stdBg') || s.icon.includes('c6-bg')){
+    if(s.icon === BLANK_ICON || s.icon.includes('studioBg') || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('stdBg') || s.icon.includes('c6-bg') || !s.isCustomIcon){
       ICON = BLANK_ICON;
+      IS_CUSTOM_ICON = false;
     } else {
       ICON = s.icon;
+      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
     }
   }
   if(s.featureGraphic) FEATURE_GRAPHIC = s.featureGraphic;
@@ -6475,7 +6333,8 @@ function getCurrentStateObject(){
       new: $('f-new') ? $('f-new').value : '',
       desc: $('f-desc') ? $('f-desc').value : ''
     },
-    icon: ICON,
+    icon: (IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')) ? ICON : BLANK_ICON,
+    isCustomIcon: !!(IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')),
     featureGraphic: FEATURE_GRAPHIC,
     shots: SHOTS,
     supportsIpad: SUPPORTS_IPAD,
@@ -6531,6 +6390,10 @@ function loadDraftFromStorage(){
         const parsed = JSON.parse(raw);
         if(parsed && typeof parsed === 'object'){
           userDraft = parsed;
+          if(!userDraft.isCustomIcon || !userDraft.icon || userDraft.icon.includes('studioBg') || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('stdBg')){
+            userDraft.icon = BLANK_ICON;
+            userDraft.isCustomIcon = false;
+          }
         }
       }
     }
@@ -6540,6 +6403,10 @@ function loadDraftFromStorage(){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
         userDraft = idbDraft;
+        if(!userDraft.isCustomIcon || !userDraft.icon || userDraft.icon.includes('studioBg') || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('stdBg')){
+          userDraft.icon = BLANK_ICON;
+          userDraft.isCustomIcon = false;
+        }
         updateDraftPill();
       }
     }).catch(()=>{});
@@ -6564,7 +6431,20 @@ function updateDraftPill(){
   if(hasDraft && userDraft){
     pill.classList.add('has-draft');
     pill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
-    const iconSrc = userDraft.icon || ICON || BLANK_ICON;
+    
+    // Always resolve icon to BLANK_ICON unless user has explicitly uploaded a custom icon
+    let iconSrc = BLANK_ICON;
+    if(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('studioBg') && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc') && !userDraft.icon.includes('stdBg') && !userDraft.icon.includes('c6-bg')){
+      iconSrc = userDraft.icon;
+    } else if(IS_CUSTOM_ICON && ICON && !ICON.includes('studioBg') && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc') && !ICON.includes('stdBg') && !ICON.includes('c6-bg')){
+      iconSrc = ICON;
+      userDraft.isCustomIcon = true;
+      userDraft.icon = ICON;
+    } else {
+      userDraft.isCustomIcon = false;
+      userDraft.icon = BLANK_ICON;
+    }
+
     const f = userDraft.form || {};
     const appTitle = (f.name && f.name.trim()) ? (typeof clampGraphemes === 'function' ? clampGraphemes(f.name.trim(), 30) : f.name.trim()) : 'Your App';
     
@@ -7435,6 +7315,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.transition = 'none';
         if(isDual){
           clonedEl.style.gap = '28px';
+          if(opts.frameless){
+            clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
+          }
+        } else {
+          clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
         }
         clonedDoc.querySelectorAll('.dev').forEach(d => {
           d.classList.remove('dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
@@ -7498,7 +7383,7 @@ function fit(){
   if(isExporting) return;
   const st=document.querySelector('.stage'),m=isM(),pad=m?20:40;
   const tb=document.querySelector('.stage-toolbar');
-  const vt=(tb?tb.offsetHeight:40)+(m?14:18);
+  const vt=(tb?tb.offsetHeight:40)+(m?14:18)+44;
   const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
 
   let baseW = 416, baseH = 870;

@@ -110,15 +110,30 @@ function renderIpadSlist(){
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
+      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>' +
       '<button class="mini" data-m="-1" title="Move Up">&uarr;</button>' +
       '<button class="mini" data-m="1" title="Move Down">&darr;</button>' +
-      '<button class="mini fit-btn" id="btnFitIpad_' + i + '" title="Resize / Fit to Apple iPad Pro 13&quot; (2048×2732 px)">' + ICO_SPARKLE + 'Fit</button>' +
       '<button class="mini del" title="Delete">&times;</button>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
-    b[1].onclick = () => mvIpad(i, -1);
-    b[2].onclick = () => mvIpad(i, 1);
-    b[3].onclick = () => fixIpadScreenshot(i);
+    b[1].onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'ipad',
+          store: 'apple',
+          index: i,
+          title: `iPad Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            IPAD_SHOTS[i] = dataUrl;
+            renderIpadShots();
+            saveState();
+          }
+        });
+      }
+    };
+    b[2].onclick = () => mvIpad(i, -1);
+    b[3].onclick = () => mvIpad(i, 1);
     b[4].onclick = () => { IPAD_SHOTS.splice(i, 1); renderIpadShots(); saveState(); };
 
     col.append(head, act);
@@ -269,283 +284,17 @@ function validateIpadScreenshots(){
   });
 
   function finalizeIpadBadge(){
-    const actionBtns = nonCompliantIndices.length > 0 ?
-      `<div class="sb-actions" style="margin-left:auto;display:inline-flex;gap:6px;align-items:center;"><button type="button" class="mini fit-btn" id="btnFixAllIpad" style="white-space:nowrap;padding:4px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Auto-resize all non-standard screenshots to iPad Pro 13&quot; 2048×2732 px">${ICO_SPARKLE}Resize All (2048px)</button></div>` : '';
-
     if(nonCompliantIndices.length > 0){
       const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
       const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px). Click <strong>Resize All</strong> to convert.</span>${actionBtns}`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px or 2064×2752 px).</span>`;
     } else {
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'} matching iPad Pro 13" standard (2048×2732 px).</span>${actionBtns}`;
-    }
-
-    if($('btnFixAllIpad')){
-      $('btnFixAllIpad').onclick = () => fixAllIpadScreenshots();
+      badgeEl.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'} matching iPad Pro 13" standard.</span>`;
     }
   }
 }
-
-/**
- * Smart fits any image into standard Apple iPad Pro 13" dimensions
- * (Portrait 2048×2732 px, or Landscape 2732×2048 px).
- */
-function fitToIpadProCanvas(img, mode){
-  const origW = img.naturalWidth || img.width;
-  const origH = img.naturalHeight || img.height;
-  if (!origW || !origH) return null;
-
-  const isWide = origW > origH * 1.15;
-  const targetW = isWide ? 2732 : 2048;
-  const targetH = isWide ? 2048 : 2732;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = targetW;
-  canvas.height = targetH;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
-
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
-
-  const origRatio = origW / origH;
-  const targetRatio = targetW / targetH;
-
-  // Case 1: If aspect ratio is already close to 4:3 / 3:4 (within 12% diff)
-  if (Math.abs(origRatio - targetRatio) < 0.12) {
-    ctx.drawImage(img, 0, 0, targetW, targetH);
-    return canvas;
-  }
-
-  // Determine fit mode (can be passed or read from UI selector #f-ipad-fit-mode)
-  const fitMode = mode || ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover'));
-
-  if (fitMode === 'cover') {
-    // Mode Cover: Scale to cover entire 2048x2732 canvas, centered crop, clean full bleed
-    const scale = Math.max(targetW / origW, targetH / origH);
-    const w = origW * scale;
-    const h = origH * scale;
-    const x = (targetW - w) / 2;
-    const y = (targetH - h) / 2;
-    ctx.drawImage(img, x, y, w, h);
-    return canvas;
-  }
-
-  // Mode Contain: Fit edge-to-edge with vibrant frosted blurred backdrop
-  const bgScale = Math.max(targetW / origW, targetH / origH);
-  const bgW = origW * bgScale;
-  const bgH = origH * bgScale;
-  const bgX = (targetW - bgW) / 2;
-  const bgY = (targetH - bgH) / 2;
-
-  ctx.save();
-  if ('filter' in ctx) {
-    try {
-      ctx.filter = 'blur(45px) brightness(0.95)';
-      ctx.drawImage(img, bgX - 30, bgY - 30, bgW + 60, bgH + 60);
-      ctx.filter = 'none';
-    } catch (e) {
-      ctx.drawImage(img, bgX, bgY, bgW, bgH);
-    }
-  } else {
-    ctx.drawImage(img, bgX, bgY, bgW, bgH);
-  }
-  ctx.restore();
-
-  // Subtle soft contrast overlay
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-  ctx.fillRect(0, 0, targetW, targetH);
-
-  // Draw foreground edge-to-edge
-  const fgScale = Math.min(targetW / origW, targetH / origH);
-  const fgW = Math.round(origW * fgScale);
-  const fgH = Math.round(origH * fgScale);
-  const fgX = Math.round((targetW - fgW) / 2);
-  const fgY = Math.round((targetH - fgH) / 2);
-
-  // For phone screenshots, add soft shadow so it stands out against backdrop
-  if (origRatio < 0.65) {
-    ctx.save();
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
-    ctx.shadowBlur = 40;
-    ctx.shadowOffsetY = 12;
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(fgX, fgY, fgW, fgH);
-    ctx.restore();
-  }
-
-  ctx.drawImage(img, fgX, fgY, fgW, fgH);
-  return canvas;
-}
-
-function fitIpadScreenshotAsync(src, mode){
-  return new Promise((resolve, reject) => {
-    if(!src || !src.trim()){
-      reject(new Error('Empty screenshot source'));
-      return;
-    }
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const canvas = fitToIpadProCanvas(img, mode);
-        if(canvas){
-          const fullPng = canvas.toDataURL('image/png');
-          try {
-            const maxDim = 600;
-            const tw = canvas.width >= canvas.height ? maxDim : Math.round((canvas.width * maxDim) / canvas.height);
-            const th = canvas.width >= canvas.height ? Math.round((canvas.height * maxDim) / canvas.width) : maxDim;
-            const tc = document.createElement('canvas');
-            tc.width = tw;
-            tc.height = th;
-            const tctx = tc.getContext('2d');
-            if(tctx){
-              tctx.imageSmoothingEnabled = true;
-              tctx.imageSmoothingQuality = 'high';
-              tctx.drawImage(canvas, 0, 0, tw, th);
-              let thumb = tc.toDataURL('image/webp', 0.85);
-              if(!thumb.startsWith('data:image/webp')){
-                thumb = tc.toDataURL('image/jpeg', 0.85);
-              }
-              if(typeof THUMB_CACHE !== 'undefined'){
-                THUMB_CACHE.set(fullPng, thumb);
-              }
-            }
-          } catch(e){}
-          resolve(fullPng);
-        } else {
-          reject(new Error('Canvas creation failed'));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    };
-    img.onerror = () => reject(new Error('Image failed to load'));
-    img.src = ensureSvgDimensions(src);
-  });
-}
-
-function fixIpadScreenshot(index){
-  if(typeof canAction === 'function' && !canAction(1000)) return;
-  const src = IPAD_SHOTS[index];
-  if(!src || !src.trim()){
-    showToast('No screenshot to resize', 'warn');
-    return;
-  }
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const w = img.naturalWidth;
-    const h = img.naturalHeight;
-    const isAlreadyCompliant = (
-      (w === 2048 && h === 2732) || 
-      (w === 2064 && h === 2752) || 
-      (w === 2732 && h === 2048) || 
-      (w === 2752 && h === 2064)
-    );
-    if(isAlreadyCompliant){
-      showToast(`Screenshot #${index + 1} is already standard iPad Pro 13" (${w}×${h} px)!`, 'ok', 3000);
-      return;
-    }
-
-    const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-    const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-    showToast(`Resizing iPad screenshot (${modeLabel})...`, 'info');
-    fitIpadScreenshotAsync(src, mode).then(dataUrl => {
-      IPAD_SHOTS[index] = dataUrl;
-      renderIpadShots();
-      saveState();
-      showToast(`Screenshot resized to 2048×2732 px (${modeLabel})!`, 'ok');
-    }).catch(err => {
-      console.error('Resize error:', err);
-      showToast('Could not resize screenshot', 'warn');
-    });
-  };
-  img.onerror = () => showToast('Failed to load image for resizing', 'warn');
-  img.src = ensureSvgDimensions(src);
-}
-
-function fixAllIpadScreenshots(){
-  if(typeof canAction === 'function' && !canAction(1000)) return;
-  const validIndices = [];
-  IPAD_SHOTS.forEach((s, idx) => {
-    if(s && s.trim()) validIndices.push(idx);
-  });
-  if(validIndices.length === 0){
-    showToast('No iPad screenshots to resize', 'warn');
-    return;
-  }
-
-  const checkPromises = validIndices.map(idx => {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        const w = img.naturalWidth;
-        const h = img.naturalHeight;
-        const isCompliant = (
-          (w === 2048 && h === 2732) || 
-          (w === 2064 && h === 2752) || 
-          (w === 2732 && h === 2048) || 
-          (w === 2752 && h === 2064)
-        );
-        resolve({ idx, needsResize: !isCompliant });
-      };
-      img.onerror = () => resolve({ idx, needsResize: false });
-      img.src = ensureSvgDimensions(IPAD_SHOTS[idx]);
-    });
-  });
-
-  Promise.all(checkPromises).then(checks => {
-    const needResizeIndices = checks.filter(c => c.needsResize).map(c => c.idx);
-    if(needResizeIndices.length === 0){
-      showToast('All screenshots are already compliant with iPad Pro 13" standard!', 'ok', 3000);
-      return;
-    }
-
-    const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-    const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-    showToast(`Resizing ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} (${modeLabel})...`, 'info');
-    Promise.all(needResizeIndices.map(idx => fitIpadScreenshotAsync(IPAD_SHOTS[idx], mode))).then(results => {
-      needResizeIndices.forEach((shotIdx, resIdx) => {
-        IPAD_SHOTS[shotIdx] = results[resIdx];
-      });
-      renderIpadShots();
-      saveState();
-      showToast(`All ${needResizeIndices.length} iPad screenshot${needResizeIndices.length === 1 ? '' : 's'} resized (${modeLabel})!`, 'ok');
-    }).catch(err => {
-      console.error('Fix all error:', err);
-      showToast('Some screenshots could not be resized', 'warn');
-    });
-  });
-}
-
-function generateIpadFromPhone(){
-  if(typeof canAction === 'function' && !canAction(1000)) return;
-  const validPhoneShots = (SHOTS || []).filter(s => typeof s === 'string' && s.trim());
-  if(validPhoneShots.length === 0){
-    showToast('Please add phone screenshots first!', 'warn');
-    return;
-  }
-  const mode = ($('f-ipad-fit-mode') ? $('f-ipad-fit-mode').value : (typeof IPAD_FIT_MODE !== 'undefined' ? IPAD_FIT_MODE : 'cover')) || 'cover';
-  const modeLabel = mode === 'cover' ? 'Fill / Cover' : 'Fit / Contain';
-  showToast(`Generating ${validPhoneShots.length} iPad Pro screenshot${validPhoneShots.length === 1 ? '' : 's'} (${modeLabel})...`, 'info');
-  Promise.all(validPhoneShots.map(s => fitIpadScreenshotAsync(s, mode))).then(results => {
-    IPAD_SHOTS = results;
-    if(!SUPPORTS_IPAD){
-      setSupportsIpad(true);
-    }
-    renderIpadShots();
-    saveState();
-    showToast(`Generated ${results.length} iPad Pro 13" screenshot${results.length === 1 ? '' : 's'} (${modeLabel})!`, 'ok');
-  }).catch(err => {
-    console.error('Generate from phone error:', err);
-    showToast('Failed to generate iPad screenshots', 'warn');
-  });
-}
-
 
 // Event Listeners for iPad Destination & Screenshots
 let ipadPick = -1;
@@ -558,16 +307,6 @@ if(fDestIpad){
   };
 }
 
-const fIpadFitMode = $('f-ipad-fit-mode');
-if(fIpadFitMode){
-  if(typeof IPAD_FIT_MODE !== 'undefined') fIpadFitMode.value = IPAD_FIT_MODE;
-  fIpadFitMode.onchange = (e) => {
-    IPAD_FIT_MODE = e.target.value;
-    saveState();
-    showToast('Fit mode: ' + (IPAD_FIT_MODE === 'cover' ? 'Fill / Cover (Full Bleed)' : 'Fit / Contain (Soft Blur)'), 'ok');
-  };
-}
-
 const addIpadShot = $('addIpadShot');
 if(addIpadShot){
   addIpadShot.onclick = () => {
@@ -577,11 +316,6 @@ if(addIpadShot){
     const ins = $$('#ipadSlist input');
     if(ins.length) ins[ins.length - 1].focus();
   };
-}
-
-const btnGenIpad = $('btnGenIpadFromPhone');
-if(btnGenIpad){
-  btnGenIpad.onclick = () => generateIpadFromPhone();
 }
 
 const ipadShotFile = $('ipadShotFile');

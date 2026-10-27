@@ -84,10 +84,12 @@ function applyStateObject(s){
     if(s.form.desc !== undefined && $('f-desc')) $('f-desc').value = s.form.desc;
   }
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('studioBg') || s.icon.includes('stdBg') || s.icon.includes('c6-bg')){
+    if(s.icon === BLANK_ICON || s.icon.includes('studioBg') || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('stdBg') || s.icon.includes('c6-bg') || !s.isCustomIcon){
       ICON = BLANK_ICON;
+      IS_CUSTOM_ICON = false;
     } else {
       ICON = s.icon;
+      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
     }
   }
   if(s.featureGraphic) FEATURE_GRAPHIC = s.featureGraphic;
@@ -141,7 +143,8 @@ function getCurrentStateObject(){
       new: $('f-new') ? $('f-new').value : '',
       desc: $('f-desc') ? $('f-desc').value : ''
     },
-    icon: ICON,
+    icon: (IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')) ? ICON : BLANK_ICON,
+    isCustomIcon: !!(IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')),
     featureGraphic: FEATURE_GRAPHIC,
     shots: SHOTS,
     supportsIpad: SUPPORTS_IPAD,
@@ -197,6 +200,10 @@ function loadDraftFromStorage(){
         const parsed = JSON.parse(raw);
         if(parsed && typeof parsed === 'object'){
           userDraft = parsed;
+          if(!userDraft.isCustomIcon || !userDraft.icon || userDraft.icon.includes('studioBg') || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('stdBg')){
+            userDraft.icon = BLANK_ICON;
+            userDraft.isCustomIcon = false;
+          }
         }
       }
     }
@@ -206,6 +213,10 @@ function loadDraftFromStorage(){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
         userDraft = idbDraft;
+        if(!userDraft.isCustomIcon || !userDraft.icon || userDraft.icon.includes('studioBg') || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('stdBg')){
+          userDraft.icon = BLANK_ICON;
+          userDraft.isCustomIcon = false;
+        }
         updateDraftPill();
       }
     }).catch(()=>{});
@@ -230,7 +241,20 @@ function updateDraftPill(){
   if(hasDraft && userDraft){
     pill.classList.add('has-draft');
     pill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
-    const iconSrc = userDraft.icon || ICON || BLANK_ICON;
+    
+    // Always resolve icon to BLANK_ICON unless user has explicitly uploaded a custom icon
+    let iconSrc = BLANK_ICON;
+    if(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('studioBg') && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc') && !userDraft.icon.includes('stdBg') && !userDraft.icon.includes('c6-bg')){
+      iconSrc = userDraft.icon;
+    } else if(IS_CUSTOM_ICON && ICON && !ICON.includes('studioBg') && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc') && !ICON.includes('stdBg') && !ICON.includes('c6-bg')){
+      iconSrc = ICON;
+      userDraft.isCustomIcon = true;
+      userDraft.icon = ICON;
+    } else {
+      userDraft.isCustomIcon = false;
+      userDraft.icon = BLANK_ICON;
+    }
+
     const f = userDraft.form || {};
     const appTitle = (f.name && f.name.trim()) ? (typeof clampGraphemes === 'function' ? clampGraphemes(f.name.trim(), 30) : f.name.trim()) : 'Your App';
     

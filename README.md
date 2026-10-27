@@ -37,7 +37,7 @@ If you are customizing the modular source code in `src/`:
 
 ### 1. Dual-Store Multi-Device & Landscape Simulation
 - Seamless 1-click toggle between **Apple App Store (iOS 18 HIG)** and **Google Play Store (Material Design 3)**.
-- **5 Hardware Form Factors**: iPhone 16 Pro, iPad Pro 12.9", Android Phone, 7-inch Tablet, and 10-inch Tablet.
+- **5 Hardware Form Factors**: iPhone, iPad, Android Phone, 7-inch Tablet, and 10-inch Tablet.
 - **Portrait & Landscape Game Mode**: Rotate phones and tablets to preview landscape mobile games, with automatic 16:9 widescreen screenshot detection.
 - Toggle between **Light Mode** and **Dark Mode** for both the studio UI and the device mockups.
 

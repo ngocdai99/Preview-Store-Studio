@@ -17,6 +17,7 @@ const OUTPUT_FILE = path.join(ROOT_DIR, 'docs', 'marketing_vi.html');
 const MIN_OUTPUT_FILE = path.join(ROOT_DIR, 'docs', 'marketing_vi.min.html');
 const ROOT_OUTPUT_FILE = path.join(ROOT_DIR, 'marketing_vi.html');
 const INDEX_OUTPUT_FILE = path.join(ROOT_DIR, 'docs', 'index.html');
+const CLOUDFLARE_DIR = path.join(ROOT_DIR, 'cloudflare');
 
 let missed = 0;
 function rep(src, from, to) {
@@ -195,7 +196,7 @@ function buildMarketingVi() {
     'Tự tin lên kế hoạch marketing mà không làm phiền lập trình viên, chỉ cần nhờ đội Dev khi thực sự cần phát hành phiên bản mới.'
   );
 
-  // Beat 3 (Thay đổi duy nhất: khung máy chân thực thay vì iPhone 16 / Pixel)
+  // Beat 3 (Thay đổi duy nhất: khung máy chân thực thay vì iPhone / Android Phone)
   html = rep(html, '03 / VISUAL CONTEXT', '03 / NGỮ CẢNH');
   html = rep(html, 
     'Drafting blindly with zero device preview',
@@ -266,8 +267,8 @@ function buildMarketingVi() {
     '<span>Bộ đếm ký tự &amp; Emoji chuẩn Store</span>'
   );
   html = rep(html, 
-    '<span>3 Curated App Presets <span class="feature-tag">JSON</span></span>',
-    '<span>3 template ứng dụng có sẵn <span class="feature-tag">JSON</span></span>'
+    '<span>All 5 Curated App Presets <span class="feature-tag">JSON</span></span>',
+    '<span>Trọn bộ 5 template ứng dụng có sẵn <span class="feature-tag">JSON</span></span>'
   );
   html = rep(html, 
     '<span>1-Click JSON Preset Import & Export</span>',
@@ -290,10 +291,6 @@ function buildMarketingVi() {
   html = rep(html, 
     '<span><strong>Everything in Plus Edition</strong>, plus:</span>',
     '<span><strong>Bao gồm tất cả quyền lợi của Plus Edition</strong>, cùng với:</span>'
-  );
-  html = rep(html, 
-    '<span>All 5 Curated App Presets <span class="feature-tag green">+ Game & Edu</span></span>',
-    '<span>Trọn bộ 5 template ứng dụng chuyên sâu <span class="feature-tag green">+ Game &amp; Giáo Dục</span></span>'
   );
   html = rep(html, 
     '<span>Team &amp; Agency License <span class="feature-tag purple">Unlimited Client Work</span></span>',
@@ -492,6 +489,12 @@ function buildMarketingVi() {
   fs.writeFileSync(ROOT_OUTPUT_FILE, html, 'utf8');
   fs.writeFileSync(MIN_OUTPUT_FILE, minified, 'utf8');
   fs.writeFileSync(INDEX_OUTPUT_FILE, minified, 'utf8');
+
+  // Automatically sync Vietnamese marketing bundles to cloudflare/
+  if (fs.existsSync(CLOUDFLARE_DIR)) {
+    fs.writeFileSync(path.join(CLOUDFLARE_DIR, 'marketing_vi.html'), html, 'utf8');
+    fs.writeFileSync(path.join(CLOUDFLARE_DIR, 'marketing_vi.min.html'), minified, 'utf8');
+  }
 
   const duration = Date.now() - t0;
   const sizeKb = (Buffer.byteLength(html, 'utf8') / 1024).toFixed(1);

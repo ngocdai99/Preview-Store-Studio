@@ -135,34 +135,28 @@ const STUDIO_ICON = makeSvgDataUri(`
 `);
 
 const BLANK_ICON = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
   <defs>
-    <linearGradient id="studioBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#bfd1fd"/>
-      <stop offset="45%" stop-color="#dee0fe"/>
-      <stop offset="100%" stop-color="#d2c7fc"/>
+    <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
     </linearGradient>
-    <linearGradient id="phoneFill" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-      <stop offset="100%" stop-color="#eff6ff" stop-opacity="0.75"/>
+    <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#6366f1"/>
     </linearGradient>
   </defs>
-  <!-- Background Pastel Soft Blue-to-Lavender Squircle -->
-  <rect width="512" height="512" fill="url(#studioBg)"/>
-
-  <!-- Back Layer Device: iPad Tablet -->
-  <rect x="168" y="72" width="264" height="288" rx="40" fill="rgba(255,255,255,0.45)" stroke="#ffffff" stroke-width="26"/>
-  <circle cx="300" cy="99" r="10" fill="#ffffff"/>
-  <rect x="200" y="136" width="96" height="112" rx="16" fill="#ffffff" opacity="0.65"/>
-  <rect x="312" y="136" width="88" height="112" rx="16" fill="#ffffff" opacity="0.65"/>
-  <rect x="200" y="272" width="200" height="48" rx="12" fill="#ffffff" opacity="0.75"/>
-
-  <!-- Front Layer Device: Phone -->
-  <rect x="80" y="128" width="184" height="312" rx="48" fill="url(#phoneFill)"/>
-  <rect x="80" y="128" width="184" height="312" rx="48" fill="none" stroke="#ffffff" stroke-width="28"/>
-  <rect x="136" y="156" width="72" height="18" rx="9" fill="#ffffff"/>
-  <rect x="108" y="200" width="128" height="120" rx="16" fill="#ffffff" opacity="0.4"/>
-  <rect x="108" y="344" width="128" height="56" rx="14" fill="#ffffff" opacity="0.75"/>
+  <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
+  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
+  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
+  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
+  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
+  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
+  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
+  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
 </svg>
 `);
 

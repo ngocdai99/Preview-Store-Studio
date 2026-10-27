@@ -73,6 +73,8 @@
 
 /* Presets Flyout Menu */
 #menuPresets {
+  left: 0;
+  right: auto;
   width: 265px;
   padding: 7px 6px;
   background: rgba(15, 23, 42, 0.96);

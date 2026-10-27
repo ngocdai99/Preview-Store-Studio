@@ -22,6 +22,7 @@ function setAppleDevice(d, animate = true){
     }
     $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
     $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === (nextDual ? 'dual' : 'apple')));
     renderIcons();
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();

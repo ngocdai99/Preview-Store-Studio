@@ -46,7 +46,7 @@ function getActiveDeviceEl(s = store, d = (s === 'apple' ? appleDevice : googleD
 function computeDeviceZoom(s, d){
   const st = document.querySelector('.stage'), m = isM(), pad = m ? 20 : 40;
   const tb = document.querySelector('.stage-toolbar');
-  const vt = (tb ? tb.offsetHeight : 40) + (m ? 14 : 18);
+  const vt = (tb ? tb.offsetHeight : 40) + (m ? 14 : 18) + 44;
   const isDual = d === 'dual' || document.body.dataset.dual === 'true';
   let baseW = 416, baseH = 870;
   if(isDual){
@@ -93,12 +93,25 @@ function syncVtPill(container){
   }
 }
 
+function syncSegPill(){
+  const seg = document.querySelector('.seg');
+  if(!seg) return;
+  const pill = seg.querySelector('.pill');
+  const activeBtn = seg.querySelector('button.on');
+  if(pill && activeBtn && activeBtn.offsetWidth > 0){
+    pill.style.width = activeBtn.offsetWidth + 'px';
+    pill.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+    pill.style.opacity = '1';
+  }
+}
+
 function syncAllVtPills(){
   requestAnimationFrame(() => {
     ['dt', 'gdt', 'vt', 'theme'].forEach(id => {
       const el = $(id);
       if(el) syncVtPill(el);
     });
+    syncSegPill();
   });
 }
 
@@ -147,7 +160,36 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
 
 // --- Store & View Switchers ---
 function setStore(s, animate = true){
-  if(store === s && document.body.dataset.store === s){
+  if(s === 'dual'){
+    document.body.dataset.dual = 'true';
+    document.body.dataset.store = 'dual';
+    appleDevice = 'dual';
+    googleDevice = 'dual';
+    document.body.dataset.appleDevice = 'iphone';
+    document.body.dataset.googleDevice = 'phone';
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'dual'));
+    $$('[data-only]').forEach(e => e.classList.remove('hide'));
+    if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
+    clearDevTransitions();
+    if(typeof renderIcons === 'function') renderIcons();
+    if(typeof renderShots === 'function') renderShots();
+    if(typeof renderIpadShots === 'function') renderIpadShots();
+    if(typeof validateAppIcon === 'function') validateAppIcon();
+    if(typeof validateScreenshots === 'function') validateScreenshots();
+    update();
+    saveState();
+    fit();
+    syncAllVtPills();
+    return;
+  }
+
+  // Single store mode (apple or google)
+  document.body.dataset.dual = 'false';
+  if(appleDevice === 'dual') appleDevice = 'iphone';
+  if(googleDevice === 'dual') googleDevice = 'phone';
+
+  if(store === s && document.body.dataset.store === s && document.body.dataset.dual !== 'true'){
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
     syncAllVtPills();
     return;
   }

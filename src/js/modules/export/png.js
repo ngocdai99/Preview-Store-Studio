@@ -157,6 +157,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.transition = 'none';
         if(isDual){
           clonedEl.style.gap = '28px';
+          if(opts.frameless){
+            clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
+          }
+        } else {
+          clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
         }
         clonedDoc.querySelectorAll('.dev').forEach(d => {
           d.classList.remove('dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));

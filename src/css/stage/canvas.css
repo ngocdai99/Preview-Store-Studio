@@ -7,4 +7,45 @@
 }
 .stage-devices{
   display:flex;align-items:flex-start;justify-content:center;gap:28px;flex-shrink:0;
+  padding-top:42px;
+}
+
+/* Device Header Label (Matching Marketing Showcase) */
+.dev-label{
+  position:absolute;
+  top:-38px;
+  left:0;
+  right:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  user-select:none;
+  z-index:10;
+}
+.dev-title{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.05em;
+  white-space:nowrap;
+  line-height:1;
+}
+.dev-title svg{
+  display:block;
+  flex-shrink:0;
+}
+.dev-label.a .dev-title{
+  color:#7dd3fc;
+}
+.dev-label.g .dev-title{
+  color:#6ee7b7;
+}
+:root[data-ui=light] .dev-label.a .dev-title{
+  color:#0071e3;
+}
+:root[data-ui=light] .dev-label.g .dev-title{
+  color:#01875f;
 }
