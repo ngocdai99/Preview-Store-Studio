@@ -1133,6 +1133,8 @@ assert(bundledHtml.includes('id="whatsNewInfoClose"'), "Popover close button #wh
 assert(bundledHtml.includes("What's New Display Guidelines"), "Popover contains What's New Display Guidelines title");
 assert(bundledHtml.includes("Google Play Store (Update State Only):"), "Popover explains Google Play Store update-state only behavior");
 assert(bundledHtml.includes("Apple App Store (Public Listing):"), "Popover explains Apple App Store public listing behavior");
+assert(bundledHtml.includes('class="wn-ver"') && bundledHtml.includes('.wn-ver.hl-target'), "What's New wraps full 'Version X.Y.Z' in .wn-ver with yellow focus highlight");
+assert(bundledHtml.includes('.wn-ver') && bundledHtml.includes("case 'ver':"), "getFieldMockupTargets maps ver field to .wn-ver container");
 assert(bundledHtml.includes("500 characters"), "Popover notes Google Play 500 characters limit");
 assert(bundledHtml.includes('initInfoPopover("whatsNewInfoBtn"'), "Bundled JS initializes whatsNewInfoBtn popover");
 

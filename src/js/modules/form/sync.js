@@ -127,8 +127,10 @@ function getFieldMockupTargets(key) {
     case 'cat-apple':
     case 'cat-google':
       return $$('.stage [data-b="cat"]');
-    case 'ver':
-      return $$('.stage [data-b="ver"]');
+    case 'ver': {
+      const verWraps = $$('.stage .wn-ver');
+      return verWraps.length ? verWraps : $$('.stage [data-b="ver"]');
+    }
     case 'rdate':
       return $$('.stage [data-b="rdate"]');
     case 'email':

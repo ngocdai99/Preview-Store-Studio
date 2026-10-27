@@ -4,6 +4,7 @@
 .sec h3 a{font-size:15px;font-weight:400;color:var(--bl)}
 .wn-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .vm{display:flex;flex-direction:column;align-items:flex-end;gap:2px;color:var(--s);font-size:12.5px;line-height:1.45;flex-shrink:0;text-align:right}
+.wn-ver{display:inline-flex;align-items:center;gap:3.5px}
 .a-txt{font-size:14.5px;line-height:1.5}
 .promo{background:var(--cd);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45;margin-bottom:20px;position:relative;padding-left:18px}
 .promo::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3.5px;border-radius:3px;background:var(--bl)}

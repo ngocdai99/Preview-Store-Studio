@@ -72,6 +72,18 @@ span[data-b="cat"].hl-target {
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.45) !important;
 }
 
+/* Version badge on Apple What's New: highlight full "Version X.Y.Z" */
+.wn-ver.hl-target {
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 3px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45) !important;
+}
+
+.wn-ver.hl-flash {
+  border-radius: 6px !important;
+}
+
 /* Typing Flash animation */
 .hl-flash {
   animation: fieldHlFlash 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
