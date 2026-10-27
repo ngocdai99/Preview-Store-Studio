@@ -21,23 +21,31 @@
   background: #0071e3;
   box-shadow: 0 3px 14px rgba(0, 113, 227, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.35s, box-shadow 0.35s, border-color 0.35s;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   pointer-events: none;
+  z-index: 0;
+  will-change: transform, width;
 }
 
+.pill.is-apple,
 body[data-store=apple]:not([data-dual=true]) .pill {
-  background: #0071e3;
-  box-shadow: 0 3px 14px rgba(0, 113, 227, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: #0071e3 !important;
+  box-shadow: 0 3px 14px rgba(0, 113, 227, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
+.pill.is-google,
 body[data-store=google]:not([data-dual=true]) .pill {
-  background: #03875f;
-  box-shadow: 0 3px 14px rgba(3, 135, 95, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: #03875f !important;
+  box-shadow: 0 3px 14px rgba(3, 135, 95, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
+.pill.is-dual,
 body[data-dual=true] .pill {
-  background: linear-gradient(135deg, #0071e3 0%, #03875f 100%);
-  box-shadow: 0 3px 14px rgba(59, 130, 246, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #0071e3 0%, #03875f 100%) !important;
+  box-shadow: 0 3px 14px rgba(59, 130, 246, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .seg button {

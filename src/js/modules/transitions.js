@@ -35,20 +35,22 @@ function clearDevTransitions(){
   const da = document.querySelector('.dev.apple.single');
   const dg = document.querySelector('.dev.google');
   if(da){
-    da.classList.remove(...ALL_TRANS_CLASSES);
+    da.classList.remove(...ALL_TRANS_CLASSES, 'is-hidden-trans');
     da.style.opacity = '';
     da.style.pointerEvents = '';
     da.style.transition = '';
     da.style.transform = '';
   }
   if(dg){
-    dg.classList.remove(...ALL_TRANS_CLASSES);
+    dg.classList.remove(...ALL_TRANS_CLASSES, 'is-hidden-trans');
     dg.style.opacity = '';
     dg.style.pointerEvents = '';
     dg.style.transition = '';
     dg.style.transform = '';
   }
-  $$('.dev').forEach(d => d.classList.remove(...ALL_TRANS_CLASSES));
+  $$('.dev').forEach(d => {
+    d.classList.remove(...ALL_TRANS_CLASSES, 'is-hidden-trans');
+  });
 }
 
 function getActiveDeviceEl(s = store, d = (s === 'apple' ? appleDevice : googleDevice)){
@@ -112,7 +114,7 @@ function syncVtPill(container){
   }
 }
 
-function syncSegPill(){
+function syncSegPill(targetStore){
   const seg = document.querySelector('.seg');
   if(!seg) return;
   const pill = seg.querySelector('.pill');
@@ -121,6 +123,11 @@ function syncSegPill(){
     pill.style.width = activeBtn.offsetWidth + 'px';
     pill.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
     pill.style.opacity = '1';
+    const s = targetStore || (activeBtn.dataset ? activeBtn.dataset.s : null);
+    if(s){
+      pill.classList.remove('is-apple', 'is-google', 'is-dual');
+      pill.classList.add('is-' + s);
+    }
   }
 }
 
@@ -209,11 +216,14 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
 
   if (fromMode === 'apple' && toMode === 'google') {
     // Single Apple -> Single Google: Apple glides left, Google enters from right
+    devGoogle.classList.add('is-hidden-trans');
     devApple.style.transition = 'opacity 0.2s cubic-bezier(0.25, 1, 0.5, 1), transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
     devApple.style.opacity = '0';
     devApple.style.transform = 'translate3d(-35px, 0, 0) scale(0.96)';
     devExitTimer = setTimeout(function () {
+      devApple.classList.add('is-hidden-trans');
       onApply();
+      devGoogle.classList.remove('is-hidden-trans');
       devGoogle.style.transition = 'none';
       devGoogle.style.opacity = '0';
       devGoogle.style.transform = 'translate3d(35px, 0, 0) scale(0.96)';
@@ -229,11 +239,14 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     }, 190);
   } else if (fromMode === 'google' && toMode === 'apple') {
     // Single Google -> Single Apple: Google glides right, Apple enters from left
+    devApple.classList.add('is-hidden-trans');
     devGoogle.style.transition = 'opacity 0.2s cubic-bezier(0.25, 1, 0.5, 1), transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
     devGoogle.style.opacity = '0';
     devGoogle.style.transform = 'translate3d(35px, 0, 0) scale(0.96)';
     devExitTimer = setTimeout(function () {
+      devGoogle.classList.add('is-hidden-trans');
       onApply();
+      devApple.classList.remove('is-hidden-trans');
       devApple.style.transition = 'none';
       devApple.style.opacity = '0';
       devApple.style.transform = 'translate3d(-35px, 0, 0) scale(0.96)';
@@ -270,6 +283,7 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     devGoogle.style.pointerEvents = 'none';
 
     devExitTimer = setTimeout(function () {
+      devGoogle.classList.add('is-hidden-trans');
       clearDevTransitions();
       fit();
       syncAllVtPills();
@@ -298,6 +312,7 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     devApple.style.pointerEvents = 'none';
 
     devExitTimer = setTimeout(function () {
+      devApple.classList.add('is-hidden-trans');
       clearDevTransitions();
       fit();
       syncAllVtPills();
@@ -306,6 +321,8 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     // Single Apple -> Dual: Apple glides from center to left, Google blooms in
     const firstA = devApple.getBoundingClientRect();
 
+    devApple.classList.remove('is-hidden-trans');
+    devGoogle.classList.remove('is-hidden-trans');
     onApply();
     fit();
 
@@ -341,6 +358,8 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     // Single Google -> Dual: Google glides from center to right, Apple blooms in
     const firstG = devGoogle.getBoundingClientRect();
 
+    devApple.classList.remove('is-hidden-trans');
+    devGoogle.classList.remove('is-hidden-trans');
     onApply();
     fit();
 
@@ -383,8 +402,11 @@ function setStore(s, animate = true){
   const fromMode = document.body.dataset.dual === 'true' ? 'dual' : store;
   const toMode = s;
 
+  // 1. UPDATE TABVIEW SEGMENT CONTROL BUTTONS & PILL IMMEDIATELY (<1ms)
+  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
+  syncSegPill(s);
+
   if(fromMode === toMode){
-    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
     syncAllVtPills();
     return;
   }
@@ -397,17 +419,10 @@ function setStore(s, animate = true){
       googleDevice = 'dual';
       document.body.dataset.appleDevice = 'iphone';
       document.body.dataset.googleDevice = 'phone';
-      $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'dual'));
       $$('[data-only]').forEach(e => e.classList.remove('hide'));
       if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
       syncCategoryUI();
       if(typeof renderIcons === 'function') renderIcons();
-      if(typeof renderShots === 'function') renderShots();
-      if(typeof renderIpadShots === 'function') renderIpadShots();
-      if(typeof validateAppIcon === 'function') validateAppIcon();
-      if(typeof validateScreenshots === 'function') validateScreenshots();
-      update();
-      saveState();
     } else {
       document.body.dataset.dual = 'false';
       store = s;
@@ -416,7 +431,6 @@ function setStore(s, animate = true){
       if(googleDevice === 'dual') googleDevice = 'phone';
       document.body.dataset.appleDevice = appleDevice;
       document.body.dataset.googleDevice = googleDevice;
-      $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
       $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
       if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
       syncCategoryUI();
@@ -454,16 +468,11 @@ function setStore(s, animate = true){
 
       if(s === 'apple'){
         if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
-        if(typeof renderIpadShots === 'function') renderIpadShots();
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
-
-      if(typeof validateAppIcon === 'function') validateAppIcon();
-      if(typeof validateScreenshots === 'function') validateScreenshots();
-      update();
-      saveState();
     }
+    if(typeof saveState === 'function') saveState();
   };
 
   transitionStoreMode(fromMode, toMode, applyStoreMode, animate);

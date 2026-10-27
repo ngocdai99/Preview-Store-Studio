@@ -30,3 +30,8 @@ body.is-animating-store .dev.google,
 body.is-animating-store #dev-phone.dev.google {
   display: block !important;
 }
+body.is-animating-store .dev.apple.single.is-hidden-trans,
+body.is-animating-store .dev.google.is-hidden-trans,
+body.is-animating-store #dev-phone.dev.google.is-hidden-trans {
+  display: none !important;
+}
