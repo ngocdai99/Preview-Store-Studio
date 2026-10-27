@@ -96,6 +96,39 @@ function startServer(port) {
       return;
     }
 
+    // 1b. Edge Proxy Simulator: /api/lookup
+    if (pathname === '/api/lookup') {
+      const id = parsedUrl.searchParams.get('id') || parsedUrl.searchParams.get('appid');
+      const bundle = parsedUrl.searchParams.get('bundle');
+      const country = parsedUrl.searchParams.get('country') || '';
+
+      if (!id && !bundle) {
+        res.writeHead(400, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify({ error: 'Missing id or bundle' }));
+        return;
+      }
+
+      const itunesUrl = `https://itunes.apple.com/lookup?${id ? `id=${encodeURIComponent(id)}` : `bundleId=${encodeURIComponent(bundle)}`}${country ? `&country=${encodeURIComponent(country)}` : ''}`;
+
+      const https = require('https');
+      https.get(itunesUrl, { headers: { 'User-Agent': 'PreviewStudioDev/2.1' } }, (apiRes) => {
+        let body = '';
+        apiRes.on('data', chunk => { body += chunk; });
+        apiRes.on('end', () => {
+          res.writeHead(apiRes.statusCode || 200, {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'public, max-age=86400'
+          });
+          res.end(body);
+        });
+      }).on('error', (err) => {
+        res.writeHead(502, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify({ error: err.message }));
+      });
+      return;
+    }
+
     const liveReloadScript = `
 <!-- Live Reload Client Script (Dev Mode Only) -->
 <script>

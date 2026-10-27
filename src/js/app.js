@@ -4974,14 +4974,7 @@ function update(){
       if(k === 'new'){
         elemMax = e.closest('.dev.google, .dev.gtab') ? 500 : 4000;
       }
-      let displayVal = (elemMax && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, elemMax) : v.slice(0, elemMax)) : (v || fallback);
-      if(k === 'promo' && !v){
-        const descInp = $('f-desc');
-        const descFallback = descInp && descInp.value.trim();
-        if(descFallback){
-          displayVal = typeof clampGraphemes === 'function' ? clampGraphemes(descFallback, 170) : descFallback.slice(0, 170);
-        }
-      }
+      const displayVal = (elemMax && v) ? (typeof clampGraphemes === 'function' ? clampGraphemes(v, elemMax) : v.slice(0, elemMax)) : (v || fallback);
       e.textContent = displayVal || fallback;
     });
   }

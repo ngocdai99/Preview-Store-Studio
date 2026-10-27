@@ -114,11 +114,7 @@
 }
 .ipad-desc-col{flex:1.8;min-width:0}
 .ipad-desc-txt{
-  font-size:14.5px;line-height:1.45;color:var(--t);margin-bottom:12px;
-  word-break:break-word;
-}
-.ipad-desc-more{
-  color:var(--bl);font-weight:400;cursor:pointer;margin-left:4px;
+  font-size:14.5px;line-height:1.5;color:var(--t);margin-bottom:12px;
 }
 .ipad-cat-pill-wrap{margin-top:10px}
 .ipad-cat-pill{

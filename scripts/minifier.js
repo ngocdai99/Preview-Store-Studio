@@ -14,13 +14,16 @@ function minifyCss(css) {
 
 function minifyJs(js) {
   return js
-    .replace(/\/\*[\s\S]*?\*\//g, '')
     .split('\n')
     .map(line => {
-      // Strip lines that are pure comments
+      // Strip lines that are pure comments first to avoid false multi-line comment opens
       if (/^\s*\/\//.test(line)) return '';
-      return line.trim();
+      return line;
     })
+    .join('\n')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n')
+    .map(line => line.trim())
     .filter(line => line.length > 0)
     .join('\n');
 }

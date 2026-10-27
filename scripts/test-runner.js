@@ -540,8 +540,8 @@ assert(tabParentDepth === 2, 'ipad-tab is properly nested inside phone container
 assert(ipadHtml.includes('ipad-nav-capsule') && ipadHtml.includes('ipad-capsule-tab'), 'iPad header features authentic center capsule store switcher');
 assert(ipadHtml.includes('ipad-platforms-row') && ipadHtml.includes('iPad, iPhone'), 'iPad gallery features platforms support badge line (iPad, iPhone)');
 assert(ipadHtml.includes('ipad-desc-row') && ipadHtml.includes('ipad-dev-entity'), 'iPad features 2-column description and developer entity row');
-assert(!ipadHtml.includes('id="ipadPromoBox"'), 'iPad does not inject unnatural callout box #ipadPromoBox');
-assert(ipadHtml.includes('data-b="promo"') && ipadHtml.includes('ipad-desc-more'), 'iPad renders promotional text with "more" link in product column');
+assert(ipadHtml.includes('ipad-desc-txt') && ipadHtml.includes('data-b="desc"'), 'iPad renders full description in description column');
+assert(ipadHtml.includes('data-b="promo"'), 'iPad supports optional promotional text banner in description column');
 assert(ipadHtml.includes('ipad-cat-pill') && ipadHtml.includes('data-b="cat"'), 'iPad displays category badge pill in description column');
 assert(ipadHtml.includes('ipad-ratings-layout') && ipadHtml.includes('ipad-rating-bar-row'), 'iPad features authentic Ratings & Reviews with 5-star distribution bars');
 assert(ipadHtml.includes('ipad-floating-pill') && ipadHtml.includes('ipad-floating-get'), 'iPad features floating bottom GET pill on scroll');
