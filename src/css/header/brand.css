@@ -1,8 +1,8 @@
 /* ---------- Header Shell & Brand Component ---------- */
 header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 10px 18px;
   background: rgba(12, 18, 32, 0.78);
   backdrop-filter: blur(18px);
@@ -17,7 +17,6 @@ header {
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-self: start;
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -26,7 +25,14 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  justify-self: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
 }
 

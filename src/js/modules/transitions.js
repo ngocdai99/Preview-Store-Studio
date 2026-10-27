@@ -140,6 +140,9 @@ function syncAllVtPills(){
     syncSegPill();
   });
 }
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', syncSegPill);
+}
 
 function transitionDevice(targetStore, targetDev, onApply, animate = true){
   const fromEl = getActiveDeviceEl(store, store === 'apple' ? appleDevice : googleDevice);

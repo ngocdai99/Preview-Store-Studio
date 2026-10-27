@@ -19,7 +19,7 @@
 /* Large Laptop / Desktop: 1101px - 1320px */
 @media(max-width:1320px){
   .workspace-bar{padding:7px 16px}
-  .seg{width:300px}
+  .seg{width:325px}
 }
 
 /* Medium Desktop / Small Laptop / Tablet Landscape: 981px - 1100px */
@@ -27,20 +27,26 @@
   header{padding:10px 14px;gap:8px}
   .workspace-bar{padding:7px 14px;gap:8px}
   .brand p{display:none}
-  .editor{width:360px}
-  .seg{width:270px}
-  .seg button{padding:6px 6px;font-size:12px;gap:5px}
+  .editor{width:350px}
+  .seg{width:310px}
+  .seg button{padding:6px 4px;font-size:12px;gap:4px}
   #btnCopyText .lbl{display:none}
   #btnCopyText{padding:7px 9px}
 }
 
 /* Compact Laptop / Tablet: 821px - 980px */
 @media(max-width:980px){
-  .brand h1{font-size:13.5px}
+  .brand h1{font-size:13px}
   .workspace-bar{padding:6px 12px;gap:8px}
-  .seg{width:240px}
-  .seg button{padding:6px 4px}
+  .seg{width:298px}
+  .seg button{padding:6px 2px;font-size:11.5px;gap:4px}
   .seg button span:not(.s-ico){font-size:11.5px}
+}
+
+/* Tablet Portrait & Small Viewport: 821px - 870px */
+@media(max-width:870px){
+  .brand h1{display:none}
+  .seg{width:295px}
 }
 
 /* Mobile & Small Screen: <= 820px */
