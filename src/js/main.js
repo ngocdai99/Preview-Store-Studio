@@ -65,6 +65,10 @@ addEventListener('orientationchange', () => setTimeout(onStageResize, 200));
 
 
 // --- App Initialization ---
+store = 'apple';
+document.body.dataset.store = 'apple';
+document.body.dataset.dual = 'false';
+if (typeof setStore === 'function') setStore('apple', false);
 document.body.dataset.appleDevice = appleDevice;
 document.body.dataset.googleDevice = googleDevice;
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
@@ -77,7 +81,7 @@ if(typeof hasUserDraft === 'function' && hasUserDraft()){
 } else if(!loadState()){
   restoring = true;
   try{
-    loadPreset('none');
+    loadPreset('taskflow');
   }finally{
     restoring = false;
   }

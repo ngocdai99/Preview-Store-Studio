@@ -1151,6 +1151,8 @@ assert(bundledHtml.includes('initInfoPopover("metricsInfoBtn"'), "Bundled JS ini
 assert(!bundledHtml.includes('id="tab7Url"') && !bundledHtml.includes('id="tab10Url"'), "By URL buttons (#tab7Url, #tab10Url) are removed from Tablet Screenshots card");
 assert(!bundledHtml.includes('let isFloating') && !bundledHtml.includes('btnFloat'), "Orphaned isFloating / btnFloat dead code is removed from bundle");
 assert(bundledHtml.includes("const defaultPrivLinked = 'Identifiers, Usage Data'") && bundledHtml.includes("const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion'"), "Custom blank draft initializes with standard App Privacy and Google Play Data Safety disclosures");
+assert(bundledHtml.includes("loadPreset('taskflow')"), "Fresh bootstrap preloads TaskFlow preset to avoid an empty UI");
+assert(bundledHtml.includes("setStore('apple', false)"), "Fresh bootstrap defaults to selecting App Store mode");
 
 // 7. Preview Toggles Pure State Behavior (No Conflicting Scroll Jumps)
 assert(bundledHtml.includes("rawId === 'f-st-off' || rawId === 'f-st-wm'"), 'Preview toggles excluded from field focus scroll linking to prevent conflicting scroll jumps across multi-location metrics');
