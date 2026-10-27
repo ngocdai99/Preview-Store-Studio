@@ -1184,6 +1184,11 @@ assert(bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed #3b82f
 assert(bundledHtml.includes('.ico-wrap.is-placeholder .ico-ov') && bundledHtml.includes('background:rgba(8,12,24,0.65);color:#38bdf8'), 'CSS defines subtle dark overlay and blue zoom icon for placeholder state');
 assert(bundledHtml.includes("iconSrc = userDraft.icon") && bundledHtml.includes("userDraft.isCustomIcon"), 'Draft pill resolves to original vibrant BLANK_ICON and sanitizes legacy pastel icons');
 
+// 12. Modern iOS 18 iPhone Search Result Mockup & Secondary Skeleton
+assert(bundledHtml.includes('class="sr-search-row"') && bundledHtml.includes('class="sr-search-input"'), 'iPhone Search Result includes modern iOS 18 search bar row');
+assert(bundledHtml.includes('class="sr-meta-line"') && bundledHtml.includes('class="sr-category"') && bundledHtml.includes('class="sr-dev"'), 'iPhone Search Result includes category and developer metadata line');
+assert(bundledHtml.includes('class="sr-skeleton-card"') && bundledHtml.includes('class="sr-skel-shots"'), 'iPhone Search Result renders realistic secondary app skeleton card');
+
 
 // ---------------------------------------------------------------------
 // Summary Report
