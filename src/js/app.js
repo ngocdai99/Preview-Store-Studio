@@ -7698,6 +7698,7 @@ function normalizeAppleApp(item) {
   return {
     platform: 'apple',
     store: 'apple',
+    appleDevice: 'iphone',
     form: {
       name: name,
       sub: sub,
@@ -7782,15 +7783,25 @@ async function fetchStoreAppData(target) {
 function applyImportedStoreApp(state) {
   if (!state) return false;
 
+  // Auto select Apple App Store and iPhone device
+  if (typeof setStore === 'function') {
+    setStore('apple', false);
+  }
+  if (typeof setAppleDevice === 'function') {
+    setAppleDevice('iphone', false);
+  }
+
   // Apply to studio state
   if (typeof applyStateObject === 'function') {
     applyStateObject(state);
   }
 
-  // Switch store if requested and not in dual mode
-  const isDual = document.body && document.body.dataset.dual === 'true';
-  if (!isDual && state.store && typeof setStore === 'function') {
-    setStore(state.store, false);
+  // Double ensure store & device buttons reflect selection after state apply
+  if (typeof setStore === 'function') {
+    setStore('apple', false);
+  }
+  if (typeof setAppleDevice === 'function') {
+    setAppleDevice('iphone', false);
   }
 
   // Rerender all components
@@ -7804,6 +7815,7 @@ function applyImportedStoreApp(state) {
   if (typeof saveDraftToStorage === 'function') saveDraftToStorage();
   if (typeof updatePresetBanner === 'function') updatePresetBanner();
   if (typeof updateDraftPill === 'function') updateDraftPill();
+  if (typeof syncAllVtPills === 'function') syncAllVtPills();
   if (typeof fit === 'function') fit();
 
   const appName = state.form && state.form.name ? state.form.name : 'App';

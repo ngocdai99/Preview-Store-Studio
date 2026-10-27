@@ -1315,6 +1315,8 @@ const mockApple = {
 };
 const normApple = normalizeAppleApp(mockApple);
 assert(normApple.platform === 'apple', 'normalizeAppleApp returns platform apple');
+assert(normApple.store === 'apple', 'normalizeAppleApp returns store apple');
+assert(normApple.appleDevice === 'iphone', 'normalizeAppleApp auto selects iphone device');
 assert(normApple.form.name === 'Spotify', 'normalizeAppleApp separates title before dash');
 assert(normApple.form.sub === 'Music and Podcasts', 'normalizeAppleApp extracts subtitle after dash');
 assert(normApple.form.dev === 'Spotify Ltd.', 'normalizeAppleApp extracts artist name');
