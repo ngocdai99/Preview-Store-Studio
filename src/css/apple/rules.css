@@ -23,3 +23,10 @@ body[data-dual="true"] .dev.ipad,
 body[data-dual="true"] .dev.gtab7,
 body[data-dual="true"] .dev.gtab10{display:none!important}
 body[data-dual="true"] #vt{display:flex!important}
+
+/* Hardware-accelerated store & dual mode transition animations */
+body.is-animating-store .dev.apple.single,
+body.is-animating-store .dev.google,
+body.is-animating-store #dev-phone.dev.google {
+  display: block !important;
+}

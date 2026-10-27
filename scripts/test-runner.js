@@ -1153,6 +1153,8 @@ assert(!bundledHtml.includes('let isFloating') && !bundledHtml.includes('btnFloa
 assert(bundledHtml.includes("const defaultPrivLinked = 'Identifiers, Usage Data'") && bundledHtml.includes("const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion'"), "Custom blank draft initializes with standard App Privacy and Google Play Data Safety disclosures");
 assert(bundledHtml.includes("loadPreset('taskflow')"), "Fresh bootstrap preloads TaskFlow preset to avoid an empty UI");
 assert(bundledHtml.includes("setStore('apple', false)"), "Fresh bootstrap defaults to selecting App Store mode");
+assert(bundledHtml.includes('function transitionStoreMode') && bundledHtml.includes('is-animating-store'), "Studio includes cinematic FLIP transitionStoreMode matching marketing showcase");
+assert(bundledHtml.includes('body.is-animating-store .dev.apple.single'), "CSS forces both phone devices visible during store transitions to eliminate layout jumps");
 
 // 7. Preview Toggles Pure State Behavior (No Conflicting Scroll Jumps)
 assert(bundledHtml.includes("rawId === 'f-st-off' || rawId === 'f-st-wm'"), 'Preview toggles excluded from field focus scroll linking to prevent conflicting scroll jumps across multi-location metrics');

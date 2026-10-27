@@ -29,6 +29,25 @@ const ALL_TRANS_CLASSES = [
 function clearDevTransitions(){
   if(devExitTimer){ clearTimeout(devExitTimer); devExitTimer = null; }
   if(devEnterTimer){ clearTimeout(devEnterTimer); devEnterTimer = null; }
+  if(document.body) document.body.classList.remove('is-animating-store');
+  const stage = $('stageDevices') || document.querySelector('.stage');
+  if(stage) stage.style.minHeight = '';
+  const da = document.querySelector('.dev.apple.single');
+  const dg = document.querySelector('.dev.google');
+  if(da){
+    da.classList.remove(...ALL_TRANS_CLASSES);
+    da.style.opacity = '';
+    da.style.pointerEvents = '';
+    da.style.transition = '';
+    da.style.transform = '';
+  }
+  if(dg){
+    dg.classList.remove(...ALL_TRANS_CLASSES);
+    dg.style.opacity = '';
+    dg.style.pointerEvents = '';
+    dg.style.transition = '';
+    dg.style.transform = '';
+  }
   $$('.dev').forEach(d => d.classList.remove(...ALL_TRANS_CLASSES));
 }
 
@@ -159,124 +178,295 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
 
 
 // --- Store & View Switchers ---
-function setStore(s, animate = true){
-  if(s === 'dual'){
-    document.body.dataset.dual = 'true';
-    document.body.dataset.store = 'dual';
-    appleDevice = 'dual';
-    googleDevice = 'dual';
-    document.body.dataset.appleDevice = 'iphone';
-    document.body.dataset.googleDevice = 'phone';
-    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'dual'));
-    $$('[data-only]').forEach(e => e.classList.remove('hide'));
-    if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
-    clearDevTransitions();
-    if(typeof renderIcons === 'function') renderIcons();
-    if(typeof renderShots === 'function') renderShots();
-    if(typeof renderIpadShots === 'function') renderIpadShots();
-    if(typeof validateAppIcon === 'function') validateAppIcon();
-    if(typeof validateScreenshots === 'function') validateScreenshots();
-    update();
-    saveState();
+function transitionStoreMode(fromMode, toMode, onApply, animate = true){
+  const devApple = document.querySelector('.dev.apple.single');
+  const devGoogle = document.querySelector('.dev.google');
+  const stage = $('stageDevices') || document.querySelector('.stage');
+
+  clearDevTransitions();
+
+  if(!animate || !devApple || !devGoogle || !stage || fromMode === toMode){
+    onApply();
     fit();
     syncAllVtPills();
     return;
   }
 
-  // Single store mode (apple or google)
-  document.body.dataset.dual = 'false';
-  if(appleDevice === 'dual') appleDevice = 'iphone';
-  if(googleDevice === 'dual') googleDevice = 'phone';
+  // If currently using iPad or Android tablet, skip 3D dual slide and apply cleanly
+  if((fromMode === 'apple' && appleDevice === 'ipad') || (toMode === 'apple' && appleDevice === 'ipad') ||
+     (fromMode === 'google' && googleDevice !== 'phone') || (toMode === 'google' && googleDevice !== 'phone')){
+    onApply();
+    fit();
+    syncAllVtPills();
+    return;
+  }
 
-  if(store === s && document.body.dataset.store === s && document.body.dataset.dual !== 'true'){
+  // Prevent CSS rules from abruptly hiding elements while transitioning
+  document.body.classList.add('is-animating-store');
+
+  const stageRect = stage.getBoundingClientRect();
+  const stageCenterX = stageRect.left + stageRect.width / 2;
+
+  if (fromMode === 'apple' && toMode === 'google') {
+    // Single Apple -> Single Google: Apple glides left, Google enters from right
+    devApple.style.transition = 'opacity 0.2s cubic-bezier(0.25, 1, 0.5, 1), transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+    devApple.style.opacity = '0';
+    devApple.style.transform = 'translate3d(-35px, 0, 0) scale(0.96)';
+    devExitTimer = setTimeout(function () {
+      onApply();
+      devGoogle.style.transition = 'none';
+      devGoogle.style.opacity = '0';
+      devGoogle.style.transform = 'translate3d(35px, 0, 0) scale(0.96)';
+      void devGoogle.offsetWidth;
+      devGoogle.style.transition = 'opacity 0.34s cubic-bezier(0.16, 1, 0.3, 1), transform 0.34s cubic-bezier(0.16, 1, 0.3, 1)';
+      devGoogle.style.opacity = '1';
+      devGoogle.style.transform = 'translate3d(0, 0, 0) scale(1)';
+      devEnterTimer = setTimeout(function () {
+        clearDevTransitions();
+        fit();
+        syncAllVtPills();
+      }, 360);
+    }, 190);
+  } else if (fromMode === 'google' && toMode === 'apple') {
+    // Single Google -> Single Apple: Google glides right, Apple enters from left
+    devGoogle.style.transition = 'opacity 0.2s cubic-bezier(0.25, 1, 0.5, 1), transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+    devGoogle.style.opacity = '0';
+    devGoogle.style.transform = 'translate3d(35px, 0, 0) scale(0.96)';
+    devExitTimer = setTimeout(function () {
+      onApply();
+      devApple.style.transition = 'none';
+      devApple.style.opacity = '0';
+      devApple.style.transform = 'translate3d(-35px, 0, 0) scale(0.96)';
+      void devApple.offsetWidth;
+      devApple.style.transition = 'opacity 0.34s cubic-bezier(0.16, 1, 0.3, 1), transform 0.34s cubic-bezier(0.16, 1, 0.3, 1)';
+      devApple.style.opacity = '1';
+      devApple.style.transform = 'translate3d(0, 0, 0) scale(1)';
+      devEnterTimer = setTimeout(function () {
+        clearDevTransitions();
+        fit();
+        syncAllVtPills();
+      }, 360);
+    }, 190);
+  } else if (fromMode === 'dual' && toMode === 'apple') {
+    // Dual -> Apple: Apple glides to center, Google softly dissolves & recedes in-flow (zero flick)
+    const firstA = devApple.getBoundingClientRect();
+    const firstG = devGoogle.getBoundingClientRect();
+    const isCol = (stageRect.width < 721) || (Math.abs(firstA.left - firstG.left) < 10);
+    const appleCenterX = firstA.left + firstA.width / 2;
+    const zoomA = parseFloat(window.getComputedStyle(devApple).zoom) || 1;
+    const deltaX = isCol ? 0 : (stageCenterX - appleCenterX) / zoomA;
+
+    stage.style.minHeight = stageRect.height + 'px';
+    onApply();
+
+    // Apple glides smoothly to center
+    devApple.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
+    devApple.style.transform = 'translate3d(' + deltaX + 'px, 0, 0)';
+
+    // Google softly fades out and gently scales down in place
+    devGoogle.style.transition = 'opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1)';
+    devGoogle.style.opacity = '0';
+    devGoogle.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
+    devGoogle.style.pointerEvents = 'none';
+
+    devExitTimer = setTimeout(function () {
+      clearDevTransitions();
+      fit();
+      syncAllVtPills();
+    }, 420);
+  } else if (fromMode === 'dual' && toMode === 'google') {
+    // Dual -> Google: Google glides to center, Apple softly dissolves & recedes in-flow (zero flick)
+    const firstA = devApple.getBoundingClientRect();
+    const firstG = devGoogle.getBoundingClientRect();
+    const isCol = (stageRect.width < 721) || (Math.abs(firstA.left - firstG.left) < 10);
+    const googleCenterX = firstG.left + firstG.width / 2;
+    const zoomG = parseFloat(window.getComputedStyle(devGoogle).zoom) || 1;
+    const deltaX = isCol ? 0 : (stageCenterX - googleCenterX) / zoomG;
+    const deltaY = isCol ? (firstA.top - firstG.top) / zoomG : 0;
+
+    stage.style.minHeight = stageRect.height + 'px';
+    onApply();
+
+    // Google glides smoothly to center
+    devGoogle.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
+    devGoogle.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)';
+
+    // Apple softly fades out and gently scales down in place
+    devApple.style.transition = 'opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1)';
+    devApple.style.opacity = '0';
+    devApple.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
+    devApple.style.pointerEvents = 'none';
+
+    devExitTimer = setTimeout(function () {
+      clearDevTransitions();
+      fit();
+      syncAllVtPills();
+    }, 420);
+  } else if (fromMode === 'apple' && toMode === 'dual') {
+    // Single Apple -> Dual: Apple glides from center to left, Google blooms in
+    const firstA = devApple.getBoundingClientRect();
+
+    onApply();
+    fit();
+
+    const lastA = devApple.getBoundingClientRect();
+    const zoomA = parseFloat(window.getComputedStyle(devApple).zoom) || 1;
+    const deltaX = (firstA.left - lastA.left) / zoomA;
+    const deltaY = (firstA.top - lastA.top) / zoomA;
+
+    // Invert Apple to starting center position
+    devApple.style.transition = 'none';
+    devApple.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)';
+
+    // Initial state for Google blooming in
+    devGoogle.style.transition = 'none';
+    devGoogle.style.opacity = '0';
+    devGoogle.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
+
+    void devApple.offsetWidth; // flush layout
+
+    // Play smooth glide and bloom together
+    devApple.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
+    devApple.style.transform = 'translate3d(0, 0, 0)';
+    devGoogle.style.transition = 'opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1), transform 0.38s cubic-bezier(0.16, 1, 0.3, 1)';
+    devGoogle.style.opacity = '1';
+    devGoogle.style.transform = 'scale(1) translate3d(0, 0, 0)';
+
+    devEnterTimer = setTimeout(function () {
+      clearDevTransitions();
+      fit();
+      syncAllVtPills();
+    }, 440);
+  } else if (fromMode === 'google' && toMode === 'dual') {
+    // Single Google -> Dual: Google glides from center to right, Apple blooms in
+    const firstG = devGoogle.getBoundingClientRect();
+
+    onApply();
+    fit();
+
+    const lastG = devGoogle.getBoundingClientRect();
+    const zoomG = parseFloat(window.getComputedStyle(devGoogle).zoom) || 1;
+    const deltaX = (firstG.left - lastG.left) / zoomG;
+    const deltaY = (firstG.top - lastG.top) / zoomG;
+
+    // Invert Google to starting center position
+    devGoogle.style.transition = 'none';
+    devGoogle.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)';
+
+    // Initial state for Apple blooming in
+    devApple.style.transition = 'none';
+    devApple.style.opacity = '0';
+    devApple.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
+
+    void devGoogle.offsetWidth; // flush layout
+
+    // Play smooth glide and bloom together
+    devGoogle.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
+    devGoogle.style.transform = 'translate3d(0, 0, 0)';
+    devApple.style.transition = 'opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1), transform 0.38s cubic-bezier(0.16, 1, 0.3, 1)';
+    devApple.style.opacity = '1';
+    devApple.style.transform = 'scale(1) translate3d(0, 0, 0)';
+
+    devEnterTimer = setTimeout(function () {
+      clearDevTransitions();
+      fit();
+      syncAllVtPills();
+    }, 440);
+  } else {
+    onApply();
+    fit();
+    syncAllVtPills();
+  }
+}
+
+function setStore(s, animate = true){
+  const fromMode = document.body.dataset.dual === 'true' ? 'dual' : store;
+  const toMode = s;
+
+  if(fromMode === toMode){
     $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
     syncAllVtPills();
     return;
   }
 
-  store = s;
-  document.body.dataset.store = s;
-  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
-  $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
-  if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
-  syncCategoryUI();
-
-  const iconLabel = $('iconSpecLabel');
-  const iconHint = $('iconSpecHint');
-  if(iconLabel && iconHint){
-    if(s === 'google'){
-      iconLabel.innerHTML = 'App Icon (512×512 px) <span class="tag g">GOOGLE</span>';
-      iconHint.innerHTML = '32-bit PNG · 512×512 px · Max 1024 KB · sRGB · No rounded corners or drop shadows.';
+  const applyStoreMode = () => {
+    if(s === 'dual'){
+      document.body.dataset.dual = 'true';
+      document.body.dataset.store = 'dual';
+      appleDevice = 'dual';
+      googleDevice = 'dual';
+      document.body.dataset.appleDevice = 'iphone';
+      document.body.dataset.googleDevice = 'phone';
+      $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'dual'));
+      $$('[data-only]').forEach(e => e.classList.remove('hide'));
+      if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
+      syncCategoryUI();
+      if(typeof renderIcons === 'function') renderIcons();
+      if(typeof renderShots === 'function') renderShots();
+      if(typeof renderIpadShots === 'function') renderIpadShots();
+      if(typeof validateAppIcon === 'function') validateAppIcon();
+      if(typeof validateScreenshots === 'function') validateScreenshots();
+      update();
+      saveState();
     } else {
-      iconLabel.innerHTML = 'App Icon (1024×1024 px) <span class="tag a">APPLE</span>';
-      iconHint.innerHTML = 'PNG · 1024×1024 px · sRGB or Display P3 · 100% Opaque (no alpha) · No rounded corners.';
-    }
-  }
+      document.body.dataset.dual = 'false';
+      store = s;
+      document.body.dataset.store = s;
+      if(appleDevice === 'dual') appleDevice = 'iphone';
+      if(googleDevice === 'dual') googleDevice = 'phone';
+      document.body.dataset.appleDevice = appleDevice;
+      document.body.dataset.googleDevice = googleDevice;
+      $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
+      $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
+      if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
+      syncCategoryUI();
 
-  // Sync preset icon variant if using preset template
-  if(typeof IS_CUSTOM_ICON !== 'undefined' && !IS_CUSTOM_ICON){
-    let iconChanged = false;
-    if(typeof BLANK_ICON !== 'undefined' && (ICON === BLANK_ICON || (typeof BLANK_ICON_1024 !== 'undefined' && ICON === BLANK_ICON_1024) || (typeof BLANK_ICON_512 !== 'undefined' && ICON === BLANK_ICON_512))){
-      if(s === 'apple' && typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024){ ICON = BLANK_ICON_1024; iconChanged = true; }
-      else if(s === 'google' && typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512){ ICON = BLANK_ICON_512; iconChanged = true; }
-    } else if(typeof PRESETS !== 'undefined'){
-      for(const k in PRESETS){
-        const p = PRESETS[k];
-        if(p && (p.icon === ICON || p.icon1024 === ICON || p.icon512 === ICON)){
-          if(s === 'apple' && p.icon1024){ ICON = p.icon1024; iconChanged = true; }
-          else if(s === 'google' && p.icon512){ ICON = p.icon512; iconChanged = true; }
-          break;
+      const iconLabel = $('iconSpecLabel');
+      const iconHint = $('iconSpecHint');
+      if(iconLabel && iconHint){
+        if(s === 'google'){
+          iconLabel.innerHTML = 'App Icon (512×512 px) <span class="tag g">GOOGLE</span>';
+          iconHint.innerHTML = '32-bit PNG · 512×512 px · Max 1024 KB · sRGB · No rounded corners or drop shadows.';
+        } else {
+          iconLabel.innerHTML = 'App Icon (1024×1024 px) <span class="tag a">APPLE</span>';
+          iconHint.innerHTML = 'PNG · 1024×1024 px · sRGB or Display P3 · 100% Opaque (no alpha) · No rounded corners.';
         }
       }
+
+      // Sync preset icon variant if using preset template
+      if(typeof IS_CUSTOM_ICON !== 'undefined' && !IS_CUSTOM_ICON){
+        let iconChanged = false;
+        if(typeof BLANK_ICON !== 'undefined' && (ICON === BLANK_ICON || (typeof BLANK_ICON_1024 !== 'undefined' && ICON === BLANK_ICON_1024) || (typeof BLANK_ICON_512 !== 'undefined' && ICON === BLANK_ICON_512))){
+          if(s === 'apple' && typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024){ ICON = BLANK_ICON_1024; iconChanged = true; }
+          else if(s === 'google' && typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512){ ICON = BLANK_ICON_512; iconChanged = true; }
+        } else if(typeof PRESETS !== 'undefined'){
+          for(const k in PRESETS){
+            const p = PRESETS[k];
+            if(p && (p.icon === ICON || p.icon1024 === ICON || p.icon512 === ICON)){
+              if(s === 'apple' && p.icon1024){ ICON = p.icon1024; iconChanged = true; }
+              else if(s === 'google' && p.icon512){ ICON = p.icon512; iconChanged = true; }
+              break;
+            }
+          }
+        }
+        if(iconChanged && typeof renderIcons === 'function') renderIcons();
+      }
+
+      if(s === 'apple'){
+        if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
+        if(typeof renderIpadShots === 'function') renderIpadShots();
+      } else {
+        if($('ipadCard')) $('ipadCard').style.display = 'none';
+      }
+
+      if(typeof validateAppIcon === 'function') validateAppIcon();
+      if(typeof validateScreenshots === 'function') validateScreenshots();
+      update();
+      saveState();
     }
-    if(iconChanged && typeof renderIcons === 'function') renderIcons();
-  }
+  };
 
-  // Trigger validation immediately upon store switch
-  if(typeof validateAppIcon === 'function') validateAppIcon();
-  if(typeof validateScreenshots === 'function') validateScreenshots();
-
-  const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
-  const targetDev = isDual ? 'dual' : (s === 'apple' ? appleDevice : googleDevice);
-
-  if(isDual){
-    clearDevTransitions();
-    document.body.dataset.appleDevice = 'iphone';
-    document.body.dataset.googleDevice = 'phone';
-    document.body.dataset.dual = 'true';
-    if(s === 'apple'){
-      if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
-      if(typeof renderIpadShots === 'function') renderIpadShots();
-    } else {
-      if($('ipadCard')) $('ipadCard').style.display = 'none';
-    }
-    if(typeof validateAppIcon === 'function') validateAppIcon();
-    if(typeof validateScreenshots === 'function') validateScreenshots();
-    update();
-    saveState();
-    fit();
-    syncAllVtPills();
-    return;
-  }
-
-  transitionDevice(s, targetDev, () => {
-    document.body.dataset.appleDevice = appleDevice === 'dual' ? 'iphone' : appleDevice;
-    document.body.dataset.googleDevice = googleDevice === 'dual' ? 'phone' : googleDevice;
-
-    if(s === 'apple'){
-      if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
-      if(typeof renderIpadShots === 'function') renderIpadShots();
-    } else {
-      if($('ipadCard')) $('ipadCard').style.display = 'none';
-    }
-
-    if(typeof validateAppIcon === 'function') validateAppIcon();
-    if(typeof validateScreenshots === 'function') validateScreenshots();
-    update();
-    saveState();
-  }, animate);
-
-  syncAllVtPills();
+  transitionStoreMode(fromMode, toMode, applyStoreMode, animate);
 }
 
 function setView(v){
