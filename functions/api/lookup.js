@@ -20,8 +20,10 @@ export async function onRequest(context) {
 
   try {
     const res = await fetch(itunesUrl, {
-      headers: { 'User-Agent': 'StorePreviewStudio/2.1' },
-      cf: { cacheTtl: 86400, cacheEverything: true }
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json'
+      }
     });
     const data = await res.text();
     return new Response(data, {
@@ -29,7 +31,7 @@ export async function onRequest(context) {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+        'Cache-Control': 'public, max-age=3600'
       }
     });
   } catch (err) {
