@@ -542,6 +542,7 @@ assert(ipadHtml.includes('ipad-platforms-row') && ipadHtml.includes('iPad, iPhon
 assert(ipadHtml.includes('ipad-desc-row') && ipadHtml.includes('ipad-dev-entity'), 'iPad features 2-column description and developer entity row');
 assert(ipadHtml.includes('ipad-ratings-layout') && ipadHtml.includes('ipad-rating-bar-row'), 'iPad features authentic Ratings & Reviews with 5-star distribution bars');
 assert(ipadHtml.includes('ipad-floating-pill') && ipadHtml.includes('ipad-floating-get'), 'iPad features floating bottom GET pill on scroll');
+assert(ipadHtml.includes('ipad-info-grid') && ipadHtml.includes('ipad-info-cell') && ipadHtml.includes('ipad-info-label') && ipadHtml.includes('ipad-info-val'), 'iPad features authentic 2-column stacked Information section layout matching iOS 18');
 
 // 6. iPad Screenshot Ratio Classifier & Rejection Warning Logic
 function classifyIpadScreenshotRatio(w, h) {

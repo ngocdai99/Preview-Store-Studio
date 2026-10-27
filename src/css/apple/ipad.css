@@ -172,11 +172,56 @@
 .ipad-floating-get{padding:6px 20px;font-size:13px;font-weight:700;border-radius:999px;flex-shrink:0}
 
 /* Full Width Detail Sections on iPad */
-.phone.ipad .sec{margin-bottom:26px;padding-bottom:22px;border-bottom:0.5px solid var(--sp)}
-.phone.ipad .sec h3{font-size:19px;font-weight:700;color:var(--t);margin-bottom:12px}
-.phone.ipad .inf{display:grid;grid-template-columns:1fr 1fr;gap:0 36px}
-.phone.ipad .inf div{border-bottom:0.5px solid var(--sp);padding:10px 0}
-.phone.ipad .inf-privacy{grid-column:span 2}
+.phone.ipad .sec{margin-bottom:28px;padding-bottom:24px;border-bottom:0.5px solid var(--sp)}
+.phone.ipad .sec h3{font-size:20px;font-weight:700;color:var(--t);margin-bottom:16px;letter-spacing:-.2px}
+
+/* iPad Information Section (iOS 18 Authentic 2-Column Stacked) */
+.ipad-info-sec{border-bottom:0.5px solid var(--sp)}
+.ipad-info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  column-gap:56px;
+  row-gap:22px;
+  margin-bottom:22px;
+}
+.ipad-info-cell{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.ipad-info-label{
+  font-size:13.5px;
+  color:var(--s);
+  font-weight:400;
+  line-height:1.2;
+}
+.ipad-info-val{
+  font-size:14.5px;
+  color:var(--t);
+  font-weight:500;
+  line-height:1.35;
+  word-break:break-word;
+}
+.ipad-info-privacy-row{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:var(--bl);
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  user-select:none;
+  margin-top:4px;
+}
+.ipad-info-hand-ico{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--bl);
+}
+.ipad-info-priv-link{
+  color:var(--bl);
+}
 
 .ipad-tab{display:none!important}
 .ipad-tab div span svg{width:22px;height:22px}
