@@ -534,7 +534,7 @@ assert(commonHtml.includes('id="ipadSlist"') && commonHtml.includes('id="addIpad
 assert(ipadHtml.includes('data-shots="ipad-gal"'), 'ipad.html uses data-shots="ipad-gal" for isolated iPad gallery');
 assert(ipadHtml.includes('data-shots="ipad-shots"'), 'ipad.html uses data-shots="ipad-shots" for search gallery');
 assert(stageTbHtml.includes('data-d="iphone"') && stageTbHtml.includes('data-d="ipad"'), 'stage-toolbar.html provides both iPhone and iPad device selectors');
-assert(brandHtml.includes('class="window-dots"') && brandHtml.includes('dot red') && brandHtml.includes('dot yellow') && brandHtml.includes('dot green'), 'brand.html in Header includes macOS window traffic light decoration dots');
+assert(!brandHtml.includes('class="window-dots"'), 'brand.html removes redundant decorative window dots to maximize header workspace');
 
 // 3. Decoupled Preview Logic
 assert(!appleJs.includes('if(d === \'ipad\' && !SUPPORTS_IPAD)'), 'apple.js does NOT block switching to iPad in iPhone-only mode');
