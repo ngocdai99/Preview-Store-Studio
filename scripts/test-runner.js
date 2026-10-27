@@ -1188,6 +1188,8 @@ assert(bundledHtml.includes("iconSrc = userDraft.icon") && bundledHtml.includes(
 assert(bundledHtml.includes('iphone-header') && bundledHtml.includes('sr-search-input'), 'iPhone Search Result includes modern iOS 18 frosted header with search bar row');
 assert(bundledHtml.includes('class="sr-meta-line"') && bundledHtml.includes('class="sr-category"') && bundledHtml.includes('class="sr-dev"'), 'iPhone Search Result includes category and developer metadata line');
 assert(bundledHtml.includes('class="sr-skeleton-card"') && bundledHtml.includes('class="sr-skel-shots"'), 'iPhone Search Result renders realistic secondary app skeleton card');
+const skelCardCount = (bundledHtml.match(/class="sr-skeleton-card"/g) || []).length;
+assert(skelCardCount >= 3, `iPhone Search Result renders at least 3 skeleton app cards for smooth scrolling (found ${skelCardCount})`);
 assert(bundledHtml.includes('class="shots sr-shots" data-shots="shots"') && bundledHtml.includes('class="sr-skel-shot"'), 'iPhone Search Result displays skeleton screenshot placeholders when no screenshots are uploaded');
 
 
