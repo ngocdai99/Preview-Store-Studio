@@ -1192,6 +1192,12 @@ const skelCardCount = (bundledHtml.match(/class="sr-skeleton-card"/g) || []).len
 assert(skelCardCount >= 3, `iPhone Search Result renders at least 3 skeleton app cards for smooth scrolling (found ${skelCardCount})`);
 assert(bundledHtml.includes('class="shots sr-shots" data-shots="shots"') && bundledHtml.includes('class="sr-skel-shot"'), 'iPhone Search Result displays skeleton screenshot placeholders when no screenshots are uploaded');
 
+// 13. Translucent iOS 18 Frosted Glass Headers & Floating Bottom Tab Bar (Marketing-Aligned)
+assert(bundledHtml.includes('backdrop-filter:blur(20px) saturate(180%)') || bundledHtml.includes('backdrop-filter: blur(20px) saturate(180%)'), 'iPhone top header uses marketing-aligned frosted glass with 180% color saturation');
+assert(bundledHtml.includes('backdrop-filter:blur(25px) saturate(190%)') || bundledHtml.includes('backdrop-filter: blur(25px) saturate(190%)'), 'iPhone bottom tab bar uses marketing-aligned frosted glass with 190% color saturation');
+assert(bundledHtml.includes('--bar:rgba(255,255,255,.78)') || bundledHtml.includes('--bar: rgba(255, 255, 255, 0.78)'), 'Light mode header uses authentic see-through glass alpha (~0.78)');
+assert(bundledHtml.includes('background:rgba(255,255,255,.78)') || bundledHtml.includes('background: rgba(255, 255, 255, 0.78)'), 'Floating tab bar uses translucent see-through glass background');
+
 
 // ---------------------------------------------------------------------
 // Summary Report

@@ -1,6 +1,6 @@
 /* ---------- APPLE STORE STYLES & PHONE CONTAINER ---------- */
-.phone.apple{--bg:#fff;--cd:#f2f2f7;--t:#000;--s:#8e8e93;--sp:#e5e5ea;--bl:#0a84ff;--bar:rgba(249,249,249,.88);font-family:system-ui,-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif}
-.phone.apple[data-theme=dark]{--bg:#000;--cd:#1c1c1e;--t:#fff;--sp:#2c2c2e;--bar:rgba(22,22,24,.88)}
+.phone.apple{--bg:#fff;--cd:#f2f2f7;--t:#000;--s:#8e8e93;--sp:#e5e5ea;--bl:#0a84ff;--bar:rgba(255,255,255,.78);font-family:system-ui,-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif}
+.phone.apple[data-theme=dark]{--bg:#000;--cd:#1c1c1e;--t:#fff;--sp:#2c2c2e;--bar:rgba(22,22,24,.75)}
 .phone.apple:not(.ipad) .sb{position:absolute;top:0;left:0;right:0;height:54px;padding:16px 32px 0;font-size:15px;z-index:7;pointer-events:none}
 .apple .sb{height:54px;padding:16px 32px 0;font-size:15px}
 .di{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:122px;height:36px;background:#000;border-radius:20px;z-index:8}

@@ -48,29 +48,31 @@ initInfoPopover("iosIconInfoBtn", "iosIconInfoPop", "iosIconInfoClose", "apple")
 
 // --- iPhone Detail View Header Dynamic Scroll Animation ---
 function syncAppleNavScroll(){
-  const scr = document.querySelector('.dev.apple.single .scr');
-  if(!scr) return;
-  const nav = scr.querySelector('.a-nav');
-  if(nav) nav.classList.toggle('scrolled', scr.scrollTop > 75);
+  document.querySelectorAll('.phone.apple:not(.ipad) .scr').forEach(scr => {
+    const nav = scr.querySelector('.a-nav');
+    if(nav) nav.classList.toggle('scrolled', scr.scrollTop > 45);
+  });
 }
 
 function initAppleNavScroll(){
-  const scr = document.querySelector('.dev.apple.single .scr');
-  if(!scr) return;
-  const nav = scr.querySelector('.a-nav');
-  if(!nav) return;
+  document.querySelectorAll('.phone.apple:not(.ipad) .scr').forEach(scr => {
+    const nav = scr.querySelector('.a-nav');
+    if(!nav) return;
 
-  scr.addEventListener('scroll', syncAppleNavScroll, { passive: true });
-  syncAppleNavScroll();
+    scr.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scr.scrollTop > 45);
+    }, { passive: true });
+    nav.classList.toggle('scrolled', scr.scrollTop > 45);
 
-  const backBtn = nav.querySelector('.a-nav-back');
-  if(backBtn){
-    backBtn.addEventListener('click', () => {
-      if(scr.scrollTop > 0){
-        scr.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-  }
+    const backBtn = nav.querySelector('.a-nav-back');
+    if(backBtn){
+      backBtn.addEventListener('click', () => {
+        if(scr.scrollTop > 0){
+          scr.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+  });
 }
 initAppleNavScroll();
 

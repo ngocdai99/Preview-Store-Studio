@@ -12,11 +12,11 @@
 .phone.ipad{
   width:718px;height:948px;border-radius:28px;overflow:hidden;position:relative;display:flex;flex-direction:column;
   background:var(--bg);color:var(--t);font-family:system-ui,-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;
-  --bg:#fff;--cd:#f2f2f7;--t:#000;--s:#8e8e93;--sp:#e5e5ea;--bl:#0a84ff;--bar:rgba(249,249,249,.88);
+  --bg:#fff;--cd:#f2f2f7;--t:#000;--s:#8e8e93;--sp:#e5e5ea;--bl:#0a84ff;--bar:rgba(255,255,255,.78);
   transition:width .32s cubic-bezier(.2,.9,.3,1.15),height .32s cubic-bezier(.2,.9,.3,1.15),opacity .2s ease;
 }
 .dev.ipad.landscape .phone.ipad{width:948px;height:718px}
-.phone.ipad[data-theme=dark]{--bg:#000;--cd:#1c1c1e;--t:#fff;--s:#8e8e93;--sp:#2c2c2e;--bar:rgba(22,22,24,.88)}
+.phone.ipad[data-theme=dark]{--bg:#000;--cd:#1c1c1e;--t:#fff;--s:#8e8e93;--sp:#2c2c2e;--bar:rgba(22,22,24,.75)}
 .ipad-cam{
   position:absolute;top:7px;left:50%;transform:translateX(-50%);
   width:8px;height:8px;border-radius:50%;background:#050508;border:1px solid #1a1a20;z-index:9;
