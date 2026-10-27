@@ -139,6 +139,53 @@ while ((scriptTagMatch = scriptTagRegex.exec(coreHtmlContent)) !== null) {
 }
 assert(coreScriptsValid, 'Syntax valid for all inline scripts in core.html');
 
+// Validate marketing source JS and built HTML files
+const marketingJsDir = path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'js');
+if (fs.existsSync(marketingJsDir)) {
+  const mJsFiles = getAllJsFiles(marketingJsDir);
+  for (const jsFile of mJsFiles) {
+    const relPath = path.relative(ROOT_DIR, jsFile);
+    let isValid = false;
+    try {
+      const code = fs.readFileSync(jsFile, 'utf8');
+      new vm.Script(code, { filename: relPath });
+      isValid = true;
+    } catch (err) {
+      console.error(`  [SYNTAX ERROR] ${relPath}: ${err.message}`);
+    }
+    assert(isValid, `Syntax valid for marketing source ${relPath}`);
+  }
+}
+
+const htmlBundlesToTest = [
+  path.join(ROOT_DIR, 'docs', 'marketing.html'),
+  path.join(ROOT_DIR, 'docs', 'marketing.min.html'),
+  path.join(ROOT_DIR, 'cloudflare', 'index.html')
+];
+for (const bundlePath of htmlBundlesToTest) {
+  if (fs.existsSync(bundlePath)) {
+    const relPath = path.relative(ROOT_DIR, bundlePath);
+    let bundleScriptsValid = true;
+    const bundleHtml = fs.readFileSync(bundlePath, 'utf8');
+    const regex = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
+    let match;
+    let idx = 0;
+    while ((match = regex.exec(bundleHtml)) !== null) {
+      const code = match[1];
+      if (code.trim()) {
+        try {
+          new vm.Script(code, { filename: `${relPath}:script[${idx}]` });
+        } catch (err) {
+          bundleScriptsValid = false;
+          console.error(`  [SYNTAX ERROR] ${relPath}:script[${idx}]: ${err.message}`);
+        }
+      }
+      idx++;
+    }
+    assert(bundleScriptsValid, `Syntax valid for inline scripts in ${relPath}`);
+  }
+}
+
 // ---------------------------------------------------------------------
 // Suite 1: Presets & Distinct Assets Suite
 // ---------------------------------------------------------------------
@@ -1214,6 +1261,122 @@ assert(bundledHtml.includes('--bar:rgba(255,255,255,.75)') || bundledHtml.includ
 assert(bundledHtml.includes('background:rgba(255,255,255,.75)') || bundledHtml.includes('background: rgba(255, 255, 255, 0.75)'), 'Floating tab bar uses translucent see-through glass background (~0.75)');
 assert(!bundledHtml.includes('.iphone-header { position: sticky; top: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; padding: 54px 20px 10px; margin: 0 -20px 14px; background: var(--bar); backdrop-filter: blur'), 'iPhone top header avoids heavy blur smudging so text underneath remains legible');
 
+
+// ---------------------------------------------------------------------
+// Suite 16: Universal Store Import (Input Parsing, Normalization, & Fallback)
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 16]: Universal Store Import (Input Parsing, Normalization, & Fallback)');
+
+assert(bundledHtml.includes('id="storeImportModal"'), 'Store import modal #storeImportModal exists in bundled HTML');
+assert(bundledHtml.includes('id="storeImportInput"'), 'Store import input #storeImportInput exists in modal');
+assert(bundledHtml.includes('id="btnOpenStoreImport"'), 'Workspace bar includes #btnOpenStoreImport button');
+assert(bundledHtml.includes('id="optImportStore"'), 'Export dropdown includes #optImportStore menu item');
+assert(bundledHtml.includes('function parseStoreInput'), 'Bundled application defines parseStoreInput');
+assert(bundledHtml.includes('function normalizeAppleApp'), 'Bundled application defines normalizeAppleApp');
+assert(bundledHtml.includes('function normalizeGoogleApp'), 'Bundled application defines normalizeGoogleApp');
+assert(bundledHtml.includes('function checkAndLoadStoreParams'), 'Bundled application defines checkAndLoadStoreParams');
+
+const storeImport = require('../src/js/modules/store-import.js');
+const { parseStoreInput, parseGooglePlayHtml, normalizeAppleApp, normalizeGoogleApp } = storeImport;
+
+// 1. parseStoreInput URL & ID parser tests
+const pAppleUrl1 = parseStoreInput('https://apps.apple.com/us/app/spotify-music-and-podcasts/id324684580');
+assert(pAppleUrl1 && pAppleUrl1.platform === 'apple' && pAppleUrl1.id === '324684580' && pAppleUrl1.country === 'us', 'parseStoreInput correctly parses full Apple App Store US URL');
+
+const pAppleUrl2 = parseStoreInput('https://apps.apple.com/vn/app/duolingo-learn-languages/id570060128');
+assert(pAppleUrl2 && pAppleUrl2.platform === 'apple' && pAppleUrl2.id === '570060128' && pAppleUrl2.country === 'vn', 'parseStoreInput correctly parses Apple App Store VN URL');
+
+const pAppleIdPrefix = parseStoreInput('id324684580');
+assert(pAppleIdPrefix && pAppleIdPrefix.platform === 'apple' && pAppleIdPrefix.id === '324684580', 'parseStoreInput parses "id324684580" prefix');
+
+const pAppleIdNumeric = parseStoreInput('324684580');
+assert(pAppleIdNumeric && pAppleIdNumeric.platform === 'apple' && pAppleIdNumeric.id === '324684580', 'parseStoreInput parses numeric Apple App ID');
+
+const pGoogleUrl = parseStoreInput('https://play.google.com/store/apps/details?id=com.spotify.music&hl=en&gl=us');
+assert(pGoogleUrl && pGoogleUrl.platform === 'google' && pGoogleUrl.id === 'com.spotify.music' && pGoogleUrl.country === 'us', 'parseStoreInput parses full Google Play Store URL');
+
+const pGooglePackage = parseStoreInput('com.spotify.music');
+assert(pGooglePackage && pGooglePackage.platform === 'google' && pGooglePackage.id === 'com.spotify.music', 'parseStoreInput parses Android package name');
+
+const pGoogleMultiDot = parseStoreInput('org.telegram.messenger.web');
+assert(pGoogleMultiDot && pGoogleMultiDot.platform === 'google' && pGoogleMultiDot.id === 'org.telegram.messenger.web', 'parseStoreInput parses multi-dot package name');
+
+assert(parseStoreInput('   ') === null, 'parseStoreInput returns null for empty string');
+assert(parseStoreInput('random-word') === null, 'parseStoreInput returns null for non-store input');
+assert(parseStoreInput('1234') === null, 'parseStoreInput returns null for short numeric input');
+
+// 2. normalizeAppleApp mapping tests
+const mockApple = {
+  trackName: 'Spotify - Music and Podcasts',
+  artistName: 'Spotify Ltd.',
+  primaryGenreName: 'Music',
+  averageUserRating: 4.84,
+  userRatingCount: 25000000,
+  artworkUrl512: 'https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/icon/512x512bb.jpg',
+  screenshotUrls: ['https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/shot1/392x696bb.png'],
+  ipadScreenshotUrls: ['https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/shot2/576x768bb.png'],
+  description: 'Spotify is the best way to listen to music and podcasts on mobile or tablet. Search for any track, artist or album and listen for free.',
+  version: '8.9.10',
+  contentAdvisoryRating: '12+',
+  bundleId: 'com.spotify.client'
+};
+const normApple = normalizeAppleApp(mockApple);
+assert(normApple.platform === 'apple', 'normalizeAppleApp returns platform apple');
+assert(normApple.form.name === 'Spotify', 'normalizeAppleApp separates title before dash');
+assert(normApple.form.sub === 'Music and Podcasts', 'normalizeAppleApp extracts subtitle after dash');
+assert(normApple.form.dev === 'Spotify Ltd.', 'normalizeAppleApp extracts artist name');
+assert(normApple.icon.includes('1024x1024bb.png'), 'normalizeAppleApp upscales icon to 1024x1024 Retina');
+assert(normApple.shots[0].includes('1242x2688bb.png'), 'normalizeAppleApp upscales screenshot to 1242x2688 Retina');
+assert(normApple.supportsIpad === true, 'normalizeAppleApp detects iPad screenshots');
+
+// 3. normalizeGoogleApp mapping tests
+const mockGoogle = {
+  id: 'com.spotify.music',
+  name: 'Spotify: Music and Podcasts',
+  developer: 'Spotify AB',
+  category: 'Music & Audio',
+  rating: '4.4',
+  ratingCount: '34000000',
+  icon: 'https://play-lh.googleusercontent.com/UrY7BAZ-XfXG7qHWDJSnSqj_jDx3E6SV_F-hnOwZNtEdQTuCWFMUZTut6qcqWqBIvE=s512',
+  icon1024: 'https://play-lh.googleusercontent.com/UrY7BAZ-XfXG7qHWDJSnSqj_jDx3E6SV_F-hnOwZNtEdQTuCWFMUZTut6qcqWqBIvE=s1024',
+  screenshots: ['https://play-lh.googleusercontent.com/screenshot1=w1080'],
+  description: 'With Spotify, you can listen to music and play millions of songs and podcasts for free. Stream music and podcasts you love and find music from all over the world.'
+};
+const normGoogle = normalizeGoogleApp(mockGoogle);
+assert(normGoogle.platform === 'google', 'normalizeGoogleApp returns platform google');
+assert(normGoogle.form.name === 'Spotify', 'normalizeGoogleApp extracts title before colon');
+assert(normGoogle.form.sub === 'Music and Podcasts', 'normalizeGoogleApp extracts subtitle after colon');
+assert(normGoogle.form.dev === 'Spotify AB', 'normalizeGoogleApp extracts developer');
+assert(normGoogle.icon.includes('=s1024'), 'normalizeGoogleApp prefers 1024px icon');
+assert(normGoogle.shots.length === 1, 'normalizeGoogleApp maps screenshots');
+
+// 4. parseGooglePlayHtml Schema.org JSON-LD parser tests
+const sampleHtml = `
+<!DOCTYPE html><html><head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Duolingo: Language Lessons",
+  "applicationCategory": "Education",
+  "author": { "@type": "Person", "name": "Duolingo" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.7", "ratingCount": "19500000" },
+  "image": "https://play-lh.googleusercontent.com/duo-icon=s512",
+  "description": "Learn a new language with the world's most-downloaded education app! Duolingo is the fun, free app."
+}
+</script>
+</head><body>
+<img src="https://play-lh.googleusercontent.com/duo-shot1=w500" alt="Screenshot image">
+<img src="https://play-lh.googleusercontent.com/duo-shot2=w500" alt="Screenshot image">
+</body></html>
+`;
+const parsedPlay = parseGooglePlayHtml(sampleHtml, 'com.duolingo');
+assert(parsedPlay.name === 'Duolingo: Language Lessons', 'parseGooglePlayHtml parses Schema.org app name');
+assert(parsedPlay.developer === 'Duolingo', 'parseGooglePlayHtml parses author/developer');
+assert(parsedPlay.category === 'Education', 'parseGooglePlayHtml parses category');
+assert(parsedPlay.rating === '4.7', 'parseGooglePlayHtml parses ratingValue');
+assert(parsedPlay.ratingCount === '19500000', 'parseGooglePlayHtml parses ratingCount');
+assert(parsedPlay.screenshots.length === 2 && parsedPlay.screenshots[0].includes('=w1080'), 'parseGooglePlayHtml upscales screenshots to w1080');
 
 // ---------------------------------------------------------------------
 // Summary Report

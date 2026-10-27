@@ -75,7 +75,7 @@ function buildMarketing() {
   fs.writeFileSync(CF_INDEX_FILE, minified, 'utf8');
 
   // Sync static branding, worker proxy, and preview assets to cloudflare/
-  const staticAssets = ['showcase-data.js', 'og-image.png', 'app-icon.svg', 'favicon.svg', '_worker.js'];
+  const staticAssets = ['showcase-data.js', 'og-image.png', 'app-icon.svg', 'favicon.svg', '_worker.js', 'no-audience-playbook.html'];
   staticAssets.forEach(file => {
     const src = path.join(ROOT_DIR, 'docs', file);
     const dest = path.join(CLOUDFLARE_DIR, file);

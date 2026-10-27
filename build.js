@@ -100,6 +100,7 @@ function getBundledJs() {
     'modules/export/markdown.js',
     'modules/export/json.js',
     'modules/export/png.js',
+    'modules/store-import.js',
     'main.js'
   ];
 

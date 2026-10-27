@@ -115,4 +115,7 @@ fit();
 setTimeout(syncAllVtPills, 10);
 setTimeout(syncAllVtPills, 120);
 window.addEventListener('load', syncAllVtPills);
+if (typeof checkAndLoadStoreParams === 'function') {
+  checkAndLoadStoreParams();
+}
 
