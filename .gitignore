@@ -12,8 +12,7 @@ Thumbs.db
 *.swo
 
 # Marketing, launch materials & documentation
-docs/*
-!docs/srs/
+docs/
 cloudflare/
 package/
 *.xlsx
