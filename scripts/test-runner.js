@@ -1185,7 +1185,7 @@ assert(bundledHtml.includes('.ico-wrap.is-placeholder .ico-ov') && bundledHtml.i
 assert(bundledHtml.includes("iconSrc = userDraft.icon") && bundledHtml.includes("userDraft.isCustomIcon"), 'Draft pill resolves to original vibrant BLANK_ICON and sanitizes legacy pastel icons');
 
 // 12. Modern iOS 18 iPhone Search Result Mockup & Secondary Skeleton
-assert(bundledHtml.includes('class="sr-search-row"') && bundledHtml.includes('class="sr-search-input"'), 'iPhone Search Result includes modern iOS 18 search bar row');
+assert(bundledHtml.includes('iphone-header') && bundledHtml.includes('sr-search-input'), 'iPhone Search Result includes modern iOS 18 frosted header with search bar row');
 assert(bundledHtml.includes('class="sr-meta-line"') && bundledHtml.includes('class="sr-category"') && bundledHtml.includes('class="sr-dev"'), 'iPhone Search Result includes category and developer metadata line');
 assert(bundledHtml.includes('class="sr-skeleton-card"') && bundledHtml.includes('class="sr-skel-shots"'), 'iPhone Search Result renders realistic secondary app skeleton card');
 assert(bundledHtml.includes('class="shots sr-shots" data-shots="shots"') && bundledHtml.includes('class="sr-skel-shot"'), 'iPhone Search Result displays skeleton screenshot placeholders when no screenshots are uploaded');

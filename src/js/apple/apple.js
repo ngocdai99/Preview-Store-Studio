@@ -87,6 +87,13 @@ function initAppleTabs(){
       });
     }
   });
+
+  // Clicking Search Clear button (X) returns to Detail View
+  document.querySelectorAll('.sr-search-clear').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(typeof setView === 'function') setView('detail');
+    });
+  });
 }
 initAppleTabs();
 

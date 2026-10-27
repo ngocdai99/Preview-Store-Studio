@@ -1,21 +1,98 @@
-/* ---------- APPLE NAVIGATION BAR ---------- */
+/* ---------- Reusable iPhone Navigation / Top Header Component ---------- */
+.iphone-header {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 54px 20px 10px;
+  margin: 0 -20px 14px;
+  background: var(--bar);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid var(--sp);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.phone.apple[data-theme=dark] .iphone-header {
+  box-shadow: none;
+}
+
+/* Detail View variant: starts transparent, becomes frosted on scroll */
+.iphone-detail-header.a-nav {
+  background: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  align-items: flex-end;
+  padding: 54px 20px 8px;
+  margin: 0 -20px 6px;
+}
+
+.phone.apple:not(.ipad) .iphone-detail-header.a-nav.scrolled {
+  background: var(--bar);
+  border-bottom-color: var(--sp);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.phone.apple:not(.ipad)[data-theme=dark] .iphone-detail-header.a-nav.scrolled {
+  box-shadow: none;
+}
+
+/* Search View variant: always frosted glass, contains search bar & clear button */
+.iphone-search-header {
+  gap: 10px;
+  padding: 54px 20px 10px;
+  margin: 0 -20px 16px;
+}
+
+/* Reusable Header Button (Back, Share, Search Clear X) */
+.iphone-header-btn,
+.a-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--t);
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.iphone-header-btn:hover,
+.a-nav-btn:hover {
+  opacity: 0.85;
+  transform: scale(0.96);
+}
+
+.phone.apple[data-theme=dark] .iphone-header-btn,
+.phone.apple[data-theme=dark] .a-nav-btn {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- APPLE NAVIGATION BAR (Detail View) ---------- */
 .a-nav{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;color:var(--bl);padding:8px 20px 8px;margin:0 -20px 6px;font-size:17px;background:transparent;border-bottom:.5px solid transparent;transition:background .25s ease,border-color .25s ease,box-shadow .25s ease}
 .phone.apple:not(.ipad) .a-nav{top:0;z-index:6;padding:54px 20px 8px;align-items:flex-end}
-.phone.apple:not(.ipad) .a-nav.scrolled{background:rgba(255,255,255,.2);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);border-bottom-color:var(--sp);box-shadow:0 4px 16px rgba(0,0,0,.02)}
-.phone.apple:not(.ipad)[data-theme=dark] .a-nav.scrolled{background:rgba(0,0,0,.22);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);border-bottom-color:var(--sp);box-shadow:none}
+.phone.apple:not(.ipad) .a-nav.scrolled{background:var(--bar);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom-color:var(--sp);box-shadow:0 4px 16px rgba(0,0,0,.02)}
+.phone.apple:not(.ipad)[data-theme=dark] .a-nav.scrolled{background:var(--bar);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom-color:var(--sp);box-shadow:none}
 .ipad-nav{background:var(--bar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .a-nav-back{display:inline-flex;align-items:center;gap:3px;font-weight:500}
 .a-nav-back svg{width:18px;height:18px;stroke-width:2.4}
 .a-nav-share{display:inline-flex;align-items:center;justify-content:center;color:var(--bl)}
 .a-nav-share svg{width:19px;height:19px;stroke-width:2}
-.a-nav-btn{width:36px;height:36px;border-radius:50%;background:#ffffff;color:var(--t);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.04);cursor:pointer;flex-shrink:0;transition:opacity .2s ease,transform .2s ease;user-select:none}
-.a-nav-btn:hover{opacity:.85;transform:scale(.96)}
 .a-nav-btn.a-nav-back{gap:0;position:relative;z-index:2}
 .a-nav-btn.a-nav-back svg{width:20px;height:20px;stroke-width:2.6;margin-left:-1px}
 .a-nav-btn.a-nav-share{color:var(--t)}
 .a-nav-btn.a-nav-share svg{width:19px;height:19px;stroke-width:2.2}
-.phone.apple[data-theme=dark] .a-nav-btn{background:rgba(255,255,255,.16);color:#ffffff;box-shadow:0 0 0 .5px rgba(255,255,255,.1)}
-.phone.apple[data-theme=dark] .a-nav-btn.a-nav-share{color:#ffffff}
 
 /* Center App Icon (Animated on scroll) */
 .a-nav-center{position:absolute;left:50%;bottom:8px;height:36px;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:1}

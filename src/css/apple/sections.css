@@ -48,26 +48,24 @@
   padding-top: 4px;
 }
 
-/* 1. Search Bar Row */
-.sr-search-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
+/* 1. Search Bar Row (Inside Reusable .iphone-search-header) */
 .sr-search-input {
   flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--cd);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 999px;
   padding: 8px 14px;
   color: var(--t);
   font-size: 15px;
   box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+}
+
+.phone.apple[data-theme=dark] .sr-search-input {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
 }
 
 .sr-search-icon {
@@ -88,29 +86,9 @@
   letter-spacing: -0.2px;
 }
 
-.sr-search-clear {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--cd);
-  border: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--t);
-  cursor: pointer;
-  flex-shrink: 0;
-  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.04);
-  transition: opacity 0.15s ease;
-}
-
 .sr-search-clear svg {
-  width: 14px;
-  height: 14px;
-}
-
-.sr-search-clear:hover {
-  opacity: 0.8;
+  width: 15px;
+  height: 15px;
 }
 
 /* 2. Primary App Result Card */
