@@ -25,39 +25,160 @@
   height:38px;padding:10px 24px 0;display:flex;justify-content:space-between;align-items:center;
   font-size:13px;font-weight:600;flex-shrink:0;z-index:6;
 }
-.ipad-scr{padding:0 28px 28px}
-.ipad-nav{padding:10px 28px 14px;margin:0 -28px 10px;font-size:16px}
-.ipad-head{display:flex;gap:22px;margin-bottom:24px;align-items:flex-start}
-.ipad-ico{width:136px;height:136px;border-radius:32px;object-fit:cover;flex-shrink:0;box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 12px 28px rgba(0,0,0,.24)}
-.ipad-head-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-.ipad-name{font-size:26px;font-weight:700;line-height:1.2;letter-spacing:-.4px;word-break:break-word}
+.ipad-scr{padding:0 36px 36px}
+.ipad-nav{
+  position:sticky;top:0;z-index:10;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 36px 12px;margin:0 -36px 14px;
+  background:var(--bar);border-bottom:0.5px solid var(--sp);
+  transition:background .2s ease,border-color .2s ease;
+}
+.ipad-nav-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:#ffffff;color:var(--t);border:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.04);
+  cursor:pointer;flex-shrink:0;transition:opacity .2s,transform .2s;
+}
+.phone.ipad[data-theme=dark] .ipad-nav-btn{
+  background:rgba(255,255,255,.16);color:#fff;
+  box-shadow:0 0 0 .5px rgba(255,255,255,.1);
+}
+.ipad-nav-capsule{
+  display:inline-flex;align-items:center;
+  background:rgba(0,0,0,.06);border-radius:999px;
+  padding:3px 4px;gap:2px;user-select:none;
+}
+.phone.ipad[data-theme=dark] .ipad-nav-capsule{
+  background:rgba(255,255,255,.12);
+}
+.ipad-capsule-tab{
+  padding:5px 15px;border-radius:999px;
+  font-size:13px;font-weight:500;color:var(--t);
+  display:inline-flex;align-items:center;justify-content:center;
+  border:0;background:transparent;cursor:pointer;
+  transition:background .15s,color .15s;line-height:1.2;
+}
+.ipad-capsule-tab.on{
+  background:#ffffff;color:var(--bl);font-weight:600;
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+}
+.phone.ipad[data-theme=dark] .ipad-capsule-tab.on{
+  background:rgba(255,255,255,.2);color:#0a84ff;
+}
+.ipad-capsule-search{
+  padding:5px 10px;color:var(--s);
+}
+.ipad-capsule-search svg{
+  width:14px;height:14px;display:block;
+}
+
+/* iPad Hero Header */
+.ipad-head{display:flex;gap:26px;margin:12px 0 24px;align-items:flex-start}
+.ipad-ico{width:136px;height:136px;border-radius:32px;object-fit:cover;flex-shrink:0;box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 12px 28px rgba(0,0,0,.18)}
+.ipad-head-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;padding-top:4px}
+.ipad-name{font-size:26px;font-weight:700;line-height:1.2;letter-spacing:-.4px;word-break:break-word;color:var(--t)}
 .ipad-sub{font-size:16px;color:var(--s);line-height:1.3}
-.ipad-dev-link{color:var(--bl);font-size:14px;font-weight:500;margin-top:2px}
-.ipad-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-.ipad-get{padding:8px 32px;font-size:15px;border-radius:24px}
-.ipad-met{margin-bottom:24px;padding:14px 0}
+.ipad-actions{margin-top:10px}
+.ipad-get{padding:7px 26px;font-size:14.5px;font-weight:700;border-radius:24px;background:var(--bl);color:#fff;border:0;cursor:pointer}
+
+/* iPad Metrics Ribbon */
+.ipad-met{margin-bottom:24px;padding:14px 0;border-top:0.5px solid var(--sp);border-bottom:0.5px solid var(--sp)}
 .ipad-met div small{font-size:10px}
 .ipad-met div b{font-size:19px}
-.ipad-shots-sec{margin-bottom:28px}
+.ipad-met-dev-ico{display:inline-flex;align-items:center;justify-content:center}
+.ipad-met-dev-ico svg{width:20px;height:20px;stroke:var(--t)}
+
+/* iPad Gallery & Platforms Support */
+.ipad-shots-sec{margin-bottom:20px}
 .ipad-gal{gap:14px}
-.ipad-gal img{flex:0 0 250px;width:250px;border-radius:9px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.18)}
+.ipad-gal img{flex:0 0 260px;width:260px;border-radius:12px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.12)}
 .ipad-gal img.ipad-shot{aspect-ratio:2048/2732}
-.ipad-gal img.landscape-shot{aspect-ratio:2732/2048;flex:0 0 360px;width:360px}
-.dev.ipad.landscape .ipad-gal img{flex:0 0 215px;width:215px}
-.ipad-cols{display:flex;gap:28px}
-.ipad-main{flex:1.6;min-width:0}
-.dev.ipad.landscape .ipad-main{flex:1.85}
-.ipad-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:20px}
-.ipad-side .sec{border:1px solid var(--sp);border-radius:16px;padding:16px;background:var(--cd)}
-.ipad-side .sec:last-child{border:1px solid var(--sp)}
-.ipad-side .inf div{padding:9px 0}
-.ipad-supports{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-.ipad-supports div{display:flex;flex-direction:column;gap:2px}
-.ipad-supports div span{font-size:20px}
-.ipad-supports div b{font-size:13.5px}
-.ipad-supports div small{font-size:11.5px;color:var(--s)}
-.ipad-tab{height:72px;padding-top:8px;padding-bottom:14px;box-sizing:border-box;flex-shrink:0;z-index:6}
-.ipad-tab div{font-size:10.5px;gap:3px}
+.ipad-gal img.landscape-shot{aspect-ratio:2732/2048;flex:0 0 380px;width:380px}
+.dev.ipad.landscape .ipad-gal img{flex:0 0 230px;width:230px}
+
+.ipad-platforms-row{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:14px;padding:6px 0 16px;
+  font-size:13.5px;font-weight:600;color:var(--s);
+  cursor:pointer;user-select:none;border-bottom:0.5px solid var(--sp);width:100%;
+}
+.ipad-plat-icons{display:inline-flex;align-items:center;gap:4px;color:var(--s)}
+.ipad-plat-tablet{width:16px;height:16px}
+.ipad-plat-phone{width:12px;height:16px}
+.ipad-plat-chevron{width:12px;height:12px;margin-left:2px}
+
+/* iPad Description & Developer Row */
+.ipad-desc-row{
+  display:flex;gap:36px;margin:20px 0 28px;padding-bottom:24px;border-bottom:0.5px solid var(--sp);
+}
+.ipad-desc-col{flex:1.8;min-width:0}
+.ipad-desc-txt{font-size:14.5px;line-height:1.5;color:var(--t);margin-bottom:12px}
+.ipad-cat-pill-wrap{margin-top:10px}
+.ipad-cat-pill{
+  display:inline-block;padding:5px 14px;border-radius:999px;
+  background:var(--cd);color:var(--bl);font-size:13px;font-weight:500;
+}
+.ipad-dev-col{
+  flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;text-align:right;
+}
+.ipad-dev-entity{max-width:220px}
+.ipad-dev-entity-name{font-size:13.5px;font-weight:600;color:var(--bl);line-height:1.35;word-break:break-word}
+.ipad-dev-entity-role{font-size:12px;color:var(--s);margin-top:2px}
+
+/* iPad Ratings & Reviews (Horizontal distribution bars) */
+.ipad-reviews-sec{margin-bottom:28px;padding-bottom:24px;border-bottom:0.5px solid var(--sp)}
+.ipad-sec-title{
+  display:flex;align-items:center;gap:6px;
+  font-size:19px;font-weight:700;color:var(--t);
+  margin-bottom:14px;letter-spacing:-.2px;
+}
+.ipad-sec-arrow{width:14px;height:14px;color:var(--s)}
+.ipad-ratings-layout{display:flex;gap:48px;align-items:center}
+.ipad-rating-score-box{display:flex;flex-direction:column;gap:2px}
+.ipad-rating-num{font-size:52px;font-weight:800;line-height:1;color:var(--t);letter-spacing:-1px}
+.ipad-rating-caption{font-size:12.5px;font-weight:500;color:var(--s);margin-top:4px}
+.ipad-rating-bars-box{flex:1;max-width:440px;display:flex;flex-direction:column;gap:5px}
+.ipad-rating-bar-row{display:flex;align-items:center;gap:10px}
+.ipad-bar-stars{font-size:9.5px;color:var(--s);width:50px;text-align:right;letter-spacing:0.5px}
+.ipad-bar-track{flex:1;height:5px;border-radius:999px;background:var(--cd);overflow:hidden}
+.ipad-bar-fill{height:100%;background:var(--s);border-radius:999px}
+
+/* iPad Floating Bottom Pill Bar on Scroll */
+.ipad-floating-pill{
+  position:absolute;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(70px);
+  opacity:0;pointer-events:none;
+  background:rgba(255,255,255,.85);
+  box-shadow:0 8px 30px rgba(0,0,0,.15),0 1px 4px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.08);
+  border-radius:999px;padding:6px 14px 6px 8px;
+  display:flex;align-items:center;gap:12px;z-index:20;
+  transition:transform .28s cubic-bezier(.16,1,.3,1),opacity .24s ease;
+  max-width:460px;
+}
+.phone.ipad[data-theme=dark] .ipad-floating-pill{
+  background:rgba(30,30,32,.85);
+  box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 0 .5px rgba(255,255,255,.15);
+}
+.ipad-floating-pill.visible{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;pointer-events:auto;
+}
+.ipad-floating-icon{width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.ipad-floating-title{
+  font-size:13.5px;font-weight:600;color:var(--t);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:250px;
+}
+.ipad-floating-get{padding:6px 20px;font-size:13px;font-weight:700;border-radius:999px;flex-shrink:0}
+
+/* Full Width Detail Sections on iPad */
+.phone.ipad .sec{margin-bottom:26px;padding-bottom:22px;border-bottom:0.5px solid var(--sp)}
+.phone.ipad .sec h3{font-size:19px;font-weight:700;color:var(--t);margin-bottom:12px}
+.phone.ipad .inf{display:grid;grid-template-columns:1fr 1fr;gap:0 36px}
+.phone.ipad .inf div{border-bottom:0.5px solid var(--sp);padding:10px 0}
+.phone.ipad .inf-privacy{grid-column:span 2}
+
+.ipad-tab{display:none!important}
 .ipad-tab div span svg{width:22px;height:22px}
 
 /* Screen container */

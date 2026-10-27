@@ -76,6 +76,19 @@ function initAppleNavScroll(){
 }
 initAppleNavScroll();
 
+// --- iPad Floating Bottom Pill on Scroll ---
+function initIpadFloatingPill(){
+  const ipadScr = document.querySelector('.phone.ipad .scr');
+  const pill = document.getElementById('ipadFloatingPill');
+  if(!ipadScr || !pill) return;
+
+  ipadScr.addEventListener('scroll', () => {
+    pill.classList.toggle('visible', ipadScr.scrollTop > 180);
+  }, { passive: true });
+  pill.classList.toggle('visible', ipadScr.scrollTop > 180);
+}
+initIpadFloatingPill();
+
 // --- iPhone Tab Navigation Interactive Switcher ---
 function initAppleTabs(){
   document.querySelectorAll('.dev.apple .tab').forEach(tabBar => {

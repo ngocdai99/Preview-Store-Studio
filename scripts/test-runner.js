@@ -536,6 +536,13 @@ ipadLines.forEach(line => {
 assert(ipadDivDepth === 0, 'ipad.html div tags are perfectly balanced (final depth === 0)');
 assert(tabParentDepth === 2, 'ipad-tab is properly nested inside phone container (not hanging outside)');
 
+// 5B. iOS 18 iPad App Store DOM Architecture
+assert(ipadHtml.includes('ipad-nav-capsule') && ipadHtml.includes('ipad-capsule-tab'), 'iPad header features authentic center capsule store switcher');
+assert(ipadHtml.includes('ipad-platforms-row') && ipadHtml.includes('iPad, iPhone'), 'iPad gallery features platforms support badge line (iPad, iPhone)');
+assert(ipadHtml.includes('ipad-desc-row') && ipadHtml.includes('ipad-dev-entity'), 'iPad features 2-column description and developer entity row');
+assert(ipadHtml.includes('ipad-ratings-layout') && ipadHtml.includes('ipad-rating-bar-row'), 'iPad features authentic Ratings & Reviews with 5-star distribution bars');
+assert(ipadHtml.includes('ipad-floating-pill') && ipadHtml.includes('ipad-floating-get'), 'iPad features floating bottom GET pill on scroll');
+
 // 6. iPad Screenshot Ratio Classifier & Rejection Warning Logic
 function classifyIpadScreenshotRatio(w, h) {
   if (w <= 0 || h <= 0) return 'INVALID';
