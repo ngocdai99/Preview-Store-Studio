@@ -262,27 +262,29 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     }, 190);
   } else if (fromMode === 'dual' && toMode === 'apple') {
     // Dual -> Apple: Apple glides to center, Google softly dissolves & recedes in-flow (zero flick)
+    const stageEl = document.querySelector('.stage') || stage;
+    const stageRect = stageEl.getBoundingClientRect();
+    const stageCenterX = stageRect.left + stageRect.width / 2;
     const firstA = devApple.getBoundingClientRect();
-    const firstG = devGoogle.getBoundingClientRect();
-    const isCol = (stageRect.width < 721) || (Math.abs(firstA.left - firstG.left) < 10);
+    const isCol = (stageRect.width < 721) || (Math.abs(firstA.left - devGoogle.getBoundingClientRect().left) < 10);
     const appleCenterX = firstA.left + firstA.width / 2;
     const zoomA = parseFloat(window.getComputedStyle(devApple).zoom) || 1;
     const deltaX = isCol ? 0 : (stageCenterX - appleCenterX) / zoomA;
 
     stage.style.minHeight = stageRect.height + 'px';
-    onApply();
 
-    // Apple glides smoothly to center
+    // Apple glides smoothly from left to center
     devApple.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
     devApple.style.transform = 'translate3d(' + deltaX + 'px, 0, 0)';
 
-    // Google softly fades out and gently scales down in place
+    // Google softly fades out and gently scales down in place (stays in-flow during glide)
     devGoogle.style.transition = 'opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1)';
     devGoogle.style.opacity = '0';
     devGoogle.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
     devGoogle.style.pointerEvents = 'none';
 
     devExitTimer = setTimeout(function () {
+      onApply();
       devGoogle.classList.add('is-hidden-trans');
       clearDevTransitions();
       fit();
@@ -290,6 +292,9 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     }, 420);
   } else if (fromMode === 'dual' && toMode === 'google') {
     // Dual -> Google: Google glides to center, Apple softly dissolves & recedes in-flow (zero flick)
+    const stageEl = document.querySelector('.stage') || stage;
+    const stageRect = stageEl.getBoundingClientRect();
+    const stageCenterX = stageRect.left + stageRect.width / 2;
     const firstA = devApple.getBoundingClientRect();
     const firstG = devGoogle.getBoundingClientRect();
     const isCol = (stageRect.width < 721) || (Math.abs(firstA.left - firstG.left) < 10);
@@ -299,19 +304,19 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     const deltaY = isCol ? (firstA.top - firstG.top) / zoomG : 0;
 
     stage.style.minHeight = stageRect.height + 'px';
-    onApply();
 
-    // Google glides smoothly to center
+    // Google glides smoothly from right to center
     devGoogle.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
     devGoogle.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)';
 
-    // Apple softly fades out and gently scales down in place
+    // Apple softly fades out and gently scales down in place (stays in-flow during glide)
     devApple.style.transition = 'opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1)';
     devApple.style.opacity = '0';
     devApple.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
     devApple.style.pointerEvents = 'none';
 
     devExitTimer = setTimeout(function () {
+      onApply();
       devApple.classList.add('is-hidden-trans');
       clearDevTransitions();
       fit();
@@ -411,6 +416,16 @@ function setStore(s, animate = true){
     return;
   }
 
+  // Immediately update editor fields visibility and title for instant feedback
+  if(s === 'dual'){
+    $$('[data-only]').forEach(e => e.classList.remove('hide'));
+    if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
+  } else {
+    $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
+    if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
+  }
+  syncCategoryUI();
+
   const applyStoreMode = () => {
     if(s === 'dual'){
       document.body.dataset.dual = 'true';
@@ -419,9 +434,6 @@ function setStore(s, animate = true){
       googleDevice = 'dual';
       document.body.dataset.appleDevice = 'iphone';
       document.body.dataset.googleDevice = 'phone';
-      $$('[data-only]').forEach(e => e.classList.remove('hide'));
-      if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
-      syncCategoryUI();
       if(typeof renderIcons === 'function') renderIcons();
     } else {
       document.body.dataset.dual = 'false';
@@ -431,9 +443,6 @@ function setStore(s, animate = true){
       if(googleDevice === 'dual') googleDevice = 'phone';
       document.body.dataset.appleDevice = appleDevice;
       document.body.dataset.googleDevice = googleDevice;
-      $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
-      if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
-      syncCategoryUI();
 
       const iconLabel = $('iconSpecLabel');
       const iconHint = $('iconSpecHint');
