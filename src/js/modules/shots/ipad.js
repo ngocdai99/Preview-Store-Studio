@@ -55,7 +55,16 @@ function renderIpadShots(){
   // Update iPad Search Result Carousel
   $$('[data-shots=ipad-shots]').forEach(c => {
     c.innerHTML = '';
-    effectiveShots.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+    const valid = effectiveShots.filter(s => s && typeof s === 'string' && s.trim());
+    if(valid.length === 0){
+      for(let i = 0; i < 3; i++){
+        const sk = document.createElement('div');
+        sk.className = 'sr-skel-shot ipad-skel-shot';
+        c.appendChild(sk);
+      }
+    } else {
+      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+    }
   });
 
   // Render iPad Editor list and status
