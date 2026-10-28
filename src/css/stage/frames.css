@@ -7,8 +7,24 @@
   transform-style:preserve-3d;-webkit-backface-visibility:hidden;backface-visibility:hidden;will-change:transform,opacity;
 }
 .dev::before,.dev::after{content:'';position:absolute;width:4px;border-radius:3px;background:linear-gradient(90deg,#3a3b40,#1a1b1e)}
-.dev::before{left:-4px;top:150px;height:56px;box-shadow:0 78px 0 #2a2b2f,0 150px 0 #2a2b2f}
-.dev::after{right:-4px;top:230px;height:96px}
+/* iPhone Hardware Buttons: Left (32px Action + two 60px Volume) & Right (96px Side Power) */
+.dev.apple:not(.ipad)::before{
+  left:-4px;top:146px;height:32px;border-radius:3px 0 0 3px;
+  box-shadow:0 54px 0 #2a2b2f,0 82px 0 #2a2b2f,0 128px 0 #2a2b2f,0 156px 0 #2a2b2f;
+}
+.dev.apple:not(.ipad)::after{
+  right:-4px;top:215px;height:96px;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#1a1b1e,#3a3b40);
+}
+/* Android Flagship Buttons: Clean Left Edge, Right Edge has 46px Power + 94px Volume Rocker */
+.dev.google:not(.gtab)::before{
+  left:auto;right:-4px;top:185px;height:46px;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#1a1b1e,#3a3b40);box-shadow:none;
+}
+.dev.google:not(.gtab)::after{
+  right:-4px;top:250px;height:94px;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#1a1b1e,#3a3b40);
+}
 .dev.google{border-radius:56px}
 
 /* Phone Device Frame - Landscape Game Mode */

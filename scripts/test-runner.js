@@ -1268,6 +1268,7 @@ assert(bundledHtml.includes('gp-skel-card') && bundledHtml.includes('gp-skel-ico
 // 11. iPhone & Android Vector Status Bar Icons
 assert(!bundledHtml.includes('▂▄▆█ 5G ▰'), 'iPhone status bar replaced crude unicode characters with crisp vector SVG icons');
 assert(bundledHtml.includes('class="phone apple"') && bundledHtml.includes('sb-ico-signal') && bundledHtml.includes('sb-ico-wifi') && bundledHtml.includes('sb-ico-battery'), 'iPhone status bar renders vector signal, wifi, and battery icons matching Android phone mockup');
+assert(bundledHtml.includes('.dev.apple:not(.ipad)::before') && bundledHtml.includes('.dev.google:not(.gtab)::before'), 'iPhone and Android frames have distinct, hardware-accurate physical side buttons');
 
 
 
