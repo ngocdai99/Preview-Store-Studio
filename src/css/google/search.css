@@ -269,33 +269,7 @@
   color: var(--t);
 }
 
-/* 4. Primary App Screenshots Row */
-.gp-search-shots {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  margin: 14px -20px 0;
-  padding: 0 20px 2px;
-}
-
-.gp-search-shots::-webkit-scrollbar {
-  display: none;
-}
-
-.gp-search-shots img,
-.gp-search-shots .sr-skel-shot {
-  height: 130px;
-  width: 73px;
-  border-radius: 8px;
-  object-fit: cover;
-  flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-  background: var(--sf);
-}
-
-/* 5. Sponsored Divider */
+/* 4. Sponsored Divider */
 .gp-search-sponsored-divider {
   display: flex;
   justify-content: space-between;

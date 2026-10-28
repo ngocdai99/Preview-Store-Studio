@@ -1260,7 +1260,7 @@ assert(ratioIssues.some(msg => msg.includes('Aspect ratio')), '16:10 screenshot 
 assert(bundledHtml.includes('class="gp-search-view"') && bundledHtml.includes('class="gp-search-bar"'), 'Bundled HTML includes Material You Google Play search view and top bar');
 assert(bundledHtml.includes('class="gp-search-chips-wrap"') && bundledHtml.includes('gp-chip-dropdown'), 'Google Play search view includes filter chips carousel with rating dropdown');
 assert(bundledHtml.includes('class="gp-search-card primary"') && bundledHtml.includes('class="gp-search-card-name"'), 'Google Play search view renders primary app result card');
-assert(bundledHtml.includes('class="shots gp-search-shots" data-shots="shots"'), 'Google Play primary search card embeds 3-screenshots carousel');
+assert(!bundledHtml.includes('class="shots gp-search-shots"'), 'Google Play search result renders compact app rows without screenshot carousel, matching native Play Store UI');
 assert(bundledHtml.includes('class="gp-search-action-btn"') && bundledHtml.includes('class="gp-search-sponsored-divider"'), 'Google Play search view includes circular action button and sponsored suggested divider');
 assert(bundledHtml.includes('gp-skel-card') && bundledHtml.includes('gp-skel-icon') && bundledHtml.includes('gp-skel-line'), 'Google Play search view includes clean skeleton secondary app cards');
 
