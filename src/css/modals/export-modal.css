@@ -1,39 +1,63 @@
-/* ─── Export Mockup Image Options Modal ─── */
+/* ─── Export Mockup Image Options Modal (Refined Linear / Apple Style) ─── */
 .export-modal-card {
-  max-width: 440px;
-  gap: 18px;
+  max-width: 390px;
+  padding: 20px 22px 18px;
+  background: #0d121f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  box-shadow: 0 24px 56px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  gap: 16px;
+}
+
+.export-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.export-modal-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .export-modal-icon-wrap {
-  background: rgba(37, 99, 235, 0.12);
-  border-color: rgba(37, 99, 235, 0.28);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.22) 0%, rgba(56, 189, 248, 0.12) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.3);
   color: #38bdf8;
-}
-
-.export-modal-title-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
-.export-modal-badge {
-  font-size: 10.5px;
+.export-modal-title {
+  font-size: 15.5px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: rgba(56, 189, 248, 0.15);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #38bdf8;
+  color: #f8fafc;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.export-modal-subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+  line-height: 1.35;
 }
 
 .export-modal-close {
   background: transparent;
   border: none;
-  color: #94a3b8;
+  color: #64748b;
   padding: 6px;
-  margin: -6px -6px 0 0;
+  margin: -4px -6px 0 0;
   cursor: pointer;
   border-radius: 8px;
   display: flex;
@@ -45,284 +69,298 @@
 
 .export-modal-close:hover {
   background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  color: #f1f5f9;
 }
 
 .export-modal-body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-.export-opt-group {
+.export-field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 6px;
 }
 
-.export-opt-label {
+.export-field-label {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   color: #94a3b8;
+  padding-left: 1px;
 }
 
-.export-opt-segmented {
+.export-seg-track {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  padding: 3px;
+  gap: 3px;
 }
 
 .export-seg-btn {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 12.5px;
+  font-weight: 500;
   cursor: pointer;
   outline: none;
-  text-align: left;
-  transition: all 0.15s ease;
+  transition: all 0.16s ease;
+  user-select: none;
   position: relative;
 }
 
 .export-seg-btn:hover {
+  color: #f8fafc;
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
 }
 
 .export-seg-btn.active {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: #3b82f6;
+  background: #2563eb;
   color: #ffffff;
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.export-seg-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  margin-top: 1px;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.export-seg-btn.active .export-seg-icon {
-  color: #38bdf8;
-}
-
-.export-seg-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-.export-seg-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.export-seg-title {
-  font-size: 13px;
   font-weight: 600;
-  line-height: 1.25;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-.export-seg-sub {
-  font-size: 11px;
-  line-height: 1.3;
-  color: #94a3b8;
+.export-seg-ico {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
-.export-seg-btn.active .export-seg-sub {
-  color: #bae6fd;
+.export-seg-btn.active .export-seg-ico {
+  opacity: 1;
 }
 
-/* Resolution Scale Grid */
-.export-scale-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.export-scale-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  padding: 10px;
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.15s ease;
-  position: relative;
-}
-
-.export-scale-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.export-scale-btn.active {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: #3b82f6;
-  color: #ffffff;
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35);
-}
-
-.export-scale-val {
-  font-size: 16px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.1;
-}
-
-.export-scale-sub {
-  font-size: 11px;
-  color: #94a3b8;
-}
-
-.export-scale-btn.active .export-scale-sub {
-  color: #bae6fd;
-}
-
-.export-scale-tag {
-  position: absolute;
-  top: 5px;
-  right: 6px;
+.export-tag-best {
   font-size: 9.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
   padding: 1px 5px;
   border-radius: 4px;
-  background: #2563eb;
+  background: rgba(255, 255, 255, 0.22);
   color: #ffffff;
+  margin-left: 2px;
 }
 
-/* Action Buttons */
-.export-modal-actions {
+/* Summary Badge */
+.export-summary-bar {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 2px;
 }
 
-.export-btn-copy {
+.export-summary-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  flex-shrink: 0;
+}
+
+.export-summary-text {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer & Actions */
+.export-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.export-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-btn-ghost {
+  background: transparent;
+  border: none;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all 0.15s ease;
+}
+
+.export-btn-ghost:hover {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.export-btn-secondary {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
-  font-size: 13px;
+  padding: 7px 13px;
+  font-size: 12.5px;
   font-weight: 600;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
   cursor: pointer;
   outline: none;
   transition: all 0.15s ease;
 }
 
-.export-btn-copy:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
-  transform: translateY(-1px);
+.export-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
 }
 
-.export-btn-download {
+.export-btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 18px;
-  font-size: 13px;
+  padding: 7px 16px;
+  font-size: 12.5px;
   font-weight: 600;
   border-radius: 8px;
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   border: 1px solid #1d4ed8;
   color: #ffffff;
   cursor: pointer;
   outline: none;
   transition: all 0.15s ease;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
 }
 
-.export-btn-download:hover {
-  background: #1d4ed8;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+.export-btn-primary:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
   transform: translateY(-1px);
 }
 
-/* Light Theme support */
+/* Light Mode Overrides */
+:root[data-ui=light] .export-modal-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 20px 48px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-ui=light] .export-modal-title {
+  color: #0f172a;
+}
+
+:root[data-ui=light] .export-modal-subtitle {
+  color: #64748b;
+}
+
+:root[data-ui=light] .export-modal-close {
+  color: #94a3b8;
+}
+
 :root[data-ui=light] .export-modal-close:hover {
-  background: rgba(0, 0, 0, 0.06);
-  color: #0f172a;
-}
-
-:root[data-ui=light] .export-opt-label {
-  color: #475569;
-}
-
-:root[data-ui=light] .export-seg-btn,
-:root[data-ui=light] .export-scale-btn {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  color: #334155;
-}
-
-:root[data-ui=light] .export-seg-btn:hover,
-:root[data-ui=light] .export-scale-btn:hover {
   background: #f1f5f9;
-  border-color: #94a3b8;
   color: #0f172a;
 }
 
-:root[data-ui=light] .export-seg-btn.active,
-:root[data-ui=light] .export-scale-btn.active {
-  background: #eff6ff;
-  border-color: #2563eb;
-  color: #1e3a8a;
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+:root[data-ui=light] .export-field-label {
+  color: #64748b;
 }
 
-:root[data-ui=light] .export-seg-btn.active .export-seg-sub,
-:root[data-ui=light] .export-scale-btn.active .export-scale-sub {
-  color: #1d4ed8;
+:root[data-ui=light] .export-seg-track {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
 }
 
-:root[data-ui=light] .export-btn-copy {
+:root[data-ui=light] .export-seg-btn {
+  color: #64748b;
+}
+
+:root[data-ui=light] .export-seg-btn:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+:root[data-ui=light] .export-seg-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-ui=light] .export-tag-best {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+:root[data-ui=light] .export-summary-bar {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+:root[data-ui=light] .export-summary-text {
+  color: #64748b;
+}
+
+:root[data-ui=light] .export-modal-footer {
+  border-top-color: #e2e8f0;
+}
+
+:root[data-ui=light] .export-btn-ghost {
+  color: #64748b;
+}
+
+:root[data-ui=light] .export-btn-ghost:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+:root[data-ui=light] .export-btn-secondary {
   background: #ffffff;
   border-color: #cbd5e1;
   color: #334155;
 }
 
-:root[data-ui=light] .export-btn-copy:hover {
+:root[data-ui=light] .export-btn-secondary:hover {
   background: #f8fafc;
   border-color: #94a3b8;
   color: #0f172a;
 }
 
-:root[data-ui=light] .export-btn-download {
+:root[data-ui=light] .export-btn-primary {
   background: #0f172a;
   border-color: #0f172a;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
 }
 
-:root[data-ui=light] .export-btn-download:hover {
+:root[data-ui=light] .export-btn-primary:hover {
   background: #1e293b;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
 }

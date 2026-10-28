@@ -7643,6 +7643,12 @@ function syncExportModalUI() {
   exportModal.querySelectorAll('[data-opt="scale"]').forEach(b => {
     b.classList.toggle('active', Number(b.dataset.val) === Number(exportPrefs.scale));
   });
+  const summaryEl = $('exportSummaryBadge');
+  if (summaryEl) {
+    const frameLabel = exportPrefs.frame === 'screen' ? 'Screen Only' : 'Device Frame';
+    const bgLabel = exportPrefs.bg === 'transparent' ? 'Transparent Cutout' : 'With Shadow';
+    summaryEl.textContent = `${exportPrefs.scale}x PNG · ${frameLabel} · ${bgLabel}`;
+  }
 }
 
 function saveExportPrefs() {
