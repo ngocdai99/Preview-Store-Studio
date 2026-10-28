@@ -24,7 +24,28 @@ function probeTab(it){
   const meta = it.meta = srcInfo(it.src);
   const im = new Image();
   im.referrerPolicy = 'no-referrer';
-  im.onload = () => { if(it.meta === meta){ meta.w = im.naturalWidth; meta.h = im.naturalHeight; renderTablets(); } };
+  im.onload = () => {
+    if(it.meta === meta){
+      meta.w = im.naturalWidth;
+      meta.h = im.naturalHeight;
+      // Alpha channel audit (Google Play Console requires 24-bit PNG or JPEG without alpha)
+      if(meta.type !== 'image/jpeg'){
+        try {
+          const c = document.createElement('canvas');
+          c.width = 64; c.height = 64;
+          const ctx = c.getContext('2d');
+          ctx.drawImage(im, 0, 0, 64, 64);
+          const data = ctx.getImageData(0, 0, 64, 64).data;
+          for(let i = 3; i < data.length; i += 4){
+            if(data[i] < 250){ meta.hasAlpha = true; break; }
+          }
+        }catch(e){
+          // Tainted canvas or environments without full 2d canvas
+        }
+      }
+      renderTablets();
+    }
+  };
   im.onerror = () => { if(it.meta === meta){ meta.bad = true; renderTablets(); } };
   im.src = ensureSvgDimensions(it.src);
 }
@@ -35,6 +56,7 @@ function tabIssues(key, it){
   if(!m) return out;
   if(m.bad) out.push('Image could not be loaded');
   if(m.type && !/^image\/(png|jpeg)$/.test(m.type)) out.push('Must be PNG or JPEG');
+  if(m.hasAlpha) out.push('Contains transparency (alpha channel not allowed by Play Console)');
   if(m.bytes && m.bytes > 8*1024*1024) out.push('Over 8 MB');
   if(m.w && m.h){
     const r = m.w / m.h;

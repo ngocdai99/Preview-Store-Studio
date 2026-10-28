@@ -68,8 +68,8 @@ function exportMarkdown(){
 | **App Icon (Apple)** | App Store | PNG/JPEG, 1024 × 1024 px (sRGB/P3, no alpha) | **Mandatory** | ${ICON ? 'Ready' : 'Missing'} |
 | **Feature Graphic** | Google Play | PNG/JPEG, up to 15 MB, 1,024 × 500 px | **Mandatory for Featuring** | ${FEATURE_GRAPHIC ? 'Ready' : 'Missing'} |
 | **Phone Screenshots** | Google Play | PNG/JPEG, up to 8 MB each, 16:9 or 9:16 (320px–3,840px) | **2 to 8 Screenshots** | ${isShotCompliant ? `PASS (${validCount} screenshots)` : `REJECT RISK (${validCount} screenshots - requires 2 to 8)`} |
-| **7-inch Tablet Screenshots** | Google Play | PNG/JPEG, up to 8 MB each, 16:9 or 9:16 (320px–3,840px per side) | **Up to 8 screenshots** | ${tabStatus('tab7')} |
-| **10-inch Tablet Screenshots** | Google Play | PNG/JPEG, up to 8 MB each, 16:9 or 9:16 (1,080px–7,680px per side) | **Up to 8 screenshots** | ${tabStatus('tab10')} |
+| **7-inch Tablet Screenshots** | Google Play | 24-bit PNG/JPEG (no alpha), up to 8 MB each, 16:9 or 9:16 (320px–3,840px per side) | **Up to 8 screenshots** | ${tabStatus('tab7')} |
+| **10-inch Tablet Screenshots** | Google Play | 24-bit PNG/JPEG (no alpha), up to 8 MB each, 16:9 or 9:16 (1,080px–7,680px per side) | **Up to 8 screenshots** | ${tabStatus('tab10')} |
 
 ---
 

@@ -1212,6 +1212,45 @@ assert(!bundledHtml.includes('id="gdRotate"'), 'Rotate button #gdRotate is remov
 assert(bundledHtml.includes('id="dt"') && bundledHtml.includes('data-d="iphone"') && bundledHtml.includes('data-d="ipad"'), 'Apple device selector preserves iPhone and iPad switcher options');
 assert(bundledHtml.includes('id="gdt"') && bundledHtml.includes('data-gd="phone"') && bundledHtml.includes('data-gd="tab7"') && bundledHtml.includes('data-gd="tab10"'), 'Google device selector preserves Phone, 7" Tablet and 10" Tablet switcher options');
 
+// 9. Tablet Screenshot Validation & Hint Verification
+assert(bundledHtml.includes('24-bit PNG (no alpha) or JPEG') && bundledHtml.includes('Recommended: 1920 × 1080 px'), 'Tablet screenshots card contains 24-bit PNG (no alpha) requirement and 1920x1080 recommendation');
+
+const TAB_TEST_CFG = {
+  tab7: { name: '7-inch', min: 320, max: 3840 },
+  tab10: { name: '10-inch', min: 1080, max: 7680 }
+};
+
+function testTabIssues(key, it) {
+  const c = TAB_TEST_CFG[key], m = it.meta, out = [];
+  if (!m) return out;
+  if (m.bad) out.push('Image could not be loaded');
+  if (m.type && !/^image\/(png|jpeg)$/.test(m.type)) out.push('Must be PNG or JPEG');
+  if (m.hasAlpha) out.push('Contains transparency (alpha channel not allowed by Play Console)');
+  if (m.bytes && m.bytes > 8 * 1024 * 1024) out.push('Over 8 MB');
+  if (m.w && m.h) {
+    const r = m.w / m.h;
+    if (Math.abs(r - 16 / 9) > 0.02 && Math.abs(r - 9 / 16) > 0.02) out.push('Aspect ratio must be 16:9 or 9:16');
+    if (m.w < c.min || m.h < c.min || m.w > c.max || m.h > c.max) out.push(`Each side must be ${c.min.toLocaleString('en-US')}–${c.max.toLocaleString('en-US')} px`);
+  }
+  return out;
+}
+
+// Alpha channel rejection
+const alphaItem = { meta: { type: 'image/png', bytes: 100000, w: 1920, h: 1080, hasAlpha: true } };
+const alphaIssues = testTabIssues('tab10', alphaItem);
+assert(alphaIssues.some(msg => msg.includes('transparency') || msg.includes('alpha')), 'Tablet screenshot with alpha transparency is flagged for rejection');
+
+// 1920x1080 clean image passes both 7" and 10" criteria
+const clean1080p = { meta: { type: 'image/png', bytes: 100000, w: 1920, h: 1080, hasAlpha: false } };
+assert(testTabIssues('tab7', clean1080p).length === 0, '1920x1080 clean image passes 7-inch tablet requirements');
+assert(testTabIssues('tab10', clean1080p).length === 0, '1920x1080 clean image passes 10-inch tablet requirements');
+
+// 16:10 aspect ratio rejection (e.g. 2560x1600)
+const ratio16_10 = { meta: { type: 'image/png', bytes: 100000, w: 2560, h: 1600, hasAlpha: false } };
+const ratioIssues = testTabIssues('tab10', ratio16_10);
+assert(ratioIssues.some(msg => msg.includes('Aspect ratio')), '16:10 screenshot (2560x1600) is flagged because Play Console strictly requires 16:9 or 9:16');
+
+
 // ---------------------------------------------------------------------
 // Suite 15: Modern Reset Draft Confirmation Modal
 // ---------------------------------------------------------------------
