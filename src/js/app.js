@@ -7744,7 +7744,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
     const w = target.offsetWidth;
     const h = target.offsetHeight;
-    const padX = opts.frameless ? 0 : 6;
+    const padX = opts.frameless ? 0 : 10;
 
     let canvas = await html2canvas(target, {
       backgroundColor: null,
@@ -7790,20 +7790,20 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             const addBtn = (side, top, height) => {
               const b = clonedDoc.createElement('div');
               const isLeft = side === 'left';
-              b.style.cssText = `position:absolute;${isLeft ? 'left:-4px;border-radius:3px 0 0 3px;background:linear-gradient(90deg,#3a3b40,#1a1b1e)' : 'right:-4px;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#1a1b1e,#3a3b40)'};top:${top}px;width:4px;height:${height}px;pointer-events:none;`;
+              b.style.cssText = `position:absolute;${isLeft ? 'left:-7px;border-radius:4px 0 0 4px;background:linear-gradient(90deg,#9ca0ab 0%,#5b5e66 50%,#25262b 100%)' : 'right:-7px;border-radius:0 4px 4px 0;background:linear-gradient(90deg,#25262b 0%,#5b5e66 50%,#9ca0ab 100%)'};top:${top}px;width:7px;height:${height}px;box-shadow:0 0 0 1px #0b0b0d;pointer-events:none;`;
               d.appendChild(b);
             };
             if(d.classList.contains('ipad')){
-              addBtn('left', 220, 70);
-              addBtn('right', 220, 120);
+              addBtn('left', 220, 76);
+              addBtn('right', 220, 128);
             } else if(d.classList.contains('apple')){
-              addBtn('left', 146, 32);
-              addBtn('left', 200, 60);
-              addBtn('left', 274, 60);
-              addBtn('right', 215, 96);
+              addBtn('left', 140, 38);
+              addBtn('left', 198, 68);
+              addBtn('left', 280, 68);
+              addBtn('right', 210, 108);
             } else if(d.classList.contains('google')){
-              addBtn('right', 185, 46);
-              addBtn('right', 250, 94);
+              addBtn('right', 180, 54);
+              addBtn('right', 252, 106);
             }
           }
         });
