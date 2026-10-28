@@ -130,7 +130,7 @@ slistArea.addEventListener('drop',e=>{
         if(loaded===files.length){
           renderShots();
           saveState();
-          showToast(`Added ${files.length} screenshot(s)!`,'🖼');
+          showToast(`Added ${files.length} screenshot(s)!`, 'ok');
         }
       });
     });

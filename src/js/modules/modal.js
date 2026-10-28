@@ -132,7 +132,18 @@
     let src = opts.src;
     if (!src) {
       if (_activeModalType === 'icon') {
-        src = (typeof ICON !== 'undefined' ? ICON : (typeof S !== 'undefined' && S ? (S[_activeModalStore === 'apple' ? 'iconApple' : 'iconGoogle'] || S.icon) : ''));
+        if (_activeModalStore === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) {
+          src = CUSTOM_ICON_512;
+        } else if (_activeModalStore === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) {
+          src = CUSTOM_ICON_1024;
+        } else {
+          src = (typeof ICON !== 'undefined' ? ICON : (typeof S !== 'undefined' && S ? (S[_activeModalStore === 'apple' ? 'iconApple' : 'iconGoogle'] || S.icon) : ''));
+        }
+        if (_activeModalStore === 'google' && typeof src === 'string' && src.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(src)) {
+          src = src.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png');
+        } else if (_activeModalStore === 'apple' && typeof src === 'string' && src.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(src)) {
+          src = src.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png');
+        }
       } else if (_activeModalType === 'feature') {
         src = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
       } else if (_activeModalType === 'ipad' && _activeModalIndex >= 0) {
@@ -337,7 +348,7 @@
             detailsHtml = '<p>Apple App Store recommends standard 1024×1024 px resolution to ensure clarity across all Retina displays.</p><p class="icon-modal-warn-hint">Re-export at 1024×1024 px from your design tool.</p>';
           } else {
             level = 'ok';
-            badgeText = '1024×1024 px · App Store Compliant';
+            badgeText = '1024×1024 px · App Store Standard';
             detailsHtml = '';
           }
         } else {
@@ -367,7 +378,7 @@
           } else {
             const sizeNote = sizeBytes ? ` (${(sizeBytes / 1024).toFixed(0)} KB)` : '';
             level = 'ok';
-            badgeText = `512×512 px · Google Play Compliant${sizeNote}`;
+            badgeText = `512×512 px · Google Play Standard${sizeNote}`;
             detailsHtml = '';
           }
         }
@@ -449,6 +460,16 @@
         // Core studio fallback
         if (typeof ICON !== 'undefined') {
           ICON = dataUrl;
+          if (_activeModalStore === 'google') {
+            if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = dataUrl;
+          } else {
+            if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = dataUrl;
+            if (typeof downscaleIconTo512 === 'function') {
+              downscaleIconTo512(dataUrl, d512 => {
+                if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+              });
+            }
+          }
           if (typeof renderIcons === 'function') renderIcons();
           if (typeof saveState === 'function') saveState();
         }

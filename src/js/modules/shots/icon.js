@@ -68,8 +68,42 @@ function getIconMeta(src = null){
 }
 
 // --- Image Renderers & Real-time Icon Validator ---
+function downscaleIconTo512(src, callback){
+  if(!src || typeof src !== 'string') return callback(src);
+  if(src.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(src)){
+    return callback(src.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png'));
+  }
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    try {
+      const cv = document.createElement('canvas');
+      cv.width = 512;
+      cv.height = 512;
+      const ctx = cv.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, 512, 512);
+      callback(cv.toDataURL('image/png'));
+    } catch(_) {
+      callback(src);
+    }
+  };
+  img.onerror = () => callback(src);
+  img.src = src;
+}
+
 function renderIcons(){
-  $$('[data-icon]').forEach(i=>{safe(i);i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(ICON, i):ICON)});
+  $$('[data-icon]').forEach(i=>{
+    safe(i);
+    let targetIcon = ICON;
+    if(i.closest('.phone.google') || (store === 'google' && !i.closest('.phone.apple'))){
+      targetIcon = (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : ICON;
+    } else if(i.closest('.phone.apple') || (store === 'apple' && !i.closest('.phone.google'))){
+      targetIcon = (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON;
+    }
+    i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(targetIcon, i):targetIcon);
+  });
   validateAppIcon();
 }
 
@@ -89,8 +123,12 @@ function validateAppIcon(){
   }
   badge.style.display = '';
   const targetDim = (store === 'google' ? 512 : 1024);
-  if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && ICON.startsWith('data:image/svg+xml')){
-    rasterizeSvgToStorePng(ICON, targetDim, pngSrc => {
+  const activeIconSrc = (store === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512)
+    ? CUSTOM_ICON_512
+    : ((store === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON);
+
+  if(typeof rasterizeSvgToStorePng === 'function' && typeof activeIconSrc === 'string' && activeIconSrc.startsWith('data:image/svg+xml')){
+    rasterizeSvgToStorePng(activeIconSrc, targetDim, pngSrc => {
       if(isPlaceholderIcon()){
         badge.style.display = 'none';
         badge.innerHTML = '';
@@ -100,7 +138,7 @@ function validateAppIcon(){
     });
     return;
   }
-  runIconPixelAudit(ICON);
+  runIconPixelAudit(activeIconSrc);
 }
 
 function runIconPixelAudit(iconSrc){
@@ -164,35 +202,39 @@ function runIconPixelAudit(iconSrc){
     if(store === 'apple'){
       // Rule 1: 1:1 Square aspect ratio
       if(!isSq){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Non-Square Aspect Ratio (${w}×${h} px):</strong> Apple App Store requires a 1:1 square icon (1024×1024 px).</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Non-square (${w}×${h} px) · 1:1 square required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 2: PNG format required
       if(mimeType && !isPng){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Format Notice:</strong> App Store icon must be PNG format (sRGB or Display P3).</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Format notice: PNG format recommended</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 3: 100% Opaque (no alpha channel)
       if(hasAlpha){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Xcode Rejection Risk (${w}×${h} px):</strong> Alpha transparency detected. iOS icons must be 100% opaque.</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Alpha detected · 100% opaque required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 4: Exact 1024×1024 px dimensions
       if(w !== 1024 || h !== 1024){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Xcode &amp; App Store require exact <strong>1024×1024 px</strong>.</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Dimension notice (${w}×${h} px): Apple requires <strong>1024×1024 px</strong></span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
-      // Compliant: All Apple criteria met.
-      badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> 1024×1024 px · PNG · 100% Opaque (sRGB/Display P3)</span>`;
+      // Compliant: All criteria met -> clean like marketing, no clunky badge
+      badge.style.display = 'none';
+      badge.innerHTML = '';
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -200,53 +242,55 @@ function runIconPixelAudit(iconSrc){
     // Specification:
     // - Dimensions: 512 × 512 px, 1:1 square
     // - Format: 32-bit PNG, sRGB
-    // - File Size: Max 1024 KB (1 MB) - red error if exceeded
-    // - Shape: Khong bo goc, khong do bong trong file (Google tu ap dynamic corner radius 20% & shadow)
-    // Official guidelines:
-    // - https://support.google.com/googleplay/android-developer/answer/9866130
+    // - File Size: Max 1024 KB (1 MB)
+    // - Shape: No pre-cut corners or drop shadows
     // ─────────────────────────────────────────────────────────────────────────
     else {
       // Rule 1: 1:1 Square aspect ratio
       if(!isSq){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Google Play Error (${w}×${h} px):</strong> Icon must be a 1:1 square (512×512 px).</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Non-square (${w}×${h} px) · 1:1 square required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 2: Max file size 1024 KB (1 MB)
-      const MAX_GOOGLE_ICON_BYTES = 1024 * 1024; // 1024 KB = 1,048,576 bytes
+      const MAX_GOOGLE_ICON_BYTES = 1024 * 1024;
       if(sizeBytes > MAX_GOOGLE_ICON_BYTES){
-        const sizeKb = (sizeBytes / 1024).toFixed(1);
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Google Play File Size Error (${sizeKb} KB):</strong> Exceeds maximum allowed <strong>1024 KB (1 MB)</strong>. Google Play Console will reject this icon.</span>`;
+        const sizeKb = (sizeBytes / 1024).toFixed(0);
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>File size: ${sizeKb} KB · Exceeds 1024 KB limit</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 3: 32-bit PNG format (sRGB color space)
       if(mimeType && !isPng){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Format Error:</strong> Google Play requires 32-bit PNG format (sRGB color space).</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Format notice: 32-bit PNG required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 4: Do not include rounded corners or drop shadows in artwork
       if(hasPreRoundedCorners){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Pre-rounded Corners / Shadow Notice:</strong> Do not include rounded corners or drop shadows in artwork; Google Play dynamically applies corner radius (20%) and drop shadow upon upload.</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Pre-rounded corners or shadow detected</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 5: Target dimensions 512×512 px
       if(w !== 512 || h !== 512){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Dimension notice (${w}×${h} px): Google Play requires <strong>512×512 px</strong></span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
-      // Compliant: All Google Play specifications passed
-      const sizeNote = sizeBytes ? ` · ${(sizeBytes / 1024).toFixed(0)} KB (≤ 1024 KB)` : '';
-      badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> 512×512 px · 32-bit PNG (sRGB)${sizeNote}</span>`;
+      // Compliant: All criteria met -> clean like marketing, no clunky badge
+      badge.style.display = 'none';
+      badge.innerHTML = '';
     }
   };
   img.src = iconSrc;
@@ -305,8 +349,19 @@ if($('icoFile')){
     ICON_FILE_NAME = f.name || '';
     readFile(f, d => {
       ICON = d;
+      if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
+      if(typeof downscaleIconTo512 === 'function'){
+        downscaleIconTo512(d, d512 => {
+          if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+          if(store === 'google'){
+            ICON = d512;
+            renderIcons();
+          }
+        });
+      }
       if(typeof userDraft !== 'undefined' && userDraft){
         userDraft.icon = d;
+        userDraft.icon1024 = d;
         userDraft.isCustomIcon = true;
       }
       renderIcons();
@@ -346,8 +401,19 @@ if(icoDropZone){
       ICON_FILE_NAME = file.name || '';
       readFile(file, d => {
         ICON = d;
+        if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
+        if(typeof downscaleIconTo512 === 'function'){
+          downscaleIconTo512(d, d512 => {
+            if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+            if(store === 'google'){
+              ICON = d512;
+              renderIcons();
+            }
+          });
+        }
         if(typeof userDraft !== 'undefined' && userDraft){
           userDraft.icon = d;
+          userDraft.icon1024 = d;
           userDraft.isCustomIcon = true;
         }
         renderIcons();

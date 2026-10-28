@@ -1321,8 +1321,23 @@ assert(normApple.form.name === 'Spotify', 'normalizeAppleApp separates title bef
 assert(normApple.form.sub === 'Music and Podcasts', 'normalizeAppleApp extracts subtitle after dash');
 assert(normApple.form.dev === 'Spotify Ltd.', 'normalizeAppleApp extracts artist name');
 assert(normApple.icon.includes('1024x1024bb.png'), 'normalizeAppleApp upscales icon to 1024x1024 Retina');
+assert(normApple.icon1024 && normApple.icon1024.includes('1024x1024bb.png'), 'normalizeAppleApp generates icon1024 Retina');
+assert(normApple.icon512 && normApple.icon512.includes('512x512bb.png'), 'normalizeAppleApp generates icon512 for Google Play');
+assert(normApple.iconGoogle && normApple.iconGoogle.includes('512x512bb.png'), 'normalizeAppleApp provides iconGoogle compliant URL');
 assert(normApple.shots[0].includes('1242x2688bb.png'), 'normalizeAppleApp upscales screenshot to 1242x2688 Retina');
 assert(normApple.supportsIpad === true, 'normalizeAppleApp detects iPad screenshots');
+assert(normApple.isUniversal === true, 'normalizeAppleApp detects Universal app');
+
+// Test iPhone-only app normalization
+const normIphoneOnly = normalizeAppleApp({
+  trackName: 'Tinder - Dating App',
+  artworkUrl512: 'https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/icon/512x512bb.jpg',
+  screenshotUrls: ['https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/shot/576x768bb.png'],
+  ipadScreenshotUrls: [],
+  features: []
+});
+assert(normIphoneOnly.supportsIpad === false, 'normalizeAppleApp detects iPhone-only app (supportsIpad false)');
+assert(normIphoneOnly.isUniversal === false, 'normalizeAppleApp detects iPhone-only app (isUniversal false)');
 
 // ---------------------------------------------------------------------
 // Summary Report

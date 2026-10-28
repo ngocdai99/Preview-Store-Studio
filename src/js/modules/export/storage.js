@@ -83,13 +83,27 @@ function applyStateObject(s){
     if(s.form.new !== undefined && $('f-new')) $('f-new').value = s.form.new;
     if(s.form.desc !== undefined && $('f-desc')) $('f-desc').value = s.form.desc;
   }
+  if(s.icon1024) CUSTOM_ICON_1024 = s.icon1024;
+  else if(s.iconApple) CUSTOM_ICON_1024 = s.iconApple;
+
+  if(s.icon512) CUSTOM_ICON_512 = s.icon512;
+  else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
+
   if(s.icon){
     if(s.icon === BLANK_ICON || s.icon.includes('studioBg') || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('stdBg') || s.icon.includes('c6-bg') || !s.isCustomIcon){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
+      CUSTOM_ICON_1024 = '';
+      CUSTOM_ICON_512 = '';
     } else {
-      ICON = s.icon;
       IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
+      if(store === 'google' && (CUSTOM_ICON_512 || s.icon512 || s.iconGoogle)){
+        ICON = CUSTOM_ICON_512 || s.icon512 || s.iconGoogle;
+      } else if(store === 'apple' && (CUSTOM_ICON_1024 || s.icon1024 || s.iconApple)){
+        ICON = CUSTOM_ICON_1024 || s.icon1024 || s.iconApple;
+      } else {
+        ICON = s.icon;
+      }
     }
   }
   if(s.featureGraphic) FEATURE_GRAPHIC = s.featureGraphic;
@@ -144,6 +158,10 @@ function getCurrentStateObject(){
       desc: $('f-desc') ? $('f-desc').value : ''
     },
     icon: (IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')) ? ICON : BLANK_ICON,
+    icon1024: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    icon512: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
+    iconApple: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    iconGoogle: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
     isCustomIcon: !!(IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')),
     featureGraphic: FEATURE_GRAPHIC,
     shots: SHOTS,

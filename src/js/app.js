@@ -2251,6 +2251,8 @@ const LINGUA_SHOT_4 = SKILL_SHOT_4;
 let ICON = BLANK_ICON;
 let BLANK_ICON_1024 = '';
 let BLANK_ICON_512 = '';
+let CUSTOM_ICON_1024 = '';
+let CUSTOM_ICON_512 = '';
 let CURRENT_PRESET_KEY = 'none';
 let IS_CUSTOM_ICON = false;
 let FEATURE_GRAPHIC = DEFAULT_FEATURE;
@@ -2728,7 +2730,7 @@ slistArea.addEventListener('drop',e=>{
         if(loaded===files.length){
           renderShots();
           saveState();
-          showToast(`Added ${files.length} screenshot(s)!`,'🖼');
+          showToast(`Added ${files.length} screenshot(s)!`, 'ok');
         }
       });
     });
@@ -2810,8 +2812,42 @@ function getIconMeta(src = null){
 }
 
 // --- Image Renderers & Real-time Icon Validator ---
+function downscaleIconTo512(src, callback){
+  if(!src || typeof src !== 'string') return callback(src);
+  if(src.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(src)){
+    return callback(src.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png'));
+  }
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    try {
+      const cv = document.createElement('canvas');
+      cv.width = 512;
+      cv.height = 512;
+      const ctx = cv.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, 512, 512);
+      callback(cv.toDataURL('image/png'));
+    } catch(_) {
+      callback(src);
+    }
+  };
+  img.onerror = () => callback(src);
+  img.src = src;
+}
+
 function renderIcons(){
-  $$('[data-icon]').forEach(i=>{safe(i);i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(ICON, i):ICON)});
+  $$('[data-icon]').forEach(i=>{
+    safe(i);
+    let targetIcon = ICON;
+    if(i.closest('.phone.google') || (store === 'google' && !i.closest('.phone.apple'))){
+      targetIcon = (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : ICON;
+    } else if(i.closest('.phone.apple') || (store === 'apple' && !i.closest('.phone.google'))){
+      targetIcon = (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON;
+    }
+    i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(targetIcon, i):targetIcon);
+  });
   validateAppIcon();
 }
 
@@ -2831,8 +2867,12 @@ function validateAppIcon(){
   }
   badge.style.display = '';
   const targetDim = (store === 'google' ? 512 : 1024);
-  if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && ICON.startsWith('data:image/svg+xml')){
-    rasterizeSvgToStorePng(ICON, targetDim, pngSrc => {
+  const activeIconSrc = (store === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512)
+    ? CUSTOM_ICON_512
+    : ((store === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON);
+
+  if(typeof rasterizeSvgToStorePng === 'function' && typeof activeIconSrc === 'string' && activeIconSrc.startsWith('data:image/svg+xml')){
+    rasterizeSvgToStorePng(activeIconSrc, targetDim, pngSrc => {
       if(isPlaceholderIcon()){
         badge.style.display = 'none';
         badge.innerHTML = '';
@@ -2842,7 +2882,7 @@ function validateAppIcon(){
     });
     return;
   }
-  runIconPixelAudit(ICON);
+  runIconPixelAudit(activeIconSrc);
 }
 
 function runIconPixelAudit(iconSrc){
@@ -2906,35 +2946,39 @@ function runIconPixelAudit(iconSrc){
     if(store === 'apple'){
       // Rule 1: 1:1 Square aspect ratio
       if(!isSq){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Non-Square Aspect Ratio (${w}×${h} px):</strong> Apple App Store requires a 1:1 square icon (1024×1024 px).</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Non-square (${w}×${h} px) · 1:1 square required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 2: PNG format required
       if(mimeType && !isPng){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Format Notice:</strong> App Store icon must be PNG format (sRGB or Display P3).</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Format notice: PNG format recommended</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 3: 100% Opaque (no alpha channel)
       if(hasAlpha){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Xcode Rejection Risk (${w}×${h} px):</strong> Alpha transparency detected. iOS icons must be 100% opaque.</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Alpha detected · 100% opaque required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 4: Exact 1024×1024 px dimensions
       if(w !== 1024 || h !== 1024){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Xcode &amp; App Store require exact <strong>1024×1024 px</strong>.</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Dimension notice (${w}×${h} px): Apple requires <strong>1024×1024 px</strong></span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
-      // Compliant: All Apple criteria met.
-      badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> 1024×1024 px · PNG · 100% Opaque (sRGB/Display P3)</span>`;
+      // Compliant: All criteria met -> clean like marketing, no clunky badge
+      badge.style.display = 'none';
+      badge.innerHTML = '';
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -2942,53 +2986,55 @@ function runIconPixelAudit(iconSrc){
     // Specification:
     // - Dimensions: 512 × 512 px, 1:1 square
     // - Format: 32-bit PNG, sRGB
-    // - File Size: Max 1024 KB (1 MB) - red error if exceeded
-    // - Shape: Khong bo goc, khong do bong trong file (Google tu ap dynamic corner radius 20% & shadow)
-    // Official guidelines:
-    // - https://support.google.com/googleplay/android-developer/answer/9866130
+    // - File Size: Max 1024 KB (1 MB)
+    // - Shape: No pre-cut corners or drop shadows
     // ─────────────────────────────────────────────────────────────────────────
     else {
       // Rule 1: 1:1 Square aspect ratio
       if(!isSq){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Google Play Error (${w}×${h} px):</strong> Icon must be a 1:1 square (512×512 px).</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Non-square (${w}×${h} px) · 1:1 square required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 2: Max file size 1024 KB (1 MB)
-      const MAX_GOOGLE_ICON_BYTES = 1024 * 1024; // 1024 KB = 1,048,576 bytes
+      const MAX_GOOGLE_ICON_BYTES = 1024 * 1024;
       if(sizeBytes > MAX_GOOGLE_ICON_BYTES){
-        const sizeKb = (sizeBytes / 1024).toFixed(1);
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Google Play File Size Error (${sizeKb} KB):</strong> Exceeds maximum allowed <strong>1024 KB (1 MB)</strong>. Google Play Console will reject this icon.</span>`;
+        const sizeKb = (sizeBytes / 1024).toFixed(0);
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>File size: ${sizeKb} KB · Exceeds 1024 KB limit</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 3: 32-bit PNG format (sRGB color space)
       if(mimeType && !isPng){
-        badge.className = 'shot-status-badge err';
-        badge.innerHTML = `${SB_ERR}<span><strong>Format Error:</strong> Google Play requires 32-bit PNG format (sRGB color space).</span>`;
+        badge.className = 'ms-icon-status err';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Format notice: 32-bit PNG required</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 4: Do not include rounded corners or drop shadows in artwork
       if(hasPreRoundedCorners){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Pre-rounded Corners / Shadow Notice:</strong> Do not include rounded corners or drop shadows in artwork; Google Play dynamically applies corner radius (20%) and drop shadow upon upload.</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Pre-rounded corners or shadow detected</span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
       // Rule 5: Target dimensions 512×512 px
       if(w !== 512 || h !== 512){
-        badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span>`;
+        badge.className = 'ms-icon-status warn';
+        badge.innerHTML = `<span class="ms-status-dot"></span><span>Dimension notice (${w}×${h} px): Google Play requires <strong>512×512 px</strong></span>`;
+        badge.style.display = 'inline-flex';
         return;
       }
 
-      // Compliant: All Google Play specifications passed
-      const sizeNote = sizeBytes ? ` · ${(sizeBytes / 1024).toFixed(0)} KB (≤ 1024 KB)` : '';
-      badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> 512×512 px · 32-bit PNG (sRGB)${sizeNote}</span>`;
+      // Compliant: All criteria met -> clean like marketing, no clunky badge
+      badge.style.display = 'none';
+      badge.innerHTML = '';
     }
   };
   img.src = iconSrc;
@@ -3047,8 +3093,19 @@ if($('icoFile')){
     ICON_FILE_NAME = f.name || '';
     readFile(f, d => {
       ICON = d;
+      if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
+      if(typeof downscaleIconTo512 === 'function'){
+        downscaleIconTo512(d, d512 => {
+          if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+          if(store === 'google'){
+            ICON = d512;
+            renderIcons();
+          }
+        });
+      }
       if(typeof userDraft !== 'undefined' && userDraft){
         userDraft.icon = d;
+        userDraft.icon1024 = d;
         userDraft.isCustomIcon = true;
       }
       renderIcons();
@@ -3088,8 +3145,19 @@ if(icoDropZone){
       ICON_FILE_NAME = file.name || '';
       readFile(file, d => {
         ICON = d;
+        if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
+        if(typeof downscaleIconTo512 === 'function'){
+          downscaleIconTo512(d, d512 => {
+            if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+            if(store === 'google'){
+              ICON = d512;
+              renderIcons();
+            }
+          });
+        }
         if(typeof userDraft !== 'undefined' && userDraft){
           userDraft.icon = d;
+          userDraft.icon1024 = d;
           userDraft.isCustomIcon = true;
         }
         renderIcons();
@@ -3451,6 +3519,13 @@ function setSupportsIpad(val){
 
   const ipadCard = $('ipadCard');
   if(ipadCard) ipadCard.style.display = (SUPPORTS_IPAD && store === 'apple') ? '' : 'none';
+
+  $$('.a-platforms-badge').forEach(b => {
+    const ipadIco = b.querySelector('.a-plat-ico-ipad');
+    const label = b.querySelector('.a-plat-label') || b.querySelector('span');
+    if(ipadIco) ipadIco.style.display = SUPPORTS_IPAD ? '' : 'none';
+    if(label) label.textContent = SUPPORTS_IPAD ? 'iPhone, iPad' : 'iPhone';
+  });
 
   renderIpadShots();
   validateScreenshots();
@@ -3906,7 +3981,18 @@ if(ipadShotFile){
     let src = opts.src;
     if (!src) {
       if (_activeModalType === 'icon') {
-        src = (typeof ICON !== 'undefined' ? ICON : (typeof S !== 'undefined' && S ? (S[_activeModalStore === 'apple' ? 'iconApple' : 'iconGoogle'] || S.icon) : ''));
+        if (_activeModalStore === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) {
+          src = CUSTOM_ICON_512;
+        } else if (_activeModalStore === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) {
+          src = CUSTOM_ICON_1024;
+        } else {
+          src = (typeof ICON !== 'undefined' ? ICON : (typeof S !== 'undefined' && S ? (S[_activeModalStore === 'apple' ? 'iconApple' : 'iconGoogle'] || S.icon) : ''));
+        }
+        if (_activeModalStore === 'google' && typeof src === 'string' && src.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(src)) {
+          src = src.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png');
+        } else if (_activeModalStore === 'apple' && typeof src === 'string' && src.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(src)) {
+          src = src.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png');
+        }
       } else if (_activeModalType === 'feature') {
         src = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
       } else if (_activeModalType === 'ipad' && _activeModalIndex >= 0) {
@@ -4111,7 +4197,7 @@ if(ipadShotFile){
             detailsHtml = '<p>Apple App Store recommends standard 1024×1024 px resolution to ensure clarity across all Retina displays.</p><p class="icon-modal-warn-hint">Re-export at 1024×1024 px from your design tool.</p>';
           } else {
             level = 'ok';
-            badgeText = '1024×1024 px · App Store Compliant';
+            badgeText = '1024×1024 px · App Store Standard';
             detailsHtml = '';
           }
         } else {
@@ -4141,7 +4227,7 @@ if(ipadShotFile){
           } else {
             const sizeNote = sizeBytes ? ` (${(sizeBytes / 1024).toFixed(0)} KB)` : '';
             level = 'ok';
-            badgeText = `512×512 px · Google Play Compliant${sizeNote}`;
+            badgeText = `512×512 px · Google Play Standard${sizeNote}`;
             detailsHtml = '';
           }
         }
@@ -4223,6 +4309,16 @@ if(ipadShotFile){
         // Core studio fallback
         if (typeof ICON !== 'undefined') {
           ICON = dataUrl;
+          if (_activeModalStore === 'google') {
+            if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = dataUrl;
+          } else {
+            if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = dataUrl;
+            if (typeof downscaleIconTo512 === 'function') {
+              downscaleIconTo512(dataUrl, d512 => {
+                if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+              });
+            }
+          }
           if (typeof renderIcons === 'function') renderIcons();
           if (typeof saveState === 'function') saveState();
         }
@@ -5689,6 +5785,7 @@ function setStore(s, animate = true){
       document.body.dataset.appleDevice = 'iphone';
       document.body.dataset.googleDevice = 'phone';
       if(typeof renderIcons === 'function') renderIcons();
+      if(typeof validateAppIcon === 'function') validateAppIcon();
     } else {
       document.body.dataset.dual = 'false';
       store = s;
@@ -5703,16 +5800,57 @@ function setStore(s, animate = true){
       if(iconLabel && iconHint){
         if(s === 'google'){
           iconLabel.innerHTML = 'App Icon (512×512 px) <span class="tag g">GOOGLE</span>';
-          iconHint.innerHTML = '32-bit PNG · 512×512 px · Max 1024 KB · sRGB · No rounded corners or drop shadows.';
+          iconHint.innerHTML = '32-bit PNG · 1:1 Square · Max 1024 KB';
         } else {
           iconLabel.innerHTML = 'App Icon (1024×1024 px) <span class="tag a">APPLE</span>';
-          iconHint.innerHTML = 'PNG · 1024×1024 px · sRGB or Display P3 · 100% Opaque (no alpha) · No rounded corners.';
+          iconHint.innerHTML = 'PNG · 1:1 Square · 100% Opaque';
         }
       }
 
-      // Sync preset icon variant if using preset template
-      if(typeof IS_CUSTOM_ICON !== 'undefined' && !IS_CUSTOM_ICON){
-        let iconChanged = false;
+      // Sync icon variant according to active store
+      let iconChanged = false;
+      if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON){
+        if(s === 'google'){
+          if(typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512 && ICON !== CUSTOM_ICON_512){
+            ICON = CUSTOM_ICON_512;
+            iconChanged = true;
+          } else if(typeof ICON === 'string' && ICON.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(ICON)){
+            const gIcon = ICON.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png');
+            if(ICON !== gIcon){
+              if(typeof CUSTOM_ICON_1024 !== 'undefined' && !CUSTOM_ICON_1024) CUSTOM_ICON_1024 = ICON;
+              ICON = gIcon;
+              if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = gIcon;
+              iconChanged = true;
+            }
+          } else if(typeof downscaleIconTo512 === 'function' && ICON && (!CUSTOM_ICON_512 || CUSTOM_ICON_512 === ICON)){
+            if(typeof CUSTOM_ICON_1024 !== 'undefined' && !CUSTOM_ICON_1024) CUSTOM_ICON_1024 = ICON;
+            downscaleIconTo512(ICON, d512 => {
+              if(d512 && d512 !== ICON){
+                if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+                if(store === 'google'){
+                  ICON = d512;
+                  if(typeof renderIcons === 'function') renderIcons();
+                  if(typeof validateAppIcon === 'function') validateAppIcon();
+                }
+              }
+            });
+          }
+        } else if(s === 'apple'){
+          if(typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024 && ICON !== CUSTOM_ICON_1024){
+            ICON = CUSTOM_ICON_1024;
+            iconChanged = true;
+          } else if(typeof ICON === 'string' && ICON.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(ICON)){
+            const aIcon = ICON.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png');
+            if(ICON !== aIcon){
+              if(typeof CUSTOM_ICON_512 !== 'undefined' && !CUSTOM_ICON_512) CUSTOM_ICON_512 = ICON;
+              ICON = aIcon;
+              if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = aIcon;
+              iconChanged = true;
+            }
+          }
+        }
+      } else {
+        // Preset icon variant sync
         if(typeof BLANK_ICON !== 'undefined' && (ICON === BLANK_ICON || (typeof BLANK_ICON_1024 !== 'undefined' && ICON === BLANK_ICON_1024) || (typeof BLANK_ICON_512 !== 'undefined' && ICON === BLANK_ICON_512))){
           if(s === 'apple' && typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024){ ICON = BLANK_ICON_1024; iconChanged = true; }
           else if(s === 'google' && typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512){ ICON = BLANK_ICON_512; iconChanged = true; }
@@ -5726,7 +5864,12 @@ function setStore(s, animate = true){
             }
           }
         }
-        if(iconChanged && typeof renderIcons === 'function') renderIcons();
+      }
+
+      if(iconChanged && typeof renderIcons === 'function'){
+        renderIcons();
+      } else if(typeof validateAppIcon === 'function'){
+        validateAppIcon();
       }
 
       if(s === 'apple'){
@@ -6526,13 +6669,27 @@ function applyStateObject(s){
     if(s.form.new !== undefined && $('f-new')) $('f-new').value = s.form.new;
     if(s.form.desc !== undefined && $('f-desc')) $('f-desc').value = s.form.desc;
   }
+  if(s.icon1024) CUSTOM_ICON_1024 = s.icon1024;
+  else if(s.iconApple) CUSTOM_ICON_1024 = s.iconApple;
+
+  if(s.icon512) CUSTOM_ICON_512 = s.icon512;
+  else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
+
   if(s.icon){
     if(s.icon === BLANK_ICON || s.icon.includes('studioBg') || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('stdBg') || s.icon.includes('c6-bg') || !s.isCustomIcon){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
+      CUSTOM_ICON_1024 = '';
+      CUSTOM_ICON_512 = '';
     } else {
-      ICON = s.icon;
       IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
+      if(store === 'google' && (CUSTOM_ICON_512 || s.icon512 || s.iconGoogle)){
+        ICON = CUSTOM_ICON_512 || s.icon512 || s.iconGoogle;
+      } else if(store === 'apple' && (CUSTOM_ICON_1024 || s.icon1024 || s.iconApple)){
+        ICON = CUSTOM_ICON_1024 || s.icon1024 || s.iconApple;
+      } else {
+        ICON = s.icon;
+      }
     }
   }
   if(s.featureGraphic) FEATURE_GRAPHIC = s.featureGraphic;
@@ -6587,6 +6744,10 @@ function getCurrentStateObject(){
       desc: $('f-desc') ? $('f-desc').value : ''
     },
     icon: (IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')) ? ICON : BLANK_ICON,
+    icon1024: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    icon512: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
+    iconApple: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    iconGoogle: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
     isCustomIcon: !!(IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('studioBg') && !ICON.includes('stdBg')),
     featureGraphic: FEATURE_GRAPHIC,
     shots: SHOTS,
@@ -7683,13 +7844,16 @@ function normalizeAppleApp(item) {
   const ratingStr = ratingNum.toFixed(1);
   const ratingCount = item.userRatingCount || 1000;
 
-  // High-resolution Retina icon (1024x1024)
+  // High-resolution Retina icons: 1024x1024 for Apple App Store, 512x512 for Google Play
   const rawIcon = item.artworkUrl512 || item.artworkUrl100 || '';
-  const iconUrl = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png') : '';
+  const icon1024 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png') : '';
+  const icon512 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png') : '';
+  const iconUrl = icon1024;
 
   // Screenshots
   const shots = (item.screenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png')).slice(0, 8);
   const ipadShots = (item.ipadScreenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png')).slice(0, 8);
+  const isUniversal = (Array.isArray(item.features) && item.features.includes('iosUniversal')) || (ipadShots.length > 0);
 
   // Short description
   const cleanDesc = (item.description || '').replace(/[\r\n]+/g, ' ').trim();
@@ -7720,10 +7884,16 @@ function normalizeAppleApp(item) {
       desc: (item.description || '').slice(0, 1000)
     },
     icon: iconUrl,
+    icon1024: icon1024,
+    icon512: icon512,
+    iconApple: icon1024,
+    iconGoogle: icon512,
+    rawIcon: rawIcon,
     isCustomIcon: !!iconUrl,
     shots: shots,
     ipadShots: ipadShots,
-    supportsIpad: ipadShots.length > 0,
+    supportsIpad: isUniversal,
+    isUniversal: isUniversal,
     stats: {
       rating: ratingStr,
       ratingsCount: ratingCount,
@@ -7787,6 +7957,13 @@ function applyImportedStoreApp(state) {
   if (!state) return false;
 
   // Auto select Apple App Store and iPhone device
+  if (state.icon1024) CUSTOM_ICON_1024 = state.icon1024;
+  else if (state.iconApple) CUSTOM_ICON_1024 = state.iconApple;
+  else if (state.icon) CUSTOM_ICON_1024 = state.icon;
+
+  if (state.icon512) CUSTOM_ICON_512 = state.icon512;
+  else if (state.iconGoogle) CUSTOM_ICON_512 = state.iconGoogle;
+
   if (typeof setStore === 'function') {
     setStore('apple', false);
   }

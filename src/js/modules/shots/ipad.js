@@ -27,6 +27,13 @@ function setSupportsIpad(val){
   const ipadCard = $('ipadCard');
   if(ipadCard) ipadCard.style.display = (SUPPORTS_IPAD && store === 'apple') ? '' : 'none';
 
+  $$('.a-platforms-badge').forEach(b => {
+    const ipadIco = b.querySelector('.a-plat-ico-ipad');
+    const label = b.querySelector('.a-plat-label') || b.querySelector('span');
+    if(ipadIco) ipadIco.style.display = SUPPORTS_IPAD ? '' : 'none';
+    if(label) label.textContent = SUPPORTS_IPAD ? 'iPhone, iPad' : 'iPhone';
+  });
+
   renderIpadShots();
   validateScreenshots();
 }

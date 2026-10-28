@@ -53,13 +53,16 @@ function normalizeAppleApp(item) {
   const ratingStr = ratingNum.toFixed(1);
   const ratingCount = item.userRatingCount || 1000;
 
-  // High-resolution Retina icon (1024x1024)
+  // High-resolution Retina icons: 1024x1024 for Apple App Store, 512x512 for Google Play
   const rawIcon = item.artworkUrl512 || item.artworkUrl100 || '';
-  const iconUrl = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png') : '';
+  const icon1024 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png') : '';
+  const icon512 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png') : '';
+  const iconUrl = icon1024;
 
   // Screenshots
   const shots = (item.screenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png')).slice(0, 8);
   const ipadShots = (item.ipadScreenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png')).slice(0, 8);
+  const isUniversal = (Array.isArray(item.features) && item.features.includes('iosUniversal')) || (ipadShots.length > 0);
 
   // Short description
   const cleanDesc = (item.description || '').replace(/[\r\n]+/g, ' ').trim();
@@ -90,10 +93,16 @@ function normalizeAppleApp(item) {
       desc: (item.description || '').slice(0, 1000)
     },
     icon: iconUrl,
+    icon1024: icon1024,
+    icon512: icon512,
+    iconApple: icon1024,
+    iconGoogle: icon512,
+    rawIcon: rawIcon,
     isCustomIcon: !!iconUrl,
     shots: shots,
     ipadShots: ipadShots,
-    supportsIpad: ipadShots.length > 0,
+    supportsIpad: isUniversal,
+    isUniversal: isUniversal,
     stats: {
       rating: ratingStr,
       ratingsCount: ratingCount,
@@ -157,6 +166,13 @@ function applyImportedStoreApp(state) {
   if (!state) return false;
 
   // Auto select Apple App Store and iPhone device
+  if (state.icon1024) CUSTOM_ICON_1024 = state.icon1024;
+  else if (state.iconApple) CUSTOM_ICON_1024 = state.iconApple;
+  else if (state.icon) CUSTOM_ICON_1024 = state.icon;
+
+  if (state.icon512) CUSTOM_ICON_512 = state.icon512;
+  else if (state.iconGoogle) CUSTOM_ICON_512 = state.iconGoogle;
+
   if (typeof setStore === 'function') {
     setStore('apple', false);
   }

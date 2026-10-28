@@ -438,6 +438,7 @@ function setStore(s, animate = true){
       document.body.dataset.appleDevice = 'iphone';
       document.body.dataset.googleDevice = 'phone';
       if(typeof renderIcons === 'function') renderIcons();
+      if(typeof validateAppIcon === 'function') validateAppIcon();
     } else {
       document.body.dataset.dual = 'false';
       store = s;
@@ -452,16 +453,57 @@ function setStore(s, animate = true){
       if(iconLabel && iconHint){
         if(s === 'google'){
           iconLabel.innerHTML = 'App Icon (512×512 px) <span class="tag g">GOOGLE</span>';
-          iconHint.innerHTML = '32-bit PNG · 512×512 px · Max 1024 KB · sRGB · No rounded corners or drop shadows.';
+          iconHint.innerHTML = '32-bit PNG · 1:1 Square · Max 1024 KB';
         } else {
           iconLabel.innerHTML = 'App Icon (1024×1024 px) <span class="tag a">APPLE</span>';
-          iconHint.innerHTML = 'PNG · 1024×1024 px · sRGB or Display P3 · 100% Opaque (no alpha) · No rounded corners.';
+          iconHint.innerHTML = 'PNG · 1:1 Square · 100% Opaque';
         }
       }
 
-      // Sync preset icon variant if using preset template
-      if(typeof IS_CUSTOM_ICON !== 'undefined' && !IS_CUSTOM_ICON){
-        let iconChanged = false;
+      // Sync icon variant according to active store
+      let iconChanged = false;
+      if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON){
+        if(s === 'google'){
+          if(typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512 && ICON !== CUSTOM_ICON_512){
+            ICON = CUSTOM_ICON_512;
+            iconChanged = true;
+          } else if(typeof ICON === 'string' && ICON.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(ICON)){
+            const gIcon = ICON.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png');
+            if(ICON !== gIcon){
+              if(typeof CUSTOM_ICON_1024 !== 'undefined' && !CUSTOM_ICON_1024) CUSTOM_ICON_1024 = ICON;
+              ICON = gIcon;
+              if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = gIcon;
+              iconChanged = true;
+            }
+          } else if(typeof downscaleIconTo512 === 'function' && ICON && (!CUSTOM_ICON_512 || CUSTOM_ICON_512 === ICON)){
+            if(typeof CUSTOM_ICON_1024 !== 'undefined' && !CUSTOM_ICON_1024) CUSTOM_ICON_1024 = ICON;
+            downscaleIconTo512(ICON, d512 => {
+              if(d512 && d512 !== ICON){
+                if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
+                if(store === 'google'){
+                  ICON = d512;
+                  if(typeof renderIcons === 'function') renderIcons();
+                  if(typeof validateAppIcon === 'function') validateAppIcon();
+                }
+              }
+            });
+          }
+        } else if(s === 'apple'){
+          if(typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024 && ICON !== CUSTOM_ICON_1024){
+            ICON = CUSTOM_ICON_1024;
+            iconChanged = true;
+          } else if(typeof ICON === 'string' && ICON.includes('mzstatic.com') && /\/\d+x\d+bb\.(jpg|png)/i.test(ICON)){
+            const aIcon = ICON.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png');
+            if(ICON !== aIcon){
+              if(typeof CUSTOM_ICON_512 !== 'undefined' && !CUSTOM_ICON_512) CUSTOM_ICON_512 = ICON;
+              ICON = aIcon;
+              if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = aIcon;
+              iconChanged = true;
+            }
+          }
+        }
+      } else {
+        // Preset icon variant sync
         if(typeof BLANK_ICON !== 'undefined' && (ICON === BLANK_ICON || (typeof BLANK_ICON_1024 !== 'undefined' && ICON === BLANK_ICON_1024) || (typeof BLANK_ICON_512 !== 'undefined' && ICON === BLANK_ICON_512))){
           if(s === 'apple' && typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024){ ICON = BLANK_ICON_1024; iconChanged = true; }
           else if(s === 'google' && typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512){ ICON = BLANK_ICON_512; iconChanged = true; }
@@ -475,7 +517,12 @@ function setStore(s, animate = true){
             }
           }
         }
-        if(iconChanged && typeof renderIcons === 'function') renderIcons();
+      }
+
+      if(iconChanged && typeof renderIcons === 'function'){
+        renderIcons();
+      } else if(typeof validateAppIcon === 'function'){
+        validateAppIcon();
       }
 
       if(s === 'apple'){

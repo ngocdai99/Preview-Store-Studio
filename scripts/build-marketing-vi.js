@@ -85,6 +85,8 @@ function buildMarketingVi() {
   html = rep(html, 'title="Export current live device stage in 2x Retina HD"', 'title="Xuất ảnh Mockup Stage chuẩn Retina 2x sắc nét"');
   html = rep(html, '<span class="mi-name">Save Mockup</span>', '<span class="mi-name">Lưu ảnh Mockup</span>');
   html = rep(html, '<small>Live device stage · Retina 2x</small>', '<small>Màn hình stage thực tế · Retina 2x</small>');
+  html = rep(html, '<span class="mi-name">Clean Mockup (4K Ultra HD)</span>', '<span class="mi-name">Ảnh Mockup sạch 4K Ultra HD</span>');
+  html = rep(html, '<small>No watermark · Studio print-ready · 4K</small>', '<small>Không watermark · Chuẩn in ấn 4K</small>');
   html = rep(html, '<span class="mi-name">Save as image (No phone frame)</span>', '<span class="mi-name">Lưu ảnh (Không khung điện thoại)</span>');
   html = rep(html, '<small>Store page UI without device bezel · 3x</small>', '<small>Giao diện store không viền máy · 3x</small>');
   html = rep(html, '<span class="dot dot-purple"></span>Store Metadata', '<span class="dot dot-purple"></span>Metadata Store');
@@ -98,16 +100,6 @@ function buildMarketingVi() {
   html = rep(html, '<span class="mi-name">Import Project</span>', '<span class="mi-name">Nhập Dự án</span>');
   html = rep(html, '<small>Open project from .json file</small>', '<small>Mở dự án từ file .json</small>');
   html = repAll(html, 'title="Plus Feature"', 'title="Tính năng Plus"');
-
-  // Export dropdown toasts
-  html = rep(html,
-    "'Plus Edition Feature',\n              'Unlock Plus Edition to export complete App Store packages, ZIP screenshots, and store metadata.',\n              'Unlock in Plus'",
-    "'Tính năng phiên bản Plus',\n              'Mở khóa phiên bản Plus để xuất trọn bộ package ZIP nộp Store và metadata.',\n              'Mở khóa bản Plus'"
-  );
-  html = rep(html,
-    "'Custom Mockup Export',\n              'Unlock Plus Edition to export high-resolution mockups with your custom app branding and real screenshots.',\n              'Unlock in Plus'",
-    "'Xuất Mockup Tùy chỉnh',\n              'Mở khóa phiên bản Plus để xuất ảnh mockup độ phân giải cao cho ứng dụng tùy chỉnh của bạn.',\n              'Mở khóa bản Plus'"
-  );
 
   // 5. Mini Studio Form
   html = rep(html, '<h3 id="msEdTitle">Listing Content</h3>', '<h3 id="msEdTitle">Nội dung trang giới thiệu ứng dụng</h3>');
@@ -250,12 +242,8 @@ function buildMarketingVi() {
   );
   html = repAll(html, '<span class="price-period">one-time payment</span>', '<span class="price-period">thanh toán một lần</span>');
   html = rep(html, 
-    '<span>Standalone Single-File Studio <span class="feature-tag code">.html</span></span>',
-    '<span>Single-File Studio offline hoàn chỉnh <span class="feature-tag code">.html</span></span>'
-  );
-  html = rep(html, 
-    '<span>100% Offline <span class="feature-tag">No Node.js required</span></span>',
-    '<span>100% Offline <span class="feature-tag">Không cần cài Node.js</span></span>'
+    '<span>Clean 4K Ultra HD Export <span class="feature-tag blue">No Watermark</span></span>',
+    '<span>Xuất ảnh Mockup 4K Ultra HD sạch <span class="feature-tag blue">Không Watermark</span></span>'
   );
   // Thay đổi ở Pricing: Giao diện mô phỏng iPhone, iPad & Android Phone/Tablet
   html = rep(html, 
@@ -263,16 +251,16 @@ function buildMarketingVi() {
     '<span>Giao diện mô phỏng iPhone, iPad &amp; Android Phone/Tablet</span>'
   );
   html = rep(html, 
+    '<span>Store Listing Metadata Export <span class="feature-tag">Markdown &amp; Copy</span></span>',
+    '<span>Xuất hồ sơ Metadata nộp Store <span class="feature-tag">Markdown &amp; Copy</span></span>'
+  );
+  html = rep(html, 
     '<span>Store Character &amp; Emoji Counters</span>',
     '<span>Bộ đếm ký tự &amp; Emoji chuẩn Store</span>'
   );
   html = rep(html, 
-    '<span>All 5 Curated App Presets <span class="feature-tag">JSON</span></span>',
-    '<span>Trọn bộ 5 template ứng dụng có sẵn <span class="feature-tag">JSON</span></span>'
-  );
-  html = rep(html, 
-    '<span>1-Click JSON Preset Import & Export</span>',
-    '<span>Import &amp; Export template JSON 1-Click</span>'
+    '<span>100% Offline Single-File Studio <span class="feature-tag code">.html</span></span>',
+    '<span>Ứng dụng chạy Offline 100% dạng 1 file <span class="feature-tag code">.html</span></span>'
   );
   html = rep(html, 
     '<span>Single-User Commercial License</span>',
@@ -285,8 +273,8 @@ function buildMarketingVi() {
 
   // Pro Card
   html = rep(html, 
-    'For agencies, power users, and teams requiring full source access and agency QA tools.',
-    'Dành cho agencies, power users và đội ngũ cần toàn quyền truy cập mã nguồn và bộ công cụ QA.'
+    'For agencies, studios, and developers requiring commercial client licensing and full source code.',
+    'Dành cho agency, studio và lập trình viên cần giấy phép thương mại làm việc với khách hàng & toàn bộ mã nguồn.'
   );
   html = rep(html, 
     '<span><strong>Everything in Plus Edition</strong>, plus:</span>',
@@ -298,7 +286,11 @@ function buildMarketingVi() {
   );
   html = rep(html, 
     '<span>Full Modular Source Code <span class="feature-tag purple code">src/</span></span>',
-    '<span>Mã nguồn mở rộng hoàn chỉnh <span class="feature-tag purple code">src/</span></span>'
+    '<span>Toàn bộ mã nguồn Module <span class="feature-tag purple code">src/</span></span>'
+  );
+  html = rep(html, 
+    '<span>White-label Ready <span class="feature-tag purple">Custom Agency Branding</span></span>',
+    '<span>Sẵn sàng White-label <span class="feature-tag purple">Gắn thương hiệu Agency</span></span>'
   );
   html = rep(html, 
     '<span>Live-Reload Dev Server & Bundler <span class="feature-tag purple code">build.js</span></span>',
@@ -306,19 +298,7 @@ function buildMarketingVi() {
   );
   html = rep(html, 
     '<span>Agency Marketing & ASO Playbook <span class="feature-tag purple">HTML offline</span></span>',
-    '<span>Agency Marketing &amp; ASO Playbook <span class="feature-tag purple">HTML offline</span></span>'
-  );
-  html = rep(html, 
-    '<span>19 QA Test Modules Specification <span class="feature-tag purple">HTML offline</span></span>',
-    '<span>Đặc tả 19 Module Kiểm Thử QA <span class="feature-tag purple">HTML offline</span></span>'
-  );
-  html = rep(html, 
-    '<span>Store Preview Studio Test Checklist <span class="feature-tag green">Excel .xlsx</span></span>',
-    '<span>Bảng Checklist Kiểm Thử Preview Studio <span class="feature-tag green">Excel .xlsx</span></span>'
-  );
-  html = rep(html, 
-    '<span>Automated Test Suite &amp; Regression Runner</span>',
-    '<span>Bộ kiểm thử tự động &amp; Regression Runner</span>'
+    '<span>Cẩm nang Marketing &amp; ASO nộp Store <span class="feature-tag purple">HTML offline</span></span>'
   );
   html = rep(html, 
     '<span>Get Pro Studio ($39)</span>',
