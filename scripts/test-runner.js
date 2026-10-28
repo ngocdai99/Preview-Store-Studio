@@ -1314,6 +1314,8 @@ assert(bundledHtml.includes('function parseStoreInput'), 'Bundled application de
 assert(bundledHtml.includes('function normalizeAppleApp'), 'Bundled application defines normalizeAppleApp');
 assert(bundledHtml.includes('function checkAndLoadStoreParams'), 'Bundled application defines checkAndLoadStoreParams');
 assert(bundledHtml.includes('Uses official Apple iTunes public API'), 'Store import modal includes legal disclaimer for public API usage');
+assert(bundledHtml.includes('Import from Apple App Store') && bundledHtml.includes('iOS only'), 'Store import modal explicitly designates Apple App Store and iOS only badge');
+assert(bundledHtml.includes('Google Play is not supported due to store API limits'), 'Store import modal explicitly clarifies Google Play limitation up front');
 
 const storeImport = require('../src/js/modules/store-import.js');
 const { parseStoreInput, normalizeAppleApp } = storeImport;

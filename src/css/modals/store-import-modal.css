@@ -4,6 +4,37 @@
   gap: 14px;
 }
 
+.store-import-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.store-import-title-wrap .confirm-modal-title {
+  margin-bottom: 0;
+}
+
+.store-import-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+:root[data-ui=light] .store-import-badge {
+  background: rgba(37, 99, 235, 0.08);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.22);
+}
+
 .store-import-body {
   display: flex;
   flex-direction: column;

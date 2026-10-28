@@ -271,7 +271,7 @@ async function handleStoreImportSubmit() {
   const target = parseStoreInput(val);
   if (!target) {
     if (val.includes('play.google.com') || /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]+)+$/.test(val)) {
-      setStoreImportStatus('error', 'Google Play import is unsupported. Please enter an Apple App Store link or numeric App ID.');
+      setStoreImportStatus('error', 'Google Play does not provide a public API. Please enter an Apple App Store link or numeric App ID (e.g. 324684580).');
     } else {
       setStoreImportStatus('error', 'Unrecognized App Store link or ID format. Try an Apple App Store URL or numeric App ID (e.g. 324684580).');
     }
