@@ -1262,6 +1262,7 @@ assert(bundledHtml.includes('class="gp-search-chips-wrap"') && bundledHtml.inclu
 assert(bundledHtml.includes('class="gp-search-card primary"') && bundledHtml.includes('class="gp-search-card-name"'), 'Google Play search view renders primary app result card');
 assert(bundledHtml.includes('class="shots gp-search-shots" data-shots="shots"'), 'Google Play primary search card embeds 3-screenshots carousel');
 assert(bundledHtml.includes('class="gp-search-action-btn"') && bundledHtml.includes('class="gp-search-sponsored-divider"'), 'Google Play search view includes circular action button and sponsored suggested divider');
+assert(bundledHtml.includes('gp-skel-card') && bundledHtml.includes('gp-skel-icon') && bundledHtml.includes('gp-skel-line'), 'Google Play search view includes clean skeleton secondary app cards');
 
 
 

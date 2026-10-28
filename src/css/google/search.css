@@ -145,30 +145,45 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
-.gp-dummy-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Skeleton Secondary Search Results */
+.gp-skel-card {
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
 }
 
-.gp-dummy-icon svg {
-  width: 24px;
-  height: 24px;
+.gp-skel-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background: var(--sf);
+  flex-shrink: 0;
+  border: 1px solid var(--sp);
 }
 
-.gp-dummy-icon-1 {
-  background: linear-gradient(135deg, #ef4444, #f97316);
-  color: #ffffff;
+.gp-skel-line {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--sf);
+  margin: 5px 0;
 }
 
-.gp-dummy-icon-2 {
-  background: linear-gradient(135deg, #3b82f6, #06b6d4);
-  color: #ffffff;
-}
+.gp-skel-line.w-30 { width: 30%; }
+.gp-skel-line.w-35 { width: 35%; }
+.gp-skel-line.w-40 { width: 40%; }
+.gp-skel-line.w-50 { width: 50%; }
+.gp-skel-line.w-60 { width: 60%; }
+.gp-skel-line.w-65 { width: 65%; }
+.gp-skel-line.w-70 { width: 70%; }
+.gp-skel-line.w-75 { width: 75%; }
 
-.gp-dummy-icon-3 {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: #ffffff;
+.gp-skel-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--sf);
+  border: 1px solid var(--sp);
+  flex-shrink: 0;
 }
 
 .gp-search-card-info {
