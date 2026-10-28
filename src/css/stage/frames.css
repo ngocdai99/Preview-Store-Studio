@@ -6,28 +6,28 @@
   transition:box-shadow .35s,border-radius .35s;transform-origin:center 30%;
   transform-style:preserve-3d;-webkit-backface-visibility:hidden;backface-visibility:hidden;will-change:transform,opacity;
 }
-.dev::before,.dev::after{content:'';position:absolute;width:7px;border-radius:4px;background:linear-gradient(90deg,#9ca0ab 0%,#5b5e66 50%,#25262b 100%);box-shadow:0 0 0 1px #0b0b0d}
-/* iPhone Hardware Buttons: Left (38px Action + two 68px Volume) & Right (108px Side Power) */
+.dev::before,.dev::after{content:'';position:absolute;width:5px;border-radius:3px;background:linear-gradient(90deg,#565860 0%,#36383e 55%,#1d1e22 100%);box-shadow:0 0 0 1px #0b0b0d}
+/* iPhone Hardware Buttons: Left (34px Action + two 62px Volume) & Right (98px Side Power) */
 .dev.apple:not(.ipad)::before{
-  left:-7px;top:140px;height:38px;border-radius:4px 0 0 4px;
+  left:-5px;top:144px;height:34px;border-radius:3px 0 0 3px;
   box-shadow:
     0 0 0 1px #0b0b0d,
-    2px 58px 0 #484b52,2px 88px 0 #484b52,0 58px 0 #9ca0ab,0 88px 0 #9ca0ab,0 58px 0 1px #0b0b0d,0 88px 0 1px #0b0b0d,
-    2px 140px 0 #484b52,2px 170px 0 #484b52,0 140px 0 #9ca0ab,0 170px 0 #9ca0ab,0 140px 0 1px #0b0b0d,0 170px 0 1px #0b0b0d;
+    1px 54px 0 #34363c,1px 82px 0 #34363c,0 54px 0 #565860,0 82px 0 #565860,0 54px 0 1px #0b0b0d,0 82px 0 1px #0b0b0d,
+    1px 130px 0 #34363c,1px 158px 0 #34363c,0 130px 0 #565860,0 158px 0 #565860,0 130px 0 1px #0b0b0d,0 158px 0 1px #0b0b0d;
 }
 .dev.apple:not(.ipad)::after{
-  right:-7px;top:210px;height:108px;border-radius:0 4px 4px 0;
-  background:linear-gradient(90deg,#25262b 0%,#5b5e66 50%,#9ca0ab 100%);
+  right:-5px;top:214px;height:98px;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#1d1e22 0%,#36383e 45%,#565860 100%);
 }
-/* Android Flagship Buttons: Clean Left Edge, Right Edge has 54px Power + 106px Volume Rocker */
+/* Android Flagship Buttons: Clean Left Edge, Right Edge has 48px Power + 96px Volume Rocker */
 .dev.google:not(.gtab)::before{
-  left:auto;right:-7px;top:180px;height:54px;border-radius:0 4px 4px 0;
-  background:linear-gradient(90deg,#25262b 0%,#5b5e66 50%,#9ca0ab 100%);
+  left:auto;right:-5px;top:184px;height:48px;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#1d1e22 0%,#36383e 45%,#565860 100%);
   box-shadow:0 0 0 1px #0b0b0d;
 }
 .dev.google:not(.gtab)::after{
-  right:-7px;top:252px;height:106px;border-radius:0 4px 4px 0;
-  background:linear-gradient(90deg,#25262b 0%,#5b5e66 50%,#9ca0ab 100%);
+  right:-5px;top:250px;height:96px;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#1d1e22 0%,#36383e 45%,#565860 100%);
   box-shadow:0 0 0 1px #0b0b0d;
 }
 .dev.google{border-radius:56px}

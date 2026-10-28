@@ -5,8 +5,8 @@
   box-shadow:0 0 0 1.5px #0b0b0d,0 35px 75px -15px rgba(0,0,0,.9),0 15px 32px -8px rgba(0,0,0,.6),0 0 100px -10px var(--glow),inset 0 0 0 2px rgba(255,255,255,.08);
   transition:width .32s cubic-bezier(.2,.9,.3,1.15),height .32s cubic-bezier(.2,.9,.3,1.15),box-shadow .35s,border-radius .35s;transform-origin:center top;
 }
-.dev.ipad::before{left:-7px;top:220px;height:76px;border-radius:4px 0 0 4px}
-.dev.ipad::after{right:-7px;top:220px;height:128px;border-radius:0 4px 4px 0;background:linear-gradient(90deg,#25262b 0%,#5b5e66 50%,#9ca0ab 100%)}
+.dev.ipad::before{left:-5px;top:220px;height:70px;border-radius:3px 0 0 3px}
+.dev.ipad::after{right:-5px;top:220px;height:120px;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#1d1e22 0%,#36383e 45%,#565860 100%)}
 .dev.ipad.landscape{width:980px;height:750px}
 .dev.ipad.landscape::before,.dev.ipad.landscape::after{display:none}
 .phone.ipad{
