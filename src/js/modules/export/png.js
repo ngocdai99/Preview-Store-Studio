@@ -326,6 +326,49 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             d.style.boxShadow = '0 0 0 1.5px #0b0b0d';
             d.style.filter = 'none';
           }
+          d.style.transform = 'none';
+          d.style.perspective = 'none';
+          d.style.transformStyle = 'flat';
+          d.style.willChange = 'auto';
+
+          const phone = d.querySelector('.phone');
+          if(phone){
+            phone.style.transform = 'none';
+            phone.style.perspective = 'none';
+            phone.style.transformStyle = 'flat';
+            phone.style.willChange = 'auto';
+
+            const isDark = phone.dataset.theme === 'dark';
+            const isGoogle = d.classList.contains('google');
+            const solidBg = isDark ? (isGoogle ? '#1b1b1d' : '#000000') : '#ffffff';
+            phone.style.backgroundColor = solidBg;
+            phone.style.background = solidBg;
+            phone.style.overflow = 'hidden';
+
+            const sb = phone.querySelector('.sb');
+            if(sb){
+              sb.style.backgroundColor = solidBg;
+              sb.style.background = solidBg;
+            }
+            const scr = phone.querySelector('.scr');
+            if(scr){
+              scr.style.backgroundColor = solidBg;
+              scr.style.background = solidBg;
+              scr.style.overflow = 'visible';
+              scr.style.overflowY = 'visible';
+              scr.style.overflowX = 'visible';
+              scr.scrollTop = 0;
+              scr.scrollLeft = 0;
+            }
+            const gnav = phone.querySelector('.gnav');
+            if(gnav){
+              gnav.style.backgroundColor = isDark ? '#2b2c2e' : '#f1f3f4';
+            }
+            const tab = phone.querySelector('.tab');
+            if(tab){
+              tab.style.backgroundColor = isDark ? 'rgba(22, 22, 24, 0.95)' : 'rgba(249, 249, 249, 0.95)';
+            }
+          }
         });
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
