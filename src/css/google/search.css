@@ -1,0 +1,310 @@
+/* ---------- GOOGLE PLAY SEARCH VIEW (MATERIAL YOU / ANDROID 14+) ---------- */
+.gp-search-view {
+  padding: 4px 0 24px;
+  animation: gpViewFade 0.2s ease-out;
+}
+
+@keyframes gpViewFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Top Search Bar */
+.gp-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0 12px;
+}
+
+.gp-search-back-btn {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  margin-left: -6px;
+  color: var(--t);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gp-search-back-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.gp-search-input-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.gp-search-query-text {
+  font-size: 16.5px;
+  font-weight: 500;
+  color: var(--t);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  letter-spacing: -0.01em;
+}
+
+.gp-search-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gp-search-act-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  color: var(--s);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gp-search-act-btn svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* 2. Filter Chips Row */
+.gp-search-chips-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -20px 18px;
+  padding: 0 20px 2px;
+}
+
+.gp-search-chips-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.gp-search-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--sp);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--t);
+  background: transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.gp-chip-dropdown {
+  background: var(--sf);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.gp-chip-dropdown svg {
+  width: 13px;
+  height: 13px;
+  color: var(--s);
+}
+
+/* 3. Search App Cards */
+.gp-search-card {
+  margin-bottom: 20px;
+}
+
+.gp-search-card-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gp-search-card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.phone.google[data-theme=dark] .gp-search-card-icon {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.gp-dummy-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gp-dummy-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.gp-dummy-icon-1 {
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: #ffffff;
+}
+
+.gp-dummy-icon-2 {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  color: #ffffff;
+}
+
+.gp-dummy-icon-3 {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+}
+
+.gp-search-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.gp-search-card-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--t);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gp-search-card-meta {
+  font-size: 12px;
+  color: var(--s);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gp-search-card-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--s);
+  margin-top: 4px;
+}
+
+.gp-stat-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 500;
+  color: var(--t);
+}
+
+.gp-star-ico {
+  width: 10px;
+  height: 10px;
+  fill: currentColor;
+}
+
+.gp-stat-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.gp-dl-ico {
+  width: 11px;
+  height: 11px;
+}
+
+.gp-search-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--sf);
+  border: 1px solid var(--sp);
+  color: var(--s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gp-search-action-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.gp-search-action-btn:hover {
+  background: var(--sp);
+  color: var(--t);
+}
+
+/* 4. Primary App Screenshots Row */
+.gp-search-shots {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  margin: 14px -20px 0;
+  padding: 0 20px 2px;
+}
+
+.gp-search-shots::-webkit-scrollbar {
+  display: none;
+}
+
+.gp-search-shots img,
+.gp-search-shots .sr-skel-shot {
+  height: 130px;
+  width: 73px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  background: var(--sf);
+}
+
+/* 5. Sponsored Divider */
+.gp-search-sponsored-divider {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--s);
+  padding: 14px 0 10px;
+  border-top: 1px solid var(--sp);
+  margin-top: 4px;
+}
+
+.gp-sponsored-label {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.gp-sponsored-more-btn {
+  background: transparent;
+  border: none;
+  color: var(--s);
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}

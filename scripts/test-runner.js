@@ -1256,6 +1256,14 @@ const ratio16_10 = { meta: { type: 'image/png', bytes: 100000, w: 2560, h: 1600,
 const ratioIssues = testTabIssues('tab10', ratio16_10);
 assert(ratioIssues.some(msg => msg.includes('Aspect ratio')), '16:10 screenshot (2560x1600) is flagged because Play Console strictly requires 16:9 or 9:16');
 
+// 10. Google Play Phone Search View (Material You Authenticity)
+assert(bundledHtml.includes('class="gp-search-view"') && bundledHtml.includes('class="gp-search-bar"'), 'Bundled HTML includes Material You Google Play search view and top bar');
+assert(bundledHtml.includes('class="gp-search-chips-wrap"') && bundledHtml.includes('gp-chip-dropdown'), 'Google Play search view includes filter chips carousel with rating dropdown');
+assert(bundledHtml.includes('class="gp-search-card primary"') && bundledHtml.includes('class="gp-search-card-name"'), 'Google Play search view renders primary app result card');
+assert(bundledHtml.includes('class="shots gp-search-shots" data-shots="shots"'), 'Google Play primary search card embeds 3-screenshots carousel');
+assert(bundledHtml.includes('class="gp-search-action-btn"') && bundledHtml.includes('class="gp-search-sponsored-divider"'), 'Google Play search view includes circular action button and sponsored suggested divider');
+
+
 
 // ---------------------------------------------------------------------
 // Suite 15: Modern Reset Draft Confirmation Modal

@@ -562,6 +562,17 @@ function setView(v){
       }
     }
   });
+  document.querySelectorAll('.phone.google .gnav').forEach(navBar => {
+    const items = navBar.querySelectorAll(':scope > div');
+    if(items.length >= 4){
+      items.forEach(t => t.classList.remove('on'));
+      if(v === 'search'){
+        items[2].classList.add('on');
+      } else {
+        items[1].classList.add('on');
+      }
+    }
+  });
   if(typeof syncAppleNavScroll === 'function') syncAppleNavScroll();
 }
 
