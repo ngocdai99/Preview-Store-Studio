@@ -7612,6 +7612,105 @@ if(optExportTransparent) optExportTransparent.onclick = () => exportPNG(3, {tran
 const optExportScreen = $('optExportScreen');
 if(optExportScreen) optExportScreen.onclick = () => exportPNG(3, {frameless:true});
 
+// ─── Export Mockup Image Modal Controller ───
+const exportModal = $('exportImageModal');
+const optOpenModal = $('optOpenExportModal');
+const btnCloseModal = $('exportModalClose');
+const btnCancelModal = $('exportModalCancel');
+const btnCopyModal = $('exportModalCopy');
+const btnDownloadModal = $('exportModalDownload');
+
+const EXPORT_PREFS_KEY = 'sps_export_img_prefs';
+let exportPrefs = {
+  frame: 'device',
+  bg: 'transparent',
+  scale: 3
+};
+
+try {
+  const saved = localStorage.getItem(EXPORT_PREFS_KEY);
+  if (saved) Object.assign(exportPrefs, JSON.parse(saved));
+} catch(_) {}
+
+function syncExportModalUI() {
+  if (!exportModal) return;
+  exportModal.querySelectorAll('[data-opt="frame"]').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === exportPrefs.frame);
+  });
+  exportModal.querySelectorAll('[data-opt="bg"]').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === exportPrefs.bg);
+  });
+  exportModal.querySelectorAll('[data-opt="scale"]').forEach(b => {
+    b.classList.toggle('active', Number(b.dataset.val) === Number(exportPrefs.scale));
+  });
+}
+
+function saveExportPrefs() {
+  try {
+    localStorage.setItem(EXPORT_PREFS_KEY, JSON.stringify(exportPrefs));
+  } catch(_) {}
+}
+
+function openExportModal() {
+  if (!exportModal) return;
+  syncExportModalUI();
+  exportModal.classList.add('open');
+  exportModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeExportModal() {
+  if (!exportModal) return;
+  exportModal.classList.remove('open');
+  exportModal.setAttribute('aria-hidden', 'true');
+}
+
+if (optOpenModal) optOpenModal.onclick = openExportModal;
+if (btnCloseModal) btnCloseModal.onclick = closeExportModal;
+if (btnCancelModal) btnCancelModal.onclick = closeExportModal;
+if (exportModal) {
+  exportModal.addEventListener('click', e => {
+    if (e.target === exportModal) closeExportModal();
+  });
+  exportModal.querySelectorAll('.export-seg-btn, .export-scale-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const opt = btn.dataset.opt;
+      const val = btn.dataset.val;
+      if (opt === 'frame') exportPrefs.frame = val;
+      else if (opt === 'bg') exportPrefs.bg = val;
+      else if (opt === 'scale') exportPrefs.scale = Number(val);
+      syncExportModalUI();
+      saveExportPrefs();
+    });
+  });
+}
+
+if (btnDownloadModal) {
+  btnDownloadModal.onclick = () => {
+    closeExportModal();
+    exportPNG(exportPrefs.scale, {
+      frameless: exportPrefs.frame === 'screen',
+      transparent: exportPrefs.bg === 'transparent'
+    });
+  };
+}
+
+if (btnCopyModal) {
+  btnCopyModal.onclick = () => {
+    closeExportModal();
+    exportPNG(exportPrefs.scale, {
+      frameless: exportPrefs.frame === 'screen',
+      transparent: exportPrefs.bg === 'transparent',
+      action: 'copy'
+    });
+  };
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && exportModal && exportModal.classList.contains('open')) {
+    closeExportModal();
+  }
+});
+
 // html2canvas can drop parts of SVG images (filters, glow). Rasterize SVG data-URI images to PNG first,
 // swap them in for the capture, and return a function that puts the originals back.
 async function rasterizeSvgImages(root, scale){
@@ -7834,8 +7933,30 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     const typeLabel = opts.frameless ? 'screen' : (opts.transparent ? 'mockup-transparent' : 'preview');
     link.download = `${slug}-${devSlug}-${typeLabel}-${scaleFactor}x.png`;
     link.href = canvas.toDataURL('image/png');
-    link.click();
-    showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : (opts.transparent ? ', transparent cutout' : '')}) downloaded!`, 'ok');
+
+    if(opts.action === 'copy'){
+      if(navigator.clipboard && window.ClipboardItem && canvas.toBlob){
+        canvas.toBlob(blob => {
+          if(!blob){
+            link.click();
+            showToast('Downloaded PNG (clipboard blob failed)', 'info');
+            return;
+          }
+          navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+            .then(() => showToast('Image copied to clipboard! Ready to paste into Figma/Slack.', 'ok'))
+            .catch(() => {
+              link.click();
+              showToast('Downloaded PNG (clipboard write restricted)', 'info');
+            });
+        }, 'image/png');
+      } else {
+        link.click();
+        showToast('Downloaded PNG (clipboard not supported)', 'info');
+      }
+    } else {
+      link.click();
+      showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : (opts.transparent ? ', transparent cutout' : '')}) downloaded!`, 'ok');
+    }
   }catch(err){
     console.error('Export PNG failed:', err);
     showToast('Failed to generate image: ' + err.message, 'warn', 4000);

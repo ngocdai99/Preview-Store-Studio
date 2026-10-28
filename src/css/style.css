@@ -11,5 +11,6 @@
 @import "modals/icon-modal.css";
 @import "modals/confirm-modal.css";
 @import "modals/store-import-modal.css";
+@import "modals/export-modal.css";
 @import "themes.css";
 @import "responsive.css";

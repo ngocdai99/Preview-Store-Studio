@@ -704,6 +704,9 @@ assert(!bundledHtml.includes('function downloadAllTabletsScreenshots'), 'downloa
 assert(!bundledHtml.includes('function downloadAllGooglePlayBundle'), 'downloadAllGooglePlayBundle routine is removed from bundle');
 
 // 2. Verify high-value presentation exports, metadata copies, and project backup options are intact
+assert(bundledHtml.includes('id="optOpenExportModal"'), 'Export menu features unified Export Mockup Image modal trigger (#optOpenExportModal)');
+assert(bundledHtml.includes('id="exportImageModal"'), 'Export Image Modal DOM is present (#exportImageModal)');
+assert(bundledHtml.includes('id="exportModalDownload"') && bundledHtml.includes('id="exportModalCopy"'), 'Export Image Modal contains Download PNG and Copy Image actions');
 assert(bundledHtml.includes('id="optExportPNG3x"'), 'Export menu preserves 3x PNG device frame export (#optExportPNG3x)');
 assert(bundledHtml.includes('id="optExportTransparent"'), 'Export menu includes transparent cutout export (#optExportTransparent)');
 assert(bundledHtml.includes('id="optExportScreen"'), 'Export menu preserves frameless store page export (#optExportScreen)');

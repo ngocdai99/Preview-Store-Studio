@@ -1,0 +1,328 @@
+/* ─── Export Mockup Image Options Modal ─── */
+.export-modal-card {
+  max-width: 440px;
+  gap: 18px;
+}
+
+.export-modal-icon-wrap {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.28);
+  color: #38bdf8;
+}
+
+.export-modal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-modal-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+.export-modal-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 6px;
+  margin: -6px -6px 0 0;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.export-modal-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.export-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.export-opt-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.export-opt-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #94a3b8;
+}
+
+.export-opt-segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.export-seg-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  cursor: pointer;
+  outline: none;
+  text-align: left;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.export-seg-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.export-seg-btn.active {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.export-seg-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.export-seg-btn.active .export-seg-icon {
+  color: #38bdf8;
+}
+
+.export-seg-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.export-seg-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.export-seg-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.export-seg-sub {
+  font-size: 11px;
+  line-height: 1.3;
+  color: #94a3b8;
+}
+
+.export-seg-btn.active .export-seg-sub {
+  color: #bae6fd;
+}
+
+/* Resolution Scale Grid */
+.export-scale-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.export-scale-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.export-scale-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.export-scale-btn.active {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35);
+}
+
+.export-scale-val {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.export-scale-sub {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.export-scale-btn.active .export-scale-sub {
+  color: #bae6fd;
+}
+
+.export-scale-tag {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* Action Buttons */
+.export-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.export-btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f1f5f9;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.export-btn-copy:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.export-btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: #2563eb;
+  border: 1px solid #1d4ed8;
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.export-btn-download:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Light Theme support */
+:root[data-ui=light] .export-modal-close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #0f172a;
+}
+
+:root[data-ui=light] .export-opt-label {
+  color: #475569;
+}
+
+:root[data-ui=light] .export-seg-btn,
+:root[data-ui=light] .export-scale-btn {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+:root[data-ui=light] .export-seg-btn:hover,
+:root[data-ui=light] .export-scale-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+:root[data-ui=light] .export-seg-btn.active,
+:root[data-ui=light] .export-scale-btn.active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #1e3a8a;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+}
+
+:root[data-ui=light] .export-seg-btn.active .export-seg-sub,
+:root[data-ui=light] .export-scale-btn.active .export-scale-sub {
+  color: #1d4ed8;
+}
+
+:root[data-ui=light] .export-btn-copy {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+:root[data-ui=light] .export-btn-copy:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+:root[data-ui=light] .export-btn-download {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+}
+
+:root[data-ui=light] .export-btn-download:hover {
+  background: #1e293b;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
+}
