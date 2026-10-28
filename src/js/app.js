@@ -7607,6 +7607,8 @@ if($('optResetDefault')){
 if($('optExportPNG')) $('optExportPNG').onclick = () => exportPNG(2);
 const optExport3x = $('optExportPNG3x');
 if(optExport3x) optExport3x.onclick = () => exportPNG(3);
+const optExportTransparent = $('optExportTransparent');
+if(optExportTransparent) optExportTransparent.onclick = () => exportPNG(3, {transparent:true});
 const optExportScreen = $('optExportScreen');
 if(optExportScreen) optExportScreen.onclick = () => exportPNG(3, {frameless:true});
 
@@ -7769,7 +7771,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.transition = 'none';
         if(isDual){
           clonedEl.style.gap = '28px';
-          if(opts.frameless){
+          if(opts.frameless || opts.transparent){
             clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
           }
         } else {
@@ -7806,6 +7808,10 @@ async function exportPNG(scaleFactor = 2, opts = {}){
               addBtn('right', 250, 96);
             }
           }
+          if(opts.transparent){
+            d.style.boxShadow = '0 0 0 1.5px #0b0b0d';
+            d.style.filter = 'none';
+          }
         });
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
@@ -7819,16 +7825,17 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
       }
     });
-    if(EXPORT_WM) canvas = addMockupNote(canvas, scaleFactor);
+    if(EXPORT_WM && !opts.transparent) canvas = addMockupNote(canvas, scaleFactor);
 
     const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
     let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     if(!slug) slug = 'app';
     const link = document.createElement('a');
-    link.download = `${slug}-${devSlug}-${opts.frameless ? 'screen' : 'preview'}-${scaleFactor}x.png`;
+    const typeLabel = opts.frameless ? 'screen' : (opts.transparent ? 'mockup-transparent' : 'preview');
+    link.download = `${slug}-${devSlug}-${typeLabel}-${scaleFactor}x.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
-    showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : ''}) downloaded!`, 'ok');
+    showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : (opts.transparent ? ', transparent cutout' : '')}) downloaded!`, 'ok');
   }catch(err){
     console.error('Export PNG failed:', err);
     showToast('Failed to generate image: ' + err.message, 'warn', 4000);

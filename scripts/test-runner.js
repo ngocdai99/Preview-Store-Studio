@@ -705,6 +705,7 @@ assert(!bundledHtml.includes('function downloadAllGooglePlayBundle'), 'downloadA
 
 // 2. Verify high-value presentation exports, metadata copies, and project backup options are intact
 assert(bundledHtml.includes('id="optExportPNG3x"'), 'Export menu preserves 3x PNG device frame export (#optExportPNG3x)');
+assert(bundledHtml.includes('id="optExportTransparent"'), 'Export menu includes transparent cutout export (#optExportTransparent)');
 assert(bundledHtml.includes('id="optExportScreen"'), 'Export menu preserves frameless store page export (#optExportScreen)');
 assert(bundledHtml.includes('id="btnCopyText"'), 'Export menu preserves clipboard metadata copy (#btnCopyText)');
 assert(bundledHtml.includes('id="optExportMD"'), 'Export menu preserves Markdown listing export (#optExportMD)');
