@@ -171,11 +171,14 @@
 .gp-skel-line.w-30 { width: 30%; }
 .gp-skel-line.w-35 { width: 35%; }
 .gp-skel-line.w-40 { width: 40%; }
+.gp-skel-line.w-45 { width: 45%; }
 .gp-skel-line.w-50 { width: 50%; }
+.gp-skel-line.w-55 { width: 55%; }
 .gp-skel-line.w-60 { width: 60%; }
 .gp-skel-line.w-65 { width: 65%; }
 .gp-skel-line.w-70 { width: 70%; }
 .gp-skel-line.w-75 { width: 75%; }
+.gp-skel-line.w-80 { width: 80%; }
 
 .gp-skel-btn {
   width: 36px;
