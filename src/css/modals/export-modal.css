@@ -1,12 +1,12 @@
-/* ─── Export Mockup Image Options Modal (Refined Linear / Apple Style) ─── */
+/* ─── Export Mockup Image Options Modal (Visual Studio) ─── */
 .export-modal-card {
-  max-width: 390px;
-  padding: 20px 22px 18px;
+  max-width: 380px;
+  padding: 18px 20px 16px;
   background: #0d121f;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
-  box-shadow: 0 24px 56px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  gap: 16px;
+  box-shadow: 0 24px 56px -12px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  gap: 14px;
 }
 
 .export-modal-header {
@@ -19,12 +19,12 @@
 .export-modal-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 11px;
 }
 
 .export-modal-icon-wrap {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.22) 0%, rgba(56, 189, 248, 0.12) 100%);
   border: 1px solid rgba(56, 189, 248, 0.3);
@@ -37,7 +37,7 @@
 }
 
 .export-modal-title {
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 700;
   color: #f8fafc;
   margin: 0;
@@ -46,7 +46,7 @@
 }
 
 .export-modal-subtitle {
-  font-size: 12px;
+  font-size: 11.5px;
   color: #94a3b8;
   margin: 2px 0 0 0;
   line-height: 1.35;
@@ -56,10 +56,10 @@
   background: transparent;
   border: none;
   color: #64748b;
-  padding: 6px;
+  padding: 5px;
   margin: -4px -6px 0 0;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,20 +72,168 @@
   color: #f1f5f9;
 }
 
+/* ─── Visual Interactive Mini-Preview Canvas ─── */
+.export-preview-stage {
+  position: relative;
+  height: 104px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: #070a10;
+  background-image: 
+    linear-gradient(45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%), 
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.04) 75%), 
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 14px 14px;
+  background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
+}
+
+.export-preview-mockup {
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.export-preview-bezel {
+  width: 48px;
+  height: 84px;
+  border-radius: 11px;
+  background: #23252a;
+  padding: 2px;
+  border: 1px solid #141518;
+  position: relative;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.export-preview-btn-left {
+  position: absolute;
+  left: -2px;
+  top: 18px;
+  width: 2px;
+  height: 16px;
+  border-radius: 1px 0 0 1px;
+  background: #565860;
+  transition: opacity 0.2s ease;
+}
+
+.export-preview-btn-right {
+  position: absolute;
+  right: -2px;
+  top: 24px;
+  width: 2px;
+  height: 12px;
+  border-radius: 0 1px 1px 0;
+  background: #565860;
+  transition: opacity 0.2s ease;
+}
+
+.export-preview-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 3px;
+  gap: 3px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+}
+
+.export-preview-hole {
+  width: 8px;
+  height: 3px;
+  border-radius: 3px;
+  background: #000;
+  margin-bottom: 3px;
+}
+
+.export-preview-head {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  margin-bottom: 2px;
+}
+
+.export-preview-line {
+  height: 2.5px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.export-preview-line.w-60 { width: 60%; }
+.export-preview-line.w-40 { width: 40%; }
+
+/* Frameless / Screen Only state */
+.export-preview-mockup.frameless .export-preview-bezel {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  width: 44px;
+  height: 80px;
+}
+
+.export-preview-mockup.frameless .export-preview-btn-left,
+.export-preview-mockup.frameless .export-preview-btn-right {
+  opacity: 0;
+}
+
+.export-preview-mockup.frameless .export-preview-screen {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Badge overlay */
+.export-preview-badge {
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  background: rgba(13, 18, 31, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 2.5px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.1px;
+}
+
+.export-preview-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+/* ─── Body Controls ─── */
 .export-modal-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .export-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .export-field-label {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -98,8 +246,8 @@
   grid-template-columns: 1fr 1fr;
   background: rgba(0, 0, 0, 0.32);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 11px;
-  padding: 3px;
+  border-radius: 10px;
+  padding: 2.5px;
   gap: 3px;
 }
 
@@ -107,13 +255,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 7px 10px;
+  gap: 6px;
+  padding: 6.5px 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: 7.5px;
   background: transparent;
   color: #94a3b8;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   outline: none;
@@ -135,8 +283,8 @@
 }
 
 .export-seg-ico {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
   opacity: 0.8;
 }
@@ -146,56 +294,25 @@
 }
 
 .export-tag-best {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  padding: 1px 5px;
+  padding: 1px 4.5px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.22);
   color: #ffffff;
-  margin-left: 2px;
+  margin-left: 1px;
 }
 
-/* Summary Badge */
-.export-summary-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  margin-top: 2px;
-}
-
-.export-summary-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
-  flex-shrink: 0;
-}
-
-.export-summary-text {
-  font-size: 11.5px;
-  font-weight: 500;
-  color: #94a3b8;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Footer & Actions */
+/* ─── Footer & Action Buttons ─── */
 .export-modal-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 4px;
-  padding-top: 14px;
+  margin-top: 2px;
+  padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
@@ -208,8 +325,8 @@
 .export-btn-ghost {
   background: transparent;
   border: none;
-  padding: 7px 10px;
-  font-size: 12.5px;
+  padding: 6.5px 9px;
+  font-size: 12px;
   font-weight: 500;
   color: #64748b;
   cursor: pointer;
@@ -225,9 +342,9 @@
 .export-btn-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 13px;
-  font-size: 12.5px;
+  gap: 5px;
+  padding: 7px 12px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.07);
@@ -248,8 +365,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 16px;
-  font-size: 12.5px;
+  padding: 7px 15px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 8px;
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
@@ -267,7 +384,7 @@
   transform: translateY(-1px);
 }
 
-/* Light Mode Overrides */
+/* ─── Light Mode Overrides ─── */
 :root[data-ui=light] .export-modal-card {
   background: #ffffff;
   border-color: #e2e8f0;
@@ -289,6 +406,42 @@
 :root[data-ui=light] .export-modal-close:hover {
   background: #f1f5f9;
   color: #0f172a;
+}
+
+:root[data-ui=light] .export-preview-stage {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  background-image: 
+    linear-gradient(45deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%), 
+    linear-gradient(-45deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.03) 75%), 
+    linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.03) 75%);
+}
+
+:root[data-ui=light] .export-preview-bezel {
+  background: #23252a;
+  border-color: #141518;
+}
+
+:root[data-ui=light] .export-preview-screen {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-ui=light] .export-preview-line {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+:root[data-ui=light] .export-preview-mockup.frameless .export-preview-screen {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-ui=light] .export-preview-badge {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #cbd5e1;
+  color: #334155;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 :root[data-ui=light] .export-field-label {
@@ -318,15 +471,6 @@
 :root[data-ui=light] .export-tag-best {
   background: #2563eb;
   color: #ffffff;
-}
-
-:root[data-ui=light] .export-summary-bar {
-  background: #f8fafc;
-  border-color: #e2e8f0;
-}
-
-:root[data-ui=light] .export-summary-text {
-  color: #64748b;
 }
 
 :root[data-ui=light] .export-modal-footer {

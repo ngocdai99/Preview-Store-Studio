@@ -7637,17 +7637,18 @@ function syncExportModalUI() {
   exportModal.querySelectorAll('[data-opt="frame"]').forEach(b => {
     b.classList.toggle('active', b.dataset.val === exportPrefs.frame);
   });
-  exportModal.querySelectorAll('[data-opt="bg"]').forEach(b => {
-    b.classList.toggle('active', b.dataset.val === exportPrefs.bg);
-  });
   exportModal.querySelectorAll('[data-opt="scale"]').forEach(b => {
     b.classList.toggle('active', Number(b.dataset.val) === Number(exportPrefs.scale));
   });
+  const mockupEl = $('exportPreviewMockup');
+  if (mockupEl) {
+    mockupEl.classList.toggle('frameless', exportPrefs.frame === 'screen');
+  }
   const summaryEl = $('exportSummaryBadge');
   if (summaryEl) {
     const frameLabel = exportPrefs.frame === 'screen' ? 'Screen Only' : 'Device Frame';
-    const bgLabel = exportPrefs.bg === 'transparent' ? 'Transparent Cutout' : 'With Shadow';
-    summaryEl.textContent = `${exportPrefs.scale}x PNG · ${frameLabel} · ${bgLabel}`;
+    const scaleLabel = exportPrefs.scale === 3 ? '3x Ultra HD' : '2x HD';
+    summaryEl.textContent = `${scaleLabel} · ${frameLabel} · Transparent`;
   }
 }
 
@@ -7695,7 +7696,7 @@ if (btnDownloadModal) {
     closeExportModal();
     exportPNG(exportPrefs.scale, {
       frameless: exportPrefs.frame === 'screen',
-      transparent: exportPrefs.bg === 'transparent'
+      transparent: true
     });
   };
 }
@@ -7705,7 +7706,7 @@ if (btnCopyModal) {
     closeExportModal();
     exportPNG(exportPrefs.scale, {
       frameless: exportPrefs.frame === 'screen',
-      transparent: exportPrefs.bg === 'transparent',
+      transparent: true,
       action: 'copy'
     });
   };
