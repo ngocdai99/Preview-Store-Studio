@@ -29,11 +29,17 @@ try {
 
 function syncExportModalUI() {
   if (!exportModal) return;
-  exportModal.querySelectorAll('[data-opt="frame"]').forEach(b => {
-    b.classList.toggle('active', b.dataset.val === exportPrefs.frame);
+  exportModal.querySelectorAll('[data-opt="frame"]').forEach(el => {
+    const isAct = el.dataset.val === exportPrefs.frame;
+    el.classList.toggle('active', isAct);
+    const radio = el.querySelector('input[type="radio"]');
+    if (radio) radio.checked = isAct;
   });
-  exportModal.querySelectorAll('[data-opt="scale"]').forEach(b => {
-    b.classList.toggle('active', Number(b.dataset.val) === Number(exportPrefs.scale));
+  exportModal.querySelectorAll('[data-opt="scale"]').forEach(el => {
+    const isAct = Number(el.dataset.val) === Number(exportPrefs.scale);
+    el.classList.toggle('active', isAct);
+    const radio = el.querySelector('input[type="radio"]');
+    if (radio) radio.checked = isAct;
   });
   const mockupEl = $('exportPreviewMockup');
   if (mockupEl) {
@@ -73,13 +79,20 @@ if (exportModal) {
   exportModal.addEventListener('click', e => {
     if (e.target === exportModal) closeExportModal();
   });
-  exportModal.querySelectorAll('.export-seg-btn, .export-scale-btn').forEach(btn => {
+  exportModal.querySelectorAll('.export-radio-item, .export-seg-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const opt = btn.dataset.opt;
       const val = btn.dataset.val;
       if (opt === 'frame') exportPrefs.frame = val;
-      else if (opt === 'bg') exportPrefs.bg = val;
       else if (opt === 'scale') exportPrefs.scale = Number(val);
+      syncExportModalUI();
+      saveExportPrefs();
+    });
+  });
+  exportModal.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.name === 'exportFrame') exportPrefs.frame = radio.value;
+      else if (radio.name === 'exportScale') exportPrefs.scale = Number(radio.value);
       syncExportModalUI();
       saveExportPrefs();
     });

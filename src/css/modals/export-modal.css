@@ -241,68 +241,112 @@
   padding-left: 1px;
 }
 
-.export-seg-track {
+/* ─── Modern Radio Controls ─── */
+.export-radio-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: rgba(0, 0, 0, 0.32);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 2.5px;
-  gap: 3px;
+  gap: 8px;
 }
 
-.export-seg-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6.5px 10px;
-  border: none;
-  border-radius: 7.5px;
-  background: transparent;
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.16s ease;
-  user-select: none;
+.export-radio-item {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8.5px;
+  padding: 8px 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.export-seg-btn:hover {
-  color: #f8fafc;
-  background: rgba(255, 255, 255, 0.05);
+.export-radio-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
-.export-seg-btn.active {
-  background: #2563eb;
-  color: #ffffff;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+.export-radio-item.active {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.42);
+  box-shadow: 0 0 12px -2px rgba(56, 189, 248, 0.18);
 }
 
-.export-seg-ico {
+/* Visually hide native radio while preserving full accessibility & keyboard navigation */
+.export-radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Custom delicate radio indicator */
+.export-radio-indicator {
   width: 14px;
   height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  background: transparent;
   flex-shrink: 0;
-  opacity: 0.8;
+  position: relative;
+  transition: all 0.16s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.export-seg-btn.active .export-seg-ico {
-  opacity: 1;
+.export-radio-item:hover .export-radio-indicator {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.export-radio-item.active .export-radio-indicator {
+  border-color: #38bdf8;
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.export-radio-item.active .export-radio-indicator::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #0d121f;
+}
+
+/* Label text & badge */
+.export-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 5.5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.export-radio-item:hover .export-radio-label {
+  color: #cbd5e1;
+}
+
+.export-radio-item.active .export-radio-label {
+  color: #f8fafc;
+  font-weight: 600;
 }
 
 .export-tag-best {
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.5px;
   padding: 1px 4.5px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.22);
-  color: #ffffff;
-  margin-left: 1px;
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  line-height: 1.2;
 }
 
 /* ─── Footer & Action Buttons ─── */
@@ -448,29 +492,56 @@
   color: #64748b;
 }
 
-:root[data-ui=light] .export-seg-track {
-  background: #f1f5f9;
+:root[data-ui=light] .export-radio-item {
+  background: #f8fafc;
   border-color: #e2e8f0;
 }
 
-:root[data-ui=light] .export-seg-btn {
+:root[data-ui=light] .export-radio-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+:root[data-ui=light] .export-radio-item.active {
+  background: rgba(37, 99, 235, 0.06);
+  border-color: #2563eb;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.12);
+}
+
+:root[data-ui=light] .export-radio-indicator {
+  border-color: #94a3b8;
+}
+
+:root[data-ui=light] .export-radio-item:hover .export-radio-indicator {
+  border-color: #475569;
+}
+
+:root[data-ui=light] .export-radio-item.active .export-radio-indicator {
+  border-color: #2563eb;
+  background: #2563eb;
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+
+:root[data-ui=light] .export-radio-item.active .export-radio-indicator::after {
+  background: #ffffff;
+}
+
+:root[data-ui=light] .export-radio-label {
   color: #64748b;
 }
 
-:root[data-ui=light] .export-seg-btn:hover {
-  color: #0f172a;
-  background: rgba(255, 255, 255, 0.6);
+:root[data-ui=light] .export-radio-item:hover .export-radio-label {
+  color: #1e293b;
 }
 
-:root[data-ui=light] .export-seg-btn.active {
-  background: #ffffff;
+:root[data-ui=light] .export-radio-item.active .export-radio-label {
   color: #0f172a;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
 :root[data-ui=light] .export-tag-best {
-  background: #2563eb;
-  color: #ffffff;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  border-color: rgba(37, 99, 235, 0.25);
 }
 
 :root[data-ui=light] .export-modal-footer {

@@ -48,35 +48,37 @@
       <!-- 1. Framing Choice -->
       <div class="export-field">
         <span class="export-field-label">Framing</span>
-        <div class="export-seg-track" role="radiogroup" aria-label="Framing">
-          <button type="button" class="export-seg-btn active" data-opt="frame" data-val="device">
-            <svg class="export-seg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="5" y="2" width="14" height="20" rx="3"></rect>
-              <line x1="12" y1="18" x2="12.01" y2="18"></line>
-            </svg>
-            <span>Device Frame</span>
-          </button>
-          <button type="button" class="export-seg-btn" data-opt="frame" data-val="screen">
-            <svg class="export-seg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="3"></rect>
-              <line x1="3" y1="9" x2="21" y2="9"></line>
-            </svg>
-            <span>Screen Only</span>
-          </button>
+        <div class="export-radio-group" role="radiogroup" aria-label="Framing">
+          <label class="export-radio-item active" data-opt="frame" data-val="device">
+            <input type="radio" name="exportFrame" value="device" class="export-radio-input" checked>
+            <span class="export-radio-indicator"></span>
+            <span class="export-radio-label">Device Frame</span>
+          </label>
+          <label class="export-radio-item" data-opt="frame" data-val="screen">
+            <input type="radio" name="exportFrame" value="screen" class="export-radio-input">
+            <span class="export-radio-indicator"></span>
+            <span class="export-radio-label">Screen Only</span>
+          </label>
         </div>
       </div>
 
       <!-- 2. Scale / Resolution Choice -->
       <div class="export-field">
         <span class="export-field-label">Resolution</span>
-        <div class="export-seg-track" role="radiogroup" aria-label="Resolution">
-          <button type="button" class="export-seg-btn" data-opt="scale" data-val="2">
-            <span>2x HD</span>
-          </button>
-          <button type="button" class="export-seg-btn active" data-opt="scale" data-val="3">
-            <span>3x Ultra HD</span>
-            <span class="export-tag-best">Retina</span>
-          </button>
+        <div class="export-radio-group" role="radiogroup" aria-label="Resolution">
+          <label class="export-radio-item" data-opt="scale" data-val="2">
+            <input type="radio" name="exportScale" value="2" class="export-radio-input">
+            <span class="export-radio-indicator"></span>
+            <span class="export-radio-label">2x HD</span>
+          </label>
+          <label class="export-radio-item active" data-opt="scale" data-val="3">
+            <input type="radio" name="exportScale" value="3" class="export-radio-input" checked>
+            <span class="export-radio-indicator"></span>
+            <span class="export-radio-label">
+              <span>3x Ultra HD</span>
+              <span class="export-tag-best">Retina</span>
+            </span>
+          </label>
         </div>
       </div>
     </div>
