@@ -139,18 +139,25 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
     const w = target.offsetWidth;
     const h = target.offsetHeight;
+    const padX = opts.frameless ? 0 : 6;
 
     let canvas = await html2canvas(target, {
       backgroundColor: null,
       scale: scaleFactor,
-      width: w,
+      x: -padX,
+      width: w + padX * 2,
       height: h,
-      windowWidth: Math.max(document.documentElement.clientWidth, w + 120),
+      windowWidth: Math.max(document.documentElement.clientWidth, w + 140),
       windowHeight: Math.max(document.documentElement.clientHeight, h + 120),
       useCORS: true,
       allowTaint: true,
       logging: false,
       onclone: (clonedDoc, clonedEl) => {
+        // Hide CSS pseudo-element buttons so html2canvas renders explicit hardware button nodes cleanly
+        const btnStyle = clonedDoc.createElement('style');
+        btnStyle.textContent = '.dev::before, .dev::after { display: none !important; }';
+        clonedDoc.head.appendChild(btnStyle);
+
         clonedEl.style.zoom = '1';
         clonedEl.style.transform = 'none';
         clonedEl.style.animation = 'none';
@@ -174,6 +181,25 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             d.style.boxShadow = 'none';
             d.style.width = 'auto';
             d.style.height = 'auto';
+          } else if(!opts.frameless && !d.classList.contains('landscape') && !d.classList.contains('gtab')){
+            const addBtn = (side, top, height) => {
+              const b = clonedDoc.createElement('div');
+              const isLeft = side === 'left';
+              b.style.cssText = `position:absolute;${isLeft ? 'left:-4px;border-radius:3px 0 0 3px;background:linear-gradient(90deg,#3a3b40,#1a1b1e)' : 'right:-4px;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#1a1b1e,#3a3b40)'};top:${top}px;width:4px;height:${height}px;pointer-events:none;`;
+              d.appendChild(b);
+            };
+            if(d.classList.contains('ipad')){
+              addBtn('left', 220, 70);
+              addBtn('right', 220, 120);
+            } else if(d.classList.contains('apple')){
+              addBtn('left', 146, 32);
+              addBtn('left', 200, 60);
+              addBtn('left', 274, 60);
+              addBtn('right', 215, 96);
+            } else if(d.classList.contains('google')){
+              addBtn('right', 185, 46);
+              addBtn('right', 250, 94);
+            }
           }
         });
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
