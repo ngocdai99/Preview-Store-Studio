@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Play Tablet Layout · SRS Interactive Reference</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #151b28;
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --g-green: #00875f;
+      --g-green-hover: #00704f;
+      --g-green-light: #00a3ff;
+      --star: #eab308;
+      --chip-bg: rgba(255, 255, 255, 0.08);
+      --chip-active-bg: rgba(0, 135, 95, 0.2);
+      --chip-active-text: #34d399;
+      --chip-active-border: rgba(52, 211, 153, 0.4);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: rgba(0, 0, 0, 0.1);
+      --text: #0f172a;
+      --muted: #64748b;
+      --chip-bg: rgba(0, 0, 0, 0.05);
+      --chip-active-bg: rgba(0, 135, 95, 0.12);
+      --chip-active-text: #065f46;
+      --chip-active-border: rgba(6, 95, 70, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px 60px;
+    }
+
+    /* Top Spec Banner & Controls */
+    .spec-header {
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .spec-title h1 {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .spec-title p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .spec-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(0, 135, 95, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .spec-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .ctrl-btn:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .ctrl-btn.active {
+      background: var(--g-green);
+      color: #ffffff;
+      border-color: var(--g-green);
+    }
+
+    /* Tablet Hardware Bezel & Viewport */
+    .tablet-stage {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      overflow-x: auto;
+      padding: 20px 0;
+    }
+
+    .dev-gtab {
+      background: linear-gradient(145deg, #4b4c52 0%, #1c1d22 25%, #101114 60%, #303138 100%);
+      box-shadow: 0 0 0 2px #0a0b0e, 0 35px 80px -15px rgba(0, 0, 0, 0.8), 0 0 60px rgba(0, 135, 95, 0.15);
+      position: relative;
+      user-select: none;
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    /* 10-inch Form Factor (Default) */
+    .dev-gtab.tab10 {
+      --sw: 1024px;
+      --sh: 640px;
+      --pad: 18px;
+      --gh: 240px;
+      width: calc(var(--sw) + var(--pad) * 2);
+      height: calc(var(--sh) + var(--pad) * 2);
+      padding: var(--pad);
+      border-radius: 36px;
+    }
+
+    /* 7-inch Form Factor */
+    .dev-gtab.tab7 {
+      --sw: 768px;
+      --sh: 480px;
+      --pad: 16px;
+      --gh: 175px;
+      width: calc(var(--sw) + var(--pad) * 2);
+      height: calc(var(--sh) + var(--pad) * 2);
+      padding: var(--pad);
+      border-radius: 30px;
+    }
+
+    /* Front Facing Camera */
+    .gt-camera {
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #000;
+      box-shadow: 0 0 0 2px #18191d;
+      z-index: 20;
+    }
+
+    /* Tablet Screen Canvas */
+    .gt-screen {
+      width: var(--sw);
+      height: var(--sh);
+      border-radius: 20px;
+      background: var(--card-bg);
+      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Status Bar */
+    .gt-sb {
+      height: 28px;
+      padding: 6px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    /* App Top Navigation Bar */
+    .gt-top-nav {
+      height: 48px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .gt-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .gt-back-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gt-search-input {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: var(--text);
+      width: 280px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gt-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+    }
+
+    /* Scrollable App Listing Content */
+    .gt-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── DUAL-COLUMN HERO (KEY TABLET ARCHITECTURE) ── */
+    .gt-hero {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .tab7 .gt-hero {
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+    }
+
+    /* Left Hero: App Identity & Actions */
+    .gt-hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .gt-identity {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .gt-icon {
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
+      background: #000;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .tab7 .gt-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+    }
+
+    .gt-meta h2 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.2px;
+    }
+
+    .gt-dev-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: #34d399;
+      margin-top: 3px;
+    }
+
+    .gt-tags-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* Quick Metrics Row */
+    .gt-stats-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .gt-stat-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .gt-stat-col:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .gt-stat-val {
+      font-size: 14px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .gt-stat-lbl {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Install CTA Button */
+    .gt-cta-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gt-install-btn {
+      flex: 1;
+      height: 42px;
+      border-radius: 21px;
+      background: var(--g-green);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .gt-install-btn:hover {
+      background: var(--g-green-hover);
+    }
+
+    .gt-share-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .gt-protect {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Right Hero: Gallery & Device Filter */
+    .gt-hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .gt-device-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .device-chip {
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border-radius: 16px;
+      background: var(--chip-bg);
+      color: var(--muted);
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .device-chip.active {
+      background: var(--chip-active-bg);
+      color: var(--chip-active-text);
+      border-color: var(--chip-active-border);
+    }
+
+    /* Tablet Screenshot Carousel */
+    .gt-gallery {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+    }
+
+    .gt-shot-card {
+      height: var(--gh);
+      aspect-ratio: 16 / 10;
+      border-radius: 12px;
+      background: #1e293b;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .gt-shot-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── LOWER SECTION: DESCRIPTION & REVIEWS ── */
+    .gt-lower-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      border-top: 1px solid var(--border);
+      padding-top: 22px;
+    }
+
+    .gt-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .gt-desc-text {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .gt-tags-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .gt-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--chip-bg);
+      border: 1px solid var(--border);
+    }
+
+    /* Reviews Score Distribution */
+    .gt-reviews-summary {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .gt-score-big {
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .gt-score-stars {
+      color: var(--star);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .gt-score-count {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .gt-bars {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .gt-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .gt-bar-track {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .gt-bar-fill {
+      height: 100%;
+      background: var(--g-green);
+      border-radius: 3px;
+    }
+
+    /* Bottom Navigation Bar */
+    .gt-bottom-nav {
+      height: 52px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-shrink: 0;
+      background: var(--card-bg);
+    }
+
+    .gt-bnav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .gt-bnav-item.active {
+      color: #34d399;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Spec Meta & Interactive Bar -->
+  <header class="spec-header">
+    <div class="spec-title">
+      <h1>
+        Google Play Tablet Mockup SRS
+        <span class="spec-badge">Material You · Single Source of Truth</span>
+      </h1>
+      <p>Clean semantic DOM layout contract for Android 7-inch &amp; 10-inch Tablets</p>
+    </div>
+    <div class="spec-controls">
+      <button class="ctrl-btn active" id="btnTab10" onclick="setDeviceSize('tab10')">10" Large Tablet</button>
+      <button class="ctrl-btn" id="btnTab7" onclick="setDeviceSize('tab7')">7" Compact Tablet</button>
+      <button class="ctrl-btn" id="btnTheme" onclick="toggleTheme()">🌓 Dark / Light</button>
+    </div>
+  </header>
+
+  <!-- Tablet Mockup Stage -->
+  <div class="tablet-stage">
+    
+    <div class="dev-gtab tab10" id="devTablet">
+      <div class="gt-camera"></div>
+
+      <div class="gt-screen">
+        
+        <!-- 1. System Status Bar -->
+        <div class="gt-sb">
+          <span>09:41</span>
+          <span>Wi-Fi · 100% 🔋</span>
+        </div>
+
+        <!-- 2. App Top Bar -->
+        <div class="gt-top-nav">
+          <div class="gt-nav-left">
+            <button class="gt-back-btn" aria-label="Back">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <div class="gt-search-input">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span>Spotify: Music and Podcasts</span>
+            </div>
+          </div>
+          <div class="gt-top-actions">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3H7a2 2 0 0 0-2 2v16l7-3 7 3V5a2 2 0 0 0-2-2z"></path></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="5" r="1.5"></circle><circle cx="12" cy="19" r="1.5"></circle></svg>
+          </div>
+        </div>
+
+        <!-- 3. Scrollable Content Area -->
+        <div class="gt-scroll">
+          
+          <!-- Upper Hero: Two-Column Responsive Split -->
+          <div class="gt-hero">
+            
+            <!-- Left Hero Column: App Identity & CTA -->
+            <div class="gt-hero-left">
+              <div class="gt-identity">
+                <img class="gt-icon" src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/icon/512x512bb.png" alt="Spotify Icon" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%231db954\'><rect width=\'100\' height=\'100\' rx=\'20\'/></svg>'">
+                <div class="gt-meta">
+                  <h2>Spotify - Music and Podcasts</h2>
+                  <div class="gt-dev-link">Spotify Ltd.</div>
+                  <div class="gt-tags-sub">Contains ads · In-app purchases</div>
+                </div>
+              </div>
+
+              <!-- Metrics -->
+              <div class="gt-stats-row">
+                <div class="gt-stat-col">
+                  <span class="gt-stat-val">4.8 ★</span>
+                  <span class="gt-stat-lbl">25M reviews</span>
+                </div>
+                <div class="gt-stat-col">
+                  <span class="gt-stat-val" style="border:1px solid currentColor;border-radius:4px;padding:0 4px;font-size:11px">12+</span>
+                  <span class="gt-stat-lbl">Parental guidance</span>
+                </div>
+                <div class="gt-stat-col">
+                  <span class="gt-stat-val">1B+</span>
+                  <span class="gt-stat-lbl">Downloads</span>
+                </div>
+              </div>
+
+              <!-- Install Action -->
+              <div class="gt-cta-wrap">
+                <button class="gt-install-btn">
+                  <span>Install</span>
+                </button>
+                <button class="gt-share-btn" title="Share">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                </button>
+              </div>
+
+              <div class="gt-protect">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                <span>Verified by Play Protect</span>
+              </div>
+            </div>
+
+            <!-- Right Hero Column: Tablet Screenshots -->
+            <div class="gt-hero-right">
+              <div class="gt-device-chips">
+                <span class="device-chip">Phone</span>
+                <span class="device-chip active">Tablet (16:10)</span>
+                <span class="device-chip">Chromebook</span>
+              </div>
+
+              <div class="gt-gallery">
+                <div class="gt-shot-card">
+                  <div style="width:100%;height:100%;background:linear-gradient(135deg,#065f46,#047857);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:16px;text-align:center">
+                    <strong style="font-size:16px">Tablet Landscape 1</strong>
+                    <span style="font-size:11px;opacity:0.8;margin-top:4px">16:10 HD Screenshot Carousel</span>
+                  </div>
+                </div>
+                <div class="gt-shot-card">
+                  <div style="width:100%;height:100%;background:linear-gradient(135deg,#1e3a8a,#2563eb);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:16px;text-align:center">
+                    <strong style="font-size:16px">Tablet Landscape 2</strong>
+                    <span style="font-size:11px;opacity:0.8;margin-top:4px">Wide Multi-Column Dashboard</span>
+                  </div>
+                </div>
+                <div class="gt-shot-card">
+                  <div style="width:100%;height:100%;background:linear-gradient(135deg,#581c87,#7e22ce);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:16px;text-align:center">
+                    <strong style="font-size:16px">Tablet Landscape 3</strong>
+                    <span style="font-size:11px;opacity:0.8;margin-top:4px">Media Playback & Lyrics View</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Lower Section: Description & Reviews -->
+          <div class="gt-lower-grid">
+            <div>
+              <div class="gt-section-title">
+                <span>About this app</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </div>
+              <p class="gt-desc-text">
+                With Spotify, you can listen to millions of songs and podcasts for free. Stream music, discover trending playlists, and build your custom audio library across phone, tablet, and desktop.
+              </p>
+              <div class="gt-tags-bar">
+                <span class="gt-tag">Music &amp; Audio</span>
+                <span class="gt-tag">Audio streaming</span>
+                <span class="gt-tag">#1 Top Free</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="gt-section-title">
+                <span>Ratings and reviews</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </div>
+              <div class="gt-reviews-summary">
+                <div>
+                  <div class="gt-score-big">4.8</div>
+                  <div class="gt-score-stars">★★★★★</div>
+                  <div class="gt-score-count">25M reviews</div>
+                </div>
+                <div class="gt-bars">
+                  <div class="gt-bar-row"><span>5</span><div class="gt-bar-track"><div class="gt-bar-fill" style="width:85%"></div></div></div>
+                  <div class="gt-bar-row"><span>4</span><div class="gt-bar-track"><div class="gt-bar-fill" style="width:10%"></div></div></div>
+                  <div class="gt-bar-row"><span>3</span><div class="gt-bar-track"><div class="gt-bar-fill" style="width:3%"></div></div></div>
+                  <div class="gt-bar-row"><span>2</span><div class="gt-bar-track"><div class="gt-bar-fill" style="width:1%"></div></div></div>
+                  <div class="gt-bar-row"><span>1</span><div class="gt-bar-track"><div class="gt-bar-fill" style="width:1%"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 4. Bottom Navigation Bar -->
+        <div class="gt-bottom-nav">
+          <div class="gt-bnav-item"><span>Games</span></div>
+          <div class="gt-bnav-item active"><span>Apps</span></div>
+          <div class="gt-bnav-item"><span>Search</span></div>
+          <div class="gt-bnav-item"><span>Books</span></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function setDeviceSize(type) {
+      var dev = document.getElementById('devTablet');
+      var b10 = document.getElementById('btnTab10');
+      var b7 = document.getElementById('btnTab7');
+      if (type === 'tab7') {
+        dev.classList.remove('tab10');
+        dev.classList.add('tab7');
+        b7.classList.add('active');
+        b10.classList.remove('active');
+      } else {
+        dev.classList.remove('tab7');
+        dev.classList.add('tab10');
+        b10.classList.add('active');
+        b7.classList.remove('active');
+      }
+    }
+
+    function toggleTheme() {
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+  </script>
+</body>
+</html>
