@@ -268,32 +268,3 @@
   background: var(--sp);
   color: var(--t);
 }
-
-/* 4. Sponsored Divider */
-.gp-search-sponsored-divider {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12.5px;
-  color: var(--s);
-  padding: 14px 0 10px;
-  border-top: 1px solid var(--sp);
-  margin-top: 4px;
-}
-
-.gp-sponsored-label {
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-.gp-sponsored-more-btn {
-  background: transparent;
-  border: none;
-  color: var(--s);
-  padding: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-}

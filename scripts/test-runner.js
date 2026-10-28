@@ -1261,7 +1261,7 @@ assert(bundledHtml.includes('class="gp-search-view"') && bundledHtml.includes('c
 assert(bundledHtml.includes('class="gp-search-chips-wrap"') && bundledHtml.includes('gp-chip-dropdown'), 'Google Play search view includes filter chips carousel with rating dropdown');
 assert(bundledHtml.includes('class="gp-search-card primary"') && bundledHtml.includes('class="gp-search-card-name"'), 'Google Play search view renders primary app result card');
 assert(!bundledHtml.includes('class="shots gp-search-shots"'), 'Google Play search result renders compact app rows without screenshot carousel, matching native Play Store UI');
-assert(bundledHtml.includes('class="gp-search-action-btn"') && bundledHtml.includes('class="gp-search-sponsored-divider"'), 'Google Play search view includes circular action button and sponsored suggested divider');
+assert(bundledHtml.includes('class="gp-search-action-btn"') && !bundledHtml.includes('Sponsored &bull; Suggested for you'), 'Google Play search view includes circular action button and omits sponsored text');
 assert(bundledHtml.includes('gp-skel-card') && bundledHtml.includes('gp-skel-icon') && bundledHtml.includes('gp-skel-line'), 'Google Play search view includes clean skeleton secondary app cards');
 
 
