@@ -7835,23 +7835,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
   showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`, 'info', 4000);
 
-  // Lock fit() and temporarily reset zoom & animations so html2canvas measures unzoomed 1:1 layout
+  // Measure unzoomed layout size without touching live DOM zoom to prevent canvas jitter
   isExporting = true;
-  if(typeof clearDevTransitions === 'function') clearDevTransitions();
-  const prevZoom = devToCapture.style.zoom;
-  const prevGap = devToCapture.style.gap;
-  const dualPhones = isDual ? [...devToCapture.querySelectorAll('.dev:not(.ipad):not(.gtab)')] : [];
-  const prevDualZooms = dualPhones.map(d => d.style.zoom);
-  devToCapture.style.zoom = '1';
-  if(isDual){
-    devToCapture.style.gap = '28px';
-    dualPhones.forEach(d => {
-      d.style.zoom = '1';
-      d.classList.remove('dev-enter', 'dev-exit');
-    });
-  }
-  devToCapture.classList.remove('dev-enter', 'dev-exit');
-  void devToCapture.offsetHeight; // Force synchronous reflow before measuring bounding rects
+  const curZoom = parseFloat(devToCapture.style.zoom) || 1;
+  const rect = target.getBoundingClientRect();
+  const w = Math.round(rect.width / curZoom);
+  const h = Math.round(rect.height / curZoom);
+  const padX = opts.frameless ? 0 : 8;
 
   let restoreImages = () => {};
   try{
@@ -7859,13 +7849,6 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       await document.fonts.ready.catch(() => {});
     }
     restoreImages = await rasterizeSvgImages(target, scaleFactor);
-    devToCapture.style.zoom = '1';
-    if(isDual) dualPhones.forEach(d => { d.style.zoom = '1'; });
-    void devToCapture.offsetHeight;
-
-    const w = target.offsetWidth;
-    const h = target.offsetHeight;
-    const padX = opts.frameless ? 0 : 8;
 
     let canvas = await html2canvas(target, {
       backgroundColor: null,
@@ -8026,12 +8009,6 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   }finally{
     restoreImages();
     isExporting = false;
-    devToCapture.style.zoom = prevZoom;
-    if(isDual){
-      devToCapture.style.gap = prevGap;
-      dualPhones.forEach((d, idx) => { d.style.zoom = prevDualZooms[idx]; });
-    }
-    fit();
   }
 }
 
