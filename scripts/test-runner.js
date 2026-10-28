@@ -1049,9 +1049,9 @@ assert(allSecure, 'All target="_blank" external links in marketing.html contain 
 assert(marketingHtml.includes('tabindex="0"') && marketingHtml.includes('role="button"') && marketingHtml.includes('aria-expanded='), 'FAQ question items include full keyboard accessibility attributes (tabindex="0", role="button", aria-expanded)');
 assert(marketingHtml.includes('e.key === \'Enter\'') && marketingHtml.includes('toggleFaq(e.target)'), 'Marketing page includes Enter and Space keypress handlers for accessible FAQ toggling');
 
-// 8. Personalized VIP Invite Banner & Tracking
-assert(marketingHtml.includes('id="vipInviteBanner"') && marketingHtml.includes('id="vipBannerMsg"'), 'Marketing page includes VIP Invite personalized banner component');
-assert(marketingHtml.includes('function trackInviteEvent') && marketingHtml.includes('function initVipBanner'), 'Marketing script defines trackInviteEvent and initVipBanner');
+// 8. Verified App ID Silent Tracking (No UI Banner or spoofable ref param)
+assert(!marketingHtml.includes('id="vipInviteBanner"'), 'Marketing page keeps UI clean without spoofable VIP banner');
+assert(marketingHtml.includes('function trackInviteEvent') && marketingHtml.includes('spsVerifiedApp'), 'Marketing script tracks verified Apple App identity via spsVerifiedApp');
 const workerContent = fs.readFileSync(path.join(__dirname, '..', 'cloudflare', '_worker.js'), 'utf8');
 assert(workerContent.includes("url.pathname === '/api/track'"), 'Cloudflare worker provides /api/track edge analytics endpoint');
 
