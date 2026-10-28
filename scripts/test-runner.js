@@ -1265,6 +1265,10 @@ assert(!bundledHtml.includes('class="shots gp-search-shots"'), 'Google Play sear
 assert(bundledHtml.includes('class="gp-search-action-btn"') && !bundledHtml.includes('Sponsored &bull; Suggested for you'), 'Google Play search view includes circular action button and omits sponsored text');
 assert(bundledHtml.includes('gp-skel-card') && bundledHtml.includes('gp-skel-icon') && bundledHtml.includes('gp-skel-line'), 'Google Play search view includes clean skeleton secondary app cards');
 
+// 11. iPhone & Android Vector Status Bar Icons
+assert(!bundledHtml.includes('▂▄▆█ 5G ▰'), 'iPhone status bar replaced crude unicode characters with crisp vector SVG icons');
+assert(bundledHtml.includes('class="phone apple"') && bundledHtml.includes('sb-ico-signal') && bundledHtml.includes('sb-ico-wifi') && bundledHtml.includes('sb-ico-battery'), 'iPhone status bar renders vector signal, wifi, and battery icons matching Android phone mockup');
+
 
 
 // ---------------------------------------------------------------------
