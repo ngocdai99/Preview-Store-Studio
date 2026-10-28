@@ -1,6 +1,6 @@
 /* ---------- GOOGLE PLAY SEARCH VIEW (MATERIAL YOU / ANDROID 14+) ---------- */
 .gp-search-view {
-  padding: 4px 0 24px;
+  padding: 0 0 24px;
   animation: gpViewFade 0.2s ease-out;
 }
 
@@ -9,12 +9,28 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 1. Top Search Bar */
+/* 1. Sticky Locked Search Header (Search Bar + Filter Chips) */
+.gp-search-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  margin: 0 -20px 14px;
+  padding: 4px 20px 10px;
+  border-bottom: 1px solid var(--sp);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.phone.google[data-theme=dark] .gp-search-header {
+  box-shadow: none;
+}
+
+/* Top Search Bar */
 .gp-search-bar {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 0 12px;
+  padding: 4px 0 10px;
 }
 
 .gp-search-back-btn {
@@ -84,7 +100,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  margin: 0 -20px 18px;
+  margin: 0 -20px 0;
   padding: 0 20px 2px;
 }
 
@@ -119,7 +135,11 @@
   color: var(--s);
 }
 
-/* 3. Search App Cards */
+/* 3. Search Results Feed (Scrollable List) */
+.gp-search-list {
+  padding-top: 2px;
+}
+
 .gp-search-card {
   margin-bottom: 20px;
 }

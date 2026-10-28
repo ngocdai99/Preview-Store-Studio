@@ -1,49 +1,54 @@
 <!-- Google Play Search Result View (Modern Material You Style) -->
 <div data-v="search" class="gp-search-view" style="display:none">
-  <!-- Top Search Bar Header -->
-  <div class="gp-search-bar">
-    <button type="button" class="gp-search-back-btn" aria-label="Back">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-    </button>
-    <div class="gp-search-input-box">
-      <span class="gp-search-query-text" data-b="name">App Name</span>
+  <!-- Sticky Search Header (Search Bar + Filter Chips) -->
+  <div class="gp-search-header">
+    <!-- Top Search Bar Header -->
+    <div class="gp-search-bar">
+      <button type="button" class="gp-search-back-btn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <div class="gp-search-input-box">
+        <span class="gp-search-query-text" data-b="name">App Name</span>
+      </div>
+      <div class="gp-search-bar-actions">
+        <button type="button" class="gp-search-act-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <button type="button" class="gp-search-act-btn" aria-label="Voice Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
+        </button>
+      </div>
     </div>
-    <div class="gp-search-bar-actions">
-      <button type="button" class="gp-search-act-btn" aria-label="Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+
+    <!-- Horizontal Filter Chips Carousel -->
+    <div class="gp-search-chips-wrap">
+      <div class="gp-search-chip gp-chip-dropdown">
+        <span>Rating</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
-      </button>
-      <button type="button" class="gp-search-act-btn" aria-label="Voice Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-          <line x1="12" y1="19" x2="12" y2="22"></line>
-        </svg>
-      </button>
+      </div>
+      <div class="gp-search-chip"><span>Family</span></div>
+      <div class="gp-search-chip"><span>New</span></div>
+      <div class="gp-search-chip"><span>Widgets</span></div>
+      <div class="gp-search-chip"><span>Top charts</span></div>
     </div>
   </div>
 
-  <!-- Horizontal Filter Chips Carousel -->
-  <div class="gp-search-chips-wrap">
-    <div class="gp-search-chip gp-chip-dropdown">
-      <span>Rating</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
-    </div>
-    <div class="gp-search-chip"><span>Family</span></div>
-    <div class="gp-search-chip"><span>New</span></div>
-    <div class="gp-search-chip"><span>Widgets</span></div>
-    <div class="gp-search-chip"><span>Top charts</span></div>
-  </div>
-
-  <!-- Primary Target App Card (User's Previewed App) -->
-  <div class="gp-search-card primary">
+  <!-- Search Results Feed (Scrollable List) -->
+  <div class="gp-search-list">
+    <!-- Primary Target App Card (User's Previewed App) -->
+    <div class="gp-search-card primary">
     <div class="gp-search-card-main">
       <img data-icon alt="App Icon" class="gp-search-card-icon">
       <div class="gp-search-card-info">
@@ -196,5 +201,6 @@
       </div>
       <div class="gp-skel-btn"></div>
     </div>
+  </div>
   </div>
 </div>

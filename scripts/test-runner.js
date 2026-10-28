@@ -1258,6 +1258,7 @@ assert(ratioIssues.some(msg => msg.includes('Aspect ratio')), '16:10 screenshot 
 
 // 10. Google Play Phone Search View (Material You Authenticity)
 assert(bundledHtml.includes('class="gp-search-view"') && bundledHtml.includes('class="gp-search-bar"'), 'Bundled HTML includes Material You Google Play search view and top bar');
+assert(bundledHtml.includes('class="gp-search-header"') && bundledHtml.includes('class="gp-search-list"'), 'Google Play search view locks sticky search header above scrollable search results list');
 assert(bundledHtml.includes('class="gp-search-chips-wrap"') && bundledHtml.includes('gp-chip-dropdown'), 'Google Play search view includes filter chips carousel with rating dropdown');
 assert(bundledHtml.includes('class="gp-search-card primary"') && bundledHtml.includes('class="gp-search-card-name"'), 'Google Play search view renders primary app result card');
 assert(!bundledHtml.includes('class="shots gp-search-shots"'), 'Google Play search result renders compact app rows without screenshot carousel, matching native Play Store UI');
