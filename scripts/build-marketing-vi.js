@@ -54,6 +54,7 @@ function buildMarketingVi() {
   );
 
   // 2. Navbar
+  html = rep(html, '>VIP PREVIEW<', '>XEM THỬ VIP<');
   html = rep(html, '>Why Us</a>', '>Tại sao chọn chúng tôi</a>');
   html = rep(html, '>Pricing</a>', '>Bảng giá</a>');
   html = rep(html, '>FAQ</a>', '>Hỏi đáp</a>');
