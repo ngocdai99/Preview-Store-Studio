@@ -35,49 +35,66 @@
     <button class="menu-item" id="optImportJSON"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Import Project File</span><small>Open project from .json file</small></span><span class="mi-pill mi-pill-code">JSON</span></button>
 
     <div class="menu-div"></div>
-    <div class="menu-label">
-      <span class="dot dot-amber"></span>Sample Templates (Presets)
+    <!-- Collapsible Templates Accordion (Default: Collapsed) -->
+    <button class="menu-item menu-item-accordion" id="btnToggleTemplates" type="button" aria-expanded="false" title="Click to view sample demo templates">
+      <span class="mi-ico-sparkle" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">Sample Templates</span>
+        <small>Demo presets (SaaS, Fitness, Game...)</small>
+      </span>
+      <span class="mi-accordion-pill">
+        <span>5 presets</span>
+        <svg class="mi-chevron" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </span>
+    </button>
+    <div class="menu-collapse-group" id="templatesGroup" style="display:none;">
+      <button class="menu-item" data-preset="taskflow">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <span class="mi-t">
+          <span class="mi-name">TaskFlow</span>
+          <small>SaaS Productivity</small>
+        </span>
+        <span class="mi-pill mi-pill-open">Preset</span>
+      </button>
+      <button class="menu-item" data-preset="pulsefit">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <span class="mi-t">
+          <span class="mi-name">PulseFit</span>
+          <small>Fitness &amp; Workout</small>
+        </span>
+        <span class="mi-pill mi-pill-open">Preset</span>
+      </button>
+      <button class="menu-item" data-preset="zenmind">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <span class="mi-t">
+          <span class="mi-name">ZenMind</span>
+          <small>Meditation &amp; Sleep</small>
+        </span>
+        <span class="mi-pill mi-pill-open">Preset</span>
+      </button>
+      <button class="menu-item" data-preset="cyberstrike">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <span class="mi-t">
+          <span class="mi-name">CyberStrike</span>
+          <small>Sci-Fi Cyber RPG Game</small>
+        </span>
+        <span class="mi-pill mi-pill-open">Preset</span>
+      </button>
+      <button class="menu-item" data-preset="edulearn">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <span class="mi-t">
+          <span class="mi-name">SkillSphere</span>
+          <small>Online Video Courses</small>
+        </span>
+        <span class="mi-pill mi-pill-open">Preset</span>
+      </button>
     </div>
-    <button class="menu-item" data-preset="taskflow">
-      <img class="preset-thumb" alt="" aria-hidden="true">
-      <span class="mi-t">
-        <span class="mi-name">TaskFlow</span>
-        <small>SaaS Productivity</small>
-      </span>
-      <span class="mi-pill mi-pill-open">Preset</span>
-    </button>
-    <button class="menu-item" data-preset="pulsefit">
-      <img class="preset-thumb" alt="" aria-hidden="true">
-      <span class="mi-t">
-        <span class="mi-name">PulseFit</span>
-        <small>Fitness &amp; Workout</small>
-      </span>
-      <span class="mi-pill mi-pill-open">Preset</span>
-    </button>
-    <button class="menu-item" data-preset="zenmind">
-      <img class="preset-thumb" alt="" aria-hidden="true">
-      <span class="mi-t">
-        <span class="mi-name">ZenMind</span>
-        <small>Meditation &amp; Sleep</small>
-      </span>
-      <span class="mi-pill mi-pill-open">Preset</span>
-    </button>
-    <button class="menu-item" data-preset="cyberstrike">
-      <img class="preset-thumb" alt="" aria-hidden="true">
-      <span class="mi-t">
-        <span class="mi-name">CyberStrike</span>
-        <small>Sci-Fi Cyber RPG Game</small>
-      </span>
-      <span class="mi-pill mi-pill-open">Preset</span>
-    </button>
-    <button class="menu-item" data-preset="edulearn">
-      <img class="preset-thumb" alt="" aria-hidden="true">
-      <span class="mi-t">
-        <span class="mi-name">SkillSphere</span>
-        <small>Online Video Courses</small>
-      </span>
-      <span class="mi-pill mi-pill-open">Preset</span>
-    </button>
 
     <div class="menu-div"></div>
     <div class="menu-label">

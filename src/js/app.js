@@ -6804,6 +6804,19 @@ function initHeader() {
     setupDropdown('btnExport', 'menuExport');
   }
 
+  // 3b. Collapsible Templates Accordion in Menu
+  const btnToggleTemplates = $('btnToggleTemplates');
+  const templatesGroup = $('templatesGroup');
+  if (btnToggleTemplates && templatesGroup) {
+    btnToggleTemplates.onclick = (e) => {
+      e.stopPropagation();
+      const isCurrentlyOpen = templatesGroup.style.display !== 'none';
+      templatesGroup.style.display = isCurrentlyOpen ? 'none' : 'flex';
+      btnToggleTemplates.classList.toggle('open', !isCurrentlyOpen);
+      btnToggleTemplates.setAttribute('aria-expanded', String(!isCurrentlyOpen));
+    };
+  }
+
   // 4. Global Keyboard Dismissal for Header Dropdowns (ESC key)
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
