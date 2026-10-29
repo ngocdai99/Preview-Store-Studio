@@ -6040,27 +6040,30 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     }, 190);
   } else if (fromMode === 'dual' && toMode === 'apple') {
     // Dual -> Apple: FLIP transition - Apple glides seamlessly to exact center, Google softly dissolves
-    const stageDevices = $('stageDevices') || document.querySelector('.stage-devices') || stage;
-    const sdRect = stageDevices.getBoundingClientRect();
+    const stageEl = document.querySelector('.stage') || stage;
+    const stRect = stageEl.getBoundingClientRect();
     const firstA = devApple.getBoundingClientRect();
     const firstG = devGoogle.getBoundingClientRect();
     const zoomG = parseFloat(window.getComputedStyle(devGoogle).zoom) || 1;
 
-    // 1. Float Google phone out-of-flow at its exact screen coordinates so Apple phone can center
-    stageDevices.style.position = 'relative';
+    // 1. Lock stage overflow to prevent any scrollbar appearance/disappearance
+    stageEl.style.overflow = 'hidden';
+    stageEl.style.minHeight = stRect.height + 'px';
+
+    // 2. Float Google phone out-of-flow relative to .stage at its exact screen coordinates
     devGoogle.style.position = 'absolute';
-    devGoogle.style.left = (firstG.left - sdRect.left) + 'px';
-    devGoogle.style.top = (firstG.top - sdRect.top) + 'px';
+    devGoogle.style.left = (firstG.left - stRect.left + stageEl.scrollLeft) + 'px';
+    devGoogle.style.top = (firstG.top - stRect.top + stageEl.scrollTop) + 'px';
     devGoogle.style.margin = '0';
     devGoogle.style.pointerEvents = 'none';
     devGoogle.style.zIndex = '5';
     devGoogle.style.zoom = zoomG;
 
-    // 2. Put Apple phone into its final single layout & zoom
+    // 3. Put Apple phone into its final single layout & zoom immediately
     onApply();
     fit();
 
-    // 3. Measure Apple phone's final centered position & zoom
+    // 4. Measure Apple phone's final centered position & zoom
     const lastA = devApple.getBoundingClientRect();
     const zoomA = parseFloat(window.getComputedStyle(devApple).zoom) || 1;
     const centerX_first = firstA.left + firstA.width / 2;
@@ -6069,27 +6072,25 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     const centerY_last = lastA.top + lastA.height / 2;
     const deltaX = (centerX_first - centerX_last) / zoomA;
     const deltaY = (centerY_first - centerY_last) / zoomA;
-    const scaleInit = lastA.width > 0 ? (firstA.width / lastA.width) : 1;
 
-    // 4. Invert Apple phone to its starting visual position
+    // 5. Invert Apple phone to its starting visual position with pure translation (zero matrix scale distortion)
     devApple.style.transition = 'none';
-    devApple.style.transformOrigin = 'center center';
-    devApple.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)' + (Math.abs(scaleInit - 1) > 0.01 ? ' scale(' + scaleInit + ')' : '');
+    devApple.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)';
 
     // Re-assert Google phone's initial visual state
     devGoogle.style.transition = 'none';
     devGoogle.style.opacity = '1';
-    devGoogle.style.transform = 'translate3d(0, 0, 0) scale(1)';
+    devGoogle.style.transform = 'translate3d(0, 0, 0)';
 
     void devApple.offsetWidth; // flush layout
 
-    // 5. Play silky smooth glide and fade together
+    // 6. Play silky smooth glide and fade together
     devApple.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
-    devApple.style.transform = 'translate3d(0, 0, 0) scale(1)';
+    devApple.style.transform = 'translate3d(0, 0, 0)';
 
     devGoogle.style.transition = 'opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
     devGoogle.style.opacity = '0';
-    devGoogle.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
+    devGoogle.style.transform = 'scale(0.94) translate3d(0, 8px, 0)';
 
     devExitTimer = setTimeout(function () {
       devGoogle.classList.add('is-hidden-trans');
@@ -6099,27 +6100,30 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     }, 420);
   } else if (fromMode === 'dual' && toMode === 'google') {
     // Dual -> Google: FLIP transition - Google glides seamlessly to exact center, Apple softly dissolves
-    const stageDevices = $('stageDevices') || document.querySelector('.stage-devices') || stage;
-    const sdRect = stageDevices.getBoundingClientRect();
+    const stageEl = document.querySelector('.stage') || stage;
+    const stRect = stageEl.getBoundingClientRect();
     const firstA = devApple.getBoundingClientRect();
     const firstG = devGoogle.getBoundingClientRect();
     const zoomA = parseFloat(window.getComputedStyle(devApple).zoom) || 1;
 
-    // 1. Float Apple phone out-of-flow at its exact screen coordinates so Google phone can center
-    stageDevices.style.position = 'relative';
+    // 1. Lock stage overflow to prevent any scrollbar appearance/disappearance
+    stageEl.style.overflow = 'hidden';
+    stageEl.style.minHeight = stRect.height + 'px';
+
+    // 2. Float Apple phone out-of-flow relative to .stage at its exact screen coordinates
     devApple.style.position = 'absolute';
-    devApple.style.left = (firstA.left - sdRect.left) + 'px';
-    devApple.style.top = (firstA.top - sdRect.top) + 'px';
+    devApple.style.left = (firstA.left - stRect.left + stageEl.scrollLeft) + 'px';
+    devApple.style.top = (firstA.top - stRect.top + stageEl.scrollTop) + 'px';
     devApple.style.margin = '0';
     devApple.style.pointerEvents = 'none';
     devApple.style.zIndex = '5';
     devApple.style.zoom = zoomA;
 
-    // 2. Put Google phone into its final single layout & zoom
+    // 3. Put Google phone into its final single layout & zoom immediately
     onApply();
     fit();
 
-    // 3. Measure Google phone's final centered position & zoom
+    // 4. Measure Google phone's final centered position & zoom
     const lastG = devGoogle.getBoundingClientRect();
     const zoomG = parseFloat(window.getComputedStyle(devGoogle).zoom) || 1;
     const centerX_first = firstG.left + firstG.width / 2;
@@ -6128,27 +6132,25 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     const centerY_last = lastG.top + lastG.height / 2;
     const deltaX = (centerX_first - centerX_last) / zoomG;
     const deltaY = (centerY_first - centerY_last) / zoomG;
-    const scaleInit = lastG.width > 0 ? (firstG.width / lastG.width) : 1;
 
-    // 4. Invert Google phone to its starting visual position
+    // 5. Invert Google phone to its starting visual position with pure translation (zero matrix scale distortion)
     devGoogle.style.transition = 'none';
-    devGoogle.style.transformOrigin = 'center center';
-    devGoogle.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)' + (Math.abs(scaleInit - 1) > 0.01 ? ' scale(' + scaleInit + ')' : '');
+    devGoogle.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)';
 
     // Re-assert Apple phone's initial visual state
     devApple.style.transition = 'none';
     devApple.style.opacity = '1';
-    devApple.style.transform = 'translate3d(0, 0, 0) scale(1)';
+    devApple.style.transform = 'translate3d(0, 0, 0)';
 
     void devGoogle.offsetWidth; // flush layout
 
-    // 5. Play silky smooth glide and fade together
+    // 6. Play silky smooth glide and fade together
     devGoogle.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
-    devGoogle.style.transform = 'translate3d(0, 0, 0) scale(1)';
+    devGoogle.style.transform = 'translate3d(0, 0, 0)';
 
     devApple.style.transition = 'opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
     devApple.style.opacity = '0';
-    devApple.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
+    devApple.style.transform = 'scale(0.94) translate3d(0, 8px, 0)';
 
     devExitTimer = setTimeout(function () {
       devApple.classList.add('is-hidden-trans');
