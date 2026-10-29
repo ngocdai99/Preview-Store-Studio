@@ -5783,7 +5783,16 @@ function clearDevTransitions(){
   if(devEnterTimer){ clearTimeout(devEnterTimer); devEnterTimer = null; }
   if(document.body) document.body.classList.remove('is-animating-store');
   const stage = $('stageDevices') || document.querySelector('.stage');
-  if(stage) stage.style.minHeight = '';
+  if(stage) {
+    stage.style.minHeight = '';
+    stage.style.position = '';
+  }
+  const stageEl = document.querySelector('.stage');
+  if(stageEl) stageEl.style.minHeight = '';
+  const dt = $('dt');
+  const gdt = $('gdt');
+  if(dt) dt.style.display = '';
+  if(gdt) gdt.style.display = '';
   const da = document.querySelector('.dev.apple.single');
   const dg = document.querySelector('.dev.google');
   if(da){
@@ -5792,6 +5801,12 @@ function clearDevTransitions(){
     da.style.pointerEvents = '';
     da.style.transition = '';
     da.style.transform = '';
+    da.style.transformOrigin = '';
+    da.style.position = '';
+    da.style.left = '';
+    da.style.top = '';
+    da.style.margin = '';
+    da.style.zIndex = '';
   }
   if(dg){
     dg.classList.remove(...ALL_TRANS_CLASSES, 'is-hidden-trans');
@@ -5799,6 +5814,12 @@ function clearDevTransitions(){
     dg.style.pointerEvents = '';
     dg.style.transition = '';
     dg.style.transform = '';
+    dg.style.transformOrigin = '';
+    dg.style.position = '';
+    dg.style.left = '';
+    dg.style.top = '';
+    dg.style.margin = '';
+    dg.style.zIndex = '';
   }
   $$('.dev').forEach(d => {
     d.classList.remove(...ALL_TRANS_CLASSES, 'is-hidden-trans');
@@ -6018,62 +6039,118 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
       }, 360);
     }, 190);
   } else if (fromMode === 'dual' && toMode === 'apple') {
-    // Dual -> Apple: Apple glides to center, Google softly dissolves & recedes in-flow (zero flick)
-    const stageEl = document.querySelector('.stage') || stage;
-    const stageRect = stageEl.getBoundingClientRect();
-    const stageCenterX = stageRect.left + stageRect.width / 2;
+    // Dual -> Apple: FLIP transition - Apple glides seamlessly to exact center, Google softly dissolves
+    const stageDevices = $('stageDevices') || document.querySelector('.stage-devices') || stage;
+    const sdRect = stageDevices.getBoundingClientRect();
     const firstA = devApple.getBoundingClientRect();
-    const isCol = (stageRect.width < 721) || (Math.abs(firstA.left - devGoogle.getBoundingClientRect().left) < 10);
-    const appleCenterX = firstA.left + firstA.width / 2;
+    const firstG = devGoogle.getBoundingClientRect();
+    const zoomG = parseFloat(window.getComputedStyle(devGoogle).zoom) || 1;
+
+    // 1. Float Google phone out-of-flow at its exact screen coordinates so Apple phone can center
+    stageDevices.style.position = 'relative';
+    devGoogle.style.position = 'absolute';
+    devGoogle.style.left = (firstG.left - sdRect.left) + 'px';
+    devGoogle.style.top = (firstG.top - sdRect.top) + 'px';
+    devGoogle.style.margin = '0';
+    devGoogle.style.pointerEvents = 'none';
+    devGoogle.style.zIndex = '5';
+    devGoogle.style.zoom = zoomG;
+
+    // 2. Put Apple phone into its final single layout & zoom
+    onApply();
+    fit();
+
+    // 3. Measure Apple phone's final centered position & zoom
+    const lastA = devApple.getBoundingClientRect();
     const zoomA = parseFloat(window.getComputedStyle(devApple).zoom) || 1;
-    const deltaX = isCol ? 0 : (stageCenterX - appleCenterX) / zoomA;
+    const centerX_first = firstA.left + firstA.width / 2;
+    const centerY_first = firstA.top + firstA.height / 2;
+    const centerX_last = lastA.left + lastA.width / 2;
+    const centerY_last = lastA.top + lastA.height / 2;
+    const deltaX = (centerX_first - centerX_last) / zoomA;
+    const deltaY = (centerY_first - centerY_last) / zoomA;
+    const scaleInit = lastA.width > 0 ? (firstA.width / lastA.width) : 1;
 
-    stage.style.minHeight = stageRect.height + 'px';
+    // 4. Invert Apple phone to its starting visual position
+    devApple.style.transition = 'none';
+    devApple.style.transformOrigin = 'center center';
+    devApple.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)' + (Math.abs(scaleInit - 1) > 0.01 ? ' scale(' + scaleInit + ')' : '');
 
-    // Apple glides smoothly from left to center
+    // Re-assert Google phone's initial visual state
+    devGoogle.style.transition = 'none';
+    devGoogle.style.opacity = '1';
+    devGoogle.style.transform = 'translate3d(0, 0, 0) scale(1)';
+
+    void devApple.offsetWidth; // flush layout
+
+    // 5. Play silky smooth glide and fade together
     devApple.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
-    devApple.style.transform = 'translate3d(' + deltaX + 'px, 0, 0)';
+    devApple.style.transform = 'translate3d(0, 0, 0) scale(1)';
 
-    // Google softly fades out and gently scales down in place (stays in-flow during glide)
-    devGoogle.style.transition = 'opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1)';
+    devGoogle.style.transition = 'opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
     devGoogle.style.opacity = '0';
     devGoogle.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
-    devGoogle.style.pointerEvents = 'none';
 
     devExitTimer = setTimeout(function () {
-      onApply();
       devGoogle.classList.add('is-hidden-trans');
       clearDevTransitions();
       fit();
       syncAllVtPills();
     }, 420);
   } else if (fromMode === 'dual' && toMode === 'google') {
-    // Dual -> Google: Google glides to center, Apple softly dissolves & recedes in-flow (zero flick)
-    const stageEl = document.querySelector('.stage') || stage;
-    const stageRect = stageEl.getBoundingClientRect();
-    const stageCenterX = stageRect.left + stageRect.width / 2;
+    // Dual -> Google: FLIP transition - Google glides seamlessly to exact center, Apple softly dissolves
+    const stageDevices = $('stageDevices') || document.querySelector('.stage-devices') || stage;
+    const sdRect = stageDevices.getBoundingClientRect();
     const firstA = devApple.getBoundingClientRect();
     const firstG = devGoogle.getBoundingClientRect();
-    const isCol = (stageRect.width < 721) || (Math.abs(firstA.left - firstG.left) < 10);
-    const googleCenterX = firstG.left + firstG.width / 2;
+    const zoomA = parseFloat(window.getComputedStyle(devApple).zoom) || 1;
+
+    // 1. Float Apple phone out-of-flow at its exact screen coordinates so Google phone can center
+    stageDevices.style.position = 'relative';
+    devApple.style.position = 'absolute';
+    devApple.style.left = (firstA.left - sdRect.left) + 'px';
+    devApple.style.top = (firstA.top - sdRect.top) + 'px';
+    devApple.style.margin = '0';
+    devApple.style.pointerEvents = 'none';
+    devApple.style.zIndex = '5';
+    devApple.style.zoom = zoomA;
+
+    // 2. Put Google phone into its final single layout & zoom
+    onApply();
+    fit();
+
+    // 3. Measure Google phone's final centered position & zoom
+    const lastG = devGoogle.getBoundingClientRect();
     const zoomG = parseFloat(window.getComputedStyle(devGoogle).zoom) || 1;
-    const deltaX = isCol ? 0 : (stageCenterX - googleCenterX) / zoomG;
-    const deltaY = isCol ? (firstA.top - firstG.top) / zoomG : 0;
+    const centerX_first = firstG.left + firstG.width / 2;
+    const centerY_first = firstG.top + firstG.height / 2;
+    const centerX_last = lastG.left + lastG.width / 2;
+    const centerY_last = lastG.top + lastG.height / 2;
+    const deltaX = (centerX_first - centerX_last) / zoomG;
+    const deltaY = (centerY_first - centerY_last) / zoomG;
+    const scaleInit = lastG.width > 0 ? (firstG.width / lastG.width) : 1;
 
-    stage.style.minHeight = stageRect.height + 'px';
+    // 4. Invert Google phone to its starting visual position
+    devGoogle.style.transition = 'none';
+    devGoogle.style.transformOrigin = 'center center';
+    devGoogle.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)' + (Math.abs(scaleInit - 1) > 0.01 ? ' scale(' + scaleInit + ')' : '');
 
-    // Google glides smoothly from right to center
+    // Re-assert Apple phone's initial visual state
+    devApple.style.transition = 'none';
+    devApple.style.opacity = '1';
+    devApple.style.transform = 'translate3d(0, 0, 0) scale(1)';
+
+    void devGoogle.offsetWidth; // flush layout
+
+    // 5. Play silky smooth glide and fade together
     devGoogle.style.transition = 'transform 0.42s cubic-bezier(0.16, 1, 0.3, 1)';
-    devGoogle.style.transform = 'translate3d(' + deltaX + 'px, ' + deltaY + 'px, 0)';
+    devGoogle.style.transform = 'translate3d(0, 0, 0) scale(1)';
 
-    // Apple softly fades out and gently scales down in place (stays in-flow during glide)
-    devApple.style.transition = 'opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1)';
+    devApple.style.transition = 'opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
     devApple.style.opacity = '0';
     devApple.style.transform = 'scale(0.92) translate3d(0, 6px, 0)';
-    devApple.style.pointerEvents = 'none';
 
     devExitTimer = setTimeout(function () {
-      onApply();
       devApple.classList.add('is-hidden-trans');
       clearDevTransitions();
       fit();
@@ -6178,26 +6255,41 @@ function setStore(s, animate = true){
   let targetAppleDev = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
   let targetGoogleDev = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
 
-  if(isTargetDual){
-    appleDevice = 'dual';
-    googleDevice = 'dual';
-    document.body.dataset.dual = 'true';
-    document.body.dataset.store = 'dual';
-    document.body.dataset.appleDevice = 'iphone';
-    document.body.dataset.googleDevice = 'phone';
-  } else {
-    document.body.dataset.dual = 'false';
-    store = s;
-    document.body.dataset.store = s;
-    if(appleDevice === 'dual') appleDevice = 'iphone';
-    if(googleDevice === 'dual') googleDevice = 'phone';
-    document.body.dataset.appleDevice = appleDevice;
-    document.body.dataset.googleDevice = googleDevice;
+  // Immediately toggle active class on device selector buttons
+  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isTargetDual ? 'dual' : targetAppleDev)));
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isTargetDual ? 'dual' : targetGoogleDev)));
+
+  // If entering or exiting dual mode, show/hide device selector tabview immediately
+  if (isTargetDual) {
+    if ($('dt')) $('dt').style.display = 'none';
+    if ($('gdt')) $('gdt').style.display = 'none';
+  } else if (s === 'apple') {
+    if ($('dt')) $('dt').style.display = 'flex';
+    if ($('gdt')) $('gdt').style.display = 'none';
+  } else if (s === 'google') {
+    if ($('dt')) $('dt').style.display = 'none';
+    if ($('gdt')) $('gdt').style.display = 'flex';
   }
 
-  // Immediately toggle active class on device selector buttons
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isTargetDual ? 'dual' : appleDevice)));
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isTargetDual ? 'dual' : googleDevice)));
+  // If not transitioning out of dual mode, update dataset attributes immediately
+  if (fromMode !== 'dual') {
+    if (isTargetDual) {
+      appleDevice = 'dual';
+      googleDevice = 'dual';
+      document.body.dataset.dual = 'true';
+      document.body.dataset.store = 'dual';
+      document.body.dataset.appleDevice = 'iphone';
+      document.body.dataset.googleDevice = 'phone';
+    } else {
+      document.body.dataset.dual = 'false';
+      store = s;
+      document.body.dataset.store = s;
+      if (appleDevice === 'dual') appleDevice = 'iphone';
+      if (googleDevice === 'dual') googleDevice = 'phone';
+      document.body.dataset.appleDevice = appleDevice;
+      document.body.dataset.googleDevice = googleDevice;
+    }
+  }
 
   // Immediately update editor fields visibility and title for instant feedback
   if(s === 'dual'){
