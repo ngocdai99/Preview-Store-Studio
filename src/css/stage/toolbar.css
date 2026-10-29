@@ -1,5 +1,6 @@
 /* ---------- STAGE TOOLBAR & CONTROLS ---------- */
 .stage-toolbar{display:flex;gap:12px;align-items:center;flex-shrink:0;z-index:20;flex-wrap:wrap;justify-content:center}
+.stage-bottom-bar{display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:20;margin-top:auto;padding-top:12px}
 body[data-dual="true"] #dt,
 body[data-dual="true"] #gdt {
   display: none !important;
