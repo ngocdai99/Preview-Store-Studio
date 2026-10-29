@@ -60,9 +60,6 @@
   .seg{width:100%;max-width:100%;min-width:0}
   .seg button{padding:7px 10px;font-size:13px;gap:6px;white-space:nowrap}
   .workspace-bar{padding:7px 12px;gap:8px;min-height:auto}
-  #btnExport .lbl, #btnExport .arr{display:none}
-  #btnExport .btn-ico{display:inline-flex}
-  #btnExport{width:36px;height:36px;padding:0;justify-content:center;border-radius:10px;flex-shrink:0}
   #btnDraft .ms-pill-reset-btn{display:inline-flex;width:18px;height:18px;font-size:11px;margin-left:4px;flex-shrink:0}
   main{flex-direction:column;min-height:0}
   .editor{width:100%;min-width:0;border:0;flex:1;padding:14px;gap:12px;margin-left:0!important;visibility:visible!important;pointer-events:auto!important;transition:none!important}
@@ -84,7 +81,6 @@
   .right{gap:5px}
   .workspace-bar{padding:7px 10px;gap:7px}
   .seg button{padding:6px 8px;font-size:12.5px;gap:5px}
-  #btnExport{width:34px;height:34px}
   #btnDraft .ms-pill-reset-btn{width:18px;height:18px;font-size:11px}
 }
 
