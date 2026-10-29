@@ -10,13 +10,16 @@
     </div>
   </div>
   <p class="hint">Required asset for Google Play Console submission. Used for store featuring, promo video cover, and Google Ads.</p>
+  <div id="featureStatusBadge" class="shot-status-badge" style="display:none;margin:4px 0 2px"></div>
   <div class="feature-wrap" id="featureDropZone" title="Click or Drag & Drop 1024×500 image">
     <img id="featurePrev" data-feature alt="Feature Graphic" style="cursor:pointer">
     <div class="feature-drop-overlay">Drop 1024×500 image</div>
   </div>
-  <div style="display:flex;gap:6px;margin-top:6px">
+  <div style="display:flex;gap:6px;margin-top:6px;align-items:center;flex-wrap:wrap">
     <button class="mini" id="featureUp"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>Upload Feature Graphic</button>
     <button class="mini" id="featureInspect" title="Inspect Feature Graphic Details &amp; Compliance"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>Inspect</button>
+    <button class="mini fit-btn" id="featureAutoFit" style="display:none" title="Auto-crop and center to 1024×500 px standard"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 22V8a2 2 0 0 0-2-2H2"></path></svg></span>Fit 1024×500</button>
+    <span class="shot-dim-tag" id="featureDimTag" style="display:none;margin-left:auto"></span>
     <input type="file" id="featureFile" accept="image/*" hidden>
   </div>
   <p class="hint" style="font-size:10.5px">Standard ratio: 1024×500 px (~2.05:1). PNG or JPEG up to 15 MB, no alpha.</p>

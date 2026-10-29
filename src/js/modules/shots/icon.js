@@ -109,6 +109,7 @@ function renderIcons(){
 
 function renderFeature(){
   $$('[data-feature]').forEach(i=>{safe(i);i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(FEATURE_GRAPHIC, i):FEATURE_GRAPHIC)});
+  if(typeof validateFeatureGraphic === 'function') validateFeatureGraphic();
 }
 
 let _iconValRunId = 0;

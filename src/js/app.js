@@ -2853,6 +2853,7 @@ function renderIcons(){
 
 function renderFeature(){
   $$('[data-feature]').forEach(i=>{safe(i);i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(FEATURE_GRAPHIC, i):FEATURE_GRAPHIC)});
+  if(typeof validateFeatureGraphic === 'function') validateFeatureGraphic();
 }
 
 let _iconValRunId = 0;
@@ -4236,9 +4237,9 @@ if(ipadShotFile){
           level = 'ok';
           badgeText = '1024×500 px · Google Play Compliant';
         } else {
-          level = 'warn';
-          badgeText = `Dimension Notice (${w}×${h} px) · Google Play requires 1024×500 px`;
-          detailsHtml = '<p>Google Play requires a landscape Feature Graphic of exactly 1024×500 px.</p><p class="icon-modal-warn-hint">Export standard 1024×500 px to display properly on the Play Store banner.</p>';
+          level = 'err';
+          badgeText = `Invalid Dimensions (${w}×${h} px) · Google Play requires 1024×500 px`;
+          detailsHtml = '<p>Google Play Console requires a landscape Feature Graphic of <strong>exactly 1024×500 px</strong> (2.05:1 ratio).</p><p class="icon-modal-warn-hint">Uploading non-standard dimensions will be rejected by Play Console.</p>';
         }
       } else if (_activeModalType === 'ipad') {
         if (w === 2048 && h === 2732) {
@@ -4320,6 +4321,12 @@ if(ipadShotFile){
             }
           }
           if (typeof renderIcons === 'function') renderIcons();
+          if (typeof saveState === 'function') saveState();
+        }
+      } else if (_activeModalType === 'feature') {
+        if (typeof FEATURE_GRAPHIC !== 'undefined') {
+          FEATURE_GRAPHIC = dataUrl;
+          if (typeof renderFeature === 'function') renderFeature();
           if (typeof saveState === 'function') saveState();
         }
       }
@@ -4457,6 +4464,151 @@ featureDropZone.addEventListener('drop',e=>{
 
 // Feature Graphic Info Popover Controller
 initInfoPopover("featureInfoBtn", "featureInfoPop", "featureInfoClose", "google");
+
+// Feature Graphic Validation & Auto-Fit Controller
+let _featureValRunId = 0;
+
+function validateFeatureGraphic(){
+  const badge = $('featureStatusBadge');
+  const dimTag = $('featureDimTag');
+  const autoFitBtn = $('featureAutoFit');
+  if(!badge) return;
+
+  const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
+  if(!currentAsset || currentAsset === (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
+    badge.className = 'shot-status-badge warn';
+    badge.innerHTML = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span><span><strong>No Feature Graphic uploaded yet.</strong> Google Play requires a 1024×500 px asset for store featuring.</span>`;
+    badge.style.display = 'flex';
+    if(dimTag) dimTag.style.display = 'none';
+    if(autoFitBtn) autoFitBtn.style.display = 'none';
+    return;
+  }
+
+  const runId = ++_featureValRunId;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    if(runId !== _featureValRunId) return;
+    const w = img.naturalWidth || 0;
+    const h = img.naturalHeight || 0;
+
+    let sizeBytes = 0;
+    let mimeType = '';
+    if(typeof currentAsset === 'string' && currentAsset.startsWith('data:')){
+      const head = currentAsset.indexOf(',');
+      const m = /^data:([^;,]+)/.exec(currentAsset);
+      if(m) mimeType = m[1].toLowerCase();
+      const b64 = /;base64/.test(currentAsset.slice(0, head));
+      const body = currentAsset.length - head - 1;
+      sizeBytes = b64 ? Math.round(body * 3 / 4) : body;
+    }
+
+    const isPng = !mimeType || mimeType === 'image/png';
+    const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg';
+
+    let hasAlpha = false;
+    if(mimeType !== 'image/jpeg'){
+      try {
+        const c = document.createElement('canvas');
+        c.width = 64; c.height = 64;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, 64, 64);
+        const data = ctx.getImageData(0, 0, 64, 64).data;
+        for(let i = 3; i < data.length; i += 4){
+          if(data[i] < 250){ hasAlpha = true; break; }
+        }
+      } catch(e){}
+    }
+
+    const issues = [];
+    if(w !== 1024 || h !== 500){
+      const r = (w / (h || 1)).toFixed(2);
+      issues.push(`Invalid dimensions (${w}×${h} px, ${r}:1 ratio) — Must be exactly 1024×500 px`);
+    }
+    if(mimeType && !isPng && !isJpeg){
+      issues.push('Must be PNG or JPEG format');
+    }
+    if(hasAlpha){
+      issues.push('Contains transparency (alpha channel not allowed by Play Console)');
+    }
+    if(sizeBytes > 15 * 1024 * 1024){
+      const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
+      issues.push(`Exceeds 15 MB limit (${mb} MB)`);
+    }
+
+    const SB_OK = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>`;
+    const SB_ERR = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></span>`;
+
+    if(issues.length){
+      badge.className = 'shot-status-badge err';
+      badge.innerHTML = `${SB_ERR}<span><strong>${issues.length} issue${issues.length === 1 ? '' : 's'} would cause rejection by Google Play:</strong> ${issues.join(' · ')}.</span>`;
+      badge.style.display = 'flex';
+      if(dimTag){
+        dimTag.className = 'shot-dim-tag err';
+        dimTag.textContent = `${(w / (h || 1)).toFixed(2)}:1 (${w}×${h})`;
+        dimTag.title = issues.join('; ');
+        dimTag.style.display = 'inline-flex';
+      }
+      if(autoFitBtn && (w !== 1024 || h !== 500)){
+        autoFitBtn.style.display = 'inline-flex';
+      }
+    } else {
+      badge.className = 'shot-status-badge ok';
+      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> Exact 1024×500 px · PNG/JPEG (no alpha).</span>`;
+      badge.style.display = 'flex';
+      if(dimTag){
+        dimTag.className = 'shot-dim-tag ok';
+        dimTag.textContent = '2.05:1 (1024×500)';
+        dimTag.title = 'Google Play compliant';
+        dimTag.style.display = 'inline-flex';
+      }
+      if(autoFitBtn) autoFitBtn.style.display = 'none';
+    }
+  };
+  img.onerror = () => {
+    badge.className = 'shot-status-badge err';
+    badge.innerHTML = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></span><span>Image could not be loaded. Please re-upload.</span>`;
+    badge.style.display = 'flex';
+    if(dimTag) dimTag.style.display = 'none';
+    if(autoFitBtn) autoFitBtn.style.display = 'none';
+  };
+  img.src = currentAsset;
+}
+
+// Auto-Fit button handler (Crop & Scale to 1024×500 px standard)
+const autoFitBtn = $('featureAutoFit');
+if(autoFitBtn){
+  autoFitBtn.onclick = () => {
+    if(!FEATURE_GRAPHIC) return;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 500;
+      const ctx = c.getContext('2d');
+
+      // Center crop & scale to cover 1024x500
+      const scale = Math.max(1024 / img.naturalWidth, 500 / img.naturalHeight);
+      const w = img.naturalWidth * scale;
+      const h = img.naturalHeight * scale;
+      const x = (1024 - w) / 2;
+      const y = (500 - h) / 2;
+
+      ctx.drawImage(img, x, y, w, h);
+      FEATURE_GRAPHIC = c.toDataURL('image/png');
+      renderFeature();
+      saveState();
+      if(typeof showToast === 'function'){
+        showToast('Auto-fitted to 1,024 × 500 px standard!', 'ok');
+      }
+    };
+    img.src = FEATURE_GRAPHIC;
+  };
+}
+
+// Initial audit on script load
+validateFeatureGraphic();
 
 
 /* =========================================================================

@@ -387,9 +387,9 @@
           level = 'ok';
           badgeText = '1024×500 px · Google Play Compliant';
         } else {
-          level = 'warn';
-          badgeText = `Dimension Notice (${w}×${h} px) · Google Play requires 1024×500 px`;
-          detailsHtml = '<p>Google Play requires a landscape Feature Graphic of exactly 1024×500 px.</p><p class="icon-modal-warn-hint">Export standard 1024×500 px to display properly on the Play Store banner.</p>';
+          level = 'err';
+          badgeText = `Invalid Dimensions (${w}×${h} px) · Google Play requires 1024×500 px`;
+          detailsHtml = '<p>Google Play Console requires a landscape Feature Graphic of <strong>exactly 1024×500 px</strong> (2.05:1 ratio).</p><p class="icon-modal-warn-hint">Uploading non-standard dimensions will be rejected by Play Console.</p>';
         }
       } else if (_activeModalType === 'ipad') {
         if (w === 2048 && h === 2732) {
@@ -471,6 +471,12 @@
             }
           }
           if (typeof renderIcons === 'function') renderIcons();
+          if (typeof saveState === 'function') saveState();
+        }
+      } else if (_activeModalType === 'feature') {
+        if (typeof FEATURE_GRAPHIC !== 'undefined') {
+          FEATURE_GRAPHIC = dataUrl;
+          if (typeof renderFeature === 'function') renderFeature();
           if (typeof saveState === 'function') saveState();
         }
       }
