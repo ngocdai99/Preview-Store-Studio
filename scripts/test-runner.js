@@ -1262,8 +1262,9 @@ assert(ratioIssues.some(msg => msg.includes('Aspect ratio')), '16:10 screenshot 
 
 // Tablet screenshot row layout standardization (no broken wrapped input / buttons)
 assert(!bundledHtml.includes('(Embedded / Uploaded Image)'), 'Deprecated input with (Embedded / Uploaded Image) is removed from tablet screenshot rows');
-assert(bundledHtml.includes('r.className = \'srow tab\'') && bundledHtml.includes('head.className = \'shot-row-head\''), 'Tablet screenshot rows use standardized horizontal row layout with header and dim tag');
+assert(bundledHtml.includes('srow tab') && bundledHtml.includes('head.className = \'shot-row-head\''), 'Tablet screenshot rows use standardized horizontal row layout with header and dim tag');
 assert(bundledHtml.includes('title="Inspect / View Details"') && bundledHtml.includes('openImageDetailModal'), 'Tablet screenshot rows provide thumbnail click-to-inspect and Inspect button');
+assert(!bundledHtml.includes('\n.tab div{') && !bundledHtml.includes('}.tab div{'), 'iOS tab bar CSS is scoped to .phone.apple without leaking global styles into editor rows');
 
 // 10. Google Play Phone Search View (Material You Authenticity)
 assert(bundledHtml.includes('class="gp-search-view"') && bundledHtml.includes('class="gp-search-bar"'), 'Bundled HTML includes Material You Google Play search view and top bar');

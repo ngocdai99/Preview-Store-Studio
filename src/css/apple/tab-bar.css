@@ -1,9 +1,9 @@
 /* ---------- APPLE BOTTOM TAB BAR (iOS 18 FLOATING BAR) ---------- */
-.tab{height:84px;flex-shrink:0;display:flex;justify-content:space-around;padding-top:9px;background:var(--bar);border-top:1px solid var(--sp)}
-.tab div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--s);font-weight:600}
-.tab div span{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;color:currentColor;opacity:.85}
-.tab div span svg{width:21px;height:21px;stroke-width:1.9;display:block}
-.tab .on{color:var(--bl)}.tab .on span{opacity:1}
+.phone.apple .tab{height:84px;flex-shrink:0;display:flex;justify-content:space-around;padding-top:9px;background:var(--bar);border-top:1px solid var(--sp)}
+.phone.apple .tab div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--s);font-weight:600}
+.phone.apple .tab div span{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;color:currentColor;opacity:.85}
+.phone.apple .tab div span svg{width:21px;height:21px;stroke-width:1.9;display:block}
+.phone.apple .tab .on{color:var(--bl)}.phone.apple .tab .on span{opacity:1}
 
 .phone.apple:not(.ipad) .tab{
   position:absolute;

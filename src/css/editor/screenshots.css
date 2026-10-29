@@ -11,7 +11,7 @@
 .srow img{width:36px;height:78px;border-radius:7px;object-fit:cover;background:#000;flex-shrink:0;border:1px solid var(--line)}
 #ipadSlist .srow img{width:48px;height:64px;border-radius:7px}
 /* Tablet screenshot rows: landscape thumbnail */
-.srow.tab img{width:64px;height:48px;border-radius:7px;object-fit:cover}
+.srow.tab img, .srow.srow-tab img{width:64px;height:48px;border-radius:7px;object-fit:cover}
 .srow .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
 .shot-row-head{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:22px}
 .shot-row-title{font-size:11.5px;font-weight:700;color:#e2e8f0;letter-spacing:.01em}

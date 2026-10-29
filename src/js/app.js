@@ -4579,7 +4579,7 @@ function renderTablets(){
     L.innerHTML = '';
     items.forEach((it, i) => {
       const r = document.createElement('div');
-      r.className = 'srow tab';
+      r.className = 'srow tab srow-tab';
       r.draggable = true;
       const handle = document.createElement('div');
       handle.className = 'drag-handle'; handle.textContent = '⠿'; handle.title = 'Drag to reorder';
