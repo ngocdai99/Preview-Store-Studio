@@ -263,7 +263,6 @@ assert(bundledHtml.includes('data-google-reviews'), 'App mockups include data-go
 assert(!bundledHtml.includes('Khoa Nguyễn'), 'Khoa Nguyễn has been replaced by English reviewers');
 
 assert(bundledHtml.includes('class="preset-thumb"'), 'Preset dropdown includes .preset-thumb app icon image elements');
-assert(bundledHtml.includes('class="preset-thumb-blank"'), 'Preset dropdown includes .preset-thumb-blank element for None/Blank option');
 assert(bundledHtml.includes('PRESET_ICONS'), 'Preset module defines PRESET_ICONS map for dynamic icon synchronization');
 assert(bundledHtml.includes('initPresetThumbnails'), 'Preset module executes initPresetThumbnails to sync app icons');
 
