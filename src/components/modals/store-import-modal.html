@@ -19,6 +19,14 @@
     </div>
 
     <div class="store-import-body">
+      <!-- 100% Offline Promise & Dynamic Network Connection Status Banner -->
+      <div class="store-import-network-banner online" id="storeImportNetworkBanner">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span><strong>100% Offline Core</strong>: App Studio never sends your data out. External API calls to Apple (<code>itunes.apple.com</code>) require your explicit confirmation.</span>
+      </div>
+
       <div class="store-import-input-wrap">
         <input type="text" id="storeImportInput" class="store-import-input" placeholder="e.g. https://apps.apple.com/... or 324684580" autocomplete="off" spellcheck="false">
       </div>
@@ -38,6 +46,33 @@
     <div class="confirm-modal-actions">
       <button type="button" class="confirm-btn-cancel" id="storeImportCancel">Cancel</button>
       <button type="button" class="confirm-btn-reset store-import-btn-submit" id="storeImportSubmit">Import App</button>
+    </div>
+  </div>
+</div>
+
+<!-- Network Connection Permission & Offline Confirmation Modal -->
+<div class="confirm-modal-backdrop" id="networkConfirmModal" role="dialog" aria-modal="true" aria-hidden="true" style="z-index: 1000005;">
+  <div class="confirm-modal-card">
+    <div class="confirm-modal-header">
+      <div class="confirm-modal-icon-wrap network-confirm-icon-wrap" id="networkConfirmIconWrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </div>
+      <div class="confirm-modal-meta">
+        <h4 class="confirm-modal-title" id="networkConfirmTitle">Allow Network Connection?</h4>
+        <p class="confirm-modal-desc" id="networkConfirmDesc">
+          Store Preview Studio operates <strong>100% offline</strong> with zero tracking.
+          Importing live app metadata requires connecting to Apple's official API (<code>itunes.apple.com</code>).
+          Do you want to enable network access to fetch this app?
+        </p>
+      </div>
+    </div>
+    <div class="confirm-modal-actions">
+      <button type="button" class="confirm-btn-cancel" id="networkConfirmCancel">Stay Offline</button>
+      <button type="button" class="confirm-btn-reset network-btn-confirm" id="networkConfirmOk">Allow & Connect</button>
     </div>
   </div>
 </div>

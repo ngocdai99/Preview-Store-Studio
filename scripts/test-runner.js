@@ -1412,6 +1412,31 @@ const normIphoneOnly = normalizeAppleApp({
 assert(normIphoneOnly.supportsIpad === false, 'normalizeAppleApp detects iPhone-only app (supportsIpad false)');
 assert(normIphoneOnly.isUniversal === false, 'normalizeAppleApp detects iPhone-only app (isUniversal false)');
 
+// 3. Network Connection Check & 100% Offline User Confirmation
+const { isNetworkOnline, showNetworkConfirmModal } = storeImport;
+assert(typeof isNetworkOnline === 'function', 'store-import exports isNetworkOnline helper');
+assert(isNetworkOnline() === true, 'isNetworkOnline defaults to true in non-browser/standard sandbox');
+
+// Test isNetworkOnline with simulated offline navigator
+const origNav = global.navigator;
+global.navigator = { onLine: false };
+assert(isNetworkOnline() === false, 'isNetworkOnline returns false when navigator.onLine is false');
+global.navigator = { onLine: true };
+assert(isNetworkOnline() === true, 'isNetworkOnline returns true when navigator.onLine is true');
+global.navigator = origNav;
+
+// HTML structure assertions for network permission and offline handling
+assert(bundledHtml.includes('id="networkConfirmModal"'), 'Network confirmation modal #networkConfirmModal exists in bundled HTML');
+assert(bundledHtml.includes('id="networkConfirmOk"'), 'Network confirm button #networkConfirmOk exists in modal');
+assert(bundledHtml.includes('id="networkConfirmCancel"'), 'Network cancel button #networkConfirmCancel exists in modal');
+assert(bundledHtml.includes('id="storeImportNetworkBanner"'), 'Dynamic network status banner #storeImportNetworkBanner exists in import modal');
+assert(bundledHtml.includes('function isNetworkOnline'), 'Bundled application defines isNetworkOnline');
+assert(bundledHtml.includes('function showNetworkConfirmModal'), 'Bundled application defines showNetworkConfirmModal');
+assert(bundledHtml.includes('function updateStoreImportNetworkStatus'), 'Bundled application defines updateStoreImportNetworkStatus');
+assert(bundledHtml.includes('100% Offline Core') || bundledHtml.includes('100% Offline Promise'), 'Import modal includes explicit 100% Offline commitment statement');
+assert(bundledHtml.includes('Turn On Network Connection'), 'Network confirmation supports explicit prompt to turn on network connection');
+assert(bundledHtml.includes('Allow Network Connection?'), 'Network confirmation prompts user to allow network access due to offline pledge');
+
 // ---------------------------------------------------------------------
 // Suite 17: Immediate Tabview Device Selection on Store Change
 // ---------------------------------------------------------------------

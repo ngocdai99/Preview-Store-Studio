@@ -216,6 +216,140 @@ function applyImportedStoreApp(state) {
 }
 
 /**
+ * Checks whether browser/environment has active network connectivity
+ * @returns {boolean}
+ */
+function isNetworkOnline() {
+  if (typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean') {
+    return navigator.onLine;
+  }
+  return true;
+}
+
+/**
+ * Updates dynamic network indicator banner inside import modal
+ */
+function updateStoreImportNetworkStatus() {
+  const banner = $('storeImportNetworkBanner');
+  if (!banner) return;
+  const online = isNetworkOnline();
+  if (!online) {
+    banner.className = 'store-import-network-banner offline';
+    banner.innerHTML = `
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+      <span><strong>Offline Mode Detected</strong>: Store Preview Studio operates 100% offline. To import live app data from Apple, please turn on your Wi-Fi or internet connection.</span>
+    `;
+  } else {
+    banner.className = 'store-import-network-banner online';
+    banner.innerHTML = `
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      <span><strong>100% Offline Core</strong>: App Studio never sends your data out. External API calls to Apple (<code>itunes.apple.com</code>) require your explicit confirmation.</span>
+    `;
+  }
+}
+
+/**
+ * Prompts user to confirm enabling network connection or turning on network
+ * due to Studio's 100% offline commitment
+ * @param {{onConfirm: Function, onCancel?: Function}} options 
+ */
+function showNetworkConfirmModal(options) {
+  const modal = $('networkConfirmModal');
+  if (!modal) {
+    if (options && typeof options.onConfirm === 'function') options.onConfirm();
+    return;
+  }
+
+  const isOffline = !isNetworkOnline();
+  const iconWrap = $('networkConfirmIconWrap') || modal.querySelector('.confirm-modal-icon-wrap');
+  const titleEl = $('networkConfirmTitle');
+  const descEl = $('networkConfirmDesc');
+  const okBtn = $('networkConfirmOk');
+  const cancelBtn = $('networkConfirmCancel');
+
+  if (isOffline) {
+    if (iconWrap) {
+      iconWrap.className = 'confirm-modal-icon-wrap network-confirm-icon-wrap offline';
+      iconWrap.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>';
+    }
+    if (titleEl) titleEl.textContent = 'Turn On Network Connection';
+    if (descEl) descEl.innerHTML = 'Store Preview Studio operates <strong>100% offline</strong> with zero tracking. To import live app metadata from Apple, you must turn on your Wi-Fi or internet connection.<br><br>Please connect to the internet and try again.';
+    if (okBtn) {
+      okBtn.textContent = "I've Turned It On";
+      okBtn.className = 'confirm-btn-reset store-import-btn-submit';
+    }
+  } else {
+    if (iconWrap) {
+      iconWrap.className = 'confirm-modal-icon-wrap network-confirm-icon-wrap';
+      iconWrap.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
+    }
+    if (titleEl) titleEl.textContent = 'Allow Network Connection?';
+    if (descEl) descEl.innerHTML = 'Store Preview Studio operates <strong>100% offline</strong> with zero tracking. Importing live app metadata requires connecting to Apple\'s official API (<code>itunes.apple.com</code>).<br><br>Do you want to enable network access to fetch this app?';
+    if (okBtn) {
+      okBtn.textContent = 'Allow & Connect';
+      okBtn.className = 'confirm-btn-reset network-btn-confirm';
+    }
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', handleKey);
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+      if (options && typeof options.onCancel === 'function') options.onCancel();
+    }
+  }
+
+  if (cancelBtn) {
+    cancelBtn.onclick = () => {
+      closeModal();
+      if (options && typeof options.onCancel === 'function') options.onCancel();
+    };
+  }
+
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      closeModal();
+      if (options && typeof options.onCancel === 'function') options.onCancel();
+    }
+  };
+
+  if (okBtn) {
+    okBtn.onclick = () => {
+      closeModal();
+      if (!isNetworkOnline()) {
+        if (typeof setStoreImportStatus === 'function') {
+          setStoreImportStatus('error', 'Still offline. Please connect to the internet (Wi-Fi/Cellular) and try again.');
+        }
+        return;
+      }
+      if (options && typeof options.onConfirm === 'function') {
+        options.onConfirm();
+      }
+    };
+  }
+
+  document.addEventListener('keydown', handleKey);
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  if (okBtn) okBtn.focus();
+}
+
+/**
  * Modal UI Controllers
  */
 function openStoreImportModal() {
@@ -236,6 +370,8 @@ function openStoreImportModal() {
     status.className = 'store-import-status';
     status.textContent = '';
   }
+
+  updateStoreImportNetworkStatus();
 }
 
 function closeStoreImportModal() {
@@ -258,7 +394,7 @@ function setStoreImportStatus(type, message) {
   status.style.display = 'block';
 }
 
-async function handleStoreImportSubmit() {
+async function handleStoreImportSubmit(confirmed = false) {
   const input = $('storeImportInput');
   if (!input) return;
   const val = input.value.trim();
@@ -278,6 +414,26 @@ async function handleStoreImportSubmit() {
     return;
   }
 
+  // 1. Check network connection first
+  if (!isNetworkOnline()) {
+    updateStoreImportNetworkStatus();
+    showNetworkConfirmModal({
+      onConfirm: () => handleStoreImportSubmit(true),
+      onCancel: () => setStoreImportStatus('info', 'Kept in 100% offline mode.')
+    });
+    setStoreImportStatus('error', 'No internet connection detected. Please turn on your Wi-Fi or internet connection to import from Apple App Store.');
+    return;
+  }
+
+  // 2. Ask user to permit network connection due to 100% offline core promise
+  if (!confirmed) {
+    showNetworkConfirmModal({
+      onConfirm: () => handleStoreImportSubmit(true),
+      onCancel: () => setStoreImportStatus('info', 'Import cancelled. Kept in 100% offline mode.')
+    });
+    return;
+  }
+
   const submitBtn = $('storeImportSubmit');
   if (submitBtn) {
     submitBtn.disabled = true;
@@ -291,7 +447,11 @@ async function handleStoreImportSubmit() {
     applyImportedStoreApp(importedState);
     closeStoreImportModal();
   } catch (err) {
-    setStoreImportStatus('error', err.message || 'Failed to import app data from App Store.');
+    if (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError')))) {
+      setStoreImportStatus('error', 'Network error: Unable to reach Apple App Store. Please check your internet connection and try again.');
+    } else {
+      setStoreImportStatus('error', err.message || 'Failed to import app data from App Store.');
+    }
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
@@ -366,10 +526,25 @@ function initStoreImportEvents() {
       closeStoreImportModal();
     }
   });
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('online', () => {
+      updateStoreImportNetworkStatus();
+      if (modal && modal.classList.contains('open')) {
+        setStoreImportStatus('info', 'Network connection restored.');
+      }
+    });
+    window.addEventListener('offline', () => {
+      updateStoreImportNetworkStatus();
+      if (modal && modal.classList.contains('open')) {
+        setStoreImportStatus('error', 'Network disconnected. Studio is running in offline mode.');
+      }
+    });
+  }
 }
 
 /**
- * Checks URL parameters on page load and auto-imports if present
+ * Checks URL parameters on page load and auto-imports if present with user confirmation
  */
 function checkAndLoadStoreParams() {
   if (typeof window === 'undefined' || !window.location || !window.location.search) return;
@@ -386,13 +561,17 @@ function checkAndLoadStoreParams() {
     }
 
     if (target) {
-      fetchStoreAppData(target)
-        .then(state => {
-          applyImportedStoreApp(state);
-        })
-        .catch(err => {
-          console.warn('[StoreImport] Auto-load failed:', err.message);
-        });
+      openStoreImportModal();
+      const input = $('storeImportInput');
+      if (input) input.value = appid || url;
+      showNetworkConfirmModal({
+        onConfirm: () => {
+          handleStoreImportSubmit(true);
+        },
+        onCancel: () => {
+          setStoreImportStatus('info', 'Auto-import paused. Kept in 100% offline mode.');
+        }
+      });
     }
   } catch (e) {
     console.warn('[StoreImport] URL param check error:', e);
@@ -409,6 +588,8 @@ if (typeof window !== 'undefined') {
   window.openStoreImportModal = openStoreImportModal;
   window.closeStoreImportModal = closeStoreImportModal;
   window.checkAndLoadStoreParams = checkAndLoadStoreParams;
+  window.isNetworkOnline = isNetworkOnline;
+  window.showNetworkConfirmModal = showNetworkConfirmModal;
 }
 
 // Node.js CommonJS export for testing
@@ -418,7 +599,9 @@ if (typeof module !== 'undefined' && module.exports) {
     normalizeAppleApp,
     fetchAppleAppData,
     fetchStoreAppData,
-    applyImportedStoreApp
+    applyImportedStoreApp,
+    isNetworkOnline,
+    showNetworkConfirmModal
   };
 }
 
