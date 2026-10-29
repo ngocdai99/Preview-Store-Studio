@@ -138,18 +138,44 @@ function renderIpadSlist(){
     thumbWrap.appendChild(delBtn);
     r.appendChild(thumbWrap);
 
-    // Row Title & Actions
+    // Row Title, Role Tag & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span><span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
+    const roleTag = i === 0
+      ? '<span class="shot-role-tag cover">Cover</span>'
+      : '<span class="shot-role-tag gallery">Gallery</span>';
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+
+    const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
+    metaLine.innerHTML = `<span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="display:none"></span>`;
+
+    col.append(head, metaLine);
+    r.appendChild(col);
 
     const act = document.createElement('div'); act.className = 'act';
-    act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>';
-    const upBtn = act.firstElementChild;
+    act.innerHTML =
+      '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>' +
+      '<button type="button" class="mini shot-inspect-btn" title="Inspect screenshot details" aria-label="Inspect screenshot details">' + ICO_INSPECT + '</button>';
+    const upBtn = act.children[0];
+    const inspectBtn = act.children[1];
     upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
-
-    col.append(head, act);
-    r.appendChild(col);
+    inspectBtn.onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'ipad',
+          store: 'apple',
+          index: i,
+          title: `iPad Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            IPAD_SHOTS[i] = dataUrl;
+            renderIpadShots();
+            saveState();
+          }
+        });
+      }
+    };
+    r.appendChild(act);
 
     // Drag & Drop event handlers for row reordering
     r.addEventListener('dragstart', e => {

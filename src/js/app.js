@@ -14,6 +14,7 @@ let store = 'apple';
 const ICO_SPARKLE = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.4 5.4 5.6 2.1-5.6 2.1-2.4 5.4-2.4-5.4-5.6-2.1 5.6-2.1 2.4-5.4zm7.5 12.5l1.2 2.7 2.8 1-2.8 1-1.2 2.8-1.2-2.8-2.8-1 2.8-1 1.2-2.7z"></path></svg></span>`;
 const ICO_DL = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span>`;
 const ICO_UPLOAD = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>`;
+const ICO_INSPECT = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>`;
 
 // --- Dynamic Date & Clock Helpers (Zero Hardcoded Dates or 9:41 Clocks) ---
 if (typeof SPS_MONTH_NAMES === 'undefined') {
@@ -3377,18 +3378,46 @@ function renderShots(){
     thumbWrap.appendChild(delBtn);
     r.appendChild(thumbWrap);
 
-    // Row Title & Actions
+    // Row Title, Role Tag & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span><span class="shot-dim-tag" id="shotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
+    const roleTag = i === 0
+      ? '<span class="shot-role-tag cover">Cover</span>'
+      : (i === 1 || i === 2)
+        ? '<span class="shot-role-tag search">Search</span>'
+        : '<span class="shot-role-tag gallery">Gallery</span>';
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+
+    const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
+    metaLine.innerHTML = `<span class="shot-dim-tag" id="shotDimTag_${i}" style="display:none"></span>`;
+
+    col.append(head, metaLine);
+    r.appendChild(col);
 
     const act = document.createElement('div'); act.className = 'act';
-    act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>';
-    const upBtn = act.firstElementChild;
+    act.innerHTML =
+      '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>' +
+      '<button type="button" class="mini shot-inspect-btn" title="Inspect screenshot details" aria-label="Inspect screenshot details">' + ICO_INSPECT + '</button>';
+    const upBtn = act.children[0];
+    const inspectBtn = act.children[1];
     upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
-
-    col.append(head, act);
-    r.appendChild(col);
+    inspectBtn.onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'screenshot',
+          store,
+          index: i,
+          title: `Phone Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            SHOTS[i] = dataUrl;
+            renderShots();
+            saveState();
+          }
+        });
+      }
+    };
+    r.appendChild(act);
 
     // Drag & Drop event handlers for row reordering
     r.addEventListener('dragstart', e => {
@@ -3742,18 +3771,44 @@ function renderIpadSlist(){
     thumbWrap.appendChild(delBtn);
     r.appendChild(thumbWrap);
 
-    // Row Title & Actions
+    // Row Title, Role Tag & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span><span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
+    const roleTag = i === 0
+      ? '<span class="shot-role-tag cover">Cover</span>'
+      : '<span class="shot-role-tag gallery">Gallery</span>';
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+
+    const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
+    metaLine.innerHTML = `<span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="display:none"></span>`;
+
+    col.append(head, metaLine);
+    r.appendChild(col);
 
     const act = document.createElement('div'); act.className = 'act';
-    act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>';
-    const upBtn = act.firstElementChild;
+    act.innerHTML =
+      '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>' +
+      '<button type="button" class="mini shot-inspect-btn" title="Inspect screenshot details" aria-label="Inspect screenshot details">' + ICO_INSPECT + '</button>';
+    const upBtn = act.children[0];
+    const inspectBtn = act.children[1];
     upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
-
-    col.append(head, act);
-    r.appendChild(col);
+    inspectBtn.onclick = () => {
+      if(typeof openImageDetailModal === 'function'){
+        openImageDetailModal({
+          src: s || PH,
+          type: 'ipad',
+          store: 'apple',
+          index: i,
+          title: `iPad Screenshot #${i + 1} Inspector`,
+          onReplace: (file, dataUrl) => {
+            IPAD_SHOTS[i] = dataUrl;
+            renderIpadShots();
+            saveState();
+          }
+        });
+      }
+    };
+    r.appendChild(act);
 
     // Drag & Drop event handlers for row reordering
     r.addEventListener('dragstart', e => {
@@ -4940,18 +4995,47 @@ function renderTablets(){
         const probs = tabIssues(key, it);
         const tagClass = probs.length ? 'err' : 'ok';
         const tagText = `${ratioLabel(it.meta.w, it.meta.h)} (${it.meta.w}×${it.meta.h})`;
-        tagHtml = `<span class="shot-dim-tag ${tagClass}" style="margin-left:auto" title="${probs.join('; ')}">${tagText}</span>`;
+        tagHtml = `<span class="shot-dim-tag ${tagClass}" title="${probs.join('; ')}">${tagText}</span>`;
       }else if(it.meta && it.meta.bad){
-        tagHtml = `<span class="shot-dim-tag err" style="margin-left:auto">Failed to load</span>`;
+        tagHtml = `<span class="shot-dim-tag err">Failed to load</span>`;
       }
-      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${tagHtml}`;
+
+      const roleTag = i === 0
+        ? '<span class="shot-role-tag cover">Cover</span>'
+        : '<span class="shot-role-tag gallery">Gallery</span>';
+
+      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+
+      const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
+      metaLine.innerHTML = tagHtml;
+
+      col.append(head, metaLine);
+      r.appendChild(col);
 
       const act = document.createElement('div'); act.className = 'act';
-      act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>';
-      const upBtn = act.firstElementChild;
+      act.innerHTML =
+        '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>' +
+        '<button type="button" class="mini shot-inspect-btn" title="Inspect screenshot details" aria-label="Inspect screenshot details">' + ICO_INSPECT + '</button>';
+      const upBtn = act.children[0];
+      const inspectBtn = act.children[1];
       upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
-      col.append(head, act);
-      r.appendChild(col);
+      inspectBtn.onclick = () => {
+        if(typeof openImageDetailModal === 'function'){
+          openImageDetailModal({
+            src: it.src || PH,
+            type: 'tablet',
+            store: 'google',
+            index: i,
+            title: `${c.name} Screenshot #${i + 1} Inspector`,
+            onReplace: (file, dataUrl) => {
+              TABS[key][i] = makeTabItem(dataUrl);
+              renderTablets();
+              saveState();
+            }
+          });
+        }
+      };
+      r.appendChild(act);
 
       r.addEventListener('dragstart', e => { r.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'tabshot:' + key + ':' + i); });
       r.addEventListener('dragend', () => { r.classList.remove('dragging'); $$('.srow.tab').forEach(x => x.classList.remove('drag-over')); });

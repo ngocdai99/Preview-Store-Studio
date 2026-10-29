@@ -173,18 +173,47 @@ function renderTablets(){
         const probs = tabIssues(key, it);
         const tagClass = probs.length ? 'err' : 'ok';
         const tagText = `${ratioLabel(it.meta.w, it.meta.h)} (${it.meta.w}×${it.meta.h})`;
-        tagHtml = `<span class="shot-dim-tag ${tagClass}" style="margin-left:auto" title="${probs.join('; ')}">${tagText}</span>`;
+        tagHtml = `<span class="shot-dim-tag ${tagClass}" title="${probs.join('; ')}">${tagText}</span>`;
       }else if(it.meta && it.meta.bad){
-        tagHtml = `<span class="shot-dim-tag err" style="margin-left:auto">Failed to load</span>`;
+        tagHtml = `<span class="shot-dim-tag err">Failed to load</span>`;
       }
-      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${tagHtml}`;
+
+      const roleTag = i === 0
+        ? '<span class="shot-role-tag cover">Cover</span>'
+        : '<span class="shot-role-tag gallery">Gallery</span>';
+
+      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+
+      const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
+      metaLine.innerHTML = tagHtml;
+
+      col.append(head, metaLine);
+      r.appendChild(col);
 
       const act = document.createElement('div'); act.className = 'act';
-      act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>';
-      const upBtn = act.firstElementChild;
+      act.innerHTML =
+        '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>' +
+        '<button type="button" class="mini shot-inspect-btn" title="Inspect screenshot details" aria-label="Inspect screenshot details">' + ICO_INSPECT + '</button>';
+      const upBtn = act.children[0];
+      const inspectBtn = act.children[1];
       upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
-      col.append(head, act);
-      r.appendChild(col);
+      inspectBtn.onclick = () => {
+        if(typeof openImageDetailModal === 'function'){
+          openImageDetailModal({
+            src: it.src || PH,
+            type: 'tablet',
+            store: 'google',
+            index: i,
+            title: `${c.name} Screenshot #${i + 1} Inspector`,
+            onReplace: (file, dataUrl) => {
+              TABS[key][i] = makeTabItem(dataUrl);
+              renderTablets();
+              saveState();
+            }
+          });
+        }
+      };
+      r.appendChild(act);
 
       r.addEventListener('dragstart', e => { r.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'tabshot:' + key + ':' + i); });
       r.addEventListener('dragend', () => { r.classList.remove('dragging'); $$('.srow.tab').forEach(x => x.classList.remove('drag-over')); });
