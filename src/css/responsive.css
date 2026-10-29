@@ -65,7 +65,7 @@
   #btnExport{width:36px;height:36px;padding:0;justify-content:center;border-radius:10px;flex-shrink:0}
   #btnDraft .ms-pill-reset-btn{display:inline-flex;width:18px;height:18px;font-size:11px;margin-left:4px;flex-shrink:0}
   main{flex-direction:column;min-height:0}
-  .editor{width:100%;border:0;flex:1;padding:14px;gap:12px;margin-left:0!important;visibility:visible!important;pointer-events:auto!important;transition:none!important}
+  .editor{width:100%;min-width:0;border:0;flex:1;padding:14px;gap:12px;margin-left:0!important;visibility:visible!important;pointer-events:auto!important;transition:none!important}
   .stage{padding:14px 10px 24px;flex:1;gap:14px}
   body[data-panel=edit] .stage{display:none}
   body[data-panel=view] .editor{display:none}

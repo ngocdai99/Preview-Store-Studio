@@ -164,6 +164,10 @@ function runRelease() {
 
     execSync(`zip -rq "${proZipPath}" "${proName}"`, { cwd: distDir });
     fs.copyFileSync(proZipPath, legacyZipPath);
+    if (fs.existsSync(path.join(ROOT_DIR, 'package'))) {
+      fs.copyFileSync(stdZipPath, path.join(ROOT_DIR, 'package', `${stdName}.zip`));
+      fs.copyFileSync(proZipPath, path.join(ROOT_DIR, 'package', `${proName}.zip`));
+    }
     const proKb = (fs.statSync(proZipPath).size / 1024).toFixed(1);
     console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightCyan}Pro Edition${c.reset} ${c.dim}(${proKb} KB)${c.reset}`);
     console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${proZipPath}${c.reset}`);
