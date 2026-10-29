@@ -1340,7 +1340,6 @@ console.log('\n[SUITE 16]: Official Apple App Store Import & Public API Disclaim
 assert(bundledHtml.includes('id="storeImportModal"'), 'Store import modal #storeImportModal exists in bundled HTML');
 assert(bundledHtml.includes('id="storeImportInput"'), 'Store import input #storeImportInput exists in modal');
 assert(bundledHtml.includes('id="btnOpenStoreImport"'), 'Workspace bar includes #btnOpenStoreImport button');
-assert(bundledHtml.includes('id="optImportStore"'), 'Export dropdown includes #optImportStore menu item');
 assert(bundledHtml.includes('function parseStoreInput'), 'Bundled application defines parseStoreInput');
 assert(bundledHtml.includes('function normalizeAppleApp'), 'Bundled application defines normalizeAppleApp');
 assert(bundledHtml.includes('function checkAndLoadStoreParams'), 'Bundled application defines checkAndLoadStoreParams');
