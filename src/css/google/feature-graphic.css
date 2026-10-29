@@ -11,6 +11,21 @@
   font-size:13px;font-weight:700;color:#fff;text-align:center;
 }
 .feature-wrap.drag-over .feature-drop-overlay{display:grid}
+.feature-remove-btn{
+  position:absolute;top:8px;right:8px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(15,23,42,.78);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  transition:background .18s ease,transform .18s ease,border-color .18s ease;
+  z-index:20;padding:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+.feature-remove-btn:hover{
+  background:rgba(239,68,68,.92);border-color:#ef4444;transform:scale(1.1);color:#fff;
+}
+.feature-remove-btn svg{display:block}
 
 /* Feature Graphic in Google Play Mockup */
 .g-feature-banner{

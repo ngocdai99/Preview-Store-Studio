@@ -156,7 +156,8 @@ function validateFeatureGraphic(){
 // Remove / Reset Feature Graphic
 const featureRemoveBtn = $('featureRemove');
 if(featureRemoveBtn){
-  featureRemoveBtn.onclick = () => {
+  featureRemoveBtn.onclick = (e) => {
+    if(e) e.stopPropagation();
     FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
     const fileInput = $('featureFile');
     if(fileInput) fileInput.value = '';
