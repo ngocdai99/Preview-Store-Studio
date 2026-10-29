@@ -317,13 +317,14 @@ function showToast(msg, icon='', duration=3200){
 // --- Menu Dropdown Helpers ---
 function setupDropdown(btnId, menuId){
   const btn=$(btnId), menu=$(menuId);
+  if (!btn || !menu) return;
   btn.onclick=(e)=>{
     e.stopPropagation();
     $$('.menu').forEach(m=>{if(m!==menu)m.classList.remove('show')});
     menu.classList.toggle('show');
   };
 }
-setupDropdown('btnPresets','menuPresets');
+if ($('btnPresets')) setupDropdown('btnPresets','menuPresets');
 setupDropdown('btnExport','menuExport');
 document.addEventListener('click',()=>$$('.menu').forEach(m=>m.classList.remove('show')));
 

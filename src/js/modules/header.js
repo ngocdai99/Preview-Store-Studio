@@ -17,7 +17,7 @@ function initHeader() {
 
   // 3. Header Dropdowns (Presets Menu & Export Menu)
   if (typeof setupDropdown === 'function') {
-    setupDropdown('btnPresets', 'menuPresets');
+    if ($('btnPresets')) setupDropdown('btnPresets', 'menuPresets');
     setupDropdown('btnExport', 'menuExport');
   }
 
