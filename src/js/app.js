@@ -5819,7 +5819,9 @@ function getActiveDeviceEl(s = store, d = (s === 'apple' ? appleDevice : googleD
 function computeDeviceZoom(s, d){
   const st = document.querySelector('.stage'), m = isM(), pad = m ? 20 : 40;
   const tb = document.querySelector('.stage-toolbar');
-  const vt = (tb ? tb.offsetHeight : 40) + (m ? 14 : 18) + 44;
+  const bb = document.querySelector('.stage-bottom-bar');
+  const bbH = (bb && bb.offsetHeight > 0) ? bb.offsetHeight + 14 : 54;
+  const vt = (tb ? tb.offsetHeight : 40) + bbH + (m ? 14 : 18) + 44;
   const isDual = d === 'dual' || document.body.dataset.dual === 'true';
   let baseW = 416, baseH = 870;
   if(isDual){
@@ -8859,7 +8861,9 @@ function fit(){
   if(isExporting) return;
   const st=document.querySelector('.stage'),m=isM(),pad=m?20:40;
   const tb=document.querySelector('.stage-toolbar');
-  const vt=(tb?tb.offsetHeight:40)+(m?14:18)+44;
+  const bb=document.querySelector('.stage-bottom-bar');
+  const bbH=(bb && bb.offsetHeight > 0) ? bb.offsetHeight + 14 : 54;
+  const vt=(tb?tb.offsetHeight:40) + bbH + (m?14:18) + 44;
   const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
 
   let baseW = 416, baseH = 870;

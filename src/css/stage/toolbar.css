@@ -1,6 +1,8 @@
 /* ---------- STAGE TOOLBAR & CONTROLS ---------- */
 .stage-toolbar{display:flex;gap:12px;align-items:center;flex-shrink:0;z-index:20;flex-wrap:wrap;justify-content:center}
-.stage-bottom-bar{display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:20;margin-top:auto;padding-top:12px}
+.stage-bottom-bar{position:sticky;bottom:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:25;margin-top:auto;padding-top:8px;pointer-events:none}
+.stage-bottom-bar > *{pointer-events:auto}
+body[data-store=google][data-google-device="tab10"] .stage-bottom-bar{display:none!important}
 body[data-dual="true"] #dt,
 body[data-dual="true"] #gdt {
   display: none !important;
