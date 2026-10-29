@@ -4325,7 +4325,7 @@ if(ipadShotFile){
         const fmt = (mimeType || 'image/png').replace('image/', '').toUpperCase();
         if (hasAlpha) {
           formatEl.textContent = `${fmt} · Alpha`;
-          formatEl.className = 'icon-metric-val ' + (_activeModalType === 'icon' && _activeModalStore === 'apple' ? 'err' : 'ok');
+          formatEl.className = 'icon-metric-val ' + ((_activeModalType === 'icon' && _activeModalStore === 'apple') || _activeModalType === 'feature' ? 'err' : 'ok');
         } else if (isJpeg) {
           formatEl.textContent = 'JPEG';
           formatEl.className = 'icon-metric-val warn';
@@ -4395,13 +4395,25 @@ if(ipadShotFile){
           }
         }
       } else if (_activeModalType === 'feature') {
-        if (w === 1024 && h === 500) {
-          level = 'ok';
-          badgeText = '1024×500 px · Google Play Compliant';
-        } else {
+        const MAX_FEATURE_BYTES = 15 * 1024 * 1024;
+        if (w !== 1024 || h !== 500) {
           level = 'err';
           badgeText = `Invalid Dimensions (${w}×${h} px) · Google Play requires 1024×500 px`;
           detailsHtml = '<p>Google Play Console requires a landscape Feature Graphic of <strong>exactly 1024×500 px</strong> (2.05:1 ratio).</p><p class="icon-modal-warn-hint">Uploading non-standard dimensions will be rejected by Play Console.</p>';
+        } else if (hasAlpha) {
+          level = 'err';
+          badgeText = 'Alpha detected · 100% Opaque required (no alpha)';
+          detailsHtml = '<p>Google Play Console strictly prohibits alpha transparency in Feature Graphics. The image must be 100% opaque without an alpha channel.</p><p class="icon-modal-warn-hint">Flatten background layers and export as 24-bit PNG or JPEG without transparency.</p>';
+        } else if (sizeBytes > MAX_FEATURE_BYTES) {
+          const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
+          level = 'err';
+          badgeText = `File size error: ${mb} MB · Exceeds maximum 15 MB`;
+          detailsHtml = `<p>Google Play Console strictly enforces a maximum file size of 15 MB. Your file is currently ${mb} MB and will be rejected upon upload.</p><p class="icon-modal-warn-hint">Please compress or optimize the image before submitting.</p>`;
+        } else {
+          const sizeNote = sizeBytes ? ` (${(sizeBytes / 1024).toFixed(0)} KB)` : '';
+          level = 'ok';
+          badgeText = `1024×500 px · Google Play Compliant${sizeNote}`;
+          detailsHtml = '';
         }
       } else if (_activeModalType === 'ipad') {
         if (w === 2048 && h === 2732) {

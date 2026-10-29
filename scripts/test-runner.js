@@ -1453,6 +1453,15 @@ assert(bundledHtml.includes('body[data-ui-store="google"] #gdt'), 'CSS displays 
 assert(!bundledHtml.includes('<div class="vt" id="dt" data-only="apple">'), 'dt tabview does not have data-only="apple" so it cannot be hidden by form card filters');
 
 // ---------------------------------------------------------------------
+// Suite 18: Google Play Feature Graphic 15 MB Limit & No-Alpha Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 18]: Google Play Feature Graphic 15 MB Limit & No-Alpha Verification');
+assert(bundledHtml.includes('sizeBytes > 15 * 1024 * 1024') && bundledHtml.includes('Exceeds 15 MB limit'), 'validateFeatureGraphic strictly verifies 15 MB maximum file size limit');
+assert(bundledHtml.includes('Contains transparency (alpha channel not allowed by Play Console)'), 'validateFeatureGraphic strictly checks and rejects alpha channel transparency');
+assert(bundledHtml.includes('MAX_FEATURE_BYTES = 15 * 1024 * 1024'), 'Feature Graphic Inspector modal verifies 15 MB file size limit');
+assert(bundledHtml.includes('Alpha detected · 100% Opaque required (no alpha)'), 'Feature Graphic Inspector modal rejects alpha transparency with actionable guidance');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
