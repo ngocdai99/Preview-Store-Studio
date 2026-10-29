@@ -6273,26 +6273,6 @@ function setStore(s, animate = true){
     if ($('gdt')) $('gdt').style.display = 'flex';
   }
 
-  // If not transitioning out of dual mode, update dataset attributes immediately
-  if (fromMode !== 'dual') {
-    if (isTargetDual) {
-      appleDevice = 'dual';
-      googleDevice = 'dual';
-      document.body.dataset.dual = 'true';
-      document.body.dataset.store = 'dual';
-      document.body.dataset.appleDevice = 'iphone';
-      document.body.dataset.googleDevice = 'phone';
-    } else {
-      document.body.dataset.dual = 'false';
-      store = s;
-      document.body.dataset.store = s;
-      if (appleDevice === 'dual') appleDevice = 'iphone';
-      if (googleDevice === 'dual') googleDevice = 'phone';
-      document.body.dataset.appleDevice = appleDevice;
-      document.body.dataset.googleDevice = googleDevice;
-    }
-  }
-
   // Immediately update editor fields visibility and title for instant feedback
   if(s === 'dual'){
     $$('[data-only]').forEach(e => e.classList.remove('hide'));
