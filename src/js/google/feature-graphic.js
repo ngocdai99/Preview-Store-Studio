@@ -46,13 +46,12 @@ featureDropZone.addEventListener('drop',e=>{
 // Feature Graphic Info Popover Controller
 initInfoPopover("featureInfoBtn", "featureInfoPop", "featureInfoClose", "google");
 
-// Feature Graphic Validation & Auto-Fit Controller
+// Feature Graphic Validation Controller
 let _featureValRunId = 0;
 
 function validateFeatureGraphic(){
   const badge = $('featureStatusBadge');
   const dimTag = $('featureDimTag');
-  const autoFitBtn = $('featureAutoFit');
   if(!badge) return;
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
@@ -61,7 +60,6 @@ function validateFeatureGraphic(){
     badge.innerHTML = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span><span><strong>No Feature Graphic uploaded yet.</strong> Google Play requires a 1024×500 px asset for store featuring.</span>`;
     badge.style.display = 'flex';
     if(dimTag) dimTag.style.display = 'none';
-    if(autoFitBtn) autoFitBtn.style.display = 'none';
     return;
   }
 
@@ -130,9 +128,6 @@ function validateFeatureGraphic(){
         dimTag.title = issues.join('; ');
         dimTag.style.display = 'inline-flex';
       }
-      if(autoFitBtn && (w !== 1024 || h !== 500)){
-        autoFitBtn.style.display = 'inline-flex';
-      }
     } else {
       badge.className = 'shot-status-badge ok';
       badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> Exact 1024×500 px · PNG/JPEG (no alpha).</span>`;
@@ -143,7 +138,6 @@ function validateFeatureGraphic(){
         dimTag.title = 'Google Play compliant';
         dimTag.style.display = 'inline-flex';
       }
-      if(autoFitBtn) autoFitBtn.style.display = 'none';
     }
   };
   img.onerror = () => {
@@ -151,41 +145,8 @@ function validateFeatureGraphic(){
     badge.innerHTML = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></span><span>Image could not be loaded. Please re-upload.</span>`;
     badge.style.display = 'flex';
     if(dimTag) dimTag.style.display = 'none';
-    if(autoFitBtn) autoFitBtn.style.display = 'none';
   };
   img.src = currentAsset;
-}
-
-// Auto-Fit button handler (Crop & Scale to 1024×500 px standard)
-const autoFitBtn = $('featureAutoFit');
-if(autoFitBtn){
-  autoFitBtn.onclick = () => {
-    if(!FEATURE_GRAPHIC) return;
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const c = document.createElement('canvas');
-      c.width = 1024;
-      c.height = 500;
-      const ctx = c.getContext('2d');
-
-      // Center crop & scale to cover 1024x500
-      const scale = Math.max(1024 / img.naturalWidth, 500 / img.naturalHeight);
-      const w = img.naturalWidth * scale;
-      const h = img.naturalHeight * scale;
-      const x = (1024 - w) / 2;
-      const y = (500 - h) / 2;
-
-      ctx.drawImage(img, x, y, w, h);
-      FEATURE_GRAPHIC = c.toDataURL('image/png');
-      renderFeature();
-      saveState();
-      if(typeof showToast === 'function'){
-        showToast('Auto-fitted to 1,024 × 500 px standard!', 'ok');
-      }
-    };
-    img.src = FEATURE_GRAPHIC;
-  };
 }
 
 // Initial audit on script load
