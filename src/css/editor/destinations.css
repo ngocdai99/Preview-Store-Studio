@@ -1,4 +1,4 @@
-/* ---------- SUPPORTED DESTINATIONS CHECKBOXES (APPLE) ---------- */
+/* ---------- SUPPORTED DESTINATIONS DEVICE TILES (APPLE) ---------- */
 .dest-badge{
   font-size:10.5px;
   font-weight:700;
@@ -15,37 +15,40 @@
   border-color:rgba(56,189,248,0.3);
 }
 .dest-grid{
-  display:flex;
-  align-items:center;
-  gap:22px;
-  padding:4px 0 2px 0;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:8px;
+  margin-top:4px;
   width:100%;
   box-sizing:border-box;
 }
 .dest-tile{
-  position:relative;
-  display:inline-flex;
+  display:flex;
   align-items:center;
   gap:8px;
-  padding:4px 0;
-  background:transparent;
-  border:none;
+  padding:8px 10px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line);
+  border-radius:10px;
   cursor:pointer;
   user-select:none;
-  transition:opacity 0.15s ease;
+  position:relative;
+  min-width:0;
+  box-sizing:border-box;
+  transition:all .2s cubic-bezier(.2,.9,.3,1);
 }
 .dest-tile:hover:not(.locked){
-  background:transparent;
-  border:none;
+  border-color:var(--line-hi);
+  background:rgba(255,255,255,0.06);
 }
 .dest-tile.active{
-  background:transparent;
-  border:none;
-  box-shadow:none;
+  border-color:#0a84ff;
+  background:rgba(10,132,255,0.08);
+  box-shadow:0 0 12px rgba(10,132,255,0.15);
 }
 .dest-tile.locked{
   cursor:default;
-  opacity:0.95;
+  opacity:0.9;
 }
 .dest-input{
   position:absolute;
@@ -55,55 +58,71 @@
   height:0;
   margin:0;
 }
-
-/* Minimal delicate checkbox indicator (matching export modal design) */
-.dest-check-indicator{
-  width:15px;
-  height:15px;
-  border-radius:4px;
-  border:1.5px solid rgba(255,255,255,0.32);
-  background:transparent;
-  flex-shrink:0;
-  position:relative;
-  transition:all 0.16s ease;
+.dest-check-box{
+  width:18px;
+  height:18px;
+  border-radius:5px;
+  border:1.5px solid var(--line-hi);
   display:flex;
   align-items:center;
   justify-content:center;
+  flex-shrink:0;
+  background:rgba(255,255,255,0.04);
+  transition:all .2s ease;
 }
-.dest-tile:hover:not(.locked) .dest-check-indicator{
-  border-color:rgba(255,255,255,0.65);
+.dest-check-box svg{
+  width:12px;
+  height:12px;
+  opacity:0;
+  stroke:#fff;
+  stroke-width:3;
+  transition:all .15s ease;
 }
-.dest-tile.active .dest-check-indicator{
-  border-color:#38bdf8;
-  background:#38bdf8;
-  box-shadow:0 0 8px rgba(56,189,248,0.4);
+.dest-tile.active .dest-check-box{
+  background:#0a84ff;
+  border-color:#0a84ff;
 }
-.dest-tile.active .dest-check-indicator::after{
-  content:'';
-  width:4px;
-  height:7px;
-  border:solid #0d121f;
-  border-width:0 2px 2px 0;
-  transform:rotate(45deg) translate(-0.5px, -0.5px);
+.dest-tile.active .dest-check-box svg{
+  opacity:1;
 }
-
-/* Label text & badges */
-.dest-label-text{
-  display:inline-flex;
+.dest-icon-wrap{
+  width:28px;
+  height:28px;
+  border-radius:7px;
+  background:rgba(255,255,255,0.05);
+  display:flex;
   align-items:center;
-  gap:6px;
-  font-size:12.5px;
-  font-weight:500;
-  color:#94a3b8;
-  transition:color 0.15s ease;
-  white-space:nowrap;
+  justify-content:center;
+  flex-shrink:0;
+  color:var(--mut);
+  transition:all .2s ease;
 }
-.dest-tile:hover .dest-label-text{
-  color:#f1f5f9;
+.dest-icon-wrap svg{
+  width:16px;
+  height:16px;
 }
-.dest-tile.active .dest-label-text{
-  color:#f8fafc;
-  font-weight:600;
+.dest-tile.active .dest-icon-wrap{
+  background:rgba(10,132,255,0.18);
+  color:#0a84ff;
+}
+.dest-info{
+  flex:1;
+  min-width:0;
+}
+.dest-name{
+  font-size:12px;
+  font-weight:700;
+  color:var(--tx);
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:4px;
+  line-height:1.2;
+}
+.dest-sub{
+  font-size:10px;
+  color:var(--mut);
+  margin-top:1px;
 }
 .dest-tag-req{
   font-size:8.5px;
@@ -155,15 +174,15 @@
 
 :root[data-ui=light] .dest-badge{background:#e2e8f0;color:#475569;border-color:#cbd5e1}
 :root[data-ui=light] .dest-badge.universal{background:rgba(10,132,255,0.12);color:#0071e3;border-color:rgba(10,132,255,0.25)}
-:root[data-ui=light] .dest-tile{background:transparent;border:none}
-:root[data-ui=light] .dest-tile:hover:not(.locked){background:transparent;border:none}
-:root[data-ui=light] .dest-tile.active{background:transparent;border:none}
-:root[data-ui=light] .dest-check-indicator{border-color:rgba(15,23,42,0.3)}
-:root[data-ui=light] .dest-tile:hover:not(.locked) .dest-check-indicator{border-color:rgba(15,23,42,0.6)}
-:root[data-ui=light] .dest-tile.active .dest-check-indicator{border-color:#0284c7;background:#0284c7;box-shadow:0 0 6px rgba(2,132,199,0.25)}
-:root[data-ui=light] .dest-tile.active .dest-check-indicator::after{border-color:#ffffff}
-:root[data-ui=light] .dest-label-text{color:#64748b}
-:root[data-ui=light] .dest-tile:hover .dest-label-text{color:#334155}
-:root[data-ui=light] .dest-tile.active .dest-label-text{color:#0f172a}
+:root[data-ui=light] .dest-tile{background:#fff;border-color:rgba(0,0,0,0.1)}
+:root[data-ui=light] .dest-tile:hover:not(.locked){background:#f8fafc;border-color:rgba(0,0,0,0.2)}
+:root[data-ui=light] .dest-tile.active{background:rgba(10,132,255,0.06);border-color:#0a84ff}
 :root[data-ui=light] .dest-desc-bar{background:#f8fafc;border-color:rgba(0,0,0,0.08);color:#64748b}
 :root[data-ui=light] .dest-desc-bar.active-universal{background:rgba(10,132,255,0.04);border-color:rgba(10,132,255,0.2);color:#1e293b}
+
+@container editor (max-width: 360px) {
+  .dest-grid{grid-template-columns:1fr}
+}
+@media (max-width: 480px) {
+  .dest-grid{grid-template-columns:1fr}
+}
