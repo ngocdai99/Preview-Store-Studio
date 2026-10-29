@@ -1462,6 +1462,15 @@ assert(bundledHtml.includes('MAX_FEATURE_BYTES = 15 * 1024 * 1024'), 'Feature Gr
 assert(bundledHtml.includes('Alpha detected · 100% Opaque required (no alpha)'), 'Feature Graphic Inspector modal rejects alpha transparency with actionable guidance');
 
 // ---------------------------------------------------------------------
+// Suite 19: Responsive Header & Tool Title Permanence Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 19]: Responsive Header & Tool Title Permanence Verification');
+assert(!bundledHtml.includes('.brand h1{display:none}'), 'Tool name .brand h1 is never hidden with display:none in bundled CSS');
+assert(bundledHtml.includes('.header-center{order:3;flex:0 0 100%;width:100%') || bundledHtml.includes('.header-center{order:3;flex:0 0 100%'), 'Header center segmented control container expands to 100% and wraps to row 2 on mobile');
+assert(bundledHtml.includes('.brand h1{display:block!important'), '.brand h1 is explicitly forced to display:block on mobile viewports');
+assert(bundledHtml.includes('.seg{width:100%;max-width:100%;min-width:0;display:flex}'), 'Segmented control (.seg) expands to full width with flex layout on mobile');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
