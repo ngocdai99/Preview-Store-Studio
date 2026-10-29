@@ -42,6 +42,39 @@
 .srow input{font-size:11px;padding:6px 9px;border-radius:7px}
 .srow .act{display:flex;gap:5px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding-bottom:1px}
 .srow .act .mini{flex-shrink:0;white-space:nowrap}
+.shot-upload-btn{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  color:#cbd5e1;
+  padding:3.5px 9px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:600;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  cursor:pointer;
+  transition:all .18s ease;
+}
+.shot-upload-btn:hover{
+  background:rgba(255,255,255,.1);
+  border-color:rgba(255,255,255,.25);
+  color:#fff;
+  transform:translateY(-0.5px);
+}
+.shot-upload-btn:active{
+  transform:scale(.97);
+}
+:root[data-ui=light] .shot-upload-btn{
+  background:#f1f5f9;
+  border-color:#cbd5e1;
+  color:#334155;
+}
+:root[data-ui=light] .shot-upload-btn:hover{
+  background:#e2e8f0;
+  border-color:#94a3b8;
+  color:#0f172a;
+}
 .mini{
   background:var(--p2);border:1px solid var(--line);color:var(--tx);border-radius:7px;
   padding:5px 11px;font-size:11px;font-weight:700;transition:.2s;cursor:pointer;

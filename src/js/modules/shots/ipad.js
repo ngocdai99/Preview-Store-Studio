@@ -144,26 +144,9 @@ function renderIpadSlist(){
     head.innerHTML = `<span class="shot-row-title">#${i + 1}</span><span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
-    act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
-      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>';
-    const b = act.children;
-    b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
-    b[1].onclick = () => {
-      if(typeof openImageDetailModal === 'function'){
-        openImageDetailModal({
-          src: s || PH,
-          type: 'ipad',
-          store: 'apple',
-          index: i,
-          title: `iPad Screenshot #${i + 1} Inspector`,
-          onReplace: (file, dataUrl) => {
-            IPAD_SHOTS[i] = dataUrl;
-            renderIpadShots();
-            saveState();
-          }
-        });
-      }
-    };
+    act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot">' + ICO_UPLOAD + '<span>Upload</span></button>';
+    const upBtn = act.firstElementChild;
+    upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; ipadPick = i; $('ipadShotFile').click(); };
 
     col.append(head, act);
     r.appendChild(col);
