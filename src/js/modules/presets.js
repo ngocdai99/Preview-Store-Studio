@@ -79,6 +79,11 @@ $$('[data-preset]').forEach(b=>{
     const pKey=b.dataset.preset;
     loadPreset(pKey);
     $$('.menu').forEach(m => m.classList.remove('show'));
+    const tModal = $('templatesModal');
+    if (tModal) {
+      tModal.classList.remove('open');
+      tModal.setAttribute('aria-hidden', 'true');
+    }
   };
 });
 

@@ -356,142 +356,23 @@
   font-weight: 750;
 }
 
-/* Level-2 Submenu Trigger inside Main Menu */
-.menu-item-has-submenu {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  cursor: pointer;
-  user-select: none;
-}
-
-.menu-item-has-submenu .mi-ico-sparkle {
+/* Sparkle Icon for Templates Trigger */
+.mi-ico-sparkle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 6px;
   background: rgba(245, 158, 11, 0.14);
   color: #fbbf24;
   flex-shrink: 0;
+  margin-top: 1px;
 }
 
-:root[data-ui=light] .menu-item-has-submenu .mi-ico-sparkle {
+:root[data-ui=light] .mi-ico-sparkle {
   background: #fef3c7;
   color: #d97706;
-}
-
-.mi-submenu-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
-  font-size: 11px;
-  font-weight: 600;
-  margin-left: auto;
-  transition: all 0.2s ease;
-}
-
-.mi-chevron-right {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease;
-}
-
-.menu-item-has-submenu:hover .mi-chevron-right,
-.menu-item-has-submenu.active .mi-chevron-right {
-  transform: translateX(2px);
-}
-
-.menu-item-has-submenu.active .mi-submenu-badge {
-  background: rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
-}
-
-/* Menu cấp 2: Flyout Submenu Panel (Nằm bên ngoài dropdown cũ) */
-.menu-submenu {
-  position: absolute;
-  right: calc(330px + 8px);
-  top: calc(100% + 8px);
-  width: 270px;
-  background: rgba(15, 23, 42, 0.96);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 16px;
-  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  padding: 8px 6px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(8px) scale(0.97);
-  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
-  pointer-events: none;
-  z-index: 1005;
-}
-
-.menu-submenu.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0) scale(1);
-  pointer-events: auto;
-}
-
-:root[data-ui=light] .menu-submenu {
-  background: rgba(255, 255, 255, 0.98);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-.menu-submenu-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 6px 6px;
-}
-
-.menu-submenu-close {
-  display: none;
-  background: none;
-  border: 0;
-  color: #94a3b8;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-}
-
-.menu-submenu-close:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Mobile & Small Viewport: Hộp thoại nổi giữa màn hình */
-@media(max-width: 680px) {
-  .menu-submenu {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    transform: translate(-50%, -46%) scale(0.96);
-    width: min(320px, calc(100vw - 32px));
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-    z-index: 10002;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 0 9999px rgba(0, 0, 0, 0.55);
-  }
-  .menu-submenu.show {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  .menu-submenu-close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
 }
 
 #menuExport .menu-item {

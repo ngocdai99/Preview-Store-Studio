@@ -1,0 +1,96 @@
+<!-- Sample Templates Modal Dialog -->
+<div class="confirm-modal-backdrop" id="templatesModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="confirm-modal-card templates-modal-card">
+    <div class="confirm-modal-header">
+      <div class="confirm-modal-icon-wrap templates-modal-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <div class="confirm-modal-meta">
+        <div class="templates-modal-title-wrap">
+          <h4 class="confirm-modal-title">Sample App Templates</h4>
+          <span class="templates-modal-badge">5 Presets</span>
+        </div>
+        <p class="confirm-modal-desc">Select a curated template to test preview layouts, screenshot sequences, and typography across App Store &amp; Google Play.</p>
+      </div>
+      <button type="button" class="templates-modal-close-btn" id="templatesModalCloseX" aria-label="Close dialog" title="Close [ESC]">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="templates-modal-grid">
+      <!-- 1. TaskFlow -->
+      <button type="button" class="template-card" data-preset="taskflow">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <div class="template-card-meta">
+          <div class="template-card-title">TaskFlow</div>
+          <div class="template-card-cat">SaaS &amp; Productivity</div>
+        </div>
+        <span class="template-card-badge">Productivity</span>
+      </button>
+
+      <!-- 2. PulseFit -->
+      <button type="button" class="template-card" data-preset="pulsefit">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <div class="template-card-meta">
+          <div class="template-card-title">PulseFit</div>
+          <div class="template-card-cat">Fitness &amp; Workout Tracker</div>
+        </div>
+        <span class="template-card-badge">Health</span>
+      </button>
+
+      <!-- 3. ZenMind -->
+      <button type="button" class="template-card" data-preset="zenmind">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <div class="template-card-meta">
+          <div class="template-card-title">ZenMind</div>
+          <div class="template-card-cat">Meditation, Sleep &amp; Breathing</div>
+        </div>
+        <span class="template-card-badge">Wellness</span>
+      </button>
+
+      <!-- 4. CyberStrike -->
+      <button type="button" class="template-card" data-preset="cyberstrike">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <div class="template-card-meta">
+          <div class="template-card-title">CyberStrike</div>
+          <div class="template-card-cat">Sci-Fi Cyber RPG Mobile Game</div>
+        </div>
+        <span class="template-card-badge">Games</span>
+      </button>
+
+      <!-- 5. SkillSphere -->
+      <button type="button" class="template-card" data-preset="edulearn">
+        <img class="preset-thumb" alt="" aria-hidden="true">
+        <div class="template-card-meta">
+          <div class="template-card-title">SkillSphere</div>
+          <div class="template-card-cat">Online Video Courses &amp; Learning</div>
+        </div>
+        <span class="template-card-badge">Education</span>
+      </button>
+
+      <!-- 6. Start Fresh (Blank) -->
+      <button type="button" class="template-card template-card-blank" data-preset="none">
+        <span class="preset-thumb-blank" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </span>
+        <div class="template-card-meta">
+          <div class="template-card-title">Start Fresh (Blank)</div>
+          <div class="template-card-cat">Clear all fields &amp; start clean</div>
+        </div>
+        <span class="template-card-badge blank">Blank</span>
+      </button>
+    </div>
+
+    <div class="confirm-modal-actions">
+      <button type="button" class="confirm-btn-cancel" id="templatesModalClose">Close</button>
+    </div>
+  </div>
+</div>

@@ -1471,8 +1471,9 @@ assert(bundledHtml.includes('.brand h1{display:block!important'), '.brand h1 is 
 assert(bundledHtml.includes('.seg{width:100%;max-width:100%;min-width:0;display:flex}'), 'Segmented control (.seg) expands to full width with flex layout on mobile');
 assert(bundledHtml.includes('.workspace-bar') && bundledHtml.includes('flex-wrap: nowrap'), 'Workspace bar strictly maintains flex-wrap: nowrap to prevent Export button dropping');
 assert(bundledHtml.includes('#draftBtnTitle') && bundledHtml.includes('text-overflow: ellipsis'), 'Draft button title supports ellipsis truncation when space is tight');
-assert(bundledHtml.includes('id="btnTemplatesSubmenu"') && bundledHtml.includes('id="menuTemplatesSub"'), 'Level-2 templates submenu panel exists outside main menu');
-assert(bundledHtml.includes('.menu-submenu') && bundledHtml.includes('position: absolute'), 'Level-2 submenu uses floating flyout panel positioning');
+assert(bundledHtml.includes('id="optOpenTemplatesModal"'), 'Menu contains option to open templates modal');
+assert(bundledHtml.includes('id="templatesModal"'), 'Dedicated templates modal dialog exists');
+assert(bundledHtml.includes('class="templates-modal-grid"'), 'Templates modal contains responsive template card grid');
 
 // ---------------------------------------------------------------------
 // Summary Report
