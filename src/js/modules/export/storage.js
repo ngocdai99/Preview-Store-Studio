@@ -314,7 +314,7 @@ function updateDraftPill(){
 }
 
 function updatePresetMenuSelection(){
-  $$('#menuPresets [data-preset]').forEach(b => {
+  $$('[data-preset]').forEach(b => {
     const k = b.dataset.preset;
     b.classList.toggle('active', k === CURRENT_PRESET_KEY);
   });

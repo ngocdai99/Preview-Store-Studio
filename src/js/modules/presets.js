@@ -63,7 +63,7 @@ function prewarmPresetIcons() {
 }
 
 function initPresetThumbnails() {
-  $$('#menuPresets [data-preset]').forEach(b => {
+  $$('[data-preset]').forEach(b => {
     const key = b.dataset.preset;
     const img = b.querySelector('.preset-thumb');
     if (img && PRESET_ICONS[key]) {
@@ -78,6 +78,7 @@ $$('[data-preset]').forEach(b=>{
   b.onclick=()=>{
     const pKey=b.dataset.preset;
     loadPreset(pKey);
+    $$('.menu').forEach(m => m.classList.remove('show'));
   };
 });
 

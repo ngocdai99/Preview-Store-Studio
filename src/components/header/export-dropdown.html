@@ -1,14 +1,14 @@
-<!-- Export Dropdown & File Utilities -->
+<!-- Menu & Export Dropdown -->
 <div class="dropdown workspace-export-dropdown">
-  <button class="btn primary" id="btnExport" title="Export Deliverables">
+  <button class="btn primary" id="btnExport" title="Actions, Presets &amp; Export Menu">
     <span class="btn-ico" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="7 10 12 15 17 10"></polyline>
-        <line x1="12" y1="15" x2="12" y2="3"></line>
+        <line x1="4" y1="6" x2="20" y2="6"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="18" x2="20" y2="18"></line>
       </svg>
     </span>
-    <span class="lbl">Export</span>
+    <span class="lbl">Menu</span>
     <span class="arr" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 12 15 18 9"></polyline>
@@ -26,19 +26,82 @@
     
     <div class="menu-div"></div>
     <div class="menu-label">
-      <span class="dot dot-purple"></span>Store Metadata
+      <span class="dot dot-purple"></span>Store Metadata &amp; Backup
     </div>
     <button class="menu-item" id="btnCopyText"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Copy Metadata to Clipboard</span><small>App name, subtitle, descriptions,...</small></span><span class="mi-pill mi-pill-accent">Copy</span></button>
     <button class="menu-item" id="optExportMD"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export Metadata (LISTING_METADATA.md)</span><small>Complete store listing document</small></span><span class="mi-pill mi-pill-code">MD</span></button>
-    <button class="menu-item" id="optExportJSON"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export Project</span><small>Save full backup of text, images &amp; settings</small></span><span class="mi-pill mi-pill-code">JSON</span></button>
+    <button class="menu-item" id="optExportJSON"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Export Project File</span><small>Save full backup of text, images &amp; settings</small></span><span class="mi-pill mi-pill-code">JSON</span></button>
     
     <div class="menu-div"></div>
     <div class="menu-label">
-      <span class="dot dot-emerald"></span>Import &amp; Reset
+      <span class="dot dot-emerald"></span>Project &amp; Import
     </div>
     <button class="menu-item" id="optImportStore"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Import from App Store</span><small>Fetch official metadata, icon &amp; screenshots</small></span><span class="mi-pill mi-pill-blue">Apple</span></button>
-    <button class="menu-item" id="optImportJSON"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Import Project</span><small>Open project from .json file</small></span><span class="mi-pill mi-pill-code">JSON</span></button>
-    <button class="menu-item" id="optResetDefault"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Reset</span><small>Clear local draft and reload</small></span><span class="mi-pill mi-pill-danger">Reset</span></button>
+    <button class="menu-item" id="optImportJSON"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Import Project File</span><small>Open project from .json file</small></span><span class="mi-pill mi-pill-code">JSON</span></button>
+
+    <div class="menu-div"></div>
+    <div class="menu-label">
+      <span class="dot dot-amber"></span>Sample Templates (Presets)
+    </div>
+    <button class="menu-item" data-preset="taskflow">
+      <img class="preset-thumb" alt="" aria-hidden="true">
+      <span class="mi-t">
+        <span class="mi-name">TaskFlow</span>
+        <small>SaaS Productivity</small>
+      </span>
+      <span class="mi-pill mi-pill-open">Preset</span>
+    </button>
+    <button class="menu-item" data-preset="pulsefit">
+      <img class="preset-thumb" alt="" aria-hidden="true">
+      <span class="mi-t">
+        <span class="mi-name">PulseFit</span>
+        <small>Fitness &amp; Workout</small>
+      </span>
+      <span class="mi-pill mi-pill-open">Preset</span>
+    </button>
+    <button class="menu-item" data-preset="zenmind">
+      <img class="preset-thumb" alt="" aria-hidden="true">
+      <span class="mi-t">
+        <span class="mi-name">ZenMind</span>
+        <small>Meditation &amp; Sleep</small>
+      </span>
+      <span class="mi-pill mi-pill-open">Preset</span>
+    </button>
+    <button class="menu-item" data-preset="cyberstrike">
+      <img class="preset-thumb" alt="" aria-hidden="true">
+      <span class="mi-t">
+        <span class="mi-name">CyberStrike</span>
+        <small>Sci-Fi Cyber RPG Game</small>
+      </span>
+      <span class="mi-pill mi-pill-open">Preset</span>
+    </button>
+    <button class="menu-item" data-preset="edulearn">
+      <img class="preset-thumb" alt="" aria-hidden="true">
+      <span class="mi-t">
+        <span class="mi-name">SkillSphere</span>
+        <small>Online Video Courses</small>
+      </span>
+      <span class="mi-pill mi-pill-open">Preset</span>
+    </button>
+
+    <div class="menu-div"></div>
+    <div class="menu-label">
+      <span class="dot dot-rose"></span>Reset &amp; Clear
+    </div>
+    <button class="menu-item" data-preset="none">
+      <span class="preset-thumb-blank" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">Start Fresh (Blank)</span>
+        <small>Clear all fields &amp; start clean</small>
+      </span>
+      <span class="mi-pill mi-pill-danger">Blank</span>
+    </button>
+    <button class="menu-item" id="optResetDefault"><span class="mi-num"></span> <span class="mi-t"><span class="mi-name">Reset to Default Draft</span><small>Clear local draft and reload</small></span><span class="mi-pill mi-pill-danger">Reset</span></button>
   </div>
 </div>
 <input type="file" id="jsonFileInput" accept=".json" hidden>
