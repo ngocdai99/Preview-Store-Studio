@@ -4471,6 +4471,7 @@ let _featureValRunId = 0;
 function validateFeatureGraphic(){
   const badge = $('featureStatusBadge');
   const dimTag = $('featureDimTag');
+  const removeBtn = $('featureRemove');
   if(!badge) return;
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
@@ -4479,8 +4480,11 @@ function validateFeatureGraphic(){
     badge.innerHTML = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span><span><strong>No Feature Graphic uploaded yet.</strong> Google Play requires a 1024×500 px asset for store featuring.</span>`;
     badge.style.display = 'flex';
     if(dimTag) dimTag.style.display = 'none';
+    if(removeBtn) removeBtn.style.display = 'none';
     return;
   }
+
+  if(removeBtn) removeBtn.style.display = 'inline-flex';
 
   const runId = ++_featureValRunId;
   const img = new Image();
@@ -4566,6 +4570,21 @@ function validateFeatureGraphic(){
     if(dimTag) dimTag.style.display = 'none';
   };
   img.src = currentAsset;
+}
+
+// Remove / Reset Feature Graphic
+const featureRemoveBtn = $('featureRemove');
+if(featureRemoveBtn){
+  featureRemoveBtn.onclick = () => {
+    FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
+    const fileInput = $('featureFile');
+    if(fileInput) fileInput.value = '';
+    renderFeature();
+    saveState();
+    if(typeof showToast === 'function'){
+      showToast('Feature graphic removed', 'ok');
+    }
+  };
 }
 
 // Initial audit on script load
