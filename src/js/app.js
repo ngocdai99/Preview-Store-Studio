@@ -2622,7 +2622,7 @@ if (editorResizer && editorPanel) {
 
   document.addEventListener('mousemove', e => {
     if (!isResizingSidebar) return;
-    const newWidth = Math.min(Math.max(e.clientX, 500), Math.min(window.innerWidth - 360, 850));
+    const newWidth = Math.min(Math.max(e.clientX, 400), Math.min(window.innerWidth - 360, 850));
     document.documentElement.style.setProperty('--editor-w', `${newWidth}px`);
     editorPanel.style.width = `${newWidth}px`;
     localStorage.setItem('sps_editor_w', newWidth);
@@ -2649,7 +2649,7 @@ if (editorResizer && editorPanel) {
   // Restore saved width
   const savedW = localStorage.getItem('sps_editor_w');
   if (savedW && !isNaN(savedW)) {
-    const w = Math.min(Math.max(parseInt(savedW, 10), 500), 850);
+    const w = Math.min(Math.max(parseInt(savedW, 10), 400), 850);
     document.documentElement.style.setProperty('--editor-w', `${w}px`);
     editorPanel.style.width = `${w}px`;
   }
