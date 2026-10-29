@@ -124,7 +124,10 @@ function renderTablets(){
       const handle = document.createElement('div');
       handle.className = 'drag-handle'; handle.textContent = '⠿'; handle.title = 'Drag to reorder';
       r.appendChild(handle);
-      // Thumbnail Preview with Click-to-Inspect
+      // Thumbnail Preview with Click-to-Inspect & Floating Delete Button
+      const thumbWrap = document.createElement('div');
+      thumbWrap.className = 'shot-thumb-wrap';
+
       const thumb = mk(it.src || PH);
       thumb.style.cursor = 'pointer';
       thumb.title = 'Click to inspect & view details';
@@ -144,7 +147,23 @@ function renderTablets(){
           });
         }
       };
-      r.appendChild(thumb);
+      thumbWrap.appendChild(thumb);
+
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'shot-remove-btn';
+      delBtn.title = 'Delete Screenshot';
+      delBtn.setAttribute('aria-label', 'Delete Screenshot');
+      delBtn.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+      delBtn.onmousedown = e => e.stopPropagation();
+      delBtn.onclick = e => {
+        e.stopPropagation();
+        TABS[key].splice(i, 1);
+        renderTablets();
+        saveState();
+      };
+      thumbWrap.appendChild(delBtn);
+      r.appendChild(thumbWrap);
 
       const col = document.createElement('div'); col.className = 'col';
       const head = document.createElement('div'); head.className = 'shot-row-head';
@@ -162,10 +181,7 @@ function renderTablets(){
 
       const act = document.createElement('div'); act.className = 'act';
       act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
-        '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>' +
-        '<button class="mini" title="Move Up">↑</button>' +
-        '<button class="mini" title="Move Down">↓</button>' +
-        '<button class="mini del" title="Delete">&times;</button>';
+        '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>';
       const b = act.children;
       b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
       b[1].onclick = () => {
@@ -184,9 +200,6 @@ function renderTablets(){
           });
         }
       };
-      b[2].onclick = () => mvTab(key, i, -1);
-      b[3].onclick = () => mvTab(key, i, 1);
-      b[4].onclick = () => { TABS[key].splice(i, 1); renderTablets(); saveState(); };
       col.append(head, act);
       r.appendChild(col);
 
@@ -218,13 +231,6 @@ function renderTablets(){
       else for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
     }
   });
-}
-
-function mvTab(key, i, d){
-  const j = i + d, a = TABS[key];
-  if(j < 0 || j >= a.length) return;
-  [a[i], a[j]] = [a[j], a[i]];
-  renderTablets(); saveState();
 }
 
 function addTabFiles(key, files){

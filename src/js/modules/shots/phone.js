@@ -45,7 +45,10 @@ function renderShots(){
     handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
-    // Thumbnail Preview with Click-to-Inspect
+    // Thumbnail Preview with Click-to-Inspect & Floating Delete Button
+    const thumbWrap = document.createElement('div');
+    thumbWrap.className = 'shot-thumb-wrap';
+
     const thumb = mk(s || PH);
     thumb.style.cursor = 'pointer';
     thumb.title = 'Click to inspect & view details';
@@ -65,7 +68,23 @@ function renderShots(){
         });
       }
     };
-    r.appendChild(thumb);
+    thumbWrap.appendChild(thumb);
+
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'shot-remove-btn';
+    delBtn.title = 'Delete Screenshot';
+    delBtn.setAttribute('aria-label', 'Delete Screenshot');
+    delBtn.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+    delBtn.onmousedown = e => e.stopPropagation();
+    delBtn.onclick = e => {
+      e.stopPropagation();
+      SHOTS.splice(i, 1);
+      renderShots();
+      saveState();
+    };
+    thumbWrap.appendChild(delBtn);
+    r.appendChild(thumbWrap);
 
     // Row Title & Actions
     const col = document.createElement('div'); col.className = 'col';
@@ -74,10 +93,7 @@ function renderShots(){
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
-      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>' +
-      '<button class="mini" data-m="-1" title="Move Up">&uarr;</button>' +
-      '<button class="mini" data-m="1" title="Move Down">&darr;</button>' +
-      '<button class="mini del" title="Delete">&times;</button>';
+      '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>';
     const b = act.children;
     b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
     b[1].onclick = () => {
@@ -96,9 +112,6 @@ function renderShots(){
         });
       }
     };
-    b[2].onclick = () => mv(i, -1);
-    b[3].onclick = () => mv(i, 1);
-    b[4].onclick = () => { SHOTS.splice(i, 1); renderShots(); saveState(); };
 
     col.append(head, act);
     r.appendChild(col);
@@ -136,14 +149,6 @@ function renderShots(){
 
     L.appendChild(r);
   });
-}
-
-function mv(i, d){
-  const j = i + d;
-  if(j < 0 || j >= SHOTS.length) return;
-  [SHOTS[i], SHOTS[j]] = [SHOTS[j], SHOTS[i]];
-  renderShots();
-  saveState();
 }
 
 let _phoneValRunId = 0;

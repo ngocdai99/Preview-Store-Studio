@@ -8,6 +8,29 @@
 .srow.dragging{opacity:.5;transform:scale(1.03);box-shadow:0 10px 24px rgba(0,0,0,.6);border-color:var(--ac)}
 .srow.drag-over{border:1px dashed var(--ac);box-shadow:0 0 0 2px var(--glow);background:var(--p2)}
 .drag-handle{color:var(--mut);font-size:16px;cursor:grab;padding:0 3px}
+.shot-thumb-wrap{position:relative;flex-shrink:0;display:inline-flex}
+.shot-thumb-wrap img{display:block}
+.shot-remove-btn{
+  position:absolute;top:-4px;right:-4px;
+  width:18px;height:18px;border-radius:50%;
+  background:rgba(15,23,42,.88);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.3);
+  color:#cbd5e1;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background .18s ease,transform .18s ease,border-color .18s ease,color .18s ease;
+  z-index:10;padding:0;
+  box-shadow:0 2px 5px rgba(0,0,0,.45);
+}
+.shot-remove-btn:hover{
+  background:rgba(30,41,59,.98);border-color:rgba(255,255,255,.6);transform:scale(1.15);color:#fff;
+}
+.shot-remove-btn svg{display:block}
+:root[data-ui=light] .shot-remove-btn{
+  background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.15);color:#475569;box-shadow:0 2px 5px rgba(0,0,0,.12);
+}
+:root[data-ui=light] .shot-remove-btn:hover{
+  background:#fff;border-color:rgba(0,0,0,.35);color:#0f172a;
+}
 .srow img{width:36px;height:78px;border-radius:7px;object-fit:cover;background:#000;flex-shrink:0;border:1px solid var(--line)}
 #ipadSlist .srow img{width:48px;height:64px;border-radius:7px}
 /* Tablet screenshot rows: landscape thumbnail */
