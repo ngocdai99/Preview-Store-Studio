@@ -44,9 +44,9 @@ body[data-store=google] .vt-pill,
   border-color:rgba(255,255,255,.14);
 }
 #vt .vt-pill{
-  background:#ffffff!important;
-  box-shadow:0 2px 12px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.8)!important;
-  border:1px solid rgba(255,255,255,.9)!important;
+  background:#334155!important;
+  box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18)!important;
+  border:1px solid rgba(255,255,255,.2)!important;
 }
 #vt button{
   color:#94a3b8;
@@ -55,12 +55,12 @@ body[data-store=google] .vt-pill,
   color:#f8fafc;
 }
 #vt button.on{
-  color:#090d16!important;
-  text-shadow:none!important;
-  font-weight:750!important;
+  color:#ffffff!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.3)!important;
+  font-weight:700!important;
 }
 #vt button.on .vt-ico{
-  color:#090d16!important;
+  color:#ffffff!important;
   opacity:1!important;
 }
 
