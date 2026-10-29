@@ -89,6 +89,11 @@
 .shot-upload-btn:active, .shot-inspect-btn:active{
   transform:scale(.94);
 }
+.shot-upload-btn:disabled, .shot-inspect-btn:disabled, .shot-inspect-btn.disabled{
+  opacity:.4;
+  cursor:not-allowed;
+  pointer-events:none;
+}
 :root[data-ui=light] .shot-upload-btn, :root[data-ui=light] .shot-inspect-btn{
   background:#f8fafc;
   border-color:#cbd5e1;

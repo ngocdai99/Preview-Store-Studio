@@ -22,8 +22,8 @@
     <div class="feature-drop-overlay">Drop 1024×500 image</div>
   </div>
   <div style="display:flex;gap:6px;margin-top:6px;align-items:center;flex-wrap:wrap">
-    <button class="mini" id="featureUp"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>Upload Feature Graphic</button>
-    <button class="mini" id="featureInspect" title="Inspect Feature Graphic Details &amp; Compliance"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>Inspect</button>
+    <button type="button" class="mini shot-upload-btn" id="featureUp" title="Upload / Replace Feature Graphic" aria-label="Upload / Replace Feature Graphic"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span></button>
+    <button type="button" class="mini shot-inspect-btn" id="featureInspect" title="Inspect Feature Graphic Details &amp; Compliance" aria-label="Inspect Feature Graphic Details &amp; Compliance"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span></button>
     <span class="shot-dim-tag" id="featureDimTag" style="display:none;margin-left:auto"></span>
     <input type="file" id="featureFile" accept="image/*" hidden>
   </div>
