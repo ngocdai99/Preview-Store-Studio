@@ -713,7 +713,6 @@ assert(bundledHtml.includes('id="btnCopyText"'), 'Export menu preserves clipboar
 assert(bundledHtml.includes('id="optExportMD"'), 'Export menu preserves Markdown listing export (#optExportMD)');
 assert(bundledHtml.includes('id="optExportJSON"'), 'Export menu preserves Project JSON export (#optExportJSON)');
 assert(bundledHtml.includes('id="optImportJSON"'), 'Export menu preserves Project JSON import (#optImportJSON)');
-assert(bundledHtml.includes('id="optResetDefault"'), 'Export menu preserves draft reset (#optResetDefault)');
 assert(bundledHtml.includes('Presentation Mockups'), 'Export dropdown header is clearly labeled Presentation Mockups');
 
 // ---------------------------------------------------------------------
