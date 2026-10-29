@@ -1420,6 +1420,10 @@ assert(bundledHtml.includes("$$('#dt [data-d]').forEach(b => b.classList.toggle(
 assert(bundledHtml.includes("$$('#gdt [data-gd]').forEach(b => b.classList.toggle('on'"), 'setStore toggles active class on Google device selector buttons immediately');
 assert(bundledHtml.includes("if(s === 'apple') syncVtPill($('dt'))"), 'setStore syncs Apple device tabview pill immediately');
 assert(bundledHtml.includes("else if(s === 'google') syncVtPill($('gdt'))"), 'setStore syncs Google device tabview pill immediately');
+assert(bundledHtml.includes('document.body.dataset.uiStore = s'), 'setStore updates uiStore dataset immediately');
+assert(bundledHtml.includes('body[data-ui-store="apple"] #dt'), 'CSS displays Apple device selector immediately on uiStore=apple');
+assert(bundledHtml.includes('body[data-ui-store="google"] #gdt'), 'CSS displays Google device selector immediately on uiStore=google');
+assert(!bundledHtml.includes('<div class="vt" id="dt" data-only="apple">'), 'dt tabview does not have data-only="apple" so it cannot be hidden by form card filters');
 
 // ---------------------------------------------------------------------
 // Summary Report

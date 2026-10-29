@@ -3,6 +3,11 @@
 .stage-bottom-bar{position:sticky;bottom:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:25;margin-top:auto;padding-top:8px;pointer-events:none}
 .stage-bottom-bar > *{pointer-events:auto}
 body[data-store=google][data-google-device="tab10"] .stage-bottom-bar{display:none!important}
+#dt, #gdt { display: none !important; }
+body[data-ui-store="apple"] #dt { display: flex !important; }
+body[data-ui-store="google"] #gdt { display: flex !important; }
+body[data-ui-store="dual"] #dt,
+body[data-ui-store="dual"] #gdt { display: none !important; }
 body[data-dual="true"] #dt,
 body[data-dual="true"] #gdt {
   display: none !important;
@@ -21,7 +26,13 @@ body[data-dual="true"] #gdt {
   transition:transform .28s cubic-bezier(.2,.9,.3,1.15), width .28s cubic-bezier(.2,.9,.3,1.15), opacity .2s ease, background .35s ease, box-shadow .35s ease, border-color .35s ease;
   z-index:1;
 }
-body[data-store=google] .vt-pill{
+#dt .vt-pill{
+  background:#0071e3;
+  box-shadow:0 3px 14px rgba(0,113,227,.48),inset 0 1px 0 rgba(255,255,255,.35);
+  border:1px solid rgba(255,255,255,.3);
+}
+body[data-store=google] .vt-pill,
+#gdt .vt-pill{
   background:#03875f;
   box-shadow:0 3px 14px rgba(3,135,95,.48),inset 0 1px 0 rgba(255,255,255,.35);
   border:1px solid rgba(255,255,255,.3);

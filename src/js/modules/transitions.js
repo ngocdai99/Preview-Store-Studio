@@ -500,6 +500,9 @@ function setStore(s, animate = true){
     return;
   }
 
+  // Set UI store state immediately so toolbar tabviews #dt and #gdt switch instantly (<1ms)
+  document.body.dataset.uiStore = s;
+
   // 2. IMMEDIATELY SELECT DEVICE ON TABVIEW WITHOUT WAITING FOR ANIMATION (<1ms)
   const isTargetDual = (s === 'dual');
   let targetAppleDev = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;

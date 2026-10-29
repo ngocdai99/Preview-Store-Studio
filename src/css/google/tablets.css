@@ -1,6 +1,4 @@
 /* ---------- GOOGLE PLAY TABLET PREVIEW (7" / 10") ---------- */
-#gdt{display:none}
-body[data-store=google] #gdt{display:flex}
 body[data-store=google][data-google-device="tab7"] .dev.google,
 body[data-store=google][data-google-device="tab10"] .dev.google{display:none!important}
 body[data-store=google][data-google-device="tab7"] .dev.gtab7{display:block!important}

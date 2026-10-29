@@ -69,6 +69,7 @@ addEventListener('orientationchange', () => setTimeout(onStageResize, 200));
 // --- App Initialization ---
 store = 'apple';
 document.body.dataset.store = 'apple';
+document.body.dataset.uiStore = 'apple';
 document.body.dataset.dual = 'false';
 if (typeof setStore === 'function') setStore('apple', false);
 document.body.dataset.appleDevice = appleDevice;
