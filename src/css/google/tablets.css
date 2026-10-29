@@ -746,3 +746,315 @@ body[data-store=apple] .card[data-only=google]{display:none}
 .dev.gtab10.portrait #galTab10 img {
   height: 320px;
 }
+
+/* ==========================================================================
+   GOOGLE PLAY 7-INCH TABLET · SEARCH RESULTS (2-COLUMN GRID)
+   ========================================================================== */
+.dev.gtab7 .gt7-search-view {
+  padding: 4px 12px 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.dev.gtab7 .gt7-search-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.dev.gtab7 .gt7-search-back-btn {
+  background: transparent;
+  border: none;
+  color: var(--t);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dev.gtab7 .gt7-search-heading {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--t);
+  margin: 0;
+  line-height: 1.2;
+}
+.dev.gtab7 .gt7-search-bar {
+  margin-bottom: 16px;
+}
+.dev.gtab7 .gt7-search-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--sf);
+  border-radius: 28px;
+  height: 44px;
+  padding: 0 16px;
+  color: var(--t);
+}
+.dev.gtab7 .gt7-search-ico {
+  color: var(--s);
+  display: inline-flex;
+}
+.dev.gtab7 .gt7-search-text {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dev.gtab7 .gt7-search-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--s);
+}
+.dev.gtab7 .gt7-search-clear {
+  background: transparent;
+  border: none;
+  color: var(--s);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+}
+.dev.gtab7 .gt7-search-action-ico {
+  color: var(--s);
+  display: inline-flex;
+}
+
+/* 2-Column Grid */
+.dev.gtab7 .gt7-search-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 18px;
+  width: 100%;
+}
+.dev.gtab7 .gt7-app-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.dev.gtab7 .gt7-app-icon,
+.dev.gtab7 .gt7-app-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dev.gtab7 .gt7-app-icon {
+  object-fit: cover;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.dev.gtab7 .gt7-app-info {
+  flex: 1;
+  min-width: 0;
+}
+.dev.gtab7 .gt7-app-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--t);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.dev.gtab7 .gt7-app-meta {
+  font-size: 11px;
+  color: var(--s);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.dev.gtab7 .gt7-app-stats {
+  font-size: 11px;
+  color: var(--s);
+  margin-top: 2px;
+}
+.dev.gtab7 .gt7-app-btn {
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--sp);
+  background: var(--sf);
+  color: var(--t);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+.dev.gtab7 .gt7-app-btn:hover {
+  background: var(--sp);
+}
+
+/* Skeleton Secondary Search Results for 7" Tablet (Zero Mock Data) */
+.dev.gtab7 .gt7-skel-card {
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
+}
+.dev.gtab7 .gt7-skel-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--sf);
+  border: 1px solid var(--sp);
+  flex-shrink: 0;
+}
+.dev.gtab7 .gt7-skel-line {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--sf);
+  margin: 3px 0;
+}
+.dev.gtab7 .gt7-skel-line.w-25 { width: 25%; }
+.dev.gtab7 .gt7-skel-line.w-30 { width: 30%; }
+.dev.gtab7 .gt7-skel-line.w-35 { width: 35%; }
+.dev.gtab7 .gt7-skel-line.w-40 { width: 40%; }
+.dev.gtab7 .gt7-skel-line.w-45 { width: 45%; }
+.dev.gtab7 .gt7-skel-line.w-50 { width: 50%; }
+.dev.gtab7 .gt7-skel-line.w-55 { width: 55%; }
+.dev.gtab7 .gt7-skel-line.w-60 { width: 60%; }
+.dev.gtab7 .gt7-skel-line.w-65 { width: 65%; }
+.dev.gtab7 .gt7-skel-line.w-70 { width: 70%; }
+.dev.gtab7 .gt7-skel-line.w-75 { width: 75%; }
+.dev.gtab7 .gt7-skel-line.w-80 { width: 80%; }
+.dev.gtab7 .gt7-skel-btn {
+  width: 58px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--sf);
+  border: 1px solid var(--sp);
+  flex-shrink: 0;
+}
+
+.dev.gtab7.portrait .gt7-search-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   GOOGLE PLAY 7-INCH TABLET · INSTALL SPLIT BUTTON
+   ========================================================================== */
+.dev.gtab7 .gt7-install-split {
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: 17px;
+  overflow: hidden;
+  margin: 6px 0 10px;
+}
+.dev.gtab7 .gt7-install-main {
+  height: 34px;
+  padding: 0 18px;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 0;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease;
+}
+.dev.gtab7 .gt7-install-arrow {
+  height: 34px;
+  width: auto;
+  min-width: 42px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.dev.gtab7 .gt7-install-main:hover,
+.dev.gtab7 .gt7-install-arrow:hover { opacity: 0.9; }
+
+/* Dark mode */
+.dev.gtab7 .gt7-install-main,
+.phone.google[data-theme=dark] .dev.gtab7 .gt7-install-main,
+.dev.gtab7 .phone.google[data-theme=dark] .gt7-install-main {
+  background: #A8C8FB; color: #041e49;
+}
+.dev.gtab7 .gt7-install-arrow,
+.phone.google[data-theme=dark] .dev.gtab7 .gt7-install-arrow,
+.dev.gtab7 .phone.google[data-theme=dark] .gt7-install-arrow {
+  background: #A8C8FB; color: #041e49;
+  border-left: 1px solid rgba(4,30,73,0.25);
+}
+/* Light mode */
+.phone.google[data-theme=light] .dev.gtab7 .gt7-install-main,
+.dev.gtab7 .phone.google[data-theme=light] .gt7-install-main {
+  background: #0b57d0; color: #ffffff;
+}
+.phone.google[data-theme=light] .dev.gtab7 .gt7-install-arrow,
+.dev.gtab7 .phone.google[data-theme=light] .gt7-install-arrow {
+  background: #0b57d0; color: #ffffff;
+  border-left: 1px solid rgba(255,255,255,0.25);
+}
+
+/* Show file size metric on tab7 as a separate column */
+.dev.gtab7 .g-met .st:first-child { display: contents; }
+.dev.gtab7 [data-gmet-rating] { display: flex !important; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; border-right: 1px solid var(--sp); padding: 0 4px; }
+.dev.gtab7 [data-gmet-size] { display: flex !important; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; border-right: 1px solid var(--sp); padding: 0 4px; }
+
+/* ==========================================================================
+   TABLET ACTION ROW · WISHLIST BUTTON (Tab7 + Tab10)
+   ========================================================================== */
+.dev.gtab7 .gt7-action-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 6px 0 10px;
+}
+.dev.gtab7 .gt7-install-split { margin: 0; }
+
+.dev.gtab7 .gt7-wishlist-btn,
+.dev.gtab10 .gt10-wishlist-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t);
+  padding: 0 4px;
+  white-space: nowrap;
+}
+.dev.gtab7 .gt7-wishlist-btn svg,
+.dev.gtab10 .gt10-wishlist-btn svg {
+  color: var(--t);
+  flex-shrink: 0;
+}
+.dev.gtab7 .gt7-wishlist-btn:hover,
+.dev.gtab10 .gt10-wishlist-btn:hover { opacity: 0.75; }
+
+/* Dark mode: wishlist button inherits install button color #A8C8FB */
+.phone.google[data-theme=dark] .dev.gtab7 .gt7-wishlist-btn,
+.dev.gtab7 .phone.google[data-theme=dark] .gt7-wishlist-btn,
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-wishlist-btn,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-wishlist-btn {
+  color: #A8C8FB;
+}
+
+/* tab10 action-row gap update */
+.dev.gtab10 .gt10-action-row { gap: 14px; }
+
+/* Tab7 metrics: swap file size and age — order: rating | age | size | downloads */
+.dev.gtab7 [data-gmet-rating] { order: 1; }
+.dev.gtab7 .g-met > div:nth-child(2) { order: 2; }
+.dev.gtab7 [data-gmet-size] { order: 3; }
+.dev.gtab7 .g-met > div:nth-child(3) { order: 4; }
