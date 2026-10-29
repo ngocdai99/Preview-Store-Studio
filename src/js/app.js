@@ -6804,17 +6804,66 @@ function initHeader() {
     setupDropdown('btnExport', 'menuExport');
   }
 
-  // 3b. Collapsible Templates Accordion in Menu
-  const btnToggleTemplates = $('btnToggleTemplates');
-  const templatesGroup = $('templatesGroup');
-  if (btnToggleTemplates && templatesGroup) {
-    btnToggleTemplates.onclick = (e) => {
-      e.stopPropagation();
-      const isCurrentlyOpen = templatesGroup.style.display !== 'none';
-      templatesGroup.style.display = isCurrentlyOpen ? 'none' : 'flex';
-      btnToggleTemplates.classList.toggle('open', !isCurrentlyOpen);
-      btnToggleTemplates.setAttribute('aria-expanded', String(!isCurrentlyOpen));
+  // 3b. Level-2 Submenu (Flyout Submenu Panel outside the main dropdown)
+  const btnSub = $('btnTemplatesSubmenu');
+  const menuSub = $('menuTemplatesSub');
+  const closeSubBtn = $('btnCloseTemplatesSub');
+  if (btnSub && menuSub) {
+    let subTimer = null;
+
+    const openSub = () => {
+      clearTimeout(subTimer);
+      const parentMenu = $('menuExport');
+      if (parentMenu && window.innerWidth > 680) {
+        const btnRect = btnSub.getBoundingClientRect();
+        const parentRect = parentMenu.getBoundingClientRect();
+        const topOffset = Math.max(0, btnRect.top - parentRect.top);
+        menuSub.style.top = `${topOffset}px`;
+      } else {
+        menuSub.style.top = '';
+      }
+      menuSub.classList.add('show');
+      btnSub.classList.add('active');
+      btnSub.setAttribute('aria-expanded', 'true');
     };
+
+    const closeSub = () => {
+      clearTimeout(subTimer);
+      subTimer = setTimeout(() => {
+        menuSub.classList.remove('show');
+        btnSub.classList.remove('active');
+        btnSub.setAttribute('aria-expanded', 'false');
+      }, 120);
+    };
+
+    btnSub.addEventListener('mouseenter', openSub);
+    btnSub.addEventListener('mouseleave', closeSub);
+    menuSub.addEventListener('mouseenter', () => clearTimeout(subTimer));
+    menuSub.addEventListener('mouseleave', closeSub);
+
+    btnSub.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (menuSub.classList.contains('show')) {
+        menuSub.classList.remove('show');
+        btnSub.classList.remove('active');
+        btnSub.setAttribute('aria-expanded', 'false');
+      } else {
+        openSub();
+      }
+    });
+
+    if (closeSubBtn) {
+      closeSubBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menuSub.classList.remove('show');
+        btnSub.classList.remove('active');
+        btnSub.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    menuSub.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
   }
 
   // 4. Global Keyboard Dismissal for Header Dropdowns (ESC key)
