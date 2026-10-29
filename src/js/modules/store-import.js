@@ -103,6 +103,8 @@ function normalizeAppleApp(item) {
     ipadShots: ipadShots,
     supportsIpad: isUniversal,
     isUniversal: isUniversal,
+    featureGraphic: (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : ''),
+    feature: (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : ''),
     stats: {
       rating: ratingStr,
       ratingsCount: ratingCount,
@@ -180,10 +182,19 @@ function applyImportedStoreApp(state) {
     setAppleDevice('iphone', false);
   }
 
+  // Reset Feature Graphic: Apple App Store does not provide Google Play Feature Graphic.
+  // Explicitly clear it so no old preset graphic is automatically embedded.
+  FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
+  state.featureGraphic = FEATURE_GRAPHIC;
+  state.feature = FEATURE_GRAPHIC;
+
   // Apply to studio state
   if (typeof applyStateObject === 'function') {
     applyStateObject(state);
   }
+
+  // Ensure Feature Graphic remains completely cleared after applying state
+  FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
 
   // Double ensure store & device buttons reflect selection after state apply
   if (typeof setStore === 'function') {
@@ -196,6 +207,7 @@ function applyImportedStoreApp(state) {
   // Rerender all components
   if (typeof renderIcons === 'function') renderIcons();
   if (typeof renderFeature === 'function') renderFeature();
+  if (typeof validateFeatureGraphic === 'function') validateFeatureGraphic();
   if (typeof renderShots === 'function') renderShots();
   if (typeof renderIpadShots === 'function') renderIpadShots();
   if (typeof renderStats === 'function') renderStats();

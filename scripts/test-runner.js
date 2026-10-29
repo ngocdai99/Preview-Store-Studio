@@ -1401,6 +1401,7 @@ assert(normApple.iconGoogle && normApple.iconGoogle.includes('512x512bb.png'), '
 assert(normApple.shots[0].includes('1242x2688bb.png'), 'normalizeAppleApp upscales screenshot to 1242x2688 Retina');
 assert(normApple.supportsIpad === true, 'normalizeAppleApp detects iPad screenshots');
 assert(normApple.isUniversal === true, 'normalizeAppleApp detects Universal app');
+assert(normApple.featureGraphic !== undefined && (normApple.featureGraphic === '' || normApple.featureGraphic === BLANK_FEATURE), 'normalizeAppleApp explicitly clears feature graphic (does not auto-embed preset feature graphic)');
 
 // Test iPhone-only app normalization
 const normIphoneOnly = normalizeAppleApp({

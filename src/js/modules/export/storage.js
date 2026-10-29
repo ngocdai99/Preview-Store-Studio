@@ -106,7 +106,8 @@ function applyStateObject(s){
       }
     }
   }
-  if(s.featureGraphic) FEATURE_GRAPHIC = s.featureGraphic;
+  if(s.featureGraphic !== undefined) FEATURE_GRAPHIC = s.featureGraphic;
+  else if(s.feature !== undefined) FEATURE_GRAPHIC = s.feature;
   if(Array.isArray(s.shots) && (s.shots.length || !s._partial)) SHOTS = s.shots;
   if(typeof s.supportsIpad === 'boolean' && typeof setSupportsIpad === 'function') setSupportsIpad(s.supportsIpad);
   if(Array.isArray(s.ipadShots)){
