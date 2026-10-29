@@ -1413,6 +1413,15 @@ assert(normIphoneOnly.supportsIpad === false, 'normalizeAppleApp detects iPhone-
 assert(normIphoneOnly.isUniversal === false, 'normalizeAppleApp detects iPhone-only app (isUniversal false)');
 
 // ---------------------------------------------------------------------
+// Suite 17: Immediate Tabview Device Selection on Store Change
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 17]: Immediate Tabview Device Selection on Store Change');
+assert(bundledHtml.includes("$$('#dt [data-d]').forEach(b => b.classList.toggle('on'"), 'setStore toggles active class on Apple device selector buttons immediately');
+assert(bundledHtml.includes("$$('#gdt [data-gd]').forEach(b => b.classList.toggle('on'"), 'setStore toggles active class on Google device selector buttons immediately');
+assert(bundledHtml.includes("if(s === 'apple') syncVtPill($('dt'))"), 'setStore syncs Apple device tabview pill immediately');
+assert(bundledHtml.includes("else if(s === 'google') syncVtPill($('gdt'))"), 'setStore syncs Google device tabview pill immediately');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

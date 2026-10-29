@@ -6173,6 +6173,32 @@ function setStore(s, animate = true){
     return;
   }
 
+  // 2. IMMEDIATELY SELECT DEVICE ON TABVIEW WITHOUT WAITING FOR ANIMATION (<1ms)
+  const isTargetDual = (s === 'dual');
+  let targetAppleDev = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
+  let targetGoogleDev = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
+
+  if(isTargetDual){
+    appleDevice = 'dual';
+    googleDevice = 'dual';
+    document.body.dataset.dual = 'true';
+    document.body.dataset.store = 'dual';
+    document.body.dataset.appleDevice = 'iphone';
+    document.body.dataset.googleDevice = 'phone';
+  } else {
+    document.body.dataset.dual = 'false';
+    store = s;
+    document.body.dataset.store = s;
+    if(appleDevice === 'dual') appleDevice = 'iphone';
+    if(googleDevice === 'dual') googleDevice = 'phone';
+    document.body.dataset.appleDevice = appleDevice;
+    document.body.dataset.googleDevice = googleDevice;
+  }
+
+  // Immediately toggle active class on device selector buttons
+  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isTargetDual ? 'dual' : appleDevice)));
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isTargetDual ? 'dual' : googleDevice)));
+
   // Immediately update editor fields visibility and title for instant feedback
   if(s === 'dual'){
     $$('[data-only]').forEach(e => e.classList.remove('hide'));
@@ -6182,6 +6208,13 @@ function setStore(s, animate = true){
     if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
   }
   syncCategoryUI();
+
+  // Immediately synchronize active device tabview pill (<16ms)
+  requestAnimationFrame(() => {
+    if(s === 'apple') syncVtPill($('dt'));
+    else if(s === 'google') syncVtPill($('gdt'));
+    syncAllVtPills();
+  });
 
   const applyStoreMode = () => {
     if(s === 'dual'){
