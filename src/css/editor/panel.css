@@ -2,7 +2,7 @@
 main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 
 .editor{
-  width:var(--editor-w, 480px);min-width:480px;max-width:850px;flex-shrink:0;
+  width:var(--editor-w, 500px);min-width:500px;max-width:850px;flex-shrink:0;
   background:rgba(12,18,32,.72);backdrop-filter:blur(20px);
   border-right:1px solid var(--line);
   overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px;

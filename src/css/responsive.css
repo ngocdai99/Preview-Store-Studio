@@ -27,7 +27,7 @@
   header{padding:10px 14px;gap:8px}
   .workspace-bar{padding:7px 14px;gap:8px}
   .brand p{display:none}
-  .editor{width:var(--editor-w, 480px);min-width:480px}
+  .editor{width:var(--editor-w, 500px);min-width:500px}
   .seg{width:310px}
   .seg button{padding:6px 4px;font-size:12px;gap:4px}
   #btnCopyText .lbl{display:none}
