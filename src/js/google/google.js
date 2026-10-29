@@ -102,12 +102,16 @@ function renderTablets(){
     if(!valid.length){
       be.className = 'shot-status-badge warn';
       be.innerHTML = `${SB_INFO}<span><strong>No ${c.name} screenshots yet.</strong> The preview shows placeholders. Upload up to ${MAX_TAB}.</span>`;
+      be.style.display = 'flex';
     }else if(bad){
       be.className = 'shot-status-badge err';
       be.innerHTML = `${SB_ERR}<span><strong>${bad} of ${valid.length} screenshot${valid.length===1?'':'s'} would be rejected</strong> by Play Console. See details below.</span>`;
+      be.style.display = 'flex';
     }else{
+      // Compliant: All criteria met -> hide badge, do not show green message box
       be.className = 'shot-status-badge ok';
-      be.innerHTML = `${SB_OK}<span><strong>${c.name} tablet assets look good:</strong> ${valid.length} screenshot${valid.length===1?'':'s'}.</span>`;
+      be.innerHTML = '';
+      be.style.display = 'none';
     }
 
     // Editor list

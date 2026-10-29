@@ -64,7 +64,7 @@
   margin-left:auto;flex-shrink:0;align-self:center;
 }
 .shot-status-badge.ok{
-  background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:#34d399;
+  display:none!important;
 }
 .shot-status-badge.warn{
   background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:#fbbf24;

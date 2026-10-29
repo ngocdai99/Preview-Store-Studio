@@ -133,9 +133,10 @@ function validateFeatureGraphic(){
         dimTag.style.display = 'inline-flex';
       }
     } else {
+      // Compliant: All criteria met -> hide badge, do not show green message box
       badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> Exact 1024×500 px · PNG/JPEG (no alpha).</span>`;
-      badge.style.display = 'flex';
+      badge.innerHTML = '';
+      badge.style.display = 'none';
       if(dimTag){
         dimTag.className = 'shot-dim-tag ok';
         dimTag.textContent = '2.05:1 (1024×500)';

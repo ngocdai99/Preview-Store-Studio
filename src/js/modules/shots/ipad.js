@@ -219,9 +219,11 @@ function validateIpadScreenshots(){
     if(SUPPORTS_IPAD){
       badgeEl.className = 'shot-status-badge warn';
       badgeEl.innerHTML = `${SB_WARN}<span><strong>Universal App Notice:</strong> 0 dedicated iPad screenshots uploaded. App Store Connect requires at least <strong>1 iPad screenshot</strong> (2048×2732 px, 4:3) for Universal submission. Mockup is using scaled iPhone fallback.</span>`;
+      badgeEl.style.display = 'flex';
     } else {
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>Using Phone Fallback:</strong> No dedicated iPad screenshots uploaded. iPad mockup displays scaled iPhone screenshots.</span>`;
+      badgeEl.innerHTML = '';
+      badgeEl.style.display = 'none';
     }
     return;
   }
@@ -229,6 +231,7 @@ function validateIpadScreenshots(){
   if(validCount > 10){
     badgeEl.className = 'shot-status-badge err';
     badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> ${validCount} screenshots. Apple allows a maximum of <strong>10 screenshots</strong> for iPad.</span>`;
+    badgeEl.style.display = 'flex';
     return;
   }
 
@@ -305,9 +308,12 @@ function validateIpadScreenshots(){
       const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
       badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px or 2064×2752 px).</span>`;
+      badgeEl.style.display = 'flex';
     } else {
+      // Compliant: All criteria met -> hide badge, do not show green message box
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'} matching iPad Pro 13" standard.</span>`;
+      badgeEl.innerHTML = '';
+      badgeEl.style.display = 'none';
     }
   }
 }

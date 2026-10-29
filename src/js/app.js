@@ -3399,11 +3399,13 @@ function validateScreenshots(){
   if(validCount < minRequired){
     badgeEl.className = 'shot-status-badge warn';
     badgeEl.innerHTML = `${SB_WARN}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Notice:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'}. Stores require at least <strong>${minRequired} screenshot${minRequired === 1 ? '' : 's'}</strong>.</span>`;
+    badgeEl.style.display = 'flex';
     return;
   }
   if(validCount > maxAllowed){
     badgeEl.className = 'shot-status-badge err';
     badgeEl.innerHTML = `${SB_ERR}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Rejection Risk:</strong> ${validCount} screenshots. ${store === 'apple' ? 'Apple' : 'Google Play'} allows a maximum of <strong>${maxAllowed} screenshots</strong>.</span>`;
+    badgeEl.style.display = 'flex';
     return;
   }
 
@@ -3490,19 +3492,24 @@ function validateScreenshots(){
         badgeEl.className = 'shot-status-badge warn';
         badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> Screenshot ${items} is square (1:1). Standard phone screenshots should be portrait (9:16 or 9:19.5). Square photos will be cropped or letterboxed in phone mockups.</span>`;
       }
+      badgeEl.style.display = 'flex';
     } else if(nonPhoneIndices.length > 0){
       const items = nonPhoneIndices.map(n => `#${n}`).join(', ');
       badgeEl.className = 'shot-status-badge warn';
       badgeEl.innerHTML = `${SB_WARN}<span><strong>Aspect Ratio Notice:</strong> Screenshot ${items} has non-standard ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>`;
+      badgeEl.style.display = 'flex';
     } else if(sizeIssueIndices.length > 0){
       const items = sizeIssueIndices.map(n => `#${n}`).join(', ');
       const noun = sizeIssueIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       const verb = sizeIssueIndices.length > 1 ? 'have' : 'has';
       badgeEl.className = 'shot-status-badge err';
       badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Error:</strong> ${noun} ${items} ${verb} side length outside 320–3,840 px.</span>`;
+      badgeEl.style.display = 'flex';
     } else {
+      // Compliant: All criteria met -> hide badge, do not show green message box
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>${store === 'apple' ? 'App Store' : 'Google Play'} Compliant:</strong> ${validCount} screenshots (Valid range: ${minRequired}–${maxAllowed}) · All portrait phone aspect ratios.</span>`;
+      badgeEl.innerHTML = '';
+      badgeEl.style.display = 'none';
     }
   }
 }
@@ -3757,9 +3764,11 @@ function validateIpadScreenshots(){
     if(SUPPORTS_IPAD){
       badgeEl.className = 'shot-status-badge warn';
       badgeEl.innerHTML = `${SB_WARN}<span><strong>Universal App Notice:</strong> 0 dedicated iPad screenshots uploaded. App Store Connect requires at least <strong>1 iPad screenshot</strong> (2048×2732 px, 4:3) for Universal submission. Mockup is using scaled iPhone fallback.</span>`;
+      badgeEl.style.display = 'flex';
     } else {
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>Using Phone Fallback:</strong> No dedicated iPad screenshots uploaded. iPad mockup displays scaled iPhone screenshots.</span>`;
+      badgeEl.innerHTML = '';
+      badgeEl.style.display = 'none';
     }
     return;
   }
@@ -3767,6 +3776,7 @@ function validateIpadScreenshots(){
   if(validCount > 10){
     badgeEl.className = 'shot-status-badge err';
     badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> ${validCount} screenshots. Apple allows a maximum of <strong>10 screenshots</strong> for iPad.</span>`;
+    badgeEl.style.display = 'flex';
     return;
   }
 
@@ -3843,9 +3853,12 @@ function validateIpadScreenshots(){
       const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
       badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px or 2064×2752 px).</span>`;
+      badgeEl.style.display = 'flex';
     } else {
+      // Compliant: All criteria met -> hide badge, do not show green message box
       badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = `${SB_OK}<span><strong>Xcode &amp; App Store Ready:</strong> ${validCount} screenshot${validCount === 1 ? '' : 's'} matching iPad Pro 13" standard.</span>`;
+      badgeEl.innerHTML = '';
+      badgeEl.style.display = 'none';
     }
   }
 }
@@ -4596,9 +4609,10 @@ function validateFeatureGraphic(){
         dimTag.style.display = 'inline-flex';
       }
     } else {
+      // Compliant: All criteria met -> hide badge, do not show green message box
       badge.className = 'shot-status-badge ok';
-      badge.innerHTML = `${SB_OK}<span><strong>Google Play Compliant:</strong> Exact 1024×500 px · PNG/JPEG (no alpha).</span>`;
-      badge.style.display = 'flex';
+      badge.innerHTML = '';
+      badge.style.display = 'none';
       if(dimTag){
         dimTag.className = 'shot-dim-tag ok';
         dimTag.textContent = '2.05:1 (1024×500)';
@@ -4743,12 +4757,16 @@ function renderTablets(){
     if(!valid.length){
       be.className = 'shot-status-badge warn';
       be.innerHTML = `${SB_INFO}<span><strong>No ${c.name} screenshots yet.</strong> The preview shows placeholders. Upload up to ${MAX_TAB}.</span>`;
+      be.style.display = 'flex';
     }else if(bad){
       be.className = 'shot-status-badge err';
       be.innerHTML = `${SB_ERR}<span><strong>${bad} of ${valid.length} screenshot${valid.length===1?'':'s'} would be rejected</strong> by Play Console. See details below.</span>`;
+      be.style.display = 'flex';
     }else{
+      // Compliant: All criteria met -> hide badge, do not show green message box
       be.className = 'shot-status-badge ok';
-      be.innerHTML = `${SB_OK}<span><strong>${c.name} tablet assets look good:</strong> ${valid.length} screenshot${valid.length===1?'':'s'}.</span>`;
+      be.innerHTML = '';
+      be.style.display = 'none';
     }
 
     // Editor list
