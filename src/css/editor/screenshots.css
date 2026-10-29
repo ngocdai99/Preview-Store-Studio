@@ -37,8 +37,8 @@
 .srow.tab img, .srow.srow-tab img{width:64px;height:48px;border-radius:7px;object-fit:cover}
 .srow .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
 .shot-row-head{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:22px}
-.shot-row-title{font-size:11.5px;font-weight:700;color:#e2e8f0;letter-spacing:.01em}
-:root[data-ui=light] .shot-row-title{color:#1e293b}
+.shot-row-title{font-size:12px;font-weight:750;color:#f1f5f9;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+:root[data-ui=light] .shot-row-title{color:#0f172a}
 .srow input{font-size:11px;padding:6px 9px;border-radius:7px}
 .srow .act{display:flex;gap:5px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding-bottom:1px}
 .srow .act .mini{flex-shrink:0;white-space:nowrap}

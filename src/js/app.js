@@ -3380,7 +3380,7 @@ function renderShots(){
     // Row Title & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    head.innerHTML = `<span class="shot-row-title">Screenshot #${i + 1}</span><span class="shot-dim-tag" id="shotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span><span class="shot-dim-tag" id="shotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
@@ -3762,7 +3762,7 @@ function renderIpadSlist(){
     // Row Title & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    head.innerHTML = `<span class="shot-row-title">iPad Screenshot #${i + 1}</span><span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span><span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
@@ -4978,7 +4978,7 @@ function renderTablets(){
       }else if(it.meta && it.meta.bad){
         tagHtml = `<span class="shot-dim-tag err" style="margin-left:auto">Failed to load</span>`;
       }
-      head.innerHTML = `<span class="shot-row-title">Screenshot #${i + 1}</span>${tagHtml}`;
+      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${tagHtml}`;
 
       const act = document.createElement('div'); act.className = 'act';
       act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +

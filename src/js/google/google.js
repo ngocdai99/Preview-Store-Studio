@@ -177,7 +177,7 @@ function renderTablets(){
       }else if(it.meta && it.meta.bad){
         tagHtml = `<span class="shot-dim-tag err" style="margin-left:auto">Failed to load</span>`;
       }
-      head.innerHTML = `<span class="shot-row-title">Screenshot #${i + 1}</span>${tagHtml}`;
+      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${tagHtml}`;
 
       const act = document.createElement('div'); act.className = 'act';
       act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
