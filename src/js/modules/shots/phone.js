@@ -92,7 +92,7 @@ function renderShots(){
     head.innerHTML = `<span class="shot-row-title">#${i + 1}</span><span class="shot-dim-tag" id="shotDimTag_${i}" style="margin-left:auto;display:none"></span>`;
 
     const act = document.createElement('div'); act.className = 'act';
-    act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot">' + ICO_UPLOAD + '<span>Upload</span></button>';
+    act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>';
     const upBtn = act.firstElementChild;
     upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
 

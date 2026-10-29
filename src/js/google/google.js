@@ -180,7 +180,7 @@ function renderTablets(){
       head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${tagHtml}`;
 
       const act = document.createElement('div'); act.className = 'act';
-      act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot">' + ICO_UPLOAD + '<span>Upload</span></button>';
+      act.innerHTML = '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>';
       const upBtn = act.firstElementChild;
       upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
       col.append(head, act);
