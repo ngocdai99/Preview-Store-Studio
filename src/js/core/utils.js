@@ -569,7 +569,7 @@ function idbDelete(key) {
 // --- SVG to Store-Compliant PNG Rasterizer ---
 const SVG_STORE_PNG_CACHE = new Map();
 
-function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
+function rasterizeSvgToDimensions(svgSrc, width, height, callback) {
   if (!svgSrc || typeof svgSrc !== 'string') {
     if (callback) callback(svgSrc);
     return;
@@ -580,7 +580,7 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
     return;
   }
 
-  const cacheKey = `${targetSize}_${svgSrc.length}_${svgSrc.slice(0, 80)}`;
+  const cacheKey = `${width}x${height}_${svgSrc.length}_${svgSrc.slice(0, 80)}`;
   if (SVG_STORE_PNG_CACHE.has(cacheKey)) {
     if (callback) callback(SVG_STORE_PNG_CACHE.get(cacheKey));
     return;
@@ -591,15 +591,15 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
   img.onload = () => {
     try {
       const canvas = document.createElement('canvas');
-      canvas.width = targetSize;
-      canvas.height = targetSize;
+      canvas.width = width;
+      canvas.height = height;
       const ctx = canvas.getContext('2d');
 
       // Draw SVG scaled to target resolution
-      ctx.drawImage(img, 0, 0, targetSize, targetSize);
+      ctx.drawImage(img, 0, 0, width, height);
 
       // Check for transparency across pixels
-      const data = ctx.getImageData(0, 0, targetSize, targetSize).data;
+      const data = ctx.getImageData(0, 0, width, height).data;
       let hasAlpha = false;
       for (let i = 3; i < data.length; i += 4) {
         if (data[i] < 250) { hasAlpha = true; break; }
@@ -609,16 +609,16 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
       if (hasAlpha) {
         // Flood background with opaque base color sampled from top edge or center
         const solidCanvas = document.createElement('canvas');
-        solidCanvas.width = targetSize;
-        solidCanvas.height = targetSize;
+        solidCanvas.width = width;
+        solidCanvas.height = height;
         const sCtx = solidCanvas.getContext('2d');
-        const topEdgeIdx = (Math.floor(targetSize * 0.05) * targetSize + Math.floor(targetSize / 2)) * 4;
-        const midIdx = (Math.floor(targetSize / 2) * targetSize + Math.floor(targetSize / 2)) * 4;
+        const topEdgeIdx = (Math.floor(height * 0.05) * width + Math.floor(width / 2)) * 4;
+        const midIdx = (Math.floor(height / 2) * width + Math.floor(width / 2)) * 4;
         const r = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx] : (data[midIdx + 3] > 240 ? data[midIdx] : 255);
         const g = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 1] : (data[midIdx + 3] > 240 ? data[midIdx + 1] : 255);
         const b = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 2] : (data[midIdx + 3] > 240 ? data[midIdx + 2] : 255);
         sCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-        sCtx.fillRect(0, 0, targetSize, targetSize);
+        sCtx.fillRect(0, 0, width, height);
         sCtx.drawImage(canvas, 0, 0);
         finalPng = solidCanvas.toDataURL('image/png');
       } else {
@@ -635,6 +635,10 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
     if (callback) callback(svgSrc);
   };
   img.src = svgSrc;
+}
+
+function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
+  return rasterizeSvgToDimensions(svgSrc, targetSize, targetSize, callback);
 }
 
 /**

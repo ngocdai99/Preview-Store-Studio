@@ -65,6 +65,19 @@ function validateFeatureGraphic(){
     return;
   }
 
+  // If current asset is an SVG (e.g. from preset or SVG upload), rasterize to 1024x500 PNG
+  if(typeof rasterizeSvgToDimensions === 'function' && typeof currentAsset === 'string' && (currentAsset.startsWith('data:image/svg+xml') || currentAsset.includes('<svg'))){
+    rasterizeSvgToDimensions(currentAsset, 1024, 500, pngData => {
+      FEATURE_GRAPHIC = pngData;
+      // Also update any preset cache if active
+      if(typeof CURRENT_PRESET_KEY !== 'undefined' && typeof PRESETS === 'object' && PRESETS[CURRENT_PRESET_KEY]){
+        PRESETS[CURRENT_PRESET_KEY].featurePng = pngData;
+      }
+      renderFeature();
+    });
+    return;
+  }
+
   if(removeBtn) removeBtn.style.display = 'inline-flex';
 
   const runId = ++_featureValRunId;

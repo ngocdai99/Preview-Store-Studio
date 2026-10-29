@@ -572,7 +572,7 @@ function idbDelete(key) {
 // --- SVG to Store-Compliant PNG Rasterizer ---
 const SVG_STORE_PNG_CACHE = new Map();
 
-function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
+function rasterizeSvgToDimensions(svgSrc, width, height, callback) {
   if (!svgSrc || typeof svgSrc !== 'string') {
     if (callback) callback(svgSrc);
     return;
@@ -583,7 +583,7 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
     return;
   }
 
-  const cacheKey = `${targetSize}_${svgSrc.length}_${svgSrc.slice(0, 80)}`;
+  const cacheKey = `${width}x${height}_${svgSrc.length}_${svgSrc.slice(0, 80)}`;
   if (SVG_STORE_PNG_CACHE.has(cacheKey)) {
     if (callback) callback(SVG_STORE_PNG_CACHE.get(cacheKey));
     return;
@@ -594,15 +594,15 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
   img.onload = () => {
     try {
       const canvas = document.createElement('canvas');
-      canvas.width = targetSize;
-      canvas.height = targetSize;
+      canvas.width = width;
+      canvas.height = height;
       const ctx = canvas.getContext('2d');
 
       // Draw SVG scaled to target resolution
-      ctx.drawImage(img, 0, 0, targetSize, targetSize);
+      ctx.drawImage(img, 0, 0, width, height);
 
       // Check for transparency across pixels
-      const data = ctx.getImageData(0, 0, targetSize, targetSize).data;
+      const data = ctx.getImageData(0, 0, width, height).data;
       let hasAlpha = false;
       for (let i = 3; i < data.length; i += 4) {
         if (data[i] < 250) { hasAlpha = true; break; }
@@ -612,16 +612,16 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
       if (hasAlpha) {
         // Flood background with opaque base color sampled from top edge or center
         const solidCanvas = document.createElement('canvas');
-        solidCanvas.width = targetSize;
-        solidCanvas.height = targetSize;
+        solidCanvas.width = width;
+        solidCanvas.height = height;
         const sCtx = solidCanvas.getContext('2d');
-        const topEdgeIdx = (Math.floor(targetSize * 0.05) * targetSize + Math.floor(targetSize / 2)) * 4;
-        const midIdx = (Math.floor(targetSize / 2) * targetSize + Math.floor(targetSize / 2)) * 4;
+        const topEdgeIdx = (Math.floor(height * 0.05) * width + Math.floor(width / 2)) * 4;
+        const midIdx = (Math.floor(height / 2) * width + Math.floor(width / 2)) * 4;
         const r = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx] : (data[midIdx + 3] > 240 ? data[midIdx] : 255);
         const g = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 1] : (data[midIdx + 3] > 240 ? data[midIdx + 1] : 255);
         const b = data[topEdgeIdx + 3] > 240 ? data[topEdgeIdx + 2] : (data[midIdx + 3] > 240 ? data[midIdx + 2] : 255);
         sCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-        sCtx.fillRect(0, 0, targetSize, targetSize);
+        sCtx.fillRect(0, 0, width, height);
         sCtx.drawImage(canvas, 0, 0);
         finalPng = solidCanvas.toDataURL('image/png');
       } else {
@@ -638,6 +638,10 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
     if (callback) callback(svgSrc);
   };
   img.src = svgSrc;
+}
+
+function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
+  return rasterizeSvgToDimensions(svgSrc, targetSize, targetSize, callback);
 }
 
 /**
@@ -3111,7 +3115,7 @@ function runIconPixelAudit(iconSrc){
           dimTag.style.display = 'inline-flex';
         }
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires exact <strong>512×512 px</strong>.</span>`;
+        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span>`;
         badge.style.display = 'flex';
         return;
       }
@@ -4183,6 +4187,17 @@ if(ipadShotFile){
         if (imgEl) imgEl.src = pngDataUrl;
         inspectModalAsset(pngDataUrl, null);
       });
+    } else if (_activeModalType === 'feature' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
+      if (typeof rasterizeSvgToDimensions === 'function') {
+        rasterizeSvgToDimensions(_activeModalAsset, 1024, 500, pngDataUrl => {
+          _activeModalAsset = pngDataUrl;
+          if (imgEl) imgEl.src = pngDataUrl;
+          inspectModalAsset(pngDataUrl, null);
+        });
+      } else {
+        if (imgEl && _activeModalAsset) imgEl.src = _activeModalAsset;
+        inspectModalAsset(_activeModalAsset, opts.file);
+      }
     } else {
       if (imgEl && _activeModalAsset) {
         imgEl.src = _activeModalAsset;
@@ -4615,6 +4630,19 @@ function validateFeatureGraphic(){
     badge.style.display = 'flex';
     if(dimTag) dimTag.style.display = 'none';
     if(removeBtn) removeBtn.style.display = 'none';
+    return;
+  }
+
+  // If current asset is an SVG (e.g. from preset or SVG upload), rasterize to 1024x500 PNG
+  if(typeof rasterizeSvgToDimensions === 'function' && typeof currentAsset === 'string' && (currentAsset.startsWith('data:image/svg+xml') || currentAsset.includes('<svg'))){
+    rasterizeSvgToDimensions(currentAsset, 1024, 500, pngData => {
+      FEATURE_GRAPHIC = pngData;
+      // Also update any preset cache if active
+      if(typeof CURRENT_PRESET_KEY !== 'undefined' && typeof PRESETS === 'object' && PRESETS[CURRENT_PRESET_KEY]){
+        PRESETS[CURRENT_PRESET_KEY].featurePng = pngData;
+      }
+      renderFeature();
+    });
     return;
   }
 
@@ -6642,8 +6670,8 @@ function prewarmPresetIcons() {
   if (typeof PRESETS === 'object') {
     Object.keys(PRESETS).forEach(key => {
       const p = PRESETS[key];
-      if (!p || typeof p.icon !== 'string') return;
-      if (p.icon.startsWith('data:image/svg+xml') || p.icon.includes('<svg')) {
+      if (!p) return;
+      if (typeof p.icon === 'string' && (p.icon.startsWith('data:image/svg+xml') || p.icon.includes('<svg'))) {
         rasterizeSvgToStorePng(p.icon, 1024, png1024 => {
           p.icon1024 = png1024;
           if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key && store === 'apple') {
@@ -6656,6 +6684,15 @@ function prewarmPresetIcons() {
           if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key && store === 'google') {
             ICON = png512;
             renderIcons();
+          }
+        });
+      }
+      if (typeof rasterizeSvgToDimensions === 'function' && typeof p.feature === 'string' && (p.feature.startsWith('data:image/svg+xml') || p.feature.includes('<svg'))) {
+        rasterizeSvgToDimensions(p.feature, 1024, 500, png1024x500 => {
+          p.featurePng = png1024x500;
+          if (CURRENT_PRESET_KEY === key) {
+            FEATURE_GRAPHIC = png1024x500;
+            renderFeature();
           }
         });
       }
@@ -6893,7 +6930,18 @@ function loadPreset(key){
       });
     }
   }
-  FEATURE_GRAPHIC = p.feature || DEFAULT_FEATURE;
+  FEATURE_GRAPHIC = p.featurePng || p.feature || DEFAULT_FEATURE;
+  if(typeof rasterizeSvgToDimensions === 'function' && typeof p.feature === 'string' && (p.feature.startsWith('data:image/svg+xml') || p.feature.includes('<svg'))){
+    if(!p.featurePng){
+      rasterizeSvgToDimensions(p.feature, 1024, 500, png1024x500 => {
+        p.featurePng = png1024x500;
+        if(CURRENT_PRESET_KEY === key){
+          FEATURE_GRAPHIC = png1024x500;
+          renderFeature();
+        }
+      });
+    }
+  }
   SHOTS = [...p.shots];
   IPAD_SHOTS = [];
   REVIEWS = p.reviews ? JSON.parse(JSON.stringify(p.reviews)) : [];

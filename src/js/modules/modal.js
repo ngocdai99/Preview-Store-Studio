@@ -199,6 +199,17 @@
         if (imgEl) imgEl.src = pngDataUrl;
         inspectModalAsset(pngDataUrl, null);
       });
+    } else if (_activeModalType === 'feature' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
+      if (typeof rasterizeSvgToDimensions === 'function') {
+        rasterizeSvgToDimensions(_activeModalAsset, 1024, 500, pngDataUrl => {
+          _activeModalAsset = pngDataUrl;
+          if (imgEl) imgEl.src = pngDataUrl;
+          inspectModalAsset(pngDataUrl, null);
+        });
+      } else {
+        if (imgEl && _activeModalAsset) imgEl.src = _activeModalAsset;
+        inspectModalAsset(_activeModalAsset, opts.file);
+      }
     } else {
       if (imgEl && _activeModalAsset) {
         imgEl.src = _activeModalAsset;

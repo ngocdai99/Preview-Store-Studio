@@ -32,8 +32,8 @@ function prewarmPresetIcons() {
   if (typeof PRESETS === 'object') {
     Object.keys(PRESETS).forEach(key => {
       const p = PRESETS[key];
-      if (!p || typeof p.icon !== 'string') return;
-      if (p.icon.startsWith('data:image/svg+xml') || p.icon.includes('<svg')) {
+      if (!p) return;
+      if (typeof p.icon === 'string' && (p.icon.startsWith('data:image/svg+xml') || p.icon.includes('<svg'))) {
         rasterizeSvgToStorePng(p.icon, 1024, png1024 => {
           p.icon1024 = png1024;
           if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key && store === 'apple') {
@@ -46,6 +46,15 @@ function prewarmPresetIcons() {
           if (!IS_CUSTOM_ICON && CURRENT_PRESET_KEY === key && store === 'google') {
             ICON = png512;
             renderIcons();
+          }
+        });
+      }
+      if (typeof rasterizeSvgToDimensions === 'function' && typeof p.feature === 'string' && (p.feature.startsWith('data:image/svg+xml') || p.feature.includes('<svg'))) {
+        rasterizeSvgToDimensions(p.feature, 1024, 500, png1024x500 => {
+          p.featurePng = png1024x500;
+          if (CURRENT_PRESET_KEY === key) {
+            FEATURE_GRAPHIC = png1024x500;
+            renderFeature();
           }
         });
       }
@@ -283,7 +292,18 @@ function loadPreset(key){
       });
     }
   }
-  FEATURE_GRAPHIC = p.feature || DEFAULT_FEATURE;
+  FEATURE_GRAPHIC = p.featurePng || p.feature || DEFAULT_FEATURE;
+  if(typeof rasterizeSvgToDimensions === 'function' && typeof p.feature === 'string' && (p.feature.startsWith('data:image/svg+xml') || p.feature.includes('<svg'))){
+    if(!p.featurePng){
+      rasterizeSvgToDimensions(p.feature, 1024, 500, png1024x500 => {
+        p.featurePng = png1024x500;
+        if(CURRENT_PRESET_KEY === key){
+          FEATURE_GRAPHIC = png1024x500;
+          renderFeature();
+        }
+      });
+    }
+  }
   SHOTS = [...p.shots];
   IPAD_SHOTS = [];
   REVIEWS = p.reviews ? JSON.parse(JSON.stringify(p.reviews)) : [];

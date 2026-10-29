@@ -367,7 +367,7 @@ function runIconPixelAudit(iconSrc){
           dimTag.style.display = 'inline-flex';
         }
         badge.className = 'shot-status-badge warn';
-        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires exact <strong>512×512 px</strong>.</span>`;
+        badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span>`;
         badge.style.display = 'flex';
         return;
       }
