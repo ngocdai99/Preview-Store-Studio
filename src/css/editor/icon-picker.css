@@ -49,16 +49,22 @@
   width:20px;height:20px;border-radius:50%;
   background:rgba(15,23,42,.88);backdrop-filter:blur(6px);
   border:1px solid rgba(255,255,255,.3);
-  color:#fff;cursor:pointer;
+  color:#cbd5e1;cursor:pointer;
   display:none;align-items:center;justify-content:center;
-  transition:background .18s ease,transform .18s ease,border-color .18s ease;
+  transition:background .18s ease,transform .18s ease,border-color .18s ease,color .18s ease;
   z-index:25;padding:0;
   box-shadow:0 2px 6px rgba(0,0,0,.45);
 }
 .ico-remove-btn:hover{
-  background:rgba(239,68,68,.95);border-color:#ef4444;transform:scale(1.15);color:#fff;
+  background:rgba(30,41,59,.98);border-color:rgba(255,255,255,.6);transform:scale(1.15);color:#fff;
 }
 .ico-remove-btn svg{display:block}
+:root[data-ui=light] .ico-remove-btn{
+  background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.15);color:#475569;box-shadow:0 2px 6px rgba(0,0,0,.12);
+}
+:root[data-ui=light] .ico-remove-btn:hover{
+  background:#fff;border-color:rgba(0,0,0,.35);color:#0f172a;
+}
 
 /* Clean Icon Status Pill (Marketing-Grade) */
 .ms-icon-status {
