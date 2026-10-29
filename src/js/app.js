@@ -2618,7 +2618,7 @@ if (editorResizer && editorPanel) {
 
   document.addEventListener('mousemove', e => {
     if (!isResizingSidebar) return;
-    const newWidth = Math.min(Math.max(e.clientX, 360), Math.min(window.innerWidth - 360, 850));
+    const newWidth = Math.min(Math.max(e.clientX, 480), Math.min(window.innerWidth - 360, 850));
     document.documentElement.style.setProperty('--editor-w', `${newWidth}px`);
     editorPanel.style.width = `${newWidth}px`;
     localStorage.setItem('sps_editor_w', newWidth);
@@ -2634,9 +2634,9 @@ if (editorResizer && editorPanel) {
     }
   });
 
-  // Double-click resizer to reset to default 440px
+  // Double-click resizer to reset to default 480px
   editorResizer.addEventListener('dblclick', () => {
-    const defaultW = 440;
+    const defaultW = 480;
     document.documentElement.style.setProperty('--editor-w', `${defaultW}px`);
     editorPanel.style.width = `${defaultW}px`;
     localStorage.setItem('sps_editor_w', defaultW);
@@ -2645,7 +2645,7 @@ if (editorResizer && editorPanel) {
   // Restore saved width
   const savedW = localStorage.getItem('sps_editor_w');
   if (savedW && !isNaN(savedW)) {
-    const w = Math.min(Math.max(parseInt(savedW, 10), 360), 850);
+    const w = Math.min(Math.max(parseInt(savedW, 10), 480), 850);
     document.documentElement.style.setProperty('--editor-w', `${w}px`);
     editorPanel.style.width = `${w}px`;
   }
@@ -4584,34 +4584,70 @@ function renderTablets(){
       const handle = document.createElement('div');
       handle.className = 'drag-handle'; handle.textContent = '⠿'; handle.title = 'Drag to reorder';
       r.appendChild(handle);
-      r.appendChild(mk(it.src || PH));
+      // Thumbnail Preview with Click-to-Inspect
+      const thumb = mk(it.src || PH);
+      thumb.style.cursor = 'pointer';
+      thumb.title = 'Click to inspect & view details';
+      thumb.onclick = () => {
+        if(typeof openImageDetailModal === 'function'){
+          openImageDetailModal({
+            src: it.src || PH,
+            type: 'tablet',
+            store: 'google',
+            index: i,
+            title: `${c.name} Screenshot #${i + 1} Inspector`,
+            onReplace: (file, dataUrl) => {
+              TABS[key][i] = makeTabItem(dataUrl);
+              renderTablets();
+              saveState();
+            }
+          });
+        }
+      };
+      r.appendChild(thumb);
 
       const col = document.createElement('div'); col.className = 'col';
-      const inp = document.createElement('input'); inp.type = 'text';
-      inp.value = it.src.startsWith('data:') ? '(Embedded / Uploaded Image)' : it.src;
-      inp.placeholder = 'https://… image URL';
-      inp.disabled = it.src.startsWith('data:');
-      inp.onchange = () => { TABS[key][i] = makeTabItem(inp.value); renderTablets(); saveState(); };
+      const head = document.createElement('div'); head.className = 'shot-row-head';
 
-      const meta = document.createElement('div'); meta.className = 'tab-meta';
+      let tagHtml = '';
       if(it.meta && it.meta.w){
         const probs = tabIssues(key, it);
-        meta.textContent = `${it.meta.w}×${it.meta.h} · ${ratioLabel(it.meta.w, it.meta.h)}` + (it.meta.bytes ? ' · ' + fmtSize(it.meta.bytes) : '') + (probs.length ? ' — ' + probs.join('; ') : ' OK');
-        meta.classList.add(probs.length ? 'bad' : 'ok');
+        const tagClass = probs.length ? 'err' : 'ok';
+        const tagText = `${ratioLabel(it.meta.w, it.meta.h)} (${it.meta.w}×${it.meta.h})`;
+        tagHtml = `<span class="shot-dim-tag ${tagClass}" style="margin-left:auto" title="${probs.join('; ')}">${tagText}</span>`;
       }else if(it.meta && it.meta.bad){
-        meta.textContent = 'Image could not be loaded'; meta.classList.add('bad');
-      }else if(it.src){
-        meta.textContent = 'Checking…';
+        tagHtml = `<span class="shot-dim-tag err" style="margin-left:auto">Failed to load</span>`;
       }
+      head.innerHTML = `<span class="shot-row-title">Screenshot #${i + 1}</span>${tagHtml}`;
 
       const act = document.createElement('div'); act.className = 'act';
-      act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button><button class="mini" title="Move Up">↑</button><button class="mini" title="Move Down">↓</button><button class="mini del" title="Delete">&times;</button>';
+      act.innerHTML = '<button class="mini" title="Replace with file">' + ICO_UPLOAD + 'Upload</button>' +
+        '<button class="mini" title="Inspect / View Details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Inspect</button>' +
+        '<button class="mini" title="Move Up">↑</button>' +
+        '<button class="mini" title="Move Down">↓</button>' +
+        '<button class="mini del" title="Delete">&times;</button>';
       const b = act.children;
       b[0].onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
-      b[1].onclick = () => mvTab(key, i, -1);
-      b[2].onclick = () => mvTab(key, i, 1);
-      b[3].onclick = () => { TABS[key].splice(i, 1); renderTablets(); saveState(); };
-      col.append(inp, meta, act);
+      b[1].onclick = () => {
+        if(typeof openImageDetailModal === 'function'){
+          openImageDetailModal({
+            src: it.src || PH,
+            type: 'tablet',
+            store: 'google',
+            index: i,
+            title: `${c.name} Screenshot #${i + 1} Inspector`,
+            onReplace: (file, dataUrl) => {
+              TABS[key][i] = makeTabItem(dataUrl);
+              renderTablets();
+              saveState();
+            }
+          });
+        }
+      };
+      b[2].onclick = () => mvTab(key, i, -1);
+      b[3].onclick = () => mvTab(key, i, 1);
+      b[4].onclick = () => { TABS[key].splice(i, 1); renderTablets(); saveState(); };
+      col.append(head, act);
       r.appendChild(col);
 
       r.addEventListener('dragstart', e => { r.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'tabshot:' + key + ':' + i); });

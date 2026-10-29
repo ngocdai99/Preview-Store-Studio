@@ -346,6 +346,6 @@ body[data-store=google] #f-cat-apple{display:none}
 .tabsec:first-of-type{border-top:0;padding-top:0}
 .tabsec-h{display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
 .tabsec .btns{display:flex;gap:8px}.tabsec .btns .add{flex:1}
-.srow.tab img{width:64px;height:48px;object-fit:contain}
+.srow.tab img{width:64px;height:48px;object-fit:cover;border-radius:7px}
 .tab-meta{font-size:10.5px;color:var(--mut);line-height:1.35}
 .tab-meta.ok{color:var(--succ)}.tab-meta.bad{color:var(--err)}
