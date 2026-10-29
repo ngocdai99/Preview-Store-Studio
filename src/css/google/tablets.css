@@ -5,6 +5,7 @@ body[data-store=google][data-google-device="tab7"] .dev.google,
 body[data-store=google][data-google-device="tab10"] .dev.google{display:none!important}
 body[data-store=google][data-google-device="tab7"] .dev.gtab7{display:block!important}
 body[data-store=google][data-google-device="tab10"] .dev.gtab10{display:block!important}
+body[data-store=google][data-google-device="tab10"] #vt{display:none!important}
 body[data-store=apple] .card[data-only=google]{display:none}
 .card.hide{display:none}
 
@@ -18,8 +19,8 @@ body[data-store=apple] .card[data-only=google]{display:none}
 .dev.gtab::before,.dev.gtab::after{display:none}
 .dev.gtab7{--sw:768px;--sh:480px;--gh:175px}
 .dev.gtab7.portrait{--sw:480px;--sh:768px;--gh:270px}
-.dev.gtab10{--sw:1024px;--sh:640px;--gh:250px;--pad:18px}
-.dev.gtab10.portrait{--sw:640px;--sh:1024px;--gh:380px}
+.dev.gtab10{--sw:1024px;--sh:640px;--gh:240px;--pad:18px}
+.dev.gtab10.portrait{--sw:640px;--sh:1024px;--gh:340px}
 .phone.gtab-screen{width:var(--sw);height:var(--sh);border-radius:22px}
 .gtab-screen .gt-cam{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:9px;height:9px;border-radius:50%;background:#000;box-shadow:0 0 0 2px #15161a;z-index:8}
 .gtab-screen .sb{height:30px;padding:8px 24px 0;font-size:12px}
@@ -30,7 +31,6 @@ body[data-store=apple] .card[data-only=google]{display:none}
 .gt-head{display:flex;align-items:center;gap:18px;margin:2px 0 12px}
 .gt-info{flex:1;min-width:0}
 .gtab-screen .g-ico{width:80px;height:80px;border-radius:19px}
-.dev.gtab10 .g-ico{width:96px;height:96px;border-radius:22px}
 .gtab-screen .g-name{font-size:24px}
 .gtab-screen .inst.gt-inst{width:auto;min-width:150px;padding:10px 38px;margin:0;flex-shrink:0}
 .gtab-screen .gt-met{max-width:420px;padding:0 0 14px}
@@ -42,4 +42,707 @@ body[data-store=apple] .card[data-only=google]{display:none}
 .dev.gtab.portrait .gt-cols{flex-direction:column;gap:0}
 .gtab-screen .gt-gal-label{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--s);text-transform:uppercase;margin:0 0 8px}
 
+/* ==========================================================================
+   GOOGLE PLAY 10-INCH TABLET · INTEGRATED TWO-PANE SPLIT SCREEN (Material 3)
+   ========================================================================== */
+.dev.gtab10 .phone.gtab-screen {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
+/* Workspace container: houses Navigation Rail + Split layout */
+.dev.gtab10 .gt10-workspace {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 0;
+  height: calc(100% - 30px);
+  overflow: hidden;
+  position: relative;
+}
+
+/* 1. Left Vertical Navigation Rail (Material 3) */
+.dev.gtab10 .gt10-rail {
+  width: 72px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 12px;
+  user-select: none;
+  z-index: 5;
+}
+.dev.gtab10 .gt10-rail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 64px;
+  cursor: pointer;
+  color: var(--s);
+  transition: color 0.15s ease;
+}
+.dev.gtab10 .gt10-rail-item:hover {
+  color: var(--t);
+}
+.dev.gtab10 .gt10-rail-icon {
+  width: 56px;
+  height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.dev.gtab10 .gt10-rail-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+.dev.gtab10 .gt10-rail-lbl {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.1px;
+  text-align: center;
+  white-space: nowrap;
+}
+.dev.gtab10 .gt10-rail-item.on {
+  color: var(--t);
+}
+.dev.gtab10 .gt10-rail-item.on .gt10-rail-lbl {
+  font-weight: 600;
+}
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-rail-item.on .gt10-rail-icon,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-rail-item.on .gt10-rail-icon {
+  background: #004a77;
+  color: #c2e7ff;
+}
+.phone.google[data-theme=light] .dev.gtab10 .gt10-rail-item.on .gt10-rail-icon,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-rail-item.on .gt10-rail-icon {
+  background: #c2e7ff;
+  color: #001d35;
+}
+
+/* 2. Two-Pane Split Container */
+.dev.gtab10 .gt10-split {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Master Column: Search & Results list */
+.dev.gtab10 .gt10-search-col {
+  width: 38%;
+  min-width: 320px;
+  max-width: 410px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 0 4px 14px 10px;
+  flex-shrink: 0;
+}
+
+/* Search Input Bar */
+.dev.gtab10 .gt10-search-bar {
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px 0 2px;
+  margin-bottom: 2px;
+  color: var(--t);
+}
+.dev.gtab10 .gt10-search-btn-icon {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.15s ease;
+}
+.dev.gtab10 .gt10-search-btn-icon:hover {
+  background: var(--sf);
+}
+.dev.gtab10 .gt10-search-input-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--t);
+}
+.dev.gtab10 .gt10-search-tools {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--t);
+  flex-shrink: 0;
+}
+.dev.gtab10 .gt10-search-tools svg {
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.15s ease;
+}
+.dev.gtab10 .gt10-search-tools svg:hover {
+  opacity: 1;
+}
+
+/* Filter Chips row */
+.dev.gtab10 .gt10-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  flex-shrink: 0;
+  padding: 2px 2px 10px;
+  scrollbar-width: none;
+}
+.dev.gtab10 .gt10-chips-row::-webkit-scrollbar {
+  display: none;
+}
+.dev.gtab10 .gt10-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid var(--sp);
+  color: var(--t);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.dev.gtab10 .gt10-chip:hover {
+  background: var(--sf);
+}
+
+/* Results feed */
+.dev.gtab10 .gt10-results-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sp) transparent;
+}
+.dev.gtab10 .gt10-results-list::-webkit-scrollbar {
+  width: 4px;
+}
+.dev.gtab10 .gt10-results-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dev.gtab10 .gt10-results-list::-webkit-scrollbar-thumb {
+  background: var(--sp);
+  border-radius: 4px;
+}
+
+/* Search Item Card */
+.dev.gtab10 .gt10-item-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+.dev.gtab10 .gt10-item-card:hover {
+  background: rgba(128, 128, 128, 0.08);
+}
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-item-card.active,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-item-card.active {
+  background: #282a2f;
+}
+.phone.google[data-theme=light] .dev.gtab10 .gt10-item-card.active,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-item-card.active {
+  background: #e8edf5;
+}
+
+/* Item Icons */
+.dev.gtab10 .gt10-item-icon {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 12px !important;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Skeleton Secondary Search Results */
+.dev.gtab10 .gt10-skel-card {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+.dev.gtab10 .gt10-skel-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: var(--sf);
+  border: 1px solid var(--sp);
+  flex-shrink: 0;
+}
+.dev.gtab10 .gt10-skel-line {
+  height: 9px;
+  border-radius: 5px;
+  background: var(--sf);
+  margin: 3px 0;
+}
+.dev.gtab10 .gt10-skel-line.w-30 { width: 30%; }
+.dev.gtab10 .gt10-skel-line.w-35 { width: 35%; }
+.dev.gtab10 .gt10-skel-line.w-40 { width: 40%; }
+.dev.gtab10 .gt10-skel-line.w-45 { width: 45%; }
+.dev.gtab10 .gt10-skel-line.w-50 { width: 50%; }
+.dev.gtab10 .gt10-skel-line.w-55 { width: 55%; }
+.dev.gtab10 .gt10-skel-line.w-60 { width: 60%; }
+.dev.gtab10 .gt10-skel-line.w-65 { width: 65%; }
+.dev.gtab10 .gt10-skel-line.w-70 { width: 70%; }
+.dev.gtab10 .gt10-skel-line.w-75 { width: 75%; }
+.dev.gtab10 .gt10-skel-line.w-80 { width: 80%; }
+
+.dev.gtab10 .gt10-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dev.gtab10 .gt10-item-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--t);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dev.gtab10 .gt10-item-sub {
+  font-size: 11.5px;
+  color: var(--s);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.dev.gtab10 .gt10-item-sub span {
+  display: inline !important;
+}
+.dev.gtab10 .gt10-item-status,
+.dev.gtab10 .gt10-item-stats {
+  font-size: 11px;
+  color: var(--s);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.dev.gtab10 .gt10-item-status svg {
+  color: var(--g);
+}
+
+/* 3. Vertical Divider with Thumb */
+.dev.gtab10 .gt10-split-divider {
+  width: 14px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dev.gtab10 .gt10-split-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--sp);
+  transform: translateX(-50%);
+}
+.dev.gtab10 .gt10-thumb {
+  position: relative;
+  z-index: 2;
+  width: 4px;
+  height: 38px;
+  border-radius: 4px;
+  background: var(--s);
+  opacity: 0.55;
+}
+
+/* 4. Detail Column (Matching Phone DOM) */
+.dev.gtab10 .gt10-detail-col {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 28px 40px 18px;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+}
+.dev.gtab10 .gt10-detail-col::-webkit-scrollbar {
+  display: none;
+}
+
+/* Window Action Bar */
+.dev.gtab10 .gt10-window-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.dev.gtab10 .gt10-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--t);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.dev.gtab10 .gt10-icon-btn:hover {
+  background: var(--sf);
+}
+.dev.gtab10 .gt10-window-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* App Identity Header */
+.dev.gtab10 .gt10-app-header {
+  margin-bottom: 20px;
+}
+.dev.gtab10 .gt10-header-dev {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-header-dev,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-header-dev {
+  color: #a8c7fa !important;
+}
+.phone.google[data-theme=light] .dev.gtab10 .gt10-header-dev,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-header-dev {
+  color: #0b57d0 !important;
+}
+.dev.gtab10 .gt10-header-title {
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 0 0 16px;
+  font-family: Google Sans, Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-header-title,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-header-title {
+  color: #ffffff;
+}
+.phone.google[data-theme=light] .dev.gtab10 .gt10-header-title,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-header-title {
+  color: #1f1f1f;
+}
+.dev.gtab10 .gt10-header-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.dev.gtab10 .gt10-header-icon {
+  width: 68px !important;
+  height: 68px !important;
+  border-radius: 16px !important;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.dev.gtab10 .gt10-header-metrics {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.dev.gtab10 .gt10-met-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.dev.gtab10 .gt10-met-item b {
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  margin-bottom: 3px;
+  color: var(--t);
+}
+.dev.gtab10 .gt10-met-item small {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--s);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+.dev.gtab10 .gt10-star {
+  font-size: 12px;
+  margin-left: 2px;
+  color: currentColor;
+}
+.dev.gtab10 .gt10-age-badge {
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 15px;
+  display: inline-block;
+}
+.dev.gtab10 .gt10-info-ico {
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.dev.gtab10 .gt10-met-dl-size {
+  align-items: center;
+}
+.dev.gtab10 .gt10-dl-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Action Row (Split Install Button + Tablet Badge) */
+.dev.gtab10 .gt10-action-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.dev.gtab10 .gt10-install-split {
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: 17px;
+  overflow: hidden;
+  box-shadow: none;
+  margin: 0;
+}
+.dev.gtab10 .gt10-install-main {
+  height: 34px;
+  padding: 0 18px;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transition: opacity 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dev.gtab10 .gt10-install-arrow {
+  height: 34px;
+  width: auto;
+  min-width: 42px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.dev.gtab10 .gt10-install-main:hover,
+.dev.gtab10 .gt10-install-arrow:hover {
+  opacity: 0.9;
+}
+.dev.gtab10 .gt10-install-main,
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-install-main,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-install-main {
+  background: #A8C8FB;
+  color: #041e49;
+}
+.dev.gtab10 .gt10-install-arrow,
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-install-arrow,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-install-arrow {
+  background: #A8C8FB;
+  color: #041e49;
+  border-left: 1px solid rgba(4, 30, 73, 0.25);
+}
+.phone.google[data-theme=light] .dev.gtab10 .gt10-install-main,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-install-main {
+  background: #0b57d0;
+  color: #ffffff;
+}
+.phone.google[data-theme=light] .dev.gtab10 .gt10-install-arrow,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-install-arrow {
+  background: #0b57d0;
+  color: #ffffff;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.dev.gtab10 .gt10-tablet-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 14px 0 6px;
+  border-radius: 17px;
+  font-size: 12.5px;
+  font-weight: 500;
+  user-select: none;
+  border: none;
+  background: #00320F;
+  color: #D1E9D3;
+}
+.dev.gtab10 .gt10-tablet-banner-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #D1E9D3;
+  color: #000000;
+}
+.dev.gtab10 .gt10-tablet-banner-circle svg {
+  stroke: #000000;
+}
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-tablet-banner,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-tablet-banner,
+.phone.google[data-theme=light] .dev.gtab10 .gt10-tablet-banner,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-tablet-banner {
+  background: #00320F;
+  color: #D1E9D3;
+}
+.phone.google[data-theme=dark] .dev.gtab10 .gt10-tablet-banner-circle,
+.dev.gtab10 .phone.google[data-theme=dark] .gt10-tablet-banner-circle,
+.phone.google[data-theme=light] .dev.gtab10 .gt10-tablet-banner-circle,
+.dev.gtab10 .phone.google[data-theme=light] .gt10-tablet-banner-circle {
+  background: #D1E9D3;
+  color: #000000;
+}
+
+.dev.gtab10 .gt10-device-note {
+  font-size: 11.5px;
+  color: var(--s);
+  margin-top: 10px;
+  line-height: 1.4;
+}
+.dev.gtab10 .gt10-iap-note {
+  font-size: 11.5px;
+  color: var(--s);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* Gallery placed directly below Install button */
+.dev.gtab10 .gt10-gallery-sec {
+  margin: 16px 0 8px;
+  width: 100%;
+}
+.dev.gtab10 #galTab10 {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 0 14px;
+  scrollbar-width: none;
+  width: 100%;
+}
+.dev.gtab10 #galTab10::-webkit-scrollbar {
+  display: none;
+}
+.dev.gtab10 #galTab10 img {
+  flex: 0 0 auto;
+  width: auto;
+  height: 240px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  object-fit: cover;
+}
+
+/* Detail Sections */
+.dev.gtab10 .gt10-sec {
+  margin-top: 20px;
+  border-top: 1px solid var(--sp);
+  padding-top: 16px;
+}
+.dev.gtab10 .gt10-about-short {
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--t);
+  margin: 8px 0 12px;
+}
+.dev.gtab10 .gt10-rank-chip {
+  background: var(--sf);
+  border: 1px solid var(--sp);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--t);
+}
+
+/* Portrait Orientation Responsive Adaptation for 10" Tablet */
+.dev.gtab10.portrait .gt10-workspace {
+  flex-direction: column;
+}
+.dev.gtab10.portrait .gt10-rail {
+  width: 100%;
+  height: auto;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--sp);
+}
+.dev.gtab10.portrait .gt10-split {
+  flex-direction: column;
+}
+.dev.gtab10.portrait .gt10-search-col {
+  width: 100%;
+  max-width: none;
+  height: 280px;
+  border-bottom: 1px solid var(--sp);
+  padding: 0 12px 10px;
+}
+.dev.gtab10.portrait .gt10-split-divider {
+  display: none;
+}
+.dev.gtab10.portrait .gt10-detail-col {
+  padding: 12px 20px 32px;
+}
+.dev.gtab10.portrait #galTab10 img {
+  height: 320px;
+}

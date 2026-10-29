@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 /**
+ * ========================================================================
+ * [DEPRECATED / NGƯNG BẢO TRÌ]
+ * LƯU Ý DÀNH CHO AGENT / DEVELOPER:
+ * - Đã ngưng bảo trì marketing_vi. Agent tuyệt đối KHÔNG thực hiện sửa file,
+ *   KHÔNG chạy build và KHÔNG deploy bản marketing_vi nữa.
+ * - Tương tự, lệnh deploy lên surge.sh cũng đã ngưng bảo trì.
+ * ========================================================================
+ * 
  * Store Preview Studio · Vietnamese Marketing Page Generator
  * 
  * Generates docs/marketing_vi.html from docs/marketing.html
@@ -38,6 +46,7 @@ function repAll(src, from, to) {
 }
 
 function buildMarketingVi() {
+  console.warn('[DEPRECATED / NGƯNG BẢO TRÌ] marketing_vi đã chính thức ngưng bảo trì. Agent không được tự ý sửa file, build hoặc deploy.');
   const t0 = Date.now();
   if (!fs.existsSync(SOURCE_FILE)) {
     console.error(`[✗] Source file not found: ${SOURCE_FILE}`);
@@ -267,8 +276,8 @@ function buildMarketingVi() {
     '<span>Bản quyền thương mại cho 1 người</span>'
   );
   html = rep(html, 
-    '<span>Get Plus Edition ($19)</span>',
-    '<span>Mua Plus Edition ($19)</span>'
+    '<span>Get Plus Edition ($29)</span>',
+    '<span>Mua Plus Edition ($29)</span>'
   );
 
   // Pro Card
