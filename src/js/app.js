@@ -4579,8 +4579,34 @@ $('featureFile').onchange=e=>{
   });
   e.target.value='';
 };
+// Helper to check if current feature graphic is a placeholder / empty
+function isPlaceholderFeature(){
+  const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
+  if(!currentAsset) return true;
+  if(typeof BLANK_FEATURE !== 'undefined' && currentAsset === BLANK_FEATURE) return true;
+  return false;
+}
+
+function handleFeatureSlotClick(e){
+  if(e) e.stopPropagation();
+  if(isPlaceholderFeature()){
+    if(typeof canUpload === 'function' && !canUpload(1000)) return;
+    if($('featureFile')) $('featureFile').click();
+  } else {
+    if(typeof openImageDetailModal === 'function'){
+      openImageDetailModal({ src: FEATURE_GRAPHIC, type: 'feature', store: 'google' });
+    }
+  }
+}
+
 if($('featureInspect')){
-  $('featureInspect').onclick = () => {
+  $('featureInspect').onclick = (e) => {
+    if(e) e.stopPropagation();
+    if(isPlaceholderFeature()){
+      if(typeof canUpload === 'function' && !canUpload(1000)) return;
+      if($('featureFile')) $('featureFile').click();
+      return;
+    }
     if(typeof openImageDetailModal === 'function'){
       openImageDetailModal({ src: FEATURE_GRAPHIC, type: 'feature', store: 'google' });
     }
@@ -4588,27 +4614,26 @@ if($('featureInspect')){
 }
 const featurePrevImg = $('featurePrev');
 if(featurePrevImg){
-  featurePrevImg.onclick = () => {
-    if(typeof openImageDetailModal === 'function'){
-      openImageDetailModal({ src: FEATURE_GRAPHIC, type: 'feature', store: 'google' });
-    }
-  };
+  featurePrevImg.onclick = handleFeatureSlotClick;
 }
 const featureDropZone = $('featureDropZone');
-featureDropZone.addEventListener('dragover',e=>{e.preventDefault();featureDropZone.classList.add('drag-over')});
-featureDropZone.addEventListener('dragleave',()=>{featureDropZone.classList.remove('drag-over')});
-featureDropZone.addEventListener('drop',e=>{
-  e.preventDefault();featureDropZone.classList.remove('drag-over');
-  const file = e.dataTransfer.files[0];
-  if(file && file.type.startsWith('image/')){
-    readFile(file,d=>{
-      FEATURE_GRAPHIC=d;
-      renderFeature();
-      saveState();
-      showToast('Feature graphic dropped & applied! (1,024 × 500 px)', 'ok');
-    });
-  }
-});
+if(featureDropZone){
+  featureDropZone.onclick = handleFeatureSlotClick;
+  featureDropZone.addEventListener('dragover',e=>{e.preventDefault();featureDropZone.classList.add('drag-over')});
+  featureDropZone.addEventListener('dragleave',()=>{featureDropZone.classList.remove('drag-over')});
+  featureDropZone.addEventListener('drop',e=>{
+    e.preventDefault();featureDropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if(file && file.type.startsWith('image/')){
+      readFile(file,d=>{
+        FEATURE_GRAPHIC=d;
+        renderFeature();
+        saveState();
+        showToast('Feature graphic dropped & applied! (1,024 × 500 px)', 'ok');
+      });
+    }
+  });
+}
 
 
 // Feature Graphic Info Popover Controller
@@ -4621,7 +4646,23 @@ function validateFeatureGraphic(){
   const badge = $('featureStatusBadge');
   const dimTag = $('featureDimTag');
   const removeBtn = $('featureRemove');
+  const inspectBtn = $('featureInspect');
+  const dropZone = $('featureDropZone');
   if(!badge) return;
+
+  const placeholder = isPlaceholderFeature();
+  if(dropZone){
+    if(placeholder){
+      dropZone.setAttribute('title', 'Click to upload Feature Graphic (1024×500 px)');
+    } else {
+      dropZone.setAttribute('title', 'Click to inspect Feature Graphic in high resolution');
+    }
+  }
+  if(inspectBtn){
+    inspectBtn.disabled = placeholder;
+    inspectBtn.classList.toggle('disabled', placeholder);
+    inspectBtn.setAttribute('title', placeholder ? 'Upload a feature graphic to inspect' : 'Inspect Feature Graphic Details & Compliance');
+  }
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
   if(!currentAsset || currentAsset === (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
