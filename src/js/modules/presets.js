@@ -322,6 +322,9 @@ function loadPreset(key){
   update();
   if(CURRENT_PRESET_KEY === 'draft'){
     saveState();
+  } else if(typeof hasUserDraft === 'function' && !hasUserDraft()){
+    // If draft is empty, selecting any template immediately initializes that template as the user's active draft
+    if(typeof initDraftFromCurrentPreset === 'function') initDraftFromCurrentPreset();
   }
   if(typeof updatePresetBanner === 'function') updatePresetBanner();
   if(typeof updateDraftPill === 'function') updateDraftPill();

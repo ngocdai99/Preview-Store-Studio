@@ -1471,6 +1471,7 @@ assert(bundledHtml.includes('#draftBtnTitle') && bundledHtml.includes('text-over
 assert(bundledHtml.includes('id="optOpenTemplatesModal"'), 'Menu contains option to open templates modal');
 assert(bundledHtml.includes('id="templatesModal"'), 'Dedicated templates modal dialog exists');
 assert(bundledHtml.includes('class="templates-modal-grid"'), 'Templates modal contains responsive template card grid');
+assert(bundledHtml.includes('initDraftFromCurrentPreset'), 'Selecting template when draft is empty converts template into active draft');
 
 // ---------------------------------------------------------------------
 // Summary Report
