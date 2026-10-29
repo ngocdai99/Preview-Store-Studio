@@ -2764,6 +2764,7 @@ function updateIconDropZoneUi(){
   const dropZone = $('icoDropZone');
   const inspectBtn = $('icoInspect');
   const badge = $('iconStatusBadge');
+  const removeBtn = $('icoRemove');
   const placeholder = isPlaceholderIcon();
 
   if(dropZone){
@@ -2776,6 +2777,10 @@ function updateIconDropZoneUi(){
       dropZone.classList.add('has');
       dropZone.setAttribute('title', 'Click to inspect icon in high resolution');
     }
+  }
+
+  if(removeBtn){
+    removeBtn.style.display = placeholder ? 'none' : 'inline-flex';
   }
 
   if(inspectBtn){
@@ -2860,8 +2865,8 @@ let _iconValRunId = 0;
 function validateAppIcon(){
   updateIconDropZoneUi();
   const badge = $('iconStatusBadge');
-  if(!badge || !ICON) return;
-  if(isPlaceholderIcon()){
+  if(!badge) return;
+  if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){
     badge.style.display = 'none';
     badge.innerHTML = '';
     return;
@@ -2874,7 +2879,7 @@ function validateAppIcon(){
 
   if(typeof rasterizeSvgToStorePng === 'function' && typeof activeIconSrc === 'string' && activeIconSrc.startsWith('data:image/svg+xml')){
     rasterizeSvgToStorePng(activeIconSrc, targetDim, pngSrc => {
-      if(isPlaceholderIcon()){
+      if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){
         badge.style.display = 'none';
         badge.innerHTML = '';
         return;
@@ -2894,6 +2899,11 @@ function runIconPixelAudit(iconSrc){
   img.crossOrigin = 'anonymous';
   img.onload = () => {
     if(runId !== _iconValRunId) return;
+    if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){
+      badge.style.display = 'none';
+      badge.innerHTML = '';
+      return;
+    }
     const w = img.naturalWidth || (store === 'google' ? 512 : 1024);
     const h = img.naturalHeight || (store === 'google' ? 512 : 1024);
     const isSq = (w === h);
@@ -3168,6 +3178,40 @@ if(icoDropZone){
       });
     }
   });
+}
+
+// Remove / Reset Custom App Icon
+const icoRemoveBtn = $('icoRemove');
+if(icoRemoveBtn){
+  icoRemoveBtn.onclick = (e) => {
+    if(e) e.stopPropagation();
+    ++_iconValRunId; // cancel any in-flight icon validation
+    IS_CUSTOM_ICON = false;
+    ICON = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+    if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = '';
+    if(typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = '';
+    ICON_FILE_SIZE = 0;
+    ICON_FILE_TYPE = '';
+    ICON_FILE_NAME = '';
+    const fileInput = $('icoFile');
+    if(fileInput) fileInput.value = '';
+    if(typeof userDraft !== 'undefined' && userDraft){
+      userDraft.icon = ICON;
+      userDraft.icon1024 = ICON;
+      userDraft.isCustomIcon = false;
+    }
+    const badge = $('iconStatusBadge');
+    if(badge){
+      badge.style.display = 'none';
+      badge.innerHTML = '';
+    }
+    renderIcons();
+    saveState();
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof showToast === 'function'){
+      showToast('App icon removed', 'ok');
+    }
+  };
 }
 
 
