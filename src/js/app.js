@@ -3381,12 +3381,7 @@ function renderShots(){
     // Row Title, Role Tag & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    const roleTag = i === 0
-      ? '<span class="shot-role-tag cover">Cover</span>'
-      : (i === 1 || i === 2)
-        ? '<span class="shot-role-tag search">Search</span>'
-        : '<span class="shot-role-tag gallery">Gallery</span>';
-    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>`;
 
     const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
     metaLine.innerHTML = `<span class="shot-dim-tag" id="shotDimTag_${i}" style="display:none"></span>`;
@@ -3774,10 +3769,7 @@ function renderIpadSlist(){
     // Row Title, Role Tag & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    const roleTag = i === 0
-      ? '<span class="shot-role-tag cover">Cover</span>'
-      : '<span class="shot-role-tag gallery">Gallery</span>';
-    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>`;
 
     const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
     metaLine.innerHTML = `<span class="shot-dim-tag" id="ipadShotDimTag_${i}" style="display:none"></span>`;
@@ -5000,11 +4992,7 @@ function renderTablets(){
         tagHtml = `<span class="shot-dim-tag err">Failed to load</span>`;
       }
 
-      const roleTag = i === 0
-        ? '<span class="shot-role-tag cover">Cover</span>'
-        : '<span class="shot-role-tag gallery">Gallery</span>';
-
-      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>`;
 
       const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
       metaLine.innerHTML = tagHtml;

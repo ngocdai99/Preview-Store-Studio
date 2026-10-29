@@ -178,11 +178,7 @@ function renderTablets(){
         tagHtml = `<span class="shot-dim-tag err">Failed to load</span>`;
       }
 
-      const roleTag = i === 0
-        ? '<span class="shot-role-tag cover">Cover</span>'
-        : '<span class="shot-role-tag gallery">Gallery</span>';
-
-      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${roleTag}`;
+      head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>`;
 
       const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
       metaLine.innerHTML = tagHtml;
