@@ -1,6 +1,8 @@
 /* ─── Templates Modal Dialog ─── */
 .templates-modal-card {
-  max-width: 540px;
+  max-width: 580px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .templates-modal-icon-wrap {
@@ -63,9 +65,11 @@
 
 .templates-modal-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   margin-top: 4px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .template-card {
@@ -80,6 +84,9 @@
   text-align: left;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   color: #e2e8f0;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .template-card:hover {
@@ -119,6 +126,11 @@
   color: #94a3b8;
 }
 
+.template-card .preset-thumb-blank svg {
+  width: 16px;
+  height: 16px;
+}
+
 .template-card:hover .preset-thumb-blank {
   border-color: rgba(255, 255, 255, 0.5);
   color: #fff;
@@ -127,6 +139,7 @@
 .template-card-meta {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .template-card-title {
@@ -134,6 +147,9 @@
   font-weight: 700;
   color: #f8fafc;
   line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .template-card-cat {
@@ -191,7 +207,7 @@
   color: #64748b;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 540px) {
   .templates-modal-grid {
     grid-template-columns: 1fr;
   }
