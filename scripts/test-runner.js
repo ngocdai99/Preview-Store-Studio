@@ -1469,6 +1469,8 @@ assert(!bundledHtml.includes('.brand h1{display:none}'), 'Tool name .brand h1 is
 assert(bundledHtml.includes('.header-center{order:3;flex:0 0 100%;width:100%') || bundledHtml.includes('.header-center{order:3;flex:0 0 100%'), 'Header center segmented control container expands to 100% and wraps to row 2 on mobile');
 assert(bundledHtml.includes('.brand h1{display:block!important'), '.brand h1 is explicitly forced to display:block on mobile viewports');
 assert(bundledHtml.includes('.seg{width:100%;max-width:100%;min-width:0;display:flex}'), 'Segmented control (.seg) expands to full width with flex layout on mobile');
+assert(bundledHtml.includes('.workspace-bar') && bundledHtml.includes('flex-wrap: nowrap'), 'Workspace bar strictly maintains flex-wrap: nowrap to prevent Export button dropping');
+assert(bundledHtml.includes('#draftBtnTitle') && bundledHtml.includes('text-overflow: ellipsis'), 'Draft button title supports ellipsis truncation when space is tight');
 
 // ---------------------------------------------------------------------
 // Summary Report

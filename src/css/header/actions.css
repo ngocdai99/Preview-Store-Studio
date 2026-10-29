@@ -94,6 +94,7 @@
 
 .workspace-export-dropdown {
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 #btnExport {
@@ -219,6 +220,17 @@
   background: rgba(255, 255, 255, 0.05);
   color: #e2e8f0;
   padding: 4px 10px 4px 4px;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+#draftBtnTitle {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ms-pill.custom.has-draft:hover {
@@ -292,6 +304,12 @@
   font-size: 12.5px;
   transition: all .2s;
   user-select: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ms-pill-import .lbl-short {
+  display: none;
 }
 
 .ms-pill-import:hover {

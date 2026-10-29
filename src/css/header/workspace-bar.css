@@ -2,7 +2,7 @@
 .workspace-bar {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding: 7px 18px;
   background: rgba(13, 19, 34, 0.78);
   backdrop-filter: blur(18px);

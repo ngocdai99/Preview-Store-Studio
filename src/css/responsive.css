@@ -62,7 +62,8 @@
   .header-center{order:3;flex:0 0 100%;width:100%;display:flex;justify-content:center;margin-top:2px}
   .seg{width:100%;max-width:100%;min-width:0;display:flex}
   .seg button{flex:1 1 0;min-width:0;padding:7px 6px;font-size:12.5px;gap:5px;white-space:nowrap}
-  .workspace-bar{padding:7px 12px;gap:8px;min-height:auto}
+  .workspace-bar{padding:6px 12px;gap:6px;min-height:42px;flex-wrap:nowrap}
+  #draftBtnTitle{max-width:120px}
   #btnDraft .ms-pill-reset-btn{display:inline-flex;width:18px;height:18px;font-size:11px;margin-left:4px;flex-shrink:0}
   main{flex-direction:column;min-height:0}
   .editor{width:100%;min-width:0;border:0;flex:1;padding:14px;gap:12px;margin-left:0!important;visibility:visible!important;pointer-events:auto!important;transition:none!important}
@@ -79,6 +80,22 @@
   .mtabs button.on{color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 6px 18px var(--glow)}
 }
 
+/* Small Tablet & Intermediate Viewports: <= 680px */
+@media(max-width:680px){
+  .workspace-bar{padding:6px 10px;gap:6px;flex-wrap:nowrap}
+  #draftBtnTitle{max-width:90px}
+  #btnPresets{padding:6px 10px;font-size:12px;gap:4px}
+  #btnExport{padding:6px 11px;font-size:12px;gap:5px}
+  .ms-pill-import{padding:5px 9px;font-size:12px;gap:5px}
+}
+
+/* Viewport <= 580px: short label for import */
+@media(max-width:580px){
+  #draftBtnTitle{max-width:80px}
+  .ms-pill-import .lbl-full{display:none}
+  .ms-pill-import .lbl-short{display:inline}
+}
+
 /* Small Mobile Phones: <= 540px */
 @media(max-width:540px){
   header{padding:7px 10px;gap:6px}
@@ -86,17 +103,33 @@
   .logo{width:28px;height:28px}
   .right{gap:5px}
   .header-center{margin-top:0}
-  .workspace-bar{padding:7px 10px;gap:7px}
+  .workspace-bar{padding:6px 8px;gap:5px;flex-wrap:nowrap}
+  #draftBtnTitle{max-width:70px;font-size:12px}
+  #btnDraft small{font-size:9.5px;padding:1px 4px}
+  #btnDraft .ms-pill-reset-btn{width:16px;height:16px;font-size:10px}
+  #btnPresets{padding:5px 8px;font-size:11.5px}
+  #btnExport{padding:5px 9px;font-size:11.5px}
   .seg button{padding:6px 4px;font-size:12px;gap:4px}
   .seg button span:not(.s-ico){font-size:11.5px}
-  #btnDraft .ms-pill-reset-btn{width:18px;height:18px;font-size:11px}
+}
+
+/* Compact Mobile: <= 420px */
+@media(max-width:420px){
+  .workspace-bar{padding:5px 6px;gap:4px;flex-wrap:nowrap}
+  #draftBtnBadge{display:none}
+  #draftBtnTitle{max-width:55px}
+  .ms-pill-import .lbl-full, .ms-pill-import .lbl-short{display:none}
+  .ms-pill-import{padding:5px 8px}
+  #btnExport .lbl{display:none}
+  #btnExport{padding:5px 8px}
 }
 
 @media(max-width:380px){
   header{padding:6px 8px;gap:5px}
   .brand h1{font-size:11.5px}
   .logo{width:26px;height:26px}
-  .workspace-bar{padding:6px 8px;gap:6px}
+  .workspace-bar{padding:5px 4px;gap:3px;flex-wrap:nowrap}
+  #draftBtnTitle{max-width:45px}
   .seg button{padding:5px 2px;font-size:11px;gap:3px}
   .seg button span:not(.s-ico){font-size:10.5px}
 }
