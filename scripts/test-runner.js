@@ -1217,6 +1217,8 @@ assert(bundledHtml.includes('MOCKUP ONLY'), "Metrics card displays MOCKUP ONLY b
 assert(bundledHtml.includes('id="f-st-off"') && bundledHtml.includes('id="f-st-wm"'), "Metrics toggle switches are preserved in DOM");
 assert(bundledHtml.includes('type="hidden" id="f-st-rating"') && bundledHtml.includes('type="hidden" id="f-st-iap"'), "Sample input elements converted to hidden state inputs for backward compatibility");
 assert(bundledHtml.includes('initInfoPopover("metricsInfoBtn"'), "Bundled JS initializes metricsInfoBtn popover");
+assert(bundledHtml.includes("counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '')"), 'Phone screenshots counter does not trigger warning highlight on clean 0 screenshots state');
+assert(bundledHtml.includes('if(validCount === 0){\n    badgeEl.style.display = \'none\';') || bundledHtml.includes('if(validCount === 0)'), 'Phone screenshots validation suppresses warning notice banner when no screenshots are uploaded (0 screenshots)');
 assert(!bundledHtml.includes('id="tab7Url"') && !bundledHtml.includes('id="tab10Url"'), "By URL buttons (#tab7Url, #tab10Url) are removed from Tablet Screenshots card");
 assert(!bundledHtml.includes('let isFloating') && !bundledHtml.includes('btnFloat'), "Orphaned isFloating / btnFloat dead code is removed from bundle");
 assert(bundledHtml.includes("const defaultPrivLinked = 'Identifiers, Usage Data'") && bundledHtml.includes("const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion'"), "Custom blank draft initializes with standard App Privacy and Google Play Data Safety disclosures");
