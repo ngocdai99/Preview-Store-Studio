@@ -1212,8 +1212,8 @@ assert(bundledHtml.includes('id="metricsInfoBtn"'), "Metrics card header contain
 assert(bundledHtml.includes('id="metricsInfoPop"'), "Floating popover #metricsInfoPop exists in DOM");
 assert(bundledHtml.includes('id="metricsInfoClose"'), "Popover close button #metricsInfoClose exists");
 assert(bundledHtml.includes("Mockup Metrics &amp; Badges Guidelines"), "Popover contains Mockup Metrics & Badges Guidelines title");
-assert(bundledHtml.includes("1. Not Storefront Listing Fields:"), "Popover preserves item 1 explanation on store calculated fields");
-assert(bundledHtml.includes("2. Preset Synchronization:"), "Popover preserves streamlined item 2 explanation on preset synchronization");
+assert(bundledHtml.includes("Not Storefront Listing Fields:"), "Popover explains store-calculated fields cannot be edited in console");
+assert(!bundledHtml.includes("2. Preset Synchronization:"), "Popover removes redundant preset synchronization bullet point");
 assert(!bundledHtml.includes("3. Clean Day-One"), "Popover removes verbose item 3");
 assert(!bundledHtml.includes("4. Optional Customization"), "Popover removes verbose item 4");
 assert(bundledHtml.includes('id="metricsDetails"'), "Manual sample metrics accordion #metricsDetails is present for custom mockup metrics");
