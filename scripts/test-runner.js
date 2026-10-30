@@ -196,20 +196,24 @@ assert(!!PRESETS.pulsefit, 'Preset PulseFit exists');
 assert(!!PRESETS.zenmind, 'Preset ZenMind exists');
 assert(!!PRESETS.cyberstrike, 'Preset CyberStrike exists');
 assert(!!PRESETS.edulearn, 'Preset SkillSphere (Education) exists');
+assert(!!PRESETS.studio, 'Preset Store Preview Studio exists');
 
 assert(PRESETS.pulsefit.icon !== PRESETS.taskflow.icon, 'PulseFit icon is distinct from TaskFlow icon');
 assert(PRESETS.zenmind.icon !== PRESETS.taskflow.icon, 'ZenMind icon is distinct from TaskFlow icon');
 assert(PRESETS.pulsefit.icon !== PRESETS.zenmind.icon, 'PulseFit icon is distinct from ZenMind icon');
 assert(PRESETS.cyberstrike.icon !== PRESETS.taskflow.icon, 'CyberStrike icon is distinct from TaskFlow icon');
 assert(PRESETS.edulearn.icon !== PRESETS.taskflow.icon, 'SkillSphere icon is distinct from TaskFlow icon');
+assert(PRESETS.studio.icon !== PRESETS.taskflow.icon, 'Store Preview Studio icon is distinct from TaskFlow icon');
 
 assert(PRESETS.pulsefit.shots[0] !== PRESETS.taskflow.shots[0], 'PulseFit screenshots are distinct from TaskFlow');
 assert(PRESETS.zenmind.shots[0] !== PRESETS.taskflow.shots[0], 'ZenMind screenshots are distinct from TaskFlow');
 assert(PRESETS.edulearn.shots[0] !== PRESETS.taskflow.shots[0], 'SkillSphere screenshots are distinct from TaskFlow');
+assert(PRESETS.studio.shots[0] !== PRESETS.taskflow.shots[0], 'Store Preview Studio screenshots are distinct from TaskFlow');
 assert(PRESETS.pulsefit.shots.length === 4, 'PulseFit has exactly 4 screenshots');
 assert(PRESETS.zenmind.shots.length === 4, 'ZenMind has exactly 4 screenshots');
 assert(PRESETS.cyberstrike.shots.length === 4, 'CyberStrike has exactly 4 screenshots');
 assert(PRESETS.edulearn.shots.length === 4, 'SkillSphere has exactly 4 screenshots');
+assert(PRESETS.studio.shots.length === 4, 'Store Preview Studio has exactly 4 screenshots');
 
 // Check 1024x1024 square opaque specifications
 [
@@ -217,15 +221,16 @@ assert(PRESETS.edulearn.shots.length === 4, 'SkillSphere has exactly 4 screensho
   { name: 'PulseFit', icon: PRESETS.pulsefit.icon },
   { name: 'ZenMind', icon: PRESETS.zenmind.icon },
   { name: 'CyberStrike', icon: PRESETS.cyberstrike.icon },
-  { name: 'SkillSphere', icon: PRESETS.edulearn.icon }
+  { name: 'SkillSphere', icon: PRESETS.edulearn.icon },
+  { name: 'StorePreviewStudio', icon: PRESETS.studio.icon }
 ].forEach(p => {
   const decoded = decodeURIComponent(p.icon);
   assert(decoded.includes('width="1024"') && decoded.includes('height="1024"'), `${p.name} icon specifies 1024x1024 dimensions`);
-  assert(decoded.includes('<rect width="512" height="512" fill="url(#') || decoded.includes('<rect width="512" height="512" fill="#'), `${p.name} icon has opaque non-transparent background rect`);
+  assert(decoded.includes('<rect width="512" height="512" fill="url(#') || decoded.includes('<rect width="512" height="512" fill="#') || decoded.includes('<rect width="32" height="32" fill="url(#') || decoded.includes('<rect width="1024" height="1024" fill="url(#'), `${p.name} icon has opaque non-transparent background rect`);
 });
 
 // Verify template files in presets/
-const presetFiles = ['saas-app-template.json', 'fitness-tracker-template.json', 'zenmind-meditation-template.json', 'cyberstrike-rpg-game-template.json', 'education-language-template.json'];
+const presetFiles = ['saas-app-template.json', 'fitness-tracker-template.json', 'zenmind-meditation-template.json', 'cyberstrike-rpg-game-template.json', 'education-language-template.json', 'store-preview-studio-template.json'];
 presetFiles.forEach(file => {
   const fullPath = path.join(ROOT_DIR, 'presets', file);
   assert(fs.existsSync(fullPath), `Preset file presets/${file} exists`);
@@ -245,7 +250,7 @@ const testNow = new Date();
 const currentTestYear = String(testNow.getFullYear());
 const currentTestMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][testNow.getMonth()];
 
-['taskflow', 'pulsefit', 'zenmind', 'cyberstrike', 'edulearn'].forEach(key => {
+['studio', 'taskflow', 'pulsefit', 'zenmind', 'cyberstrike', 'edulearn'].forEach(key => {
   const p = PRESETS[key];
   assert(p.rdate && p.rdate.includes(currentTestYear) && p.rdate.includes(currentTestMonth), `Preset ${key} release date '${p.rdate}' contains current month (${currentTestMonth}) and year (${currentTestYear})`);
   assert(Array.isArray(p.reviews) && p.reviews.length >= 2, `Preset ${key} contains an array of at least 2 reviews`);

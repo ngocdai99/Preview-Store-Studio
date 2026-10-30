@@ -2,6 +2,7 @@
 // --- Preset Switcher ---
 const PRESET_ICONS = {
   none: BLANK_ICON,
+  studio: STUDIO_ICON,
   taskflow: DEFAULT_ICON,
   pulsefit: PULSEFIT_ICON,
   zenmind: ZENMIND_ICON,
@@ -239,11 +240,11 @@ function loadPreset(key){
   $('f-short').value = p.short;
   $('f-dev').value = p.dev;
   setCategory(p.category);
-  if($('f-ver')) $('f-ver').value = key === 'cyberstrike' ? '4.2.0' : (key === 'pulsefit' ? '3.1.2' : (key === 'zenmind' ? '1.8.0' : (key === 'edulearn' ? '4.1.0' : '2.4.0')));
+  if($('f-ver')) $('f-ver').value = (p && p.ver) ? p.ver : (key === 'studio' ? '2.1.0' : (key === 'cyberstrike' ? '4.2.0' : (key === 'pulsefit' ? '3.1.2' : (key === 'zenmind' ? '1.8.0' : (key === 'edulearn' ? '4.1.0' : '2.4.0')))));
   if($('f-rdate')) $('f-rdate').value = (p && p.rdate) ? p.rdate : getCurrentMonthDateStr(2, true);
-  if($('f-email')) $('f-email').value = (p && p.email) ? p.email : (key === 'cyberstrike' ? 'support@omniarcade.games' : (key === 'pulsefit' ? 'support@pulsefit.io' : (key === 'zenmind' ? 'hello@zenmind.app' : (key === 'edulearn' ? 'support@skillsphere.edu' : 'support@flowcraft.studio'))));
-  if($('f-phone')) $('f-phone').value = (p && p.phone) ? p.phone : (key === 'cyberstrike' ? '+81 3 5555 0188' : (key === 'pulsefit' ? '+1 888-555-0142' : (key === 'zenmind' ? '+1 800-555-0177' : (key === 'edulearn' ? '+44 20 7946 0912' : '+1 800-555-0199'))));
-  if($('f-addr')) $('f-addr').value = (p && p.addr) ? p.addr : (key === 'cyberstrike' ? 'Tokyo, Japan' : (key === 'edulearn' ? 'San Francisco, CA' : 'Vietnam'));
+  if($('f-email')) $('f-email').value = (p && p.email) ? p.email : (key === 'studio' ? 'support@previewstudio.app' : (key === 'cyberstrike' ? 'support@omniarcade.games' : (key === 'pulsefit' ? 'support@pulsefit.io' : (key === 'zenmind' ? 'hello@zenmind.app' : (key === 'edulearn' ? 'support@skillsphere.edu' : 'support@flowcraft.studio')))));
+  if($('f-phone')) $('f-phone').value = (p && p.phone) ? p.phone : (key === 'studio' ? '+1 800-555-0199' : (key === 'cyberstrike' ? '+81 3 5555 0188' : (key === 'pulsefit' ? '+1 888-555-0142' : (key === 'zenmind' ? '+1 800-555-0177' : (key === 'edulearn' ? '+44 20 7946 0912' : '+1 800-555-0199')))));
+  if($('f-addr')) $('f-addr').value = (p && p.addr) ? p.addr : (key === 'studio' ? 'San Francisco, CA' : (key === 'cyberstrike' ? 'Tokyo, Japan' : (key === 'edulearn' ? 'San Francisco, CA' : 'Vietnam')));
   if($('f-priv-linked')) $('f-priv-linked').value = p.privLinked || '';
   if($('f-priv-notlinked')) $('f-priv-notlinked').value = p.privNotLinked || '';
   if($('f-priv-google')) $('f-priv-google').value = p.privGoogle || '';
