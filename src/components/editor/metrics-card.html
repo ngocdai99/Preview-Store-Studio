@@ -1,7 +1,7 @@
-<!-- Card 4: Mockup Display Settings & Metrics -->
+<!-- Card 4: Settings & Metrics -->
 <div class="card" id="statsCard">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
-    <h2 style="margin:0"><span class="card-num" title="Card 4">4</span><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Mockup Settings &amp; Metrics</h2>
+    <h2 style="margin:0"><span class="card-num" title="Card 4">4</span><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Settings &amp; Metrics</h2>
     <div style="display:flex;align-items:center;gap:6px">
       <span class="tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:0.04em">MOCKUP ONLY</span>
       <span class="info-tip-btn" id="metricsInfoBtn" tabindex="0" role="button" aria-label="Mockup Metrics Display Guidelines" title="How Metrics &amp; Badges Work in Preview Studio">
@@ -9,26 +9,20 @@
       </span>
     </div>
   </div>
-  <p class="hint" style="margin-bottom:12px">Store ratings, download milestones, and badges in the mockup use <strong>illustrative sample numbers</strong> automatically for your custom draft and all presets.</p>
+  <p class="hint">Ratings, ranking, and download badges use illustrative sample data.</p>
   
   <div class="sw-group" style="margin-bottom:0">
     <label class="sw-row" id="swRowMetricsOff">
-      <span class="sw-lbl">Hide illustrative metrics (rating, chart, downloads) from mockup</span>
+      <span class="sw-lbl">Hide all metrics from mockup</span>
       <span class="sw-box">
         <input type="checkbox" id="f-st-off" class="sw-inp">
-        <span class="sw-track"><span class="sw-thumb"></span></span>
-      </span>
-    </label>
-    <label class="sw-row">
-      <span class="sw-lbl">Add a small “Illustrative mockup” caption below exported images</span>
-      <span class="sw-box">
-        <input type="checkbox" id="f-st-wm" class="sw-inp">
         <span class="sw-track"><span class="sw-thumb"></span></span>
       </span>
     </label>
   </div>
 
   <!-- Hidden state inputs to maintain 100% backward compatibility for export & presets -->
+  <input type="hidden" id="f-st-wm" value="false">
   <input type="hidden" id="f-st-rating" value="4.9">
   <input type="hidden" id="f-st-count" value="1.8K">
   <input type="hidden" id="f-st-rank" value="1">

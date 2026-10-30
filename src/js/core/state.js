@@ -16,7 +16,7 @@ function getCurrentMonthDateStr(dayOffset = 0, withYear = true) {
 const STATS_DEFAULT = {rating:'4.9', count:'1.8K', rank:'1', dl:'50K+', size:'86 MB', age:'4+', iap:'iap'};
 const STATS = {...STATS_DEFAULT};
 let STATS_OFF = false;   // hide all illustrative numbers in the mockups
-let EXPORT_WM = true;    // add a small "Illustrative mockup" line under exported images
+let EXPORT_WM = false;   // illustrative mockup watermark note (disabled by default)
 const STAT_INPUTS = {rating:'f-st-rating', count:'f-st-count', rank:'f-st-rank', dl:'f-st-dl', size:'f-st-size', age:'f-st-age', iap:'f-st-iap'};
 
 const GOOGLE_AGE_MAP = {
