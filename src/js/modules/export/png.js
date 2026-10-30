@@ -40,6 +40,12 @@ function syncExportModalUI() {
     const radio = el.querySelector('input[type="radio"]');
     if (radio) radio.checked = isAct;
   });
+  const summaryEl = $('exportSummaryBadge');
+  if (summaryEl) {
+    const frameLabel = exportPrefs.frame === 'screen' ? 'Screen Only' : 'Device Frame';
+    const scaleLabel = exportPrefs.scale === 3 ? '3x Ultra HD' : '2x HD';
+    summaryEl.textContent = `${scaleLabel} · ${frameLabel} · Transparent`;
+  }
 }
 
 function saveExportPrefs() {
@@ -97,13 +103,28 @@ if (btnDownloadModal) {
   };
 }
 
+let copyResetTimer = null;
 if (btnCopyModal) {
   btnCopyModal.onclick = () => {
-    closeExportModal();
+    const originalHtml = btnCopyModal.innerHTML;
     exportPNG(exportPrefs.scale, {
       frameless: exportPrefs.frame === 'screen',
       transparent: true,
-      action: 'copy'
+      action: 'copy',
+      onSuccess: () => {
+        clearTimeout(copyResetTimer);
+        btnCopyModal.classList.add('copied');
+        btnCopyModal.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span style="color:#10b981;font-weight:600;">Copied!</span>
+        `;
+        copyResetTimer = setTimeout(() => {
+          btnCopyModal.classList.remove('copied');
+          btnCopyModal.innerHTML = originalHtml;
+        }, 1800);
+      }
     });
   };
 }
@@ -216,7 +237,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   // Screen only: capture the inner screen (.phone) instead of the whole device frame
   const target = (!isDual && opts.frameless) ? (devToCapture.querySelector('.phone') || devToCapture) : devToCapture;
 
-  showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`, 'info', 4000);
+  if(opts.action !== 'copy'){
+    showToast(`Rendering ${scaleFactor}x PNG${opts.frameless ? ' (screen only)' : ''}...`, 'info', 4000);
+  }
 
   // Measure unzoomed layout size without touching live DOM zoom to prevent canvas jitter
   isExporting = true;
@@ -372,7 +395,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             return;
           }
           navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-            .then(() => showToast('Image copied to clipboard! Ready to paste into Figma/Slack.', 'ok'))
+            .then(() => {
+              if (typeof opts.onSuccess === 'function') {
+                opts.onSuccess();
+              }
+            })
             .catch(() => {
               link.click();
               showToast('Downloaded PNG (clipboard write restricted)', 'info');

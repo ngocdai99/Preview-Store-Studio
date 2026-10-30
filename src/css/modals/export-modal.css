@@ -349,6 +349,34 @@
   line-height: 1.2;
 }
 
+/* ─── Live Export Summary Bar ─── */
+.export-summary-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  margin-top: 4px;
+}
+
+.export-summary-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  flex-shrink: 0;
+}
+
+.export-summary-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 0.2px;
+}
+
 /* ─── Footer & Action Buttons ─── */
 .export-modal-footer {
   display: flex;
@@ -405,6 +433,12 @@
   color: #ffffff;
 }
 
+.export-btn-secondary.copied {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
+}
+
 .export-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -450,6 +484,15 @@
 :root[data-ui=light] .export-modal-close:hover {
   background: #f1f5f9;
   color: #0f172a;
+}
+
+:root[data-ui=light] .export-summary-bar {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+:root[data-ui=light] .export-summary-text {
+  color: #64748b;
 }
 
 :root[data-ui=light] .export-preview-stage {
