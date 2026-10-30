@@ -38,6 +38,7 @@
 @media(max-width:980px){
   .brand h1{display:block;font-size:13.5px;white-space:nowrap}
   .workspace-bar{padding:6px 12px;gap:8px}
+  #draftBtnTitle{max-width:220px}
   .seg{width:300px}
   .seg button{padding:6px 4px;font-size:12px;gap:4px}
   .seg button span:not(.s-ico){font-size:11.5px}
@@ -63,7 +64,7 @@
   .seg{width:100%;max-width:100%;min-width:0;display:flex}
   .seg button{flex:1 1 0;min-width:0;padding:7px 6px;font-size:12.5px;gap:5px;white-space:nowrap}
   .workspace-bar{padding:6px 12px;gap:6px;min-height:42px;flex-wrap:nowrap}
-  #draftBtnTitle{max-width:120px}
+  #draftBtnTitle{max-width:180px}
   #btnDraft .ms-pill-reset-btn{display:inline-flex;width:18px;height:18px;font-size:11px;margin-left:4px;flex-shrink:0}
   main{flex-direction:column;min-height:0}
   .editor{width:100%;min-width:0;border:0;flex:1;padding:14px;gap:12px;margin-left:0!important;visibility:visible!important;pointer-events:auto!important;transition:none!important}
