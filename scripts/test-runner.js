@@ -1205,6 +1205,7 @@ assert(bundledHtml.includes("Apple App Store (Public Listing):"), "Popover expla
 assert(bundledHtml.includes('class="wn-ver"') && bundledHtml.includes('.wn-ver.hl-target'), "What's New wraps full 'Version X.Y.Z' in .wn-ver with yellow focus highlight");
 assert(bundledHtml.includes('.wn-ver') && bundledHtml.includes("case 'ver':"), "getFieldMockupTargets maps ver field to .wn-ver container");
 assert(bundledHtml.includes("500 characters"), "Popover notes Google Play 500 characters limit");
+assert(!bundledHtml.includes("What's New is preserved across both stores"), "What's New popover removes redundant item 4");
 assert(bundledHtml.includes('initInfoPopover("whatsNewInfoBtn"'), "Bundled JS initializes whatsNewInfoBtn popover");
 
 // 6. Mockup Display Settings & Metrics Card Modernization
