@@ -358,7 +358,7 @@ function updateDraftPill(){
       presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
         '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
         '<small id="presetBtnBadge">Preset</small>' +
-        '<button type="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</button>';
+        '<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</span>';
 
       const closeBtn = presetPill.querySelector('#presetPillCloseBtn');
       if(closeBtn){
@@ -407,7 +407,7 @@ function updateDraftPill(){
     draftPill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
       '<span id="draftBtnTitle">' + escapeHtml(appTitle) + '</span>' +
       '<small id="draftBtnBadge">Draft</small>' +
-      '<button type="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</button>';
+      '<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</span>';
 
     const resetBtn = draftPill.querySelector('#msPillResetBtn');
     if(resetBtn){

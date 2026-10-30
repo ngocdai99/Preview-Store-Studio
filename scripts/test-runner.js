@@ -1634,6 +1634,7 @@ console.log('\n[SUITE 22]: Preset Pill Close Button & Dynamic Re-opening from Me
 // Test 1: Preset pill markup contains close button with ms-pill-reset-btn styling
 assert(bundledHtml.includes('id="presetPillCloseBtn"'), 'Workspace bar contains dedicated #presetPillCloseBtn element');
 assert(bundledHtml.includes('class="ms-pill-reset-btn" id="presetPillCloseBtn"'), 'presetPillCloseBtn uses standardized ms-pill-reset-btn class');
+assert(!(/<button[^>]*id="btnPresetPill"[^>]*>(?:(?!<\/button>)[\s\S])*?<button/.test(bundledHtml)), 'btnPresetPill static markup contains no invalid nested buttons');
 
 // Test 2: closePresetPill function resets CURRENT_ACTIVE_PRESET and returns to draft
 assert(bundledHtml.includes('function closePresetPill()') && bundledHtml.includes('CURRENT_ACTIVE_PRESET = null'), 'closePresetPill sets CURRENT_ACTIVE_PRESET = null');
