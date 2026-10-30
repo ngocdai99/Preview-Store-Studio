@@ -1176,6 +1176,7 @@ assert(bundledHtml.includes('id="privacyInfoPop"'), 'Floating popover #privacyIn
 assert(bundledHtml.includes('id="privacyInfoClose"'), 'Popover close button #privacyInfoClose exists');
 assert(bundledHtml.includes('Store Privacy &amp; Data Safety Guidelines'), 'Popover contains Store Privacy & Data Safety Guidelines title');
 assert(bundledHtml.includes('Questionnaires on Store Consoles:'), 'Popover explains console questionnaire compliance process');
+assert(!bundledHtml.includes("4. Preview Studio Sync:"), 'Privacy popover removes redundant item 4');
 assert(bundledHtml.includes('id="privacyMockBanner"'), 'Privacy card renders compact interactive banner #privacyMockBanner');
 assert(!bundledHtml.includes('class="pcb-shield"'), 'Privacy card removed protect shield icon from compact banner');
 assert(bundledHtml.includes('class="pcb-tags"'), 'Privacy card wraps APPLE & GOOGLE store tags on a separate line below title');
