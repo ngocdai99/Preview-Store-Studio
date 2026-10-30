@@ -162,10 +162,30 @@ async function fetchStoreAppData(target) {
 /**
  * Applies imported store app state to Studio, re-renders, and saves draft
  * @param {object} state 
+ * @param {boolean} [replaceDraftOption]
  * @returns {boolean}
  */
-function applyImportedStoreApp(state) {
+function applyImportedStoreApp(state, replaceDraftOption) {
   if (!state) return false;
+
+  const replaceRadio = $('storeImportReplaceDraft');
+  const shouldReplace = (typeof replaceDraftOption === 'boolean') 
+    ? replaceDraftOption 
+    : (replaceRadio ? !!replaceRadio.checked : false);
+  const hasExistingDraft = (typeof hasUserDraft === 'function') && hasUserDraft();
+
+  if (!shouldReplace && hasExistingDraft) {
+    // Non-destructive preview mode: ensure active draft is safely persisted before previewing imported app
+    if (CURRENT_PRESET_KEY === 'draft' && typeof saveDraftToStorage === 'function') {
+      saveDraftToStorage();
+    }
+    CURRENT_PRESET_KEY = 'imported';
+    isPresetModified = false;
+  } else {
+    // Replace active draft or initialize draft if none exists
+    CURRENT_PRESET_KEY = 'draft';
+    isPresetModified = false;
+  }
 
   // Auto select Apple App Store and iPhone device
   if (state.icon1024) CUSTOM_ICON_1024 = state.icon1024;
@@ -213,7 +233,15 @@ function applyImportedStoreApp(state) {
   if (typeof renderStats === 'function') renderStats();
   if (typeof syncStatInputs === 'function') syncStatInputs();
   if (typeof update === 'function') update();
-  if (typeof saveDraftToStorage === 'function') saveDraftToStorage();
+
+  if (CURRENT_PRESET_KEY === 'draft') {
+    if (typeof getCurrentStateObject === 'function') {
+      userDraft = getCurrentStateObject();
+      userDraft.isCustomized = true;
+    }
+    if (typeof saveDraftToStorage === 'function') saveDraftToStorage();
+  }
+
   if (typeof updatePresetBanner === 'function') updatePresetBanner();
   if (typeof updateDraftPill === 'function') updateDraftPill();
   if (typeof syncAllVtPills === 'function') syncAllVtPills();
@@ -221,7 +249,11 @@ function applyImportedStoreApp(state) {
 
   const appName = state.form && state.form.name ? state.form.name : 'App';
   if (typeof showToast === 'function') {
-    showToast('Imported ' + appName + ' from App Store successfully');
+    if (CURRENT_PRESET_KEY === 'draft') {
+      showToast('Imported ' + appName + ' and replaced draft successfully', 'ok');
+    } else {
+      showToast('Imported ' + appName + ' for preview (Your draft is saved safely)', 'ok');
+    }
   }
 
   return true;
@@ -376,6 +408,26 @@ function openStoreImportModal() {
     setTimeout(() => input.focus(), 80);
   }
 
+  const replaceRadio = $('storeImportReplaceDraft');
+  const replaceRow = $('storeImportReplaceRow');
+  const hasDraft = (typeof hasUserDraft === 'function') && hasUserDraft();
+
+  if (replaceRadio) {
+    replaceRadio.checked = false;
+    replaceRadio._wasChecked = false;
+  }
+  if (replaceRow) {
+    replaceRow.classList.remove('is-checked');
+    const nameSpan = replaceRow.querySelector('.store-import-draft-name');
+    if (nameSpan) {
+      if (hasDraft && typeof userDraft === 'object' && userDraft && userDraft.form && userDraft.form.name && userDraft.form.name.trim()) {
+        nameSpan.textContent = '("' + userDraft.form.name.trim() + '")';
+      } else {
+        nameSpan.textContent = '';
+      }
+    }
+  }
+
   const status = $('storeImportStatus');
   if (status) {
     status.style.display = 'none';
@@ -496,6 +548,25 @@ function initStoreImportEvents() {
   const cancelBtn = $('storeImportCancel');
   if (cancelBtn) {
     cancelBtn.onclick = () => closeStoreImportModal();
+  }
+
+  const replaceRadio = $('storeImportReplaceDraft');
+  const replaceRow = $('storeImportReplaceRow');
+  if (replaceRadio) {
+    let wasChecked = false;
+    replaceRadio.addEventListener('mousedown', function() {
+      wasChecked = this.checked;
+    });
+    replaceRadio.addEventListener('click', function() {
+      if (wasChecked) {
+        this.checked = false;
+        wasChecked = false;
+      } else {
+        this.checked = true;
+        wasChecked = true;
+      }
+      if (replaceRow) replaceRow.classList.toggle('is-checked', this.checked);
+    });
   }
 
   const submitBtn = $('storeImportSubmit');

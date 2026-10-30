@@ -395,11 +395,20 @@ function updatePresetBanner(){
     banner.style.display = 'inline-flex';
     banner.classList.toggle('is-modified', !!isPresetModified);
     const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
-    const pName = CURRENT_PRESET_KEY === 'none' ? 'None (Blank)' : (CURRENT_PRESET_KEY ? (CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1)) : 'Preset');
+    let pName = 'Preset';
+    if(CURRENT_PRESET_KEY === 'none') {
+      pName = 'None (Blank)';
+    } else if(CURRENT_PRESET_KEY === 'imported') {
+      pName = ($('f-name') && $('f-name').value.trim()) ? $('f-name').value.trim() : 'Imported App';
+    } else if(CURRENT_PRESET_KEY) {
+      pName = CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1);
+    }
     
     if(textEl){
       if(isPresetModified){
         textEl.innerHTML = '<strong>Preview only: edits won\'t be saved</strong> · Your draft is saved safely.';
+      } else if(CURRENT_PRESET_KEY === 'imported'){
+        textEl.innerHTML = 'Viewing imported app: <strong id="presetBannerName">' + escapeHtml(pName) + '</strong> · Your draft is saved safely.';
       } else {
         textEl.innerHTML = 'Viewing preset: <strong id="presetBannerName">' + escapeHtml(pName) + '</strong> · Your draft is saved safely.';
       }
