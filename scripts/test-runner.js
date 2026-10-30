@@ -1880,6 +1880,20 @@ assert(catSandbox.GOOGLE_APP_CATEGORIES.length === 31, 'Google Play defines all 
 assert(catSandbox.GOOGLE_GAME_CATEGORIES.length === 17, 'Google Play defines all 17 official game categories');
 
 // ---------------------------------------------------------------------
+// SUITE 25: iPad Screenshots Header & Clean Validation Notice
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 25]: iPad Screenshots Header & Clean Validation Notice');
+
+const ipadCardHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'ipad-screenshots-card.html'), 'utf8');
+assert(ipadCardHtml.includes('iPad Screenshots</h2>'), 'Card 5B title is streamlined to "iPad Screenshots" to prevent header line breaks');
+assert(!ipadCardHtml.includes('iPad Screenshots (13" Pro)</h2>'), 'Card 5B does not contain wrapped (13" Pro) subtitle in h2');
+assert(ipadCardHtml.includes('<strong>iPad Pro 13" (4:3 ratio):</strong>'), 'Card 5B hint retains iPad Pro 13" and 4:3 ratio');
+assert(ipadCardHtml.includes('2048×2732 px') && ipadCardHtml.includes('2064×2752 px'), 'Card 5B hint retains essential Apple resolutions (2048×2732 px, 2064×2752 px)');
+
+const ipadJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'ipad.js'), 'utf8');
+assert(!ipadJsCode.includes('Universal App Notice:'), 'validateIpadScreenshots no longer displays warning notice when 0 screenshots are uploaded');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

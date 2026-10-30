@@ -227,15 +227,9 @@ function validateIpadScreenshots(){
   const SB_ERR = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></span>`;
 
   if(validCount === 0){
-    if(SUPPORTS_IPAD){
-      badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Universal App Notice:</strong> 0 dedicated iPad screenshots uploaded. App Store Connect requires at least <strong>1 iPad screenshot</strong> (2048×2732 px, 4:3) for Universal submission. Mockup is using scaled iPhone fallback.</span>`;
-      badgeEl.style.display = 'flex';
-    } else {
-      badgeEl.className = 'shot-status-badge ok';
-      badgeEl.innerHTML = '';
-      badgeEl.style.display = 'none';
-    }
+    badgeEl.className = 'shot-status-badge ok';
+    badgeEl.innerHTML = '';
+    badgeEl.style.display = 'none';
     return;
   }
 
