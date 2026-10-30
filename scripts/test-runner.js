@@ -1812,6 +1812,41 @@ assert(simResolvePillIcon(simUserDraft23) === 'data:image/svg+xml;blank', 'First
 assert(simUserDraft23.form.name === '', 'First reset leaves userDraft name empty without requiring a second reset');
 
 // ---------------------------------------------------------------------
+// SUITE 24: Custom Category Dropdown UI & Search Filter Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 24]: Custom Category Dropdown UI & Search Filter Verification');
+
+assert(bundledHtml.includes('id="customCatWrap"') && bundledHtml.includes('id="customCatTrigger"'), 'Custom category dropdown wrapper and trigger exist in bundled HTML');
+assert(bundledHtml.includes('id="customCatVal"') && bundledHtml.includes('id="customCatMenu"'), 'Custom category label display and popover menu exist in bundled HTML');
+assert(bundledHtml.includes('id="customCatSearch"') && bundledHtml.includes('id="customCatOptions"'), 'Custom category search input and options container exist in bundled HTML');
+assert(bundledHtml.includes('.custom-cat-trigger') && bundledHtml.includes('.custom-cat-menu') && bundledHtml.includes('.custom-cat-option'), 'Custom category CSS classes exist in bundled CSS');
+assert(bundledHtml.includes(':root[data-ui=light] .custom-cat-trigger') && bundledHtml.includes(':root[data-ui=light] .custom-cat-menu'), 'Custom category provides authentic light theme adaptation');
+
+// Functional testing for category matching & normalization
+const catCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'categories.js'), 'utf8');
+const catSandbox = {
+  $: (id) => ({ id, value: '', dataset: {}, classList: { toggle: () => {}, add: () => {}, remove: () => {}, contains: () => false }, querySelectorAll: () => [], appendChild: () => {}, setAttribute: () => {} }),
+  document: {
+    createElement: () => ({ setAttribute: () => {}, appendChild: () => {}, classList: { add: () => {} }, dataset: {} }),
+    addEventListener: () => {}
+  },
+  store: 'apple'
+};
+vm.createContext(catSandbox);
+vm.runInContext(catCode + '\nglobalThis.matchCat = matchCat;\nglobalThis.setCategory = setCategory;\nglobalThis.CAT = CAT;\nglobalThis.APPLE_CATEGORIES = APPLE_CATEGORIES;\nglobalThis.GOOGLE_APP_CATEGORIES = GOOGLE_APP_CATEGORIES;\nglobalThis.GOOGLE_GAME_CATEGORIES = GOOGLE_GAME_CATEGORIES;', catSandbox);
+
+const matchCatFn = catSandbox.matchCat;
+assert(typeof matchCatFn === 'function', 'matchCat function is defined and runnable');
+assert(matchCatFn('apple', 'productivity') === 'Productivity', 'matchCat correctly resolves Apple Productivity category');
+assert(matchCatFn('google', 'productivity') === 'Productivity', 'matchCat correctly resolves Google Productivity category');
+assert(matchCatFn('google', 'puzzle') === 'Games · Puzzle', 'matchCat correctly prefixes Google Games categories with "Games · "');
+assert(matchCatFn('apple', 'social') === 'Social Networking', 'matchCat resolves Apple category alias (social -> Social Networking)');
+assert(matchCatFn('google', 'social networking') === 'Social', 'matchCat resolves Google category alias (social networking -> Social)');
+assert(catSandbox.APPLE_CATEGORIES.length === 26, 'Apple App Store defines all 26 official categories');
+assert(catSandbox.GOOGLE_APP_CATEGORIES.length === 31, 'Google Play defines all 31 official app categories');
+assert(catSandbox.GOOGLE_GAME_CATEGORIES.length === 17, 'Google Play defines all 17 official game categories');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

@@ -5335,9 +5335,147 @@ function matchCat(st, val){
 }
 
 function syncCategoryUI(){
-  if($('f-cat')) $('f-cat').value = (CAT[store] || '').replace(/^Games · /, '');
+  const activeSt = typeof store !== 'undefined' ? store : 'apple';
+  const displayVal = (CAT[activeSt] || '').replace(/^Games · /, '');
+  if($('f-cat')) $('f-cat').value = displayVal;
   const t = $('catTag');
-  if(t){ t.textContent = store === 'apple' ? 'APPLE' : 'GOOGLE'; t.className = 'tag ' + (store === 'apple' ? 'a' : 'g'); }
+  if(t){ t.textContent = activeSt === 'apple' ? 'APPLE' : 'GOOGLE'; t.className = 'tag ' + (activeSt === 'apple' ? 'a' : 'g'); }
+  const valEl = $('customCatVal');
+  if(valEl) valEl.textContent = displayVal || 'Select category…';
+  const wrap = $('customCatWrap');
+  if(wrap && wrap.classList.contains('open')) {
+    renderCustomCatOptions($('customCatSearch') ? $('customCatSearch').value : '');
+  }
+}
+
+function isCustomCatOpen() {
+  const wrap = $('customCatWrap');
+  return wrap ? wrap.classList.contains('open') : false;
+}
+
+function openCustomCat() {
+  const wrap = $('customCatWrap');
+  const trigger = $('customCatTrigger');
+  const searchInput = $('customCatSearch');
+  if (!wrap) return;
+  wrap.classList.add('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'true');
+  if (searchInput) {
+    searchInput.value = '';
+    searchInput.focus();
+  }
+  renderCustomCatOptions('');
+  const activeOpt = wrap.querySelector('.custom-cat-option.active');
+  if (activeOpt) {
+    activeOpt.scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function closeCustomCat() {
+  const wrap = $('customCatWrap');
+  const trigger = $('customCatTrigger');
+  if (!wrap) return;
+  wrap.classList.remove('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+
+function selectCategoryFromUI(catVal) {
+  const activeSt = typeof store !== 'undefined' ? store : 'apple';
+  setCategory(catVal, activeSt);
+  closeCustomCat();
+  const trigger = $('customCatTrigger');
+  if (trigger) trigger.focus();
+  if (typeof update === 'function') update();
+  if (typeof saveState === 'function') saveState();
+  if (typeof flashField === 'function') flashField('cat');
+  if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
+}
+
+function renderCustomCatOptions(query = '') {
+  const listContainer = $('customCatOptions');
+  if (!listContainer) return;
+  listContainer.innerHTML = '';
+
+  const activeSt = typeof store !== 'undefined' ? store : 'apple';
+  const currentVal = CAT[activeSt] || '';
+  const q = query.trim().toLowerCase();
+
+  const checkSvg = '<svg class="custom-cat-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+  const createOptionEl = (val, label = val) => {
+    const item = document.createElement('div');
+    item.className = 'custom-cat-option' + (val === currentVal ? ' active' : '');
+    item.dataset.val = val;
+    item.role = 'option';
+    item.setAttribute('aria-selected', val === currentVal ? 'true' : 'false');
+    item.innerHTML = `<span>${label}</span>${checkSvg}`;
+    item.onclick = (e) => {
+      e.stopPropagation();
+      selectCategoryFromUI(val);
+    };
+    return item;
+  };
+
+  let renderedCount = 0;
+
+  if (activeSt === 'apple') {
+    const filtered = APPLE_CATEGORIES.filter(c => !q || c.toLowerCase().includes(q));
+    filtered.forEach(c => {
+      listContainer.appendChild(createOptionEl(c));
+      renderedCount++;
+    });
+  } else {
+    const filteredApps = GOOGLE_APP_CATEGORIES.filter(c => !q || c.toLowerCase().includes(q));
+    const filteredGames = GOOGLE_GAME_CATEGORIES.filter(c => !q || c.toLowerCase().includes(q) || ('games · ' + c.toLowerCase()).includes(q));
+
+    if (filteredApps.length > 0) {
+      const gLabel = document.createElement('div');
+      gLabel.className = 'custom-cat-group-label';
+      gLabel.textContent = 'Apps';
+      listContainer.appendChild(gLabel);
+      filteredApps.forEach(c => {
+        listContainer.appendChild(createOptionEl(c));
+        renderedCount++;
+      });
+    }
+
+    if (filteredGames.length > 0) {
+      const gLabel = document.createElement('div');
+      gLabel.className = 'custom-cat-group-label';
+      gLabel.textContent = 'Games';
+      listContainer.appendChild(gLabel);
+      filteredGames.forEach(c => {
+        listContainer.appendChild(createOptionEl('Games · ' + c, c));
+        renderedCount++;
+      });
+    }
+  }
+
+  // Handle custom value if present and not in list
+  if (currentVal && !matchCat(activeSt, currentVal)) {
+    const customOption = createOptionEl(currentVal, currentVal + ' (custom)');
+    listContainer.insertBefore(customOption, listContainer.firstChild);
+    renderedCount++;
+  }
+
+  // If no results match query, allow creating/using custom category
+  if (renderedCount === 0 && q) {
+    const rawVal = query.trim();
+    const customItem = document.createElement('div');
+    customItem.className = 'custom-cat-option';
+    customItem.dataset.val = rawVal;
+    customItem.innerHTML = `<span>Use "<strong>${rawVal}</strong>"</span><span class="custom-cat-create-tag">Custom</span>`;
+    customItem.onclick = (e) => {
+      e.stopPropagation();
+      selectCategoryFromUI(rawVal);
+    };
+    listContainer.appendChild(customItem);
+  } else if (renderedCount === 0) {
+    const emptyEl = document.createElement('div');
+    emptyEl.className = 'custom-cat-empty';
+    emptyEl.textContent = 'No categories found';
+    listContainer.appendChild(emptyEl);
+  }
 }
 
 function setCategory(val, only){
@@ -5345,16 +5483,19 @@ function setCategory(val, only){
   ['apple','google'].forEach(st => {
     if(only && only !== st) return;
     const sel = CAT_SEL[st];
-    if(!sel) return;
-    sel.querySelectorAll('option[data-custom]').forEach(o => o.remove());
     let m = val ? matchCat(st, val) : '';
-    if(val && !m){
+    if(sel){
+      sel.querySelectorAll('option[data-custom]').forEach(o => o.remove());
+      if(val && !m){
+        m = val;
+        const o = document.createElement('option'); o.value = val; o.textContent = val + ' (custom)'; o.dataset.custom = '1';
+        sel.appendChild(o);
+      }
+      sel.value = m;
+    } else if(val && !m) {
       m = val;
-      const o = document.createElement('option'); o.value = val; o.textContent = val + ' (custom)'; o.dataset.custom = '1';
-      sel.appendChild(o);
     }
     CAT[st] = m;
-    sel.value = m;
   });
   syncCategoryUI();
 }
@@ -5371,6 +5512,67 @@ function setCategory(val, only){
     };
   }
 });
+
+(function initCustomCatEvents() {
+  const trigger = $('customCatTrigger');
+  const wrap = $('customCatWrap');
+  const searchInput = $('customCatSearch');
+
+  if (trigger) {
+    trigger.onclick = (e) => {
+      e.stopPropagation();
+      if (isCustomCatOpen()) {
+        closeCustomCat();
+      } else {
+        openCustomCat();
+      }
+    };
+  }
+
+  if (searchInput) {
+    searchInput.oninput = () => {
+      renderCustomCatOptions(searchInput.value);
+    };
+
+    searchInput.onkeydown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeCustomCat();
+        if (trigger) trigger.focus();
+        return;
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const firstOpt = wrap ? wrap.querySelector('.custom-cat-option') : null;
+        if (firstOpt && firstOpt.dataset.val) {
+          selectCategoryFromUI(firstOpt.dataset.val);
+        }
+        return;
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const firstOpt = wrap ? wrap.querySelector('.custom-cat-option') : null;
+        if (firstOpt) {
+          firstOpt.focus();
+        }
+      }
+    };
+  }
+
+  document.addEventListener('click', (e) => {
+    if (wrap && !wrap.contains(e.target)) {
+      closeCustomCat();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isCustomCatOpen()) {
+      closeCustomCat();
+      if (trigger) trigger.focus();
+    }
+  });
+})();
+
 setCategory('Productivity');
 
 

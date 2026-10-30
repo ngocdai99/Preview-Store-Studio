@@ -65,11 +65,41 @@
       <div class="lr"><label>Developer<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label></div>
       <input type="text" id="f-dev" value="FlowCraft Studio Inc." placeholder="e.g. Company or Studio">
     </div>
-    <div class="fg">
+    <div class="fg cat-picker-fg">
       <div class="lr"><label>Category<span class="tag a" id="catTag">APPLE</span></label></div>
       <input type="hidden" id="f-cat" value="Productivity">
-      <select class="fsel" id="f-cat-apple" aria-label="App Store primary category"></select>
-      <select class="fsel" id="f-cat-google" aria-label="Google Play category"></select>
+      <!-- Hidden legacy selects for full compatibility -->
+      <select class="fsel" id="f-cat-apple" aria-label="App Store primary category" style="display:none"></select>
+      <select class="fsel" id="f-cat-google" aria-label="Google Play category" style="display:none"></select>
+
+      <!-- Custom Category Selector -->
+      <div class="custom-cat-wrap" id="customCatWrap">
+        <button type="button" class="custom-cat-trigger" id="customCatTrigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="custom-cat-trigger-content">
+            <svg class="custom-cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="custom-cat-val" id="customCatVal">Productivity</span>
+          </span>
+          <svg class="custom-cat-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <div class="custom-cat-menu" id="customCatMenu" role="listbox">
+          <div class="custom-cat-search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="customCatSearch" placeholder="Search category..." autocomplete="off" spellcheck="false">
+          </div>
+          <div class="custom-cat-options" id="customCatOptions"></div>
+        </div>
+      </div>
     </div>
   </div>
 
