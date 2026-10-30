@@ -7121,7 +7121,7 @@ function loadPreset(key){
   }
 
   // Before switching to a preset, if we were in draft mode, ensure draft is persisted
-  if(CURRENT_PRESET_KEY === 'draft'){
+  if(CURRENT_PRESET_KEY === 'draft' && key !== 'none'){
     userDraft = getCurrentStateObject();
     userDraft.isCustomized = true;
     if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
@@ -7699,20 +7699,10 @@ function initDraftFromCurrentPreset(){
 }
 
 function resetDraftWorkspace(){
-  userDraft = null;
   isPresetModified = false;
   const prevActivePreset = CURRENT_ACTIVE_PRESET;
-  try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
-  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-  try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
-  if(typeof idbDelete === 'function'){
-    idbDelete(DRAFT_STORAGE_KEY);
-    idbDelete(STORAGE_KEY);
-  }
-  if(typeof resetStats === 'function') resetStats();
-  if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE && typeof THUMB_CACHE.clear === 'function'){
-    THUMB_CACHE.clear();
-  }
+
+  // 1. Clear file inputs and iPad support
   ['icoFile', 'featureFile', 'shotFile', 'ipadShotFile', 'tab7File', 'tab10File'].forEach(id => {
     const el = $(id);
     if(el) el.value = '';
@@ -7720,9 +7710,34 @@ function resetDraftWorkspace(){
   if(typeof setSupportsIpad === 'function'){
     setSupportsIpad(false);
   }
+  if(typeof resetStats === 'function') resetStats();
+  if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE && typeof THUMB_CACHE.clear === 'function'){
+    THUMB_CACHE.clear();
+  }
+
+  // 2. Set CURRENT_PRESET_KEY to 'none' before loadPreset so it never saves old draft
+  CURRENT_PRESET_KEY = 'none';
   loadPreset('none');
+
+  // 3. Wipe all storage
+  try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
+  if(typeof idbDelete === 'function'){
+    idbDelete(DRAFT_STORAGE_KEY);
+    idbDelete(STORAGE_KEY);
+  }
+
+  // 4. Initialize clean blank userDraft
   CURRENT_PRESET_KEY = 'draft';
   CURRENT_ACTIVE_PRESET = prevActivePreset;
+  userDraft = getCurrentStateObject();
+  userDraft.isCustomized = true;
+  userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+  userDraft.isCustomIcon = false;
+  saveDraftToStorage();
+
+  // 5. Update UI
   if(typeof updatePresetBanner === 'function') updatePresetBanner();
   if(typeof updateDraftPill === 'function') updateDraftPill();
   if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();

@@ -132,7 +132,7 @@ function loadPreset(key){
   }
 
   // Before switching to a preset, if we were in draft mode, ensure draft is persisted
-  if(CURRENT_PRESET_KEY === 'draft'){
+  if(CURRENT_PRESET_KEY === 'draft' && key !== 'none'){
     userDraft = getCurrentStateObject();
     userDraft.isCustomized = true;
     if(typeof saveDraftToStorage === 'function') saveDraftToStorage();

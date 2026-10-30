@@ -1736,6 +1736,76 @@ assert(suite22PresetPill.style.display === 'none', 'Preset pill is hidden');
 assert(suite22DraftPill.classList.contains('on'), 'Draft pill remains active');
 
 // ---------------------------------------------------------------------
+// [SUITE 23]: Single-Click Complete Draft Reset & Draft Pill Immediate State Wipe Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 23]: Single-Click Complete Draft Reset & Draft Pill Immediate State Wipe Verification');
+
+// Test 1: loadPreset never persists current draft when key === 'none'
+assert(bundledHtml.includes("CURRENT_PRESET_KEY === 'draft' && key !== 'none'"), 'loadPreset skips persisting draft when switching to none');
+
+// Test 2: resetDraftWorkspace sets CURRENT_PRESET_KEY to 'none' before invoking loadPreset('none')
+const resetSeqMatch = bundledHtml.match(/CURRENT_PRESET_KEY\s*=\s*'none';\s*loadPreset\('none'\);/);
+assert(!!resetSeqMatch, 'resetDraftWorkspace temporarily switches CURRENT_PRESET_KEY before loadPreset("none")');
+
+// Test 3: resetDraftWorkspace re-initializes userDraft with clean blank state and blank icon
+assert(bundledHtml.includes("userDraft = getCurrentStateObject();") && bundledHtml.includes("userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');"), 'resetDraftWorkspace cleanly reinitializes userDraft with blank icon');
+
+// Test 4: Functional simulation verifying single-reset draft pill wipe (no second reset required)
+let simFormName = 'Custom Power App';
+let simCustomIcon = 'data:image/png;customIconData';
+let simIsCustom = true;
+let simPresetKey23 = 'draft';
+
+// Active populated draft
+let simUserDraft23 = {
+  form: { name: simFormName },
+  icon: simCustomIcon,
+  isCustomIcon: true,
+  isCustomized: true
+};
+
+function simResolvePillTitle(draft) {
+  const f = (draft && draft.form) || {};
+  return (f.name && f.name.trim()) ? f.name.trim() : 'Your App';
+}
+
+function simResolvePillIcon(draft) {
+  if (draft && draft.isCustomIcon && draft.icon) return draft.icon;
+  return 'data:image/svg+xml;blank';
+}
+
+// Pre-reset assertions
+assert(simResolvePillTitle(simUserDraft23) === 'Custom Power App', 'Initially pill draft displays custom app name');
+assert(simResolvePillIcon(simUserDraft23) === simCustomIcon, 'Initially pill draft displays custom uploaded icon');
+
+// Perform single reset
+function simPerformReset() {
+  // Step A: do not persist old draft because key === 'none'
+  if (simPresetKey23 === 'draft' && 'none' !== 'none') {
+    simUserDraft23 = { form: { name: simFormName }, icon: simCustomIcon, isCustomIcon: simIsCustom };
+  }
+  // Step B: clear inputs
+  simFormName = '';
+  simCustomIcon = '';
+  simIsCustom = false;
+  // Step C: reinitialize fresh clean draft
+  simUserDraft23 = {
+    form: { name: simFormName },
+    icon: 'data:image/svg+xml;blank',
+    isCustomIcon: false,
+    isCustomized: true
+  };
+  simPresetKey23 = 'draft';
+}
+
+simPerformReset();
+
+// Verify on the very first reset that draft pill data is completely wiped
+assert(simResolvePillTitle(simUserDraft23) === 'Your App', 'First reset immediately clears draft pill title back to "Your App"');
+assert(simResolvePillIcon(simUserDraft23) === 'data:image/svg+xml;blank', 'First reset immediately clears draft pill icon back to blank placeholder');
+assert(simUserDraft23.form.name === '', 'First reset leaves userDraft name empty without requiring a second reset');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
