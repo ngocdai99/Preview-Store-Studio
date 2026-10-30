@@ -51,10 +51,26 @@ if(featurePrevImg){
 const featureDropZone = $('featureDropZone');
 if(featureDropZone){
   featureDropZone.onclick = handleFeatureSlotClick;
-  featureDropZone.addEventListener('dragover',e=>{e.preventDefault();featureDropZone.classList.add('drag-over')});
-  featureDropZone.addEventListener('dragleave',()=>{featureDropZone.classList.remove('drag-over')});
-  featureDropZone.addEventListener('drop',e=>{
-    e.preventDefault();featureDropZone.classList.remove('drag-over');
+  let featureDragCounter = 0;
+  featureDropZone.addEventListener('dragenter', e => {
+    e.preventDefault();
+    featureDragCounter++;
+    featureDropZone.classList.add('drag-over');
+  });
+  featureDropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+  });
+  featureDropZone.addEventListener('dragleave', () => {
+    featureDragCounter--;
+    if(featureDragCounter <= 0){
+      featureDragCounter = 0;
+      featureDropZone.classList.remove('drag-over');
+    }
+  });
+  featureDropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    featureDragCounter = 0;
+    featureDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file && file.type.startsWith('image/')){
       readFile(file,d=>{
