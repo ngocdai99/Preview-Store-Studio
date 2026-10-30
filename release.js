@@ -3,8 +3,8 @@
  * Store Preview Studio · Commercial Release Packager
  * 
  * Generates delivery ZIP packages:
- *   - Standard Edition ($15): Full 6 Presets, Minified HTML, Docs
- *   - Pro Edition ($25-$29): Full 6 Presets, Full src/, build.js, dev.js, Agency QA Toolkit
+ *   - Plus Edition ($29): Full 6 Presets, Minified HTML, Docs
+ *   - Pro Edition ($39): Full 6 Presets, Full src/, build.js, dev.js, Agency QA Toolkit
  * 
  * Usage:
  *   npm run release
@@ -73,35 +73,37 @@ function runRelease() {
   const srcPresets = path.join(ROOT_DIR, 'presets');
 
   // =====================================================================
-  // TIER 1: STANDARD EDITION ($15) — Minified HTML + Full 6 Presets + Readme/License
+  // TIER 1: PLUS EDITION ($29) — Minified HTML + Full 6 Presets + Readme/License
   // =====================================================================
-  const stdName = 'store-preview-studio-standard-v1.0';
-  const stdDir = path.join(distDir, stdName);
-  const stdPresetsDir = path.join(stdDir, 'presets');
-  fs.mkdirSync(stdPresetsDir, { recursive: true });
+  const plusName = 'store-preview-studio-plus-v1.0';
+  const plusDir = path.join(distDir, plusName);
+  const plusPresetsDir = path.join(plusDir, 'presets');
+  fs.mkdirSync(plusPresetsDir, { recursive: true });
 
   // Copy full 6-preset minified build as store_preview_studio.html for instant use
-  fs.copyFileSync(minFile, path.join(stdDir, 'store_preview_studio.html'));
+  fs.copyFileSync(minFile, path.join(plusDir, 'store_preview_studio.html'));
 
   ['README.md', 'LICENSE.txt'].forEach(f => {
     const src = fs.existsSync(path.join(ROOT_DIR, f))
       ? path.join(ROOT_DIR, f)
       : path.join(ROOT_DIR, 'package', f);
-    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(stdDir, f));
+    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(plusDir, f));
   });
 
-  // Copy all 6 JSON presets to Standard Edition
+  // Copy all 6 JSON presets to Plus Edition
   if (fs.existsSync(srcPresets)) {
     fs.readdirSync(srcPresets).filter(f => f.endsWith('.json')).forEach(f => {
-      fs.copyFileSync(path.join(srcPresets, f), path.join(stdPresetsDir, f));
+      fs.copyFileSync(path.join(srcPresets, f), path.join(plusPresetsDir, f));
     });
   }
 
-  const stdZipPath = path.join(ROOT_DIR, `${stdName}.zip`);
-  if (fs.existsSync(stdZipPath)) fs.unlinkSync(stdZipPath);
+  const plusZipPath = path.join(ROOT_DIR, `${plusName}.zip`);
+  const legacyStdZipPath = path.join(ROOT_DIR, 'store-preview-studio-standard-v1.0.zip');
+  if (fs.existsSync(plusZipPath)) fs.unlinkSync(plusZipPath);
+  if (fs.existsSync(legacyStdZipPath)) fs.unlinkSync(legacyStdZipPath);
 
   // =====================================================================
-  // TIER 2: PRO / AGENCY EDITION ($25-$29) — Full 6 Presets + Full src/ + QA
+  // TIER 2: PRO / AGENCY EDITION ($39) — Full 6 Presets + Full src/ + QA
   // =====================================================================
   const proName = 'store-preview-studio-pro-v1.0';
   const proDir = path.join(distDir, proName);
@@ -152,20 +154,24 @@ function runRelease() {
   console.log(`\n${c.bold}2. Packaging Release Delivery Packages:${c.reset}`);
 
   try {
-    execSync(`zip -rq "${stdZipPath}" "${stdName}"`, { cwd: distDir });
-    const stdKb = (fs.statSync(stdZipPath).size / 1024).toFixed(1);
-    console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightYellow}Standard Edition${c.reset} ${c.dim}(${stdKb} KB)${c.reset}`);
-    console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${stdZipPath}${c.reset}`);
+    execSync(`zip -rq "${plusZipPath}" "${plusName}"`, { cwd: distDir });
+    fs.copyFileSync(plusZipPath, legacyStdZipPath);
+    if (fs.existsSync(path.join(ROOT_DIR, 'package'))) {
+      fs.copyFileSync(plusZipPath, path.join(ROOT_DIR, 'package', `${plusName}.zip`));
+      fs.copyFileSync(plusZipPath, path.join(ROOT_DIR, 'package', 'store-preview-studio-standard-v1.0.zip'));
+    }
+    const plusKb = (fs.statSync(plusZipPath).size / 1024).toFixed(1);
+    console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightYellow}Plus Edition ($29)${c.reset} ${c.dim}(${plusKb} KB)${c.reset}`);
+    console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${plusZipPath}${c.reset}`);
     console.log(`    ${c.gray}Package:${c.reset} All 6 Presets · Offline Standalone HTML\n`);
 
     execSync(`zip -rq "${proZipPath}" "${proName}"`, { cwd: distDir });
     fs.copyFileSync(proZipPath, legacyZipPath);
     if (fs.existsSync(path.join(ROOT_DIR, 'package'))) {
-      fs.copyFileSync(stdZipPath, path.join(ROOT_DIR, 'package', `${stdName}.zip`));
       fs.copyFileSync(proZipPath, path.join(ROOT_DIR, 'package', `${proName}.zip`));
     }
     const proKb = (fs.statSync(proZipPath).size / 1024).toFixed(1);
-    console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightCyan}Pro Edition${c.reset} ${c.dim}(${proKb} KB)${c.reset}`);
+    console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightCyan}Pro Edition ($39)${c.reset} ${c.dim}(${proKb} KB)${c.reset}`);
     console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${proZipPath}${c.reset}`);
     console.log(`    ${c.gray}Package:${c.reset} All 6 Presets · Full Modular Source · Dev Server · QA Toolkit\n`);
 
