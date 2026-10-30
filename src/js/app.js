@@ -7699,16 +7699,8 @@ function updateDraftPill(){
     pill.setAttribute('title', 'Viewing preset: ' + pName + (hasDraft ? ' (Click to Return to Draft)' : ''));
     pill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + pIcon + '">' +
       '<span id="draftBtnTitle">' + escapeHtml(dispName) + '</span>' +
-      '<small id="draftBtnBadge">Preset</small>' +
-      (hasDraft ? '<button type="button" class="ms-pill-reset-btn" id="msPillReturnBtn" title="Return to your saved draft" aria-label="Return to draft" style="font-size:11px;font-weight:700">↩</button>' : '');
+      '<small id="draftBtnBadge">Preset</small>';
     
-    const returnBtn = pill.querySelector('#msPillReturnBtn');
-    if(returnBtn){
-      returnBtn.addEventListener('click', function(e){
-        e.stopPropagation();
-        loadPreset('draft');
-      });
-    }
     updatePresetMenuSelection();
     return;
   }

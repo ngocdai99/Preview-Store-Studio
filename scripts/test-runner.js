@@ -1547,7 +1547,7 @@ resolved = testResolveDraftPillIcon(testDraft, 'draft', mockPresetIcons, false, 
 assert(resolved === mockPresetIcons.none, 'Resetting draft cleanly restores blank placeholder icon');
 
 // Test 6: Switching to view preset while draft exists switches displayed pill data to preset with return capability
-assert(bundledHtml.includes("Viewing preset: ' + pName") && bundledHtml.includes("msPillReturnBtn"), 'updateDraftPill updates displayed data to viewed preset while preserving draft return action');
+assert(bundledHtml.includes("Viewing preset: ' + pName") && bundledHtml.includes("draftBtnThumb"), 'updateDraftPill updates displayed data to viewed preset while preserving draft return action');
 assert(bundledHtml.includes("CUSTOM_ICON_1024 = '';") && bundledHtml.includes("CUSTOM_ICON_512 = '';"), 'loadPreset resets custom icon dimensional caches so preset vector icons render on all mockups');
 
 // ---------------------------------------------------------------------
