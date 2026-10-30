@@ -41,9 +41,11 @@ function updateIconDropZoneUi(){
   }
 
   if(inspectBtn){
-    inspectBtn.disabled = placeholder;
-    inspectBtn.classList.toggle('disabled', placeholder);
-    inspectBtn.setAttribute('title', placeholder ? 'Upload an app icon to inspect store compliance' : 'Inspect Icon Details & Store Compliance');
+    const disabled = placeholder || !ICON || ICON === BLANK_ICON;
+    inspectBtn.disabled = disabled;
+    inspectBtn.classList.toggle('disabled', disabled);
+    inspectBtn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    inspectBtn.setAttribute('title', disabled ? 'Upload an app icon to inspect store compliance' : 'Inspect Icon Details & Store Compliance');
   }
 
   if(placeholder){
@@ -408,8 +410,7 @@ if($('icoUp')){
 if($('icoInspect')){
   $('icoInspect').onclick = (e) => {
     if(e) e.stopPropagation();
-    if(isPlaceholderIcon()){
-      if($('icoFile')) $('icoFile').click();
+    if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){
       return;
     }
     if(typeof openImageDetailModal === 'function'){

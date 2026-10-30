@@ -1942,6 +1942,20 @@ assert(getTargets('st-age').length > 0, 'getTargets resolves age rating target e
 assert(getTargets('st-iap').length > 0, 'getTargets resolves monetization badge target elements');
 
 // ---------------------------------------------------------------------
+// SUITE 27: Inspect Button Disabled State When No App Icon
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 27]: Inspect Button Disabled State When No App Icon');
+
+const iconJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'icon.js'), 'utf8');
+assert(iconJsCode.includes('inspectBtn.disabled = disabled') || iconJsCode.includes('inspectBtn.disabled = placeholder'), 'updateIconDropZoneUi disables icoInspect when icon is missing or placeholder');
+assert(iconJsCode.includes("if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){\n      return;"), 'icoInspect click handler returns early when icon is missing');
+
+const identityCardHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'identity-card.html'), 'utf8');
+assert(identityCardHtml.includes('id="icoInspect"') && identityCardHtml.includes('disabled'), 'icoInspect button initializes with disabled attribute in identity-card.html');
+
+assert(bundledHtml.includes('.mini:disabled') && bundledHtml.includes('cursor:not-allowed'), 'Bundled CSS provides explicit disabled cursor and opacity styles for mini buttons');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

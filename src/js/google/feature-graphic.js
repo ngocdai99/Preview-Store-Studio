@@ -40,8 +40,6 @@ if($('featureInspect')){
   $('featureInspect').onclick = (e) => {
     if(e) e.stopPropagation();
     if(isPlaceholderFeature()){
-      if(typeof canUpload === 'function' && !canUpload(1000)) return;
-      if($('featureFile')) $('featureFile').click();
       return;
     }
     if(typeof openImageDetailModal === 'function'){

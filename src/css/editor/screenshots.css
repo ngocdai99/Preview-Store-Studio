@@ -117,6 +117,25 @@
   padding:5px 11px;font-size:11px;font-weight:700;transition:.2s;cursor:pointer;
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
 }
+.mini:disabled,
+.mini.disabled{
+  opacity:0.38!important;cursor:not-allowed!important;
+  border-color:var(--line)!important;color:var(--mut)!important;
+  background:var(--p2)!important;box-shadow:none!important;transform:none!important;
+}
+.mini:disabled:hover,
+.mini.disabled:hover{
+  border-color:var(--line)!important;color:var(--mut)!important;
+  background:var(--p2)!important;box-shadow:none!important;transform:none!important;cursor:not-allowed!important;
+}
+:root[data-ui=light] .mini:disabled,
+:root[data-ui=light] .mini.disabled{
+  opacity:0.42!important;background:#f1f5f9!important;border-color:#e2e8f0!important;color:#94a3b8!important;
+}
+:root[data-ui=light] .mini:disabled:hover,
+:root[data-ui=light] .mini.disabled:hover{
+  background:#f1f5f9!important;border-color:#e2e8f0!important;color:#94a3b8!important;cursor:not-allowed!important;
+}
 .mini:hover{border-color:var(--ac);color:#fff}.mini.del:hover{border-color:rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.08)}
 :root[data-ui=light] .mini.del:hover{border-color:rgba(0,0,0,.35);color:#0f172a;background:rgba(0,0,0,.05)}
 .mini.fit-btn{background:rgba(10,132,255,.14);border:1px solid rgba(10,132,255,.35);color:#38bdf8;display:inline-flex;align-items:center;justify-content:center;gap:7px}
