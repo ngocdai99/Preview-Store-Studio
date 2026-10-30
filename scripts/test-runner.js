@@ -1627,6 +1627,114 @@ assert(mockBadge.textContent === 'iPhone Only', 'Destination badge updated to "i
 assert(!mockDescBar.classList.contains('active-universal'), 'Description bar active-universal class removed');
 
 // ---------------------------------------------------------------------
+// [SUITE 22]: Preset Pill Close Button & Dynamic Re-opening from Menu Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 22]: Preset Pill Close Button & Dynamic Re-opening from Menu Verification');
+
+// Test 1: Preset pill markup contains close button with ms-pill-reset-btn styling
+assert(bundledHtml.includes('id="presetPillCloseBtn"'), 'Workspace bar contains dedicated #presetPillCloseBtn element');
+assert(bundledHtml.includes('class="ms-pill-reset-btn" id="presetPillCloseBtn"'), 'presetPillCloseBtn uses standardized ms-pill-reset-btn class');
+
+// Test 2: closePresetPill function resets CURRENT_ACTIVE_PRESET and returns to draft
+assert(bundledHtml.includes('function closePresetPill()') && bundledHtml.includes('CURRENT_ACTIVE_PRESET = null'), 'closePresetPill sets CURRENT_ACTIVE_PRESET = null');
+assert(bundledHtml.includes('loadPreset(\'draft\')'), 'closePresetPill returns user workspace to draft if currently viewing preset');
+
+// Test 3: updateDraftPill renders close button and hides preset pill when activePresetKey is null
+assert(bundledHtml.includes('activePresetKey') && bundledHtml.includes('presetPill.style.display = \'none\''), 'updateDraftPill hides preset pill when activePresetKey is null');
+assert(bundledHtml.includes('presetPill.querySelector(\'#presetPillCloseBtn\')'), 'updateDraftPill binds click handler to preset pill close button');
+
+// Test 4: Functional simulation of Preset Pill close and re-open workflow
+let suite22PresetKey = 'studio';
+let suite22ActivePreset = 'studio';
+const suite22Draft = { form: { name: 'My Test Draft' } };
+const suite22PresetClasses = new Set();
+const suite22DraftClasses = new Set();
+const suite22PresetPill = {
+  style: { display: 'none' },
+  classList: {
+    toggle: (cls, val) => val ? suite22PresetClasses.add(cls) : suite22PresetClasses.delete(cls),
+    contains: (cls) => suite22PresetClasses.has(cls)
+  }
+};
+const suite22DraftPill = {
+  style: { display: 'none' },
+  classList: {
+    toggle: (cls, val) => val ? suite22DraftClasses.add(cls) : suite22DraftClasses.delete(cls),
+    contains: (cls) => suite22DraftClasses.has(cls)
+  }
+};
+
+function suite22UpdatePills() {
+  const isViewingPreset = (suite22PresetKey !== 'draft');
+  const activePresetKey = isViewingPreset ? suite22PresetKey : (suite22ActivePreset && suite22ActivePreset !== 'draft' ? suite22ActivePreset : null);
+
+  if (!activePresetKey) {
+    suite22PresetPill.style.display = 'none';
+    suite22PresetPill.classList.toggle('on', false);
+  } else {
+    suite22PresetPill.style.display = 'inline-flex';
+    suite22PresetPill.classList.toggle('on', isViewingPreset);
+  }
+
+  suite22DraftPill.style.display = 'inline-flex';
+  suite22DraftPill.classList.toggle('on', suite22PresetKey === 'draft');
+}
+
+function suite22ClosePresetPill() {
+  suite22ActivePreset = null;
+  if (suite22PresetKey !== 'draft') {
+    suite22PresetKey = 'draft';
+  }
+  suite22UpdatePills();
+}
+
+function suite22LoadPreset(key) {
+  if (key === 'draft') {
+    suite22PresetKey = 'draft';
+  } else {
+    suite22ActivePreset = key;
+    suite22PresetKey = key;
+  }
+  suite22UpdatePills();
+}
+
+// Initial state: viewing studio preset
+suite22UpdatePills();
+assert(suite22PresetPill.style.display === 'inline-flex', 'Initially preset pill is displayed');
+assert(suite22PresetPill.classList.contains('on'), 'Preset pill is active while viewing preset');
+assert(!suite22DraftPill.classList.contains('on'), 'Draft pill is inactive while viewing preset');
+
+// Step 1: User clicks X on preset pill
+suite22ClosePresetPill();
+assert(suite22ActivePreset === null, 'suite22ActivePreset is reset to null');
+assert(suite22PresetKey === 'draft', 'Workspace returned to draft');
+assert(suite22PresetPill.style.display === 'none', 'Preset pill is completely hidden after clicking X');
+assert(suite22DraftPill.style.display === 'inline-flex', 'Draft pill remains visible');
+assert(suite22DraftPill.classList.contains('on'), 'Draft pill is active');
+
+// Step 2: User opens template from menu (e.g. pulsefit)
+suite22LoadPreset('pulsefit');
+assert(suite22ActivePreset === 'pulsefit', 'suite22ActivePreset updated to pulsefit');
+assert(suite22PresetKey === 'pulsefit', 'suite22PresetKey updated to pulsefit');
+assert(suite22PresetPill.style.display === 'inline-flex', 'Preset pill re-opens normally when chosen from menu');
+assert(suite22PresetPill.classList.contains('on'), 'Preset pill is active');
+assert(suite22DraftPill.style.display === 'inline-flex', 'Draft pill is displayed beside preset pill');
+assert(!suite22DraftPill.classList.contains('on'), 'Draft pill is inactive while viewing pulsefit');
+
+// Step 3: User returns to draft workspace
+suite22LoadPreset('draft');
+assert(suite22PresetKey === 'draft', 'User returned to draft');
+assert(suite22PresetPill.style.display === 'inline-flex', 'Preset pill stays beside draft as inactive pill');
+assert(!suite22PresetPill.classList.contains('on'), 'Preset pill is inactive');
+assert(suite22DraftPill.classList.contains('on'), 'Draft pill is active');
+
+// Step 4: User clicks X on preset pill while in draft workspace
+suite22ClosePresetPill();
+assert(suite22ActivePreset === null, 'suite22ActivePreset is reset to null');
+assert(suite22PresetPill.style.display === 'none', 'Preset pill is hidden');
+assert(suite22DraftPill.classList.contains('on'), 'Draft pill remains active');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

@@ -67,7 +67,7 @@
   #draftBtnTitle{max-width:none}
   #btnExport .lbl{display:none}
   #btnExport{padding:6px 9px}
-  #btnDraft .ms-pill-reset-btn{display:inline-flex;width:18px;height:18px;font-size:11px;margin-left:4px;flex-shrink:0}
+  #btnDraft .ms-pill-reset-btn, #btnPresetPill .ms-pill-reset-btn{display:inline-flex;width:18px;height:18px;font-size:11px;margin-left:4px;flex-shrink:0}
   main{flex-direction:column;min-height:0}
   .editor{width:100%;min-width:0;border:0;flex:1;padding:14px;gap:12px;margin-left:0!important;visibility:visible!important;pointer-events:auto!important;transition:none!important}
   .stage{padding:14px 10px 24px;flex:1;gap:14px}
@@ -109,7 +109,7 @@
   .workspace-bar{padding:6px 8px;gap:5px;flex-wrap:nowrap}
   #draftBtnTitle{max-width:none;font-size:12px}
   #btnDraft small{font-size:9.5px;padding:1px 4px}
-  #btnDraft .ms-pill-reset-btn{width:16px;height:16px;font-size:10px}
+  #btnDraft .ms-pill-reset-btn, #btnPresetPill .ms-pill-reset-btn{width:16px;height:16px;font-size:10px}
   #btnPresets{padding:5px 8px;font-size:11.5px}
   #btnExport{padding:5px 8px;font-size:11.5px}
   .seg button{padding:6px 4px;font-size:12px;gap:4px}

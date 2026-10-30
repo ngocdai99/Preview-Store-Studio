@@ -91,8 +91,10 @@ $$('[data-preset]').forEach(b=>{
 function loadPreset(key){
   if(key === 'draft'){
     if(!userDraft){
+      const prevActivePreset = CURRENT_ACTIVE_PRESET;
       loadPreset('none');
       CURRENT_PRESET_KEY = 'draft';
+      CURRENT_ACTIVE_PRESET = prevActivePreset;
       isPresetModified = false;
       userDraft = getCurrentStateObject();
       userDraft.isCustomized = true;
@@ -358,9 +360,22 @@ if(btnReturn){
   };
 }
 
+function closePresetPill(){
+  CURRENT_ACTIVE_PRESET = null;
+  if(CURRENT_PRESET_KEY !== 'draft'){
+    loadPreset('draft');
+  } else {
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof updatePresetBanner === 'function') updatePresetBanner();
+    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+  }
+}
+
 const btnDraft = $('btnDraft');
 if(btnDraft){
   btnDraft.onclick = () => {
+    const ev = window.event;
+    if(ev && ev.target && ev.target.closest && ev.target.closest('#msPillResetBtn')) return;
     if(CURRENT_PRESET_KEY !== 'draft'){
       loadPreset('draft');
     }
@@ -370,6 +385,8 @@ if(btnDraft){
 const btnPresetPill = $('btnPresetPill');
 if(btnPresetPill){
   btnPresetPill.onclick = () => {
+    const ev = window.event;
+    if(ev && ev.target && ev.target.closest && ev.target.closest('#presetPillCloseBtn')) return;
     if(CURRENT_PRESET_KEY === 'draft'){
       loadPreset(CURRENT_ACTIVE_PRESET || 'studio');
     } else {

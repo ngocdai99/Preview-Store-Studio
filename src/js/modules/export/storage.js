@@ -306,6 +306,7 @@ function initDraftFromCurrentPreset(){
 function resetDraftWorkspace(){
   userDraft = null;
   isPresetModified = false;
+  const prevActivePreset = CURRENT_ACTIVE_PRESET;
   try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
@@ -326,6 +327,7 @@ function resetDraftWorkspace(){
   }
   loadPreset('none');
   CURRENT_PRESET_KEY = 'draft';
+  CURRENT_ACTIVE_PRESET = prevActivePreset;
   if(typeof updatePresetBanner === 'function') updatePresetBanner();
   if(typeof updateDraftPill === 'function') updateDraftPill();
   if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
@@ -338,20 +340,34 @@ function updateDraftPill(){
   const hasDraft = hasUserDraft();
 
   const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft');
-  const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' ? CURRENT_ACTIVE_PRESET : 'studio');
+  const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' ? CURRENT_ACTIVE_PRESET : null);
 
   if(presetPill){
-    const p = (typeof PRESETS !== 'undefined') ? PRESETS[activePresetKey] : null;
-    const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activePresetKey]) ? PRESET_ICONS[activePresetKey] : (p ? p.icon : BLANK_ICON);
-    const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey === 'none' ? 'Blank Template' : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1))));
-    const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
+    if(!activePresetKey){
+      presetPill.style.display = 'none';
+      presetPill.classList.remove('on');
+    } else {
+      const p = (typeof PRESETS !== 'undefined') ? PRESETS[activePresetKey] : null;
+      const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activePresetKey]) ? PRESET_ICONS[activePresetKey] : (p ? p.icon : BLANK_ICON);
+      const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey === 'none' ? 'Blank Template' : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1))));
+      const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
 
-    presetPill.style.display = 'inline-flex';
-    presetPill.classList.toggle('on', isViewingPreset);
-    presetPill.setAttribute('title', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
-    presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
-      '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
-      '<small id="presetBtnBadge">Preset</small>';
+      presetPill.style.display = 'inline-flex';
+      presetPill.classList.toggle('on', isViewingPreset);
+      presetPill.setAttribute('title', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
+      presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
+        '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
+        '<small id="presetBtnBadge">Preset</small>' +
+        '<button type="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</button>';
+
+      const closeBtn = presetPill.querySelector('#presetPillCloseBtn');
+      if(closeBtn){
+        closeBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          if(typeof closePresetPill === 'function') closePresetPill();
+        });
+      }
+    }
   }
 
   if(!draftPill) return;
