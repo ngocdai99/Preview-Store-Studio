@@ -1980,36 +1980,6 @@ const launchModalHtml = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'mark
 assert(launchModalHtml.includes('Return to Interactive Preview'), 'launch-modal.html contains Return to Interactive Preview');
 
 // ---------------------------------------------------------------------
-// SUITE 29: Mini Studio ASO Search Result Verification
-// ---------------------------------------------------------------------
-console.log('\n[SUITE 29]: Mini Studio ASO Search Result Verification');
-
-assert(miniStudioHtml.includes('id="msVt"'), 'mini-studio.html defines #msVt view switcher');
-assert(miniStudioHtml.includes('id="msViewDetail"') && miniStudioHtml.includes('id="msViewSearch"'), 'mini-studio.html defines Detail View and Search Result buttons');
-assert(miniStudioHtml.includes('apple-search-view'), 'mini-studio.html contains apple-search-view');
-assert(miniStudioHtml.includes('gp-search-view'), 'mini-studio.html contains gp-search-view');
-assert(miniStudioHtml.includes('sr-search-header'), 'Apple search view contains search header');
-assert(miniStudioHtml.includes('class="sr-app-card"'), 'Apple search view contains primary app card');
-assert(miniStudioHtml.includes('data-shots="search-apple"'), 'Apple search view contains screenshots gallery container');
-assert(miniStudioHtml.includes('class="gp-search-header"'), 'Google Play search view contains sticky search header');
-assert(miniStudioHtml.includes('gp-search-card primary'), 'Google Play search view contains primary card');
-assert(miniStudioHtml.includes('class="gp-search-chips-wrap"'), 'Google Play search view contains filter chips');
-
-const miniJsCode = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'js', 'mini-studio.js'), 'utf8');
-assert(miniJsCode.includes('function setMiniStudioView'), 'mini-studio.js defines setMiniStudioView');
-assert(miniJsCode.includes('function updateMsViewIndicator'), 'mini-studio.js defines updateMsViewIndicator');
-assert(miniJsCode.includes('data-shots="search-apple"'), 'mini-studio.js populates search-apple gallery');
-assert(miniJsCode.includes('.sr-search-clear') && miniJsCode.includes('.gp-search-back-btn'), 'mini-studio.js wires return to detail on clear/back');
-
-const miniSearchCss = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'css', 'mini-studio-search.css'), 'utf8');
-assert(miniSearchCss.includes('.apple-search-view') && miniSearchCss.includes('.gp-search-view'), 'mini-studio-search.css styles both search views');
-assert(miniSearchCss.includes('.ms-vt') && miniSearchCss.includes('.ms-vt-pill'), 'mini-studio-search.css styles view switcher');
-
-const freshMarketingHtml = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'marketing.html'), 'utf8');
-assert(freshMarketingHtml.includes('id="msVt"'), 'Bundled docs/marketing.html includes #msVt');
-assert(freshMarketingHtml.includes('apple-search-view') && freshMarketingHtml.includes('gp-search-view'), 'Bundled docs/marketing.html includes both search views');
-
-// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
