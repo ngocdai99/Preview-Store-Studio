@@ -140,6 +140,9 @@ function loadPreset(key){
   CURRENT_PRESET_KEY = key;
   isPresetModified = false;
   if(key === 'none'){
+    if(typeof setSupportsIpad === 'function'){
+      setSupportsIpad(false);
+    }
     $('f-name').value = '';
     $('f-sub').value = '';
     $('f-promo').value = '';
@@ -328,6 +331,9 @@ function loadPreset(key){
   }
   SHOTS = [...p.shots];
   IPAD_SHOTS = [];
+  if(typeof setSupportsIpad === 'function'){
+    setSupportsIpad(!!p.supportsIpad);
+  }
   REVIEWS = p.reviews ? JSON.parse(JSON.stringify(p.reviews)) : [];
   TABS.tab7 = []; TABS.tab10 = [];
   renderTablets();

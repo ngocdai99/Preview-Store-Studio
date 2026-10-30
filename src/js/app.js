@@ -7129,6 +7129,9 @@ function loadPreset(key){
   CURRENT_PRESET_KEY = key;
   isPresetModified = false;
   if(key === 'none'){
+    if(typeof setSupportsIpad === 'function'){
+      setSupportsIpad(false);
+    }
     $('f-name').value = '';
     $('f-sub').value = '';
     $('f-promo').value = '';
@@ -7317,6 +7320,9 @@ function loadPreset(key){
   }
   SHOTS = [...p.shots];
   IPAD_SHOTS = [];
+  if(typeof setSupportsIpad === 'function'){
+    setSupportsIpad(!!p.supportsIpad);
+  }
   REVIEWS = p.reviews ? JSON.parse(JSON.stringify(p.reviews)) : [];
   TABS.tab7 = []; TABS.tab10 = [];
   renderTablets();
@@ -7497,7 +7503,7 @@ function applyStateObject(s){
     IS_CUSTOM_FEATURE = false;
   }
   if(Array.isArray(s.shots) && (s.shots.length || !s._partial)) SHOTS = s.shots;
-  if(typeof s.supportsIpad === 'boolean' && typeof setSupportsIpad === 'function') setSupportsIpad(s.supportsIpad);
+  if(typeof setSupportsIpad === 'function') setSupportsIpad(typeof s.supportsIpad === 'boolean' ? s.supportsIpad : false);
   if(Array.isArray(s.ipadShots)){
     IPAD_SHOTS = s.ipadShots.filter(x => typeof x === 'string');
     if(typeof renderIpadShots === 'function') renderIpadShots();
@@ -7693,6 +7699,9 @@ function resetDraftWorkspace(){
     const el = $(id);
     if(el) el.value = '';
   });
+  if(typeof setSupportsIpad === 'function'){
+    setSupportsIpad(false);
+  }
   loadPreset('none');
   CURRENT_PRESET_KEY = 'draft';
   if(typeof updatePresetBanner === 'function') updatePresetBanner();

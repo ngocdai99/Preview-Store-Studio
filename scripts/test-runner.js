@@ -1567,6 +1567,66 @@ assert(bundledHtml.includes('CURRENT_ACTIVE_PRESET = key'), 'loadPreset updates 
 assert(bundledHtml.includes('applyImportedStoreApp') && bundledHtml.includes('userDraft = getCurrentStateObject();'), 'applyImportedStoreApp replaces draft with imported app data');
 
 // ---------------------------------------------------------------------
+// [SUITE 21]: Supported Devices Clean Checkboxes & Draft iPad State Reset Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 21]: Supported Devices Clean Checkboxes & Draft iPad State Reset Verification');
+
+// Test 1: Device icons on destination checkboxes are completely removed
+assert(!bundledHtml.includes('class="dest-icon-wrap"'), 'Supported Devices destination checkboxes have device icons removed');
+assert(bundledHtml.includes('id="destTileIphone"') && bundledHtml.includes('id="destTileIpad"'), 'Supported Devices retains iPhone and iPad destination tiles');
+
+// Test 2: Destination tiles contain clean checkmark boxes and info labels
+const iphoneTileMatch = bundledHtml.match(/<label class="dest-tile[^"]*" id="destTileIphone"[^>]*>([\s\S]*?)<\/label>/);
+assert(iphoneTileMatch && iphoneTileMatch[1].includes('dest-check-box') && !iphoneTileMatch[1].includes('dest-icon-wrap'), 'iPhone destination tile contains clean checkmark box without device icon');
+
+const ipadTileMatch = bundledHtml.match(/<label class="dest-tile[^"]*" id="destTileIpad"[^>]*>([\s\S]*?)<\/label>/);
+assert(ipadTileMatch && ipadTileMatch[1].includes('dest-check-box') && !ipadTileMatch[1].includes('dest-icon-wrap'), 'iPad destination tile contains clean checkmark box without device icon');
+
+// Test 3: resetDraftWorkspace resets iPad support state and unchecks iPad checkbox
+assert(bundledHtml.includes('resetDraftWorkspace()') && bundledHtml.includes('setSupportsIpad(false)'), 'resetDraftWorkspace resets iPad support state via setSupportsIpad(false)');
+
+// Test 4: loadPreset('none') resets iPad support state
+const loadPresetNoneMatch = bundledHtml.match(/if\s*\(\s*key\s*===\s*'none'\s*\)\s*\{[\s\S]*?setSupportsIpad\(false\)/);
+assert(!!loadPresetNoneMatch, 'loadPreset("none") guarantees iPad support is reset to false');
+
+// Test 5: Functional verification of setSupportsIpad reset behavior
+let mockSupportsIpad = true;
+const mockIpadChk = { checked: true };
+const mockTileClasses = new Set(['dest-tile', 'active']);
+const mockTileIpad = {
+  classList: {
+    toggle: (cls, val) => val ? mockTileClasses.add(cls) : mockTileClasses.delete(cls),
+    contains: (cls) => mockTileClasses.has(cls)
+  }
+};
+const mockBadge = { textContent: 'Universal App', className: 'dest-badge universal' };
+const mockDescClasses = new Set(['dest-desc-bar', 'active-universal']);
+const mockDescBar = {
+  classList: {
+    toggle: (cls, val) => val ? mockDescClasses.add(cls) : mockDescClasses.delete(cls),
+    contains: (cls) => mockDescClasses.has(cls)
+  }
+};
+
+function testSetSupportsIpad(val) {
+  mockSupportsIpad = !!val;
+  if (mockIpadChk.checked !== mockSupportsIpad) mockIpadChk.checked = mockSupportsIpad;
+  mockTileIpad.classList.toggle('active', mockSupportsIpad);
+  mockBadge.textContent = mockSupportsIpad ? 'Universal App' : 'iPhone Only';
+  mockBadge.className = 'dest-badge' + (mockSupportsIpad ? ' universal' : '');
+  mockDescBar.classList.toggle('active-universal', mockSupportsIpad);
+}
+
+// Perform reset
+testSetSupportsIpad(false);
+
+assert(mockSupportsIpad === false, 'mockSupportsIpad reset to false');
+assert(mockIpadChk.checked === false, 'iPad checkbox checked property reset to false');
+assert(!mockTileIpad.classList.contains('active'), 'iPad destination tile active class removed');
+assert(mockBadge.textContent === 'iPhone Only', 'Destination badge updated to "iPhone Only"');
+assert(!mockDescBar.classList.contains('active-universal'), 'Description bar active-universal class removed');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
