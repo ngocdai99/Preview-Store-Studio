@@ -111,6 +111,59 @@ img.hl-target {
   border-radius: 6px !important;
 }
 
+/* Sample Metrics & Badges Focus Highlight Styling */
+.a-met b.hl-target,
+.ipad-metrics b.hl-target,
+.g-met b.hl-target,
+.a-met i.hl-target,
+.ipad-metrics i.hl-target,
+.g-met small.hl-target,
+.a-rating-num.hl-target,
+.g-rb-num.hl-target,
+.ipad-rating-num.hl-target,
+.a-rating-sub.hl-target,
+.g-rb-cnt.hl-target,
+.ipad-rating-caption.hl-target,
+.a-info b.hl-target,
+.ipad-info-val.hl-target,
+.iap[data-iap-apple].hl-target,
+.g-meta[data-iap-google].hl-target,
+.g-about .st.hl-target,
+.gt10-rank-chip.hl-target {
+  background-color: rgba(245, 158, 11, 0.28) !important;
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 1px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+.iap[data-iap-apple].hl-target,
+.g-meta[data-iap-google].hl-target {
+  display: inline-block !important;
+  padding: 1px 4px !important;
+}
+
+.a-met b.hl-flash,
+.ipad-metrics b.hl-flash,
+.g-met b.hl-flash,
+.a-met i.hl-flash,
+.ipad-metrics i.hl-flash,
+.g-met small.hl-flash,
+.a-rating-num.hl-flash,
+.g-rb-num.hl-flash,
+.ipad-rating-num.hl-flash,
+.a-rating-sub.hl-flash,
+.g-rb-cnt.hl-flash,
+.ipad-rating-caption.hl-flash,
+.a-info b.hl-flash,
+.ipad-info-val.hl-flash,
+.iap[data-iap-apple].hl-flash,
+.g-meta[data-iap-google].hl-flash,
+.g-about .st.hl-flash,
+.gt10-rank-chip.hl-flash {
+  border-radius: 4px !important;
+}
+
 /* Typing Flash animation */
 .hl-flash {
   animation: fieldHlFlash 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) !important;

@@ -1894,6 +1894,54 @@ const ipadJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', '
 assert(!ipadJsCode.includes('Universal App Notice:'), 'validateIpadScreenshots no longer displays warning notice when 0 screenshots are uploaded');
 
 // ---------------------------------------------------------------------
+// SUITE 26: Customize Metrics Focus Highlight & Linking Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 26]: Customize Metrics Focus Highlight & Linking Verification');
+
+const syncJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'sync.js'), 'utf8');
+assert(syncJsCode.includes("case 'st-rating':") && syncJsCode.includes("case 'st-count':"), 'sync.js defines mockup target mapping for rating and ratings count');
+assert(syncJsCode.includes("case 'st-rank':") && syncJsCode.includes("case 'st-dl':"), 'sync.js defines mockup target mapping for rank and downloads');
+assert(syncJsCode.includes("case 'st-size':") && syncJsCode.includes("case 'st-age':") && syncJsCode.includes("case 'st-iap':"), 'sync.js defines mockup target mapping for size, age rating, and monetization badge');
+
+assert(bundledHtml.includes('.a-met b.hl-target') && bundledHtml.includes('.g-met b.hl-target'), 'Bundled CSS provides focus highlight styles for metrics ribbon numbers');
+assert(bundledHtml.includes('.iap[data-iap-apple].hl-target') && bundledHtml.includes('.g-meta[data-iap-google].hl-target'), 'Bundled CSS provides focus highlight styles for monetization badges');
+assert(bundledHtml.includes('.a-info b.hl-target') && bundledHtml.includes('.ipad-info-val.hl-target'), 'Bundled CSS provides focus highlight styles for Information table metrics');
+
+// Functional testing for getFieldMockupTargets with metric fields
+const syncSandbox = {
+  $$: (sel) => {
+    if (sel.includes('[data-stat="rating"]')) return [{ id: 'mock-rating', closest: () => ({ id: 'mock-rating-b' }) }];
+    if (sel.includes('[data-stat="count"]')) return [{ id: 'mock-count', closest: () => ({ id: 'mock-count-i' }) }];
+    if (sel.includes('[data-stat="rank"]')) return [{ id: 'mock-rank', closest: () => ({ id: 'mock-rank-b' }) }];
+    if (sel.includes('[data-stat="dl"]')) return [{ id: 'mock-dl', closest: () => ({ id: 'mock-dl-st' }) }];
+    if (sel.includes('[data-stat="size"]')) return [{ id: 'mock-size', closest: () => ({ id: 'mock-size-b' }) }];
+    if (sel.includes('[data-age-apple]')) return [{ id: 'mock-age', closest: () => ({ id: 'mock-age-b' }) }];
+    if (sel.includes('[data-iap-apple]')) return [{ id: 'mock-iap', closest: () => null }];
+    return [];
+  },
+  $: () => null,
+  document: {
+    readyState: 'complete',
+    addEventListener: () => {},
+    querySelector: () => null,
+    querySelectorAll: () => []
+  },
+  window: {}
+};
+vm.createContext(syncSandbox);
+vm.runInContext(syncJsCode + '\nglobalThis.getFieldMockupTargets = getFieldMockupTargets;', syncSandbox);
+
+const getTargets = syncSandbox.getFieldMockupTargets;
+assert(typeof getTargets === 'function', 'getFieldMockupTargets is defined and runnable');
+assert(getTargets('st-rating').length > 0, 'getTargets resolves rating target elements');
+assert(getTargets('st-count').length > 0, 'getTargets resolves count target elements');
+assert(getTargets('st-rank').length > 0, 'getTargets resolves rank target elements');
+assert(getTargets('st-dl').length > 0, 'getTargets resolves downloads target elements');
+assert(getTargets('st-size').length > 0, 'getTargets resolves size target elements');
+assert(getTargets('st-age').length > 0, 'getTargets resolves age rating target elements');
+assert(getTargets('st-iap').length > 0, 'getTargets resolves monetization badge target elements');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
