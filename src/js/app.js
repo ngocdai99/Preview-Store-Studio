@@ -1726,8 +1726,8 @@ const BLANK_FEATURE = makeSvgDataUri(`
     <path d="M56 38 L40 22 L12 50"/>
     <path d="M35 38 L42 30 L56 44"/>
   </g>
-  <text x="512" y="285" font-family="-apple-system,system-ui,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#94a3b8">Google Play Feature Graphic (1,024 × 500 px)</text>
-  <text x="512" y="320" font-family="-apple-system,system-ui,sans-serif" font-size="14" text-anchor="middle" fill="#64748b">PNG or JPEG · Up to 15 MB · Click or drag image to upload</text>
+  <text x="512" y="285" font-family="-apple-system,system-ui,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#94a3b8">Click or drag image to upload</text>
+  <text x="512" y="320" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="500" text-anchor="middle" fill="#64748b">1024 × 500 px</text>
 </svg>
 `);
 
@@ -4808,9 +4808,8 @@ function validateFeatureGraphic(){
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
   if(!currentAsset || currentAsset === (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
-    badge.className = 'shot-status-badge warn';
-    badge.innerHTML = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span><span><strong>No Feature Graphic uploaded yet.</strong> Google Play requires a 1024×500 px asset for store featuring.</span>`;
-    badge.style.display = 'flex';
+    badge.style.display = 'none';
+    badge.innerHTML = '';
     if(dimTag) dimTag.style.display = 'none';
     if(removeBtn) removeBtn.style.display = 'none';
     return;

@@ -124,9 +124,8 @@ function validateFeatureGraphic(){
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
   if(!currentAsset || currentAsset === (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
-    badge.className = 'shot-status-badge warn';
-    badge.innerHTML = `<span class="sb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span><span><strong>No Feature Graphic uploaded yet.</strong> Google Play requires a 1024×500 px asset for store featuring.</span>`;
-    badge.style.display = 'flex';
+    badge.style.display = 'none';
+    badge.innerHTML = '';
     if(dimTag) dimTag.style.display = 'none';
     if(removeBtn) removeBtn.style.display = 'none';
     return;

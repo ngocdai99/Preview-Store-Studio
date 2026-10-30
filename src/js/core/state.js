@@ -1029,8 +1029,8 @@ const BLANK_FEATURE = makeSvgDataUri(`
     <path d="M56 38 L40 22 L12 50"/>
     <path d="M35 38 L42 30 L56 44"/>
   </g>
-  <text x="512" y="285" font-family="-apple-system,system-ui,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#94a3b8">Google Play Feature Graphic (1,024 × 500 px)</text>
-  <text x="512" y="320" font-family="-apple-system,system-ui,sans-serif" font-size="14" text-anchor="middle" fill="#64748b">PNG or JPEG · Up to 15 MB · Click or drag image to upload</text>
+  <text x="512" y="285" font-family="-apple-system,system-ui,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#94a3b8">Click or drag image to upload</text>
+  <text x="512" y="320" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="500" text-anchor="middle" fill="#64748b">1024 × 500 px</text>
 </svg>
 `);
 
