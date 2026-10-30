@@ -1481,6 +1481,9 @@ assert(bundledHtml.includes('sizeBytes > 15 * 1024 * 1024') && bundledHtml.inclu
 assert(bundledHtml.includes('Contains transparency (alpha channel not allowed by Play Console)'), 'validateFeatureGraphic strictly checks and rejects alpha channel transparency');
 assert(bundledHtml.includes('MAX_FEATURE_BYTES = 15 * 1024 * 1024'), 'Feature Graphic Inspector modal verifies 15 MB file size limit');
 assert(bundledHtml.includes('Alpha detected · 100% Opaque required (no alpha)'), 'Feature Graphic Inspector modal rejects alpha transparency with actionable guidance');
+assert(bundledHtml.includes('id="featureCard"') && bundledHtml.includes('</i>Feature Graphic</h2>'), 'Feature Graphic card title removes (1024×500 px) for concise clean title');
+assert(bundledHtml.includes('.card h2{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:800;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0}'), 'Card headers enforce flex-wrap: nowrap to prevent title text dropping below icon');
+assert(bundledHtml.includes('.card-sub-tag') && bundledHtml.includes('margin-left:72px'), 'Feature Graphic card places GOOGLE tag on a separate line directly under title text');
 
 // ---------------------------------------------------------------------
 // Suite 19: Responsive Header & Tool Title Permanence Verification
