@@ -151,7 +151,6 @@ function minifyHtml(html) {
 function build(options = {}) {
   const startTime = Date.now();
   const isMin = !!options.minify;
-  const isStandardTier = options.tier === 'standard';
 
   try {
     const indexPath = path.join(SRC_DIR, 'index.html');
@@ -165,9 +164,6 @@ function build(options = {}) {
     // 1. Resolve HTML components
     let rawHtml = fs.readFileSync(indexPath, 'utf8');
     let html = resolveHtmlIncludes(rawHtml, SRC_DIR);
-    if (isStandardTier) {
-      html = html.replace(/<button[^>]*data-preset=["'](cyberstrike|edulearn)["'][^>]*>[\s\S]*?<\/button>\s*/gi, '');
-    }
     if (isMin) html = minifyHtml(html);
 
     // 2. Resolve CSS modules
@@ -177,9 +173,6 @@ function build(options = {}) {
 
     // 3. Bundle JS modules
     let js = getBundledJs();
-    if (isStandardTier) {
-      js = js.replace(/\/\*\s*@pro-only-start\s*\*\/[\s\S]*?\/\*\s*@pro-only-end\s*\*\//g, '');
-    }
     if (isMin) js = minifyJs(js);
 
     // 4. Vendor library
@@ -219,9 +212,9 @@ function build(options = {}) {
 
     const duration = Date.now() - startTime;
     const sizeKb = (fs.statSync(outTarget).size / 1024).toFixed(1);
-    const tierLabel = isStandardTier 
-      ? ` ${c.yellow}[Standard 3-Preset]${c.reset}`
-      : (options.minify ? ` ${c.cyan}[Minified]${c.reset}` : ` ${c.gray}[Full 5-Preset]${c.reset}`);
+    const tierLabel = options.tier === 'standard' 
+      ? ` ${c.yellow}[Standard 6-Preset]${c.reset}`
+      : (options.minify ? ` ${c.cyan}[Minified 6-Preset]${c.reset}` : ` ${c.gray}[Full 6-Preset]${c.reset}`);
 
     console.log(`  ${c.green}[OK]${c.reset} Bundled: ${c.brightGreen}${outTarget}${c.reset}`);
     console.log(`    ${c.gray}Variant:${c.reset}${tierLabel} ${c.gray}· Size:${c.reset} ${c.yellow}${sizeKb} KB${c.reset} ${c.gray}· Time:${c.reset} ${duration}ms`);

@@ -63,10 +63,12 @@ If you are customizing the modular source code in `src/`:
 - **LocalStorage Auto-Save**: Automatically preserves your active session across browser reloads.
 
 ### 5. Built-in International Templates & Presets
+- **Store Preview Studio**: Meta Developer Tool & ASO Mockup Showcase.
 - **TaskFlow**: SaaS Productivity & Daily Habit Planner.
 - **PulseFit**: Health, Fitness & Calorie Tracker.
 - **ZenMind**: Meditation, Mindfulness & Sleep Soundscapes.
 - **CyberStrike**: Sci-Fi Action RPG Mobile Game (120 FPS, Landscape/Portrait, Teen 12+ rating, game-specific privacy labels).
+- **EduLearn**: Language Learning & Skill Academy (Education category, rich achievements & course curriculum).
 - **None (Blank)**: Clean slate ready for new projects.
 
 ---
@@ -84,11 +86,12 @@ store-preview-studio-pro-v1.0/
 ├── build.js / dev.js                      # Asset compiler & live dev server
 ├── src/                                   # Full modular source code
 └── presets/                               # Ready-to-use JSON listing presets (v2.1.0)
+    ├── store-preview-studio-template.json
     ├── saas-app-template.json
     ├── fitness-tracker-template.json
     ├── zenmind-meditation-template.json
     ├── cyberstrike-rpg-game-template.json
-    └── edulearn-course-template.json
+    └── education-language-template.json
 ```
 
 ---
