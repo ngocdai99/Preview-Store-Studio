@@ -5048,9 +5048,8 @@ function renderTablets(){
 
     const be = $(c.badge);
     if(!valid.length){
-      be.className = 'shot-status-badge warn';
-      be.innerHTML = `${SB_INFO}<span><strong>No ${c.name} screenshots yet.</strong> The preview shows placeholders. Upload up to ${MAX_TAB}.</span>`;
-      be.style.display = 'flex';
+      be.style.display = 'none';
+      be.innerHTML = '';
     }else if(bad){
       be.className = 'shot-status-badge err';
       be.innerHTML = `${SB_ERR}<span><strong>${bad} of ${valid.length} screenshot${valid.length===1?'':'s'} would be rejected</strong> by Play Console. See details below.</span>`;
