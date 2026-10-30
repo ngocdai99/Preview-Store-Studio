@@ -4772,7 +4772,10 @@ function validateFeatureGraphic(){
 
     if(issues.length){
       badge.className = 'shot-status-badge err';
-      badge.innerHTML = `${SB_ERR}<span><strong>${issues.length} issue${issues.length === 1 ? '' : 's'} would cause rejection by Google Play:</strong> ${issues.join(' · ')}.</span>`;
+      const issuesContent = issues.length === 1
+        ? ` ${issues[0]}.`
+        : `<div class="sb-issues-list">${issues.map(iss => `<span class="sb-issue-item">• ${iss}</span>`).join('')}</div>`;
+      badge.innerHTML = `${SB_ERR}<span><strong>${issues.length} issue${issues.length === 1 ? '' : 's'} would cause rejection by Google Play:</strong>${issuesContent}</span>`;
       badge.style.display = 'flex';
       if(dimTag){
         dimTag.className = 'shot-dim-tag err';

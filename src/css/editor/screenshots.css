@@ -139,16 +139,22 @@
 
 /* Screenshot Status Badge in Editor */
 .shot-status-badge{
-  display:flex;align-items:center;gap:8px;font-size:11.5px;padding:8px 12px;border-radius:10px;line-height:1.4;margin:6px 0 2px;
+  display:flex;align-items:flex-start;gap:8px;font-size:11.5px;padding:8px 12px;border-radius:10px;line-height:1.4;margin:6px 0 2px;
   flex-wrap:wrap;min-width:0;box-sizing:border-box;
 }
 .shot-status-badge:empty{display:none!important}
 .shot-status-badge .sb-ico{
-  width:16px;height:16px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;margin-top:0;
+  width:16px;height:16px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;
 }
 .shot-status-badge .sb-ico svg{width:15px;height:15px;stroke-width:2.3;display:block}
 .shot-status-badge > span:not(.sb-ico){
-  flex:1 1 180px;min-width:0;word-break:break-word;align-self:center;
+  flex:1 1 180px;min-width:0;word-break:break-word;align-self:flex-start;
+}
+.sb-issues-list{
+  margin-top:4px;display:flex;flex-direction:column;gap:3px;
+}
+.sb-issue-item{
+  line-height:1.35;
 }
 .shot-status-badge .sb-actions{
   display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto;flex-shrink:0;align-self:center;
