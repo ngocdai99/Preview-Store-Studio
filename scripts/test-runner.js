@@ -1822,13 +1822,15 @@ assert(bundledHtml.includes('id="customCatSearch"') && bundledHtml.includes('id=
 assert(bundledHtml.includes('.custom-cat-trigger') && bundledHtml.includes('.custom-cat-menu') && bundledHtml.includes('.custom-cat-option'), 'Custom category CSS classes exist in bundled CSS');
 assert(bundledHtml.includes(':root[data-ui=light] .custom-cat-trigger') && bundledHtml.includes(':root[data-ui=light] .custom-cat-menu'), 'Custom category provides authentic light theme adaptation');
 assert(/<label>Category\s*<span class="tag a"[^>]*>APPLE<\/span>\s*<span class="tag g"[^>]*>GOOGLE<\/span><\/label>/.test(bundledHtml), 'Category field label displays both APPLE and GOOGLE badges');
+assert(bundledHtml.includes("setFieldFocus('cat', true)"), 'Focusing custom category dropdown triggers setFieldFocus to highlight category on device');
+assert(bundledHtml.includes('.ipad-cat-pill.hl-target') && bundledHtml.includes('.a-met [data-b="cat"].hl-target'), 'Category focus highlight styles cover iPhone, iPad, and Google Play mockups');
 
 // Functional testing for category matching & normalization
 const catCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'categories.js'), 'utf8');
 const catSandbox = {
-  $: (id) => ({ id, value: '', dataset: {}, classList: { toggle: () => {}, add: () => {}, remove: () => {}, contains: () => false }, querySelectorAll: () => [], appendChild: () => {}, setAttribute: () => {} }),
+  $: (id) => ({ id, value: '', dataset: {}, classList: { toggle: () => {}, add: () => {}, remove: () => {}, contains: () => false }, querySelectorAll: () => [], appendChild: () => {}, setAttribute: () => {}, addEventListener: () => {} }),
   document: {
-    createElement: () => ({ setAttribute: () => {}, appendChild: () => {}, classList: { add: () => {} }, dataset: {} }),
+    createElement: () => ({ setAttribute: () => {}, appendChild: () => {}, classList: { add: () => {} }, dataset: {}, addEventListener: () => {} }),
     addEventListener: () => {}
   },
   store: 'apple'

@@ -54,18 +54,27 @@ img.hl-target {
   border-radius: 16px !important;
 }
 
-/* Specific Category Pill & Chips: cleanly change the white border to orange/yellow without modifying text or background */
+/* Specific Category Pill & Chips: cleanly change the border/outline to orange/yellow */
 .chips span[data-b="cat"].hl-target,
-.chips [data-b="cat"].hl-target,
-span[data-b="cat"].hl-target {
+.chips [data-b="cat"].hl-target {
   border-color: #f59e0b !important;
-  outline: none !important;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5) !important;
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 2px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+.ipad-cat-pill.hl-target {
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 2px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
 }
 
 /* Apple Metrics Ribbon & Information Category */
 .a-met [data-b="cat"].hl-target,
-.a-info [data-b="cat"].hl-target {
+.a-info [data-b="cat"].hl-target,
+.ipad-info-val[data-b="cat"].hl-target {
   outline: 2px solid #f59e0b !important;
   outline-offset: 2px !important;
   border-radius: 4px !important;

@@ -170,6 +170,7 @@ function setFieldFocus(key, shouldScroll = true) {
   if (!shouldScroll) return;
 
   // Smoothly scroll active device screens (.scr) to the target position
+  const scrolledContainers = new Set();
   targets.forEach(target => {
     const dev = target.closest('.dev');
     if (!dev) return;
@@ -186,7 +187,8 @@ function setFieldFocus(key, shouldScroll = true) {
 
     // Scroll the device's inner screen (.scr)
     const scr = target.closest('.scr');
-    if (scr) {
+    if (scr && !scrolledContainers.has(scr)) {
+      scrolledContainers.add(scr);
       const scrRect = scr.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
 
@@ -274,6 +276,32 @@ function initFieldFocusLinking() {
     });
     el.addEventListener('mouseleave', () => {
       if (activeFieldFocusKey === 'shots') setFieldFocus(null);
+    });
+  });
+
+  // Custom Category dropdown trigger and search interaction zones
+  const catZones = $$('#customCatTrigger, #customCatSearch, .custom-cat-trigger');
+  catZones.forEach(el => {
+    el.addEventListener('focus', () => setFieldFocus('cat', true));
+    el.addEventListener('blur', (e) => {
+      const wrap = el.closest('.custom-cat-wrap');
+      if (wrap && wrap.contains(e.relatedTarget)) return;
+      if (typeof isCustomCatOpen === 'function' && isCustomCatOpen()) return;
+      setFieldFocus(null);
+    });
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('cat', true);
+    });
+    el.addEventListener('mouseleave', () => {
+      const wrap = el.closest('.custom-cat-wrap');
+      const isDropdownOpen = (wrap && wrap.classList.contains('open')) || (typeof isCustomCatOpen === 'function' && isCustomCatOpen());
+      if (!isDropdownOpen && activeFieldFocusKey === 'cat') {
+        const trigger = wrap ? wrap.querySelector('#customCatTrigger') : null;
+        const search = wrap ? wrap.querySelector('#customCatSearch') : null;
+        if (document.activeElement !== trigger && document.activeElement !== search) {
+          setFieldFocus(null);
+        }
+      }
     });
   });
 }
