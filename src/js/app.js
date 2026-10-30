@@ -2262,7 +2262,7 @@ let CUSTOM_ICON_512 = '';
 let CURRENT_PRESET_KEY = 'none';
 let IS_CUSTOM_ICON = false;
 let IS_CUSTOM_FEATURE = false;
-let FEATURE_GRAPHIC = DEFAULT_FEATURE;
+let FEATURE_GRAPHIC = BLANK_FEATURE;
 let SHOTS = [SHOT_1, SHOT_2, SHOT_3, SHOT_4];
 let IPAD_SHOTS = [];
 let SUPPORTS_IPAD = false;
@@ -7258,6 +7258,7 @@ if(btnDraft){
 // Store Preview Studio - Storage & State Persistence (LocalStorage & IndexedDB)
 const STORAGE_KEY = 'store_preview_studio_state_v2';
 const DRAFT_STORAGE_KEY = 'sps_core_user_draft';
+const DRAFT_FEATURE_THUMB_KEY = 'sps_draft_feature_thumb';
 let userDraft = null;
 let isPresetModified = false;
 let saveTimer = null;
@@ -7474,6 +7475,17 @@ function saveDraftToStorage(){
   if(typeof idbSave === 'function'){
     idbSave(DRAFT_STORAGE_KEY, userDraft);
   }
+  if(userDraft.isCustomFeature && userDraft.featureGraphic && userDraft.featureGraphic !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
+    if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE.has(userDraft.featureGraphic)){
+      try{ localStorage.setItem(DRAFT_FEATURE_THUMB_KEY, THUMB_CACHE.get(userDraft.featureGraphic)); }catch(_){}
+    } else if(typeof generateDisplayThumbnail === 'function'){
+      generateDisplayThumbnail(userDraft.featureGraphic).then(thumb => {
+        try{ localStorage.setItem(DRAFT_FEATURE_THUMB_KEY, thumb); }catch(_){}
+      });
+    }
+  } else {
+    try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(_){}
+  }
   try{
     localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(userDraft));
   }catch(e){
@@ -7495,6 +7507,10 @@ function loadDraftFromStorage(){
           if(!userDraft.isCustomIcon || !userDraft.icon || userDraft.icon.includes('studioBg') || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('stdBg')){
             userDraft.icon = BLANK_ICON;
             userDraft.isCustomIcon = false;
+          }
+          if(userDraft.isCustomFeature && (!userDraft.featureGraphic || userDraft.featureGraphic === (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : ''))){
+            const thumb = localStorage.getItem(DRAFT_FEATURE_THUMB_KEY);
+            if(thumb) userDraft.featureGraphic = thumb;
           }
         }
       }
@@ -7583,6 +7599,7 @@ function updateDraftPill(){
           userDraft = null;
           try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
           try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+          try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
           if(typeof idbDelete === 'function'){
             idbDelete(DRAFT_STORAGE_KEY);
             idbDelete(STORAGE_KEY);
