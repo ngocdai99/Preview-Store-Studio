@@ -1821,6 +1821,7 @@ assert(bundledHtml.includes('id="customCatVal"') && bundledHtml.includes('id="cu
 assert(bundledHtml.includes('id="customCatSearch"') && bundledHtml.includes('id="customCatOptions"'), 'Custom category search input and options container exist in bundled HTML');
 assert(bundledHtml.includes('.custom-cat-trigger') && bundledHtml.includes('.custom-cat-menu') && bundledHtml.includes('.custom-cat-option'), 'Custom category CSS classes exist in bundled CSS');
 assert(bundledHtml.includes(':root[data-ui=light] .custom-cat-trigger') && bundledHtml.includes(':root[data-ui=light] .custom-cat-menu'), 'Custom category provides authentic light theme adaptation');
+assert(/<label>Category\s*<span class="tag a"[^>]*>APPLE<\/span>\s*<span class="tag g"[^>]*>GOOGLE<\/span><\/label>/.test(bundledHtml), 'Category field label displays both APPLE and GOOGLE badges');
 
 // Functional testing for category matching & normalization
 const catCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'categories.js'), 'utf8');

@@ -46,8 +46,6 @@ function syncCategoryUI(){
   const activeSt = typeof store !== 'undefined' ? store : 'apple';
   const displayVal = (CAT[activeSt] || '').replace(/^Games · /, '');
   if($('f-cat')) $('f-cat').value = displayVal;
-  const t = $('catTag');
-  if(t){ t.textContent = activeSt === 'apple' ? 'APPLE' : 'GOOGLE'; t.className = 'tag ' + (activeSt === 'apple' ? 'a' : 'g'); }
   const valEl = $('customCatVal');
   if(valEl) valEl.textContent = displayVal || 'Select category…';
   const wrap = $('customCatWrap');
