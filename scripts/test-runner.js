@@ -1221,6 +1221,7 @@ assert(bundledHtml.includes('class="metrics-summary"'), "Accordion #metricsDetai
 assert(bundledHtml.includes('MOCKUP ONLY'), "Metrics card displays MOCKUP ONLY badge");
 assert(bundledHtml.includes('Settings &amp; Metrics'), "Metrics card displays streamlined title Settings & Metrics");
 assert(bundledHtml.indexOf('Settings &amp; Metrics') < bundledHtml.indexOf('MOCKUP ONLY'), "MOCKUP ONLY tag is positioned below the Settings & Metrics title");
+assert(bundledHtml.includes('class="tag a" title="App Store">APPLE</span>') && bundledHtml.includes('class="tag g" title="Google Play">GOOGLE</span>'), "Settings & Metrics card includes APPLE and GOOGLE store badges");
 assert(!bundledHtml.includes('Add a small “Illustrative mockup” caption'), "Removed redundant exported image watermark caption toggle from Card 4");
 assert(!bundledHtml.includes('Hide all metrics from mockup'), "Metrics card removes redundant hide metrics toggle UI");
 assert(!bundledHtml.includes('id="swRowMetricsOff"'), "Switch row #swRowMetricsOff is completely removed from DOM");
