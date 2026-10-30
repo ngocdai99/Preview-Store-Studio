@@ -86,12 +86,6 @@ function closeCustomCat() {
   if (!wrap) return;
   wrap.classList.remove('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'false');
-  if (typeof setFieldFocus === 'function') {
-    const activeEl = document.activeElement;
-    if (activeEl !== trigger && (!wrap.contains(activeEl))) {
-      setFieldFocus(null);
-    }
-  }
 }
 
 function selectCategoryFromUI(catVal) {
@@ -248,25 +242,13 @@ function setCategory(val, only){
         if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
       });
 
-      trigger.addEventListener('blur', (e) => {
-        if (wrap && wrap.contains(e.relatedTarget)) return;
-        if (!isCustomCatOpen() && typeof setFieldFocus === 'function') {
-          setFieldFocus(null);
-        }
+      trigger.addEventListener('click', () => {
+        if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
           setFieldFocus('cat', true);
-        }
-      });
-
-      trigger.addEventListener('mouseleave', () => {
-        if (!isCustomCatOpen() && typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && activeFieldFocusKey === 'cat') {
-          const search = $('customCatSearch');
-          if (document.activeElement !== trigger && document.activeElement !== search) {
-            setFieldFocus(null);
-          }
         }
       });
     }
@@ -276,13 +258,6 @@ function setCategory(val, only){
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
         if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
-      });
-
-      searchInput.addEventListener('blur', (e) => {
-        if (wrap && wrap.contains(e.relatedTarget)) return;
-        if (!isCustomCatOpen() && typeof setFieldFocus === 'function') {
-          setFieldFocus(null);
-        }
       });
     }
     searchInput.oninput = () => {

@@ -1,10 +1,20 @@
 /* ---------- Field Focus Highlight & Scroll Linking (Form <-> Device Mockups) ---------- */
 .hl-target {
+  background-color: rgba(245, 158, 11, 0.22) !important;
   outline: 2px solid #f59e0b !important;
-  outline-offset: 3px !important;
+  outline-offset: 2px !important;
   border-radius: 6px !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45) !important;
-  transition: outline 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  transition: outline 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.18s ease !important;
+}
+
+/* For inline text data-b elements: give proper display and yellow background */
+span[data-b].hl-target,
+i[data-b].hl-target,
+b[data-b].hl-target,
+div[data-b].hl-target {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+  border-radius: 4px !important;
 }
 
 /* For rounded app icons */
@@ -12,6 +22,7 @@ img.hl-target {
   outline: 2.5px solid #f59e0b !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  background-color: transparent !important;
 }
 
 /* Google Play About App circular arrow button: maintain 50% circle radius with crisp yellow border */
@@ -21,6 +32,7 @@ img.hl-target {
   outline: 2px solid #f59e0b !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.55) !important;
+  background-color: rgba(245, 158, 11, 0.25) !important;
 }
 
 .g-desc-arrow.hl-flash,
@@ -35,6 +47,7 @@ img.hl-target {
   outline: 2px solid #f59e0b !important;
   outline-offset: 3px !important;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  background-color: rgba(245, 158, 11, 0.1) !important;
 }
 
 .safe[data-google-safety].hl-flash,
@@ -48,6 +61,7 @@ img.hl-target {
   outline: 2px solid #f59e0b !important;
   outline-offset: 3px !important;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  background-color: rgba(245, 158, 11, 0.1) !important;
 }
 
 [data-apple-priv-wrap] .pc.hl-flash {
@@ -57,6 +71,7 @@ img.hl-target {
 /* Specific Category Pill & Chips: cleanly change the border/outline to orange/yellow */
 .chips span[data-b="cat"].hl-target,
 .chips [data-b="cat"].hl-target {
+  background-color: rgba(245, 158, 11, 0.28) !important;
   border-color: #f59e0b !important;
   outline: 2px solid #f59e0b !important;
   outline-offset: 2px !important;
@@ -65,6 +80,7 @@ img.hl-target {
 }
 
 .ipad-cat-pill.hl-target {
+  background-color: rgba(245, 158, 11, 0.28) !important;
   outline: 2px solid #f59e0b !important;
   outline-offset: 2px !important;
   border-radius: 999px !important;
@@ -75,6 +91,7 @@ img.hl-target {
 .a-met [data-b="cat"].hl-target,
 .a-info [data-b="cat"].hl-target,
 .ipad-info-val[data-b="cat"].hl-target {
+  background-color: rgba(245, 158, 11, 0.28) !important;
   outline: 2px solid #f59e0b !important;
   outline-offset: 2px !important;
   border-radius: 4px !important;
@@ -83,6 +100,7 @@ img.hl-target {
 
 /* Version badge on Apple What's New: highlight full "Version X.Y.Z" */
 .wn-ver.hl-target {
+  background-color: rgba(245, 158, 11, 0.25) !important;
   outline: 2px solid #f59e0b !important;
   outline-offset: 3px !important;
   border-radius: 6px !important;
@@ -95,25 +113,33 @@ img.hl-target {
 
 /* Typing Flash animation */
 .hl-flash {
-  animation: fieldHlFlash 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+  animation: fieldHlFlash 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
 }
 
 @keyframes fieldHlFlash {
   0% {
-    outline: 2px solid #f59e0b !important;
+    background-color: rgba(245, 158, 11, 0.55) !important;
+    outline: 2.5px solid #f59e0b !important;
     outline-offset: 3px !important;
-    box-shadow: 0 0 14px rgba(245, 158, 11, 0.55) !important;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.65) !important;
+  }
+  50% {
+    background-color: rgba(245, 158, 11, 0.35) !important;
+    outline: 2px solid #f59e0b !important;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
   }
   100% {
-    outline: none !important;
-    box-shadow: none !important;
+    background-color: rgba(245, 158, 11, 0.22) !important;
+    outline: 2px solid #f59e0b !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.45) !important;
   }
 }
 
 .chips span[data-b="cat"].hl-flash {
+  background-color: rgba(245, 158, 11, 0.35) !important;
   border-color: #f59e0b !important;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.6) !important;
-  outline: none !important;
 }
 
 /* Clean export protection: exports NEVER render the focus highlight */
@@ -124,5 +150,6 @@ img.hl-target {
   outline: none !important;
   box-shadow: none !important;
   animation: none !important;
+  background-color: transparent !important;
   border-color: inherit !important;
 }

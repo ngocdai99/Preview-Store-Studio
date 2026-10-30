@@ -241,8 +241,8 @@ function initFieldFocusLinking() {
       setFieldFocus(key, true);
     });
 
-    input.addEventListener('blur', () => {
-      setFieldFocus(null);
+    input.addEventListener('click', () => {
+      setFieldFocus(key, true);
     });
 
     if (input.tagName === 'SELECT') {
@@ -253,16 +253,31 @@ function initFieldFocusLinking() {
     }
   });
 
+  // Entire field group click delegation: clicking label or field box highlights on device
+  $$('.editor .fg').forEach(fg => {
+    fg.addEventListener('click', (e) => {
+      if (e.target.closest('#customCatMenu')) return;
+      const targetInput = fg.querySelector('input:not([type=hidden]), textarea, select, #customCatTrigger');
+      if (!targetInput) return;
+      let key = '';
+      const rawId = targetInput.id || '';
+      if (rawId.startsWith('f-')) key = rawId.replace('f-', '');
+      else if (rawId.startsWith('sw-')) key = 'privacy';
+      else if (targetInput.id === 'customCatTrigger' || rawId.includes('cat')) key = 'cat';
+      if (key.startsWith('cat')) key = 'cat';
+      if (key) {
+        setFieldFocus(key, true);
+      }
+    });
+  });
+
   // App icon interaction zones
   const iconZones = $$('#icoDropZone, #icoUp, #icoFile, #iconStatusBadge, #dropApple, #dropGoogle');
   iconZones.forEach(el => {
     el.addEventListener('focus', () => setFieldFocus('icon', true));
-    el.addEventListener('blur', () => setFieldFocus(null));
+    el.addEventListener('click', () => setFieldFocus('icon', true));
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('icon', true);
-    });
-    el.addEventListener('mouseleave', () => {
-      if (activeFieldFocusKey === 'icon') setFieldFocus(null);
     });
   });
 
@@ -270,12 +285,9 @@ function initFieldFocusLinking() {
   const shotZones = $$('#dropZ, #dropZ-ipad, #dropZ-tab7, #dropZ-tab10, .drop-shots');
   shotZones.forEach(el => {
     el.addEventListener('focus', () => setFieldFocus('shots', true));
-    el.addEventListener('blur', () => setFieldFocus(null));
+    el.addEventListener('click', () => setFieldFocus('shots', true));
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('shots', true);
-    });
-    el.addEventListener('mouseleave', () => {
-      if (activeFieldFocusKey === 'shots') setFieldFocus(null);
     });
   });
 
@@ -283,27 +295,21 @@ function initFieldFocusLinking() {
   const catZones = $$('#customCatTrigger, #customCatSearch, .custom-cat-trigger');
   catZones.forEach(el => {
     el.addEventListener('focus', () => setFieldFocus('cat', true));
-    el.addEventListener('blur', (e) => {
-      const wrap = el.closest('.custom-cat-wrap');
-      if (wrap && wrap.contains(e.relatedTarget)) return;
-      if (typeof isCustomCatOpen === 'function' && isCustomCatOpen()) return;
-      setFieldFocus(null);
-    });
+    el.addEventListener('click', () => setFieldFocus('cat', true));
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('cat', true);
     });
-    el.addEventListener('mouseleave', () => {
-      const wrap = el.closest('.custom-cat-wrap');
-      const isDropdownOpen = (wrap && wrap.classList.contains('open')) || (typeof isCustomCatOpen === 'function' && isCustomCatOpen());
-      if (!isDropdownOpen && activeFieldFocusKey === 'cat') {
-        const trigger = wrap ? wrap.querySelector('#customCatTrigger') : null;
-        const search = wrap ? wrap.querySelector('#customCatSearch') : null;
-        if (document.activeElement !== trigger && document.activeElement !== search) {
-          setFieldFocus(null);
-        }
+  });
+
+  // Dismiss focus highlight when clicking directly on empty stage canvas background
+  const stage = document.querySelector('.stage');
+  if (stage) {
+    stage.addEventListener('click', (e) => {
+      if (e.target === stage || e.target.id === 'stageDevices' || e.target.id === 'stage') {
+        setFieldFocus(null);
       }
     });
-  });
+  }
 }
 
 // Bind input listeners
