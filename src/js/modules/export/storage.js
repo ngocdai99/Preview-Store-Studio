@@ -334,6 +334,33 @@ function updateDraftPill(){
   if(!pill) return;
   const hasDraft = hasUserDraft();
 
+  if(CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none'){
+    // When viewing a preset while draft is saved:
+    // Update displayed data on the pill to reflect the currently active preset view!
+    const p = (typeof PRESETS !== 'undefined') ? PRESETS[CURRENT_PRESET_KEY] : null;
+    const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY]) ? PRESET_ICONS[CURRENT_PRESET_KEY] : (p ? p.icon : BLANK_ICON);
+    const pName = p ? p.name : (CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1));
+    const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
+    
+    pill.classList.add('has-draft');
+    pill.classList.add('on');
+    pill.setAttribute('title', 'Viewing preset: ' + pName + (hasDraft ? ' (Click to Return to Draft)' : ''));
+    pill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + pIcon + '">' +
+      '<span id="draftBtnTitle">' + escapeHtml(dispName) + '</span>' +
+      '<small id="draftBtnBadge">Preset</small>' +
+      (hasDraft ? '<button type="button" class="ms-pill-reset-btn" id="msPillReturnBtn" title="Return to your saved draft" aria-label="Return to draft" style="font-size:11px;font-weight:700">↩</button>' : '');
+    
+    const returnBtn = pill.querySelector('#msPillReturnBtn');
+    if(returnBtn){
+      returnBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        loadPreset('draft');
+      });
+    }
+    updatePresetMenuSelection();
+    return;
+  }
+
   if(hasDraft && userDraft){
     pill.classList.add('has-draft');
     pill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');

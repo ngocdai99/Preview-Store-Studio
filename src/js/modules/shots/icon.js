@@ -12,7 +12,7 @@ function isPlaceholderIcon(){
   if(!ICON || ICON === BLANK_ICON) return true;
   if(typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024 && ICON === BLANK_ICON_1024) return true;
   if(typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512 && ICON === BLANK_ICON_512) return true;
-  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('studioBg') || ICON.includes('stdBg'))) return true;
+  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc'))) return true;
   return false;
 }
 

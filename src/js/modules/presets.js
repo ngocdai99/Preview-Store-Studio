@@ -276,7 +276,13 @@ function loadPreset(key){
   $('f-new').value = p.whatsNew;
   $('f-desc').value = p.desc;
   IS_CUSTOM_ICON = false;
+  CUSTOM_ICON_1024 = '';
+  CUSTOM_ICON_512 = '';
   ICON_FILE_SIZE = 0; ICON_FILE_TYPE = ''; ICON_FILE_NAME = '';
+  ['icoFile', 'featureFile', 'shotFile', 'ipadShotFile', 'tab7File', 'tab10File'].forEach(id => {
+    const el = $(id);
+    if(el) el.value = '';
+  });
   if (store === 'apple' && p.icon1024) {
     ICON = p.icon1024;
   } else if (store === 'google' && p.icon512) {
