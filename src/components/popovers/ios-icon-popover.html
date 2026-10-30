@@ -8,13 +8,10 @@
     <button class="info-pop-close" id="iosIconInfoClose" title="Close" aria-label="Close tooltip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
   </div>
   <div class="info-pop-body">
-    <p><b>1. Packaged via Xcode:</b> Since iOS 11+, standalone icon upload on App Store Connect is disabled. The 1024×1024 px icon must be bundled inside <code>Assets.xcassets</code> (AppIcon) within your Xcode project before archiving.</p>
-    <p><b>2. Exact Dimensions:</b> Exactly <b>1024 × 1024 px</b> (1:1 square aspect ratio). Color space must be sRGB or Display P3.</p>
-    <p><b>3. No Transparency (No Alpha Channel):</b> Must be 100% opaque without an alpha channel. Uploads with RGBA / transparency will be rejected immediately by Xcode &amp; App Store validation (<i>Asset validation failed</i>).</p>
-    <p><b>4. Keep Square (No Rounded Corners):</b> Deliver a sharp, square image. iOS and the App Store automatically apply the continuous-curvature squircle mask. Pre-rounding will result in black corner artifacts.</p>
-    <p><b>5. HIG Design Standards:</b> Do not include promotional text (<i>Free, Sale, #1</i>), device mockups, or system UI elements. The store icon must match the home screen icon after installation.</p>
-    <div class="info-pop-note" style="margin-top:4px;padding-top:7px;border-top:1px solid rgba(255,255,255,.1);font-size:11px;color:#94a3b8;line-height:1.45">
-      <i><b>Note:</b> These guidelines reflect current Apple &amp; Xcode policies and may be adjusted or changed by Apple in future releases.</i>
-    </div>
+    <p><b>1. Xcode Packaging:</b> Must be bundled inside <code>Assets.xcassets</code> (AppIcon) in your Xcode project before archiving.</p>
+    <p><b>2. Dimensions &amp; Color:</b> Exactly <b>1024 × 1024 px</b> (1:1 square) in sRGB or Display P3.</p>
+    <p><b>3. No Transparency:</b> Must be 100% opaque without alpha channel (transparency causes upload rejection).</p>
+    <p><b>4. Square Corners:</b> Upload sharp square corners. iOS automatically applies the squircle mask (do not pre-round).</p>
+    <p><b>5. Design Standards:</b> Avoid promotional text (<i>Free, #1</i>), device frames, or UI elements.</p>
   </div>
 </div>
