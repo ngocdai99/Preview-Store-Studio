@@ -245,43 +245,120 @@ body[data-store=google] .vt-pill,
 .vt button:active{transform:scale(.95)}
 
 /* Device Theme Segment Switch inside Stage Toolbar */
-.vt.theme-seg{padding:4px;gap:4px;position:relative;box-sizing:border-box}
-.vt.theme-seg .vt-pill{
-  position:absolute;top:4px;bottom:4px;left:0;
-  height:32px!important;
-  border-radius:10px!important;
-  pointer-events:none;
-  background:#334155!important;
-  box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2)!important;
-  border:1px solid rgba(255,255,255,.22)!important;
-  transition:transform .28s cubic-bezier(.2,.9,.3,1.15), width .28s cubic-bezier(.2,.9,.3,1.15), opacity .2s ease!important;
-  z-index:1;
+.vt.theme-seg,
+#theme.vt {
+  padding: 4px;
+  gap: 4px;
+  position: relative;
+  box-sizing: border-box;
+  background: rgba(15, 23, 42, .92);
+  border-color: rgba(255, 255, 255, .14);
 }
-.vt.theme-seg button{
-  position:relative;z-index:2;
-  width:38px!important;height:32px!important;min-width:38px!important;max-width:38px!important;
-  flex:0 0 38px!important;
-  padding:0!important;justify-content:center;
-  border-radius:10px!important;font-weight:600!important;
-  background:transparent!important;border:0!important;box-shadow:none!important;
-  color:#94a3b8!important;
-  transition:color .2s ease, transform .15s ease!important;
-  box-sizing:border-box!important;
-}
-.vt.theme-seg button:hover:not(.on){color:#f1f5f9!important}
-.vt.theme-seg button.on{
-  color:#ffffff!important;font-weight:700!important;
-  background:transparent!important;border:0!important;box-shadow:none!important;
-}
-.vt.theme-seg button.on .vt-ico{color:#ffffff!important;opacity:1!important}
 
-/* Light Mode Overrides for Stage Toolbar Theme Segment */
-:root[data-ui=light] .vt.theme-seg .vt-pill{
-  background:#334155!important;
-  box-shadow:0 2px 6px rgba(51,65,85,.25),inset 0 1px 0 rgba(255,255,255,.2)!important;
-  border-color:#334155!important;
+.vt.theme-seg .vt-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  height: 32px !important;
+  border-radius: 10px !important;
+  pointer-events: none;
+  background: #334155 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .2) !important;
+  border: 1px solid rgba(255, 255, 255, .22) !important;
+  transition: transform .28s cubic-bezier(.2, .9, .3, 1.15), width .28s cubic-bezier(.2, .9, .3, 1.15), opacity .2s ease !important;
+  z-index: 1;
 }
-:root[data-ui=light] .vt.theme-seg button{color:#64748b!important}
-:root[data-ui=light] .vt.theme-seg button:hover:not(.on){color:#0f172a!important}
-:root[data-ui=light] .vt.theme-seg button.on{color:#ffffff!important}
-:root[data-ui=light] .vt.theme-seg button.on .vt-ico{color:#ffffff!important;opacity:1!important}
+
+.vt.theme-seg button {
+  position: relative;
+  z-index: 2;
+  width: 38px !important;
+  height: 32px !important;
+  min-width: 38px !important;
+  max-width: 38px !important;
+  flex: 0 0 38px !important;
+  padding: 0 !important;
+  justify-content: center;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #94a3b8 !important;
+  transition: color .2s ease, transform .15s ease !important;
+  box-sizing: border-box !important;
+}
+
+.vt.theme-seg button .vt-ico {
+  color: inherit !important;
+  opacity: .88;
+  transition: color .2s ease, opacity .2s ease, transform .25s ease;
+}
+
+.vt.theme-seg button:hover:not(.on),
+.vt.theme-seg button:hover:not(.on) .vt-ico {
+  color: #f8fafc !important;
+  opacity: 1 !important;
+}
+
+.vt.theme-seg button:hover .vt-ico {
+  transform: scale(1.08);
+}
+
+.vt.theme-seg button:active {
+  transform: scale(.95);
+}
+
+.vt.theme-seg button.on {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.vt.theme-seg button.on .vt-ico {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Light Mode Overrides for Stage Toolbar Theme Segment (Matching Detail View & Dual Phone) */
+:root[data-ui=light] .vt.theme-seg,
+:root[data-ui=light] #theme.vt {
+  background: rgba(241, 245, 249, .94) !important;
+  border: 1px solid rgba(15, 23, 42, .15) !important;
+  box-shadow: 0 6px 20px -4px rgba(15, 23, 42, .12), 0 2px 6px -1px rgba(15, 23, 42, .08), inset 0 1px 0 #fff !important;
+}
+
+:root[data-ui=light] .vt.theme-seg .vt-pill {
+  background: #0f172a !important;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, .35), inset 0 1px 0 rgba(255, 255, 255, .2) !important;
+  border: 1px solid #0f172a !important;
+}
+
+:root[data-ui=light] .vt.theme-seg button {
+  color: #64748b !important;
+}
+
+:root[data-ui=light] .vt.theme-seg button .vt-ico {
+  color: #475569 !important;
+  opacity: .92 !important;
+}
+
+:root[data-ui=light] .vt.theme-seg button:hover:not(.on),
+:root[data-ui=light] .vt.theme-seg button:hover:not(.on) .vt-ico {
+  color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+:root[data-ui=light] .vt.theme-seg button.on {
+  color: #ffffff !important;
+  font-weight: 750 !important;
+  text-shadow: none !important;
+}
+
+:root[data-ui=light] .vt.theme-seg button.on .vt-ico {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}

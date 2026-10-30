@@ -139,9 +139,9 @@
   box-shadow:0 6px 20px -4px rgba(15,23,42,.1),0 2px 6px -1px rgba(15,23,42,.06),inset 0 1px 0 #fff;
 }
 :root[data-ui=light] .vt button{color:#334155}
-:root[data-ui=light] .vt button:hover:not(.on){color:var(--ac)}
+:root[data-ui=light] .vt:not(.theme-seg) button:hover:not(.on){color:var(--ac)}
 :root[data-ui=light] .vt button:not(.on) .vt-ico{color:#475569;opacity:.92}
-:root[data-ui=light] .vt button:hover:not(.on) .vt-ico{color:var(--ac);opacity:1}
+:root[data-ui=light] .vt:not(.theme-seg) button:hover:not(.on) .vt-ico{color:var(--ac);opacity:1}
 :root[data-ui=light] .vt button.on{
   background:transparent!important;
   color:#ffffff!important;
