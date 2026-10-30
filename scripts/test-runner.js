@@ -1457,6 +1457,11 @@ assert(bundledHtml.includes('document.body.dataset.uiStore = s'), 'setStore upda
 assert(bundledHtml.includes('body[data-ui-store="apple"] #dt'), 'CSS displays Apple device selector immediately on uiStore=apple');
 assert(bundledHtml.includes('body[data-ui-store="google"] #gdt'), 'CSS displays Google device selector immediately on uiStore=google');
 assert(!bundledHtml.includes('<div class="vt" id="dt" data-only="apple">'), 'dt tabview does not have data-only="apple" so it cannot be hidden by form card filters');
+assert(bundledHtml.includes('.pill.is-apple') && bundledHtml.includes('.seg[data-store="apple"] .pill'), 'Immediate Apple store pill selector defined');
+assert(bundledHtml.includes('.pill.is-google') && bundledHtml.includes('.seg[data-store="google"] .pill'), 'Immediate Google Play store pill selector defined');
+assert(bundledHtml.includes('.pill.is-dual') && bundledHtml.includes('.seg[data-store="dual"] .pill'), 'Immediate Dual store pill selector defined');
+assert(bundledHtml.includes('pill.dataset.store = s'), 'syncSegPill sets pill dataset store immediately');
+assert(bundledHtml.includes('seg.dataset.store = s'), 'syncSegPill sets segmented control dataset store immediately');
 
 // ---------------------------------------------------------------------
 // Suite 18: Google Play Feature Graphic 15 MB Limit & No-Alpha Verification

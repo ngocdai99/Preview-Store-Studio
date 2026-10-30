@@ -142,15 +142,17 @@ function syncSegPill(targetStore){
   if(!seg) return;
   const pill = seg.querySelector('.pill');
   const activeBtn = seg.querySelector('button.on');
+  const s = (typeof targetStore === 'string' && targetStore) || (activeBtn && activeBtn.dataset ? activeBtn.dataset.s : null);
+  if(pill && s){
+    pill.classList.remove('is-apple', 'is-google', 'is-dual');
+    pill.classList.add('is-' + s);
+    seg.dataset.store = s;
+    pill.dataset.store = s;
+  }
   if(pill && activeBtn && activeBtn.offsetWidth > 0){
     pill.style.width = activeBtn.offsetWidth + 'px';
     pill.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
     pill.style.opacity = '1';
-    const s = targetStore || (activeBtn.dataset ? activeBtn.dataset.s : null);
-    if(s){
-      pill.classList.remove('is-apple', 'is-google', 'is-dual');
-      pill.classList.add('is-' + s);
-    }
   }
 }
 
@@ -491,6 +493,9 @@ function setStore(s, animate = true){
   const fromMode = document.body.dataset.dual === 'true' ? 'dual' : store;
   const toMode = s;
 
+  // Set UI store state immediately so pill and toolbar tabviews #dt and #gdt switch instantly (<1ms)
+  document.body.dataset.uiStore = s;
+
   // 1. UPDATE TABVIEW SEGMENT CONTROL BUTTONS & PILL IMMEDIATELY (<1ms)
   $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
   syncSegPill(s);
@@ -499,9 +504,6 @@ function setStore(s, animate = true){
     syncAllVtPills();
     return;
   }
-
-  // Set UI store state immediately so toolbar tabviews #dt and #gdt switch instantly (<1ms)
-  document.body.dataset.uiStore = s;
 
   // 2. IMMEDIATELY SELECT DEVICE ON TABVIEW WITHOUT WAITING FOR ANIMATION (<1ms)
   const isTargetDual = (s === 'dual');
