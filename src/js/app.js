@@ -7185,6 +7185,9 @@ function loadPreset(key){
   update();
   if(CURRENT_PRESET_KEY === 'draft'){
     saveState();
+  } else if(typeof hasUserDraft === 'function' && !hasUserDraft()){
+    // If draft is empty, selecting any template immediately initializes that template as the user's active draft
+    if(typeof initDraftFromCurrentPreset === 'function') initDraftFromCurrentPreset();
   }
   if(typeof updatePresetBanner === 'function') updatePresetBanner();
   if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -8210,7 +8213,6 @@ if(optExportScreen) optExportScreen.onclick = () => exportPNG(3, {frameless:true
 const exportModal = $('exportImageModal');
 const optOpenModal = $('optOpenExportModal');
 const btnCloseModal = $('exportModalClose');
-const btnCancelModal = $('exportModalCancel');
 const btnCopyModal = $('exportModalCopy');
 const btnDownloadModal = $('exportModalDownload');
 
@@ -8240,16 +8242,6 @@ function syncExportModalUI() {
     const radio = el.querySelector('input[type="radio"]');
     if (radio) radio.checked = isAct;
   });
-  const mockupEl = $('exportPreviewMockup');
-  if (mockupEl) {
-    mockupEl.classList.toggle('frameless', exportPrefs.frame === 'screen');
-  }
-  const summaryEl = $('exportSummaryBadge');
-  if (summaryEl) {
-    const frameLabel = exportPrefs.frame === 'screen' ? 'Screen Only' : 'Device Frame';
-    const scaleLabel = exportPrefs.scale === 3 ? '3x Ultra HD' : '2x HD';
-    summaryEl.textContent = `${scaleLabel} · ${frameLabel} · Transparent`;
-  }
 }
 
 function saveExportPrefs() {
@@ -8273,7 +8265,6 @@ function closeExportModal() {
 
 if (optOpenModal) optOpenModal.onclick = openExportModal;
 if (btnCloseModal) btnCloseModal.onclick = closeExportModal;
-if (btnCancelModal) btnCancelModal.onclick = closeExportModal;
 if (exportModal) {
   exportModal.addEventListener('click', e => {
     if (e.target === exportModal) closeExportModal();
