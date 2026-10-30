@@ -1238,7 +1238,7 @@ assert(bundledHtml.includes('id="gdt"') && bundledHtml.includes('data-gd="phone"
 assert(bundledHtml.includes('24-bit PNG (no alpha) or JPEG') && bundledHtml.includes('Recommended: 1920 × 1080 px'), 'Tablet screenshots card contains 24-bit PNG (no alpha) requirement and 1920x1080 recommendation');
 assert(!bundledHtml.includes('No 7-inch screenshots yet'), 'Tablet screenshots card suppresses empty 7-inch warning alert banner');
 assert(!bundledHtml.includes('No 10-inch screenshots yet'), 'Tablet screenshots card suppresses empty 10-inch warning alert banner');
-assert(!bundledHtml.includes('each side between 1,080 px and 7,680 px'), 'Tablet screenshots card removes repetitive per-section hint paragraphs');
+assert(bundledHtml.includes('Each side between 320 px and 3,840 px') && bundledHtml.includes('Each side between 1,080 px and 7,680 px'), 'Tablet screenshots card preserves critical Play Console dimension constraints for 7-inch and 10-inch');
 
 const TAB_TEST_CFG = {
   tab7: { name: '7-inch', min: 320, max: 3840 },
