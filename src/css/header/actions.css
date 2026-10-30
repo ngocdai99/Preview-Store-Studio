@@ -93,7 +93,6 @@
 }
 
 .workspace-export-dropdown {
-  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -291,6 +290,7 @@
 }
 
 .ms-pill-import {
+  margin-left: auto;
   padding: 6px 12px;
   background: rgba(59, 130, 246, 0.08);
   border: 1px solid rgba(59, 130, 246, 0.28);
