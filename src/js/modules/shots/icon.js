@@ -286,12 +286,10 @@ function runIconPixelAudit(iconSrc){
         return;
       }
 
-      // Compliant: All criteria met -> show clean ok dimTag, no intrusive message box
+      // Compliant: All criteria met -> completely hide both dimTag and badge message
       if(dimTag){
-        dimTag.className = 'shot-dim-tag ok';
-        dimTag.textContent = '1:1 (1024×1024)';
-        dimTag.title = 'App Store compliant';
-        dimTag.style.display = 'inline-flex';
+        dimTag.style.display = 'none';
+        dimTag.textContent = '';
       }
       badge.className = 'shot-status-badge ok';
       badge.style.display = 'none';
@@ -374,12 +372,10 @@ function runIconPixelAudit(iconSrc){
         return;
       }
 
-      // Compliant: All criteria met -> show clean ok dimTag, no intrusive message box
+      // Compliant: All criteria met -> completely hide both dimTag and badge message
       if(dimTag){
-        dimTag.className = 'shot-dim-tag ok';
-        dimTag.textContent = '1:1 (512×512)';
-        dimTag.title = 'Google Play compliant';
-        dimTag.style.display = 'inline-flex';
+        dimTag.style.display = 'none';
+        dimTag.textContent = '';
       }
       badge.className = 'shot-status-badge ok';
       badge.style.display = 'none';

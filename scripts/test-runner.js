@@ -1954,6 +1954,7 @@ const identityCardHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components'
 assert(identityCardHtml.includes('id="icoInspect"') && identityCardHtml.includes('disabled'), 'icoInspect button initializes with disabled attribute in identity-card.html');
 
 assert(bundledHtml.includes('.mini:disabled') && bundledHtml.includes('cursor:not-allowed'), 'Bundled CSS provides explicit disabled cursor and opacity styles for mini buttons');
+assert(!iconJsCode.includes("dimTag.className = 'shot-dim-tag ok';"), 'runIconPixelAudit does not render green dim tag when icon is compliant');
 
 // ---------------------------------------------------------------------
 // Summary Report
