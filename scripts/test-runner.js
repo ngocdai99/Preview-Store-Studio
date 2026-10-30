@@ -1216,14 +1216,16 @@ assert(bundledHtml.includes("1. Not Storefront Listing Fields:"), "Popover prese
 assert(bundledHtml.includes("2. Preset Synchronization:"), "Popover preserves streamlined item 2 explanation on preset synchronization");
 assert(!bundledHtml.includes("3. Clean Day-One"), "Popover removes verbose item 3");
 assert(!bundledHtml.includes("4. Optional Customization"), "Popover removes verbose item 4");
-assert(!bundledHtml.includes('id="metricsDetails"'), "Manual sample metrics accordion #metricsDetails is removed from UI");
+assert(bundledHtml.includes('id="metricsDetails"'), "Manual sample metrics accordion #metricsDetails is present for custom mockup metrics");
+assert(bundledHtml.includes('class="metrics-summary"'), "Accordion #metricsDetails includes accessible summary header");
 assert(bundledHtml.includes('MOCKUP ONLY'), "Metrics card displays MOCKUP ONLY badge");
 assert(bundledHtml.includes('Settings &amp; Metrics'), "Metrics card displays streamlined title Settings & Metrics");
 assert(bundledHtml.indexOf('Settings &amp; Metrics') < bundledHtml.indexOf('MOCKUP ONLY'), "MOCKUP ONLY tag is positioned below the Settings & Metrics title");
 assert(!bundledHtml.includes('Add a small “Illustrative mockup” caption'), "Removed redundant exported image watermark caption toggle from Card 4");
 assert(bundledHtml.includes('Hide all metrics from mockup'), "Metrics card uses concise non-repetitive toggle label");
 assert(bundledHtml.includes('id="f-st-off"') && bundledHtml.includes('id="f-st-wm"'), "Metrics toggle switches are preserved in DOM");
-assert(bundledHtml.includes('type="hidden" id="f-st-rating"') && bundledHtml.includes('type="hidden" id="f-st-iap"'), "Sample input elements converted to hidden state inputs for backward compatibility");
+assert(bundledHtml.includes('id="f-st-rating"') && bundledHtml.includes('id="f-st-iap"'), "Sample input elements provided in DOM for mockup customization and presets sync");
+assert(bundledHtml.includes('type="hidden" id="f-st-wm"'), "Watermark toggle preserved as hidden backward-compatible state input");
 assert(bundledHtml.includes('initInfoPopover("metricsInfoBtn"'), "Bundled JS initializes metricsInfoBtn popover");
 assert(bundledHtml.includes("counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '')"), 'Phone screenshots counter does not trigger warning highlight on clean 0 screenshots state');
 assert(bundledHtml.includes('if(validCount === 0){\n    badgeEl.style.display = \'none\';') || bundledHtml.includes('if(validCount === 0)'), 'Phone screenshots validation suppresses warning notice banner when no screenshots are uploaded (0 screenshots)');
