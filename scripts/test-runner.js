@@ -1219,6 +1219,7 @@ assert(!bundledHtml.includes("4. Optional Customization"), "Popover removes verb
 assert(!bundledHtml.includes('id="metricsDetails"'), "Manual sample metrics accordion #metricsDetails is removed from UI");
 assert(bundledHtml.includes('MOCKUP ONLY'), "Metrics card displays MOCKUP ONLY badge");
 assert(bundledHtml.includes('Settings &amp; Metrics'), "Metrics card displays streamlined title Settings & Metrics");
+assert(bundledHtml.indexOf('Settings &amp; Metrics') < bundledHtml.indexOf('MOCKUP ONLY'), "MOCKUP ONLY tag is positioned below the Settings & Metrics title");
 assert(!bundledHtml.includes('Add a small “Illustrative mockup” caption'), "Removed redundant exported image watermark caption toggle from Card 4");
 assert(bundledHtml.includes('Hide all metrics from mockup'), "Metrics card uses concise non-repetitive toggle label");
 assert(bundledHtml.includes('id="f-st-off"') && bundledHtml.includes('id="f-st-wm"'), "Metrics toggle switches are preserved in DOM");
