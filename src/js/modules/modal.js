@@ -499,6 +499,11 @@
       } else if (_activeModalType === 'feature') {
         if (typeof FEATURE_GRAPHIC !== 'undefined') {
           FEATURE_GRAPHIC = dataUrl;
+          if (typeof IS_CUSTOM_FEATURE !== 'undefined') IS_CUSTOM_FEATURE = true;
+          if (typeof userDraft !== 'undefined' && userDraft) {
+            userDraft.featureGraphic = dataUrl;
+            userDraft.isCustomFeature = true;
+          }
           if (typeof renderFeature === 'function') renderFeature();
           if (typeof saveState === 'function') saveState();
         }

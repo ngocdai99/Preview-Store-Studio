@@ -5,6 +5,11 @@ $('featureFile').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
   readFile(f,d=>{
     FEATURE_GRAPHIC=d;
+    if(typeof IS_CUSTOM_FEATURE !== 'undefined') IS_CUSTOM_FEATURE = true;
+    if(typeof userDraft !== 'undefined' && userDraft){
+      userDraft.featureGraphic = d;
+      userDraft.isCustomFeature = true;
+    }
     renderFeature();
     saveState();
     showToast('Feature graphic updated! (1,024 × 500 px)', 'ok');
@@ -75,6 +80,11 @@ if(featureDropZone){
     if(file && file.type.startsWith('image/')){
       readFile(file,d=>{
         FEATURE_GRAPHIC=d;
+        if(typeof IS_CUSTOM_FEATURE !== 'undefined') IS_CUSTOM_FEATURE = true;
+        if(typeof userDraft !== 'undefined' && userDraft){
+          userDraft.featureGraphic = d;
+          userDraft.isCustomFeature = true;
+        }
         renderFeature();
         saveState();
         showToast('Feature graphic dropped & applied! (1,024 × 500 px)', 'ok');
@@ -233,6 +243,11 @@ if(featureRemoveBtn){
   featureRemoveBtn.onclick = (e) => {
     if(e) e.stopPropagation();
     FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
+    if(typeof IS_CUSTOM_FEATURE !== 'undefined') IS_CUSTOM_FEATURE = false;
+    if(typeof userDraft !== 'undefined' && userDraft){
+      userDraft.featureGraphic = FEATURE_GRAPHIC;
+      userDraft.isCustomFeature = false;
+    }
     const fileInput = $('featureFile');
     if(fileInput) fileInput.value = '';
     renderFeature();

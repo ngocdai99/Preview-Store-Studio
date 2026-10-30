@@ -186,6 +186,7 @@ function loadPreset(key){
       }
     }
     FEATURE_GRAPHIC = BLANK_FEATURE;
+    IS_CUSTOM_FEATURE = false;
     SHOTS = [];
     IPAD_SHOTS = [];
     REVIEWS = [
@@ -298,6 +299,7 @@ function loadPreset(key){
       });
     }
   }
+  IS_CUSTOM_FEATURE = false;
   FEATURE_GRAPHIC = p.featurePng || p.feature || DEFAULT_FEATURE;
   if(typeof rasterizeSvgToDimensions === 'function' && typeof p.feature === 'string' && (p.feature.startsWith('data:image/svg+xml') || p.feature.includes('<svg'))){
     if(!p.featurePng){
