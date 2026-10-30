@@ -1482,6 +1482,71 @@ assert(bundledHtml.includes('class="templates-modal-grid"'), 'Templates modal co
 assert(bundledHtml.includes('initDraftFromCurrentPreset'), 'Selecting template when draft is empty converts template into active draft');
 
 // ---------------------------------------------------------------------
+// Suite 20: Draft Pill Icon Dynamic Template Synchronization Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 20]: Draft Pill Icon Dynamic Template Synchronization Verification');
+assert(bundledHtml.includes("PRESET_ICONS[CURRENT_PRESET_KEY]") && bundledHtml.includes("if(!userDraft.isCustomIcon) userDraft.icon = iconSrc"), 'updateDraftPill resolves and synchronizes draft pill icon with active selected template');
+assert(bundledHtml.includes("icon: (IS_CUSTOM_ICON && ICON) ? ICON : (ICON || (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY]) || BLANK_ICON)"), 'getCurrentStateObject retains selected template vector icon instead of discarding it');
+
+// Simulation of Draft Pill Icon Resolution Logic
+function testResolveDraftPillIcon(uDraft, activePreset, presetIcons, isCustom, activeIcon, blankIcon) {
+  let iconSrc = blankIcon;
+  if(uDraft.isCustomIcon && uDraft.icon && !uDraft.icon.includes('bfd1fd') && !uDraft.icon.includes('d2c7fc')){
+    iconSrc = uDraft.icon;
+  } else if(isCustom && activeIcon && !activeIcon.includes('bfd1fd') && !activeIcon.includes('d2c7fc')){
+    iconSrc = activeIcon;
+    uDraft.isCustomIcon = true;
+    uDraft.icon = activeIcon;
+  } else if(activePreset && presetIcons[activePreset] && activePreset !== 'none' && activePreset !== 'draft'){
+    iconSrc = presetIcons[activePreset];
+    if(!uDraft.isCustomIcon) uDraft.icon = iconSrc;
+  } else if(uDraft.icon && uDraft.icon !== blankIcon && !uDraft.icon.includes('bfd1fd') && !uDraft.icon.includes('d2c7fc')){
+    iconSrc = uDraft.icon;
+  } else if(activeIcon && activeIcon !== blankIcon && !activeIcon.includes('bfd1fd') && !activeIcon.includes('d2c7fc')){
+    iconSrc = activeIcon;
+  } else {
+    iconSrc = blankIcon;
+    uDraft.icon = blankIcon;
+  }
+  return iconSrc;
+}
+
+const mockPresetIcons = {
+  none: 'data:image/svg+xml;blank',
+  studio: 'data:image/svg+xml;studio',
+  taskflow: 'data:image/svg+xml;taskflow',
+  pulsefit: 'data:image/svg+xml;pulsefit',
+  zenmind: 'data:image/svg+xml;zenmind',
+  cyberstrike: 'data:image/svg+xml;cyberstrike',
+  edulearn: 'data:image/svg+xml;edulearn'
+};
+let testDraft = { isCustomIcon: false, icon: 'data:image/svg+xml;blank' };
+
+// Test 1: Selecting studio template updates pill icon to studio vector icon
+let resolved = testResolveDraftPillIcon(testDraft, 'studio', mockPresetIcons, false, mockPresetIcons.studio, mockPresetIcons.none);
+assert(resolved === mockPresetIcons.studio, 'Draft pill icon dynamically resolves to Store Preview Studio template icon');
+assert(testDraft.icon === mockPresetIcons.studio, 'Draft model icon synchronizes with Store Preview Studio icon');
+
+// Test 2: Selecting pulsefit template updates pill icon to pulsefit vector icon
+resolved = testResolveDraftPillIcon(testDraft, 'pulsefit', mockPresetIcons, false, mockPresetIcons.pulsefit, mockPresetIcons.none);
+assert(resolved === mockPresetIcons.pulsefit, 'Draft pill icon dynamically resolves to PulseFit template icon');
+
+// Test 3: Selecting cyberstrike template updates pill icon to cyberstrike vector icon
+resolved = testResolveDraftPillIcon(testDraft, 'cyberstrike', mockPresetIcons, false, mockPresetIcons.cyberstrike, mockPresetIcons.none);
+assert(resolved === mockPresetIcons.cyberstrike, 'Draft pill icon dynamically resolves to CyberStrike template icon');
+
+// Test 4: Custom uploaded icon takes absolute precedence over presets
+testDraft.isCustomIcon = true;
+testDraft.icon = 'data:image/png;customAppIcon';
+resolved = testResolveDraftPillIcon(testDraft, 'studio', mockPresetIcons, true, 'data:image/png;customAppIcon', mockPresetIcons.none);
+assert(resolved === 'data:image/png;customAppIcon', 'User-uploaded custom icon takes precedence over template icons');
+
+// Test 5: Resetting draft clears icon back to blank placeholder
+testDraft = { isCustomIcon: false, icon: mockPresetIcons.none };
+resolved = testResolveDraftPillIcon(testDraft, 'draft', mockPresetIcons, false, mockPresetIcons.none, mockPresetIcons.none);
+assert(resolved === mockPresetIcons.none, 'Resetting draft cleanly restores blank placeholder icon');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
