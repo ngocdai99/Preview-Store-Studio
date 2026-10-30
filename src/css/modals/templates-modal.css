@@ -92,11 +92,10 @@
 .template-card:hover {
   background: rgba(59, 130, 246, 0.1);
   border-color: rgba(59, 130, 246, 0.35);
-  transform: translateY(-1px);
 }
 
 .template-card:active {
-  transform: scale(0.98);
+  background: rgba(59, 130, 246, 0.14);
 }
 
 .template-card.active {
