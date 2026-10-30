@@ -1344,6 +1344,8 @@ assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes
 assert(bundledHtml.includes('.dev-label') && bundledHtml.includes('.dev-title'), 'Stage stylesheet includes .dev-label and .dev-title presentation styling');
 
 // 11. Marketing-Aligned Placeholder App Icon & Silent Validation in Core Studio
+assert(bundledHtml.includes('id="edTitle">Listing Details</span>'), 'Card 1 header uses unified "Listing Details" title');
+assert(bundledHtml.includes("$('edTitle').textContent = 'Listing Details'"), 'setStore maintains unified "Listing Details" title');
 assert(bundledHtml.includes('class="ico-wrap is-placeholder"') && bundledHtml.includes('id="icoDropZone"'), 'App icon drop container in Listing Details starts with .is-placeholder class');
 assert(bundledHtml.includes('<div class="ico-ov">') && bundledHtml.includes('circle cx="11" cy="11" r="8"'), 'App icon drop container contains .ico-ov overlay with blue zoom/lens icon');
 assert(bundledHtml.includes('linearGradient id="c6-bg"') && bundledHtml.includes('stop-color="#3b82f6"'), 'BLANK_ICON matches marketing Concept 6 vibrant dual-device vector gradient (#3b82f6 -> #8b5cf6)');

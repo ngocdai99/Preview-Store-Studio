@@ -530,7 +530,7 @@ function setStore(s, animate = true){
 
   // Immediately update editor fields visibility and title for instant feedback
   $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
-  if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
+  if($('edTitle')) $('edTitle').textContent = 'Listing Details';
   syncCategoryUI();
 
   // Immediately synchronize active device tabview pill (<16ms)
