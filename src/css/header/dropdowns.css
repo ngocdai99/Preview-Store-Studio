@@ -438,7 +438,13 @@
 .menu .mi-t small {
   color: var(--mut);
   opacity: 0.85;
-  line-height: 1.3;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 :root[data-ui=light] .menu .mi-t small {
