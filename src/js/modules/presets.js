@@ -355,7 +355,20 @@ if(btnReturn){
 const btnDraft = $('btnDraft');
 if(btnDraft){
   btnDraft.onclick = () => {
-    loadPreset('draft');
+    if(CURRENT_PRESET_KEY !== 'draft'){
+      loadPreset('draft');
+    }
+  };
+}
+
+const btnPresetPill = $('btnPresetPill');
+if(btnPresetPill){
+  btnPresetPill.onclick = () => {
+    const tModal = $('templatesModal');
+    if(tModal){
+      tModal.classList.add('open');
+      tModal.setAttribute('aria-hidden', 'false');
+    }
   };
 }
 

@@ -7343,7 +7343,20 @@ if(btnReturn){
 const btnDraft = $('btnDraft');
 if(btnDraft){
   btnDraft.onclick = () => {
-    loadPreset('draft');
+    if(CURRENT_PRESET_KEY !== 'draft'){
+      loadPreset('draft');
+    }
+  };
+}
+
+const btnPresetPill = $('btnPresetPill');
+if(btnPresetPill){
+  btnPresetPill.onclick = () => {
+    const tModal = $('templatesModal');
+    if(tModal){
+      tModal.classList.add('open');
+      tModal.setAttribute('aria-hidden', 'false');
+    }
   };
 }
 
@@ -7684,47 +7697,54 @@ function resetDraftWorkspace(){
 }
 
 function updateDraftPill(){
-  const pill = $('btnDraft');
-  if(!pill) return;
+  const draftPill = $('btnDraft');
+  const presetPill = $('btnPresetPill');
   const hasDraft = hasUserDraft();
 
-  if(CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none'){
-    // When viewing a preset while draft is saved:
-    // Update displayed data on the pill to reflect the currently active preset view!
-    const p = (typeof PRESETS !== 'undefined') ? PRESETS[CURRENT_PRESET_KEY] : null;
-    const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY]) ? PRESET_ICONS[CURRENT_PRESET_KEY] : (p ? p.icon : BLANK_ICON);
-    const pName = p ? p.name : (CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1));
-    const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
-    
-    pill.classList.add('has-draft');
-    pill.classList.add('on');
-    pill.setAttribute('title', 'Viewing preset: ' + pName + (hasDraft ? ' (Click to Return to Draft)' : ''));
-    pill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + pIcon + '">' +
-      '<span id="draftBtnTitle">' + escapeHtml(dispName) + '</span>' +
-      '<small id="draftBtnBadge">Preset</small>';
-    
-    updatePresetMenuSelection();
-    return;
+  const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none');
+
+  if(presetPill){
+    if(isViewingPreset){
+      presetPill.style.display = 'inline-flex';
+      presetPill.classList.add('on');
+      const p = (typeof PRESETS !== 'undefined') ? PRESETS[CURRENT_PRESET_KEY] : null;
+      const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY]) ? PRESET_ICONS[CURRENT_PRESET_KEY] : (p ? p.icon : BLANK_ICON);
+      const pName = p ? p.name : (CURRENT_PRESET_KEY === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1)));
+      const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
+      presetPill.setAttribute('title', 'Viewing preset: ' + pName + (hasDraft ? ' (Saved Draft is preserved)' : ''));
+      presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
+        '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
+        '<small id="presetBtnBadge">Preset</small>';
+    } else {
+      presetPill.style.display = 'none';
+      presetPill.classList.remove('on');
+    }
   }
 
+  if(!draftPill) return;
+
   if(hasDraft && userDraft){
-    pill.classList.add('has-draft');
-    pill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
-    
-    // Resolve icon: custom uploaded icon takes top precedence, then active selected preset icon, then draft icon, fallback to BLANK_ICON
+    // When draft exists:
+    // If viewing preset, draftPill is displayed beside presetPill as an inactive pill (.on removed)
+    // If in draft mode, draftPill is displayed as active (.on)
+    draftPill.style.display = 'inline-flex';
+    draftPill.classList.add('has-draft');
+    draftPill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
+
+    // Resolve icon for draft: custom uploaded icon takes top precedence, then draft icon, fallback to BLANK_ICON
     let iconSrc = BLANK_ICON;
     if(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc')){
       iconSrc = userDraft.icon;
-    } else if(IS_CUSTOM_ICON && ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc')){
+    } else if(CURRENT_PRESET_KEY === 'draft' && IS_CUSTOM_ICON && ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc')){
       iconSrc = ICON;
       userDraft.isCustomIcon = true;
       userDraft.icon = ICON;
-    } else if(CURRENT_PRESET_KEY && typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY] && CURRENT_PRESET_KEY !== 'none' && CURRENT_PRESET_KEY !== 'draft'){
+    } else if(CURRENT_PRESET_KEY === 'draft' && typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY] && CURRENT_PRESET_KEY !== 'none'){
       iconSrc = PRESET_ICONS[CURRENT_PRESET_KEY];
       if(!userDraft.isCustomIcon) userDraft.icon = iconSrc;
     } else if(userDraft.icon && userDraft.icon !== BLANK_ICON && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc')){
       iconSrc = userDraft.icon;
-    } else if(ICON && ICON !== BLANK_ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc')){
+    } else if(ICON && ICON !== BLANK_ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc') && CURRENT_PRESET_KEY === 'draft'){
       iconSrc = ICON;
     } else {
       iconSrc = BLANK_ICON;
@@ -7733,14 +7753,14 @@ function updateDraftPill(){
 
     const f = userDraft.form || {};
     const appTitle = (f.name && f.name.trim()) ? (typeof clampGraphemes === 'function' ? clampGraphemes(f.name.trim(), 30) : f.name.trim()) : 'Your App';
-    
-    pill.setAttribute('title', appTitle + (CURRENT_PRESET_KEY === 'draft' ? ' (Active Workspace)' : ' (Saved Draft - Click to Return)'));
-    pill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
+
+    draftPill.setAttribute('title', appTitle + (CURRENT_PRESET_KEY === 'draft' ? ' (Active Workspace)' : ' (Saved Draft · Click to Return)'));
+    draftPill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
       '<span id="draftBtnTitle">' + escapeHtml(appTitle) + '</span>' +
       '<small id="draftBtnBadge">Draft</small>' +
       '<button type="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</button>';
 
-    const resetBtn = pill.querySelector('#msPillResetBtn');
+    const resetBtn = draftPill.querySelector('#msPillResetBtn');
     if(resetBtn){
       resetBtn.addEventListener('click', function(e){
         e.stopPropagation();
@@ -7750,10 +7770,18 @@ function updateDraftPill(){
       });
     }
   } else {
-    pill.classList.remove('has-draft');
-    pill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
-    pill.textContent = '+ Your App';
-    pill.setAttribute('title', 'Start your custom app draft');
+    // No draft exists
+    if(isViewingPreset){
+      // When viewing preset and there is no draft, hide draft pill
+      draftPill.style.display = 'none';
+      draftPill.classList.remove('has-draft', 'on');
+    } else {
+      draftPill.style.display = 'inline-flex';
+      draftPill.classList.remove('has-draft');
+      draftPill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
+      draftPill.textContent = '+ Your App';
+      draftPill.setAttribute('title', 'Start your custom app draft');
+    }
   }
 
   updatePresetMenuSelection();

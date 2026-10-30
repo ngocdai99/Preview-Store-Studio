@@ -1556,6 +1556,13 @@ assert(resolved === mockPresetIcons.none, 'Resetting draft cleanly restores blan
 assert(bundledHtml.includes("Viewing preset: ' + pName") && bundledHtml.includes("draftBtnThumb"), 'updateDraftPill updates displayed data to viewed preset while preserving draft return action');
 assert(bundledHtml.includes("CUSTOM_ICON_1024 = '';") && bundledHtml.includes("CUSTOM_ICON_512 = '';"), 'loadPreset resets custom icon dimensional caches so preset vector icons render on all mockups');
 
+// Test 7: Co-existence of Preset Pill and Draft Pill when viewing presets
+assert(bundledHtml.includes('id="btnPresetPill"'), 'Workspace bar contains dedicated #btnPresetPill element');
+assert(bundledHtml.includes('presetPill.style.display = \'inline-flex\'') && bundledHtml.includes('presetPill.classList.add(\'on\')'), 'updateDraftPill displays active preset pill when viewing preset template');
+assert(bundledHtml.includes('draftPill.style.display = \'inline-flex\'') && bundledHtml.includes('draftPill.classList.toggle(\'on\', CURRENT_PRESET_KEY === \'draft\')'), 'updateDraftPill displays saved draft pill beside active preset pill');
+assert(bundledHtml.includes('btnPresetPill.onclick = () => {') && bundledHtml.includes('templatesModal'), 'btnPresetPill allows quick access to template switcher modal');
+assert(bundledHtml.includes('CURRENT_PRESET_KEY !== \'draft\'') && bundledHtml.includes('loadPreset(\'draft\')'), 'Clicking draft pill returns cleanly to draft workspace');
+
 // ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
