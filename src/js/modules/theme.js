@@ -30,8 +30,7 @@ Object.entries(STAT_INPUTS).forEach(([k,id]) => {
   el.addEventListener('input', onStatChange);
   el.addEventListener('change', onStatChange);
 });
-const stOffEl = $('f-st-off'), stWmEl = $('f-st-wm');
-if(stOffEl) stOffEl.addEventListener('change', () => { STATS_OFF = stOffEl.checked; renderStats(); debouncedSave(); });
+const stWmEl = $('f-st-wm');
 if(stWmEl) stWmEl.addEventListener('change', () => { EXPORT_WM = stWmEl.checked; debouncedSave(); });
 
 // Smooth, Hardware-Accelerated Drag-to-Scroll & Intelligent Wheel for Carousels (.gal, .a-met)

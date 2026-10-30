@@ -204,7 +204,7 @@ body[data-store=google] .sw-row:has(.sw-inp:checked){
   transform:translateX(16px);
 }
 .chk{display:none}
-body.stats-off .st{display:none!important}
+/* Metrics always visible in mockups */
 span.sv{all:unset!important}
 /* Transparent PNG icons keep a white tile so white glyphs never vanish on the white store page */
 .phone [data-icon]{background:#fff;flex-shrink:0}

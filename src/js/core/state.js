@@ -54,21 +54,20 @@ function renderStats(){
     e.style.display = gMetaText ? '' : 'none';
   });
 
-  document.body.classList.toggle('stats-off', STATS_OFF);
+  document.body.classList.remove('stats-off');
 }
 function syncStatInputs(){
   Object.entries(STAT_INPUTS).forEach(([k,id]) => { const el = $(id); if(el) el.value = STATS[k]; });
-  const off = $('f-st-off'), wm = $('f-st-wm');
-  if(off) off.checked = STATS_OFF;
+  const wm = $('f-st-wm');
   if(wm) wm.checked = EXPORT_WM;
 }
 function applyStatsFromObject(o){
   if(!o || typeof o !== 'object') return;
   Object.keys(STATS_DEFAULT).forEach(k => { if(typeof o[k] === 'string') STATS[k] = o[k].slice(0, 16); });
-  if(typeof o.off === 'boolean') STATS_OFF = o.off;
+  STATS_OFF = false;
   if(typeof o.wm === 'boolean') EXPORT_WM = o.wm;
 }
-function statsToObject(){ return {...STATS, off: STATS_OFF, wm: EXPORT_WM}; }
+function statsToObject(){ return {...STATS, off: false, wm: EXPORT_WM}; }
 function resetStats(){ Object.assign(STATS, STATS_DEFAULT); STATS_OFF = false; EXPORT_WM = true; syncStatInputs(); renderStats(); }
 
 // --- Built-in Neutral Vector Icon & Screenshot Mockups (100% Offline, 1024x1024 Opaque Square) ---
