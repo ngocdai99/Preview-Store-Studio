@@ -1324,6 +1324,7 @@ assert(bundledHtml.includes('linearGradient id="c6-bg"') && bundledHtml.includes
 assert(bundledHtml.includes('function isPlaceholderIcon'), 'Core studio includes isPlaceholderIcon helper function to silence validation badge on unedited drafts');
 assert(bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed #3b82f6') || bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed'), 'CSS defines dashed border for .ico-wrap.is-placeholder');
 assert(bundledHtml.includes('.ico-wrap.is-placeholder .ico-ov') && bundledHtml.includes('background:rgba(8,12,24,0.65);color:#38bdf8'), 'CSS defines subtle dark overlay and blue zoom icon for placeholder state');
+assert(!bundledHtml.includes('.ico-wrap:hover{transform:scale'), 'App icon .ico-wrap does not scale on hover');
 assert(bundledHtml.includes("iconSrc = userDraft.icon") && bundledHtml.includes("userDraft.isCustomIcon"), 'Draft pill resolves to original vibrant BLANK_ICON and sanitizes legacy pastel icons');
 
 // 12. Modern iOS 18 iPhone Search Result Mockup & Secondary Skeleton
