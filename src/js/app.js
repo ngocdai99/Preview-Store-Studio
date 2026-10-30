@@ -1720,14 +1720,12 @@ const BLANK_FEATURE = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500">
   <rect width="1024" height="500" fill="#121a2c"/>
   <rect x="20" y="20" width="984" height="460" rx="16" fill="none" stroke="#2f3e66" stroke-width="2" stroke-dasharray="10 10"/>
-  <g transform="translate(484, 180)" stroke="#64748b" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="0" y="0" width="56" height="56" rx="10"/>
-    <circle cx="18" cy="18" r="4.5"/>
-    <path d="M56 38 L40 22 L12 50"/>
-    <path d="M35 38 L42 30 L56 44"/>
+  <g transform="translate(480, 218)" stroke="#64748b" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="0" width="64" height="64" rx="12"/>
+    <circle cx="20" cy="20" r="5"/>
+    <path d="M64 44 L46 26 L14 58"/>
+    <path d="M40 44 L48 34 L64 50"/>
   </g>
-  <text x="512" y="285" font-family="-apple-system,system-ui,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#94a3b8">Click or drag image to upload</text>
-  <text x="512" y="320" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="500" text-anchor="middle" fill="#64748b">1024 × 500 px</text>
 </svg>
 `);
 
