@@ -10,16 +10,6 @@
     <span class="tag" style="background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:0.04em">MOCKUP ONLY</span>
   </div>
   <p class="hint">Ratings, ranking, and download badges use illustrative sample data.</p>
-  
-  <div class="sw-group" style="margin-bottom:0">
-    <label class="sw-row" id="swRowMetricsOff">
-      <span class="sw-lbl">Hide all metrics from mockup</span>
-      <span class="sw-box">
-        <input type="checkbox" id="f-st-off" class="sw-inp">
-        <span class="sw-track"><span class="sw-thumb"></span></span>
-      </span>
-    </label>
-  </div>
 
   <details class="metrics-details" id="metricsDetails">
     <summary class="metrics-summary">
@@ -59,5 +49,6 @@
   </details>
 
   <!-- Hidden state inputs to maintain 100% backward compatibility for export & presets -->
+  <input type="hidden" id="f-st-off" value="false">
   <input type="hidden" id="f-st-wm" value="false">
 </div>
