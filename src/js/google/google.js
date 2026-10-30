@@ -291,7 +291,14 @@ function applyGoogleDevice(){
   document.body.dataset.dual = isDual ? 'true' : 'false';
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isDual ? 'dual' : googleDevice)));
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isDual ? 'dual' : appleDevice)));
-  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === (isDual ? 'dual' : 'google')));
+  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'google'));
+  if (isDual) {
+    const btn = $('btnDualPhone');
+    if (btn) btn.classList.add('on');
+  } else {
+    const btn = $('btnDualPhone');
+    if (btn) btn.classList.remove('on');
+  }
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){

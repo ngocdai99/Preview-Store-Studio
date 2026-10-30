@@ -1,8 +1,70 @@
 /* ---------- STAGE TOOLBAR & CONTROLS ---------- */
 .stage-toolbar{display:flex;gap:12px;align-items:center;flex-shrink:0;z-index:20;flex-wrap:wrap;justify-content:center}
-.stage-bottom-bar{position:sticky;bottom:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:25;margin-top:auto;padding-top:8px;pointer-events:none}
+.stage-bottom-bar{position:sticky;bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;z-index:25;margin-top:auto;padding-top:8px;pointer-events:none}
 .stage-bottom-bar > *{pointer-events:auto}
 body[data-store=google][data-google-device="tab10"] .stage-bottom-bar{display:none!important}
+
+/* Dual Phone Comparison Toggle Button in Stage Bottom Bar */
+#dualPhoneWrap {
+  display: inline-flex;
+}
+
+/* Hide Dual Phone button when iPad or Tablets are active */
+body[data-store="apple"][data-apple-device="ipad"] #dualPhoneWrap,
+body[data-store="google"][data-google-device="tab7"] #dualPhoneWrap,
+body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap {
+  display: none !important;
+}
+
+.dual-phone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 0;
+  color: #94a3b8;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all .2s ease;
+  user-select: none;
+}
+
+.dual-phone-btn:hover {
+  color: #f8fafc;
+}
+
+.dual-phone-btn.on,
+body[data-dual="true"] .dual-phone-btn {
+  background: #334155;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.18);
+  font-weight: 700;
+}
+
+:root[data-ui=light] #dualPhoneWrap {
+  background: rgba(241,245,249,.94);
+  border: 1px solid rgba(15,23,42,.15);
+  box-shadow: 0 6px 20px -4px rgba(15,23,42,.12), 0 2px 6px -1px rgba(15,23,42,.08), inset 0 1px 0 #fff;
+}
+
+:root[data-ui=light] .dual-phone-btn {
+  color: #64748b !important;
+}
+
+:root[data-ui=light] .dual-phone-btn:hover:not(.on) {
+  color: #0f172a !important;
+}
+
+:root[data-ui=light] .dual-phone-btn.on,
+:root[data-ui=light] body[data-dual="true"] .dual-phone-btn {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(15,23,42,.35), inset 0 1px 0 rgba(255,255,255,.2) !important;
+}
 #dt, #gdt { display: none !important; }
 body[data-ui-store="apple"] #dt { display: flex !important; }
 body[data-ui-store="google"] #gdt { display: flex !important; }

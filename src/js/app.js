@@ -5242,7 +5242,14 @@ function applyGoogleDevice(){
   document.body.dataset.dual = isDual ? 'true' : 'false';
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isDual ? 'dual' : googleDevice)));
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isDual ? 'dual' : appleDevice)));
-  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === (isDual ? 'dual' : 'google')));
+  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'google'));
+  if (isDual) {
+    const btn = $('btnDualPhone');
+    if (btn) btn.classList.add('on');
+  } else {
+    const btn = $('btnDualPhone');
+    if (btn) btn.classList.remove('on');
+  }
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){
@@ -6680,6 +6687,12 @@ function setStore(s, animate = true){
   const fromMode = document.body.dataset.dual === 'true' ? 'dual' : store;
   const toMode = s;
 
+  if (document.body.dataset.dual === 'true') {
+    document.body.dataset.dual = 'false';
+    const btn = $('btnDualPhone');
+    if (btn) btn.classList.remove('on');
+  }
+
   // Set UI store state immediately so pill and toolbar tabviews #dt and #gdt switch instantly (<1ms)
   document.body.dataset.uiStore = s;
 
@@ -6693,19 +6706,15 @@ function setStore(s, animate = true){
   }
 
   // 2. IMMEDIATELY SELECT DEVICE ON TABVIEW WITHOUT WAITING FOR ANIMATION (<1ms)
-  const isTargetDual = (s === 'dual');
   let targetAppleDev = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
   let targetGoogleDev = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
 
   // Immediately toggle active class on device selector buttons
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isTargetDual ? 'dual' : targetAppleDev)));
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isTargetDual ? 'dual' : targetGoogleDev)));
+  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === targetAppleDev));
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === targetGoogleDev));
 
-  // If entering or exiting dual mode, show/hide device selector tabview immediately
-  if (isTargetDual) {
-    if ($('dt')) $('dt').style.display = 'none';
-    if ($('gdt')) $('gdt').style.display = 'none';
-  } else if (s === 'apple') {
+  // Show/hide device selector tabview immediately
+  if (s === 'apple') {
     if ($('dt')) $('dt').style.display = 'flex';
     if ($('gdt')) $('gdt').style.display = 'none';
   } else if (s === 'google') {
@@ -6714,13 +6723,8 @@ function setStore(s, animate = true){
   }
 
   // Immediately update editor fields visibility and title for instant feedback
-  if(s === 'dual'){
-    $$('[data-only]').forEach(e => e.classList.remove('hide'));
-    if($('edTitle')) $('edTitle').textContent = 'Dual Store Listing Details';
-  } else {
-    $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
-    if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
-  }
+  $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
+  if($('edTitle')) $('edTitle').textContent = s === 'apple' ? 'App Store Listing Details' : 'Google Play Listing Details';
   syncCategoryUI();
 
   // Immediately synchronize active device tabview pill (<16ms)
@@ -6731,35 +6735,25 @@ function setStore(s, animate = true){
   });
 
   const applyStoreMode = () => {
-    if(s === 'dual'){
-      document.body.dataset.dual = 'true';
-      document.body.dataset.store = 'dual';
-      appleDevice = 'dual';
-      googleDevice = 'dual';
-      document.body.dataset.appleDevice = 'iphone';
-      document.body.dataset.googleDevice = 'phone';
-      if(typeof renderIcons === 'function') renderIcons();
-      if(typeof validateAppIcon === 'function') validateAppIcon();
-    } else {
-      document.body.dataset.dual = 'false';
-      store = s;
-      document.body.dataset.store = s;
-      if(appleDevice === 'dual') appleDevice = 'iphone';
-      if(googleDevice === 'dual') googleDevice = 'phone';
-      document.body.dataset.appleDevice = appleDevice;
-      document.body.dataset.googleDevice = googleDevice;
+    document.body.dataset.dual = 'false';
+    store = s;
+    document.body.dataset.store = s;
+    if(appleDevice === 'dual') appleDevice = 'iphone';
+    if(googleDevice === 'dual') googleDevice = 'phone';
+    document.body.dataset.appleDevice = appleDevice;
+    document.body.dataset.googleDevice = googleDevice;
 
-      const iconLabel = $('iconSpecLabel');
-      const iconHint = $('iconSpecHint');
-      if(iconLabel && iconHint){
-        if(s === 'google'){
-          iconLabel.innerHTML = 'App Icon (512×512 px) <span class="tag g">GOOGLE</span>';
-          iconHint.innerHTML = '32-bit PNG · 1:1 Square · Max 1024 KB';
-        } else {
-          iconLabel.innerHTML = 'App Icon (1024×1024 px) <span class="tag a">APPLE</span>';
-          iconHint.innerHTML = 'PNG · 1:1 Square · 100% Opaque';
-        }
+    const iconLabel = $('iconSpecLabel');
+    const iconHint = $('iconSpecHint');
+    if(iconLabel && iconHint){
+      if(s === 'google'){
+        iconLabel.innerHTML = 'App Icon (512×512 px) <span class="tag g">GOOGLE</span>';
+        iconHint.innerHTML = '32-bit PNG · 1:1 Square · Max 1024 KB';
+      } else {
+        iconLabel.innerHTML = 'App Icon (1024×1024 px) <span class="tag a">APPLE</span>';
+        iconHint.innerHTML = 'PNG · 1:1 Square · 100% Opaque';
       }
+    }
 
       // Sync icon variant according to active store
       let iconChanged = false;
@@ -6831,7 +6825,6 @@ function setStore(s, animate = true){
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
-    }
     if(typeof saveState === 'function') saveState();
   };
 
@@ -6879,6 +6872,51 @@ function setView(v){
 
 $$('.seg button').forEach(b => b.onclick = () => setStore(b.dataset.s));
 $$('#vt button').forEach(b => b.onclick = () => setView(b.dataset.v));
+
+// Dual Phone Comparison Toggle on Stage Bottom Bar
+function toggleDualPhone(forceState) {
+  const isCurrentlyDual = document.body.dataset.dual === 'true';
+  const nextDual = typeof forceState === 'boolean' ? forceState : !isCurrentlyDual;
+
+  const btn = $('btnDualPhone');
+  if (btn) btn.classList.toggle('on', nextDual);
+
+  const activeStore = (typeof store !== 'undefined' && (store === 'apple' || store === 'google')) ? store : 'apple';
+
+  const applyDualState = () => {
+    document.body.dataset.dual = nextDual ? 'true' : 'false';
+    if (nextDual) {
+      appleDevice = 'dual';
+      googleDevice = 'dual';
+    } else {
+      appleDevice = 'iphone';
+      googleDevice = 'phone';
+    }
+    document.body.dataset.appleDevice = 'iphone';
+    document.body.dataset.googleDevice = 'phone';
+    if (btn) btn.classList.toggle('on', nextDual);
+    if (typeof renderIcons === 'function') renderIcons();
+    if (typeof renderShots === 'function') renderShots();
+    if (typeof update === 'function') update();
+    if (typeof fit === 'function') fit();
+    syncAllVtPills();
+    if (typeof saveState === 'function') saveState();
+  };
+
+  if (typeof transitionStoreMode === 'function') {
+    if (nextDual) {
+      transitionStoreMode(activeStore, 'dual', applyDualState);
+    } else {
+      transitionStoreMode('dual', activeStore, applyDualState);
+    }
+  } else {
+    applyDualState();
+  }
+}
+
+if ($('btnDualPhone')) {
+  $('btnDualPhone').onclick = () => toggleDualPhone();
+}
 
 // Mockup Light / Dark theme controller
 function setDeviceTheme(theme, save = true){
@@ -6935,7 +6973,11 @@ function setAppleDevice(d, animate = true){
     }
     $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
     $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
-    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === (nextDual ? 'dual' : 'apple')));
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'apple'));
+    if (d === 'ipad') {
+      const btn = $('btnDualPhone');
+      if (btn) btn.classList.remove('on');
+    }
     renderIcons();
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();

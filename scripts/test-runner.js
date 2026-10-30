@@ -1313,11 +1313,11 @@ assert(!/if\s*\(\s*confirm\s*\(/.test(bundledHtml), 'Native browser confirm() di
 assert(!bundledHtml.includes('showToast(SUPPORTS_IPAD'), 'iPad destination toggle does not trigger toast notification');
 assert(bundledHtml.includes('btnToggleSidebar.onclick = (e) =>'), 'btnToggleSidebar has single dedicated onclick binding avoiding double-toggle cancelation');
 
-// 10. Dual Store Phone Preview (iPhone + Android Phone Side-by-Side) & PNG Export
+// 10. Dual Phone Comparison in Stage Bottom Bar & Clean Header Store Switcher
 assert(bundledHtml.includes('id="stageDevices"'), 'Stage wraps device mockups in #stageDevices flex container');
-assert(bundledHtml.includes('data-s="dual"') && bundledHtml.includes('Dual Store Phone Preview (iPhone &amp; Android Phone side-by-side)'), 'Store switcher (.seg) includes Dual View tab with clear side-by-side phone tooltip');
-assert(bundledHtml.includes('class="seg-tooltip"') && bundledHtml.includes('class="seg-tt-badge"') && bundledHtml.includes('Phone Only'), 'Store switcher tab includes custom instant tooltip with Phone Only badge for Dual View');
-assert(bundledHtml.includes('Side-by-side preview of <b>iPhone</b> and <b>Android Phone</b> on one canvas.'), 'Dual View tooltip provides clean concise preview description');
+assert(bundledHtml.includes('id="btnDualPhone"') && bundledHtml.includes('Dual Phone'), 'Stage bottom bar includes dedicated Dual Phone toggle button');
+assert(bundledHtml.includes('data-s="apple"') && bundledHtml.includes('data-s="google"') && !bundledHtml.includes('data-s="dual"'), 'Store switcher (.seg) contains only clean App Store and Google Play platforms, separating form from viewport');
+assert(bundledHtml.includes('body[data-store="apple"][data-apple-device="ipad"] #dualPhoneWrap') && bundledHtml.includes('body[data-store="google"][data-google-device="tab7"] #dualPhoneWrap'), 'CSS rules hide Dual Phone button when iPad or Tablets are active');
 assert(bundledHtml.includes('body[data-dual="true"] .dev.apple.single') && bundledHtml.includes('body[data-dual="true"] #dev-phone.dev.google'), 'CSS rules display both iPhone and Android Phone side-by-side when data-dual="true"');
 assert(bundledHtml.includes("devSlug = 'dual-store-phone'"), 'exportPNG supports capturing dual-store-phone comparison image');
 assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes('GOOGLE PLAY &middot; Android'), 'Devices render marketing-style platform header labels (APP STORE · iPhone / GOOGLE PLAY · Android)');
