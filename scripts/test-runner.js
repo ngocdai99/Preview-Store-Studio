@@ -1558,10 +1558,12 @@ assert(bundledHtml.includes("CUSTOM_ICON_1024 = '';") && bundledHtml.includes("C
 
 // Test 7: Co-existence of Preset Pill and Draft Pill when viewing presets
 assert(bundledHtml.includes('id="btnPresetPill"'), 'Workspace bar contains dedicated #btnPresetPill element');
-assert(bundledHtml.includes('presetPill.style.display = \'inline-flex\'') && bundledHtml.includes('presetPill.classList.add(\'on\')'), 'updateDraftPill displays active preset pill when viewing preset template');
+assert(bundledHtml.includes('presetPill.style.display = \'inline-flex\'') && (bundledHtml.includes('presetPill.classList.toggle(\'on\'') || bundledHtml.includes('presetPill.classList.add(\'on\'')), 'updateDraftPill displays active preset pill when viewing preset template');
 assert(bundledHtml.includes('draftPill.style.display = \'inline-flex\'') && bundledHtml.includes('draftPill.classList.toggle(\'on\', CURRENT_PRESET_KEY === \'draft\')'), 'updateDraftPill displays saved draft pill beside active preset pill');
 assert(bundledHtml.includes('btnPresetPill.onclick = () => {') && bundledHtml.includes('templatesModal'), 'btnPresetPill allows quick access to template switcher modal');
 assert(bundledHtml.includes('CURRENT_PRESET_KEY !== \'draft\'') && bundledHtml.includes('loadPreset(\'draft\')'), 'Clicking draft pill returns cleanly to draft workspace');
+assert(bundledHtml.includes('CURRENT_ACTIVE_PRESET = key'), 'loadPreset updates CURRENT_ACTIVE_PRESET while preserving userDraft');
+assert(bundledHtml.includes('applyImportedStoreApp') && bundledHtml.includes('userDraft = getCurrentStateObject();'), 'applyImportedStoreApp replaces draft with imported app data');
 
 // ---------------------------------------------------------------------
 // Summary Report

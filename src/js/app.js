@@ -2281,7 +2281,8 @@ let BLANK_ICON_1024 = '';
 let BLANK_ICON_512 = '';
 let CUSTOM_ICON_1024 = '';
 let CUSTOM_ICON_512 = '';
-let CURRENT_PRESET_KEY = 'none';
+let CURRENT_PRESET_KEY = 'draft';
+let CURRENT_ACTIVE_PRESET = 'studio';
 let IS_CUSTOM_ICON = false;
 let IS_CUSTOM_FEATURE = false;
 let FEATURE_GRAPHIC = BLANK_FEATURE;
@@ -7118,10 +7119,13 @@ function loadPreset(key){
   }
 
   // Before switching to a preset, if we were in draft mode, ensure draft is persisted
-  if(CURRENT_PRESET_KEY === 'draft' && typeof hasUserDraft === 'function' && hasUserDraft()){
+  if(CURRENT_PRESET_KEY === 'draft'){
+    userDraft = getCurrentStateObject();
+    userDraft.isCustomized = true;
     if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
   }
 
+  CURRENT_ACTIVE_PRESET = key;
   CURRENT_PRESET_KEY = key;
   isPresetModified = false;
   if(key === 'none'){
@@ -7324,9 +7328,6 @@ function loadPreset(key){
   update();
   if(CURRENT_PRESET_KEY === 'draft'){
     saveState();
-  } else if(typeof hasUserDraft === 'function' && !hasUserDraft()){
-    // If draft is empty, selecting any template immediately initializes that template as the user's active draft
-    if(typeof initDraftFromCurrentPreset === 'function') initDraftFromCurrentPreset();
   }
   if(typeof updatePresetBanner === 'function') updatePresetBanner();
   if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -7352,10 +7353,14 @@ if(btnDraft){
 const btnPresetPill = $('btnPresetPill');
 if(btnPresetPill){
   btnPresetPill.onclick = () => {
-    const tModal = $('templatesModal');
-    if(tModal){
-      tModal.classList.add('open');
-      tModal.setAttribute('aria-hidden', 'false');
+    if(CURRENT_PRESET_KEY === 'draft'){
+      loadPreset(CURRENT_ACTIVE_PRESET || 'studio');
+    } else {
+      const tModal = $('templatesModal');
+      if(tModal){
+        tModal.classList.add('open');
+        tModal.setAttribute('aria-hidden', 'false');
+      }
     }
   };
 }
@@ -7701,24 +7706,21 @@ function updateDraftPill(){
   const presetPill = $('btnPresetPill');
   const hasDraft = hasUserDraft();
 
-  const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none');
+  const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft');
+  const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' ? CURRENT_ACTIVE_PRESET : 'studio');
 
   if(presetPill){
-    if(isViewingPreset){
-      presetPill.style.display = 'inline-flex';
-      presetPill.classList.add('on');
-      const p = (typeof PRESETS !== 'undefined') ? PRESETS[CURRENT_PRESET_KEY] : null;
-      const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY]) ? PRESET_ICONS[CURRENT_PRESET_KEY] : (p ? p.icon : BLANK_ICON);
-      const pName = p ? p.name : (CURRENT_PRESET_KEY === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1)));
-      const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
-      presetPill.setAttribute('title', 'Viewing preset: ' + pName + (hasDraft ? ' (Saved Draft is preserved)' : ''));
-      presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
-        '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
-        '<small id="presetBtnBadge">Preset</small>';
-    } else {
-      presetPill.style.display = 'none';
-      presetPill.classList.remove('on');
-    }
+    const p = (typeof PRESETS !== 'undefined') ? PRESETS[activePresetKey] : null;
+    const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activePresetKey]) ? PRESET_ICONS[activePresetKey] : (p ? p.icon : BLANK_ICON);
+    const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey === 'none' ? 'Blank Template' : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1))));
+    const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
+
+    presetPill.style.display = 'inline-flex';
+    presetPill.classList.toggle('on', isViewingPreset);
+    presetPill.setAttribute('title', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
+    presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
+      '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
+      '<small id="presetBtnBadge">Preset</small>';
   }
 
   if(!draftPill) return;
@@ -8398,6 +8400,16 @@ function parseAndApplyJSON(jsonString){
   if(typeof renderIpadShots === 'function') renderIpadShots();
   if(typeof renderTablets === 'function') renderTablets();
   if(typeof update === 'function') update();
+
+  CURRENT_PRESET_KEY = 'draft';
+  isPresetModified = false;
+  if(typeof getCurrentStateObject === 'function'){
+    userDraft = getCurrentStateObject();
+    userDraft.isCustomized = true;
+  }
+  if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+  if(typeof updatePresetBanner === 'function') updatePresetBanner();
+  if(typeof updateDraftPill === 'function') updateDraftPill();
   saveState();
 
   if(hadWrongTypes){
@@ -9627,6 +9639,11 @@ if(typeof hasUserDraft === 'function' && hasUserDraft()){
   restoring = true;
   try{
     loadPreset('taskflow');
+    if(typeof getCurrentStateObject === 'function'){
+      userDraft = getCurrentStateObject();
+      userDraft.isCustomized = true;
+      if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+    }
   }finally{
     restoring = false;
   }

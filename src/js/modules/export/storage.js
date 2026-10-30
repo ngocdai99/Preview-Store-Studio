@@ -334,24 +334,21 @@ function updateDraftPill(){
   const presetPill = $('btnPresetPill');
   const hasDraft = hasUserDraft();
 
-  const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none');
+  const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft');
+  const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' ? CURRENT_ACTIVE_PRESET : 'studio');
 
   if(presetPill){
-    if(isViewingPreset){
-      presetPill.style.display = 'inline-flex';
-      presetPill.classList.add('on');
-      const p = (typeof PRESETS !== 'undefined') ? PRESETS[CURRENT_PRESET_KEY] : null;
-      const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY]) ? PRESET_ICONS[CURRENT_PRESET_KEY] : (p ? p.icon : BLANK_ICON);
-      const pName = p ? p.name : (CURRENT_PRESET_KEY === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (CURRENT_PRESET_KEY.charAt(0).toUpperCase() + CURRENT_PRESET_KEY.slice(1)));
-      const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
-      presetPill.setAttribute('title', 'Viewing preset: ' + pName + (hasDraft ? ' (Saved Draft is preserved)' : ''));
-      presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
-        '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
-        '<small id="presetBtnBadge">Preset</small>';
-    } else {
-      presetPill.style.display = 'none';
-      presetPill.classList.remove('on');
-    }
+    const p = (typeof PRESETS !== 'undefined') ? PRESETS[activePresetKey] : null;
+    const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activePresetKey]) ? PRESET_ICONS[activePresetKey] : (p ? p.icon : BLANK_ICON);
+    const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey === 'none' ? 'Blank Template' : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1))));
+    const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
+
+    presetPill.style.display = 'inline-flex';
+    presetPill.classList.toggle('on', isViewingPreset);
+    presetPill.setAttribute('title', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
+    presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
+      '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
+      '<small id="presetBtnBadge">Preset</small>';
   }
 
   if(!draftPill) return;

@@ -130,10 +130,13 @@ function loadPreset(key){
   }
 
   // Before switching to a preset, if we were in draft mode, ensure draft is persisted
-  if(CURRENT_PRESET_KEY === 'draft' && typeof hasUserDraft === 'function' && hasUserDraft()){
+  if(CURRENT_PRESET_KEY === 'draft'){
+    userDraft = getCurrentStateObject();
+    userDraft.isCustomized = true;
     if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
   }
 
+  CURRENT_ACTIVE_PRESET = key;
   CURRENT_PRESET_KEY = key;
   isPresetModified = false;
   if(key === 'none'){
@@ -336,9 +339,6 @@ function loadPreset(key){
   update();
   if(CURRENT_PRESET_KEY === 'draft'){
     saveState();
-  } else if(typeof hasUserDraft === 'function' && !hasUserDraft()){
-    // If draft is empty, selecting any template immediately initializes that template as the user's active draft
-    if(typeof initDraftFromCurrentPreset === 'function') initDraftFromCurrentPreset();
   }
   if(typeof updatePresetBanner === 'function') updatePresetBanner();
   if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -364,10 +364,14 @@ if(btnDraft){
 const btnPresetPill = $('btnPresetPill');
 if(btnPresetPill){
   btnPresetPill.onclick = () => {
-    const tModal = $('templatesModal');
-    if(tModal){
-      tModal.classList.add('open');
-      tModal.setAttribute('aria-hidden', 'false');
+    if(CURRENT_PRESET_KEY === 'draft'){
+      loadPreset(CURRENT_ACTIVE_PRESET || 'studio');
+    } else {
+      const tModal = $('templatesModal');
+      if(tModal){
+        tModal.classList.add('open');
+        tModal.setAttribute('aria-hidden', 'false');
+      }
     }
   };
 }

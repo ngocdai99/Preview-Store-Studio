@@ -207,6 +207,16 @@ function parseAndApplyJSON(jsonString){
   if(typeof renderIpadShots === 'function') renderIpadShots();
   if(typeof renderTablets === 'function') renderTablets();
   if(typeof update === 'function') update();
+
+  CURRENT_PRESET_KEY = 'draft';
+  isPresetModified = false;
+  if(typeof getCurrentStateObject === 'function'){
+    userDraft = getCurrentStateObject();
+    userDraft.isCustomized = true;
+  }
+  if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+  if(typeof updatePresetBanner === 'function') updatePresetBanner();
+  if(typeof updateDraftPill === 'function') updateDraftPill();
   saveState();
 
   if(hadWrongTypes){

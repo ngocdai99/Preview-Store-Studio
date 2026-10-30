@@ -85,6 +85,11 @@ if(typeof hasUserDraft === 'function' && hasUserDraft()){
   restoring = true;
   try{
     loadPreset('taskflow');
+    if(typeof getCurrentStateObject === 'function'){
+      userDraft = getCurrentStateObject();
+      userDraft.isCustomized = true;
+      if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+    }
   }finally{
     restoring = false;
   }
