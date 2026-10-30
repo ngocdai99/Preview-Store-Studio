@@ -5,10 +5,17 @@
 body[data-store=google][data-google-device="tab10"] .stage-bottom-bar{display:none!important}
 
 /* Dual Phone Comparison Toggle Button in Stage Bottom Bar */
+.dual-phone-wrap,
 #dualPhoneWrap {
+  position: relative;
   display: inline-flex;
+  align-items: center;
   background: rgba(15, 23, 42, .92);
-  border-color: rgba(255, 255, 255, .14);
+  backdrop-filter: blur(16px);
+  border-radius: 14px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, .45), 0 2px 6px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .07);
 }
 
 /* Hide Dual Phone button when iPad or Tablets are active */
@@ -24,9 +31,9 @@ body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: transparent;
-  border: 1px solid transparent;
-  color: #94a3b8;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: #94a3b8 !important;
   padding: 7px 15px;
   border-radius: 10px;
   font-family: inherit;
@@ -39,12 +46,31 @@ body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap {
   box-sizing: border-box;
 }
 
+.dual-phone-btn .vt-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  opacity: .88;
+  transition: color .2s ease, opacity .2s ease, transform .25s ease;
+  flex-shrink: 0;
+}
+
+.dual-phone-btn .vt-ico svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.1;
+  display: block;
+}
+
 .dual-phone-btn:hover:not(.on) {
-  color: #f8fafc;
+  color: #f8fafc !important;
 }
 
 .dual-phone-btn:hover .vt-ico {
-  opacity: 1;
+  opacity: 1 !important;
   transform: scale(1.08);
 }
 
@@ -52,11 +78,12 @@ body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap {
   transform: scale(.95);
 }
 
+/* Active State in Dark Mode (matching #vt button.on + .vt-pill) */
 .dual-phone-btn.on,
 body[data-dual="true"] .dual-phone-btn {
   background: #334155 !important;
   color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18) !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .3) !important;
   font-weight: 700 !important;
@@ -68,6 +95,8 @@ body[data-dual="true"] .dual-phone-btn .vt-ico {
   opacity: 1 !important;
 }
 
+/* Light Mode Styling (:root[data-ui=light]) */
+:root[data-ui=light] .dual-phone-wrap,
 :root[data-ui=light] #dualPhoneWrap {
   background: rgba(241, 245, 249, .94);
   border: 1px solid rgba(15, 23, 42, .15);
@@ -78,22 +107,37 @@ body[data-dual="true"] .dual-phone-btn .vt-ico {
   color: #64748b !important;
 }
 
+:root[data-ui=light] .dual-phone-btn .vt-ico {
+  color: #475569 !important;
+  opacity: .92;
+}
+
 :root[data-ui=light] .dual-phone-btn:hover:not(.on) {
   color: #0f172a !important;
 }
 
+:root[data-ui=light] .dual-phone-btn:hover:not(.on) .vt-ico {
+  color: #0f172a !important;
+  opacity: 1;
+}
+
+/* Active / Selected State in Light Mode (Exact match to Detail View black pill #0f172a) */
 :root[data-ui=light] .dual-phone-btn.on,
-:root[data-ui=light] body[data-dual="true"] .dual-phone-btn {
+:root[data-ui=light] body[data-dual="true"] .dual-phone-btn,
+:root[data-ui=light] #dualPhoneWrap .dual-phone-btn.on,
+:root[data-ui=light] body[data-dual="true"] #dualPhoneWrap .dual-phone-btn {
   background: #0f172a !important;
   color: #ffffff !important;
-  border-color: #0f172a !important;
+  border: 1px solid #0f172a !important;
   box-shadow: 0 2px 10px rgba(15, 23, 42, .35), inset 0 1px 0 rgba(255, 255, 255, .2) !important;
   text-shadow: none !important;
   font-weight: 750 !important;
 }
 
 :root[data-ui=light] .dual-phone-btn.on .vt-ico,
-:root[data-ui=light] body[data-dual="true"] .dual-phone-btn .vt-ico {
+:root[data-ui=light] body[data-dual="true"] .dual-phone-btn .vt-ico,
+:root[data-ui=light] #dualPhoneWrap .dual-phone-btn.on .vt-ico,
+:root[data-ui=light] body[data-dual="true"] #dualPhoneWrap .dual-phone-btn .vt-ico {
   color: #ffffff !important;
   opacity: 1 !important;
 }
