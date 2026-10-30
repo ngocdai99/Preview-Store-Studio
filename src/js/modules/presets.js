@@ -158,6 +158,8 @@ function loadPreset(key){
     $('f-new').value = '';
     $('f-desc').value = '';
     IS_CUSTOM_ICON = false;
+    CUSTOM_ICON_1024 = '';
+    CUSTOM_ICON_512 = '';
     ICON_FILE_SIZE = 0; ICON_FILE_TYPE = ''; ICON_FILE_NAME = '';
     if (store === 'apple' && BLANK_ICON_1024) {
       ICON = BLANK_ICON_1024;
@@ -188,6 +190,7 @@ function loadPreset(key){
     }
     FEATURE_GRAPHIC = BLANK_FEATURE;
     IS_CUSTOM_FEATURE = false;
+    FEATURE_FILE_SIZE = 0; FEATURE_FILE_TYPE = ''; FEATURE_FILE_NAME = '';
     SHOTS = [];
     IPAD_SHOTS = [];
     REVIEWS = [
@@ -218,6 +221,7 @@ function loadPreset(key){
     renderIcons();
     renderFeature();
     renderShots();
+    if(typeof renderIpadShots === 'function') renderIpadShots();
     renderReviews();
     update();
     if(CURRENT_PRESET_KEY === 'draft'){
@@ -321,6 +325,7 @@ function loadPreset(key){
   renderIcons();
   renderFeature();
   renderShots();
+  if(typeof renderIpadShots === 'function') renderIpadShots();
   renderReviews();
   update();
   if(CURRENT_PRESET_KEY === 'draft'){

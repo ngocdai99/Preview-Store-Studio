@@ -303,6 +303,32 @@ function initDraftFromCurrentPreset(){
   updatePresetMenuSelection();
 }
 
+function resetDraftWorkspace(){
+  userDraft = null;
+  isPresetModified = false;
+  try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
+  if(typeof idbDelete === 'function'){
+    idbDelete(DRAFT_STORAGE_KEY);
+    idbDelete(STORAGE_KEY);
+  }
+  if(typeof resetStats === 'function') resetStats();
+  if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE && typeof THUMB_CACHE.clear === 'function'){
+    THUMB_CACHE.clear();
+  }
+  ['icoFile', 'featureFile', 'shotFile', 'ipadShotFile', 'tab7File', 'tab10File'].forEach(id => {
+    const el = $(id);
+    if(el) el.value = '';
+  });
+  loadPreset('none');
+  CURRENT_PRESET_KEY = 'draft';
+  if(typeof updatePresetBanner === 'function') updatePresetBanner();
+  if(typeof updateDraftPill === 'function') updateDraftPill();
+  if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+  showToast('Draft cleared and reset.', 'ok');
+}
+
 function updateDraftPill(){
   const pill = $('btnDraft');
   if(!pill) return;
@@ -339,19 +365,7 @@ function updateDraftPill(){
       resetBtn.addEventListener('click', function(e){
         e.stopPropagation();
         showResetConfirmModal(function(){
-          userDraft = null;
-          try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
-          try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-          try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
-          if(typeof idbDelete === 'function'){
-            idbDelete(DRAFT_STORAGE_KEY);
-            idbDelete(STORAGE_KEY);
-          }
-          if(typeof resetStats === 'function') resetStats();
-          loadPreset('taskflow');
-          updateDraftPill();
-          updatePresetBanner();
-          showToast('Draft cleared and reset.', 'ok');
+          resetDraftWorkspace();
         });
       });
     }

@@ -1297,6 +1297,9 @@ assert(bundledHtml.includes('id="resetConfirmCancel"'), 'Cancel button #resetCon
 assert(bundledHtml.includes('id="resetConfirmOk"') && /<button[^>]*id="resetConfirmOk"[^>]*>Reset<\/button>/.test(bundledHtml), 'Action button #resetConfirmOk exists with exact button text "Reset"');
 assert(bundledHtml.includes('Reset App Draft?'), 'Modal title "Reset App Draft?" exists in DOM');
 assert(bundledHtml.includes('function showResetConfirmModal'), 'Helper function showResetConfirmModal is defined in bundled script');
+assert(bundledHtml.includes('function resetDraftWorkspace'), 'Helper function resetDraftWorkspace is defined in bundled script');
+assert(bundledHtml.includes('resetDraftWorkspace();'), 'Reset confirmation triggers resetDraftWorkspace');
+assert(!bundledHtml.includes("loadPreset('taskflow');\n          updateDraftPill();"), 'Resetting draft does not inappropriately reload TaskFlow preset');
 assert(bundledHtml.includes('.confirm-modal-backdrop') && bundledHtml.includes('.confirm-modal-card'), 'Modal backdrop and card styles are present in bundled CSS');
 assert(!/if\s*\(\s*confirm\s*\(/.test(bundledHtml), 'Native browser confirm() dialog is replaced across all reset triggers');
 

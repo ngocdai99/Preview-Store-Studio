@@ -257,18 +257,26 @@ window.addEventListener('drop', e => {
 if($('optResetDefault')){
   $('optResetDefault').onclick = () => {
     showResetConfirmModal(() => {
-      userDraft = null;
-      try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
-      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-      if(typeof idbDelete === 'function'){
-        idbDelete(DRAFT_STORAGE_KEY);
-        idbDelete(STORAGE_KEY);
+      if(typeof resetDraftWorkspace === 'function'){
+        resetDraftWorkspace();
+      } else {
+        userDraft = null;
+        isPresetModified = false;
+        try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
+        try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+        try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
+        if(typeof idbDelete === 'function'){
+          idbDelete(DRAFT_STORAGE_KEY);
+          idbDelete(STORAGE_KEY);
+        }
+        if(typeof resetStats === 'function') resetStats();
+        loadPreset('none');
+        CURRENT_PRESET_KEY = 'draft';
+        if(typeof updatePresetBanner === 'function') updatePresetBanner();
+        if(typeof updateDraftPill === 'function') updateDraftPill();
+        if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+        showToast('Draft cleared and reset.', 'ok');
       }
-      resetStats();
-      loadPreset('taskflow');
-      if(typeof updatePresetBanner === 'function') updatePresetBanner();
-      if(typeof updateDraftPill === 'function') updateDraftPill();
-      showToast('Draft cleared and reset to default.', 'ok');
     });
   };
 }
