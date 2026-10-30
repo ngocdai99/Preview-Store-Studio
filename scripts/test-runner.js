@@ -1957,21 +1957,14 @@ assert(bundledHtml.includes('.mini:disabled') && bundledHtml.includes('cursor:no
 assert(!iconJsCode.includes("dimTag.className = 'shot-dim-tag ok';"), 'runIconPixelAudit does not render green dim tag when icon is compliant');
 
 // ---------------------------------------------------------------------
-// SUITE 28: Interactive Preview (Lite) & Sandbox Capability Banner
+// SUITE 28: Interactive Preview (Lite) Positioning Verification
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 28]: Interactive Preview (Lite) & Sandbox Capability Banner');
+console.log('\n[SUITE 28]: Interactive Preview (Lite) Positioning Verification');
 
 const miniStudioHtml = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'components', 'mini-studio.html'), 'utf8');
 assert(miniStudioHtml.includes('<span class="ms-live">INTERACTIVE PREVIEW (LITE)</span>'), 'mini-studio.html toolbar badge displays INTERACTIVE PREVIEW (LITE)');
 assert(!miniStudioHtml.includes('<span class="ms-live">LIVE DEMO</span>'), 'mini-studio.html no longer displays old LIVE DEMO badge');
-
-assert(miniStudioHtml.includes('class="ms-sandbox-banner"'), 'mini-studio.html includes ms-sandbox-banner');
-assert(miniStudioHtml.includes('Web Sandbox'), 'ms-sandbox-banner displays Web Sandbox pill');
-assert(miniStudioHtml.includes('Full Studio includes iPad Pro 13", Android Tablets, ASO Search Results &amp; 4K Clean Export'), 'ms-sandbox-banner clarifies full studio capabilities');
-
-const miniToolbarCss = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'css', 'mini-studio-toolbar.css'), 'utf8');
-assert(miniToolbarCss.includes('.ms-sandbox-banner') && miniToolbarCss.includes('.ms-sandbox-badge'), 'mini-studio-toolbar.css defines styles for ms-sandbox-banner and ms-sandbox-badge');
-assert(miniToolbarCss.includes('[data-theme="light"] .ms-sandbox-banner'), 'mini-studio-toolbar.css defines light theme styles for ms-sandbox-banner');
+assert(!miniStudioHtml.includes('ms-sandbox-banner'), 'mini-studio.html does not render ms-sandbox-banner');
 
 const footerHtml = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'components', 'footer.html'), 'utf8');
 assert(footerHtml.includes('Interactive Preview'), 'footer.html links to Interactive Preview');
