@@ -598,6 +598,12 @@ assert(ipadHtml.includes('ipad-ratings-layout') && ipadHtml.includes('ipad-ratin
 assert(ipadHtml.includes('ipad-floating-pill') && ipadHtml.includes('ipad-floating-get'), 'iPad features floating bottom GET pill on scroll');
 assert(ipadHtml.includes('ipad-info-grid') && ipadHtml.includes('ipad-info-cell') && ipadHtml.includes('ipad-info-label') && ipadHtml.includes('ipad-info-val'), 'iPad features authentic 2-column stacked Information section layout matching iOS 18');
 
+// 5C. iPad Navigation Header Button SVG Dimensions
+assert(bundledHtml.includes('.ipad-nav-btn svg') && bundledHtml.includes('width:19px'), 'iPad nav buttons have explicit SVG dimension rules in bundled CSS');
+assert(ipadHtml.includes('class="a-nav-btn ipad-nav-btn ipad-nav-back"') && ipadHtml.includes('class="a-nav-btn ipad-nav-btn ipad-nav-share"'), 'iPad back and share buttons use shared a-nav-btn styling');
+assert(/<button[^>]*ipad-nav-back[^>]*>\s*<svg[^>]*width="20"[^>]*height="20"/.test(ipadHtml), 'iPad back button SVG has explicit width/height constraints');
+assert(/<button[^>]*ipad-nav-share[^>]*>\s*<svg[^>]*width="19"[^>]*height="19"/.test(ipadHtml), 'iPad share button SVG has explicit width/height constraints');
+
 // 6. iPad Screenshot Ratio Classifier & Rejection Warning Logic
 function classifyIpadScreenshotRatio(w, h) {
   if (w <= 0 || h <= 0) return 'INVALID';
