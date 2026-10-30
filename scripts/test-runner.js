@@ -1218,6 +1218,7 @@ assert(!bundledHtml.includes("3. Clean Day-One"), "Popover removes verbose item 
 assert(!bundledHtml.includes("4. Optional Customization"), "Popover removes verbose item 4");
 assert(bundledHtml.includes('id="metricsDetails"'), "Manual sample metrics accordion #metricsDetails is present for custom mockup metrics");
 assert(bundledHtml.includes('class="metrics-summary"'), "Accordion #metricsDetails includes accessible summary header");
+assert(bundledHtml.includes('Customize'), "Metrics accordion uses concise Customize label");
 assert(bundledHtml.includes('MOCKUP ONLY'), "Metrics card displays MOCKUP ONLY badge");
 assert(bundledHtml.includes('Settings &amp; Metrics'), "Metrics card displays streamlined title Settings & Metrics");
 assert(bundledHtml.indexOf('Settings &amp; Metrics') < bundledHtml.indexOf('MOCKUP ONLY'), "MOCKUP ONLY tag is positioned below the Settings & Metrics title");
