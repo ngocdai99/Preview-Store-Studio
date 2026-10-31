@@ -35,14 +35,14 @@
 ### 1.3 Semantic Icon Chips trên Form Cards
 - [ ] **[P1]** Kiểm tra 7 Form Cards ở cả 2 trạng thái:
   - **Thu gọn (Collapsed)**: Icon mang màu sắc pastel dịu dàng, phân biệt rõ từng card:
-    - Card 1: Apple Blue (`#identityCard`)
+    - Card 1: Amber Gold (`#identityCard`)
     - Card 2: Radiant Purple (`#contentCard`)
     - Card 3: Rose Coral (`#shotsCard`)
     - Card 4: Emerald Mint (`#statsCard`)
     - Card 5: Sky Cyan (`#ipadCard` / `#tabCard`)
     - Card 6 (Google): Sunset Orange (`#featureCard`)
     - Card 6/8: Security Indigo (`#privacyCard`)
-    - Card 7 (Google): Warm Amber (`#supportCard`)
+    - Card 7 (Google): Deep Teal (`#supportCard`)
   - **Mở rộng (Expanded & Selected)**: Icon chuyển sang gradient rực rỡ, card có viền phát sáng ambient glow cùng tone màu.
 
 ### 1.4 Preset Pills & Draft Persistence
