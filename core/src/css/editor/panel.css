@@ -348,11 +348,16 @@ body.sidebar-collapsed .editor-resizer{
 /* Light Theme support for Privacy Compact Banner */
 :root[data-ui=light] .privacy-compact-box {
   background: #f8fafc;
-  border-color: rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 :root[data-ui=light] .privacy-compact-box:hover {
   background: #f1f5f9;
-  border-color: rgba(15, 23, 42, 0.18);
+  border-color: rgba(15, 23, 42, 0.16);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+:root[data-ui=light] .pcb-title {
+  color: #0f172a;
 }
 :root[data-ui=light] .pcb-sub {
   color: #64748b;
