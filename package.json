@@ -7,6 +7,7 @@
     "dev": "npm --prefix marketing run dev",
     "dev:marketing": "npm --prefix marketing run dev",
     "build:marketing": "npm --prefix marketing run build",
+    "push:landing": "git subtree push --prefix marketing landing main",
     "dev:core": "npm --prefix core run dev",
     "build:core": "npm --prefix core run build"
   }
