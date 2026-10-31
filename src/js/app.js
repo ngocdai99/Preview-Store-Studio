@@ -3604,6 +3604,7 @@ function renderShots(){
   // Validate screenshots count & aspect ratios
   validateScreenshots();
   if(typeof renderIpadShots === 'function') renderIpadShots();
+  if(typeof renderTablets === 'function') renderTablets();
 
   // Update Editor Screenshot List with Drag & Drop Sorting
   const L = $('slist');
@@ -3751,9 +3752,9 @@ function validateScreenshots(){
   const hintEl = $('shotHint');
   if(hintEl){
     if(store === 'apple'){
-      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px). PNG or JPEG, no alpha transparency. Drag ⠿ handle to reorder.';
+      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
     } else {
-      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots. PNG or JPEG, up to 8 MB each, 16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px. Drag ⠿ handle to reorder.';
+      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
     }
   }
 
@@ -5384,16 +5385,37 @@ function renderTablets(){
       L.appendChild(r);
     });
 
-    // Live preview gallery inside the tablet mockup
+    // Live preview gallery inside the tablet mockup (prioritize dedicated tablet screenshots, fallback to phone screenshots)
+    const phoneShots = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS) ? SHOTS : [])
+      .filter(s => typeof s === 'string' && s.trim());
+    const hasDedicatedTabShots = valid.length > 0;
+    const effectiveShots = hasDedicatedTabShots ? valid.map(it => it.src) : phoneShots;
+
     const g = $(c.gal);
-    g.innerHTML = '';
-    if(valid.length) valid.forEach((it, i) => g.appendChild(mk(it.src, 'Screenshot ' + (i+1))));
-    else for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+    if(g){
+      g.innerHTML = '';
+      if(effectiveShots.length){
+        effectiveShots.forEach((src, i) => {
+          const img = mk(src, (hasDedicatedTabShots ? `${c.name} Screenshot ` : 'Phone Screenshot ') + (i + 1));
+          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+          g.appendChild(img);
+        });
+      } else {
+        for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      }
+    }
     const sg = $('srch' + key.charAt(0).toUpperCase() + key.slice(1));
     if(sg){
       sg.innerHTML = '';
-      if(valid.length) valid.slice(0, 3).forEach((it, i) => sg.appendChild(mk(it.src, 'Result ' + (i+1))));
-      else for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      if(effectiveShots.length){
+        effectiveShots.slice(0, 3).forEach((src, i) => {
+          const img = mk(src, (hasDedicatedTabShots ? `${c.name} Result ` : 'Phone Result ') + (i + 1));
+          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+          sg.appendChild(img);
+        });
+      } else {
+        for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      }
     }
   });
 }
@@ -6999,7 +7021,11 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
 
   // Pre-calculate target zoom synchronously so target device NEVER renders unscaled
   const targetZoom = computeDeviceZoom(targetStore, targetDev);
-  if(toEl) toEl.style.zoom = targetZoom;
+  if(toEl) {
+    toEl.style.zoom = targetZoom;
+    toEl.style.setProperty('--dev-zoom', targetZoom);
+  }
+  document.documentElement.style.setProperty('--dev-zoom', targetZoom);
 
   fromEl.classList.add(exitClass);
 
@@ -10178,6 +10204,7 @@ function applyImportedStoreApp(state) {
   if (typeof validateFeatureGraphic === 'function') validateFeatureGraphic();
   if (typeof renderShots === 'function') renderShots();
   if (typeof renderIpadShots === 'function') renderIpadShots();
+  if (typeof renderTablets === 'function') renderTablets();
   if (typeof renderStats === 'function') renderStats();
   if (typeof syncStatInputs === 'function') syncStatInputs();
   if (typeof update === 'function') update();
@@ -10642,14 +10669,25 @@ function fit(){
   const sd = $('stageDevices');
   if(sd) sd.style.gap = Math.round(28 * z) + 'px';
 
+  document.documentElement.style.setProperty('--dev-zoom', z);
+
   if(!isDual && store === 'apple' && appleDevice === 'ipad'){
     const ipad = document.querySelector('.dev.ipad');
-    if(ipad) ipad.style.zoom = z;
+    if(ipad) {
+      ipad.style.zoom = z;
+      ipad.style.setProperty('--dev-zoom', z);
+    }
   }else if(!isDual && store === 'google' && googleDevice !== 'phone'){
     const t = $('dev-' + googleDevice);
-    if(t) t.style.zoom = z;
+    if(t) {
+      t.style.zoom = z;
+      t.style.setProperty('--dev-zoom', z);
+    }
   }else{
-    $$('.dev:not(.ipad):not(.gtab)').forEach(d=>d.style.zoom=z);
+    $$('.dev:not(.ipad):not(.gtab)').forEach(d => {
+      d.style.zoom = z;
+      d.style.setProperty('--dev-zoom', z);
+    });
   }
 }
 function setPanel(p){

@@ -226,16 +226,37 @@ function renderTablets(){
       L.appendChild(r);
     });
 
-    // Live preview gallery inside the tablet mockup
+    // Live preview gallery inside the tablet mockup (prioritize dedicated tablet screenshots, fallback to phone screenshots)
+    const phoneShots = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS) ? SHOTS : [])
+      .filter(s => typeof s === 'string' && s.trim());
+    const hasDedicatedTabShots = valid.length > 0;
+    const effectiveShots = hasDedicatedTabShots ? valid.map(it => it.src) : phoneShots;
+
     const g = $(c.gal);
-    g.innerHTML = '';
-    if(valid.length) valid.forEach((it, i) => g.appendChild(mk(it.src, 'Screenshot ' + (i+1))));
-    else for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+    if(g){
+      g.innerHTML = '';
+      if(effectiveShots.length){
+        effectiveShots.forEach((src, i) => {
+          const img = mk(src, (hasDedicatedTabShots ? `${c.name} Screenshot ` : 'Phone Screenshot ') + (i + 1));
+          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+          g.appendChild(img);
+        });
+      } else {
+        for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      }
+    }
     const sg = $('srch' + key.charAt(0).toUpperCase() + key.slice(1));
     if(sg){
       sg.innerHTML = '';
-      if(valid.length) valid.slice(0, 3).forEach((it, i) => sg.appendChild(mk(it.src, 'Result ' + (i+1))));
-      else for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      if(effectiveShots.length){
+        effectiveShots.slice(0, 3).forEach((src, i) => {
+          const img = mk(src, (hasDedicatedTabShots ? `${c.name} Result ` : 'Phone Result ') + (i + 1));
+          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+          sg.appendChild(img);
+        });
+      } else {
+        for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      }
     }
   });
 }

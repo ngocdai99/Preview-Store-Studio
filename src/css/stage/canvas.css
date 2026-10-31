@@ -10,10 +10,14 @@
   padding-top:42px;
 }
 
+:root {
+  --dev-zoom: 1;
+}
+
 /* Device Header Label (Matching Marketing Showcase) */
 .dev-label{
   position:absolute;
-  top:-38px;
+  top:calc(-32px / var(--dev-zoom, 1));
   left:0;
   right:0;
   display:flex;
@@ -26,14 +30,16 @@
 .dev-title{
   display:inline-flex;
   align-items:center;
-  gap:8px;
-  font-size:14px;
+  gap:calc(6.5px / var(--dev-zoom, 1));
+  font-size:calc(13px / var(--dev-zoom, 1));
   font-weight:800;
   letter-spacing:.05em;
   white-space:nowrap;
   line-height:1;
 }
 .dev-title svg{
+  width:calc(12px / var(--dev-zoom, 1)) !important;
+  height:calc(12px / var(--dev-zoom, 1)) !important;
   display:block;
   flex-shrink:0;
 }

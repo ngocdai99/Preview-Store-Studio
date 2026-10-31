@@ -213,6 +213,7 @@ function applyImportedStoreApp(state) {
   if (typeof validateFeatureGraphic === 'function') validateFeatureGraphic();
   if (typeof renderShots === 'function') renderShots();
   if (typeof renderIpadShots === 'function') renderIpadShots();
+  if (typeof renderTablets === 'function') renderTablets();
   if (typeof renderStats === 'function') renderStats();
   if (typeof syncStatInputs === 'function') syncStatInputs();
   if (typeof update === 'function') update();

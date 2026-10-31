@@ -40,6 +40,7 @@ function renderShots(){
   // Validate screenshots count & aspect ratios
   validateScreenshots();
   if(typeof renderIpadShots === 'function') renderIpadShots();
+  if(typeof renderTablets === 'function') renderTablets();
 
   // Update Editor Screenshot List with Drag & Drop Sorting
   const L = $('slist');
@@ -187,9 +188,9 @@ function validateScreenshots(){
   const hintEl = $('shotHint');
   if(hintEl){
     if(store === 'apple'){
-      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px). PNG or JPEG, no alpha transparency. Drag ⠿ handle to reorder.';
+      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
     } else {
-      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots. PNG or JPEG, up to 8 MB each, 16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px. Drag ⠿ handle to reorder.';
+      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
     }
   }
 

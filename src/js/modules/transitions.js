@@ -190,7 +190,11 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
 
   // Pre-calculate target zoom synchronously so target device NEVER renders unscaled
   const targetZoom = computeDeviceZoom(targetStore, targetDev);
-  if(toEl) toEl.style.zoom = targetZoom;
+  if(toEl) {
+    toEl.style.zoom = targetZoom;
+    toEl.style.setProperty('--dev-zoom', targetZoom);
+  }
+  document.documentElement.style.setProperty('--dev-zoom', targetZoom);
 
   fromEl.classList.add(exitClass);
 

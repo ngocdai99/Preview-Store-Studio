@@ -4,7 +4,7 @@
     <h2><span class="card-num" title="Card 5">5</span><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><circle cx="7.5" cy="9.5" r="1.3" fill="currentColor" stroke="none"></circle><path d="M4 17l5-5 3.5 3.5 4.5-5.5 5 7"></path></svg></i>Tablet Screenshots</h2>
     <div class="card-header-right">
       <span class="tag g">GOOGLE</span>
-      <span class="info-tip-btn" data-tip-title="Tablet Screenshots Guidelines" data-tip-desc="Google Play requires 7-inch and 10-inch screenshots (16:9 or 9:16) up to 8 MB each for tablet store featuring." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151#screenshots" tabindex="0" role="button" aria-label="Tablet Screenshots Guidelines" title="Tablet Screenshots Guidelines">
+      <span class="info-tip-btn" data-tip-title="Tablet Screenshots Guidelines" data-tip-desc="Google Play requires 7-inch and 10-inch screenshots (16:9 or 9:16) up to 8 MB each for tablet store featuring. If empty, tablet store listings and mockups automatically display phone screenshots." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151#screenshots" tabindex="0" role="button" aria-label="Tablet Screenshots Guidelines" title="Tablet Screenshots Guidelines">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
       </span>
       <span class="card-toggle-ico" aria-hidden="true">
@@ -14,12 +14,31 @@
       </span>
     </div>
   </div>
-  <p class="hint">24-bit PNG (no alpha) or JPEG, up to 8 MB (16:9 or 9:16). Recommended: 1920 × 1080 px (satisfies both 7" &amp; 10"). Drag ⠿ to reorder.</p>
+  <p class="hint" style="line-height:1.6;margin-bottom:8px">
+    <strong>Google Play Tablets:</strong> 24-bit PNG (no alpha) or JPEG, up to 8 MB (16:9 or 9:16).<br>
+    • Recommended: 1920 × 1080 px (satisfies both 7" &amp; 10").<br>
+    • Drag ⠿ handle to reorder.
+  </p>
+
+  <div class="shot-fallback-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    <div class="sfn-content">
+      <strong class="sfn-title">Store Standard:</strong>
+      <div class="sfn-desc">If no dedicated tablet screenshots are uploaded, Google Play store listings and preview mockups automatically display your phone screenshots. If empty, tablet mockups display phone screenshots.</div>
+    </div>
+  </div>
 
   <div class="tabsec" data-tab="tab7">
     <div class="tabsec-h"><strong>7-inch tablet screenshots</strong><span class="cc" id="tab7Counter">0 / 8 screenshots</span></div>
     <div class="shot-status-badge" id="tab7Badge" style="display:none"></div>
-    <p class="hint" style="margin:2px 0 4px">Each side between 320 px and 3,840 px.</p>
+    <p class="hint" style="margin:2px 0 6px;line-height:1.5">
+      Each side between 320 px and 3,840 px.<br>
+      If empty, mockup displays phone screenshots.
+    </p>
     <div class="sl" id="tab7List"></div>
     <button class="add" id="tab7Add"><span class="add-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>Upload screenshots</button>
     <input type="file" id="tab7File" accept="image/png,image/jpeg" multiple hidden>
@@ -28,7 +47,10 @@
   <div class="tabsec" data-tab="tab10">
     <div class="tabsec-h"><strong>10-inch tablet screenshots</strong><span class="cc" id="tab10Counter">0 / 8 screenshots</span></div>
     <div class="shot-status-badge" id="tab10Badge" style="display:none"></div>
-    <p class="hint" style="margin:2px 0 4px">Each side between 1,080 px and 7,680 px.</p>
+    <p class="hint" style="margin:2px 0 6px;line-height:1.5">
+      Each side between 1,080 px and 7,680 px.<br>
+      If empty, mockup displays phone screenshots.
+    </p>
     <div class="sl" id="tab10List"></div>
     <button class="add" id="tab10Add"><span class="add-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>Upload screenshots</button>
     <input type="file" id="tab10File" accept="image/png,image/jpeg" multiple hidden>

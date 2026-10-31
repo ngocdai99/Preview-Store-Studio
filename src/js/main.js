@@ -41,14 +41,25 @@ function fit(){
   const sd = $('stageDevices');
   if(sd) sd.style.gap = Math.round(28 * z) + 'px';
 
+  document.documentElement.style.setProperty('--dev-zoom', z);
+
   if(!isDual && store === 'apple' && appleDevice === 'ipad'){
     const ipad = document.querySelector('.dev.ipad');
-    if(ipad) ipad.style.zoom = z;
+    if(ipad) {
+      ipad.style.zoom = z;
+      ipad.style.setProperty('--dev-zoom', z);
+    }
   }else if(!isDual && store === 'google' && googleDevice !== 'phone'){
     const t = $('dev-' + googleDevice);
-    if(t) t.style.zoom = z;
+    if(t) {
+      t.style.zoom = z;
+      t.style.setProperty('--dev-zoom', z);
+    }
   }else{
-    $$('.dev:not(.ipad):not(.gtab)').forEach(d=>d.style.zoom=z);
+    $$('.dev:not(.ipad):not(.gtab)').forEach(d => {
+      d.style.zoom = z;
+      d.style.setProperty('--dev-zoom', z);
+    });
   }
 }
 function setPanel(p){

@@ -212,3 +212,49 @@
 :root[data-ui=light] .shot-dim-tag.warn{background:rgba(245,158,11,.12);color:#d97706;border-color:rgba(245,158,11,.3)}
 :root[data-ui=light] .shot-dim-tag.info{background:rgba(14,165,233,.1);color:#0284c7;border-color:rgba(14,165,233,.3)}
 :root[data-ui=light] .shot-dim-tag.err{background:rgba(239,68,68,.1);color:#dc2626;border-color:rgba(239,68,68,.3)}
+
+/* Tablet & iPad Fallback Explanatory Note */
+.shot-fallback-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--mut);
+  background: var(--p2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 6px 0 10px;
+}
+.shot-fallback-note svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--ac);
+}
+.shot-fallback-note .sfn-content {
+  flex: 1;
+  min-width: 0;
+}
+.shot-fallback-note .sfn-title {
+  display: block;
+  color: var(--tx);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.shot-fallback-note .sfn-desc {
+  color: var(--mut);
+  line-height: 1.45;
+}
+:root[data-ui=light] .shot-fallback-note {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+:root[data-ui=light] .shot-fallback-note .sfn-title {
+  color: #0f172a;
+}
+:root[data-ui=light] .shot-fallback-note .sfn-desc {
+  color: #64748b;
+}

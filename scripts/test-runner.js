@@ -728,7 +728,8 @@ assert(bundledHtml.includes('id="btnCopyText"'), 'Export menu preserves clipboar
 assert(bundledHtml.includes('id="optExportMD"'), 'Export menu preserves Markdown listing export (#optExportMD)');
 assert(bundledHtml.includes('id="optExportJSON"'), 'Export menu preserves Project JSON export (#optExportJSON)');
 assert(bundledHtml.includes('id="optImportJSON"'), 'Export menu preserves Project JSON import (#optImportJSON)');
-assert(bundledHtml.includes('Presentation Mockups'), 'Export dropdown header is clearly labeled Presentation Mockups');
+assert(!bundledHtml.includes('Presentation Mockups'), 'Export dropdown removed cluttering section header titles for clean UI');
+assert(bundledHtml.includes('mi-ico-blue') && bundledHtml.includes('mi-ico-purple') && bundledHtml.includes('mi-ico-amber'), 'Export menu items feature vibrant colored icon badges');
 
 // ---------------------------------------------------------------------
 // SUITE 11: High-Capacity Storage Engine & LocalStorage Quota Exceeded Protection
@@ -1351,6 +1352,8 @@ assert(bundledHtml.includes("$$('#dt [data-d]').forEach(b => b.classList.toggle(
 assert(bundledHtml.includes("devSlug = 'dual-store-phone'"), 'exportPNG supports capturing dual-store-phone comparison image');
 assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes('GOOGLE PLAY &middot; Android'), 'Devices render marketing-style platform header labels (APP STORE · iPhone / GOOGLE PLAY · Android)');
 assert(bundledHtml.includes('.dev-label') && bundledHtml.includes('.dev-title'), 'Stage stylesheet includes .dev-label and .dev-title presentation styling');
+assert(bundledHtml.includes('font-size:calc(13px / var(--dev-zoom, 1))'), '.dev-title uses --dev-zoom invariant font scaling at 13px');
+assert(bundledHtml.includes("document.documentElement.style.setProperty('--dev-zoom', z)"), 'fit() updates --dev-zoom variable on root');
 
 // 11. Marketing-Aligned Placeholder App Icon & Silent Validation in Core Studio
 assert(bundledHtml.includes('id="edTitle">App Identity</span>'), 'Card 1 header uses unified "App Identity" title');
@@ -2159,6 +2162,146 @@ assert(!bundledHtml.includes('data-tip-title="Developer Name Guidelines"'), 'Dev
 expectedTipTitles.forEach(title => {
   assert(bundledHtml.includes(`data-tip-title="${title}"`), `Field/card tooltip with title "${title}" exists in bundled HTML`);
 });
+
+// ---------------------------------------------------------------------
+// SUITE 33: Google Play Tablet Screenshots Fallback Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 33]: Google Play Tablet Screenshots Fallback Verification');
+
+// 1. Structure and HTML verification
+assert(bundledHtml.includes('data-shots="tab7-gal"') && bundledHtml.includes('data-shots="tab10-gal"'), 'Tablet mockup galleries use isolated data-shots attributes');
+assert(bundledHtml.includes('id="galTab7" data-shots="tab7-gal"'), '7-inch tablet gallery has id="galTab7" and isolated data-shots');
+assert(bundledHtml.includes('id="galTab10" data-shots="tab10-gal"'), '10-inch tablet gallery has id="galTab10" and isolated data-shots');
+assert(bundledHtml.includes('If empty, tablet mockups display phone screenshots'), 'Tablet screenshots card hint informs user of automatic phone screenshots fallback');
+assert(bundledHtml.includes('.shot-fallback-note'), 'CSS provides styling for .shot-fallback-note callout box');
+assert(bundledHtml.includes('class="sfn-title">Store Standard:</strong>') && bundledHtml.includes('If no dedicated iPad screenshots are uploaded'), 'iPad card features explicit Store Standard note for iPhone screenshots fallback');
+assert(bundledHtml.includes('class="sfn-title">Store Standard:</strong>') && bundledHtml.includes('If no dedicated tablet screenshots are uploaded'), 'Tablet card features explicit Store Standard note for phone screenshots fallback');
+
+// 2. JS integration verification
+const googleJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'google', 'google.js'), 'utf8');
+const phoneJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'phone.js'), 'utf8');
+
+assert(phoneJsCode.includes("if(typeof renderTablets === 'function') renderTablets();"), 'renderShots triggers renderTablets to synchronize phone screenshots fallback to tablet mockups');
+assert(googleJsCode.includes('hasDedicatedTabShots = valid.length > 0'), 'renderTablets detects presence of dedicated tablet screenshots');
+assert(googleJsCode.includes('const effectiveShots = hasDedicatedTabShots ? valid.map(it => it.src) : phoneShots;'), 'renderTablets resolves effectiveShots falling back to phoneShots when no dedicated tablet screenshots are present');
+
+// 3. Functional behavior simulation in VM sandbox
+const tabSandbox = {
+  console,
+  document: {
+    createElement(tag) {
+      const classes = [];
+      return {
+        tagName: tag.toUpperCase(),
+        className: '',
+        classList: {
+          add(c) { if (!classes.includes(c)) classes.push(c); },
+          remove(c) { const i = classes.indexOf(c); if (i !== -1) classes.splice(i, 1); },
+          contains(c) { return classes.includes(c); }
+        },
+        _children: [],
+        get children() {
+          if (!this._children.length && this._innerHTML) {
+            return [
+              tabSandbox.document.createElement('button'),
+              tabSandbox.document.createElement('button')
+            ];
+          }
+          return this._children;
+        },
+        set children(v) { this._children = v; },
+        appendChild(child) { this._children.push(child); return child; },
+        append(...args) { this._children.push(...args); },
+        addEventListener() {},
+        setAttribute(k, v) { this[k] = v; },
+        set innerHTML(v) { this._innerHTML = v; },
+        get innerHTML() { return this._innerHTML || ''; },
+        textContent: '',
+        style: {}
+      };
+    }
+  },
+  elements: {
+    tab7Counter: { textContent: '', className: '' },
+    tab7Badge: { style: {}, className: '', innerHTML: '' },
+    tab7List: { innerHTML: '', children: [], appendChild(c) { this.children.push(c); } },
+    galTab7: {
+      _innerHTML: '',
+      children: [],
+      set innerHTML(v) { this._innerHTML = v; if (!v) this.children = []; },
+      get innerHTML() { return this._innerHTML; },
+      appendChild(c) { this.children.push(c); return c; }
+    },
+    srchTab7: {
+      _innerHTML: '',
+      children: [],
+      set innerHTML(v) { this._innerHTML = v; if (!v) this.children = []; },
+      get innerHTML() { return this._innerHTML; },
+      appendChild(c) { this.children.push(c); return c; }
+    },
+    tab10Counter: { textContent: '', className: '' },
+    tab10Badge: { style: {}, className: '', innerHTML: '' },
+    tab10List: { innerHTML: '', children: [], appendChild(c) { this.children.push(c); } },
+    galTab10: {
+      _innerHTML: '',
+      children: [],
+      set innerHTML(v) { this._innerHTML = v; if (!v) this.children = []; },
+      get innerHTML() { return this._innerHTML; },
+      appendChild(c) { this.children.push(c); return c; }
+    }
+  },
+  $(id) { return tabSandbox.elements[id] || null; },
+  $$(sel) { return []; },
+  mk(src, alt = '') {
+    const el = tabSandbox.document.createElement('img');
+    el.src = src;
+    el.alt = alt;
+    return el;
+  },
+  tabPlaceholder(key, orient, n) {
+    return `data:image/svg+xml;placeholder-${key}-${orient}-${n}`;
+  },
+  ratioLabel(w, h) { return '16:9'; },
+  ICO_UPLOAD: '',
+  ICO_INSPECT: '',
+  tabIssues() { return []; },
+  MAX_TAB: 8,
+  TAB_CFG: {
+    tab7:  {name:'7-inch',  min:320,  max:3840, list:'tab7List',  counter:'tab7Counter',  badge:'tab7Badge',  file:'tab7File',  add:'tab7Add',  gal:'galTab7',  dev:'dev-tab7'},
+    tab10: {name:'10-inch', min:1080, max:7680, list:'tab10List', counter:'tab10Counter', badge:'tab10Badge', file:'tab10File', add:'tab10Add', gal:'galTab10', dev:'dev-tab10'}
+  },
+  tabOrient: { tab7: 'landscape', tab10: 'landscape' },
+  TABS: { tab7: [], tab10: [] },
+  SHOTS: ['data:image/png;base64,phone1', 'data:image/png;base64,phone2', 'data:image/png;base64,phone3']
+};
+
+vm.createContext(tabSandbox);
+const renderTabletsSnippet = googleJsCode.slice(googleJsCode.indexOf('function renderTablets()'), googleJsCode.indexOf('function addTabFiles'));
+vm.runInContext(renderTabletsSnippet + '\nglobalThis.renderTablets = renderTablets;', tabSandbox);
+
+// Case 1: No dedicated tablet screenshots, phone screenshots present
+tabSandbox.renderTablets();
+assert(tabSandbox.elements.galTab7.children.length === 3, '7-inch tablet gallery renders 3 fallback phone screenshots when no dedicated tablet screenshots are uploaded');
+assert(tabSandbox.elements.galTab7.children[0].src === 'data:image/png;base64,phone1', '7-inch tablet gallery displays phone screenshot #1');
+assert(tabSandbox.elements.galTab7.children[0].classList.contains('tab-fallback-shot'), 'Fallback screenshot has tab-fallback-shot class applied');
+assert(tabSandbox.elements.galTab10.children.length === 3, '10-inch tablet gallery renders 3 fallback phone screenshots');
+
+// Case 2: Dedicated tablet screenshot uploaded for 7-inch tablet
+tabSandbox.TABS.tab7 = [{ src: 'data:image/png;base64,tab7_custom1', meta: { w: 1920, h: 1080 } }];
+tabSandbox.elements.galTab7.children = [];
+tabSandbox.renderTablets();
+assert(tabSandbox.elements.galTab7.children.length === 1, '7-inch tablet gallery prioritizes dedicated tablet screenshot over phone screenshots');
+assert(tabSandbox.elements.galTab7.children[0].src === 'data:image/png;base64,tab7_custom1', '7-inch tablet gallery displays dedicated screenshot');
+assert(!tabSandbox.elements.galTab7.children[0].classList.contains('tab-fallback-shot'), 'Dedicated screenshot does not have tab-fallback-shot class');
+assert(tabSandbox.elements.galTab10.children.length === 3, '10-inch tablet still uses phone fallback while empty');
+
+// Case 3: Both dedicated and phone screenshots are empty -> renders placeholders
+tabSandbox.TABS.tab7 = [];
+tabSandbox.SHOTS = [];
+tabSandbox.elements.galTab7.children = [];
+tabSandbox.renderTablets();
+assert(tabSandbox.elements.galTab7.children.length === 3, 'Renders 3 placeholders only when neither dedicated nor phone screenshots exist');
+assert(tabSandbox.elements.galTab7.children[0].src.includes('placeholder-tab7'), 'Placeholder SVG is used as fallback when completely empty');
 
 // ---------------------------------------------------------------------
 // Summary Report
