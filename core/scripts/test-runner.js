@@ -2047,6 +2047,10 @@ assert(bundledHtml.includes('.card.selected:not(.collapsed) .card-ico'), 'CSS re
 assert(!bundledHtml.includes('card-ico c-blue') && !bundledHtml.includes('card-ico c-purple'), 'Multi-color rainbow classes (c-blue, c-purple, etc.) are eliminated from card icons');
 assert(!bundledHtml.includes('#tabCard h2{') && !bundledHtml.includes('#tabCard h2 i{'), 'Card 5 (tabCard) inherits standard .card-header h2 and .card-ico alignment without anomalous overrides');
 
+// 4. Stable Scrollbar Gutter to prevent Form Width Layout Shift on Card Expand
+assert(bundledHtml.includes('scrollbar-gutter:stable') || bundledHtml.includes('scrollbar-gutter: stable'), 'Editor form container applies scrollbar-gutter: stable to prevent layout shift upon expanding cards');
+assert(bundledHtml.includes('.editor::-webkit-scrollbar'), 'CSS provides custom floating scrollbar styles for editor drawer');
+
 // 3. CSS rules for collapsed cards and headers
 assert(bundledHtml.includes('.card.collapsed > :not(.card-header)'), 'CSS hides all content outside .card-header when card is collapsed');
 assert(bundledHtml.includes('.card-header') && bundledHtml.includes('.card-toggle-ico'), 'CSS styles .card-header and .card-toggle-ico');
