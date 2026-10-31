@@ -131,9 +131,9 @@ body.sidebar-collapsed .editor-resizer{
 }
 
 .card.collapsed:hover {
-  background: rgba(139, 92, 246, 0.08);
-  border-color: rgba(139, 92, 246, 0.28);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
 }
 .card h2 i{
   width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;flex-shrink:0;
