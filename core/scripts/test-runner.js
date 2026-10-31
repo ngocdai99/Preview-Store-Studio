@@ -1912,6 +1912,8 @@ console.log('\n[SUITE 25]: iPad Screenshots Header & Clean Validation Notice');
 const ipadCardHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'ipad-screenshots-card.html'), 'utf8');
 assert(ipadCardHtml.includes('iPad Screenshots</h2>'), 'Card 5B title is streamlined to "iPad Screenshots" to prevent header line breaks');
 assert(!ipadCardHtml.includes('iPad Screenshots (13" Pro)</h2>'), 'Card 5B does not contain wrapped (13" Pro) subtitle in h2');
+assert(ipadCardHtml.includes('<span class="tag a">APPLE</span>'), 'Card 5B (iPad Screenshots) header includes APPLE store tag in header right for symmetry');
+assert(ipadCardHtml.indexOf('class="tag a"') < ipadCardHtml.indexOf('class="info-tip-btn"'), 'Card 5B header places APPLE store tag before info button');
 assert(ipadCardHtml.includes('<strong>iPad Pro 13" (4:3 ratio):</strong>'), 'Card 5B hint retains iPad Pro 13" and 4:3 ratio');
 assert(ipadCardHtml.includes('2048×2732 px') && ipadCardHtml.includes('2064×2752 px'), 'Card 5B hint retains essential Apple resolutions (2048×2732 px, 2064×2752 px)');
 
