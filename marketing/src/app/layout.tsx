@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -35,8 +36,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full scroll-smooth dark" data-theme="dark" suppressHydrationWarning>
-      <head>
-        <script
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased transition-colors duration-200">
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               try {
@@ -56,8 +59,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased transition-colors duration-200">
         {children}
       </body>
     </html>
