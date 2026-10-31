@@ -24,10 +24,10 @@
   flex-shrink:0;position:relative;overflow:hidden;
   transition:border-color .22s ease, color .22s ease, box-shadow .22s ease;
   -webkit-tap-highlight-color:transparent;
-  background:rgba(139,92,246,0.16)!important;
-  border:1px solid rgba(139,92,246,0.28)!important;
-  color:#ffffff!important;
-  box-shadow:none!important;
+  background:rgba(139,92,246,0.16);
+  border:1px solid rgba(139,92,246,0.28);
+  color:#c084fc;
+  box-shadow:none;
 }
 .card-ico::before{
   content:'';position:absolute;inset:0;
@@ -50,6 +50,55 @@
 .card.selected:not(.collapsed) .card-ico::before{
   opacity:1;
 }
+
+/* Card Semantic Icon Chips & Focus Glows (Dark Mode / Obsidian Linear) */
+/* Card 1: App Identity (Apple Blue) */
+#identityCard .card-ico{background:rgba(59,130,246,0.16);border-color:rgba(59,130,246,0.32);color:#60a5fa}
+#identityCard .card-ico::before{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+#identityCard.selected:not(.collapsed){border-color:rgba(59,130,246,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(59,130,246,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#identityCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(37,99,235,0.45)!important}
+
+/* Card 2: Description & Release Notes (Radiant Purple) */
+#contentCard .card-ico{background:rgba(168,85,247,0.16);border-color:rgba(168,85,247,0.32);color:#c084fc}
+#contentCard .card-ico::before{background:linear-gradient(135deg,#a855f7,#7c3aed)}
+#contentCard.selected:not(.collapsed){border-color:rgba(168,85,247,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(168,85,247,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#contentCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(124,58,237,0.45)!important}
+
+/* Card 3: Phone Screenshots (Rose Coral) */
+#shotsCard .card-ico{background:rgba(244,63,94,0.16);border-color:rgba(244,63,94,0.32);color:#fb7185}
+#shotsCard .card-ico::before{background:linear-gradient(135deg,#f43f5e,#e11d48)}
+#shotsCard.selected:not(.collapsed){border-color:rgba(244,63,94,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(244,63,94,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#shotsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(225,29,72,0.45)!important}
+
+/* Card 4: Settings & Metrics (Emerald Mint) */
+#statsCard .card-ico{background:rgba(16,185,129,0.16);border-color:rgba(16,185,129,0.32);color:#34d399}
+#statsCard .card-ico::before{background:linear-gradient(135deg,#10b981,#059669)}
+#statsCard.selected:not(.collapsed){border-color:rgba(16,185,129,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(16,185,129,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#statsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(5,150,105,0.45)!important}
+
+/* Card 5: Tablet / iPad Screenshots (Sky Cyan) */
+#ipadCard .card-ico, #tabCard .card-ico{background:rgba(14,165,233,0.16);border-color:rgba(14,165,233,0.32);color:#38bdf8}
+#ipadCard .card-ico::before, #tabCard .card-ico::before{background:linear-gradient(135deg,#0ea5e9,#0284c7)}
+#ipadCard.selected:not(.collapsed), #tabCard.selected:not(.collapsed){border-color:rgba(14,165,233,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(14,165,233,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#ipadCard.selected:not(.collapsed) .card-ico, #tabCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(2,132,199,0.45)!important}
+
+/* Card 6 (Google): Feature Graphic (Sunset Orange) */
+#featureCard .card-ico{background:rgba(249,115,22,0.16);border-color:rgba(249,115,22,0.32);color:#fb923c}
+#featureCard .card-ico::before{background:linear-gradient(135deg,#f97316,#ea580c)}
+#featureCard.selected:not(.collapsed){border-color:rgba(249,115,22,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(249,115,22,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#featureCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(234,88,12,0.45)!important}
+
+/* Card 6 (Apple) / Card 8 (Google): App Privacy & Data Safety (Security Indigo) */
+#privacyCard .card-ico{background:rgba(99,102,241,0.16);border-color:rgba(99,102,241,0.32);color:#818cf8}
+#privacyCard .card-ico::before{background:linear-gradient(135deg,#6366f1,#4f46e5)}
+#privacyCard.selected:not(.collapsed){border-color:rgba(99,102,241,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(99,102,241,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#privacyCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(79,70,229,0.45)!important}
+
+/* Card 7 (Google): App Support (Warm Amber) */
+#supportCard .card-ico{background:rgba(245,158,11,0.16);border-color:rgba(245,158,11,0.32);color:#fbbf24}
+#supportCard .card-ico::before{background:linear-gradient(135deg,#f59e0b,#d97706)}
+#supportCard.selected:not(.collapsed){border-color:rgba(245,158,11,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(245,158,11,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
+#supportCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(217,119,6,0.45)!important}
 
 /* Form Action Button Icons */
 .btn-mini-ico{display:inline-flex;align-items:center;justify-content:center;margin-right:0;vertical-align:-1px;flex-shrink:0}
@@ -295,10 +344,10 @@
   :root[data-ui=light] .card-ico,
   :root[data-ui=light] .card.collapsed .card-ico,
   :root[data-ui=light] .card:not(.collapsed) .card-ico{
-    background:rgba(124,58,237,0.1)!important;
-    border:1px solid rgba(124,58,237,0.2)!important;
-    color:#7c3aed!important;
-    box-shadow:none!important;
+    background:rgba(124,58,237,0.08);
+    border:1px solid rgba(124,58,237,0.2);
+    color:#7c3aed;
+    box-shadow:none;
     -webkit-tap-highlight-color:transparent;
   }
   :root[data-ui=light] .card-ico::before{
@@ -314,6 +363,55 @@
   :root[data-ui=light] .card.selected:not(.collapsed) .card-ico::before{
     opacity:1;
   }
+
+  /* Card Semantic Icon Chips & Tactile Focus in Light Mode */
+  /* Card 1: App Identity (Apple Blue) */
+  :root[data-ui=light] #identityCard .card-ico{background:rgba(37,99,235,0.08);border-color:rgba(37,99,235,0.2);color:#2563eb}
+  :root[data-ui=light] #identityCard .card-ico::before{background:linear-gradient(135deg,#0071e3,#2563eb)}
+  :root[data-ui=light] #identityCard.selected:not(.collapsed){border-color:rgba(0,113,227,0.45)!important;box-shadow:0 4px 16px -2px rgba(0,113,227,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #identityCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(0,113,227,0.35)!important}
+
+  /* Card 2: Description & Release Notes (Radiant Purple) */
+  :root[data-ui=light] #contentCard .card-ico{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.2);color:#7c3aed}
+  :root[data-ui=light] #contentCard .card-ico::before{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+  :root[data-ui=light] #contentCard.selected:not(.collapsed){border-color:rgba(124,58,237,0.45)!important;box-shadow:0 4px 16px -2px rgba(124,58,237,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #contentCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(124,58,237,0.35)!important}
+
+  /* Card 3: Phone Screenshots (Rose Coral) */
+  :root[data-ui=light] #shotsCard .card-ico{background:rgba(225,29,72,0.08);border-color:rgba(225,29,72,0.2);color:#e11d48}
+  :root[data-ui=light] #shotsCard .card-ico::before{background:linear-gradient(135deg,#f43f5e,#e11d48)}
+  :root[data-ui=light] #shotsCard.selected:not(.collapsed){border-color:rgba(225,29,72,0.45)!important;box-shadow:0 4px 16px -2px rgba(225,29,72,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #shotsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(225,29,72,0.35)!important}
+
+  /* Card 4: Settings & Metrics (Emerald Mint) */
+  :root[data-ui=light] #statsCard .card-ico{background:rgba(5,150,105,0.08);border-color:rgba(5,150,105,0.2);color:#059669}
+  :root[data-ui=light] #statsCard .card-ico::before{background:linear-gradient(135deg,#10b981,#059669)}
+  :root[data-ui=light] #statsCard.selected:not(.collapsed){border-color:rgba(5,150,105,0.45)!important;box-shadow:0 4px 16px -2px rgba(5,150,105,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #statsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(5,150,105,0.35)!important}
+
+  /* Card 5: Tablet / iPad Screenshots (Sky Cyan) */
+  :root[data-ui=light] #ipadCard .card-ico, :root[data-ui=light] #tabCard .card-ico{background:rgba(2,132,199,0.08);border-color:rgba(2,132,199,0.2);color:#0284c7}
+  :root[data-ui=light] #ipadCard .card-ico::before, :root[data-ui=light] #tabCard .card-ico::before{background:linear-gradient(135deg,#0ea5e9,#0284c7)}
+  :root[data-ui=light] #ipadCard.selected:not(.collapsed), :root[data-ui=light] #tabCard.selected:not(.collapsed){border-color:rgba(2,132,199,0.45)!important;box-shadow:0 4px 16px -2px rgba(2,132,199,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #ipadCard.selected:not(.collapsed) .card-ico, :root[data-ui=light] #tabCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(2,132,199,0.35)!important}
+
+  /* Card 6 (Google): Feature Graphic (Sunset Orange) */
+  :root[data-ui=light] #featureCard .card-ico{background:rgba(234,88,12,0.08);border-color:rgba(234,88,12,0.2);color:#ea580c}
+  :root[data-ui=light] #featureCard .card-ico::before{background:linear-gradient(135deg,#f97316,#ea580c)}
+  :root[data-ui=light] #featureCard.selected:not(.collapsed){border-color:rgba(234,88,12,0.45)!important;box-shadow:0 4px 16px -2px rgba(234,88,12,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #featureCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(234,88,12,0.35)!important}
+
+  /* Card 6 (Apple) / Card 8 (Google): App Privacy & Data Safety (Security Indigo) */
+  :root[data-ui=light] #privacyCard .card-ico{background:rgba(79,70,229,0.08);border-color:rgba(79,70,229,0.2);color:#4f46e5}
+  :root[data-ui=light] #privacyCard .card-ico::before{background:linear-gradient(135deg,#6366f1,#4f46e5)}
+  :root[data-ui=light] #privacyCard.selected:not(.collapsed){border-color:rgba(79,70,229,0.45)!important;box-shadow:0 4px 16px -2px rgba(79,70,229,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #privacyCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(79,70,229,0.35)!important}
+
+  /* Card 7 (Google): App Support (Warm Amber) */
+  :root[data-ui=light] #supportCard .card-ico{background:rgba(217,119,6,0.08);border-color:rgba(217,119,6,0.2);color:#d97706}
+  :root[data-ui=light] #supportCard .card-ico::before{background:linear-gradient(135deg,#f59e0b,#d97706)}
+  :root[data-ui=light] #supportCard.selected:not(.collapsed){border-color:rgba(217,119,6,0.45)!important;box-shadow:0 4px 16px -2px rgba(217,119,6,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
+  :root[data-ui=light] #supportCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(217,119,6,0.35)!important}
 
   /* Collapsed Card Hover in Light Mode (Pure White + Crisp Tactile Elevation) */
   :root[data-ui=light] .card.collapsed:hover{
