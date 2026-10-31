@@ -10707,7 +10707,7 @@ async function handleStoreImportSubmit(confirmed = false) {
   const submitBtn = $('storeImportSubmit');
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Fetching...';
+    submitBtn.textContent = 'Cloning...';
   }
 
   setStoreImportStatus('info', 'Connecting to Apple App Store API...');
@@ -10725,7 +10725,7 @@ async function handleStoreImportSubmit(confirmed = false) {
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Import App';
+      submitBtn.textContent = 'Clone App';
     }
   }
 }
