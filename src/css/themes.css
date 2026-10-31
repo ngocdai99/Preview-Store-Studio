@@ -44,12 +44,12 @@ body[data-store=google] .card.collapsed .card-ico{
   transform:scale(1.04);
 }
 
-/* Selected State: Expanded / Active Card (Màu đậm) */
+/* Selected State: Expanded / Active Card (Màu khác biệt - Tím Indigo Violet) */
 .card:not(.collapsed) .card-ico{
-  background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
-  border:1px solid rgba(255,255,255,0.25)!important;
+  background:linear-gradient(135deg,#8b5cf6,#6366f1)!important;
+  border:1px solid rgba(255,255,255,0.28)!important;
   color:#ffffff!important;
-  box-shadow:0 4px 14px var(--glow)!important;
+  box-shadow:0 4px 14px rgba(139,92,246,0.42)!important;
 }
 
 /* Form Action Button Icons */
@@ -297,10 +297,10 @@ body[data-store=google] .card.collapsed .card-ico{
   }
 
   :root[data-ui=light] .card:not(.collapsed) .card-ico{
-    background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
+    background:linear-gradient(135deg,#7c3aed,#6366f1)!important;
     border:none!important;
     color:#ffffff!important;
-    box-shadow:0 4px 12px var(--glow)!important;
+    box-shadow:0 4px 12px rgba(124,58,237,0.32)!important;
   }
 
   /* Form Upload and Action Buttons in Light Mode with Soft Elevation */
