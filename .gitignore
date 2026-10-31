@@ -1,0 +1,41 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Env & Logs
+.env*.local
+*.log
+npm-debug.log*
+
+# Core app ignored build artifacts
+core/dist/
+core/core.html
+core/core.min.html
+core/store_preview_studio.html
+core/store_preview_studio.min.html
+core/store-preview-studio-*.zip
+core/store-preview-studio-*/
+core/docs/
+core/cloudflare/
+core/package/
+core/.agents/
+core/.wrangler/
+core/*.xlsx
+core/marketing*.html
+core/og-image.png
+core/GUMROAD_LISTING.md
+core/MARKETING_PLAYBOOK.md
+core/gumroad-assets.html
+core/gumroad-*
+core/start_marketing.command
