@@ -87,6 +87,7 @@ body.sidebar-collapsed .editor-resizer{
   gap: 8px;
   cursor: pointer;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
   min-height: 28px;
   transition: opacity 0.15s ease;
 }
