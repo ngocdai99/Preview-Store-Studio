@@ -2175,6 +2175,24 @@ assert(!bundledHtml.includes('edit-device-availability'), 'Broken edit-device-av
 assert(!bundledHtml.includes('data-tip-title="App Version Guidelines" data-tip-desc="The current release version number of your app (e.g. 2.4.0), displayed on the App Store product page." data-tip-apple-link'), 'Broken Learn more link removed from App Version tooltip');
 assert(!bundledHtml.includes('data-tip-title="Release Date Guidelines" data-tip-desc="The publication date of the current version, displayed on the App Store next to the version number." data-tip-apple-link'), 'Broken Learn more link removed from Release Date tooltip');
 
+// Verify App Support & Content card tooltips have no misleading Google Learn more links
+assert(!bundledHtml.includes('data-tip-title="App Support Guidelines" data-tip-desc="Public contact and developer support information displayed on your Google Play Store listing so users and European regulators can reach you." data-tip-google-link'), 'App Support tooltip does not contain irrelevant graphic assets Learn more link');
+assert(!bundledHtml.includes('data-tip-title="Support Email Guidelines" data-tip-desc="Public contact email displayed on your Google Play Store listing so users can reach you for customer support." data-tip-google-link'), 'Support Email tooltip does not contain irrelevant Learn more link');
+assert(!bundledHtml.includes('data-tip-title="Support Phone Guidelines" data-tip-desc="Direct support phone number displayed on your Google Play Store listing, required by merchant verification policies." data-tip-google-link'), 'Support Phone tooltip does not contain irrelevant Learn more link');
+assert(!bundledHtml.includes('data-tip-title="Developer Location Guidelines" data-tip-desc="Physical developer address displayed on Google Play, required by European consumer protection laws and Google policy." data-tip-google-link'), 'Developer Location tooltip does not contain irrelevant Learn more link');
+assert(!bundledHtml.includes('data-tip-title="Content &amp; Updates Guidelines" data-tip-desc="Detailed promotional content, release update notes, and SEO/ASO descriptions for store search indexing." data-tip-apple-link="https://developer.apple.com/app-store/product-page/" data-tip-google-link'), 'Content card header tooltip does not contain irrelevant Google Learn more link');
+
+// Verify What\'s New and Description popovers only display Learn more link for Apple (hidden on Google)
+const whatsNewIdx = bundledHtml.indexOf('id="whatsNewInfoPop"');
+const whatsNewSnippet = bundledHtml.slice(whatsNewIdx, whatsNewIdx + 2500);
+assert(whatsNewSnippet.includes('<div class="info-pop-footer" data-only="apple">'), 'whatsNewInfoPop footer is restricted to Apple mode via data-only="apple"');
+assert(!whatsNewSnippet.includes('data-only="google"'), 'whatsNewInfoPop does not contain Google Learn more link');
+
+const descPopIdx = bundledHtml.indexOf('id="descInfoPop"');
+const descPopSnippet = bundledHtml.slice(descPopIdx, descPopIdx + 2500);
+assert(descPopSnippet.includes('<div class="info-pop-footer" data-only="apple">'), 'descInfoPop footer is restricted to Apple mode via data-only="apple"');
+assert(!descPopSnippet.includes('data-only="google"'), 'descInfoPop does not contain Google Learn more link');
+
 // ---------------------------------------------------------------------
 // SUITE 33: Google Play Tablet Screenshots Fallback Verification
 // ---------------------------------------------------------------------
