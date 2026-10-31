@@ -38,6 +38,10 @@
 .card-ico svg{width:15px;height:15px;stroke-width:2.2;position:relative;z-index:1}
 
 /* Selected State: Card must be BOTH Selected and Expanded */
+.card.selected:not(.collapsed){
+  border-color:rgba(139,92,246,0.42)!important;
+  box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(139,92,246,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important;
+}
 .card.selected:not(.collapsed) .card-ico{
   border:1px solid rgba(255,255,255,0.28)!important;
   color:#ffffff!important;
@@ -375,12 +379,18 @@
 
 /* Category dropdowns (per store) */
 select.fsel{
-  width:100%;min-width:0;box-sizing:border-box;text-overflow:ellipsis;background:#0a101d;border:1px solid var(--line);border-radius:11px;padding:9px 32px 9px 12px;color:#fff;
+  width:100%;min-width:0;box-sizing:border-box;text-overflow:ellipsis;background:#090b10;border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:9px 32px 9px 12px;color:#f8fafc;
   font-family:inherit;font-size:13px;line-height:1.55;cursor:pointer;appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238593b2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-  background-repeat:no-repeat;background-position:right 12px center;transition:border-color .25s,box-shadow .25s;
+  background-repeat:no-repeat;background-position:right 12px center;transition:border-color .25s,box-shadow .25s,background .25s;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,0.3);
 }
-select.fsel:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px var(--glow)}
+select.fsel:focus{
+  outline:0;
+  border-color:rgba(139,92,246,0.55);
+  box-shadow:0 0 0 3px rgba(139,92,246,0.18), inset 0 1px 2px rgba(0,0,0,0.2);
+  background:#0d1017;
+}
 select.fsel option,select.fsel optgroup{background:#fff;color:#111}
 body[data-store=apple] #f-cat-google{display:none}
 body[data-store=google] #f-cat-apple{display:none}
