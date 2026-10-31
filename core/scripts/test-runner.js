@@ -1918,6 +1918,9 @@ assert(!ipadJsCode.includes('Universal App Notice:'), 'validateIpadScreenshots n
 assert(ipadJsCode.includes('(isExactIpad || is3to4)'), 'validateIpadScreenshots accepts both exact iPad Pro 13" and standard 4:3 iPad ratios as compliant');
 assert(!ipadJsCode.includes('not exact iPad Pro 13"'), 'validateIpadScreenshots warning focuses on non-standard ratios without falsely flagging 4:3 iPad screenshots');
 assert(bundledHtml.includes('MAX_UPLOAD_BYTES = 8 * 1024 * 1024') && bundledHtml.includes('validateUploadFile'), 'utils.js exports MAX_UPLOAD_BYTES (8 MB) and validateUploadFile helper to protect IndexedDB');
+assert(bundledHtml.includes('const PH_IPAD = makeSvgDataUri(') && bundledHtml.includes('const PH_TAB = makeSvgDataUri('), 'Bundled application defines dedicated vector placeholders for iPad (PH_IPAD) and Tablet (PH_TAB)');
+assert(!bundledHtml.includes('Image Not Found'), 'Tacky emoji and "Image Not Found" text are permanently eliminated from application bundle');
+assert(bundledHtml.includes('Empty Slot · Ready to Upload'), 'Modal Inspector cleanly handles empty slot placeholders without false dimension notices');
 
 // ---------------------------------------------------------------------
 // SUITE 26: Customize Metrics Focus Highlight & Linking Verification

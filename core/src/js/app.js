@@ -141,8 +141,10 @@ function ensureSvgDimensions(uri){
       if(vb){
         let w = Math.round(parseFloat(vb[1]));
         let h = Math.round(parseFloat(vb[2]));
-        if(w === 460 && h === 996){ w = 1080; h = 2340; }
+        if(w === 460 && h === 996){ w = 1290; h = 2796; }
         else if(w === 1024 && h === 500){ w = 1024; h = 500; }
+        else if(w === 2048 && h === 2732){ w = 2048; h = 2732; }
+        else if(w === 2560 && h === 1600){ w = 2560; h = 1600; }
         const fixed = raw.replace(/<svg\b([^>]*)>/i, `<svg$1 width="${w}" height="${h}">`);
         return 'data:image/svg+xml;utf8,' + encodeURIComponent(fixed.replace(/\s+/g,' '));
       }
@@ -1261,13 +1263,92 @@ const SHOT_4 = makeSvgDataUri(`
 </svg>
 `);
 
-// Fallback placeholder image for broken external links
+// Fallback placeholder images for empty screenshot slots & offline previews
 const PH = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e293b"/><stop offset="1" stop-color="#0f172a"/></linearGradient></defs>
-  <rect width="460" height="996" fill="url(#g)"/>
-  <text x="230" y="480" font-family="sans-serif" font-size="64" text-anchor="middle" fill="#64748b">🖼</text>
-  <text x="230" y="540" font-family="sans-serif" font-size="24" text-anchor="middle" fill="#94a3b8">Image Not Found</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 2796" width="1290" height="2796">
+  <defs>
+    <linearGradient id="ph_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#070d1a"/>
+    </linearGradient>
+    <linearGradient id="ph_glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1290" height="2796" fill="url(#ph_bg)"/>
+  <rect x="50" y="50" width="1190" height="2696" rx="84" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+  <rect x="495" y="95" width="300" height="80" rx="40" fill="#030712" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <g transform="translate(645, 1280)">
+    <circle cx="0" cy="0" r="140" fill="rgba(99,102,241,0.07)" stroke="rgba(99,102,241,0.2)" stroke-width="3"/>
+    <rect x="-60" y="-45" width="120" height="90" rx="16" fill="none" stroke="url(#ph_glow)" stroke-width="7"/>
+    <circle cx="-25" cy="-18" r="12" fill="url(#ph_glow)"/>
+    <path d="M-55 35 L-15 -5 L20 30 L40 10 L55 35" fill="none" stroke="url(#ph_glow)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="50" cy="35" r="28" fill="#6366f1"/>
+    <path d="M50 22 L50 48 M37 35 L63 35" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+    <text x="0" y="210" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="52" font-weight="700" fill="#f8fafc" text-anchor="middle" letter-spacing="-0.5">No Screenshot Uploaded</text>
+    <text x="0" y="275" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="34" font-weight="500" fill="#94a3b8" text-anchor="middle">iPhone 6.9&quot; Target: 1290 × 2796 px</text>
+    <text x="0" y="335" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="28" font-weight="400" fill="#64748b" text-anchor="middle">PNG or JPEG · Max 8 MB · Drag &amp; drop to upload</text>
+  </g>
+</svg>
+`);
+
+const PH_IPAD = makeSvgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2732" width="2048" height="2732">
+  <defs>
+    <linearGradient id="ph_ipad_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#070d1a"/>
+    </linearGradient>
+    <linearGradient id="ph_ipad_glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="2048" height="2732" fill="url(#ph_ipad_bg)"/>
+  <rect x="65" y="65" width="1918" height="2602" rx="72" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+  <circle cx="1024" cy="115" r="10" fill="rgba(255,255,255,0.15)"/>
+  <g transform="translate(1024, 1260)">
+    <circle cx="0" cy="0" r="180" fill="rgba(139,92,246,0.07)" stroke="rgba(139,92,246,0.2)" stroke-width="3"/>
+    <rect x="-80" y="-105" width="160" height="210" rx="20" fill="none" stroke="url(#ph_ipad_glow)" stroke-width="7"/>
+    <circle cx="0" cy="-88" r="5" fill="url(#ph_ipad_glow)"/>
+    <line x1="-30" y1="88" x2="30" y2="88" stroke="url(#ph_ipad_glow)" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="65" cy="80" r="34" fill="#8b5cf6"/>
+    <path d="M65 64 L65 96 M49 80 L81 80" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+    <text x="0" y="240" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="64" font-weight="700" fill="#f8fafc" text-anchor="middle" letter-spacing="-0.5">No iPad Screenshot Uploaded</text>
+    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#94a3b8" text-anchor="middle">iPad Pro 13&quot; Target: 2048 × 2732 px (3:4 Ratio)</text>
+    <text x="0" y="385" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="32" font-weight="400" fill="#64748b" text-anchor="middle">PNG or JPEG · Up to 8 MB · Supports Landscape &amp; Portrait</text>
+  </g>
+</svg>
+`);
+
+const PH_TAB = makeSvgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1600" width="2560" height="1600">
+  <defs>
+    <linearGradient id="ph_tab_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#070d1a"/>
+    </linearGradient>
+    <linearGradient id="ph_tab_glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="2560" height="1600" fill="url(#ph_tab_bg)"/>
+  <rect x="60" y="60" width="2440" height="1480" rx="60" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+  <g transform="translate(1280, 750)">
+    <circle cx="0" cy="0" r="160" fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.2)" stroke-width="3"/>
+    <rect x="-100" y="-65" width="200" height="130" rx="16" fill="none" stroke="url(#ph_tab_glow)" stroke-width="7"/>
+    <circle cx="85" cy="0" r="5" fill="url(#ph_tab_glow)"/>
+    <circle cx="75" cy="50" r="30" fill="#10b981"/>
+    <path d="M75 36 L75 64 M61 50 L89 50" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+    <text x="0" y="220" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="56" font-weight="700" fill="#f8fafc" text-anchor="middle">No Tablet Screenshot Uploaded</text>
+    <text x="0" y="295" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="34" font-weight="500" fill="#94a3b8" text-anchor="middle">Google Play Target: 16:10 or 16:9 Landscape · Up to 8 MB</text>
+    <text x="0" y="355" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="28" font-weight="400" fill="#64748b" text-anchor="middle">If empty, tablet mockups automatically display phone screenshots</text>
+  </g>
 </svg>
 `);
 
@@ -4053,7 +4134,7 @@ function renderIpadShots(){
         c.appendChild(sk);
       }
     } else {
-      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH), 'Result ' + (i + 1))));
     }
   });
 
@@ -4084,13 +4165,13 @@ function renderIpadSlist(){
     const thumbWrap = document.createElement('div');
     thumbWrap.className = 'shot-thumb-wrap';
 
-    const thumb = mk(s || PH);
+    const thumb = mk(s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH));
     thumb.style.cursor = 'pointer';
     thumb.title = 'Click to inspect & view details';
     thumb.onclick = () => {
       if(typeof openImageDetailModal === 'function'){
         openImageDetailModal({
-          src: s || PH,
+          src: s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH),
           type: 'ipad',
           store: 'apple',
           index: i,
@@ -4142,7 +4223,7 @@ function renderIpadSlist(){
     inspectBtn.onclick = () => {
       if(typeof openImageDetailModal === 'function'){
         openImageDetailModal({
-          src: s || PH,
+          src: s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH),
           type: 'ipad',
           store: 'apple',
           index: i,
@@ -4601,13 +4682,51 @@ if(ipadShotFile){
     const badgeEl = $('msIconModalBadge') || $('imageDetailModalBadge');
     const msgEl = $('msIconModalMsg') || $('imageDetailModalMsg');
 
-    if (!src) {
-      if (dimEl) dimEl.textContent = '--';
-      if (ratioEl) ratioEl.textContent = '--';
-      if (sizeEl) sizeEl.textContent = '--';
-      if (formatEl) formatEl.textContent = '--';
-      if (badgeEl) { badgeEl.className = 'icon-modal-badge warn'; badgeEl.textContent = 'No Asset'; }
-      if (msgEl) { msgEl.className = 'icon-modal-warn-msg'; msgEl.textContent = ''; }
+    const isPlaceholder = !src || 
+                          src === (typeof PH !== 'undefined' ? PH : '') || 
+                          src === (typeof PH_IPAD !== 'undefined' ? PH_IPAD : '') || 
+                          src === (typeof PH_TAB !== 'undefined' ? PH_TAB : '') ||
+                          src === (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+
+    if (isPlaceholder) {
+      if (dimEl) {
+        if (_activeModalType === 'ipad') {
+          dimEl.textContent = 'Empty (2048 × 2732 px target)';
+        } else if (_activeModalType === 'tablet') {
+          dimEl.textContent = 'Empty (16:10 target)';
+        } else if (_activeModalType === 'feature') {
+          dimEl.textContent = 'Empty (1024 × 500 px target)';
+        } else if (_activeModalType === 'icon') {
+          dimEl.textContent = _activeModalStore === 'apple' ? 'Empty (1024 × 1024 px target)' : 'Empty (512 × 512 px target)';
+        } else {
+          dimEl.textContent = 'Empty (1290 × 2796 px target)';
+        }
+        dimEl.className = 'icon-metric-val';
+      }
+      if (ratioEl) {
+        if (_activeModalType === 'ipad') ratioEl.textContent = '3:4 (Target)';
+        else if (_activeModalType === 'tablet') ratioEl.textContent = '16:10 (Target)';
+        else if (_activeModalType === 'icon') ratioEl.textContent = '1:1 Square';
+        else if (_activeModalType === 'feature') ratioEl.textContent = '2.05:1 Landscape';
+        else ratioEl.textContent = '9:19.5 (Target)';
+        ratioEl.className = 'icon-metric-val';
+      }
+      if (sizeEl) {
+        sizeEl.textContent = 'None (Max 8 MB)';
+        sizeEl.className = 'icon-metric-val';
+      }
+      if (formatEl) {
+        formatEl.textContent = 'PNG / JPEG';
+        formatEl.className = 'icon-metric-val';
+      }
+      if (badgeEl) {
+        badgeEl.className = 'icon-modal-badge';
+        badgeEl.textContent = 'Empty Slot · Ready to Upload';
+      }
+      if (msgEl) {
+        msgEl.className = 'icon-modal-warn-msg';
+        msgEl.textContent = '';
+      }
       return;
     }
 
@@ -5377,13 +5496,13 @@ function renderTablets(){
       const thumbWrap = document.createElement('div');
       thumbWrap.className = 'shot-thumb-wrap';
 
-      const thumb = mk(it.src || PH);
+      const thumb = mk(it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH));
       thumb.style.cursor = 'pointer';
       thumb.title = 'Click to inspect & view details';
       thumb.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
           openImageDetailModal({
-            src: it.src || PH,
+            src: it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH),
             type: 'tablet',
             store: 'google',
             index: i,
@@ -5445,7 +5564,7 @@ function renderTablets(){
       inspectBtn.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
           openImageDetailModal({
-            src: it.src || PH,
+            src: it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH),
             type: 'tablet',
             store: 'google',
             index: i,

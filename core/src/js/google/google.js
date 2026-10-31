@@ -127,13 +127,13 @@ function renderTablets(){
       const thumbWrap = document.createElement('div');
       thumbWrap.className = 'shot-thumb-wrap';
 
-      const thumb = mk(it.src || PH);
+      const thumb = mk(it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH));
       thumb.style.cursor = 'pointer';
       thumb.title = 'Click to inspect & view details';
       thumb.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
           openImageDetailModal({
-            src: it.src || PH,
+            src: it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH),
             type: 'tablet',
             store: 'google',
             index: i,
@@ -195,7 +195,7 @@ function renderTablets(){
       inspectBtn.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
           openImageDetailModal({
-            src: it.src || PH,
+            src: it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH),
             type: 'tablet',
             store: 'google',
             index: i,

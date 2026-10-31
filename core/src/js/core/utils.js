@@ -138,8 +138,10 @@ function ensureSvgDimensions(uri){
       if(vb){
         let w = Math.round(parseFloat(vb[1]));
         let h = Math.round(parseFloat(vb[2]));
-        if(w === 460 && h === 996){ w = 1080; h = 2340; }
+        if(w === 460 && h === 996){ w = 1290; h = 2796; }
         else if(w === 1024 && h === 500){ w = 1024; h = 500; }
+        else if(w === 2048 && h === 2732){ w = 2048; h = 2732; }
+        else if(w === 2560 && h === 1600){ w = 2560; h = 1600; }
         const fixed = raw.replace(/<svg\b([^>]*)>/i, `<svg$1 width="${w}" height="${h}">`);
         return 'data:image/svg+xml;utf8,' + encodeURIComponent(fixed.replace(/\s+/g,' '));
       }

@@ -233,13 +233,51 @@
     const badgeEl = $('msIconModalBadge') || $('imageDetailModalBadge');
     const msgEl = $('msIconModalMsg') || $('imageDetailModalMsg');
 
-    if (!src) {
-      if (dimEl) dimEl.textContent = '--';
-      if (ratioEl) ratioEl.textContent = '--';
-      if (sizeEl) sizeEl.textContent = '--';
-      if (formatEl) formatEl.textContent = '--';
-      if (badgeEl) { badgeEl.className = 'icon-modal-badge warn'; badgeEl.textContent = 'No Asset'; }
-      if (msgEl) { msgEl.className = 'icon-modal-warn-msg'; msgEl.textContent = ''; }
+    const isPlaceholder = !src || 
+                          src === (typeof PH !== 'undefined' ? PH : '') || 
+                          src === (typeof PH_IPAD !== 'undefined' ? PH_IPAD : '') || 
+                          src === (typeof PH_TAB !== 'undefined' ? PH_TAB : '') ||
+                          src === (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+
+    if (isPlaceholder) {
+      if (dimEl) {
+        if (_activeModalType === 'ipad') {
+          dimEl.textContent = 'Empty (2048 × 2732 px target)';
+        } else if (_activeModalType === 'tablet') {
+          dimEl.textContent = 'Empty (16:10 target)';
+        } else if (_activeModalType === 'feature') {
+          dimEl.textContent = 'Empty (1024 × 500 px target)';
+        } else if (_activeModalType === 'icon') {
+          dimEl.textContent = _activeModalStore === 'apple' ? 'Empty (1024 × 1024 px target)' : 'Empty (512 × 512 px target)';
+        } else {
+          dimEl.textContent = 'Empty (1290 × 2796 px target)';
+        }
+        dimEl.className = 'icon-metric-val';
+      }
+      if (ratioEl) {
+        if (_activeModalType === 'ipad') ratioEl.textContent = '3:4 (Target)';
+        else if (_activeModalType === 'tablet') ratioEl.textContent = '16:10 (Target)';
+        else if (_activeModalType === 'icon') ratioEl.textContent = '1:1 Square';
+        else if (_activeModalType === 'feature') ratioEl.textContent = '2.05:1 Landscape';
+        else ratioEl.textContent = '9:19.5 (Target)';
+        ratioEl.className = 'icon-metric-val';
+      }
+      if (sizeEl) {
+        sizeEl.textContent = 'None (Max 8 MB)';
+        sizeEl.className = 'icon-metric-val';
+      }
+      if (formatEl) {
+        formatEl.textContent = 'PNG / JPEG';
+        formatEl.className = 'icon-metric-val';
+      }
+      if (badgeEl) {
+        badgeEl.className = 'icon-modal-badge';
+        badgeEl.textContent = 'Empty Slot · Ready to Upload';
+      }
+      if (msgEl) {
+        msgEl.className = 'icon-modal-warn-msg';
+        msgEl.textContent = '';
+      }
       return;
     }
 

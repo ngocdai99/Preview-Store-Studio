@@ -78,7 +78,6 @@ export const siteConfig = {
   },
 
   navigation: [
-    { label: "Showcase", href: "#showcase" },
     { label: "Features", href: "#features" },
     { label: "Why Us", href: "#comparison" },
     { label: "Reviews", href: "#testimonials" },
@@ -95,8 +94,8 @@ export const siteConfig = {
       href: "#pricing",
     },
     secondaryCta: {
-      label: "Watch Interactive Tour",
-      href: "#showcase",
+      label: "Explore Features",
+      href: "#features",
     },
     trustBadges: [
       "100% Offline & Private",
@@ -391,3 +390,4 @@ export const siteConfig = {
     ],
   },
 };
+

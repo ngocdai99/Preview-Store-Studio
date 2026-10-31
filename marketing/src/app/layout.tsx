@@ -1,9 +1,31 @@
 import type { Metadata } from "next";
+import { siteConfig } from "@/config/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Store Preview Studio — Preview & Optimize App Store Listings",
-  description: "The zero-server, 100% offline studio to design, preview, and validate Apple App Store & Google Play listings with realistic device mockups.",
+  title: `${siteConfig.name} — Preview & Optimize App Store Listings`,
+  description: siteConfig.description,
+  metadataBase: new URL(siteConfig.url),
+  openGraph: {
+    type: "website",
+    url: siteConfig.url,
+    title: `${siteConfig.name} — Preview & Optimize App Store Listings`,
+    description: siteConfig.description,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1280,
+        height: 720,
+        alt: siteConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} — Preview & Optimize App Store Listings`,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+  },
 };
 
 export default function RootLayout({
@@ -12,8 +34,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased" data-theme="dark">
-      <body className="min-h-full flex flex-col font-sans bg-slate-950 text-slate-100">{children}</body>
+    <html lang="en" className="h-full scroll-smooth" data-theme="dark">
+      <body className="min-h-full flex flex-col font-sans bg-slate-950 text-slate-100 antialiased">
+        {children}
+      </body>
     </html>
   );
 }

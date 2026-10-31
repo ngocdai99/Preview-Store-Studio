@@ -1,0 +1,14 @@
+{
+  "name": "preview-studio-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Store Preview Studio monorepo: Core standalone studio & React Next.js marketing landing page",
+  "scripts": {
+    "dev": "npm --prefix marketing run dev",
+    "dev:marketing": "npm --prefix marketing run dev",
+    "build:marketing": "npm --prefix marketing run build",
+    "dev:core": "npm --prefix core run dev",
+    "build:core": "npm --prefix core run build"
+  }
+}
+

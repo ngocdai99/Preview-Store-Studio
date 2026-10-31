@@ -70,7 +70,7 @@ function renderIpadShots(){
         c.appendChild(sk);
       }
     } else {
-      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH), 'Result ' + (i + 1))));
     }
   });
 
@@ -101,13 +101,13 @@ function renderIpadSlist(){
     const thumbWrap = document.createElement('div');
     thumbWrap.className = 'shot-thumb-wrap';
 
-    const thumb = mk(s || PH);
+    const thumb = mk(s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH));
     thumb.style.cursor = 'pointer';
     thumb.title = 'Click to inspect & view details';
     thumb.onclick = () => {
       if(typeof openImageDetailModal === 'function'){
         openImageDetailModal({
-          src: s || PH,
+          src: s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH),
           type: 'ipad',
           store: 'apple',
           index: i,
@@ -159,7 +159,7 @@ function renderIpadSlist(){
     inspectBtn.onclick = () => {
       if(typeof openImageDetailModal === 'function'){
         openImageDetailModal({
-          src: s || PH,
+          src: s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH),
           type: 'ipad',
           store: 'apple',
           index: i,

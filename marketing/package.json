@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "dev:marketing": "next dev",
+    "build": "next build --webpack",
+    "build:marketing": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
