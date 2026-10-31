@@ -13,19 +13,19 @@ export function Faq() {
   };
 
   return (
-    <section id="faq" className="py-20 border-t border-slate-900 bg-slate-950/60">
+    <section id="faq" className="py-20 border-t border-border bg-card/30 transition-colors">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
             Frequently Asked Questions
           </h2>
-          <p className="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
+          <p className="mt-4 text-muted text-sm sm:text-base leading-relaxed">
             Everything you need to know about offline architecture, store review compliance,
             client handoff, and licensing.
           </p>
         </div>
 
-        <div className="space-y-3.5">
+        <div className="space-y-3">
           {faq.map((item, index) => {
             const isOpen = openId === item.id;
             const num = String(index + 1).padStart(2, "0");
@@ -33,29 +33,31 @@ export function Faq() {
             return (
               <div
                 key={item.id}
-                className="rounded-2xl border border-slate-800/80 bg-slate-900/40 overflow-hidden transition-colors hover:border-slate-700"
+                className="rounded-2xl border border-border bg-card overflow-hidden transition-colors shadow-sm"
               >
                 <button
                   type="button"
                   onClick={() => toggle(item.id)}
                   aria-expanded={isOpen}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 transition-colors"
+                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 transition-colors hover:bg-card-muted/50"
                 >
                   <div className="flex items-start gap-4">
-                    <span className="text-xs font-bold text-slate-500 mt-0.5">{num}</span>
+                    <span className="text-xs font-semibold text-muted mt-0.5">{num}</span>
                     <div>
-                      <span className="block text-[11px] font-semibold text-indigo-400 uppercase tracking-wider mb-1">
+                      <span className="block text-[11px] font-semibold text-muted uppercase tracking-wider mb-1">
                         {item.topic}
                       </span>
-                      <h3 className="text-base sm:text-lg font-semibold text-white">
+                      <h3 className="text-base sm:text-lg font-semibold text-foreground">
                         {item.question}
                       </h3>
                     </div>
                   </div>
 
                   <div
-                    className={`w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 bg-indigo-600 text-white" : "text-slate-400"
+                    className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${
+                      isOpen
+                        ? "rotate-180 bg-foreground text-background"
+                        : "bg-card-muted text-muted"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -63,7 +65,7 @@ export function Faq() {
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-slate-300 text-sm sm:text-base leading-relaxed pl-13 sm:pl-16 border-t border-slate-800/50 mt-1">
+                  <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-muted text-sm sm:text-base leading-relaxed pl-13 sm:pl-16 border-t border-border/50 mt-1">
                     <div className="pt-3">{item.answer}</div>
                   </div>
                 )}
@@ -75,4 +77,3 @@ export function Faq() {
     </section>
   );
 }
-

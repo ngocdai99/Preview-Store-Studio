@@ -4,6 +4,7 @@ export function BrandIcon({ className = "w-8 h-8" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 32 32" aria-hidden="true">
       <defs>
+        {/* Official Concept 6 App Icon Gradients */}
         <linearGradient id="brand-bg" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#3b82f6" />
           <stop offset="100%" stopColor="#8b5cf6" />
@@ -45,4 +46,3 @@ export function BrandIcon({ className = "w-8 h-8" }: { className?: string }) {
     </svg>
   );
 }
-
