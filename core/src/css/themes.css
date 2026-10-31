@@ -70,7 +70,7 @@
 :root[data-ui=light] body{background:var(--bg)}
 :root[data-ui=light] header{background:rgba(255,255,255,.9);border-bottom-color:rgba(15,23,42,.09);box-shadow:0 1px 3px rgba(15,23,42,.03)}
 :root[data-ui=light] .editor{background:#fbfbfd;box-shadow:1px 0 6px rgba(15,23,42,.04)}
-:root[data-ui=light] .card{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.03),0 3px 8px rgba(0,0,0,.03)}
+:root[data-ui=light] .card{background:#fff;border:1px solid rgba(0,0,0,0.08);box-shadow:0 1px 3px rgba(15,23,42,0.04),0 4px 12px -2px rgba(15,23,42,0.06),inset 0 1px 0 rgba(255,255,255,0.95)}
 :root[data-ui=light] .lr{color:var(--tx)}
 :root[data-ui=light] .tag{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);color:#64748b}
 :root[data-ui=light] .tag.a{color:#0071e3;background:rgba(0,113,227,.1);border-color:rgba(0,113,227,.24);box-shadow:none}
@@ -186,7 +186,20 @@
 :root[data-ui=light]{--ac:#0071e3;--ac2:#2997ff;--glow:rgba(0,113,227,.16);--line:#d9d9df;--line-hi:#b4b4bc}
 :root[data-ui=light] body[data-store=google]{--ac:#059669;--ac2:#10b981;--glow:rgba(5,150,105,.16)}
 :root[data-ui=light] .editor{background:#ebebf0;box-shadow:1px 0 6px rgba(15,23,42,.04)}
-:root[data-ui=light] .card{background:#fff;border:1px solid rgba(0,0,0,.04);box-shadow:0 1px 3px rgba(0,0,0,.03),0 3px 8px rgba(0,0,0,.03)}
+:root[data-ui=light] .card{
+  background:#ffffff;
+  border:1px solid rgba(0,0,0,0.08);
+  box-shadow:0 1px 3px rgba(15,23,42,0.04),0 4px 12px -2px rgba(15,23,42,0.06),inset 0 1px 0 rgba(255,255,255,0.95);
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease,padding .2s,gap .2s;
+}
+:root[data-ui=light] .card:hover{
+  border-color:rgba(0,0,0,0.12);
+  box-shadow:0 2px 5px rgba(15,23,42,0.05),0 6px 16px -2px rgba(15,23,42,0.08),inset 0 1px 0 rgba(255,255,255,0.95);
+}
+:root[data-ui=light] .card.selected:not(.collapsed){
+  border-color:rgba(124,58,237,0.28);
+  box-shadow:0 2px 6px rgba(124,58,237,0.05),0 8px 24px -4px rgba(124,58,237,0.1),inset 0 1px 0 rgba(255,255,255,0.95);
+}
 :root[data-ui=light] .lr{font-weight:700}
 /* Modern Soft Shadow Styling for Inputs & Textareas (No harsh borders) */
 :root[data-ui=light] input[type=text],
@@ -295,11 +308,11 @@
     opacity:1;
   }
 
-  /* Collapsed Card Hover in Light Mode (Màu tím nhạt lavender) */
+  /* Collapsed Card Hover in Light Mode (Màu tím nhạt lavender + tactile elevation) */
   :root[data-ui=light] .card.collapsed:hover{
-    background:#f5f3ff!important;
-    border-color:rgba(139,92,246,0.25)!important;
-    box-shadow:0 4px 16px rgba(139,92,246,0.08)!important;
+    background:#f8f7ff!important;
+    border-color:rgba(124,58,237,0.25)!important;
+    box-shadow:0 2px 6px rgba(124,58,237,0.06),0 8px 20px -3px rgba(124,58,237,0.1),inset 0 1px 0 rgba(255,255,255,0.95)!important;
   }
 
   /* Form Upload and Action Buttons in Light Mode with Soft Elevation */
