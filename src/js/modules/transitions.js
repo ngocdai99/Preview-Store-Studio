@@ -701,6 +701,22 @@ function toggleDualPhone(forceState) {
     document.body.dataset.appleDevice = 'iphone';
     document.body.dataset.googleDevice = 'phone';
     if (btn) btn.classList.toggle('on', nextDual);
+
+    // Auto select Phone on device selector
+    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === 'phone'));
+
+    // Keep the active device selector visible
+    if (activeStore === 'apple') {
+      if ($('dt')) $('dt').style.display = 'flex';
+      if ($('gdt')) $('gdt').style.display = 'none';
+      if ($('dt')) syncVtPill($('dt'));
+    } else {
+      if ($('dt')) $('dt').style.display = 'none';
+      if ($('gdt')) $('gdt').style.display = 'flex';
+      if ($('gdt')) syncVtPill($('gdt'));
+    }
+
     if (typeof renderIcons === 'function') renderIcons();
     if (typeof renderShots === 'function') renderShots();
     if (typeof update === 'function') update();
@@ -708,6 +724,20 @@ function toggleDualPhone(forceState) {
     syncAllVtPills();
     if (typeof saveState === 'function') saveState();
   };
+
+  // Immediate device selector update (<1ms)
+  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === 'phone'));
+  if (activeStore === 'apple') {
+    if ($('dt')) $('dt').style.display = 'flex';
+    if ($('gdt')) $('gdt').style.display = 'none';
+    if ($('dt')) syncVtPill($('dt'));
+  } else {
+    if ($('dt')) $('dt').style.display = 'none';
+    if ($('gdt')) $('gdt').style.display = 'flex';
+    if ($('gdt')) syncVtPill($('gdt'));
+  }
+  syncAllVtPills();
 
   if (typeof transitionStoreMode === 'function') {
     if (nextDual) {

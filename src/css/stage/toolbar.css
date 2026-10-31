@@ -142,14 +142,10 @@ body[data-dual="true"] .dual-phone-btn .vt-ico {
   opacity: 1 !important;
 }
 #dt, #gdt { display: none !important; }
-body[data-ui-store="apple"] #dt { display: flex !important; }
-body[data-ui-store="google"] #gdt { display: flex !important; }
-body[data-ui-store="dual"] #dt,
-body[data-ui-store="dual"] #gdt { display: none !important; }
-body[data-dual="true"] #dt,
-body[data-dual="true"] #gdt {
-  display: none !important;
-}
+body[data-ui-store="apple"] #dt,
+body[data-store="apple"]:not([data-ui-store="google"]) #dt { display: flex !important; }
+body[data-ui-store="google"] #gdt,
+body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: flex !important; }
 .vt{
   position:relative;display:flex;background:rgba(15,23,42,.88);backdrop-filter:blur(16px);border-radius:14px;padding:4px;gap:4px;
   border:1px solid rgba(255,255,255,.13);

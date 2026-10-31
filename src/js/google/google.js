@@ -288,8 +288,10 @@ function applyGoogleDevice(){
   const isDual = googleDevice === 'dual' || appleDevice === 'dual';
   document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
   document.body.dataset.dual = isDual ? 'true' : 'false';
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (isDual ? 'dual' : googleDevice)));
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === (isDual ? 'dual' : appleDevice)));
+  const selGoogle = (isDual || googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
+  const selApple = (isDual || appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
+  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
   $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'google'));
   if (isDual) {
     const btn = $('btnDualPhone');
@@ -328,7 +330,8 @@ function setGoogleDevice(d, animate = true){
     return;
   }
   transitionDevice('google', nextDev, applyState, animate);
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === nextDev));
+  const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
+  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
   syncAllVtPills();
 }
 $$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));

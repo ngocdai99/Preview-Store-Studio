@@ -48,7 +48,7 @@
   <!-- Search Results Feed (Scrollable List) -->
   <div class="gp-search-list">
     <!-- Primary Target App Card (User's Previewed App) -->
-    <div class="gp-search-card primary">
+    <div class="gp-search-card primary is-expanded">
     <div class="gp-search-card-main">
       <img data-icon alt="App Icon" class="gp-search-card-icon">
       <div class="gp-search-card-info">
@@ -74,11 +74,17 @@
           </span>
         </div>
       </div>
-      <button type="button" class="gp-search-action-btn" title="View details" aria-label="Details">
+      <button type="button" class="gp-search-action-btn" title="Toggle screenshots" aria-label="Toggle screenshots">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
+          <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
       </button>
+    </div>
+    <!-- 3 Screenshots Gallery (Shows uploaded shots or fallback skeleton placeholders) -->
+    <div class="gp-search-shots" data-shots="gp-search">
+      <div class="gp-skel-shot"></div>
+      <div class="gp-skel-shot"></div>
+      <div class="gp-skel-shot"></div>
     </div>
   </div>
 

@@ -20,10 +20,12 @@ function setAppleDevice(d, animate = true){
       googleDevice = 'phone';
       document.body.dataset.googleDevice = 'phone';
     }
-    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
-    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === googleDevice));
+    const selApple = (d === 'dual' || !d) ? 'iphone' : d;
+    const selGoogle = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
+    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
     $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'apple'));
-    if (d === 'ipad') {
+    if (!nextDual) {
       const btn = $('btnDualPhone');
       if (btn) btn.classList.remove('on');
     }

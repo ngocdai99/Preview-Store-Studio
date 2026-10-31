@@ -285,9 +285,56 @@
 .gp-search-action-btn svg {
   width: 15px;
   height: 15px;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gp-search-card:not(.is-expanded) .gp-search-action-btn svg {
+  transform: rotate(180deg);
 }
 
 .gp-search-action-btn:hover {
   background: var(--sp);
   color: var(--t);
+}
+
+/* Google Play Search Screenshots Gallery */
+.gp-search-shots {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.gp-search-card:not(.is-expanded) .gp-search-shots {
+  display: none !important;
+}
+
+.gp-search-shots img {
+  flex: 1;
+  min-width: 0;
+  border-radius: 10px;
+  aspect-ratio: 9 / 19;
+  object-fit: cover;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: var(--sf);
+}
+
+.phone.google[data-theme=dark] .gp-search-shots img {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.gp-search-shots .gp-skel-shot {
+  flex: 1;
+  min-width: 0;
+  border-radius: 10px;
+  aspect-ratio: 9 / 19;
+  background: var(--sf);
+  border: 1px solid var(--sp);
+}
+
+.phone.google[data-theme=dark] .gp-search-shots .gp-skel-shot {
+  background: #25272a;
+  border-color: rgba(255, 255, 255, 0.08);
 }

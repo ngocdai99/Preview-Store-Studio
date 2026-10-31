@@ -1302,10 +1302,11 @@ assert(!bundledHtml.includes('\n.tab div{') && !bundledHtml.includes('}.tab div{
 assert(bundledHtml.includes('class="gp-search-view"') && bundledHtml.includes('class="gp-search-bar"'), 'Bundled HTML includes Material You Google Play search view and top bar');
 assert(bundledHtml.includes('class="gp-search-header"') && bundledHtml.includes('class="gp-search-list"'), 'Google Play search view locks sticky search header above scrollable search results list');
 assert(bundledHtml.includes('class="gp-search-chips-wrap"') && bundledHtml.includes('gp-chip-dropdown'), 'Google Play search view includes filter chips carousel with rating dropdown');
-assert(bundledHtml.includes('class="gp-search-card primary"') && bundledHtml.includes('class="gp-search-card-name"'), 'Google Play search view renders primary app result card');
-assert(!bundledHtml.includes('class="shots gp-search-shots"'), 'Google Play search result renders compact app rows without screenshot carousel, matching native Play Store UI');
+assert(/class="gp-search-card primary\b/.test(bundledHtml) && bundledHtml.includes('class="gp-search-card-name"'), 'Google Play search view renders primary app result card');
+assert(bundledHtml.includes('class="gp-search-shots"') && bundledHtml.includes('data-shots="gp-search"'), 'Google Play search result renders open screenshots gallery on primary app card');
 assert(bundledHtml.includes('class="gp-search-action-btn"') && !bundledHtml.includes('Sponsored &bull; Suggested for you'), 'Google Play search view includes circular action button and omits sponsored text');
 assert(bundledHtml.includes('gp-skel-card') && bundledHtml.includes('gp-skel-icon') && bundledHtml.includes('gp-skel-line'), 'Google Play search view includes clean skeleton secondary app cards');
+assert(!bundledHtml.includes('gp-skel-card') || !/<div[^>]*class="[^"]*gp-skel-card[^"]*"[^>]*>[\s\S]*?class="gp-search-shots"/.test(bundledHtml), 'Google Play search skeleton placeholder cards hide screenshots');
 
 // 11. iPhone & Android Vector Status Bar Icons
 assert(!bundledHtml.includes('▂▄▆█ 5G ▰'), 'iPhone status bar replaced crude unicode characters with crisp vector SVG icons');
@@ -1341,6 +1342,8 @@ assert(bundledHtml.includes('id="btnDualPhone"') && bundledHtml.includes('Dual P
 assert(bundledHtml.includes('data-s="apple"') && bundledHtml.includes('data-s="google"') && !bundledHtml.includes('data-s="dual"'), 'Store switcher (.seg) contains only clean App Store and Google Play platforms, separating form from viewport');
 assert(bundledHtml.includes('body[data-store="apple"][data-apple-device="ipad"] #dualPhoneWrap') && bundledHtml.includes('body[data-store="google"][data-google-device="tab7"] #dualPhoneWrap'), 'CSS rules hide Dual Phone button when iPad or Tablets are active');
 assert(bundledHtml.includes('body[data-dual="true"] .dev.apple.single') && bundledHtml.includes('body[data-dual="true"] #dev-phone.dev.google'), 'CSS rules display both iPhone and Android Phone side-by-side when data-dual="true"');
+assert(!bundledHtml.includes('body[data-dual="true"] #dt'), 'Device selector (#dt / #gdt) remains visible in Dual Phone mode');
+assert(bundledHtml.includes("$$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'))"), 'Dual Phone auto-selects Phone on device selector');
 assert(bundledHtml.includes("devSlug = 'dual-store-phone'"), 'exportPNG supports capturing dual-store-phone comparison image');
 assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes('GOOGLE PLAY &middot; Android'), 'Devices render marketing-style platform header labels (APP STORE · iPhone / GOOGLE PLAY · Android)');
 assert(bundledHtml.includes('.dev-label') && bundledHtml.includes('.dev-title'), 'Stage stylesheet includes .dev-label and .dev-title presentation styling');

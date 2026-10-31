@@ -23,6 +23,19 @@ function renderShots(){
       valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
     }
   });
+  $$('[data-shots=gp-search]').forEach(c => {
+    c.innerHTML = '';
+    const valid = SHOTS.filter(s => s && typeof s === 'string' && s.trim());
+    if(valid.length === 0){
+      for(let i = 0; i < 3; i++){
+        const sk = document.createElement('div');
+        sk.className = 'gp-skel-shot';
+        c.appendChild(sk);
+      }
+    } else {
+      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+    }
+  });
 
   // Validate screenshots count & aspect ratios
   validateScreenshots();
@@ -335,3 +348,14 @@ if($('addShot')){
     if(ins.length) ins[ins.length - 1].focus();
   };
 }
+
+// Interactive Toggle for Google Play Search Result Screenshots Expand/Collapse
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.gp-search-action-btn');
+  if (btn) {
+    const card = btn.closest('.gp-search-card');
+    if (card) {
+      card.classList.toggle('is-expanded');
+    }
+  }
+});
