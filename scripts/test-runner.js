@@ -2039,6 +2039,10 @@ assert(bundledHtml.includes('id="shotCounter"') && bundledHtml.includes('id="ipa
 assert(bundledHtml.indexOf('id="shotHint"') < bundledHtml.indexOf('id="shotCounter"'), 'Phone screenshot counter is placed below description');
 assert(bundledHtml.indexOf('id="ipadShotHint"') < bundledHtml.indexOf('id="ipadShotCounter"'), 'iPad screenshot counter is placed below description');
 
+// 3. Two-state Card Icon architecture (Selected vs Unselected)
+assert(bundledHtml.includes('.card.collapsed .card-ico') && bundledHtml.includes('.card:not(.collapsed) .card-ico'), 'CSS provides distinct 2-state styling for collapsed (unselected) and expanded (selected) card icons');
+assert(!bundledHtml.includes('card-ico c-blue') && !bundledHtml.includes('card-ico c-purple'), 'Multi-color rainbow classes (c-blue, c-purple, etc.) are eliminated from card icons');
+
 // 3. CSS rules for collapsed cards and headers
 assert(bundledHtml.includes('.card.collapsed > :not(.card-header)'), 'CSS hides all content outside .card-header when card is collapsed');
 assert(bundledHtml.includes('.card-header') && bundledHtml.includes('.card-toggle-ico'), 'CSS styles .card-header and .card-toggle-ico');

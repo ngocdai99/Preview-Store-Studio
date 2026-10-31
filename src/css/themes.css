@@ -15,18 +15,33 @@
 .ico-copy{background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 2px 8px rgba(5,150,105,.38)}
 .ico-export{background:rgba(255,255,255,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
 
-/* Card Title Gradient Badges */
+/* Card Title Badges - Two-State Architecture: Selected (open) vs Unselected (collapsed) */
 .card-ico{
   width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;
-  flex-shrink:0;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.2);
+  flex-shrink:0;transition:all .22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .card-ico svg{width:15px;height:15px;stroke-width:2.2}
-.card-ico.c-blue{background:linear-gradient(135deg,#0a84ff,#38bdf8)}
-.card-ico.c-purple{background:linear-gradient(135deg,#8b5cf6,#c084fc)}
-.card-ico.c-green{background:linear-gradient(135deg,#10b981,#34d399)}
-.card-ico.c-amber{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
-.card-ico.c-teal{background:linear-gradient(135deg,#0d9488,#14b8a6)}
-.card-ico.c-indigo{background:linear-gradient(135deg,#4f46e5,#6366f1)}
+
+/* Unselected State: Collapsed Card */
+.card.collapsed .card-ico{
+  background:rgba(255,255,255,0.06)!important;
+  border:1px solid rgba(255,255,255,0.08);
+  color:#94a3b8!important;
+  box-shadow:none!important;
+}
+.card.collapsed:hover .card-ico{
+  background:rgba(255,255,255,0.1)!important;
+  border-color:rgba(255,255,255,0.14);
+  color:var(--tx)!important;
+}
+
+/* Selected State: Expanded / Active Card */
+.card:not(.collapsed) .card-ico{
+  background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
+  border:1px solid rgba(255,255,255,0.18);
+  color:#ffffff!important;
+  box-shadow:0 4px 14px var(--glow)!important;
+}
 
 /* Form Action Button Icons */
 .btn-mini-ico{display:inline-flex;align-items:center;justify-content:center;margin-right:0;vertical-align:-1px;flex-shrink:0}
@@ -252,14 +267,24 @@
     transform:scale(1.04);
   }
 
-  /* Form Card Badges in Light Mode */
-  :root[data-ui=light] .card-ico{box-shadow:0 2px 8px rgba(0,0,0,.12)}
-  :root[data-ui=light] .card-ico.c-blue{background:linear-gradient(135deg,#0071e3,#2997ff)}
-  :root[data-ui=light] .card-ico.c-purple{background:linear-gradient(135deg,#6d28d9,#8b5cf6)}
-  :root[data-ui=light] .card-ico.c-green{background:linear-gradient(135deg,#059669,#10b981)}
-  :root[data-ui=light] .card-ico.c-amber{background:linear-gradient(135deg,#d97706,#f59e0b)}
-  :root[data-ui=light] .card-ico.c-teal{background:linear-gradient(135deg,#0f766e,#0d9488)}
-  :root[data-ui=light] .card-ico.c-indigo{background:linear-gradient(135deg,#4338ca,#4f46e5)}
+  /* Form Card Badges in Light Mode (Two-State Architecture) */
+  :root[data-ui=light] .card.collapsed .card-ico{
+    background:rgba(0,0,0,0.05)!important;
+    border:1px solid rgba(0,0,0,0.08);
+    color:#64748b!important;
+    box-shadow:none!important;
+  }
+  :root[data-ui=light] .card.collapsed:hover .card-ico{
+    background:rgba(0,0,0,0.08)!important;
+    border-color:rgba(0,0,0,0.12);
+    color:#0f172a!important;
+  }
+  :root[data-ui=light] .card:not(.collapsed) .card-ico{
+    background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
+    border:none;
+    color:#ffffff!important;
+    box-shadow:0 4px 12px var(--glow)!important;
+  }
 
   /* Form Upload and Action Buttons in Light Mode with Soft Elevation */
   :root[data-ui=light] .mini{

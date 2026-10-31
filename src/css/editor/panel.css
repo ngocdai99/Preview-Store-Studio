@@ -135,7 +135,6 @@ body.sidebar-collapsed .editor-resizer{
 }
 .card h2 i{
   width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 4px 12px var(--glow);
 }
 .card-num{
   display:inline-flex;
