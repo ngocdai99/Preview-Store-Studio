@@ -21,21 +21,30 @@
 .card.collapsed .card-ico,
 .card:not(.collapsed) .card-ico{
   width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:all .18s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink:0;position:relative;overflow:hidden;
+  transition:border-color .22s ease, color .22s ease, box-shadow .22s ease;
   -webkit-tap-highlight-color:transparent;
-  background:rgba(139,92,246,0.14)!important;
-  border:1px solid rgba(139,92,246,0.24)!important;
-  color:#c4b5fd!important;
+  background:rgba(139,92,246,0.16)!important;
+  border:1px solid rgba(139,92,246,0.28)!important;
+  color:#ffffff!important;
   box-shadow:none!important;
 }
-.card-ico svg{width:15px;height:15px;stroke-width:2.2}
+.card-ico::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,#8b5cf6,#6366f1);
+  opacity:0;transition:opacity .22s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index:0;
+}
+.card-ico svg{width:15px;height:15px;stroke-width:2.2;position:relative;z-index:1}
 
 /* Selected State: Card must be BOTH Selected and Expanded */
 .card.selected:not(.collapsed) .card-ico{
-  background:rgba(139,92,246,0.24)!important;
-  border:1px solid rgba(139,92,246,0.44)!important;
+  border:1px solid rgba(255,255,255,0.28)!important;
   color:#ffffff!important;
-  box-shadow:none!important;
+  box-shadow:0 4px 14px rgba(139,92,246,0.42)!important;
+}
+.card.selected:not(.collapsed) .card-ico::before{
+  opacity:1;
 }
 
 /* Form Action Button Icons */
@@ -266,19 +275,24 @@
   :root[data-ui=light] .card-ico,
   :root[data-ui=light] .card.collapsed .card-ico,
   :root[data-ui=light] .card:not(.collapsed) .card-ico{
-    background:rgba(124,58,237,0.08)!important;
-    border:1px solid rgba(124,58,237,0.18)!important;
+    background:rgba(124,58,237,0.1)!important;
+    border:1px solid rgba(124,58,237,0.2)!important;
     color:#7c3aed!important;
     box-shadow:none!important;
     -webkit-tap-highlight-color:transparent;
   }
+  :root[data-ui=light] .card-ico::before{
+    background:linear-gradient(135deg,#7c3aed,#6366f1);
+  }
 
-  /* Form Card Badges in Light Mode: Selected and Expanded */
+  /* Form Card Badges in Light Mode: Selected and Expanded (Vibrant Brand Gradient via Opacity Fade) */
   :root[data-ui=light] .card.selected:not(.collapsed) .card-ico{
-    background:rgba(124,58,237,0.15)!important;
-    border:1px solid rgba(124,58,237,0.32)!important;
-    color:#6d28d9!important;
-    box-shadow:none!important;
+    border:1px solid rgba(255,255,255,0.25)!important;
+    color:#ffffff!important;
+    box-shadow:0 4px 12px rgba(124,58,237,0.32)!important;
+  }
+  :root[data-ui=light] .card.selected:not(.collapsed) .card-ico::before{
+    opacity:1;
   }
 
   /* Collapsed Card Hover in Light Mode (Màu tím nhạt lavender) */
