@@ -60,8 +60,21 @@ function normalizeAppleApp(item) {
   const iconUrl = icon1024;
 
   // Screenshots
-  const shots = (item.screenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png')).slice(0, 8);
-  const ipadShots = (item.ipadScreenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png')).slice(0, 8);
+  const shots = (item.screenshotUrls || []).map(u => {
+    const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
+    if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
+      return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2688x1242bb.png');
+    }
+    return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png');
+  }).slice(0, 8);
+
+  const ipadShots = (item.ipadScreenshotUrls || []).map(u => {
+    const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
+    if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
+      return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2732x2048bb.png');
+    }
+    return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png');
+  }).slice(0, 8);
   const isUniversal = (Array.isArray(item.features) && item.features.includes('iosUniversal')) || (ipadShots.length > 0);
 
   // Short description

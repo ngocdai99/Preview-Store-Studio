@@ -4198,7 +4198,7 @@ function validateIpadScreenshots(){
       );
 
       const ratio = w / h;
-      const is3to4 = (Math.abs(ratio - (3/4)) < 0.05) || (Math.abs(ratio - (4/3)) < 0.05);
+      const is3to4 = (Math.abs(ratio - (3/4)) < 0.08) || (Math.abs(ratio - (4/3)) < 0.08) || (ratio >= 0.65 && ratio <= 0.85) || (ratio >= 1.18 && ratio <= 1.54);
 
       if(tag){
         tag.style.display = 'inline-flex';
@@ -4206,9 +4206,9 @@ function validateIpadScreenshots(){
           tag.className = 'shot-dim-tag ok';
           tag.textContent = `iPad Pro 13" (${w}×${h})`;
         } else if(is3to4){
-          tag.className = 'shot-dim-tag info';
-          tag.textContent = `4:3 Ratio (${w}×${h})`;
-        } else if(h > w * 1.5){
+          tag.className = 'shot-dim-tag ok';
+          tag.textContent = `iPad 4:3 (${w}×${h})`;
+        } else if(h > w * 1.5 || w > h * 1.5){
           tag.className = 'shot-dim-tag warn';
           tag.textContent = `Phone Ratio (${w}×${h})`;
         } else {
@@ -4217,7 +4217,7 @@ function validateIpadScreenshots(){
         }
       }
 
-      if(isExactIpad){
+      if(isExactIpad || is3to4){
         compliantIndices.push(idx + 1);
       } else {
         nonCompliantIndices.push(idx + 1);
@@ -4243,7 +4243,7 @@ function validateIpadScreenshots(){
       const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
       const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not exact iPad Pro 13" (2048×2732 px or 2064×2752 px).</span>`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not standard iPad 4:3 ratio. Phone screenshots will be cropped or letterboxed.</span>`;
       badgeEl.style.display = 'flex';
     } else {
       // Compliant: All criteria met -> hide badge, do not show green message box
@@ -10081,8 +10081,21 @@ function normalizeAppleApp(item) {
   const iconUrl = icon1024;
 
   // Screenshots
-  const shots = (item.screenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png')).slice(0, 8);
-  const ipadShots = (item.ipadScreenshotUrls || []).map(u => u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png')).slice(0, 8);
+  const shots = (item.screenshotUrls || []).map(u => {
+    const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
+    if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
+      return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2688x1242bb.png');
+    }
+    return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png');
+  }).slice(0, 8);
+
+  const ipadShots = (item.ipadScreenshotUrls || []).map(u => {
+    const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
+    if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
+      return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2732x2048bb.png');
+    }
+    return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png');
+  }).slice(0, 8);
   const isUniversal = (Array.isArray(item.features) && item.features.includes('iosUniversal')) || (ipadShots.length > 0);
 
   // Short description

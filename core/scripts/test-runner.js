@@ -1463,6 +1463,17 @@ const normIphoneOnly = normalizeAppleApp({
 assert(normIphoneOnly.supportsIpad === false, 'normalizeAppleApp detects iPhone-only app (supportsIpad false)');
 assert(normIphoneOnly.isUniversal === false, 'normalizeAppleApp detects iPhone-only app (isUniversal false)');
 
+// Test Landscape screenshot normalization
+const normLandscape = normalizeAppleApp({
+  trackName: 'Landscape Game',
+  artworkUrl512: 'https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/icon/512x512bb.jpg',
+  screenshotUrls: ['https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/shot/696x392bb.png'],
+  ipadScreenshotUrls: ['https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/shot/552x414bb.png'],
+  features: ['iosUniversal']
+});
+assert(normLandscape.shots[0].includes('2688x1242bb.png'), 'Landscape iPhone screenshot upscales to 2688x1242 Retina');
+assert(normLandscape.ipadShots[0].includes('2732x2048bb.png'), 'Landscape iPad screenshot upscales to 2732x2048 Retina');
+
 // 3. Network Connection Check & 100% Offline User Confirmation
 const { isNetworkOnline, showNetworkConfirmModal } = storeImport;
 assert(typeof isNetworkOnline === 'function', 'store-import exports isNetworkOnline helper');
@@ -1904,6 +1915,8 @@ assert(ipadCardHtml.includes('2048×2732 px') && ipadCardHtml.includes('2064×27
 
 const ipadJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'ipad.js'), 'utf8');
 assert(!ipadJsCode.includes('Universal App Notice:'), 'validateIpadScreenshots no longer displays warning notice when 0 screenshots are uploaded');
+assert(ipadJsCode.includes('if(isExactIpad || is3to4)'), 'validateIpadScreenshots accepts both exact iPad Pro 13" and standard 4:3 iPad ratios as compliant');
+assert(!ipadJsCode.includes('not exact iPad Pro 13"'), 'validateIpadScreenshots warning focuses on non-standard ratios without falsely flagging 4:3 iPad screenshots');
 
 // ---------------------------------------------------------------------
 // SUITE 26: Customize Metrics Focus Highlight & Linking Verification
