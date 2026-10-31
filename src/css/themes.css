@@ -22,22 +22,12 @@
 }
 .card-ico svg{width:15px;height:15px;stroke-width:2.2}
 
-/* Unselected State: Collapsed Card (Màu nhạt: màu đậm Indigo Violet lấy alpha thấp) */
+/* Unselected State: Collapsed Card (Màu nhạt: Indigo Violet alpha thấp) */
 .card.collapsed .card-ico{
   background:rgba(139,92,246,0.16)!important;
   border:1px solid rgba(139,92,246,0.28)!important;
   color:#ffffff!important;
   box-shadow:none!important;
-}
-
-/* Hover: Thấy được màu đậm (Full vibrant Indigo Violet gradient + glow) */
-.card.collapsed:hover .card-ico,
-.card-ico:hover{
-  background:linear-gradient(135deg,#8b5cf6,#6366f1)!important;
-  border-color:rgba(255,255,255,0.28)!important;
-  color:#ffffff!important;
-  box-shadow:0 4px 12px rgba(139,92,246,0.38)!important;
-  transform:scale(1.04);
 }
 
 /* Selected State: Expanded / Active Card (Màu đậm Indigo Violet) */
@@ -272,20 +262,12 @@
     transform:scale(1.04);
   }
 
-  /* Form Card Badges in Light Mode: Unselected (Màu nhạt) vs Hover/Selected (Màu đậm Indigo Violet) */
+  /* Form Card Badges in Light Mode: Unselected (Màu nhạt) vs Selected (Màu đậm Indigo Violet) */
   :root[data-ui=light] .card.collapsed .card-ico{
     background:rgba(124,58,237,0.1)!important;
     border:1px solid rgba(124,58,237,0.2)!important;
     color:#7c3aed!important;
     box-shadow:none!important;
-  }
-  :root[data-ui=light] .card.collapsed:hover .card-ico,
-  :root[data-ui=light] .card-ico:hover{
-    background:linear-gradient(135deg,#7c3aed,#6366f1)!important;
-    border-color:transparent!important;
-    color:#ffffff!important;
-    box-shadow:0 4px 12px rgba(124,58,237,0.28)!important;
-    transform:scale(1.04);
   }
 
   :root[data-ui=light] .card:not(.collapsed) .card-ico{
@@ -293,6 +275,13 @@
     border:none!important;
     color:#ffffff!important;
     box-shadow:0 4px 12px rgba(124,58,237,0.32)!important;
+  }
+
+  /* Collapsed Card Hover in Light Mode (Màu xám nhẹ tự nhiên) */
+  :root[data-ui=light] .card.collapsed:hover{
+    background:#f1f5f9!important;
+    border-color:rgba(0,0,0,0.12)!important;
+    box-shadow:0 4px 16px rgba(0,0,0,0.06)!important;
   }
 
   /* Form Upload and Action Buttons in Light Mode with Soft Elevation */
