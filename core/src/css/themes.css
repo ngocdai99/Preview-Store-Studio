@@ -190,7 +190,7 @@
   background:#ffffff;
   border:1px solid rgba(0,0,0,0.08);
   box-shadow:0 1px 3px rgba(15,23,42,0.04),0 4px 12px -2px rgba(15,23,42,0.06),inset 0 1px 0 rgba(255,255,255,0.95);
-  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease,padding .2s,gap .2s;
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
 }
 :root[data-ui=light] .card:hover{
   border-color:rgba(0,0,0,0.12);
@@ -199,6 +199,9 @@
 :root[data-ui=light] .card.selected:not(.collapsed){
   border-color:rgba(124,58,237,0.28);
   box-shadow:0 2px 6px rgba(124,58,237,0.05),0 8px 24px -4px rgba(124,58,237,0.1),inset 0 1px 0 rgba(255,255,255,0.95);
+}
+:root[data-ui=light] .card:not(.collapsed) .card-header{
+  border-bottom:1px solid rgba(0,0,0,0.06);
 }
 :root[data-ui=light] .lr{font-weight:700}
 /* Modern Soft Shadow Styling for Inputs & Textareas (No harsh borders) */

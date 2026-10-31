@@ -73,8 +73,8 @@ body.sidebar-collapsed .editor-resizer{
 
 /* Card base */
 .card{
-  background:linear-gradient(180deg,var(--p2),var(--p1));border:1px solid var(--line);border-radius:18px;padding:16px;
-  display:flex;flex-direction:column;gap:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:border-color .3s, padding .2s, gap .2s;
+  background:linear-gradient(180deg,var(--p2),var(--p1));border:1px solid var(--line);border-radius:18px;padding:0;
+  display:flex;flex-direction:column;gap:0;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
 }
 .card:hover{border-color:var(--line-hi)}
 .card h2{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:800;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0}
@@ -89,11 +89,29 @@ body.sidebar-collapsed .editor-resizer{
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   min-height: 28px;
-  transition: opacity 0.15s ease;
+  padding: 13px 16px;
+  border-radius: 17px;
+  transition: opacity 0.15s ease, background 0.15s ease;
 }
 
 .card-header:hover {
   opacity: 0.92;
+}
+
+.card:not(.collapsed) .card-header {
+  border-bottom: 1px solid var(--line);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Card Body (Expanded Form Container) */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 16px;
+  border-bottom-left-radius: 17px;
+  border-bottom-right-radius: 17px;
 }
 
 .card-header h2 {
@@ -149,12 +167,13 @@ body.sidebar-collapsed .editor-resizer{
 
 /* Collapsed state */
 .card.collapsed {
-  padding: 13px 16px;
+  padding: 0;
   gap: 0;
-  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, padding 0.2s, gap 0.2s;
+  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.card.collapsed > :not(.card-header) {
+.card.collapsed .card-body,
+.card.collapsed > :not(.card-header):not(.card-body) {
   display: none !important;
 }
 
