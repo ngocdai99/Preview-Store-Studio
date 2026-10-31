@@ -264,17 +264,20 @@ function renderTablets(){
 function addTabFiles(key, files){
   files = [...files].filter(f => f.type.startsWith('image/'));
   if(!files.length) return;
+  const validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, `${TAB_CFG[key].name} tablet screenshot`));
+  if(!validFiles.length) return;
   const room = MAX_TAB - TABS[key].length;
   if(room <= 0){ showToast(`${TAB_CFG[key].name} tablets allow up to ${MAX_TAB} screenshots`, 'warn'); return; }
-  if(files.length > room){ files = files.slice(0, room); showToast(`Only ${room} more fit (max ${MAX_TAB}) — extra files skipped`, 'warn'); }
+  let targetFiles = validFiles;
+  if(targetFiles.length > room){ targetFiles = targetFiles.slice(0, room); showToast(`Only ${room} more fit (max ${MAX_TAB}) — extra files skipped`, 'warn'); }
   let done = 0;
-  const out = new Array(files.length);
-  files.forEach((f, n) => readFile(f, d => {
+  const out = new Array(targetFiles.length);
+  targetFiles.forEach((f, n) => readFile(f, d => {
     out[n] = d;
-    if(++done === files.length){
+    if(++done === targetFiles.length){
       out.forEach(s => TABS[key].push(makeTabItem(s)));
       renderTablets(); saveState();
-      showToast(`Added ${files.length} ${TAB_CFG[key].name} tablet screenshot${files.length===1?'':'s'}`, 'ok');
+      showToast(`Added ${targetFiles.length} ${TAB_CFG[key].name} tablet screenshot${targetFiles.length===1?'':'s'}`, 'ok');
     }
   }));
 }
@@ -287,6 +290,7 @@ Object.keys(TAB_CFG).forEach(key => {
     if(!files.length) return;
     if(tabPick.key === key && tabPick.idx >= 0){
       const idx = tabPick.idx; tabPick = {key:null, idx:-1};
+      if(typeof validateUploadFile === 'function' && !validateUploadFile(files[0], MAX_UPLOAD_BYTES, `${TAB_CFG[key].name} tablet screenshot`)) return;
       readFile(files[0], d => { TABS[key][idx] = makeTabItem(d); renderTablets(); saveState(); showToast('Screenshot replaced', 'ok'); });
     }else{
       tabPick = {key:null, idx:-1};

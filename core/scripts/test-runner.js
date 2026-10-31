@@ -1915,8 +1915,9 @@ assert(ipadCardHtml.includes('2048×2732 px') && ipadCardHtml.includes('2064×27
 
 const ipadJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'ipad.js'), 'utf8');
 assert(!ipadJsCode.includes('Universal App Notice:'), 'validateIpadScreenshots no longer displays warning notice when 0 screenshots are uploaded');
-assert(ipadJsCode.includes('if(isExactIpad || is3to4)'), 'validateIpadScreenshots accepts both exact iPad Pro 13" and standard 4:3 iPad ratios as compliant');
+assert(ipadJsCode.includes('(isExactIpad || is3to4)'), 'validateIpadScreenshots accepts both exact iPad Pro 13" and standard 4:3 iPad ratios as compliant');
 assert(!ipadJsCode.includes('not exact iPad Pro 13"'), 'validateIpadScreenshots warning focuses on non-standard ratios without falsely flagging 4:3 iPad screenshots');
+assert(bundledHtml.includes('MAX_UPLOAD_BYTES = 8 * 1024 * 1024') && bundledHtml.includes('validateUploadFile'), 'utils.js exports MAX_UPLOAD_BYTES (8 MB) and validateUploadFile helper to protect IndexedDB');
 
 // ---------------------------------------------------------------------
 // SUITE 26: Customize Metrics Focus Highlight & Linking Verification

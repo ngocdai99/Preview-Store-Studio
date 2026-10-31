@@ -269,9 +269,23 @@ function validateIpadScreenshots(){
       const ratio = w / h;
       const is3to4 = (Math.abs(ratio - (3/4)) < 0.08) || (Math.abs(ratio - (4/3)) < 0.08) || (ratio >= 0.65 && ratio <= 0.85) || (ratio >= 1.18 && ratio <= 1.54);
 
+      let shotSize = 0;
+      if (typeof s === 'string' && s.startsWith('data:')) {
+        const comma = s.indexOf(',');
+        if (comma !== -1) {
+          const b64 = s.slice(comma + 1);
+          const pad = b64.endsWith('==') ? 2 : (b64.endsWith('=') ? 1 : 0);
+          shotSize = Math.round((b64.length * 3) / 4 - pad);
+        }
+      }
+      const isOverSize = shotSize > 8 * 1024 * 1024;
+
       if(tag){
         tag.style.display = 'inline-flex';
-        if(isExactIpad){
+        if(isOverSize){
+          tag.className = 'shot-dim-tag err';
+          tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
+        } else if(isExactIpad){
           tag.className = 'shot-dim-tag ok';
           tag.textContent = `iPad Pro 13" (${w}×${h})`;
         } else if(is3to4){
@@ -286,7 +300,7 @@ function validateIpadScreenshots(){
         }
       }
 
-      if(isExactIpad || is3to4){
+      if(!isOverSize && (isExactIpad || is3to4)){
         compliantIndices.push(idx + 1);
       } else {
         nonCompliantIndices.push(idx + 1);
@@ -312,7 +326,7 @@ function validateIpadScreenshots(){
       const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
       const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not standard iPad 4:3 ratio. Phone screenshots will be cropped or letterboxed.</span>`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} exceed 8 MB limit or not standard iPad 4:3 ratio. Phone screenshots will be cropped or letterboxed.</span>`;
       badgeEl.style.display = 'flex';
     } else {
       // Compliant: All criteria met -> hide badge, do not show green message box
@@ -350,6 +364,10 @@ if(ipadShotFile){
   ipadShotFile.onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'iPad screenshot')){
+      e.target.value = '';
+      return;
+    }
     readFile(f, d => {
       ipadPick < 0 ? IPAD_SHOTS.push(d) : IPAD_SHOTS[ipadPick] = d;
       ipadPick = -1;

@@ -86,9 +86,25 @@ function updateMockupClocks() {
 
 
 
-// --- File Reader Helper ---
-const readFile = (f, cb) => {
-  if (typeof FileReader === 'undefined') return;
+// --- File Reader Helper & Storage Protection (8 MB limit matching Google Play to protect IndexedDB) ---
+const MAX_UPLOAD_BYTES = 8 * 1024 * 1024; // 8 MB
+
+function validateUploadFile(file, maxBytes = MAX_UPLOAD_BYTES, label = 'Screenshot') {
+  if (!file) return false;
+  if (typeof file.size === 'number' && file.size > maxBytes) {
+    const mb = (file.size / (1024 * 1024)).toFixed(1);
+    const maxMb = Math.round(maxBytes / (1024 * 1024));
+    if (typeof showToast === 'function') {
+      showToast(`${label} file too large (${mb} MB). Maximum allowed is ${maxMb} MB.`, 'err');
+    }
+    return false;
+  }
+  return true;
+}
+
+const readFile = (f, cb, maxBytes = MAX_UPLOAD_BYTES) => {
+  if (typeof FileReader === 'undefined' || !f) return;
+  if (!validateUploadFile(f, maxBytes)) return;
   const r = new FileReader();
   r.onload = () => cb(r.result);
   r.readAsDataURL(f);

@@ -89,9 +89,25 @@ function updateMockupClocks() {
 
 
 
-// --- File Reader Helper ---
-const readFile = (f, cb) => {
-  if (typeof FileReader === 'undefined') return;
+// --- File Reader Helper & Storage Protection (8 MB limit matching Google Play to protect IndexedDB) ---
+const MAX_UPLOAD_BYTES = 8 * 1024 * 1024; // 8 MB
+
+function validateUploadFile(file, maxBytes = MAX_UPLOAD_BYTES, label = 'Screenshot') {
+  if (!file) return false;
+  if (typeof file.size === 'number' && file.size > maxBytes) {
+    const mb = (file.size / (1024 * 1024)).toFixed(1);
+    const maxMb = Math.round(maxBytes / (1024 * 1024));
+    if (typeof showToast === 'function') {
+      showToast(`${label} file too large (${mb} MB). Maximum allowed is ${maxMb} MB.`, 'err');
+    }
+    return false;
+  }
+  return true;
+}
+
+const readFile = (f, cb, maxBytes = MAX_UPLOAD_BYTES) => {
+  if (typeof FileReader === 'undefined' || !f) return;
+  if (!validateUploadFile(f, maxBytes)) return;
   const r = new FileReader();
   r.onload = () => cb(r.result);
   r.readAsDataURL(f);
@@ -3002,15 +3018,17 @@ slistArea.addEventListener('drop',e=>{
   const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
   if(files.length){
     e.preventDefault();
+    const validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
+    if(!validFiles.length) return;
     let loaded=0;
-    files.forEach(f=>{
+    validFiles.forEach(f=>{
       readFile(f,d=>{
         SHOTS.push(d);
         loaded++;
-        if(loaded===files.length){
+        if(loaded===validFiles.length){
           renderShots();
           saveState();
-          showToast(`Added ${files.length} screenshot(s)!`, 'ok');
+          showToast(`Added ${validFiles.length} screenshot(s)!`, 'ok');
         }
       });
     });
@@ -3455,6 +3473,10 @@ if($('icoFile')){
   $('icoFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'App icon')){
+      e.target.value = '';
+      return;
+    }
     IS_CUSTOM_ICON = true;
     ICON_FILE_SIZE = f.size || 0;
     ICON_FILE_TYPE = f.type || '';
@@ -3498,6 +3520,7 @@ if(icoDropZone){
     icoDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file && file.type.startsWith('image/')){
+      if(typeof validateUploadFile === 'function' && !validateUploadFile(file, MAX_UPLOAD_BYTES, 'App icon')) return;
       IS_CUSTOM_ICON = true;
       ICON_FILE_SIZE = file.size || 0;
       ICON_FILE_TYPE = file.type || '';
@@ -3788,6 +3811,7 @@ function validateScreenshots(){
   const squareIndices = [];
   const nonPhoneIndices = [];
   const sizeIssueIndices = [];
+  const overSizeIndices = [];
 
   SHOTS.forEach((s, idx) => {
     if(!s || !s.trim()){
@@ -3804,6 +3828,17 @@ function validateScreenshots(){
       const h = img.naturalHeight;
       const tag = $('shotDimTag_' + idx);
 
+      let shotSize = 0;
+      if (typeof s === 'string' && s.startsWith('data:')) {
+        const comma = s.indexOf(',');
+        if (comma !== -1) {
+          const b64 = s.slice(comma + 1);
+          const pad = b64.endsWith('==') ? 2 : (b64.endsWith('=') ? 1 : 0);
+          shotSize = Math.round((b64.length * 3) / 4 - pad);
+        }
+      }
+      const isOverSize = shotSize > 8 * 1024 * 1024;
+
       if(w > 0 && h > 0){
         const isSquare = (Math.abs(w - h) / Math.max(w, h)) < 0.12;
         const isLandscape = w > h * 1.15;
@@ -3812,7 +3847,10 @@ function validateScreenshots(){
 
         if(tag){
           tag.style.display = 'inline-flex';
-          if(isSquare){
+          if(isOverSize){
+            tag.className = 'shot-dim-tag err';
+            tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
+          } else if(isSquare){
             tag.className = 'shot-dim-tag warn';
             tag.textContent = `1:1 Square (${w}×${h})`;
           } else if(isGoogleSizeIssue){
@@ -3830,6 +3868,9 @@ function validateScreenshots(){
           }
         }
 
+        if(isOverSize){
+          overSizeIndices.push(idx + 1);
+        }
         if(isSquare){
           squareIndices.push(idx + 1);
         } else if(!isPhonePortrait && !isLandscape){
@@ -3858,7 +3899,14 @@ function validateScreenshots(){
 
   function finalizeBadge(){
     const maxAllowed = store === 'apple' ? 10 : 8;
-    if(squareIndices.length > 0){
+    if(overSizeIndices.length > 0){
+      const items = overSizeIndices.map(n => `#${n}`).join(', ');
+      const noun = overSizeIndices.length > 1 ? 'Screenshots' : 'Screenshot';
+      const verb = overSizeIndices.length > 1 ? 'exceed' : 'exceeds';
+      badgeEl.className = 'shot-status-badge err';
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>File Size Error:</strong> ${noun} ${items} ${verb} 8 MB maximum limit. Please compress to avoid upload rejection and high memory usage.</span>`;
+      badgeEl.style.display = 'flex';
+    } else if(squareIndices.length > 0){
       const items = squareIndices.map(n => `#${n}`).join(', ');
       if(store === 'apple'){
         badgeEl.className = 'shot-status-badge err';
@@ -3893,6 +3941,10 @@ if($('shotFile')){
   $('shotFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'Phone screenshot')){
+      e.target.value = '';
+      return;
+    }
     readFile(f, d => {
       pick < 0 ? SHOTS.push(d) : SHOTS[pick] = d;
       pick = -1;
@@ -4200,9 +4252,23 @@ function validateIpadScreenshots(){
       const ratio = w / h;
       const is3to4 = (Math.abs(ratio - (3/4)) < 0.08) || (Math.abs(ratio - (4/3)) < 0.08) || (ratio >= 0.65 && ratio <= 0.85) || (ratio >= 1.18 && ratio <= 1.54);
 
+      let shotSize = 0;
+      if (typeof s === 'string' && s.startsWith('data:')) {
+        const comma = s.indexOf(',');
+        if (comma !== -1) {
+          const b64 = s.slice(comma + 1);
+          const pad = b64.endsWith('==') ? 2 : (b64.endsWith('=') ? 1 : 0);
+          shotSize = Math.round((b64.length * 3) / 4 - pad);
+        }
+      }
+      const isOverSize = shotSize > 8 * 1024 * 1024;
+
       if(tag){
         tag.style.display = 'inline-flex';
-        if(isExactIpad){
+        if(isOverSize){
+          tag.className = 'shot-dim-tag err';
+          tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
+        } else if(isExactIpad){
           tag.className = 'shot-dim-tag ok';
           tag.textContent = `iPad Pro 13" (${w}×${h})`;
         } else if(is3to4){
@@ -4217,7 +4283,7 @@ function validateIpadScreenshots(){
         }
       }
 
-      if(isExactIpad || is3to4){
+      if(!isOverSize && (isExactIpad || is3to4)){
         compliantIndices.push(idx + 1);
       } else {
         nonCompliantIndices.push(idx + 1);
@@ -4243,7 +4309,7 @@ function validateIpadScreenshots(){
       const items = nonCompliantIndices.map(n => `#${n}`).join(', ');
       const noun = nonCompliantIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} not standard iPad 4:3 ratio. Phone screenshots will be cropped or letterboxed.</span>`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> ${noun} ${items} exceed 8 MB limit or not standard iPad 4:3 ratio. Phone screenshots will be cropped or letterboxed.</span>`;
       badgeEl.style.display = 'flex';
     } else {
       // Compliant: All criteria met -> hide badge, do not show green message box
@@ -4281,6 +4347,10 @@ if(ipadShotFile){
   ipadShotFile.onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'iPad screenshot')){
+      e.target.value = '';
+      return;
+    }
     readFile(f, d => {
       ipadPick < 0 ? IPAD_SHOTS.push(d) : IPAD_SHOTS[ipadPick] = d;
       ipadPick = -1;
@@ -4713,18 +4783,38 @@ if(ipadShotFile){
           detailsHtml = '';
         }
       } else if (_activeModalType === 'ipad') {
-        if (w === 2048 && h === 2732) {
+        const MAX_IPAD_SHOT_BYTES = 8 * 1024 * 1024;
+        if (sizeBytes > MAX_IPAD_SHOT_BYTES) {
+          const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
+          level = 'err';
+          badgeText = `File size error: ${mb} MB · Exceeds maximum 8 MB`;
+          detailsHtml = `<p>Screenshot file size (${mb} MB) exceeds the 8 MB safety limit. Large files slow down IndexedDB and will increase rejection risks.</p><p class="icon-modal-warn-hint">Please optimize or compress the PNG/JPEG image.</p>`;
+        } else if (w === 2048 && h === 2732) {
           level = 'ok';
           badgeText = '2048×2732 px · iPad Pro 13" Compliant';
+        } else if (w === 2732 && h === 2048) {
+          level = 'ok';
+          badgeText = '2732×2048 px · iPad Pro 13" Landscape Compliant';
+        } else if ((Math.abs(w/h - 0.75) < 0.08) || (Math.abs(w/h - 1.333) < 0.08) || (w/h >= 0.65 && w/h <= 0.85) || (w/h >= 1.18 && w/h <= 1.54)) {
+          level = 'ok';
+          badgeText = `${w}×${h} px · Standard iPad Compliant`;
         } else {
           level = 'warn';
           badgeText = `Dimension Notice (${w}×${h} px) · Target: 2048×2732 px`;
-          detailsHtml = '<p>Apple recommends 2048×2732 px for 13" iPad Pro screenshots (Portrait).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
+          detailsHtml = '<p>Apple recommends 2048×2732 px for 13" iPad Pro screenshots (Portrait) or 2732×2048 px (Landscape).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
         }
       } else {
         // Phone Screenshot
-        level = 'ok';
-        badgeText = `${w}×${h} px · Active Screenshot`;
+        const MAX_PHONE_SHOT_BYTES = 8 * 1024 * 1024;
+        if (sizeBytes > MAX_PHONE_SHOT_BYTES) {
+          const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
+          level = 'err';
+          badgeText = `File size error: ${mb} MB · Exceeds maximum 8 MB`;
+          detailsHtml = `<p>Screenshot file size (${mb} MB) exceeds the 8 MB safety limit. Google Play strictly enforces a maximum of 8 MB per screenshot.</p><p class="icon-modal-warn-hint">Please compress or optimize the image before submitting.</p>`;
+        } else {
+          level = 'ok';
+          badgeText = `${w}×${h} px · Active Screenshot`;
+        }
       }
 
       if (badgeEl) {
@@ -4759,6 +4849,7 @@ if(ipadShotFile){
 
   function handleFileReplacement(file) {
     if (!file) return;
+    if (typeof validateUploadFile === 'function' && !validateUploadFile(file, typeof MAX_UPLOAD_BYTES !== 'undefined' ? MAX_UPLOAD_BYTES : 8 * 1024 * 1024, 'Asset')) return;
     const reader = new FileReader();
     reader.onload = e => {
       const dataUrl = e.target.result;
@@ -5423,17 +5514,20 @@ function renderTablets(){
 function addTabFiles(key, files){
   files = [...files].filter(f => f.type.startsWith('image/'));
   if(!files.length) return;
+  const validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, `${TAB_CFG[key].name} tablet screenshot`));
+  if(!validFiles.length) return;
   const room = MAX_TAB - TABS[key].length;
   if(room <= 0){ showToast(`${TAB_CFG[key].name} tablets allow up to ${MAX_TAB} screenshots`, 'warn'); return; }
-  if(files.length > room){ files = files.slice(0, room); showToast(`Only ${room} more fit (max ${MAX_TAB}) — extra files skipped`, 'warn'); }
+  let targetFiles = validFiles;
+  if(targetFiles.length > room){ targetFiles = targetFiles.slice(0, room); showToast(`Only ${room} more fit (max ${MAX_TAB}) — extra files skipped`, 'warn'); }
   let done = 0;
-  const out = new Array(files.length);
-  files.forEach((f, n) => readFile(f, d => {
+  const out = new Array(targetFiles.length);
+  targetFiles.forEach((f, n) => readFile(f, d => {
     out[n] = d;
-    if(++done === files.length){
+    if(++done === targetFiles.length){
       out.forEach(s => TABS[key].push(makeTabItem(s)));
       renderTablets(); saveState();
-      showToast(`Added ${files.length} ${TAB_CFG[key].name} tablet screenshot${files.length===1?'':'s'}`, 'ok');
+      showToast(`Added ${targetFiles.length} ${TAB_CFG[key].name} tablet screenshot${targetFiles.length===1?'':'s'}`, 'ok');
     }
   }));
 }
@@ -5446,6 +5540,7 @@ Object.keys(TAB_CFG).forEach(key => {
     if(!files.length) return;
     if(tabPick.key === key && tabPick.idx >= 0){
       const idx = tabPick.idx; tabPick = {key:null, idx:-1};
+      if(typeof validateUploadFile === 'function' && !validateUploadFile(files[0], MAX_UPLOAD_BYTES, `${TAB_CFG[key].name} tablet screenshot`)) return;
       readFile(files[0], d => { TABS[key][idx] = makeTabItem(d); renderTablets(); saveState(); showToast('Screenshot replaced', 'ok'); });
     }else{
       tabPick = {key:null, idx:-1};

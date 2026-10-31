@@ -122,15 +122,17 @@ slistArea.addEventListener('drop',e=>{
   const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
   if(files.length){
     e.preventDefault();
+    const validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
+    if(!validFiles.length) return;
     let loaded=0;
-    files.forEach(f=>{
+    validFiles.forEach(f=>{
       readFile(f,d=>{
         SHOTS.push(d);
         loaded++;
-        if(loaded===files.length){
+        if(loaded===validFiles.length){
           renderShots();
           saveState();
-          showToast(`Added ${files.length} screenshot(s)!`, 'ok');
+          showToast(`Added ${validFiles.length} screenshot(s)!`, 'ok');
         }
       });
     });

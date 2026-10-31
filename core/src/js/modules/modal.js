@@ -415,18 +415,38 @@
           detailsHtml = '';
         }
       } else if (_activeModalType === 'ipad') {
-        if (w === 2048 && h === 2732) {
+        const MAX_IPAD_SHOT_BYTES = 8 * 1024 * 1024;
+        if (sizeBytes > MAX_IPAD_SHOT_BYTES) {
+          const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
+          level = 'err';
+          badgeText = `File size error: ${mb} MB · Exceeds maximum 8 MB`;
+          detailsHtml = `<p>Screenshot file size (${mb} MB) exceeds the 8 MB safety limit. Large files slow down IndexedDB and will increase rejection risks.</p><p class="icon-modal-warn-hint">Please optimize or compress the PNG/JPEG image.</p>`;
+        } else if (w === 2048 && h === 2732) {
           level = 'ok';
           badgeText = '2048×2732 px · iPad Pro 13" Compliant';
+        } else if (w === 2732 && h === 2048) {
+          level = 'ok';
+          badgeText = '2732×2048 px · iPad Pro 13" Landscape Compliant';
+        } else if ((Math.abs(w/h - 0.75) < 0.08) || (Math.abs(w/h - 1.333) < 0.08) || (w/h >= 0.65 && w/h <= 0.85) || (w/h >= 1.18 && w/h <= 1.54)) {
+          level = 'ok';
+          badgeText = `${w}×${h} px · Standard iPad Compliant`;
         } else {
           level = 'warn';
           badgeText = `Dimension Notice (${w}×${h} px) · Target: 2048×2732 px`;
-          detailsHtml = '<p>Apple recommends 2048×2732 px for 13" iPad Pro screenshots (Portrait).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
+          detailsHtml = '<p>Apple recommends 2048×2732 px for 13" iPad Pro screenshots (Portrait) or 2732×2048 px (Landscape).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
         }
       } else {
         // Phone Screenshot
-        level = 'ok';
-        badgeText = `${w}×${h} px · Active Screenshot`;
+        const MAX_PHONE_SHOT_BYTES = 8 * 1024 * 1024;
+        if (sizeBytes > MAX_PHONE_SHOT_BYTES) {
+          const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
+          level = 'err';
+          badgeText = `File size error: ${mb} MB · Exceeds maximum 8 MB`;
+          detailsHtml = `<p>Screenshot file size (${mb} MB) exceeds the 8 MB safety limit. Google Play strictly enforces a maximum of 8 MB per screenshot.</p><p class="icon-modal-warn-hint">Please compress or optimize the image before submitting.</p>`;
+        } else {
+          level = 'ok';
+          badgeText = `${w}×${h} px · Active Screenshot`;
+        }
       }
 
       if (badgeEl) {
@@ -461,6 +481,7 @@
 
   function handleFileReplacement(file) {
     if (!file) return;
+    if (typeof validateUploadFile === 'function' && !validateUploadFile(file, typeof MAX_UPLOAD_BYTES !== 'undefined' ? MAX_UPLOAD_BYTES : 8 * 1024 * 1024, 'Asset')) return;
     const reader = new FileReader();
     reader.onload = e => {
       const dataUrl = e.target.result;

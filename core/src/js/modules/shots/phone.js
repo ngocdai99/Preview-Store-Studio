@@ -224,6 +224,7 @@ function validateScreenshots(){
   const squareIndices = [];
   const nonPhoneIndices = [];
   const sizeIssueIndices = [];
+  const overSizeIndices = [];
 
   SHOTS.forEach((s, idx) => {
     if(!s || !s.trim()){
@@ -240,6 +241,17 @@ function validateScreenshots(){
       const h = img.naturalHeight;
       const tag = $('shotDimTag_' + idx);
 
+      let shotSize = 0;
+      if (typeof s === 'string' && s.startsWith('data:')) {
+        const comma = s.indexOf(',');
+        if (comma !== -1) {
+          const b64 = s.slice(comma + 1);
+          const pad = b64.endsWith('==') ? 2 : (b64.endsWith('=') ? 1 : 0);
+          shotSize = Math.round((b64.length * 3) / 4 - pad);
+        }
+      }
+      const isOverSize = shotSize > 8 * 1024 * 1024;
+
       if(w > 0 && h > 0){
         const isSquare = (Math.abs(w - h) / Math.max(w, h)) < 0.12;
         const isLandscape = w > h * 1.15;
@@ -248,7 +260,10 @@ function validateScreenshots(){
 
         if(tag){
           tag.style.display = 'inline-flex';
-          if(isSquare){
+          if(isOverSize){
+            tag.className = 'shot-dim-tag err';
+            tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
+          } else if(isSquare){
             tag.className = 'shot-dim-tag warn';
             tag.textContent = `1:1 Square (${w}×${h})`;
           } else if(isGoogleSizeIssue){
@@ -266,6 +281,9 @@ function validateScreenshots(){
           }
         }
 
+        if(isOverSize){
+          overSizeIndices.push(idx + 1);
+        }
         if(isSquare){
           squareIndices.push(idx + 1);
         } else if(!isPhonePortrait && !isLandscape){
@@ -294,7 +312,14 @@ function validateScreenshots(){
 
   function finalizeBadge(){
     const maxAllowed = store === 'apple' ? 10 : 8;
-    if(squareIndices.length > 0){
+    if(overSizeIndices.length > 0){
+      const items = overSizeIndices.map(n => `#${n}`).join(', ');
+      const noun = overSizeIndices.length > 1 ? 'Screenshots' : 'Screenshot';
+      const verb = overSizeIndices.length > 1 ? 'exceed' : 'exceeds';
+      badgeEl.className = 'shot-status-badge err';
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>File Size Error:</strong> ${noun} ${items} ${verb} 8 MB maximum limit. Please compress to avoid upload rejection and high memory usage.</span>`;
+      badgeEl.style.display = 'flex';
+    } else if(squareIndices.length > 0){
       const items = squareIndices.map(n => `#${n}`).join(', ');
       if(store === 'apple'){
         badgeEl.className = 'shot-status-badge err';
@@ -329,6 +354,10 @@ if($('shotFile')){
   $('shotFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'Phone screenshot')){
+      e.target.value = '';
+      return;
+    }
     readFile(f, d => {
       pick < 0 ? SHOTS.push(d) : SHOTS[pick] = d;
       pick = -1;

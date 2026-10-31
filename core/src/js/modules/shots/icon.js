@@ -431,6 +431,10 @@ if($('icoFile')){
   $('icoFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'App icon')){
+      e.target.value = '';
+      return;
+    }
     IS_CUSTOM_ICON = true;
     ICON_FILE_SIZE = f.size || 0;
     ICON_FILE_TYPE = f.type || '';
@@ -474,6 +478,7 @@ if(icoDropZone){
     icoDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file && file.type.startsWith('image/')){
+      if(typeof validateUploadFile === 'function' && !validateUploadFile(file, MAX_UPLOAD_BYTES, 'App icon')) return;
       IS_CUSTOM_ICON = true;
       ICON_FILE_SIZE = file.size || 0;
       ICON_FILE_TYPE = file.type || '';
