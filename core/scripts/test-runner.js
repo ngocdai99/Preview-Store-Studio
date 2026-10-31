@@ -1516,6 +1516,8 @@ assert(bundledHtml.includes('.pill.is-google') && bundledHtml.includes('.seg[dat
 assert(bundledHtml.includes('.pill.is-dual') && bundledHtml.includes('.seg[data-store="dual"] .pill'), 'Immediate Dual store pill selector defined');
 assert(bundledHtml.includes('pill.dataset.store = s'), 'syncSegPill sets pill dataset store immediately');
 assert(bundledHtml.includes('seg.dataset.store = s'), 'syncSegPill sets segmented control dataset store immediately');
+assert(bundledHtml.includes('body[data-ui-store=apple] .card[data-only=google]'), 'CSS updates Google card selector to support immediate uiStore switching');
+assert(bundledHtml.includes("if ($('ipadCard')) $('ipadCard').style.display = (typeof SUPPORTS_IPAD !== 'undefined' && SUPPORTS_IPAD) ? '' : 'none';"), 'setStore updates ipadCard display synchronously to prevent intermediate 5-card flicker');
 
 // ---------------------------------------------------------------------
 // Suite 18: Google Play Feature Graphic 15 MB Limit & No-Alpha Verification

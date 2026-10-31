@@ -7583,6 +7583,11 @@ function setStore(s, animate = true){
 
   // Immediately update editor fields visibility and title for instant feedback
   $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
+  if (s === 'apple') {
+    if ($('ipadCard')) $('ipadCard').style.display = (typeof SUPPORTS_IPAD !== 'undefined' && SUPPORTS_IPAD) ? '' : 'none';
+  } else {
+    if ($('ipadCard')) $('ipadCard').style.display = 'none';
+  }
   if($('edTitle')) $('edTitle').textContent = 'App Identity';
   syncCategoryUI();
   if (typeof syncAgeUI === 'function') syncAgeUI();

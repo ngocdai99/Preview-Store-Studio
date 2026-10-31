@@ -4,7 +4,8 @@ body[data-store=google][data-google-device="tab10"] .dev.google{display:none!imp
 body[data-store=google][data-google-device="tab7"] .dev.gtab7{display:block!important}
 body[data-store=google][data-google-device="tab10"] .dev.gtab10{display:block!important}
 body[data-store=google][data-google-device="tab10"] #vt{display:none!important}
-body[data-store=apple] .card[data-only=google]{display:none}
+body[data-ui-store=apple] .card[data-only=google],
+body:not([data-ui-store])[data-store=apple] .card[data-only=google]{display:none}
 .card.hide{display:none}
 
 .dev.gtab{
