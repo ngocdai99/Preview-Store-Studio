@@ -3,7 +3,9 @@
   <div class="card-header">
     <h2><span class="card-num" title="Card 5">5</span><i class="card-ico c-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg></i>iPad Screenshots</h2>
     <div class="card-header-right">
-      <span class="cc" id="ipadShotCounter">0 / 10 screenshots</span>
+      <span class="info-tip-btn" data-tip-title="iPad Screenshots Guidelines" data-tip-desc="Required for Universal iOS apps. Upload 13&quot; iPad Pro (2048×2732 or 2064×2752 px) screenshots in 4:3 ratio without alpha." data-tip-apple-link="https://developer.apple.com/app-store/product-page/#screenshots" tabindex="0" role="button" aria-label="iPad Screenshots Guidelines" title="iPad Screenshots Guidelines">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </span>
       <span class="card-toggle-ico" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="6 9 12 15 18 9"></polyline>
@@ -12,9 +14,12 @@
     </div>
   </div>
   <div id="ipadShotStatusBadge" class="shot-status-badge" style="display:none"></div>
-  <p class="hint">
+  <p class="hint" id="ipadShotHint" style="margin-bottom:6px">
     <strong>iPad Pro 13" (4:3 ratio):</strong> Upload 1–10 screenshots at <strong>2048×2732 px</strong> or <strong>2064×2752 px</strong>. If empty, mockup displays scaled iPhone screenshots. Drag ⠿ handle to reorder.
   </p>
+  <div class="shot-counter-row" style="display:flex;justify-content:flex-end;margin-bottom:8px">
+    <span class="cc" id="ipadShotCounter">0 / 10 screenshots</span>
+  </div>
   <div class="sl" id="ipadSlist"></div>
   <button class="add" id="addIpadShot"><span class="add-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>Add Screenshot</button>
   <input type="file" id="ipadShotFile" accept="image/*" hidden>

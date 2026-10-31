@@ -1,8 +1,11 @@
 <!-- Card 1: App Identity -->
 <div class="card" id="identityCard">
   <div class="card-header">
-    <h2><span class="card-num" title="Card 1">1</span><i class="card-ico c-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></i><span id="edTitle">Listing Details</span></h2>
+    <h2><span class="card-num" title="Card 1">1</span><i class="card-ico c-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></i><span id="edTitle">App Identity</span></h2>
     <div class="card-header-right">
+      <span class="info-tip-btn" data-tip-title="App Identity Guidelines" data-tip-desc="Core identity assets for your store listing: App Icon, App Name, Subtitle, Developer information, Category, and Device Support." data-tip-apple-link="https://developer.apple.com/app-store/product-page/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="App Identity Guidelines" title="App Identity Guidelines">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </span>
       <span class="card-toggle-ico" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="6 9 12 15 18 9"></polyline>
@@ -37,6 +40,9 @@
           <span class="info-tip-btn" id="iosIconInfoBtn" data-only="apple" tabindex="0" role="button" aria-label="iOS App Icon &amp; Xcode Guidelines" title="iOS App Icon &amp; Xcode Guidelines">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           </span>
+          <span class="info-tip-btn" data-only="google" data-tip-title="Google Play App Icon Guidelines" data-tip-desc="512 × 512 px 32-bit PNG with alpha channel, up to 1024 KB. Sharp square corners (Google Play dynamically applies 20% corner radius and shadow)." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="Google Play App Icon Guidelines" title="Google Play App Icon Guidelines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </span>
         </div>
         <span class="shot-dim-tag" id="iconDimTag" style="display:none"></span>
       </div>
@@ -52,19 +58,40 @@
 
   <!-- App Name (30 chars) -->
   <div class="fg">
-    <div class="lr"><label>App name<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label><span class="cc" id="c-name"></span></div>
+    <div class="lr">
+      <label>App name<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span>
+        <span class="info-tip-btn" id="appNameInfoBtn" tabindex="0" role="button" aria-label="App Name Guidelines" title="App Name Guidelines">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+      </label>
+      <span class="cc" id="c-name"></span>
+    </div>
     <input type="text" id="f-name" value="TaskFlow: Daily Habit Planner" placeholder="e.g. My App Name">
   </div>
 
   <!-- Subtitle (Apple, 30 chars) -->
   <div class="fg" data-only="apple">
-    <div class="lr"><label>Subtitle<span class="tag a">APPLE</span></label><span class="cc" id="c-sub"></span></div>
+    <div class="lr">
+      <label>Subtitle<span class="tag a">APPLE</span>
+        <span class="info-tip-btn" data-tip-title="Subtitle Guidelines" data-tip-desc="A concise summary of your app's main purpose (max 30 characters), appearing right below the app name on iOS." data-tip-apple-link="https://developer.apple.com/app-store/product-page/#subtitle" tabindex="0" role="button" aria-label="Subtitle Guidelines" title="Subtitle Guidelines">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+      </label>
+      <span class="cc" id="c-sub"></span>
+    </div>
     <input type="text" id="f-sub" value="Build habits & boost focus" placeholder="e.g. 30-character punchy subtitle">
   </div>
 
   <!-- Short Description (Google, 80 chars) -->
   <div class="fg" data-only="google">
-    <div class="lr"><label>Short Description<span class="tag g">GOOGLE</span></label><span class="cc" id="c-short"></span></div>
+    <div class="lr">
+      <label>Short Description<span class="tag g">GOOGLE</span>
+        <span class="info-tip-btn" data-tip-title="Short Description Guidelines" data-tip-desc="The first description users see on Google Play (max 80 characters) before tapping 'About this app'. Crucial for search and conversion." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="Short Description Guidelines" title="Short Description Guidelines">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+      </label>
+      <span class="cc" id="c-short"></span>
+    </div>
     <textarea id="f-short" rows="3" placeholder="e.g. 80-character hook for Google Play Store...">Organize daily tasks, build lasting habits, and track your focus effortlessly.</textarea>
   </div>
 
@@ -75,7 +102,14 @@
       <input type="text" id="f-dev" value="FlowCraft Studio Inc." placeholder="e.g. Company or Studio">
     </div>
     <div class="fg cat-picker-fg">
-      <div class="lr"><label>Category<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label></div>
+      <div class="lr">
+        <div style="display:inline-flex;align-items:center">
+          <label>Category<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label>
+          <span class="info-tip-btn" data-tip-title="Category Guidelines" data-tip-desc="The primary category for your app. Helps store algorithms place your app in top charts and recommendation lists." data-tip-apple-link="https://developer.apple.com/app-store/categories/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9859673" tabindex="0" role="button" aria-label="Category Guidelines" title="Category Guidelines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </span>
+        </div>
+      </div>
       <input type="hidden" id="f-cat" value="Productivity">
       <!-- Hidden legacy selects for full compatibility -->
       <select class="fsel" id="f-cat-apple" aria-label="App Store primary category" style="display:none"></select>
@@ -112,26 +146,14 @@
     </div>
   </div>
 
-  <!-- Support Email, Phone & Location (Google Play App Support) -->
-  <div class="form-row-2col" data-only="google">
-    <div class="fg">
-      <div class="lr"><label>Email<span class="tag g">GOOGLE</span></label></div>
-      <input type="text" id="f-email" value="support@flowcraft.studio" placeholder="e.g. support@domain.com">
-    </div>
-    <div class="fg">
-      <div class="lr"><label>Phone Number<span class="tag g">GOOGLE</span></label></div>
-      <input type="text" id="f-phone" value="+1 800-555-0199" placeholder="e.g. +1 800-555-0199">
-    </div>
-  </div>
-  <div class="fg" data-only="google" style="margin-top:12px">
-    <div class="lr"><label>Developer Location<span class="tag g">GOOGLE</span></label></div>
-    <input type="text" id="f-addr" value="Vietnam" placeholder="e.g. Vietnam">
-  </div>
-
   <!-- Supported Devices / App Store Destination (Apple) -->
   <div class="fg" data-only="apple" id="destAppleGroup">
     <div class="lr">
-      <label>Supported Devices<span class="tag a">APPLE</span></label>
+      <label>Supported Devices<span class="tag a">APPLE</span>
+        <span class="info-tip-btn" data-tip-title="Supported Devices Guidelines" data-tip-desc="Configure whether your iOS binary is iPhone-only or a Universal app supporting both iPhone and iPad native interfaces." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/manage-app-information/edit-device-availability/" tabindex="0" role="button" aria-label="Supported Devices Guidelines" title="Supported Devices Guidelines">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+      </label>
       <span class="dest-badge" id="destStatusBadge">iPhone Only</span>
     </div>
 

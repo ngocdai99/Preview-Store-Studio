@@ -407,10 +407,14 @@ function initDescFeatures() {
   initFieldFocusLinking();
   initPrivacyBanner();
   if (typeof initInfoPopover === 'function') {
+    initInfoPopover("appNameInfoBtn", "appNameInfoPop", "appNameInfoClose");
     initInfoPopover("descInfoBtn", "descInfoPop", "descInfoClose");
     initInfoPopover("privacyInfoBtn", "privacyInfoPop", "privacyInfoClose");
     initInfoPopover("whatsNewInfoBtn", "whatsNewInfoPop", "whatsNewInfoClose");
     initInfoPopover("metricsInfoBtn", "metricsInfoPop", "metricsInfoClose");
+  }
+  if (typeof initSharedPopovers === 'function') {
+    initSharedPopovers();
   }
 }
 

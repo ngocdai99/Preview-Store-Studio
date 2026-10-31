@@ -481,6 +481,196 @@ function initInfoPopover(btnId, popId, closeId, allowedStore = null) {
   });
 }
 
+function initSharedPopovers() {
+  const pop = $("sharedInfoPop");
+  const close = $("sharedInfoClose");
+  const titleText = $("sharedInfoTitleText");
+  const descEl = $("sharedInfoDesc");
+  const footer = $("sharedInfoFooter");
+  const linkEl = $("sharedInfoLink");
+  if (!pop) return;
+
+  let popoverCloseTimeout = null;
+  let activeBtn = null;
+  let isPinned = false;
+
+  function updatePosition(btn) {
+    if (!btn || !pop || !pop.classList.contains("open")) return;
+    if (document.body.classList.contains("sidebar-collapsed")) {
+      hide(true);
+      return;
+    }
+
+    const rect = btn.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0 || rect.bottom < 40 || rect.top > window.innerHeight - 40) {
+      hide(true);
+      return;
+    }
+
+    const popW = 360;
+    const btnCenterY = rect.top + rect.height / 2;
+
+    let left = rect.right + 12;
+    let isFlipLeft = false;
+
+    if (left + popW > window.innerWidth - 14) {
+      left = rect.left - popW - 12;
+      isFlipLeft = true;
+      if (left < 14) {
+        left = Math.max(14, window.innerWidth - popW - 14);
+        isFlipLeft = false;
+      }
+    }
+
+    let top = rect.top - 18;
+    const popH = pop.offsetHeight || 260;
+    if (top + popH > window.innerHeight - 16) {
+      top = Math.max(16, window.innerHeight - popH - 16);
+    }
+    if (top < 16) top = 16;
+
+    const arrowTop = Math.max(18, Math.min(popH - 18, btnCenterY - top));
+
+    pop.style.top = Math.round(top) + "px";
+    pop.style.left = Math.round(left) + "px";
+    pop.style.setProperty("--pop-arrow-top", Math.round(arrowTop) + "px");
+    pop.classList.toggle("flip-left", isFlipLeft);
+  }
+
+  function show(btn, pinned = false) {
+    if (!btn || !pop) return;
+    if (document.body.classList.contains("sidebar-collapsed")) return;
+
+    if (popoverCloseTimeout) {
+      clearTimeout(popoverCloseTimeout);
+      popoverCloseTimeout = null;
+    }
+
+    if (activeBtn && activeBtn !== btn) {
+      activeBtn.classList.remove("active");
+    }
+    activeBtn = btn;
+    if (pinned) isPinned = true;
+
+    const title = btn.dataset.tipTitle || 'Guidelines';
+    if (titleText) titleText.textContent = title;
+
+    const desc = btn.dataset.tipDesc || '';
+    if (descEl) descEl.textContent = desc;
+
+    const activeSt = typeof store !== 'undefined' ? store : (document.body.dataset.store || 'apple');
+    let url = '';
+    if (activeSt === 'apple' && btn.dataset.tipAppleLink) {
+      url = btn.dataset.tipAppleLink;
+    } else if (activeSt === 'google' && btn.dataset.tipGoogleLink) {
+      url = btn.dataset.tipGoogleLink;
+    } else if (btn.dataset.tipLink) {
+      url = btn.dataset.tipLink;
+    } else if (btn.dataset.tipAppleLink) {
+      url = btn.dataset.tipAppleLink;
+    } else if (btn.dataset.tipGoogleLink) {
+      url = btn.dataset.tipGoogleLink;
+    }
+
+    if (footer && linkEl) {
+      if (url) {
+        linkEl.href = url;
+        footer.style.display = 'flex';
+      } else {
+        footer.style.display = 'none';
+      }
+    }
+
+    pop.classList.add("open");
+    pop.setAttribute("aria-hidden", "false");
+    btn.classList.add("active");
+    updatePosition(btn);
+  }
+
+  function hide(immediate = false) {
+    if (!pop) return;
+    if (immediate) {
+      if (popoverCloseTimeout) clearTimeout(popoverCloseTimeout);
+      isPinned = false;
+      pop.classList.remove("open");
+      pop.setAttribute("aria-hidden", "true");
+      if (activeBtn) activeBtn.classList.remove("active");
+      activeBtn = null;
+      return;
+    }
+
+    if (popoverCloseTimeout) clearTimeout(popoverCloseTimeout);
+    popoverCloseTimeout = setTimeout(() => {
+      isPinned = false;
+      pop.classList.remove("open");
+      pop.setAttribute("aria-hidden", "true");
+      if (activeBtn) activeBtn.classList.remove("active");
+      activeBtn = null;
+    }, 120);
+  }
+
+  document.addEventListener("click", e => {
+    const tipBtn = e.target.closest(".info-tip-btn[data-tip-title]");
+    if (tipBtn) {
+      e.stopPropagation();
+      if (pop.classList.contains("open") && activeBtn === tipBtn && isPinned) {
+        hide(true);
+      } else {
+        show(tipBtn, true);
+      }
+      return;
+    }
+    if (pop.classList.contains("open") && !pop.contains(e.target)) {
+      hide(true);
+    }
+  });
+
+  document.addEventListener("mouseover", e => {
+    const tipBtn = e.target.closest(".info-tip-btn[data-tip-title]");
+    if (tipBtn) {
+      show(tipBtn, false);
+    }
+  });
+
+  document.addEventListener("mouseout", e => {
+    const tipBtn = e.target.closest(".info-tip-btn[data-tip-title]");
+    if (tipBtn && !isPinned) {
+      hide(false);
+    }
+  });
+
+  pop.addEventListener("mouseenter", () => {
+    if (popoverCloseTimeout) clearTimeout(popoverCloseTimeout);
+  });
+  pop.addEventListener("mouseleave", () => {
+    if (!isPinned) hide(false);
+  });
+
+  if (close) {
+    close.addEventListener("click", e => {
+      e.stopPropagation();
+      hide(true);
+    });
+  }
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && pop.classList.contains("open")) {
+      hide(true);
+    }
+  });
+
+  const editor = document.querySelector(".editor");
+  if (editor) {
+    editor.addEventListener("scroll", () => {
+      if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);
+    }, { passive: true });
+  }
+
+  window.addEventListener("resize", () => {
+    if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);
+  });
+}
+
 // --- IndexedDB High-Capacity Storage Engine (Virtually unlimited quota for high-res screenshots) ---
 const IDB_DB_NAME = 'StorePreviewStudioDB';
 const IDB_STORE_NAME = 'keyval';
@@ -6596,10 +6786,14 @@ function initDescFeatures() {
   initFieldFocusLinking();
   initPrivacyBanner();
   if (typeof initInfoPopover === 'function') {
+    initInfoPopover("appNameInfoBtn", "appNameInfoPop", "appNameInfoClose");
     initInfoPopover("descInfoBtn", "descInfoPop", "descInfoClose");
     initInfoPopover("privacyInfoBtn", "privacyInfoPop", "privacyInfoClose");
     initInfoPopover("whatsNewInfoBtn", "whatsNewInfoPop", "whatsNewInfoClose");
     initInfoPopover("metricsInfoBtn", "metricsInfoPop", "metricsInfoClose");
+  }
+  if (typeof initSharedPopovers === 'function') {
+    initSharedPopovers();
   }
 }
 
@@ -7145,7 +7339,7 @@ function setStore(s, animate = true){
 
   // Immediately update editor fields visibility and title for instant feedback
   $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
-  if($('edTitle')) $('edTitle').textContent = 'Listing Details';
+  if($('edTitle')) $('edTitle').textContent = 'App Identity';
   syncCategoryUI();
   if (typeof syncAgeUI === 'function') syncAgeUI();
 

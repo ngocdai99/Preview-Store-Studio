@@ -604,6 +604,10 @@ assert(ipadHtml.includes('class="a-nav-btn ipad-nav-btn ipad-nav-back"') && ipad
 assert(/<button[^>]*ipad-nav-back[^>]*>\s*<svg[^>]*width="20"[^>]*height="20"/.test(ipadHtml), 'iPad back button SVG has explicit width/height constraints');
 assert(/<button[^>]*ipad-nav-share[^>]*>\s*<svg[^>]*width="19"[^>]*height="19"/.test(ipadHtml), 'iPad share button SVG has explicit width/height constraints');
 
+// 5D. iPad App Privacy Dark Theme Styling
+assert(bundledHtml.includes('.phone.ipad[data-theme=dark] .pc') || bundledHtml.includes('.phone[data-theme=dark] .pc'), 'iPad App Privacy cards (.pc) have dark theme rules in bundled CSS');
+assert(/(\.phone\.ipad|\.phone)\[data-theme=dark\]\s*\.pc\{background:#1c1c1e/.test(bundledHtml), 'iPad App Privacy cards use #1c1c1e background in dark mode');
+
 // 6. iPad Screenshot Ratio Classifier & Rejection Warning Logic
 function classifyIpadScreenshotRatio(w, h) {
   if (w <= 0 || h <= 0) return 'INVALID';
@@ -1179,7 +1183,7 @@ assert(bundledHtml.includes('Questionnaires on Store Consoles:'), 'Popover expla
 assert(!bundledHtml.includes("4. Preview Studio Sync:"), 'Privacy popover removes redundant item 4');
 assert(bundledHtml.includes('id="privacyMockBanner"'), 'Privacy card renders compact interactive banner #privacyMockBanner');
 assert(!bundledHtml.includes('class="pcb-shield"'), 'Privacy card removed protect shield icon from compact banner');
-assert(bundledHtml.includes('class="pcb-tags"'), 'Privacy card wraps APPLE & GOOGLE store tags on a separate line below title');
+assert(bundledHtml.includes('class="pcb-tags"') && bundledHtml.includes('class="tag a"') && bundledHtml.includes('class="tag g"'), 'Privacy card displays APPLE & GOOGLE store tags outside compact compliance box');
 assert(bundledHtml.includes('.pcb-sub') && bundledHtml.includes('-webkit-line-clamp: 2;'), 'Privacy card sub description allows 2 lines of full content');
 assert(
   bundledHtml.includes('type="hidden" id="f-priv-linked"') &&
@@ -1349,9 +1353,9 @@ assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes
 assert(bundledHtml.includes('.dev-label') && bundledHtml.includes('.dev-title'), 'Stage stylesheet includes .dev-label and .dev-title presentation styling');
 
 // 11. Marketing-Aligned Placeholder App Icon & Silent Validation in Core Studio
-assert(bundledHtml.includes('id="edTitle">Listing Details</span>'), 'Card 1 header uses unified "Listing Details" title');
-assert(bundledHtml.includes("$('edTitle').textContent = 'Listing Details'"), 'setStore maintains unified "Listing Details" title');
-assert(bundledHtml.includes('class="ico-wrap is-placeholder"') && bundledHtml.includes('id="icoDropZone"'), 'App icon drop container in Listing Details starts with .is-placeholder class');
+assert(bundledHtml.includes('id="edTitle">App Identity</span>'), 'Card 1 header uses unified "App Identity" title');
+assert(bundledHtml.includes("$('edTitle').textContent = 'App Identity'"), 'setStore maintains unified "App Identity" title');
+assert(bundledHtml.includes('class="ico-wrap is-placeholder"') && bundledHtml.includes('id="icoDropZone"'), 'App icon drop container in App Identity starts with .is-placeholder class');
 assert(bundledHtml.includes('<div class="ico-ov">') && bundledHtml.includes('circle cx="11" cy="11" r="8"'), 'App icon drop container contains .ico-ov overlay with blue zoom/lens icon');
 assert(bundledHtml.includes('linearGradient id="c6-bg"') && bundledHtml.includes('stop-color="#3b82f6"'), 'BLANK_ICON matches marketing Concept 6 vibrant dual-device vector gradient (#3b82f6 -> #8b5cf6)');
 assert(bundledHtml.includes('function isPlaceholderIcon'), 'Core studio includes isPlaceholderIcon helper function to silence validation badge on unedited drafts');
@@ -2007,7 +2011,7 @@ assert(bundledHtml.indexOf('id="privacyCard"') > bundledHtml.indexOf('id="featur
 console.log('\n[SUITE 30]: Large Cards Collapsible Accordion Verification');
 
 // 1. Card 1 must be ALWAYS EXPANDED by default (no collapsed class)
-assert(/<div[^>]*id="identityCard"[^>]*class="card(?!\s+collapsed\b)[^"]*"/.test(bundledHtml) || !bundledHtml.includes('id="identityCard" class="card collapsed"'), 'Card 1 (Listing Details) is expanded by default (no collapsed class)');
+assert(/<div[^>]*id="identityCard"[^>]*class="card(?!\s+collapsed\b)[^"]*"/.test(bundledHtml) || !bundledHtml.includes('id="identityCard" class="card collapsed"'), 'Card 1 (App Identity) is expanded by default (no collapsed class)');
 
 // 2. Other large cards must be COLLAPSED by default
 assert(/class="card collapsed"[^>]*id="contentCard"/.test(bundledHtml), 'Card 2 (Description & Release Notes) is collapsed by default');
@@ -2016,7 +2020,21 @@ assert(/class="card collapsed"[^>]*id="statsCard"/.test(bundledHtml), 'Card 4 (S
 assert(/class="card collapsed"[^>]*id="ipadCard"/.test(bundledHtml), 'Card 5 (iPad Screenshots) is collapsed by default');
 assert(/class="card collapsed"[^>]*id="tabCard"/.test(bundledHtml), 'Card 5 (Tablet Screenshots) is collapsed by default');
 assert(/class="card collapsed"[^>]*id="featureCard"/.test(bundledHtml), 'Card 6 (Feature Graphic) is collapsed by default');
+assert(/class="card collapsed"[^>]*id="supportCard"/.test(bundledHtml), 'Card 7 (App Support) is collapsed by default');
 assert(/class="card collapsed"[^>]*id="privacyCard"/.test(bundledHtml), 'Card Privacy (App Privacy & Data Safety) is collapsed by default at bottom');
+assert(bundledHtml.includes('id="supportCard"') && bundledHtml.includes('title="Card 7">7</span>'), 'Card 7 (App Support) has card-num 7 for Google Play');
+assert(bundledHtml.includes('<span data-only="google">8</span>'), 'Card Privacy has card-num 8 for Google Play');
+assert(bundledHtml.indexOf('id="featureCard"') < bundledHtml.indexOf('id="supportCard"'), 'Feature Graphic (Card 6) is before App Support (Card 7)');
+assert(bundledHtml.indexOf('id="supportCard"') < bundledHtml.indexOf('id="privacyCard"'), 'App Support (Card 7) is before Privacy (Card 8)');
+
+// Verify screenshot counters are inside card body / desc area, not inside card header
+const shotsHeader = bundledHtml.match(/<div class="card[^"]*" id="shotsCard">[\s\S]*?<div class="card-header">([\s\S]*?)<\/div>/);
+assert(shotsHeader && !shotsHeader[1].includes('id="shotCounter"'), 'Phone Screenshots header does not contain screenshot counter');
+const ipadHeader = bundledHtml.match(/<div class="card[^"]*"[^>]*id="ipadCard"[^>]*>[\s\S]*?<div class="card-header">([\s\S]*?)<\/div>/);
+assert(ipadHeader && !ipadHeader[1].includes('id="ipadShotCounter"'), 'iPad Screenshots header does not contain screenshot counter');
+assert(bundledHtml.includes('id="shotCounter"') && bundledHtml.includes('id="ipadShotCounter"'), 'Screenshot counters exist in card body description area');
+assert(bundledHtml.indexOf('id="shotHint"') < bundledHtml.indexOf('id="shotCounter"'), 'Phone screenshot counter is placed below description');
+assert(bundledHtml.indexOf('id="ipadShotHint"') < bundledHtml.indexOf('id="ipadShotCounter"'), 'iPad screenshot counter is placed below description');
 
 // 3. CSS rules for collapsed cards and headers
 assert(bundledHtml.includes('.card.collapsed > :not(.card-header)'), 'CSS hides all content outside .card-header when card is collapsed');
@@ -2079,6 +2097,68 @@ assert(ageSandbox.AGE_RATINGS.length >= 5, 'AGE_RATINGS contains at least 5 stan
 
 ageSandbox.selectAgeFromUI('12+');
 assert(ageSandbox.STATS.age === '12+', 'selectAgeFromUI updates STATS.age to 12+');
+
+// ---------------------------------------------------------------------
+// SUITE 32: Tooltip Guidelines & Learn More Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 32]: Tooltip Guidelines & Learn More Verification');
+
+assert(bundledHtml.includes('id="appNameInfoBtn"'), 'App Name info tip button exists in identity card');
+assert(bundledHtml.includes('id="appNameInfoPop"'), 'App Name guidelines popover exists in bundled HTML');
+assert(bundledHtml.includes('https://developer.apple.com/app-store/product-page/'), 'App Name popover links to official Apple App Store product page');
+
+// Verify guidelines popovers include Learn more link (metrics intentionally excluded as it has no public listing doc)
+['appNameInfoPop', 'descInfoPop', 'featureInfoPop', 'iosIconInfoPop', 'privacyInfoPop', 'whatsNewInfoPop'].forEach(popId => {
+  const idx = bundledHtml.indexOf(`id="${popId}"`);
+  assert(idx !== -1, `${popId} exists in bundled HTML`);
+  const popSnippet = bundledHtml.slice(idx, idx + 1800);
+  assert(popSnippet.includes('info-pop-link') && popSnippet.includes('Learn more'), `${popId} includes a Learn more link button`);
+});
+
+const metricsPopIdx = bundledHtml.indexOf('id="metricsInfoPop"');
+assert(metricsPopIdx !== -1, 'metricsInfoPop exists in bundled HTML');
+const metricsPopSnippet = bundledHtml.slice(metricsPopIdx, metricsPopIdx + 1200);
+assert(!metricsPopSnippet.includes('info-pop-link'), 'metricsInfoPop does not contain external Learn more link as requested');
+
+assert(bundledHtml.includes('.info-pop-link') && bundledHtml.includes('.info-pop-footer'), 'Bundled CSS provides styling for .info-pop-link and .info-pop-footer');
+assert(bundledHtml.includes(':root[data-ui=light] .info-pop-link'), 'Bundled CSS provides light theme adaptation for .info-pop-link');
+assert(/:root\[data-ui=light\]\s*\.info-pop-title\{\s*color:#0f172a/.test(bundledHtml), 'Tooltip title uses crisp black text (#0f172a) in light mode');
+assert(/:root\[data-ui=light\]\s*\.info-popover\{[^}]*box-shadow:\s*none/.test(bundledHtml), 'Tooltip popover shadow is completely removed in light mode (box-shadow: none)');
+assert(!bundledHtml.includes('#privacyInfoPop .info-pop-title{color:#34d399}'), 'Tooltip title does not use green tint');
+assert(!bundledHtml.includes('body[data-store=google] .info-tip-btn:hover{color:#10b981'), 'Tooltip icon button uses neutral monochrome styling without store/card tinting');
+assert(/:root\[data-ui=light\]\s*\.info-tip-btn\{[^}]*background:transparent!important/.test(bundledHtml), 'Tooltip button has transparent background without outer wrapper or shadow in light mode');
+
+// Shared Guidelines Popover & Card / Field Tooltip Verification
+assert(bundledHtml.includes('id="sharedInfoPop"') && bundledHtml.includes('id="sharedInfoLink"'), 'Shared info popover with dynamic link exists in bundled HTML');
+assert(bundledHtml.includes('initSharedPopovers'), 'initSharedPopovers function exists in bundled JS');
+
+const expectedTipTitles = [
+  'App Identity Guidelines',
+  'Content &amp; Updates Guidelines',
+  'Phone Screenshots Guidelines',
+  'iPad Screenshots Guidelines',
+  'Tablet Screenshots Guidelines',
+  'App Support Guidelines',
+  'Subtitle Guidelines',
+  'Short Description Guidelines',
+  'Category Guidelines',
+  'Support Email Guidelines',
+  'Support Phone Guidelines',
+  'Developer Location Guidelines',
+  'Supported Devices Guidelines',
+  'Promotional Text Guidelines',
+  'App Version Guidelines',
+  'Release Date Guidelines',
+  'Age Rating Guidelines',
+  'Monetization Guidelines',
+  'Customer Reviews Guidelines'
+];
+
+assert(!bundledHtml.includes('data-tip-title="Developer Name Guidelines"'), 'Developer field does not contain guideline tooltip as requested');
+
+expectedTipTitles.forEach(title => {
+  assert(bundledHtml.includes(`data-tip-title="${title}"`), `Field/card tooltip with title "${title}" exists in bundled HTML`);
+});
 
 // ---------------------------------------------------------------------
 // Summary Report

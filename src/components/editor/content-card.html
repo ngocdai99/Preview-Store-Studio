@@ -3,6 +3,9 @@
   <div class="card-header">
     <h2><span class="card-num" title="Card 2">2</span><i class="card-ico c-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></i>Description &amp; Release Notes</h2>
     <div class="card-header-right">
+      <span class="info-tip-btn" data-tip-title="Content &amp; Updates Guidelines" data-tip-desc="Detailed promotional content, release update notes, and SEO/ASO descriptions for store search indexing." data-tip-apple-link="https://developer.apple.com/app-store/product-page/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="Content &amp; Updates Guidelines" title="Content &amp; Updates Guidelines">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </span>
       <span class="card-toggle-ico" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="6 9 12 15 18 9"></polyline>
@@ -13,17 +16,36 @@
   
   <!-- Promotional Text (Apple, 170 chars) -->
   <div class="fg" data-only="apple">
-    <div class="lr"><label>Promotional Text<span class="tag a">APPLE</span></label><span class="cc" id="c-promo"></span></div>
+    <div class="lr">
+      <label>Promotional Text<span class="tag a">APPLE</span>
+        <span class="info-tip-btn" data-tip-title="Promotional Text Guidelines" data-tip-desc="Appears at the top of the description on the App Store (max 170 characters). Can be updated anytime without submitting a new build." data-tip-apple-link="https://developer.apple.com/app-store/product-page/#promotional-text" tabindex="0" role="button" aria-label="Promotional Text Guidelines" title="Promotional Text Guidelines">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+      </label>
+      <span class="cc" id="c-promo"></span>
+    </div>
     <textarea id="f-promo" rows="3" placeholder="e.g. Special offer, seasonal update, or headline...">Spring Productivity Sale: Unlock TaskFlow Pro with smart recurring habits, Pomodoro focus timer, and seamless cloud sync.</textarea>
   </div>
 
   <div class="form-row-2col" data-only="apple" style="margin-bottom:12px">
     <div class="fg" style="margin:0">
-      <div class="lr"><label>Version<span class="tag a" title="App Store">APPLE</span></label></div>
+      <div class="lr">
+        <label>Version<span class="tag a" title="App Store">APPLE</span>
+          <span class="info-tip-btn" data-tip-title="App Version Guidelines" data-tip-desc="The current release version number of your app (e.g. 2.4.0), displayed on the App Store product page." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/manage-app-information/" tabindex="0" role="button" aria-label="App Version Guidelines" title="App Version Guidelines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </span>
+        </label>
+      </div>
       <input type="text" id="f-ver" value="2.4.0" placeholder="e.g. 1.0.1">
     </div>
     <div class="fg" style="margin:0">
-      <div class="lr"><label>Release Date<span class="tag a" title="App Store">APPLE</span></label></div>
+      <div class="lr">
+        <label>Release Date<span class="tag a" title="App Store">APPLE</span>
+          <span class="info-tip-btn" data-tip-title="Release Date Guidelines" data-tip-desc="The publication date of the current version, displayed on the App Store next to the version number." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/manage-app-information/" tabindex="0" role="button" aria-label="Release Date Guidelines" title="Release Date Guidelines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </span>
+        </label>
+      </div>
       <input type="text" id="f-rdate" value="" placeholder="e.g. Current release date">
     </div>
   </div>
