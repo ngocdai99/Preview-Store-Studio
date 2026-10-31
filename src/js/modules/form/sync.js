@@ -199,12 +199,16 @@ function setFieldFocus(key, shouldScroll = true) {
 
   if (!key) return;
 
-  // Auto-expand containing card if it is currently collapsed
+  // Auto-expand containing card if it is currently collapsed & mark it selected
   const editorInput = $('f-' + key) || $(key);
   if (editorInput) {
     const parentCard = editorInput.closest('.card');
-    if (parentCard && parentCard.classList.contains('collapsed')) {
-      parentCard.classList.remove('collapsed');
+    if (parentCard) {
+      if (parentCard.classList.contains('collapsed')) {
+        parentCard.classList.remove('collapsed');
+      }
+      $$('.card').forEach(c => c.classList.remove('selected'));
+      parentCard.classList.add('selected');
     }
   }
 

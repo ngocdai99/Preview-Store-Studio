@@ -2041,6 +2041,7 @@ assert(bundledHtml.indexOf('id="ipadShotHint"') < bundledHtml.indexOf('id="ipadS
 
 // 3. Two-state Card Icon architecture (Selected vs Unselected)
 assert(bundledHtml.includes('.card.collapsed .card-ico') && bundledHtml.includes('.card:not(.collapsed) .card-ico'), 'CSS provides distinct 2-state styling for collapsed (unselected) and expanded (selected) card icons');
+assert(bundledHtml.includes('.card.selected:not(.collapsed) .card-ico'), 'CSS requires card to be both selected AND expanded to take bold indigo icon');
 assert(!bundledHtml.includes('card-ico c-blue') && !bundledHtml.includes('card-ico c-purple'), 'Multi-color rainbow classes (c-blue, c-purple, etc.) are eliminated from card icons');
 assert(!bundledHtml.includes('#tabCard h2{') && !bundledHtml.includes('#tabCard h2 i{'), 'Card 5 (tabCard) inherits standard .card-header h2 and .card-ico alignment without anomalous overrides');
 
@@ -2051,6 +2052,7 @@ assert(bundledHtml.includes('.card-header') && bundledHtml.includes('.card-toggl
 // 4. JS click listener toggles collapsed class
 const headerJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'header.js'), 'utf8');
 assert(headerJsCode.includes("card.classList.toggle('collapsed')"), 'header.js provides click delegation on .card-header to toggle collapsed class');
+assert(headerJsCode.includes("card.classList.add('selected')"), 'header.js manages selected state when expanding cards');
 
 // ---------------------------------------------------------------------
 // SUITE 31: Custom Age Rating Dropdown UI & Search Filter Verification

@@ -66,18 +66,44 @@ function initHeader() {
     }
   });
 
-  // 5. Editor Large Cards Accordion Controller (Expand / Collapse)
+  // 5. Editor Large Cards Accordion Controller (Expand / Collapse & Selected state)
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.info-tip-btn, button:not(.card-toggle-btn), a, input, select, textarea')) {
-      return;
-    }
     const header = e.target.closest('.card-header');
     if (header) {
+      if (e.target.closest('.info-tip-btn, button:not(.card-toggle-btn), a, input, select, textarea')) {
+        return;
+      }
       const card = header.closest('.card');
       if (card) {
+        const wasCollapsed = card.classList.contains('collapsed');
         card.classList.toggle('collapsed');
+        
+        // Card is selected only if it is expanded
+        $$('.card').forEach(c => c.classList.remove('selected'));
+        if (wasCollapsed) {
+          card.classList.add('selected');
+        }
         if (typeof saveState === 'function') saveState();
       }
+      return;
+    }
+
+    // Clicking anywhere inside an already expanded card body selects it
+    const bodyCard = e.target.closest('.card');
+    if (bodyCard && !bodyCard.classList.contains('collapsed')) {
+      if (!bodyCard.classList.contains('selected')) {
+        $$('.card').forEach(c => c.classList.remove('selected'));
+        bodyCard.classList.add('selected');
+      }
+    }
+  });
+
+  // 6. Focusin inside an expanded card also updates selected state
+  document.addEventListener('focusin', (e) => {
+    const card = e.target.closest('.card');
+    if (card && !card.classList.contains('collapsed') && !card.classList.contains('selected')) {
+      $$('.card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
     }
   });
 }

@@ -16,22 +16,21 @@
 .ico-export{background:rgba(255,255,255,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
 
 /* Card Title Badges - Two-State Architecture: Selected (open) vs Unselected (collapsed) */
-.card-ico{
+/* Unselected State: Collapsed or Non-Selected Expanded Card */
+.card-ico,
+.card.collapsed .card-ico,
+.card:not(.collapsed) .card-ico{
   width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;
   flex-shrink:0;transition:all .22s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.card-ico svg{width:15px;height:15px;stroke-width:2.2}
-
-/* Unselected State: Collapsed Card (Màu nhạt: Indigo Violet alpha thấp) */
-.card.collapsed .card-ico{
   background:rgba(139,92,246,0.16)!important;
   border:1px solid rgba(139,92,246,0.28)!important;
   color:#ffffff!important;
   box-shadow:none!important;
 }
+.card-ico svg{width:15px;height:15px;stroke-width:2.2}
 
-/* Selected State: Expanded / Active Card (Màu đậm Indigo Violet) */
-.card:not(.collapsed) .card-ico{
+/* Selected State: Card must be BOTH Selected and Expanded */
+.card.selected:not(.collapsed) .card-ico{
   background:linear-gradient(135deg,#8b5cf6,#6366f1)!important;
   border:1px solid rgba(255,255,255,0.28)!important;
   color:#ffffff!important;
@@ -262,26 +261,29 @@
     transform:scale(1.04);
   }
 
-  /* Form Card Badges in Light Mode: Unselected (Màu nhạt) vs Selected (Màu đậm Indigo Violet) */
-  :root[data-ui=light] .card.collapsed .card-ico{
+  /* Form Card Badges in Light Mode: Unselected or Non-Selected */
+  :root[data-ui=light] .card-ico,
+  :root[data-ui=light] .card.collapsed .card-ico,
+  :root[data-ui=light] .card:not(.collapsed) .card-ico{
     background:rgba(124,58,237,0.1)!important;
     border:1px solid rgba(124,58,237,0.2)!important;
     color:#7c3aed!important;
     box-shadow:none!important;
   }
 
-  :root[data-ui=light] .card:not(.collapsed) .card-ico{
+  /* Form Card Badges in Light Mode: Selected and Expanded */
+  :root[data-ui=light] .card.selected:not(.collapsed) .card-ico{
     background:linear-gradient(135deg,#7c3aed,#6366f1)!important;
     border:none!important;
     color:#ffffff!important;
     box-shadow:0 4px 12px rgba(124,58,237,0.32)!important;
   }
 
-  /* Collapsed Card Hover in Light Mode (Màu xám nhẹ tự nhiên) */
+  /* Collapsed Card Hover in Light Mode (Màu tím nhạt lavender) */
   :root[data-ui=light] .card.collapsed:hover{
-    background:#f1f5f9!important;
-    border-color:rgba(0,0,0,0.12)!important;
-    box-shadow:0 4px 16px rgba(0,0,0,0.06)!important;
+    background:#f5f3ff!important;
+    border-color:rgba(139,92,246,0.25)!important;
+    box-shadow:0 4px 16px rgba(139,92,246,0.08)!important;
   }
 
   /* Form Upload and Action Buttons in Light Mode with Soft Elevation */
