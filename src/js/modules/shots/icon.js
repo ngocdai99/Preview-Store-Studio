@@ -210,7 +210,7 @@ function runIconPixelAudit(iconSrc){
       // Check corner pixels for pre-cut rounded corners or drop shadow:
       // Google Play specifies: "Do not submit artwork with rounded corners or drop shadows."
       // Google Play automatically applies dynamic corner radius (20%) and drop shadow upon upload.
-      // Official documentation: https://support.google.com/googleplay/android-developer/answer/9866130
+      // Official documentation: https://support.google.com/googleplay/android-developer/answer/9866151
       const cornerIdx = [
         (0 * 64 + 0) * 4 + 3,       // Top-left corner
         (0 * 64 + 63) * 4 + 3,      // Top-right corner
