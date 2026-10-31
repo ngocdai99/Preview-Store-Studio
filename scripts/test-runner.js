@@ -2170,6 +2170,11 @@ expectedTipTitles.forEach(title => {
   assert(bundledHtml.includes(`data-tip-title="${title}"`), `Field/card tooltip with title "${title}" exists in bundled HTML`);
 });
 
+// Verify 404 links removed from Supported Devices, App Version, and Release Date
+assert(!bundledHtml.includes('edit-device-availability'), 'Broken edit-device-availability URL removed from Supported Devices tooltip');
+assert(!bundledHtml.includes('data-tip-title="App Version Guidelines" data-tip-desc="The current release version number of your app (e.g. 2.4.0), displayed on the App Store product page." data-tip-apple-link'), 'Broken Learn more link removed from App Version tooltip');
+assert(!bundledHtml.includes('data-tip-title="Release Date Guidelines" data-tip-desc="The publication date of the current version, displayed on the App Store next to the version number." data-tip-apple-link'), 'Broken Learn more link removed from Release Date tooltip');
+
 // ---------------------------------------------------------------------
 // SUITE 33: Google Play Tablet Screenshots Fallback Verification
 // ---------------------------------------------------------------------
