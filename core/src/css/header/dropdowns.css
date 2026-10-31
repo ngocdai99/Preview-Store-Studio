@@ -379,7 +379,7 @@
   color: #d97706;
 }
 
-/* Menu Item Colored Icon Badges */
+/* Menu Item Brand Indigo Violet Icon Badges */
 .mi-ico {
   width: 28px;
   height: 28px;
@@ -388,9 +388,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,.22);
+  background: rgba(139, 92, 246, 0.14);
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  color: #c084fc;
+  box-shadow: none;
   margin-top: 1px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .mi-ico svg {
   width: 14.5px;
@@ -398,22 +401,27 @@
   stroke-width: 2.2;
   display: block;
 }
-.mi-ico-blue { background: linear-gradient(135deg, #0284c7, #38bdf8); }
-.mi-ico-purple { background: linear-gradient(135deg, #7c3aed, #a855f7); }
-.mi-ico-indigo { background: linear-gradient(135deg, #4f46e5, #6366f1); }
-.mi-ico-amber { background: linear-gradient(135deg, #d97706, #f59e0b); }
-.mi-ico-emerald { background: linear-gradient(135deg, #059669, #10b981); }
-.mi-ico-rose { background: linear-gradient(135deg, #db2777, #f43f5e); }
+
+#menuExport .menu-item:hover .mi-ico {
+  background: rgba(139, 92, 246, 0.24);
+  border-color: rgba(139, 92, 246, 0.45);
+  color: #e9d5ff;
+  transform: scale(1.05);
+}
 
 :root[data-ui=light] .mi-ico {
-  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  color: #7c3aed;
+  box-shadow: none;
 }
-:root[data-ui=light] .mi-ico-blue { background: linear-gradient(135deg, #0071e3, #2997ff); }
-:root[data-ui=light] .mi-ico-purple { background: linear-gradient(135deg, #6d28d9, #9333ea); }
-:root[data-ui=light] .mi-ico-indigo { background: linear-gradient(135deg, #4338ca, #4f46e5); }
-:root[data-ui=light] .mi-ico-amber { background: linear-gradient(135deg, #b45309, #d97706); }
-:root[data-ui=light] .mi-ico-emerald { background: linear-gradient(135deg, #047857, #059669); }
-:root[data-ui=light] .mi-ico-rose { background: linear-gradient(135deg, #be185d, #e11d48); }
+
+:root[data-ui=light] #menuExport .menu-item:hover .mi-ico {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.32);
+  color: #6d28d9;
+  transform: scale(1.05);
+}
 
 #menuExport .menu-item {
   counter-increment: export-idx;
@@ -483,28 +491,28 @@
   font-weight: 450;
 }
 
-.menu .menu-item:hover {
-  background: rgba(255, 255, 255, 0.12);
+#menuExport .menu-item:hover {
+  background: rgba(148, 163, 184, 0.12) !important;
   color: #ffffff;
 }
 
-:root[data-ui=light] .menu .menu-item:hover {
-  background: rgba(15, 23, 42, 0.07);
+:root[data-ui=light] #menuExport .menu-item:hover {
+  background: rgba(15, 23, 42, 0.06) !important;
   color: #0f172a;
 }
 
-/* Redesigned Premium Format Badges */
+/* Redesigned Premium Format Badges (Monochrome Slate / Neutral Pill) */
 .mi-pill {
-  font-size: 9.5px;
-  font-weight: 650;
+  font-size: 10px;
+  font-weight: 600;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  letter-spacing: 0.3px;
-  padding: 2px 7px;
+  letter-spacing: 0.35px;
+  padding: 2.5px 7px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  background: rgba(148, 163, 184, 0.1) !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  box-shadow: none !important;
   text-transform: uppercase;
   flex-shrink: 0;
   margin-left: auto;
@@ -514,224 +522,32 @@
 }
 
 #menuExport .menu-item:hover .mi-pill {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.mi-pill-blue {
-  background: rgba(14, 165, 233, 0.14);
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.32);
-}
-
-#menuExport .menu-item:hover .mi-pill-blue {
-  background: rgba(14, 165, 233, 0.26);
-  color: #e0f2fe;
-  border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
-}
-
-.mi-pill-cyan,
-.mi-pill-green {
-  background: rgba(34, 197, 94, 0.14);
-  color: #4ade80;
-  border-color: rgba(74, 222, 128, 0.32);
-}
-
-#menuExport .menu-item:hover .mi-pill-cyan,
-#menuExport .menu-item:hover .mi-pill-green {
-  background: rgba(34, 197, 94, 0.26);
-  color: #dcfce7;
-  border-color: rgba(74, 222, 128, 0.5);
-  box-shadow: 0 0 10px rgba(74, 222, 128, 0.35);
-}
-
-.mi-pill-emerald {
-  background: rgba(16, 185, 129, 0.14);
-  color: #34d399;
-  border-color: rgba(52, 211, 153, 0.32);
-}
-
-#menuExport .menu-item:hover .mi-pill-emerald {
-  background: rgba(16, 185, 129, 0.26);
-  color: #d1fae5;
-  border-color: rgba(52, 211, 153, 0.5);
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
-}
-
-.mi-pill-accent {
-  background: rgba(168, 85, 247, 0.12);
-  color: #c084fc;
-  border-color: rgba(168, 85, 247, 0.28);
-}
-
-#menuExport .menu-item:hover .mi-pill-accent {
-  background: rgba(168, 85, 247, 0.24);
-  color: #f3e8ff;
-  border-color: rgba(168, 85, 247, 0.45);
-  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
-}
-
-.mi-pill-code {
-  background: rgba(99, 102, 241, 0.1);
-  color: #a5b4fc;
-  border-color: rgba(99, 102, 241, 0.24);
-}
-
-#menuExport .menu-item:hover .mi-pill-code {
-  background: rgba(99, 102, 241, 0.2);
-  color: #e0e7ff;
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.25);
-}
-
-.mi-pill-open {
-  background: rgba(52, 211, 153, 0.1);
-  color: #6ee7b7;
-  border-color: rgba(52, 211, 153, 0.24);
-}
-
-#menuExport .menu-item:hover .mi-pill-open {
-  background: rgba(52, 211, 153, 0.2);
-  color: #d1fae5;
-  border-color: rgba(52, 211, 153, 0.4);
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.25);
-}
-
-.mi-pill-danger {
-  background: rgba(244, 63, 94, 0.1);
-  color: #fb7185;
-  border-color: rgba(244, 63, 94, 0.25);
-}
-
-#menuExport .menu-item:hover .mi-pill-danger {
-  background: rgba(244, 63, 94, 0.22);
-  color: #fff;
-  border-color: rgba(244, 63, 94, 0.42);
-  box-shadow: 0 0 10px rgba(244, 63, 94, 0.3);
+  background: rgba(148, 163, 184, 0.18) !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+  box-shadow: none !important;
 }
 
 :root[data-ui=light] .mi-pill {
-  background: rgba(15, 23, 42, 0.04);
-  color: #64748b;
-  border-color: rgba(15, 23, 42, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: rgba(15, 23, 42, 0.05) !important;
+  color: #64748b !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: none !important;
 }
 
 :root[data-ui=light] #menuExport .menu-item:hover .mi-pill {
-  background: rgba(15, 23, 42, 0.08);
-  color: #0f172a;
-  border-color: rgba(15, 23, 42, 0.15);
-}
-
-:root[data-ui=light] .mi-pill-blue {
-  background: rgba(2, 132, 199, 0.08);
-  color: #0284c7;
-  border-color: rgba(2, 132, 199, 0.22);
-}
-
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-blue {
-  background: rgba(2, 132, 199, 0.15);
-  color: #0369a1;
-}
-
-:root[data-ui=light] .mi-pill-cyan,
-:root[data-ui=light] .mi-pill-green {
-  background: rgba(22, 163, 74, 0.08);
-  color: #16a34a;
-  border-color: rgba(22, 163, 74, 0.22);
-}
-
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-cyan,
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-green {
-  background: rgba(22, 163, 74, 0.15);
-  color: #15803d;
-}
-
-:root[data-ui=light] .mi-pill-emerald {
-  background: rgba(5, 150, 105, 0.08);
-  color: #059669;
-  border-color: rgba(5, 150, 105, 0.22);
-}
-
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-emerald {
-  background: rgba(5, 150, 105, 0.15);
-  color: #047857;
-}
-
-:root[data-ui=light] .mi-pill-accent {
-  background: rgba(147, 51, 234, 0.08);
-  color: #7c3aed;
-  border-color: rgba(147, 51, 234, 0.2);
-}
-
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-accent {
-  background: rgba(147, 51, 234, 0.15);
-  color: #6b21a8;
-}
-
-:root[data-ui=light] .mi-pill-code {
-  background: rgba(79, 70, 229, 0.07);
-  color: #4f46e5;
-  border-color: rgba(79, 70, 229, 0.18);
-}
-
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-code {
-  background: rgba(79, 70, 229, 0.14);
-  color: #3730a3;
-}
-
-:root[data-ui=light] .mi-pill-open {
-  background: rgba(16, 185, 129, 0.08);
-  color: #059669;
-  border-color: rgba(16, 185, 129, 0.2);
-}
-
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-open {
-  background: rgba(16, 185, 129, 0.15);
-  color: #047857;
-}
-
-:root[data-ui=light] .mi-pill-danger {
-  background: rgba(225, 29, 72, 0.07);
-  color: #e11d48;
-  border-color: rgba(225, 29, 72, 0.2);
-}
-
-:root[data-ui=light] #menuExport .menu-item:hover .mi-pill-danger {
-  background: rgba(225, 29, 72, 0.14);
-  color: #be123c;
-}
-
-/* Subtle accent for quick clipboard copy */
-#menuExport #btnCopyText {
-  background: linear-gradient(90deg, rgba(168, 85, 247, 0.1) 0%, transparent 100%);
-  border-left: 2.5px solid #a855f7;
-  border-radius: 4px 9px 9px 4px;
-}
-
-#menuExport #btnCopyText:hover {
-  background: linear-gradient(90deg, rgba(168, 85, 247, 0.28) 0%, rgba(255, 255, 255, 0.1) 100%);
-}
-
-:root[data-ui=light] #menuExport #btnCopyText {
-  background: linear-gradient(90deg, rgba(147, 51, 234, 0.07) 0%, transparent 100%);
-  border-left: 2.5px solid #9333ea;
-}
-
-:root[data-ui=light] #menuExport #btnCopyText:hover {
-  background: linear-gradient(90deg, rgba(147, 51, 234, 0.14) 0%, rgba(15, 23, 42, 0.05) 100%);
+  background: rgba(15, 23, 42, 0.09) !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.2) !important;
 }
 
 /* Soft dividers */
 .menu-div {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1) 15%, rgba(255, 255, 255, 0.1) 85%, transparent);
+  background: rgba(255, 255, 255, 0.08);
   margin: 6px 4px;
 }
 
 :root[data-ui=light] .menu-div {
-  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08) 15%, rgba(0, 0, 0, 0.08) 85%, transparent);
+  background: rgba(0, 0, 0, 0.06);
 }

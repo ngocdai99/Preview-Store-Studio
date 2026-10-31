@@ -729,7 +729,9 @@ assert(bundledHtml.includes('id="optExportMD"'), 'Export menu preserves Markdown
 assert(bundledHtml.includes('id="optExportJSON"'), 'Export menu preserves Project JSON export (#optExportJSON)');
 assert(bundledHtml.includes('id="optImportJSON"'), 'Export menu preserves Project JSON import (#optImportJSON)');
 assert(!bundledHtml.includes('Presentation Mockups'), 'Export dropdown removed cluttering section header titles for clean UI');
-assert(bundledHtml.includes('mi-ico-blue') && bundledHtml.includes('mi-ico-purple') && bundledHtml.includes('mi-ico-amber'), 'Export menu items feature vibrant colored icon badges');
+assert(bundledHtml.includes('class="mi-ico"'), 'Export menu items feature unified brand icon badges');
+assert(!bundledHtml.includes('border-left: 2.5px solid #a855f7'), 'Export menu removes asymmetric left border on copy metadata');
+assert(bundledHtml.includes('class="mi-pill"'), 'Export menu features unified sleek format badges');
 
 // ---------------------------------------------------------------------
 // SUITE 11: High-Capacity Storage Engine & LocalStorage Quota Exceeded Protection
