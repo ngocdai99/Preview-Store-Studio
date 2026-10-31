@@ -2357,6 +2357,95 @@ assert(tabSandbox.elements.galTab7.children.length === 3, 'Renders 3 placeholder
 assert(tabSandbox.elements.galTab7.children[0].src.includes('placeholder-tab7'), 'Placeholder SVG is used as fallback when completely empty');
 
 // ---------------------------------------------------------------------
+// [SUITE 34]: View Switcher Idempotency (Spam-Click Guard & No-op on Active View)
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 34]: View Switcher Idempotency (Spam-Click Guard & No-op on Active View)');
+
+assert(bundledHtml.includes('function setView(v, force = false)') || bundledHtml.includes('function setView(v,force=false)'), 'Bundled application defines setView with optional force parameter');
+assert(bundledHtml.includes('document.querySelector(\'#vt button.on\')') || bundledHtml.includes('document.querySelector("#vt button.on")'), 'setView queries active button on #vt');
+assert(bundledHtml.includes('if (!force && activeView === v) return;') || bundledHtml.includes('if(!force&&activeView===v)return;'), 'setView returns early if requested view is already active (prevents re-render on spam tap)');
+
+// Functional test for setView idempotency
+let reflowCount = 0;
+let classToggles = 0;
+const vtDetailBtn = { dataset: { v: 'detail' }, classList: { toggle: (cls, on) => { if(cls === 'on') { classToggles++; vtDetailBtn.isOn = on; } } }, isOn: true };
+const vtSearchBtn = { dataset: { v: 'search' }, classList: { toggle: (cls, on) => { if(cls === 'on') { classToggles++; vtSearchBtn.isOn = on; } } }, isOn: false };
+const viewDetailEl = { dataset: { v: 'detail' }, style: { display: 'block' }, classList: { add: () => {}, remove: () => {} } };
+const viewSearchEl = { dataset: { v: 'search' }, style: { display: 'none' }, classList: { add: () => {}, remove: () => {} } };
+
+const viewSandbox = {
+  document: {
+    querySelector: (sel) => {
+      if (sel === '#vt button.on') {
+        if (vtDetailBtn.isOn) return vtDetailBtn;
+        if (vtSearchBtn.isOn) return vtSearchBtn;
+        return null;
+      }
+      return null;
+    },
+    querySelectorAll: () => []
+  },
+  $$: (sel) => {
+    if (sel === '#vt button') return [vtDetailBtn, vtSearchBtn];
+    if (sel === '.phone [data-v]') return [viewDetailEl, viewSearchEl];
+    return [];
+  },
+  syncAllVtPills: () => {},
+  syncAppleNavScroll: () => {}
+};
+
+const setViewCode = `
+function setView(v, force = false){
+  const activeBtn = document.querySelector('#vt button.on');
+  const activeView = activeBtn ? activeBtn.dataset.v : null;
+  if (!force && activeView === v) return;
+
+  $$('#vt button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  syncAllVtPills();
+  $$('.phone [data-v]').forEach(e => {
+    if(e.dataset.v === v){
+      e.style.display = 'block';
+      e.classList.remove('view-enter');
+      reflowCount++;
+      e.classList.add('view-enter');
+      setTimeout(() => e.classList.remove('view-enter'), 240);
+    } else {
+      e.style.display = 'none';
+    }
+  });
+}
+`;
+
+vm.runInNewContext(setViewCode, Object.assign(viewSandbox, {
+  reflowCount: 0,
+  setTimeout: () => {}
+}));
+
+// Initial state: Detail view is active
+assert(vtDetailBtn.isOn && !vtSearchBtn.isOn, 'Initial view is detail');
+
+// Tap 1: Spam click 'detail' while already in detail -> Must NOT re-render (early return)
+const initialToggles = classToggles;
+viewSandbox.setView('detail');
+assert(classToggles === initialToggles, 'Clicking detail while detail is active does not toggle button classes');
+assert(viewSandbox.reflowCount === 0, 'Clicking detail while detail is active does not trigger reflow or re-render');
+
+// Tap 2: Click 'search' -> Switches to search view
+viewSandbox.setView('search');
+assert(vtSearchBtn.isOn && !vtDetailBtn.isOn, 'Clicking search switches active button to search');
+assert(viewSandbox.reflowCount === 1, 'Switching from detail to search triggers enter transition once');
+
+// Tap 3: Spam click 'search' multiple times while already in search -> Must NOT re-render
+viewSandbox.setView('search');
+viewSandbox.setView('search');
+viewSandbox.setView('search');
+assert(viewSandbox.reflowCount === 1, 'Spam clicking search does not trigger reflow or re-render');
+
+// Tap 4: force = true allows forced re-render if needed
+viewSandbox.setView('search', true);
+assert(viewSandbox.reflowCount === 2, 'Forced view update re-renders when force=true');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

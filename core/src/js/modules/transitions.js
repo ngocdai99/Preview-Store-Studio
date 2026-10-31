@@ -642,7 +642,11 @@ function setStore(s, animate = true){
   transitionStoreMode(fromMode, toMode, applyStoreMode, animate);
 }
 
-function setView(v){
+function setView(v, force = false){
+  const activeBtn = document.querySelector('#vt button.on');
+  const activeView = activeBtn ? activeBtn.dataset.v : null;
+  if (!force && activeView === v) return;
+
   $$('#vt button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   syncAllVtPills();
   $$('.phone [data-v]').forEach(e => {
