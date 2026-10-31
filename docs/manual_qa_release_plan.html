@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store Preview Studio · Manual QA Test Plan & Release Checklist</title>
+<style>
+  :root {
+    --bg-base: #0b0f19;
+    --bg-surface: #111827;
+    --bg-card: #1f2937;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.18);
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.25);
+    --p0-bg: rgba(239, 68, 68, 0.15);
+    --p0-border: rgba(239, 68, 68, 0.35);
+    --p0-text: #f87171;
+    --p1-bg: rgba(245, 158, 11, 0.15);
+    --p1-border: rgba(245, 158, 11, 0.35);
+    --p1-text: #fbbf24;
+    --p2-bg: rgba(59, 130, 246, 0.15);
+    --p2-border: rgba(59, 130, 246, 0.35);
+    --p2-text: #60a5fa;
+    --succ-bg: rgba(16, 185, 129, 0.15);
+    --succ-border: rgba(16, 185, 129, 0.35);
+    --succ-text: #34d399;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+  }
+
+  [data-theme="light"] {
+    --bg-base: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-card: #ffffff;
+    --border: rgba(15, 23, 42, 0.08);
+    --border-hover: rgba(15, 23, 42, 0.18);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent: #0071e3;
+    --accent-glow: rgba(0, 113, 227, 0.2);
+    --p0-bg: #fee2e2;
+    --p0-border: #fca5a5;
+    --p0-text: #b91c1c;
+    --p1-bg: #fef3c7;
+    --p1-border: #fcd34d;
+    --p1-text: #b45309;
+    --p2-bg: #e0f2fe;
+    --p2-border: #7dd3fc;
+    --p2-text: #0369a1;
+    --succ-bg: #d1fae5;
+    --succ-border: #6ee7b7;
+    --succ-text: #047857;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding-bottom: 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Sticky Header */
+  header.top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    padding: 14px 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .nav-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .nav-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
+  }
+  .nav-title h1 {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .nav-title span {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: var(--p0-bg);
+    color: var(--p0-text);
+    border: 1px solid var(--p0-border);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+  }
+  .btn:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn-accent {
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  /* Progress & Filter Bar */
+  .progress-card {
+    max-width: 1040px;
+    margin: 24px auto 0;
+    padding: 18px 24px;
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .progress-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .progress-stat {
+    font-size: 13px;
+    font-weight: 700;
+    font-feature-settings: 'tnum';
+    color: var(--accent);
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-card);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    border-radius: 4px;
+    transition: width 0.35s ease;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .filter-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+  }
+  .filter-pill:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+  }
+  .filter-pill.active {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: transparent;
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1040px;
+    margin: 24px auto;
+    padding: 0 16px;
+  }
+
+  .track-section {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .track-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+  .track-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .track-stat {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-feature-settings: 'tnum';
+  }
+
+  .subtrack-group {
+    margin-bottom: 20px;
+  }
+  .subtrack-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Checklist Items */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    margin-bottom: 6px;
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .check-item:hover {
+    background: var(--bg-card);
+    border-color: var(--border);
+  }
+  .check-item.done {
+    opacity: 0.72;
+    background: rgba(16, 185, 129, 0.03);
+  }
+  .check-item.done .item-content {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+
+  .custom-check {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .custom-check input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .checkmark {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    border: 1.8px solid var(--text-muted);
+    background: var(--bg-card);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .custom-check input:checked ~ .checkmark {
+    background: #10b981;
+    border-color: #10b981;
+  }
+  .checkmark svg {
+    display: none;
+    width: 13px;
+    height: 13px;
+    stroke: #ffffff;
+    stroke-width: 2.8;
+  }
+  .custom-check input:checked ~ .checkmark svg {
+    display: block;
+  }
+
+  .item-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .item-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 5px;
+    letter-spacing: 0.03em;
+  }
+  .badge-p0 { background: var(--p0-bg); color: var(--p0-text); border: 1px solid var(--p0-border); }
+  .badge-p1 { background: var(--p1-bg); color: var(--p1-text); border: 1px solid var(--p1-border); }
+  .badge-p2 { background: var(--p2-bg); color: var(--p2-text); border: 1px solid var(--p2-border); }
+
+  .item-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .item-content {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .item-content ul {
+    margin: 6px 0 0 18px;
+    padding: 0;
+  }
+  .item-content li {
+    margin-bottom: 3px;
+  }
+  .item-content code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  /* Bug Log Box */
+  .bug-template-box {
+    background: var(--bg-card);
+    border: 1px dashed var(--border-hover);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    position: relative;
+    margin-top: 14px;
+  }
+  .bug-template-box pre {
+    font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #10b981;
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media print {
+    header.top-nav, .filter-bar, .btn { display: none !important; }
+    body { background: #fff !important; color: #000 !important; }
+    .track-section { border: 1px solid #ccc !important; box-shadow: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-nav">
+  <div class="nav-inner">
+    <div class="nav-title">
+      <div class="nav-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 11 12 14 22 4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+      </div>
+      <div>
+        <h1>Store Preview Studio · Manual QA Plan</h1>
+      </div>
+      <span>Release Candidate</span>
+    </div>
+    <div class="nav-actions">
+      <button class="btn" id="btnTheme" onclick="toggleTheme()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <span id="lblTheme">Light Mode</span>
+      </button>
+      <button class="btn" onclick="resetAllCheckboxes()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+        Reset Progress
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="progress-card">
+  <div class="progress-header">
+    <div class="progress-title">Tiến độ Kiểm thử Toàn bộ (Overall QA Progress)</div>
+    <div class="progress-stat" id="statSummary">0 / 30 hoàn thành (0%)</div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressBar"></div>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-pill active" onclick="setFilter('all')">Tất cả (All)</button>
+    <button class="filter-pill" onclick="setFilter('p0')">P0 - Blocker</button>
+    <button class="filter-pill" onclick="setFilter('p1')">P1 - High</button>
+    <button class="filter-pill" onclick="setFilter('uncompleted')">Chưa hoàn thành</button>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- Track 1 -->
+  <section class="track-section" data-track="1">
+    <div class="track-header">
+      <div class="track-title">
+        <span>Track 1: Workspace Bar, Theming & Navigation</span>
+      </div>
+      <div class="track-stat" id="statTrack1">0/6</div>
+    </div>
+
+    <div class="subtrack-group">
+      <div class="subtrack-title">1.1 Store Switcher (Apple ↔ Google Play)</div>
+      
+      <div class="check-item" data-sev="p0">
+        <label class="custom-check">
+          <input type="checkbox" id="t1_1">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p0">P0 - Blocker</span>
+            <span class="item-title">Chuyển đổi giữa Apple và Google Play Store</span>
+          </div>
+          <div class="item-content">
+            <ul>
+              <li>Tiêu đề card, danh mục (Categories), nhãn (Labels) đổi chính xác theo store tương ứng.</li>
+              <li>Form ẩn/hiển thị trường đặc thù: Apple hiện Subtitle/iPad/Privacy; Google ẩn Subtitle, hiện Short Desc/Feature Graphic/Tablet/Support.</li>
+              <li>Khung Mockup đổi giao diện đúng chuẩn: Dynamic Island iOS vs Android Status bar.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subtrack-group">
+      <div class="subtrack-title">1.2 Dark Mode & Light Mode (UI Theme)</div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t1_2">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">Chuyển đổi Theme UI (Nút Toggle trên Toolbar)</span>
+          </div>
+          <div class="item-content">
+            <ul>
+              <li><strong>Light Mode</strong>: Nền drawer màu trắng tinh khiết (<code>#ffffff</code>), các card nổi bật nhờ đổ bóng đa lớp, chữ "Store Compliance Profile" màu đen rõ ràng (không tàng hình).</li>
+              <li><strong>Dark Mode</strong>: Bề mặt Obsidian đen sâu (<code>#0b0f19</code>), viền specular highlight sắc nét, tương phản văn bản chuẩn WCAG AAA.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subtrack-group">
+      <div class="subtrack-title">1.3 Semantic Icon Chips trên Form Cards</div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t1_3">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">Icon chips theo màu ngữ nghĩa (Card 1 đến Card 7)</span>
+          </div>
+          <div class="item-content">
+            <ul>
+              <li><strong>Thu gọn (Collapsed)</strong>: Mỗi card mang một màu pastel nhẹ phân biệt: Card 1 Blue, Card 2 Purple, Card 3 Rose, Card 4 Mint, Card 5 Cyan, Card 6 Orange, Card 6/8 Indigo, Card 7 Amber.</li>
+              <li><strong>Mở rộng (Expanded)</strong>: Icon chip sáng bừng rực rỡ dạng gradient, card có viền phát sáng ambient glow cùng tone màu.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subtrack-group">
+      <div class="subtrack-title">1.4 Preset Pills & Draft Persistence</div>
+
+      <div class="check-item" data-sev="p0">
+        <label class="custom-check">
+          <input type="checkbox" id="t1_4a">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p0">P0 - Blocker</span>
+            <span class="item-title">Chuyển đổi qua lại giữa 6 Presets mẫu</span>
+          </div>
+          <div class="item-content">Canvas cập nhật tức thì icon, tên app, danh mục, metrics và ảnh chụp màn hình tương ứng.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-sev="p0">
+        <label class="custom-check">
+          <input type="checkbox" id="t1_4b">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p0">P0 - Blocker</span>
+            <span class="item-title">Lưu trữ Draft tự động & Bền vững (Reload không mất)</span>
+          </div>
+          <div class="item-content">Khi sửa bất kỳ input nào $\rightarrow$ Hiện pill Draft đồng bộ icon/tên app. Reload trình duyệt $\rightarrow$ Giữ nguyên 100% dữ liệu.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-sev="p0">
+        <label class="custom-check">
+          <input type="checkbox" id="t1_4c">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p0">P0 - Blocker</span>
+            <span class="item-title">Reset Draft Modal</span>
+          </div>
+          <div class="item-content">Menu $\rightarrow$ Reset Draft $\rightarrow$ Hiện modal xác nhận $\rightarrow$ Bấm Reset thì xóa sạch draft và trở về preset sạch sẽ.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track 2 -->
+  <section class="track-section" data-track="2">
+    <div class="track-header">
+      <div class="track-title">
+        <span>Track 2: Form Input & Validation từng Card</span>
+      </div>
+      <div class="track-stat" id="statTrack2">0/8</div>
+    </div>
+
+    <div class="subtrack-group">
+      <div class="subtrack-title">Card 1: App Identity</div>
+
+      <div class="check-item" data-sev="p0">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_1a">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p0">P0 - Blocker</span>
+            <span class="item-title">Upload App Icon & Modal Inspect Icon</span>
+          </div>
+          <div class="item-content">Kéo thả file ảnh vào ô Icon cập nhật tức thì. Bấm "Inspect Icon" soi chuẩn góc bo squircle iOS và hình tròn Google Play.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_1b">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">Bộ đếm ký tự chuẩn Intl.Segmenter & Emoji</span>
+          </div>
+          <div class="item-content">Gõ quá 30 ký tự (Apple) báo đỏ cảnh báo. Nhập Emoji phức tạp đếm đúng 1 ký tự visual.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_1c">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">Category Dropdown có ô Search Filter</span>
+          </div>
+          <div class="item-content">Mở dropdown danh mục có ô tìm kiếm gõ lọc nhanh theo tên thể loại.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subtrack-group">
+      <div class="subtrack-title">Card 2, 3, 4: Nội dung, Screenshots & Metrics</div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_2">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">Markdown Description & Tooltip What's New</span>
+          </div>
+          <div class="item-content">Nhập mô tả ngắt dòng, bullet point hiển thị chuẩn trên màn hình Store.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-sev="p0">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_3">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p0">P0 - Blocker</span>
+            <span class="item-title">Upload nhiều Screenshots, Reorder & Fit/Fill</span>
+          </div>
+          <div class="item-content">Upload 3-10 ảnh, kéo thả đổi thứ tự screenshot, xóa ảnh, bật tắt chế độ vừa khung/tràn viền hoạt động trơn tru.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_4">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">Settings & Metrics (Rating, Reviews, Age)</span>
+          </div>
+          <div class="item-content">Sửa điểm đánh giá, số lượng vote, chọn độ tuổi 4+/9+/12+/17+ (Apple) hoặc 3+/7+/12+/16+/18+ (Google) đổi badge chuẩn xác.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subtrack-group">
+      <div class="subtrack-title">Card 5, 6, Privacy: Tablet, Banner & Privacy</div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_5">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">iPad Pro 13" & Android Tablet Screenshots</span>
+          </div>
+          <div class="item-content">Upload ảnh tablet hiển thị sắc nét trên viewport iPad/Tablet, không bị méo tỉ lệ khung hình.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-sev="p1">
+        <label class="custom-check">
+          <input type="checkbox" id="t2_6">
+          <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        </label>
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="badge badge-p1">P1 - High</span>
+            <span class="item-title">Feature Graphic 1024x500 & Modal Privacy</span>
+          </div>
+          <div class="item-content">Upload banner Google Play chặn ảnh có alpha trong suốt. Nút Inspect Privacy mở modal nhãn dinh dưỡng dữ liệu rõ ràng.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track 3 -->
+  <section class="track-section" data-track="3">
+    <div class="track-header">
+      <div class="track-title">
+        <span>Track 3: Clone Store App (iTunes API)</span>
+      </div>
+      <div class="track-stat" id="statTrack3">0/3</div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t3_1">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Đồng bộ Title: "Clone Store App" $\rightarrow$ "Clone from Apple App Store" $\rightarrow$ "Clone App"</span>
+        </div>
+        <div class="item-content">Nút toolbar, tiêu đề modal và nút action submit mang từ ngữ nhất quán, có badge "iOS only" minh bạch.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t3_2">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Test Quick Chips (Spotify, Duolingo, Notion, Telegram)</span>
+        </div>
+        <div class="item-content">Bấm chip cào dữ liệu thành công trong 2-3s: Tải về Icon, Tên app, Subtitle, Screenshots trực tiếp lên canvas.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p1">
+      <label class="custom-check">
+        <input type="checkbox" id="t3_3">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p1">P1 - High</span>
+          <span class="item-title">Nhập Link URL thật & Bắt lỗi mất mạng</span>
+        </div>
+        <div class="item-content">Dán URL App Store bất kỳ phân tích đúng App ID. Ngắt mạng hiển thị thông báo lỗi thân thiện, banner mạng đổi màu.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track 4 -->
+  <section class="track-section" data-track="4">
+    <div class="track-header">
+      <div class="track-title">
+        <span>Track 4: Canvas & Mockup Viewports</span>
+      </div>
+      <div class="track-stat" id="statTrack4">0/3</div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t4_1">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Chuyển đổi Thiết bị: Phone ↔ Tablet</span>
+        </div>
+        <div class="item-content">Chuyển đổi giữa Phone mockup và iPad Pro 13" / Android Tablet mockup mượt mà, căn giữa đẹp mắt.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p1">
+      <label class="custom-check">
+        <input type="checkbox" id="t4_2">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p1">P1 - High</span>
+          <span class="item-title">Trang Chi tiết (Detail) vs Kết quả tìm kiếm (Search Card)</span>
+        </div>
+        <div class="item-content">Xem app store dạng thẻ tìm kiếm (hiển thị icon, tên, rating, 3 screenshots nằm ngang) chuẩn thiết kế thực tế.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p1">
+      <label class="custom-check">
+        <input type="checkbox" id="t4_3">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p1">P1 - High</span>
+          <span class="item-title">Đổi Theme Mockup & Zoom / Pan Canvas</span>
+        </div>
+        <div class="item-content">Đổi mockup sang Dark/Light bên trong màn hình điện thoại. Zoom in/out, fit màn hình và vuốt ngang gallery mượt mà.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track 5 -->
+  <section class="track-section" data-track="5">
+    <div class="track-header">
+      <div class="track-title">
+        <span>Track 5: Export & Import Engine</span>
+      </div>
+      <div class="track-stat" id="statTrack5">0/4</div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t5_1">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Export PNG Phone & iPad Screenshots</span>
+        </div>
+        <div class="item-content">Xuất ảnh PNG chuẩn độ phân giải gốc, chữ và bóng sắc nét, không bị dính thanh cuộn hay outline thừa.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t5_2">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Export Project Backup (.json)</span>
+        </div>
+        <div class="item-content">Tải về file JSON chứa toàn bộ dữ liệu cấu hình và ảnh screenshots dưới dạng nén/base64 đầy đủ.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t5_3">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Import JSON qua Menu $\rightarrow$ Khôi phục 100%</span>
+        </div>
+        <div class="item-content">Nạp lại file JSON đã xuất: Toàn bộ form và canvas khôi phục chính xác từng chi tiết mà không cần mạng.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p1">
+      <label class="custom-check">
+        <input type="checkbox" id="t5_4">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p1">P1 - High</span>
+          <span class="item-title">Copy Markdown / ASO Spec Summary</span>
+        </div>
+        <div class="item-content">Nút Copy text sao chép nội dung tóm tắt ASO vào bộ nhớ tạm chuẩn cú pháp Markdown.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track 6 -->
+  <section class="track-section" data-track="6">
+    <div class="track-header">
+      <div class="track-title">
+        <span>Track 6: Edge Cases, Quota & Chaos Testing</span>
+      </div>
+      <div class="track-stat" id="statTrack6">0/3</div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t6_1">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Kiểm tra Quota LocalStorage khi upload nhiều ảnh lớn</span>
+        </div>
+        <div class="item-content">Upload 10 ảnh nặng không bị văng lỗi QuotaExceededError nhờ hệ thống bảo vệ bộ nhớ High-Capacity Engine.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p1">
+      <label class="custom-check">
+        <input type="checkbox" id="t6_2">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p1">P1 - High</span>
+          <span class="item-title">100% Offline Promise (Ngắt hoàn toàn Wi-Fi)</span>
+        </div>
+        <div class="item-content">Ngắt Wi-Fi mở file <code>core.html</code>: Mọi tính năng chỉnh sửa, xuất ảnh, đổi theme hoạt động độc lập hoàn hảo.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p1">
+      <label class="custom-check">
+        <input type="checkbox" id="t6_3">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p1">P1 - High</span>
+          <span class="item-title">Spam Click & Đóng/Mở Card tốc độ cao</span>
+        </div>
+        <div class="item-content">Click nhanh liên tục không gây layout shift (nhờ <code>scrollbar-gutter: stable</code>) và không crash JS console.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track 7 -->
+  <section class="track-section" data-track="7">
+    <div class="track-header">
+      <div class="track-title">
+        <span>Track 7: Cross-Browser & Pre-Store Checklist</span>
+      </div>
+      <div class="track-stat" id="statTrack7">0/3</div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t7_1">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Kiểm thử trên Apple Safari (macOS & iPadOS)</span>
+        </div>
+        <div class="item-content">Kiểm tra render backdrop-filter, đổ bóng card và xuất ảnh bằng html2canvas trên Safari không bị lỗi trắng màn hình.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p1">
+      <label class="custom-check">
+        <input type="checkbox" id="t7_2">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p1">P1 - High</span>
+          <span class="item-title">Kiểm thử trên Google Chrome & Mozilla Firefox</span>
+        </div>
+        <div class="item-content">Hiển thị chuẩn font hệ thống San Francisco/Roboto, thanh cuộn tùy chỉnh và hiệu ứng elevation mượt mà.</div>
+      </div>
+    </div>
+
+    <div class="check-item" data-sev="p0">
+      <label class="custom-check">
+        <input type="checkbox" id="t7_3">
+        <span class="checkmark"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      </label>
+      <div class="item-body">
+        <div class="item-meta">
+          <span class="badge badge-p0">P0 - Blocker</span>
+          <span class="item-title">Nghiệm thu Đóng gói: 883/883 Unit Tests Pass</span>
+        </div>
+        <div class="item-content">Chạy <code>npm test</code> 100% thành công. File <code>core/core.html</code> độc lập, sạch sẽ, sẵn sàng đem lên Store.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bug Log Card -->
+  <section class="track-section">
+    <div class="track-header">
+      <div class="track-title">
+        <span>📋 Mẫu Ghi Nhận Lỗi Nhanh (Bug Log Template)</span>
+      </div>
+      <button class="btn btn-accent" onclick="copyBugTemplate()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        Copy Template
+      </button>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">Nếu phát hiện lỗi bất thường trong khi test, bấm copy template dưới đây để paste nhanh cho tôi:</p>
+    <div class="bug-template-box">
+      <pre id="bugTemplateText">- **Vị trí**: [Card số mấy / Menu / Canvas / Modal nào]
+- **Store & Mode**: [Apple / Google] · [Light / Dark]
+- **Thao tác**: Bước 1 -> Bước 2 -> Bước 3
+- **Hiện tượng**: [Mô tả lỗi hoặc đính kèm ảnh chụp màn hình]
+- **Mong muốn**: [Hành vi đúng cần có]</pre>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast">Đã copy mẫu báo lỗi vào bộ nhớ tạm!</div>
+
+<script>
+  const STORAGE_KEY = 'sps_qa_plan_states_v1';
+  let checkboxStates = {};
+
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) checkboxStates = JSON.parse(saved);
+  } catch (e) {}
+
+  const allCheckboxes = document.querySelectorAll('.custom-check input[type="checkbox"]');
+  const totalCount = allCheckboxes.length;
+
+  allCheckboxes.forEach(cb => {
+    if (checkboxStates[cb.id]) {
+      cb.checked = true;
+      cb.closest('.check-item').classList.add('done');
+    }
+    cb.addEventListener('change', () => {
+      checkboxStates[cb.id] = cb.checked;
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checkboxStates)); } catch (e) {}
+      if (cb.checked) {
+        cb.closest('.check-item').classList.add('done');
+      } else {
+        cb.closest('.check-item').classList.remove('done');
+      }
+      updateStats();
+    });
+  });
+
+  function updateStats() {
+    let completedCount = 0;
+    allCheckboxes.forEach(cb => { if (cb.checked) completedCount++; });
+    const pct = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
+
+    document.getElementById('statSummary').innerText = `${completedCount} / ${totalCount} hoàn thành (${pct}%)`;
+    document.getElementById('progressBar').style.width = `${pct}%`;
+
+    // Per-track stats
+    for (let i = 1; i <= 7; i++) {
+      const trackSection = document.querySelector(`.track-section[data-track="${i}"]`);
+      if (trackSection) {
+        const cbs = trackSection.querySelectorAll('.custom-check input');
+        const done = Array.from(cbs).filter(c => c.checked).length;
+        const statEl = document.getElementById(`statTrack${i}`);
+        if (statEl) statEl.innerText = `${done}/${cbs.length}`;
+      }
+    }
+  }
+
+  function setFilter(type) {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+
+    const items = document.querySelectorAll('.check-item');
+    items.forEach(item => {
+      const sev = item.getAttribute('data-sev');
+      const isDone = item.classList.contains('done');
+
+      if (type === 'all') {
+        item.style.display = 'flex';
+      } else if (type === 'p0') {
+        item.style.display = sev === 'p0' ? 'flex' : 'none';
+      } else if (type === 'p1') {
+        item.style.display = sev === 'p1' ? 'flex' : 'none';
+      } else if (type === 'uncompleted') {
+        item.style.display = !isDone ? 'flex' : 'none';
+      }
+    });
+  }
+
+  function resetAllCheckboxes() {
+    if (confirm('Bạn có chắc muốn đặt lại toàn bộ tiến độ kiểm thử?')) {
+      checkboxStates = {};
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      allCheckboxes.forEach(cb => {
+        cb.checked = false;
+        cb.closest('.check-item').classList.remove('done');
+      });
+      updateStats();
+    }
+  }
+
+  function toggleTheme() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    document.getElementById('lblTheme').innerText = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+    try { localStorage.setItem('sps_qa_plan_theme', next); } catch (e) {}
+  }
+
+  try {
+    const savedTheme = localStorage.getItem('sps_qa_plan_theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.getElementById('lblTheme').innerText = savedTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    }
+  } catch (e) {}
+
+  function copyBugTemplate() {
+    const text = document.getElementById('bugTemplateText').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    });
+  }
+
+  updateStats();
+</script>
+</body>
+</html>
