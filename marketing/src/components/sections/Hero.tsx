@@ -25,9 +25,9 @@ export function Hero() {
 
         {/* Main H1 */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground max-w-4xl leading-[1.12]">
-          Stop guessing how your app listing <br className="hidden sm:inline" />
+          {hero.titleLead} <br className="hidden sm:inline" />
           <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-400 bg-clip-text text-transparent">
-            looks before submitting.
+            {hero.titleAccent}
           </span>
         </h1>
 

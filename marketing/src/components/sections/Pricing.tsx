@@ -36,7 +36,7 @@ export function Pricing() {
               {tier.isPopular && (
                 <div className="absolute -top-3 right-8 px-3.5 py-1 rounded-full text-[11px] font-semibold tracking-wider bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5" />
-                  Most Popular
+                  {pricing.mostPopularBadge}
                 </div>
               )}
 
@@ -116,11 +116,11 @@ export function Pricing() {
           <Info className="w-4 h-4 text-muted flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
             <p>
-              <strong className="text-foreground">What’s covered:</strong>{" "}
+              <strong className="text-foreground">{pricing.scopeNote.coveredLabel}</strong>{" "}
               {pricing.scopeNote.covered}
             </p>
             <p>
-              <strong className="text-muted">What’s not covered:</strong>{" "}
+              <strong className="text-muted">{pricing.scopeNote.notCoveredLabel}</strong>{" "}
               {pricing.scopeNote.notCovered}
             </p>
           </div>

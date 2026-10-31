@@ -24,17 +24,16 @@ export function Features() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-            Built for mobile developers, agencies, and ASO pros.
+            {features.headline}
           </h2>
           <p className="mt-4 text-muted text-sm sm:text-base leading-relaxed">
-            Everything you need to craft, review, and ship perfect app listings without messy
-            spreadsheets or design templates.
+            {features.subheadline}
           </p>
         </div>
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => {
+          {features.items.map((feature) => {
             const Icon = iconMap[feature.icon] || Smartphone;
 
             return (

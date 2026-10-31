@@ -9,15 +9,15 @@ export function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-card-muted text-muted border border-border mb-4">
-            Loved by creators, trusted by agencies
+            {testimonials.badge}
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-            See how founders and agencies ship faster.
+            {testimonials.title}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((item) => (
+          {testimonials.items.map((item) => (
             <div
               key={item.author}
               className="p-6 sm:p-8 rounded-2xl border border-border bg-card hover:border-foreground/30 transition-all flex flex-col justify-between shadow-sm"

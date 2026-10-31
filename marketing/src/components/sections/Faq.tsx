@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 
 export function Faq() {
   const { faq } = siteConfig;
-  const [openId, setOpenId] = useState<string | null>(faq[0]?.id || null);
+  const [openId, setOpenId] = useState<string | null>(faq.items[0]?.id || null);
 
   const toggle = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -17,16 +17,15 @@ export function Faq() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-            Frequently Asked Questions
+            {faq.title}
           </h2>
           <p className="mt-4 text-muted text-sm sm:text-base leading-relaxed">
-            Everything you need to know about offline architecture, store review compliance,
-            client handoff, and licensing.
+            {faq.description}
           </p>
         </div>
 
         <div className="space-y-3">
-          {faq.map((item, index) => {
+          {faq.items.map((item, index) => {
             const isOpen = openId === item.id;
             const num = String(index + 1).padStart(2, "0");
 

@@ -37,7 +37,7 @@ export function Navbar() {
             href="#pricing"
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white px-3.5 sm:px-4 py-2 rounded-xl shadow-sm shadow-indigo-500/20 transition-all hover:shadow-indigo-500/35"
           >
-            <span>View Pricing</span>
+            <span>{siteConfig.navPricingCta}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
