@@ -720,13 +720,14 @@ const GOOGLE_AGE_MAP = {
   '4+':  {badge:'E',    label:'Everyone'},
   '9+':  {badge:'E10+', label:'Everyone 10+'},
   '12+': {badge:'T',    label:'Teen · 12+'},
-  '17+': {badge:'M',    label:'Mature 17+'}
+  '17+': {badge:'M',    label:'Mature 17+'},
+  '18+': {badge:'18+',  label:'Adults Only 18+'}
 };
 
 function renderStats(){
   $$('[data-stat]').forEach(e => { e.textContent = STATS[e.dataset.stat] || ''; });
   const ageVal = STATS.age || '4+';
-  const gAge = GOOGLE_AGE_MAP[ageVal] || GOOGLE_AGE_MAP['4+'];
+  const gAge = GOOGLE_AGE_MAP[ageVal] || { badge: ageVal, label: 'Rated for ' + ageVal };
   $$('[data-age-apple]').forEach(e => { e.textContent = ageVal; });
   $$('[data-age-google-badge]').forEach(e => { e.textContent = gAge.badge; });
   $$('[data-age-google-lbl]').forEach(e => { e.textContent = gAge.label; });
@@ -757,6 +758,7 @@ function syncStatInputs(){
   Object.entries(STAT_INPUTS).forEach(([k,id]) => { const el = $(id); if(el) el.value = STATS[k]; });
   const wm = $('f-st-wm');
   if(wm) wm.checked = EXPORT_WM;
+  if(typeof syncAgeUI === 'function') syncAgeUI();
 }
 function applyStatsFromObject(o){
   if(!o || typeof o !== 'object') return;
@@ -5380,6 +5382,10 @@ function openCustomCat() {
   const trigger = $('customCatTrigger');
   const searchInput = $('customCatSearch');
   if (!wrap) return;
+
+  // Close age dropdown if open
+  if (typeof closeCustomAge === 'function') closeCustomAge();
+
   wrap.classList.add('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
   if (searchInput) {
@@ -5757,10 +5763,71 @@ function renderPrivacy(){
 /* =========================================================================
    Module: src/js/modules/form/reviews.js
    ========================================================================= */
-// Store Preview Studio · Review Cards Dynamic Rendering (Mockups)
+// Store Preview Studio · Review Cards Dynamic Rendering & Customization (Mockups)
+
+const DEFAULT_REVIEW = {
+  title: 'Love this app so much',
+  author: 'michellerebecca',
+  text: 'This app is one of my favorite used apps on my phone. The interface is so intuitive and beautiful. Would recommend to everyone!',
+  stars: 5,
+  avatarBg: '#0b57d0',
+  helpful: 84
+};
+
+function syncReviewInputs(){
+  if(!Array.isArray(REVIEWS) || REVIEWS.length === 0){
+    REVIEWS = [{ ...DEFAULT_REVIEW }];
+  }
+  const rev = REVIEWS[0] || DEFAULT_REVIEW;
+  const tEl = $('f-rev-title');
+  const uEl = $('f-rev-user');
+  const dEl = $('f-rev-desc');
+  if(tEl && document.activeElement !== tEl) tEl.value = rev.title || '';
+  if(uEl && document.activeElement !== uEl) uEl.value = rev.author || '';
+  if(dEl && document.activeElement !== dEl) dEl.value = rev.text || '';
+}
+
+function initReviewInputs(){
+  const tEl = $('f-rev-title');
+  const uEl = $('f-rev-user');
+  const dEl = $('f-rev-desc');
+
+  const onRevInput = () => {
+    if(!Array.isArray(REVIEWS) || REVIEWS.length === 0){
+      REVIEWS = [{ ...DEFAULT_REVIEW }];
+    }
+    if(tEl) REVIEWS[0].title = tEl.value;
+    if(uEl){
+      REVIEWS[0].author = uEl.value;
+      REVIEWS[0].avatar = uEl.value.trim().charAt(0).toUpperCase() || 'U';
+    }
+    if(dEl) REVIEWS[0].text = dEl.value;
+    renderReviews();
+    if(typeof isPresetModified !== 'undefined') isPresetModified = true;
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof saveState === 'function') saveState();
+  };
+
+  if(tEl && !tEl._revBound){
+    tEl.addEventListener('input', onRevInput);
+    tEl._revBound = true;
+  }
+  if(uEl && !uEl._revBound){
+    uEl.addEventListener('input', onRevInput);
+    uEl._revBound = true;
+  }
+  if(dEl && !dEl._revBound){
+    dEl.addEventListener('input', onRevInput);
+    dEl._revBound = true;
+  }
+}
+
 function renderReviews(){
   const esc = (typeof escapeHtml === 'function') ? escapeHtml : (s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-  const list = Array.isArray(REVIEWS) ? REVIEWS : [];
+  if(!Array.isArray(REVIEWS) || REVIEWS.length === 0){
+    REVIEWS = [{ ...DEFAULT_REVIEW }];
+  }
+  const list = REVIEWS;
 
   const html = list.map((rev, idx) => {
     const starsCount = Math.max(1, Math.min(5, rev.stars || 5));
@@ -5819,6 +5886,302 @@ function renderReviews(){
     container.innerHTML = appleHtml;
   });
 }
+
+// Auto-bind review inputs
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initReviewInputs();
+      syncReviewInputs();
+    });
+  } else {
+    initReviewInputs();
+    syncReviewInputs();
+  }
+}
+
+
+/* =========================================================================
+   Module: src/js/modules/form/age.js
+   ========================================================================= */
+// Store Preview Studio · Age Rating Dropdown & Normalization (App Store & Google Play)
+const AGE_RATINGS = [
+  { val: '4+',  apple: '4+',  googleBadge: 'E',    googleLabel: 'Everyone',        label: '4+ / Everyone (E)',        desc: 'General audience · Suitable for all ages' },
+  { val: '9+',  apple: '9+',  googleBadge: 'E10+', googleLabel: 'Everyone 10+',    label: '9+ / Everyone 10+ (E10+)', desc: 'Mild cartoon or fantasy violence' },
+  { val: '12+', apple: '12+', googleBadge: 'T',    googleLabel: 'Teen · 12+',      label: '12+ / Teen (T)',           desc: 'Mild violence, suggestive themes, crude humor' },
+  { val: '17+', apple: '17+', googleBadge: 'M',    googleLabel: 'Mature 17+',      label: '17+ / Mature 17+ (M)',     desc: 'Frequent mature themes, realistic violence' },
+  { val: '18+', apple: '18+', googleBadge: '18+',  googleLabel: 'Adults Only 18+', label: '18+ / Adults Only (AO)',   desc: 'Explicit adult content, strictly 18+' }
+];
+
+function getAgeRatingLabel(val) {
+  if (!val) return '4+ / Everyone (E)';
+  const match = AGE_RATINGS.find(r => r.val.toLowerCase() === val.toLowerCase());
+  if (match) return match.label;
+  return val + ' (Custom)';
+}
+
+function syncAgeUI() {
+  const currentVal = (typeof STATS !== 'undefined' && STATS.age) ? STATS.age : ($('f-st-age') ? $('f-st-age').value : '4+');
+  const valEl = $('customAgeVal');
+  if (valEl) valEl.textContent = getAgeRatingLabel(currentVal);
+
+  const wrap = $('customAgeWrap');
+  if (wrap && wrap.classList.contains('open')) {
+    renderCustomAgeOptions($('customAgeSearch') ? $('customAgeSearch').value : '');
+  }
+}
+
+function isCustomAgeOpen() {
+  const wrap = $('customAgeWrap');
+  return wrap ? wrap.classList.contains('open') : false;
+}
+
+function openCustomAge() {
+  const wrap = $('customAgeWrap');
+  const trigger = $('customAgeTrigger');
+  const searchInput = $('customAgeSearch');
+  if (!wrap) return;
+
+  // Close category dropdown if open
+  if (typeof closeCustomCat === 'function') closeCustomCat();
+
+  wrap.classList.add('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'true');
+  if (searchInput) {
+    searchInput.value = '';
+    searchInput.focus();
+  }
+  renderCustomAgeOptions('');
+  const activeOpt = wrap.querySelector('.custom-age-option.active');
+  if (activeOpt) {
+    activeOpt.scrollIntoView({ block: 'nearest' });
+  }
+  if (typeof setFieldFocus === 'function') {
+    setFieldFocus('st-age', true);
+  }
+}
+
+function closeCustomAge() {
+  const wrap = $('customAgeWrap');
+  const trigger = $('customAgeTrigger');
+  if (!wrap) return;
+  wrap.classList.remove('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+
+function selectAgeFromUI(ageVal) {
+  ageVal = (ageVal || '4+').trim();
+  if (typeof STATS !== 'undefined') {
+    STATS.age = ageVal;
+  }
+  const sel = $('f-st-age');
+  if (sel) {
+    let opt = Array.from(sel.options).find(o => o.value === ageVal);
+    if (!opt) {
+      opt = document.createElement('option');
+      opt.value = ageVal;
+      opt.textContent = ageVal + ' (custom)';
+      sel.appendChild(opt);
+    }
+    sel.value = ageVal;
+  }
+  closeCustomAge();
+  const trigger = $('customAgeTrigger');
+  if (trigger) trigger.focus();
+  if (typeof renderStats === 'function') renderStats();
+  syncAgeUI();
+  if (typeof debouncedSave === 'function') debouncedSave();
+  else if (typeof saveState === 'function') saveState();
+  if (typeof flashField === 'function') flashField('st-age');
+  if (typeof setFieldFocus === 'function') setFieldFocus('st-age', true);
+}
+
+function renderCustomAgeOptions(query = '') {
+  const listContainer = $('customAgeOptions');
+  if (!listContainer) return;
+  listContainer.innerHTML = '';
+
+  const currentVal = (typeof STATS !== 'undefined' && STATS.age) ? STATS.age : ($('f-st-age') ? $('f-st-age').value : '4+');
+  const q = query.trim().toLowerCase();
+
+  const checkSvg = '<svg class="custom-age-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+  const createOptionEl = (item) => {
+    const el = document.createElement('div');
+    const isActive = item.val.toLowerCase() === (currentVal || '').toLowerCase();
+    el.className = 'custom-age-option' + (isActive ? ' active' : '');
+    el.dataset.val = item.val;
+    el.role = 'option';
+    el.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    el.innerHTML = `
+      <div class="custom-age-option-text">
+        <div class="custom-age-option-title">${item.label}</div>
+        <div class="custom-age-option-desc">${item.desc}</div>
+      </div>
+      ${checkSvg}
+    `;
+    el.onclick = (e) => {
+      e.stopPropagation();
+      selectAgeFromUI(item.val);
+    };
+    return el;
+  };
+
+  let renderedCount = 0;
+  const filtered = AGE_RATINGS.filter(r => {
+    if (!q) return true;
+    return r.val.toLowerCase().includes(q) ||
+           r.label.toLowerCase().includes(q) ||
+           r.apple.toLowerCase().includes(q) ||
+           r.googleBadge.toLowerCase().includes(q) ||
+           r.googleLabel.toLowerCase().includes(q) ||
+           r.desc.toLowerCase().includes(q);
+  });
+
+  filtered.forEach(r => {
+    listContainer.appendChild(createOptionEl(r));
+    renderedCount++;
+  });
+
+  // If current value is custom and not in standard list, show it at the top
+  if (currentVal && !AGE_RATINGS.some(r => r.val.toLowerCase() === currentVal.toLowerCase())) {
+    const customItem = document.createElement('div');
+    customItem.className = 'custom-age-option active';
+    customItem.dataset.val = currentVal;
+    customItem.role = 'option';
+    customItem.setAttribute('aria-selected', 'true');
+    customItem.innerHTML = `
+      <div class="custom-age-option-text">
+        <div class="custom-age-option-title">${currentVal} (Custom)</div>
+        <div class="custom-age-option-desc">User-defined age rating</div>
+      </div>
+      ${checkSvg}
+    `;
+    customItem.onclick = (e) => {
+      e.stopPropagation();
+      selectAgeFromUI(currentVal);
+    };
+    listContainer.insertBefore(customItem, listContainer.firstChild);
+    renderedCount++;
+  }
+
+  // If no match found for query, allow creating/using custom rating
+  if (renderedCount === 0 && q) {
+    const rawVal = query.trim();
+    const customItem = document.createElement('div');
+    customItem.className = 'custom-age-option';
+    customItem.dataset.val = rawVal;
+    customItem.innerHTML = `
+      <div class="custom-age-option-text">
+        <div class="custom-age-option-title">Use "<strong>${rawVal}</strong>"</div>
+        <div class="custom-age-option-desc">Custom age rating</div>
+      </div>
+      <span class="custom-age-create-tag">Custom</span>
+    `;
+    customItem.onclick = (e) => {
+      e.stopPropagation();
+      selectAgeFromUI(rawVal);
+    };
+    listContainer.appendChild(customItem);
+  } else if (renderedCount === 0) {
+    const emptyEl = document.createElement('div');
+    emptyEl.className = 'custom-age-empty';
+    emptyEl.textContent = 'No age ratings found';
+    listContainer.appendChild(emptyEl);
+  }
+}
+
+(function initCustomAgeEvents() {
+  const trigger = $('customAgeTrigger');
+  const wrap = $('customAgeWrap');
+  const searchInput = $('customAgeSearch');
+  const sel = $('f-st-age');
+
+  if (trigger) {
+    trigger.onclick = (e) => {
+      e.stopPropagation();
+      if (isCustomAgeOpen()) {
+        closeCustomAge();
+      } else {
+        openCustomAge();
+      }
+    };
+
+    if (typeof trigger.addEventListener === 'function') {
+      trigger.addEventListener('focus', () => {
+        if (typeof setFieldFocus === 'function') setFieldFocus('st-age', true);
+      });
+
+      trigger.addEventListener('click', () => {
+        if (typeof setFieldFocus === 'function') setFieldFocus('st-age', true);
+      });
+
+      trigger.addEventListener('mouseenter', () => {
+        if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
+          setFieldFocus('st-age', true);
+        }
+      });
+    }
+  }
+
+  if (searchInput) {
+    if (typeof searchInput.addEventListener === 'function') {
+      searchInput.addEventListener('focus', () => {
+        if (typeof setFieldFocus === 'function') setFieldFocus('st-age', true);
+      });
+    }
+
+    searchInput.oninput = () => {
+      renderCustomAgeOptions(searchInput.value);
+    };
+
+    searchInput.onkeydown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeCustomAge();
+        if (trigger) trigger.focus();
+        return;
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const firstOpt = wrap ? wrap.querySelector('.custom-age-option') : null;
+        if (firstOpt && firstOpt.dataset.val) {
+          selectAgeFromUI(firstOpt.dataset.val);
+        }
+        return;
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const firstOpt = wrap ? wrap.querySelector('.custom-age-option') : null;
+        if (firstOpt) {
+          firstOpt.focus();
+        }
+      }
+    };
+  }
+
+  if (sel) {
+    sel.addEventListener('change', () => {
+      syncAgeUI();
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (wrap && !wrap.contains(e.target)) {
+      closeCustomAge();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isCustomAgeOpen()) {
+      closeCustomAge();
+      if (trigger) trigger.focus();
+    }
+  });
+})();
+
+// Initial sync
+syncAgeUI();
 
 
 /* =========================================================================
@@ -5970,8 +6333,11 @@ function getFieldMockupTargets(key) {
       return $$('.stage [data-apple-priv-wrap] .pc:first-child, .stage [data-apple-priv-wrap]');
     case 'priv-notlinked':
       return $$('.stage [data-apple-priv-wrap] .pc:last-child, .stage [data-apple-priv-wrap]');
+    case 'rev-title':
+    case 'rev-user':
+    case 'rev-desc':
     case 'reviews':
-      return $$('.stage .reviews, .stage .ratings-reviews, .stage .a-rev, .stage .g-rev');
+      return $$('.stage [data-apple-reviews], .stage [data-google-reviews], .stage .a-reviews-list, .stage .g-reviews-list');
     case 'rating':
     case 'st-rating': {
       const raw = $$('.stage [data-stat="rating"]');
@@ -6021,6 +6387,15 @@ function setFieldFocus(key, shouldScroll = true) {
   $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
 
   if (!key) return;
+
+  // Auto-expand containing card if it is currently collapsed
+  const editorInput = $('f-' + key) || $(key);
+  if (editorInput) {
+    const parentCard = editorInput.closest('.card');
+    if (parentCard && parentCard.classList.contains('collapsed')) {
+      parentCard.classList.remove('collapsed');
+    }
+  }
 
   const targets = getFieldMockupTargets(key);
   if (!targets.length) return;
@@ -6772,6 +7147,7 @@ function setStore(s, animate = true){
   $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
   if($('edTitle')) $('edTitle').textContent = 'Listing Details';
   syncCategoryUI();
+  if (typeof syncAgeUI === 'function') syncAgeUI();
 
   // Immediately synchronize active device tabview pill (<16ms)
   requestAnimationFrame(() => {
@@ -7180,7 +7556,12 @@ $('btnUi').onclick = () => {
 Object.entries(STAT_INPUTS).forEach(([k,id]) => {
   const el = $(id);
   if(!el) return;
-  const onStatChange = () => { STATS[k] = el.value.trim(); renderStats(); debouncedSave(); };
+  const onStatChange = () => {
+    STATS[k] = el.value.trim();
+    if (k === 'age' && typeof syncAgeUI === 'function') syncAgeUI();
+    renderStats();
+    debouncedSave();
+  };
   el.addEventListener('input', onStatChange);
   el.addEventListener('change', onStatChange);
 });
@@ -7368,6 +7749,21 @@ function initHeader() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       $$('.menu.show').forEach(m => m.classList.remove('show'));
+    }
+  });
+
+  // 5. Editor Large Cards Accordion Controller (Expand / Collapse)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.info-tip-btn, button:not(.card-toggle-btn), a, input, select, textarea')) {
+      return;
+    }
+    const header = e.target.closest('.card-header');
+    if (header) {
+      const card = header.closest('.card');
+      if (card) {
+        card.classList.toggle('collapsed');
+        if (typeof saveState === 'function') saveState();
+      }
     }
   });
 }
@@ -7616,6 +8012,8 @@ function loadPreset(key){
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();
     renderReviews();
+  if(typeof syncReviewInputs === 'function') syncReviewInputs();
+    if(typeof syncReviewInputs === 'function') syncReviewInputs();
     update();
     if(CURRENT_PRESET_KEY === 'draft'){
       saveState();
@@ -7729,6 +8127,7 @@ function loadPreset(key){
   renderShots();
   if(typeof renderIpadShots === 'function') renderIpadShots();
   renderReviews();
+  if(typeof syncReviewInputs === 'function') syncReviewInputs();
   update();
   if(CURRENT_PRESET_KEY === 'draft'){
     saveState();
@@ -7935,6 +8334,7 @@ function applyStateObject(s){
   if(Array.isArray(s.reviews)) {
     REVIEWS = s.reviews;
     if(typeof renderReviews === 'function') renderReviews();
+    if(typeof syncReviewInputs === 'function') syncReviewInputs();
   }
   if(typeof applyStatsFromObject === 'function') applyStatsFromObject(s.stats);
   return true;
@@ -10117,6 +10517,7 @@ applyGoogleDevice();
 applyTabOrient();
 renderTablets();
 if(typeof renderReviews === 'function') renderReviews();
+if(typeof syncReviewInputs === 'function') syncReviewInputs();
 if($('f-rdate') && !$('f-rdate').value){
   $('f-rdate').value = getCurrentMonthDateStr(2, true);
 }

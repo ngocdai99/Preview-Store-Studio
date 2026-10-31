@@ -65,6 +65,21 @@ function initHeader() {
       $$('.menu.show').forEach(m => m.classList.remove('show'));
     }
   });
+
+  // 5. Editor Large Cards Accordion Controller (Expand / Collapse)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.info-tip-btn, button:not(.card-toggle-btn), a, input, select, textarea')) {
+      return;
+    }
+    const header = e.target.closest('.card-header');
+    if (header) {
+      const card = header.closest('.card');
+      if (card) {
+        card.classList.toggle('collapsed');
+        if (typeof saveState === 'function') saveState();
+      }
+    }
+  });
 }
 
 // Auto-initialize header when DOM is ready or module is loaded

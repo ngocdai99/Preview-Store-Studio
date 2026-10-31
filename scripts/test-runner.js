@@ -1976,6 +1976,111 @@ const launchModalHtml = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'mark
 assert(launchModalHtml.includes('Return to Interactive Preview'), 'launch-modal.html contains Return to Interactive Preview');
 
 // ---------------------------------------------------------------------
+// SUITE 29: Settings & Metrics User Review Customization Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 29]: Settings & Metrics User Review Customization Verification');
+
+const metricsCardHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'metrics-card.html'), 'utf8');
+assert(metricsCardHtml.includes('id="f-rev-title"') && metricsCardHtml.includes('Review Title'), 'Settings & Metrics includes Review Title input (#f-rev-title)');
+assert(metricsCardHtml.includes('id="f-rev-user"') && metricsCardHtml.includes('Review Username'), 'Settings & Metrics includes Review Username input (#f-rev-user)');
+assert(metricsCardHtml.includes('id="f-rev-desc"') && metricsCardHtml.includes('Review Description'), 'Settings & Metrics includes Review Description textarea (#f-rev-desc)');
+assert(metricsCardHtml.includes('placeholder="Love this app so much"'), 'Review Title has expected authentic placeholder');
+assert(metricsCardHtml.includes('placeholder="michellerebecca"'), 'Review Username has expected authentic placeholder');
+assert(metricsCardHtml.includes('placeholder="This app is one of my favorite used apps on my phone.'), 'Review Description has expected authentic placeholder');
+
+const reviewsJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'reviews.js'), 'utf8');
+assert(reviewsJsCode.includes('function syncReviewInputs') && reviewsJsCode.includes('function initReviewInputs'), 'reviews.js exposes syncReviewInputs and initReviewInputs functions');
+assert(reviewsJsCode.includes('tEl.value = rev.title') && reviewsJsCode.includes('uEl.value = rev.author'), 'syncReviewInputs synchronizes review title, username and description');
+assert(reviewsJsCode.includes("REVIEWS[0].title = tEl.value") && reviewsJsCode.includes("REVIEWS[0].author = uEl.value"), 'onRevInput binds input fields directly to REVIEWS[0] model');
+
+assert(syncJsCode.includes("case 'rev-title':") && syncJsCode.includes("case 'rev-user':") && syncJsCode.includes("case 'rev-desc':"), 'Focus linking system links review fields to mockup review components');
+
+assert(bundledHtml.includes('id="f-rev-title"') && bundledHtml.includes('id="f-rev-user"') && bundledHtml.includes('id="f-rev-desc"'), 'Bundled core.html contains all 3 user review customization inputs');
+
+// Verify Card order: Phone Screenshots before Settings & Metrics, and Privacy at very bottom
+assert(bundledHtml.indexOf('id="shotsCard"') < bundledHtml.indexOf('id="statsCard"'), 'Phone Screenshots is positioned before Settings & Metrics');
+assert(bundledHtml.indexOf('id="privacyCard"') > bundledHtml.indexOf('id="featureCard"'), 'App Privacy & Data Safety is positioned at the very bottom of the editor panel');
+
+// ---------------------------------------------------------------------
+// SUITE 30: Large Cards Collapsible Accordion Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 30]: Large Cards Collapsible Accordion Verification');
+
+// 1. Card 1 must be ALWAYS EXPANDED by default (no collapsed class)
+assert(/<div[^>]*id="identityCard"[^>]*class="card(?!\s+collapsed\b)[^"]*"/.test(bundledHtml) || !bundledHtml.includes('id="identityCard" class="card collapsed"'), 'Card 1 (Listing Details) is expanded by default (no collapsed class)');
+
+// 2. Other large cards must be COLLAPSED by default
+assert(/class="card collapsed"[^>]*id="contentCard"/.test(bundledHtml), 'Card 2 (Description & Release Notes) is collapsed by default');
+assert(/class="card collapsed"[^>]*id="shotsCard"/.test(bundledHtml), 'Card 3 (Phone Screenshots) is collapsed by default');
+assert(/class="card collapsed"[^>]*id="statsCard"/.test(bundledHtml), 'Card 4 (Settings & Metrics) is collapsed by default');
+assert(/class="card collapsed"[^>]*id="ipadCard"/.test(bundledHtml), 'Card 5 (iPad Screenshots) is collapsed by default');
+assert(/class="card collapsed"[^>]*id="tabCard"/.test(bundledHtml), 'Card 5 (Tablet Screenshots) is collapsed by default');
+assert(/class="card collapsed"[^>]*id="featureCard"/.test(bundledHtml), 'Card 6 (Feature Graphic) is collapsed by default');
+assert(/class="card collapsed"[^>]*id="privacyCard"/.test(bundledHtml), 'Card Privacy (App Privacy & Data Safety) is collapsed by default at bottom');
+
+// 3. CSS rules for collapsed cards and headers
+assert(bundledHtml.includes('.card.collapsed > :not(.card-header)'), 'CSS hides all content outside .card-header when card is collapsed');
+assert(bundledHtml.includes('.card-header') && bundledHtml.includes('.card-toggle-ico'), 'CSS styles .card-header and .card-toggle-ico');
+
+// 4. JS click listener toggles collapsed class
+const headerJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'header.js'), 'utf8');
+assert(headerJsCode.includes("card.classList.toggle('collapsed')"), 'header.js provides click delegation on .card-header to toggle collapsed class');
+
+// ---------------------------------------------------------------------
+// SUITE 31: Custom Age Rating Dropdown UI & Search Filter Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 31]: Custom Age Rating Dropdown UI & Search Filter Verification');
+
+assert(bundledHtml.includes('id="customAgeWrap"') && bundledHtml.includes('id="customAgeTrigger"'), 'Custom age rating dropdown wrapper and trigger exist in bundled HTML');
+assert(bundledHtml.includes('id="customAgeVal"') && bundledHtml.includes('id="customAgeMenu"'), 'Custom age rating value display and popover menu exist in bundled HTML');
+assert(bundledHtml.includes('id="customAgeSearch"') && bundledHtml.includes('id="customAgeOptions"'), 'Custom age rating search input and options container exist in bundled HTML');
+assert(bundledHtml.includes('id="f-st-age"') && bundledHtml.includes('style="display:none"'), 'Hidden select #f-st-age preserved for backward compatibility');
+assert(bundledHtml.includes('.custom-age-trigger') && bundledHtml.includes('.custom-age-menu') && bundledHtml.includes('.custom-age-option'), 'Custom age CSS classes exist in bundled CSS');
+assert(bundledHtml.includes(':root[data-ui=light] .custom-age-trigger') && bundledHtml.includes(':root[data-ui=light] .custom-age-menu'), 'Custom age provides authentic light theme adaptation');
+assert(bundledHtml.includes("setFieldFocus('st-age', true)"), 'Interacting with custom age dropdown triggers setFieldFocus to highlight age rating on mockup');
+
+// Functional testing for age ratings normalization & module
+const ageCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'age.js'), 'utf8');
+const ageSandbox = {
+  $: (id) => ({
+    id,
+    value: '4+',
+    options: [{ value: '4+' }, { value: '9+' }, { value: '12+' }, { value: '17+' }, { value: '18+' }],
+    dataset: {},
+    classList: { toggle: () => {}, add: () => {}, remove: () => {}, contains: () => false },
+    querySelectorAll: () => [],
+    querySelector: () => null,
+    appendChild: () => {},
+    setAttribute: () => {},
+    addEventListener: () => {},
+    focus: () => {}
+  }),
+  document: {
+    createElement: () => ({ setAttribute: () => {}, appendChild: () => {}, classList: { add: () => {} }, dataset: {}, addEventListener: () => {} }),
+    addEventListener: () => {}
+  },
+  STATS: { age: '4+' },
+  renderStats: () => {},
+  debouncedSave: () => {},
+  flashField: () => {},
+  setFieldFocus: () => {}
+};
+vm.createContext(ageSandbox);
+vm.runInContext(ageCode + '\nglobalThis.getAgeRatingLabel = getAgeRatingLabel;\nglobalThis.selectAgeFromUI = selectAgeFromUI;\nglobalThis.AGE_RATINGS = AGE_RATINGS;', ageSandbox);
+
+assert(typeof ageSandbox.getAgeRatingLabel === 'function', 'getAgeRatingLabel function is defined and runnable');
+assert(ageSandbox.getAgeRatingLabel('4+') === '4+ / Everyone (E)', 'Age 4+ resolves to "4+ / Everyone (E)"');
+assert(ageSandbox.getAgeRatingLabel('9+') === '9+ / Everyone 10+ (E10+)', 'Age 9+ resolves to "9+ / Everyone 10+ (E10+)"');
+assert(ageSandbox.getAgeRatingLabel('12+') === '12+ / Teen (T)', 'Age 12+ resolves to "12+ / Teen (T)"');
+assert(ageSandbox.getAgeRatingLabel('17+') === '17+ / Mature 17+ (M)', 'Age 17+ resolves to "17+ / Mature 17+ (M)"');
+assert(ageSandbox.getAgeRatingLabel('18+') === '18+ / Adults Only (AO)', 'Age 18+ resolves to "18+ / Adults Only (AO)"');
+assert(ageSandbox.getAgeRatingLabel('16+') === '16+ (Custom)', 'Custom age 16+ resolves with (Custom) suffix');
+assert(ageSandbox.AGE_RATINGS.length >= 5, 'AGE_RATINGS contains at least 5 standard ratings');
+
+ageSandbox.selectAgeFromUI('12+');
+assert(ageSandbox.STATS.age === '12+', 'selectAgeFromUI updates STATS.age to 12+');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

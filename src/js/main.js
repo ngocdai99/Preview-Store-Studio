@@ -110,6 +110,7 @@ applyGoogleDevice();
 applyTabOrient();
 renderTablets();
 if(typeof renderReviews === 'function') renderReviews();
+if(typeof syncReviewInputs === 'function') syncReviewInputs();
 if($('f-rdate') && !$('f-rdate').value){
   $('f-rdate').value = getCurrentMonthDateStr(2, true);
 }

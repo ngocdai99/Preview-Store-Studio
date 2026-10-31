@@ -64,6 +64,10 @@ function openCustomCat() {
   const trigger = $('customCatTrigger');
   const searchInput = $('customCatSearch');
   if (!wrap) return;
+
+  // Close age dropdown if open
+  if (typeof closeCustomAge === 'function') closeCustomAge();
+
   wrap.classList.add('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
   if (searchInput) {

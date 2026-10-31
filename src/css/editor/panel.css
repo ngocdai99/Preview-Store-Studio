@@ -47,10 +47,92 @@ body.sidebar-collapsed .editor-resizer{
 /* Card base */
 .card{
   background:linear-gradient(180deg,var(--p2),var(--p1));border:1px solid var(--line);border-radius:18px;padding:16px;
-  display:flex;flex-direction:column;gap:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:border-color .3s;
+  display:flex;flex-direction:column;gap:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:border-color .3s, padding .2s, gap .2s;
 }
 .card:hover{border-color:var(--line-hi)}
 .card h2{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:800;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0}
+
+/* Card Header & Collapsible Accordion Behavior */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  min-height: 28px;
+  transition: opacity 0.15s ease;
+}
+
+.card-header:hover {
+  opacity: 0.92;
+}
+
+.card-header h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.card-toggle-ico {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--mut);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+:root[data-ui=light] .card-toggle-ico {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #64748b;
+}
+
+.card-toggle-ico svg {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Expanded state: chevron points up */
+.card:not(.collapsed) .card-toggle-ico svg {
+  transform: rotate(180deg);
+  color: var(--t);
+}
+
+/* Collapsed state */
+.card.collapsed {
+  padding: 13px 16px;
+  gap: 0;
+}
+
+.card.collapsed > :not(.card-header) {
+  display: none !important;
+}
+
+.card.collapsed:hover {
+  border-color: var(--line-hi);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
 .card h2 i{
   width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;flex-shrink:0;
   background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 4px 12px var(--glow);
@@ -95,6 +177,16 @@ body.sidebar-collapsed .editor-resizer{
   .form-row-2col{
     grid-template-columns:1fr;
   }
+}
+
+/* Review Customization Wrap */
+.review-custom-wrap {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+:root[data-ui=light] .review-custom-wrap {
+  border-top-color: rgba(15, 23, 42, 0.08);
 }
 
 /* Privacy Compact Info Banner */

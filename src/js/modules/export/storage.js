@@ -144,6 +144,7 @@ function applyStateObject(s){
   if(Array.isArray(s.reviews)) {
     REVIEWS = s.reviews;
     if(typeof renderReviews === 'function') renderReviews();
+    if(typeof syncReviewInputs === 'function') syncReviewInputs();
   }
   if(typeof applyStatsFromObject === 'function') applyStatsFromObject(s.stats);
   return true;

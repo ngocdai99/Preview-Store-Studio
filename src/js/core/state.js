@@ -23,13 +23,14 @@ const GOOGLE_AGE_MAP = {
   '4+':  {badge:'E',    label:'Everyone'},
   '9+':  {badge:'E10+', label:'Everyone 10+'},
   '12+': {badge:'T',    label:'Teen · 12+'},
-  '17+': {badge:'M',    label:'Mature 17+'}
+  '17+': {badge:'M',    label:'Mature 17+'},
+  '18+': {badge:'18+',  label:'Adults Only 18+'}
 };
 
 function renderStats(){
   $$('[data-stat]').forEach(e => { e.textContent = STATS[e.dataset.stat] || ''; });
   const ageVal = STATS.age || '4+';
-  const gAge = GOOGLE_AGE_MAP[ageVal] || GOOGLE_AGE_MAP['4+'];
+  const gAge = GOOGLE_AGE_MAP[ageVal] || { badge: ageVal, label: 'Rated for ' + ageVal };
   $$('[data-age-apple]').forEach(e => { e.textContent = ageVal; });
   $$('[data-age-google-badge]').forEach(e => { e.textContent = gAge.badge; });
   $$('[data-age-google-lbl]').forEach(e => { e.textContent = gAge.label; });
@@ -60,6 +61,7 @@ function syncStatInputs(){
   Object.entries(STAT_INPUTS).forEach(([k,id]) => { const el = $(id); if(el) el.value = STATS[k]; });
   const wm = $('f-st-wm');
   if(wm) wm.checked = EXPORT_WM;
+  if(typeof syncAgeUI === 'function') syncAgeUI();
 }
 function applyStatsFromObject(o){
   if(!o || typeof o !== 'object') return;

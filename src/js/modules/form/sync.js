@@ -144,8 +144,11 @@ function getFieldMockupTargets(key) {
       return $$('.stage [data-apple-priv-wrap] .pc:first-child, .stage [data-apple-priv-wrap]');
     case 'priv-notlinked':
       return $$('.stage [data-apple-priv-wrap] .pc:last-child, .stage [data-apple-priv-wrap]');
+    case 'rev-title':
+    case 'rev-user':
+    case 'rev-desc':
     case 'reviews':
-      return $$('.stage .reviews, .stage .ratings-reviews, .stage .a-rev, .stage .g-rev');
+      return $$('.stage [data-apple-reviews], .stage [data-google-reviews], .stage .a-reviews-list, .stage .g-reviews-list');
     case 'rating':
     case 'st-rating': {
       const raw = $$('.stage [data-stat="rating"]');
@@ -195,6 +198,15 @@ function setFieldFocus(key, shouldScroll = true) {
   $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
 
   if (!key) return;
+
+  // Auto-expand containing card if it is currently collapsed
+  const editorInput = $('f-' + key) || $(key);
+  if (editorInput) {
+    const parentCard = editorInput.closest('.card');
+    if (parentCard && parentCard.classList.contains('collapsed')) {
+      parentCard.classList.remove('collapsed');
+    }
+  }
 
   const targets = getFieldMockupTargets(key);
   if (!targets.length) return;

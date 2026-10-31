@@ -231,6 +231,8 @@ function loadPreset(key){
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();
     renderReviews();
+  if(typeof syncReviewInputs === 'function') syncReviewInputs();
+    if(typeof syncReviewInputs === 'function') syncReviewInputs();
     update();
     if(CURRENT_PRESET_KEY === 'draft'){
       saveState();
@@ -344,6 +346,7 @@ function loadPreset(key){
   renderShots();
   if(typeof renderIpadShots === 'function') renderIpadShots();
   renderReviews();
+  if(typeof syncReviewInputs === 'function') syncReviewInputs();
   update();
   if(CURRENT_PRESET_KEY === 'draft'){
     saveState();

@@ -532,6 +532,7 @@ function setStore(s, animate = true){
   $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
   if($('edTitle')) $('edTitle').textContent = 'Listing Details';
   syncCategoryUI();
+  if (typeof syncAgeUI === 'function') syncAgeUI();
 
   // Immediately synchronize active device tabview pill (<16ms)
   requestAnimationFrame(() => {

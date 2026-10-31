@@ -1,10 +1,17 @@
 <!-- Card 4: Settings & Metrics -->
-<div class="card" id="statsCard">
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
-    <h2 style="margin:0"><span class="card-num" title="Card 4">4</span><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Settings &amp; Metrics</h2>
-    <span class="info-tip-btn" id="metricsInfoBtn" tabindex="0" role="button" aria-label="Mockup Metrics Display Guidelines" title="How Metrics &amp; Badges Work in Preview Studio">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-    </span>
+<div class="card collapsed" id="statsCard">
+  <div class="card-header">
+    <h2><span class="card-num" title="Card 4">4</span><i class="card-ico c-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Settings &amp; Metrics</h2>
+    <div class="card-header-right">
+      <span class="info-tip-btn" id="metricsInfoBtn" tabindex="0" role="button" aria-label="Mockup Metrics Display Guidelines" title="How Metrics &amp; Badges Work in Preview Studio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </span>
+      <span class="card-toggle-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </span>
+    </div>
   </div>
   <div style="display:flex;align-items:center;gap:6px;margin:2px 0 6px;flex-wrap:wrap">
     <span class="tag a" title="App Store">APPLE</span>
@@ -39,14 +46,42 @@
         <div class="fg"><div class="lr"><label for="f-st-rank">Chart Rank (#)</label></div><input type="text" id="f-st-rank" maxlength="4" placeholder="1"></div>
         <div class="fg"><div class="lr"><label for="f-st-dl">Downloads (Google)</label></div><input type="text" id="f-st-dl" maxlength="10" placeholder="50K+"></div>
         <div class="fg"><div class="lr"><label for="f-st-size">App Size</label></div><input type="text" id="f-st-size" maxlength="10" placeholder="86 MB"></div>
-        <div class="fg">
-          <div class="lr"><label for="f-st-age">Age Rating</label></div>
-          <select class="fsel" id="f-st-age" aria-label="Age Rating">
+        <div class="fg age-picker-fg">
+          <div class="lr"><label for="customAgeTrigger">Age Rating</label></div>
+          <!-- Hidden select for backward compatibility with STAT_INPUTS, presets, and tests -->
+          <select class="fsel" id="f-st-age" aria-label="Age Rating" style="display:none">
             <option value="4+">4+ / Everyone (E)</option>
             <option value="9+">9+ / Everyone 10+ (E10+)</option>
             <option value="12+">12+ / Teen (T)</option>
             <option value="17+">17+ / Mature 17+ (M)</option>
+            <option value="18+">18+ / Adults Only (AO)</option>
           </select>
+
+          <!-- Custom Age Rating Selector -->
+          <div class="custom-cat-wrap custom-age-wrap" id="customAgeWrap">
+            <button type="button" class="custom-cat-trigger custom-age-trigger" id="customAgeTrigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Select age rating">
+              <span class="custom-cat-trigger-content custom-age-trigger-content">
+                <svg class="custom-cat-icon custom-age-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span class="custom-cat-val custom-age-val" id="customAgeVal">4+ / Everyone (E)</span>
+              </span>
+              <svg class="custom-cat-chevron custom-age-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <div class="custom-cat-menu custom-age-menu" id="customAgeMenu" role="listbox">
+              <div class="custom-cat-search custom-age-search">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="customAgeSearch" placeholder="Search age rating..." autocomplete="off" spellcheck="false">
+              </div>
+              <div class="custom-cat-options custom-age-options" id="customAgeOptions"></div>
+            </div>
+          </div>
         </div>
         <div class="fg" style="grid-column:1 / -1">
           <div class="lr"><label for="f-st-iap">Monetization Badge</label></div>
@@ -56,6 +91,24 @@
             <option value="ads">Contains Ads Only</option>
             <option value="free">None (100% Free / Paid Upfront)</option>
           </select>
+        </div>
+      </div>
+
+      <!-- User Review Customization (Mockup Only) -->
+      <div class="review-custom-wrap">
+        <div class="form-row-2col" style="margin-bottom:10px">
+          <div class="fg" style="margin:0">
+            <div class="lr"><label for="f-rev-title">Review Title</label></div>
+            <input type="text" id="f-rev-title" placeholder="Love this app so much">
+          </div>
+          <div class="fg" style="margin:0">
+            <div class="lr"><label for="f-rev-user">Review Username</label></div>
+            <input type="text" id="f-rev-user" placeholder="michellerebecca">
+          </div>
+        </div>
+        <div class="fg" style="margin:0">
+          <div class="lr"><label for="f-rev-desc">Review Description</label></div>
+          <textarea id="f-rev-desc" rows="3" placeholder="This app is one of my favorite used apps on my phone. The interface is so intuitive and beautiful. Would recommend to everyone!"></textarea>
         </div>
       </div>
     </div>

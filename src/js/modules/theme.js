@@ -26,7 +26,12 @@ $('btnUi').onclick = () => {
 Object.entries(STAT_INPUTS).forEach(([k,id]) => {
   const el = $(id);
   if(!el) return;
-  const onStatChange = () => { STATS[k] = el.value.trim(); renderStats(); debouncedSave(); };
+  const onStatChange = () => {
+    STATS[k] = el.value.trim();
+    if (k === 'age' && typeof syncAgeUI === 'function') syncAgeUI();
+    renderStats();
+    debouncedSave();
+  };
   el.addEventListener('input', onStatChange);
   el.addEventListener('change', onStatChange);
 });
