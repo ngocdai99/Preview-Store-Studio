@@ -22,23 +22,32 @@
 }
 .card-ico svg{width:15px;height:15px;stroke-width:2.2}
 
-/* Unselected State: Collapsed Card */
+/* Unselected State: Collapsed Card (Màu nhạt: màu đậm lấy alpha thấp) */
 .card.collapsed .card-ico{
-  background:rgba(255,255,255,0.06)!important;
-  border:1px solid rgba(255,255,255,0.08);
-  color:#94a3b8!important;
+  background:rgba(10,132,255,0.16)!important;
+  border:1px solid rgba(10,132,255,0.26)!important;
+  color:#ffffff!important;
   box-shadow:none!important;
 }
-.card.collapsed:hover .card-ico{
-  background:rgba(255,255,255,0.1)!important;
-  border-color:rgba(255,255,255,0.14);
-  color:var(--tx)!important;
+body[data-store=google] .card.collapsed .card-ico{
+  background:rgba(0,179,126,0.16)!important;
+  border-color:rgba(0,179,126,0.26)!important;
+  color:#ffffff!important;
 }
 
-/* Selected State: Expanded / Active Card */
+/* Hover: Thấy được màu đậm (Full vibrant accent gradient + glow) */
+.card.collapsed:hover .card-ico{
+  background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
+  border-color:rgba(255,255,255,0.25)!important;
+  color:#ffffff!important;
+  box-shadow:0 4px 12px var(--glow)!important;
+  transform:scale(1.04);
+}
+
+/* Selected State: Expanded / Active Card (Màu đậm) */
 .card:not(.collapsed) .card-ico{
   background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
-  border:1px solid rgba(255,255,255,0.18);
+  border:1px solid rgba(255,255,255,0.25)!important;
   color:#ffffff!important;
   box-shadow:0 4px 14px var(--glow)!important;
 }
@@ -267,21 +276,29 @@
     transform:scale(1.04);
   }
 
-  /* Form Card Badges in Light Mode (Two-State Architecture) */
+  /* Form Card Badges in Light Mode: Unselected (Màu nhạt) vs Hover/Selected (Màu đậm) */
   :root[data-ui=light] .card.collapsed .card-ico{
-    background:rgba(0,0,0,0.05)!important;
-    border:1px solid rgba(0,0,0,0.08);
-    color:#64748b!important;
+    background:rgba(0,113,227,0.1)!important;
+    border:1px solid rgba(0,113,227,0.2)!important;
+    color:#0071e3!important;
     box-shadow:none!important;
   }
-  :root[data-ui=light] .card.collapsed:hover .card-ico{
-    background:rgba(0,0,0,0.08)!important;
-    border-color:rgba(0,0,0,0.12);
-    color:#0f172a!important;
+  :root[data-ui=light] body[data-store=google] .card.collapsed .card-ico{
+    background:rgba(1,135,95,0.1)!important;
+    border-color:rgba(1,135,95,0.2)!important;
+    color:#01875f!important;
   }
+  :root[data-ui=light] .card.collapsed:hover .card-ico{
+    background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
+    border-color:transparent!important;
+    color:#ffffff!important;
+    box-shadow:0 4px 12px var(--glow)!important;
+    transform:scale(1.04);
+  }
+
   :root[data-ui=light] .card:not(.collapsed) .card-ico{
     background:linear-gradient(135deg,var(--ac),var(--ac2))!important;
-    border:none;
+    border:none!important;
     color:#ffffff!important;
     box-shadow:0 4px 12px var(--glow)!important;
   }
