@@ -39,3 +39,8 @@ core/MARKETING_PLAYBOOK.md
 core/gumroad-assets.html
 core/gumroad-*
 core/start_marketing.command
+
+
+# Specs & SRS documentation
+srs/
+**/srs/
