@@ -116,14 +116,14 @@ export function Features() {
   return (
     <section
       id="features"
-      className="py-20 sm:py-24 border-t border-border bg-slate-50/50 dark:bg-[#080d1a]/50 transition-colors relative overflow-hidden"
+      className="pt-12 pb-20 sm:pt-14 sm:pb-24 border-t border-border bg-slate-50/50 dark:bg-[#080d1a]/50 transition-colors relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-[0.08em] bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 mb-4 shadow-[0_2px_8px_rgba(59,130,246,0.06)]">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Studio Capabilities</span>
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-[0.08em] bg-orange-500/10 dark:bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/25 dark:border-orange-500/30 mb-3.5 shadow-[0_2px_8px_rgba(249,115,22,0.08)]">
+            <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+            <span>Features</span>
           </div>
 
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
