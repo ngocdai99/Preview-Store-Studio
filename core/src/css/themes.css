@@ -50,6 +50,11 @@
 .card.selected:not(.collapsed) .card-ico::before{
   opacity:1;
 }
+.card.selected:not(.collapsed) .card-num{
+  background:rgba(139,92,246,0.15);
+  color:#c4b5fd;
+  border-color:rgba(139,92,246,0.35);
+}
 
 /* Card Semantic Icon Chips & Focus Glows (Dark Mode / Obsidian Linear) */
 /* Card 1: App Identity (Amber Gold) */
@@ -57,48 +62,56 @@
 #identityCard .card-ico::before{background:linear-gradient(135deg,#f59e0b,#ea580c)}
 #identityCard.selected:not(.collapsed){border-color:rgba(245,158,11,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(245,158,11,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #identityCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(217,119,6,0.45)!important}
+#identityCard.selected:not(.collapsed) .card-num{background:rgba(245,158,11,0.14);color:#fbbf24;border-color:rgba(245,158,11,0.35)}
 
 /* Card 2: Description & Release Notes (Radiant Purple) */
 #contentCard .card-ico{background:rgba(168,85,247,0.16);border-color:rgba(168,85,247,0.32);color:#c084fc}
 #contentCard .card-ico::before{background:linear-gradient(135deg,#a855f7,#7c3aed)}
 #contentCard.selected:not(.collapsed){border-color:rgba(168,85,247,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(168,85,247,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #contentCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(124,58,237,0.45)!important}
+#contentCard.selected:not(.collapsed) .card-num{background:rgba(168,85,247,0.14);color:#c084fc;border-color:rgba(168,85,247,0.35)}
 
 /* Card 3: Phone Screenshots (Rose Coral) */
 #shotsCard .card-ico{background:rgba(244,63,94,0.16);border-color:rgba(244,63,94,0.32);color:#fb7185}
 #shotsCard .card-ico::before{background:linear-gradient(135deg,#f43f5e,#e11d48)}
 #shotsCard.selected:not(.collapsed){border-color:rgba(244,63,94,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(244,63,94,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #shotsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(225,29,72,0.45)!important}
+#shotsCard.selected:not(.collapsed) .card-num{background:rgba(244,63,94,0.14);color:#fb7185;border-color:rgba(244,63,94,0.35)}
 
 /* Card 4: Settings & Metrics (Emerald Mint) */
 #statsCard .card-ico{background:rgba(16,185,129,0.16);border-color:rgba(16,185,129,0.32);color:#34d399}
 #statsCard .card-ico::before{background:linear-gradient(135deg,#10b981,#059669)}
 #statsCard.selected:not(.collapsed){border-color:rgba(16,185,129,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(16,185,129,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #statsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(5,150,105,0.45)!important}
+#statsCard.selected:not(.collapsed) .card-num{background:rgba(16,185,129,0.14);color:#34d399;border-color:rgba(16,185,129,0.35)}
 
 /* Card 5: Tablet / iPad Screenshots (Sky Cyan) */
 #ipadCard .card-ico, #tabCard .card-ico{background:rgba(14,165,233,0.16);border-color:rgba(14,165,233,0.32);color:#38bdf8}
 #ipadCard .card-ico::before, #tabCard .card-ico::before{background:linear-gradient(135deg,#0ea5e9,#0284c7)}
 #ipadCard.selected:not(.collapsed), #tabCard.selected:not(.collapsed){border-color:rgba(14,165,233,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(14,165,233,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #ipadCard.selected:not(.collapsed) .card-ico, #tabCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(2,132,199,0.45)!important}
+#ipadCard.selected:not(.collapsed) .card-num, #tabCard.selected:not(.collapsed) .card-num{background:rgba(14,165,233,0.14);color:#38bdf8;border-color:rgba(14,165,233,0.35)}
 
 /* Card 6 (Google): Feature Graphic (Sunset Orange) */
 #featureCard .card-ico{background:rgba(249,115,22,0.16);border-color:rgba(249,115,22,0.32);color:#fb923c}
 #featureCard .card-ico::before{background:linear-gradient(135deg,#f97316,#ea580c)}
 #featureCard.selected:not(.collapsed){border-color:rgba(249,115,22,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(249,115,22,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #featureCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(234,88,12,0.45)!important}
+#featureCard.selected:not(.collapsed) .card-num{background:rgba(249,115,22,0.14);color:#fb923c;border-color:rgba(249,115,22,0.35)}
 
 /* Card 6 (Apple) / Card 8 (Google): App Privacy & Data Safety (Security Indigo) */
 #privacyCard .card-ico{background:rgba(99,102,241,0.16);border-color:rgba(99,102,241,0.32);color:#818cf8}
 #privacyCard .card-ico::before{background:linear-gradient(135deg,#6366f1,#4f46e5)}
 #privacyCard.selected:not(.collapsed){border-color:rgba(99,102,241,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(99,102,241,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #privacyCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(79,70,229,0.45)!important}
+#privacyCard.selected:not(.collapsed) .card-num{background:rgba(99,102,241,0.14);color:#818cf8;border-color:rgba(99,102,241,0.35)}
 
 /* Card 7 (Google): App Support (Deep Teal) */
 #supportCard .card-ico{background:rgba(20,184,166,0.16);border-color:rgba(20,184,166,0.32);color:#2dd4bf}
 #supportCard .card-ico::before{background:linear-gradient(135deg,#14b8a6,#0d9488)}
 #supportCard.selected:not(.collapsed){border-color:rgba(20,184,166,0.42)!important;box-shadow:0 8px 32px -4px rgba(0,0,0,0.6),0 0 0 1px rgba(20,184,166,0.2),inset 0 1px 0 rgba(255,255,255,0.12)!important}
 #supportCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(13,148,136,0.45)!important}
+#supportCard.selected:not(.collapsed) .card-num{background:rgba(20,184,166,0.14);color:#2dd4bf;border-color:rgba(20,184,166,0.35)}
 
 /* Form Action Button Icons */
 .btn-mini-ico{display:inline-flex;align-items:center;justify-content:center;margin-right:0;vertical-align:-1px;flex-shrink:0}
@@ -363,6 +376,11 @@
   :root[data-ui=light] .card.selected:not(.collapsed) .card-ico::before{
     opacity:1;
   }
+  :root[data-ui=light] .card.selected:not(.collapsed) .card-num{
+    background:rgba(124,58,237,0.1);
+    color:#6d28d9;
+    border-color:rgba(124,58,237,0.28);
+  }
 
   /* Card Semantic Icon Chips & Tactile Focus in Light Mode */
   /* Card 1: App Identity (Amber Gold) */
@@ -370,48 +388,56 @@
   :root[data-ui=light] #identityCard .card-ico::before{background:linear-gradient(135deg,#f59e0b,#ea580c)}
   :root[data-ui=light] #identityCard.selected:not(.collapsed){border-color:rgba(217,119,6,0.45)!important;box-shadow:0 4px 16px -2px rgba(217,119,6,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #identityCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(217,119,6,0.38)!important}
+  :root[data-ui=light] #identityCard.selected:not(.collapsed) .card-num{background:rgba(217,119,6,0.1);color:#b45309;border-color:rgba(217,119,6,0.28)}
 
   /* Card 2: Description & Release Notes (Radiant Purple) */
   :root[data-ui=light] #contentCard .card-ico{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.2);color:#7c3aed}
   :root[data-ui=light] #contentCard .card-ico::before{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
   :root[data-ui=light] #contentCard.selected:not(.collapsed){border-color:rgba(124,58,237,0.45)!important;box-shadow:0 4px 16px -2px rgba(124,58,237,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #contentCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(124,58,237,0.35)!important}
+  :root[data-ui=light] #contentCard.selected:not(.collapsed) .card-num{background:rgba(124,58,237,0.1);color:#6d28d9;border-color:rgba(124,58,237,0.28)}
 
   /* Card 3: Phone Screenshots (Rose Coral) */
   :root[data-ui=light] #shotsCard .card-ico{background:rgba(225,29,72,0.08);border-color:rgba(225,29,72,0.2);color:#e11d48}
   :root[data-ui=light] #shotsCard .card-ico::before{background:linear-gradient(135deg,#f43f5e,#e11d48)}
   :root[data-ui=light] #shotsCard.selected:not(.collapsed){border-color:rgba(225,29,72,0.45)!important;box-shadow:0 4px 16px -2px rgba(225,29,72,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #shotsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(225,29,72,0.35)!important}
+  :root[data-ui=light] #shotsCard.selected:not(.collapsed) .card-num{background:rgba(225,29,72,0.1);color:#be123c;border-color:rgba(225,29,72,0.28)}
 
   /* Card 4: Settings & Metrics (Emerald Mint) */
   :root[data-ui=light] #statsCard .card-ico{background:rgba(5,150,105,0.08);border-color:rgba(5,150,105,0.2);color:#059669}
   :root[data-ui=light] #statsCard .card-ico::before{background:linear-gradient(135deg,#10b981,#059669)}
   :root[data-ui=light] #statsCard.selected:not(.collapsed){border-color:rgba(5,150,105,0.45)!important;box-shadow:0 4px 16px -2px rgba(5,150,105,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #statsCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(5,150,105,0.35)!important}
+  :root[data-ui=light] #statsCard.selected:not(.collapsed) .card-num{background:rgba(5,150,105,0.1);color:#047857;border-color:rgba(5,150,105,0.28)}
 
   /* Card 5: Tablet / iPad Screenshots (Sky Cyan) */
   :root[data-ui=light] #ipadCard .card-ico, :root[data-ui=light] #tabCard .card-ico{background:rgba(2,132,199,0.08);border-color:rgba(2,132,199,0.2);color:#0284c7}
   :root[data-ui=light] #ipadCard .card-ico::before, :root[data-ui=light] #tabCard .card-ico::before{background:linear-gradient(135deg,#0ea5e9,#0284c7)}
   :root[data-ui=light] #ipadCard.selected:not(.collapsed), :root[data-ui=light] #tabCard.selected:not(.collapsed){border-color:rgba(2,132,199,0.45)!important;box-shadow:0 4px 16px -2px rgba(2,132,199,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #ipadCard.selected:not(.collapsed) .card-ico, :root[data-ui=light] #tabCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(2,132,199,0.35)!important}
+  :root[data-ui=light] #ipadCard.selected:not(.collapsed) .card-num, :root[data-ui=light] #tabCard.selected:not(.collapsed) .card-num{background:rgba(2,132,199,0.1);color:#0369a1;border-color:rgba(2,132,199,0.28)}
 
   /* Card 6 (Google): Feature Graphic (Sunset Orange) */
   :root[data-ui=light] #featureCard .card-ico{background:rgba(234,88,12,0.08);border-color:rgba(234,88,12,0.2);color:#ea580c}
   :root[data-ui=light] #featureCard .card-ico::before{background:linear-gradient(135deg,#f97316,#ea580c)}
   :root[data-ui=light] #featureCard.selected:not(.collapsed){border-color:rgba(234,88,12,0.45)!important;box-shadow:0 4px 16px -2px rgba(234,88,12,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #featureCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(234,88,12,0.35)!important}
+  :root[data-ui=light] #featureCard.selected:not(.collapsed) .card-num{background:rgba(234,88,12,0.1);color:#c2410c;border-color:rgba(234,88,12,0.28)}
 
   /* Card 6 (Apple) / Card 8 (Google): App Privacy & Data Safety (Security Indigo) */
   :root[data-ui=light] #privacyCard .card-ico{background:rgba(79,70,229,0.08);border-color:rgba(79,70,229,0.2);color:#4f46e5}
   :root[data-ui=light] #privacyCard .card-ico::before{background:linear-gradient(135deg,#6366f1,#4f46e5)}
   :root[data-ui=light] #privacyCard.selected:not(.collapsed){border-color:rgba(79,70,229,0.45)!important;box-shadow:0 4px 16px -2px rgba(79,70,229,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #privacyCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(79,70,229,0.35)!important}
+  :root[data-ui=light] #privacyCard.selected:not(.collapsed) .card-num{background:rgba(79,70,229,0.1);color:#4338ca;border-color:rgba(79,70,229,0.28)}
 
   /* Card 7 (Google): App Support (Deep Teal) */
   :root[data-ui=light] #supportCard .card-ico{background:rgba(13,148,136,0.08);border-color:rgba(13,148,136,0.22);color:#0d9488}
   :root[data-ui=light] #supportCard .card-ico::before{background:linear-gradient(135deg,#14b8a6,#0d9488)}
   :root[data-ui=light] #supportCard.selected:not(.collapsed){border-color:rgba(13,148,136,0.45)!important;box-shadow:0 4px 16px -2px rgba(13,148,136,0.16),0 12px 28px -4px rgba(15,23,42,0.08)!important}
   :root[data-ui=light] #supportCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(13,148,136,0.38)!important}
+  :root[data-ui=light] #supportCard.selected:not(.collapsed) .card-num{background:rgba(13,148,136,0.1);color:#0f766e;border-color:rgba(13,148,136,0.28)}
 
   /* Collapsed Card Hover in Light Mode (Pure White + Crisp Tactile Elevation) */
   :root[data-ui=light] .card.collapsed:hover{

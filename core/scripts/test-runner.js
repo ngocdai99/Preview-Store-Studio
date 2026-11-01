@@ -2094,6 +2094,12 @@ assert(bundledHtml.includes('.card.selected:not(.collapsed) .card-ico'), 'CSS re
 assert(!bundledHtml.includes('card-ico c-blue') && !bundledHtml.includes('card-ico c-purple'), 'Multi-color rainbow classes (c-blue, c-purple, etc.) are eliminated from card icons');
 assert(!bundledHtml.includes('#tabCard h2{') && !bundledHtml.includes('#tabCard h2 i{'), 'Card 5 (tabCard) inherits standard .card-header h2 and .card-ico alignment without anomalous overrides');
 
+// Card sequence number (.card-num) selected & semantic tint styling
+assert(bundledHtml.includes('.card.selected:not(.collapsed) .card-num'), 'CSS highlights card sequence number (.card-num) when card is selected and expanded');
+assert(bundledHtml.includes(':root[data-ui=light] .card.selected:not(.collapsed) .card-num'), 'CSS provides light theme selected tint for card sequence number');
+assert(bundledHtml.includes('#identityCard.selected:not(.collapsed) .card-num') && bundledHtml.includes('#contentCard.selected:not(.collapsed) .card-num'), 'CSS provides harmonious semantic tints for individual card numbers');
+assert(bundledHtml.includes(':root[data-ui=light] #identityCard.selected:not(.collapsed) .card-num'), 'CSS provides light theme semantic tints for card numbers');
+
 // 4. Stable Scrollbar Gutter to prevent Form Width Layout Shift on Card Expand
 assert(bundledHtml.includes('scrollbar-gutter:stable') || bundledHtml.includes('scrollbar-gutter: stable'), 'Editor form container applies scrollbar-gutter: stable to prevent layout shift upon expanding cards');
 assert(bundledHtml.includes('.editor::-webkit-scrollbar'), 'CSS provides custom floating scrollbar styles for editor drawer');

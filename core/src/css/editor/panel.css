@@ -204,34 +204,44 @@ body.sidebar-collapsed .editor-resizer{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:18px;
+  min-width:20px;
   height:20px;
-  padding:0 2px;
-  border-radius:5px;
+  padding:0 4px;
+  border-radius:6px;
   font-size:11px;
   font-weight:800;
   font-feature-settings:'tnum';
   letter-spacing:0.02em;
-  background:transparent;
+  background:rgba(255,255,255,0.04);
   color:#64748b;
-  border:none;
+  border:1px solid rgba(255,255,255,0.06);
   flex-shrink:0;
   line-height:1;
   user-select:none;
-  transition:color .2s ease;
+  transition:all .2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.card:hover .card-num,
-.card.selected .card-num{
+.card:hover .card-num{
   color:#94a3b8;
+  border-color:rgba(255,255,255,0.12);
+}
+.card.selected .card-num{
+  color:#cbd5e1;
 }
 :root[data-ui=light] .card-num{
-  background:rgba(0,0,0,0.05);
+  background:rgba(0,0,0,0.04);
   color:#64748b;
   border:1px solid rgba(0,0,0,0.08);
-  min-width:22px;
-  height:22px;
-  padding:0 5px;
-  border-radius:7px;
+  min-width:20px;
+  height:20px;
+  padding:0 4px;
+  border-radius:6px;
+}
+:root[data-ui=light] .card:hover .card-num{
+  color:#334155;
+  border-color:rgba(0,0,0,0.15);
+}
+:root[data-ui=light] .card.selected .card-num{
+  color:#1e293b;
 }
 .fg{display:flex;flex-direction:column;gap:6px;min-width:0}.fg.hide{display:none}
 [data-only].hide{display:none!important}
