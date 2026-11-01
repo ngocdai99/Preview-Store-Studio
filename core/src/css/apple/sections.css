@@ -16,6 +16,63 @@
 .phone.ipad[data-theme=dark] .pc,
 .phone[data-theme=dark] .pc{background:#1c1c1e;box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 0 .5px rgba(255,255,255,.1)}
 .pc.pc-single{align-items:center;text-align:center;padding:24px 20px 22px}
+
+/* iPhone Privacy Layout: Each card is 100% width; 2 cards wrap vertically; 2-column disclosures */
+.phone.apple:not(.ipad) .pg {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.phone.apple:not(.ipad) .pc {
+  width: 100%;
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+.phone.apple:not(.ipad) .pc h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.phone.apple:not(.ipad) .pc .pc-desc {
+  font-size: 12px;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+.phone.apple:not(.ipad) .pc-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 14px;
+}
+.phone.apple:not(.ipad) .pc-list p {
+  font-size: 12px;
+  gap: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* iPad Privacy Layout: 2 cards side-by-side; Single card width < 50% */
+.phone.ipad .pg {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 14px;
+}
+.phone.ipad .pg .pc {
+  flex: 1;
+  min-width: 0;
+}
+.phone.ipad .pg .pc:only-child,
+.phone.ipad .pg .pc.pc-single {
+  flex: 0 0 auto;
+  width: 44%;
+  max-width: 44%;
+}
+.dev.ipad.landscape .phone.ipad .pg .pc:only-child,
+.dev.ipad.landscape .phone.ipad .pg .pc.pc-single {
+  width: 40%;
+  max-width: 40%;
+}
 .pc-top-ico{width:32px;height:32px;margin:0 auto 10px;color:var(--bl);display:flex;align-items:center;justify-content:center}
 .pc-top-ico svg{width:28px;height:28px;display:block}
 .pc-check-ico{width:36px;height:36px;margin:0 auto 10px}

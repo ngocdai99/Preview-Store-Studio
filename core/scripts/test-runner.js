@@ -2476,6 +2476,19 @@ viewSandbox.setView('search', true);
 assert(viewSandbox.reflowCount === 2, 'Forced view update re-renders when force=true');
 
 // ---------------------------------------------------------------------
+// [SUITE 35]: Apple Privacy Layout (iPhone 100% Stacked vs iPad Single Card <50%)
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 35]: Apple Privacy Layout (iPhone 100% Stacked vs iPad Single Card <50%)');
+
+const appleSectionsCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'sections.css'), 'utf8');
+
+assert(appleSectionsCss.includes('.phone.apple:not(.ipad) .pg') && appleSectionsCss.includes('flex-direction: column'), 'iPhone privacy wrapper stacks cards vertically in a column');
+assert(appleSectionsCss.includes('.phone.apple:not(.ipad) .pc') && appleSectionsCss.includes('width: 100%'), 'iPhone privacy cards expand to 100% full width');
+assert(appleSectionsCss.includes('.phone.apple:not(.ipad) .pc-list') && appleSectionsCss.includes('grid-template-columns: repeat(2, 1fr)'), 'iPhone privacy disclosures format into an authentic 2-column grid');
+assert(appleSectionsCss.includes('.phone.ipad .pg .pc:only-child') && appleSectionsCss.includes('width: 44%'), 'iPad single privacy card is constrained to < 50% width (44%)');
+assert(appleSectionsCss.includes('.dev.ipad.landscape .phone.ipad .pg .pc:only-child') && appleSectionsCss.includes('width: 40%'), 'iPad landscape single privacy card is constrained to < 50% width (40%)');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
