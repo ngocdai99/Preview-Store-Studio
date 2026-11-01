@@ -1366,6 +1366,10 @@ assert(bundledHtml.includes('body[data-dual="true"] .dev.apple.single') && bundl
 assert(!bundledHtml.includes('body[data-dual="true"] #dt'), 'Device selector (#dt / #gdt) remains visible in Dual Phone mode');
 assert(bundledHtml.includes("$$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'))"), 'Dual Phone auto-selects Phone on device selector');
 assert(bundledHtml.includes("devSlug = 'dual-store-phone'"), 'exportPNG supports capturing dual-store-phone comparison image');
+assert(bundledHtml.includes('curZoom = isDual') && bundledHtml.includes("document.querySelector('.dev.apple.single')?.style.zoom"), 'exportPNG measures dual phone unzoomed dimensions using child device zoom rather than container style.zoom');
+assert(bundledHtml.includes('w = appleW + gap + googleW') && bundledHtml.includes('h = Math.max(appleH, googleH)'), 'exportPNG calculates full unzoomed dual phone width and height preventing vertical truncation');
+assert(bundledHtml.includes("clonedEl.style.paddingTop = '0px'") && bundledHtml.includes("clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none')"), 'exportPNG removes 36px top blank gap and hides dev-labels in cloned dual phone export');
+assert(bundledHtml.includes('scrollX: 0') && bundledHtml.includes('scrollY: 0'), 'exportPNG passes scrollX: 0 and scrollY: 0 to prevent scroll offset drift');
 assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes('GOOGLE PLAY &middot; Android'), 'Devices render marketing-style platform header labels (APP STORE · iPhone / GOOGLE PLAY · Android)');
 assert(bundledHtml.includes('.dev-label') && bundledHtml.includes('.dev-title'), 'Stage stylesheet includes .dev-label and .dev-title presentation styling');
 assert(bundledHtml.includes('font-size:calc(13px / var(--dev-zoom, 1))'), '.dev-title uses --dev-zoom invariant font scaling at 13px');

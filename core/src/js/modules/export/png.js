@@ -243,10 +243,36 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
   // Measure unzoomed layout size without touching live DOM zoom to prevent canvas jitter
   isExporting = true;
-  const curZoom = parseFloat(devToCapture.style.zoom) || 1;
-  const rect = target.getBoundingClientRect();
-  const w = Math.round(rect.width / curZoom);
-  const h = Math.round(rect.height / curZoom);
+  const curZoom = isDual
+    ? (parseFloat(document.querySelector('.dev.apple.single')?.style.zoom)
+       || parseFloat(document.querySelector('.dev')?.style.zoom)
+       || parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dev-zoom'))
+       || 1)
+    : (parseFloat(devToCapture.style.zoom) || 1);
+
+  let w, h;
+  if(isDual){
+    const appleDev = devToCapture.querySelector('.dev.apple.single');
+    const googleDev = devToCapture.querySelector('.dev.google');
+    const appleTarget = (opts.frameless && appleDev?.querySelector('.phone')) || appleDev;
+    const googleTarget = (opts.frameless && googleDev?.querySelector('.phone')) || googleDev;
+
+    const appleRect = appleTarget ? appleTarget.getBoundingClientRect() : null;
+    const googleRect = googleTarget ? googleTarget.getBoundingClientRect() : null;
+
+    const appleW = appleRect ? Math.round(appleRect.width / curZoom) : (opts.frameless ? 390 : 416);
+    const appleH = appleRect ? Math.round(appleRect.height / curZoom) : (opts.frameless ? 844 : 870);
+    const googleW = googleRect ? Math.round(googleRect.width / curZoom) : (opts.frameless ? 390 : 416);
+    const googleH = googleRect ? Math.round(googleRect.height / curZoom) : (opts.frameless ? 844 : 870);
+
+    const gap = 28;
+    w = appleW + gap + googleW;
+    h = Math.max(appleH, googleH);
+  } else {
+    const rect = target.getBoundingClientRect();
+    w = Math.round(rect.width / curZoom);
+    h = Math.round(rect.height / curZoom);
+  }
   const padX = opts.frameless ? 0 : 8;
 
   let restoreImages = () => {};
@@ -262,12 +288,21 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       x: -padX,
       width: w + padX * 2,
       height: h,
+      scrollX: 0,
+      scrollY: 0,
       windowWidth: Math.max(document.documentElement.clientWidth, w + 140),
       windowHeight: Math.max(document.documentElement.clientHeight, h + 120),
       useCORS: true,
       allowTaint: true,
       logging: false,
       onclone: (clonedDoc, clonedEl) => {
+        // Reset stage scroll if present
+        const clonedStage = clonedDoc.querySelector('.stage');
+        if(clonedStage){
+          clonedStage.scrollTop = 0;
+          clonedStage.scrollLeft = 0;
+        }
+
         // Hide CSS pseudo-element buttons so html2canvas renders explicit hardware button nodes cleanly
         const btnStyle = clonedDoc.createElement('style');
         btnStyle.textContent = '.dev::before, .dev::after { display: none !important; }';
@@ -277,13 +312,19 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.style.transform = 'none';
         clonedEl.style.animation = 'none';
         clonedEl.style.transition = 'none';
+
+        // Always hide developer labels in exported mockups
+        clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
+
         if(isDual){
+          clonedEl.style.paddingTop = '0px';
+          clonedEl.style.paddingBottom = '0px';
+          clonedEl.style.paddingLeft = '0px';
+          clonedEl.style.paddingRight = '0px';
           clonedEl.style.gap = '28px';
-          if(opts.frameless || opts.transparent){
-            clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
-          }
-        } else {
-          clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none');
+          clonedEl.style.width = `${w}px`;
+          clonedEl.style.height = `${h}px`;
+          clonedEl.style.justifyContent = 'flex-start';
         }
         clonedDoc.querySelectorAll('.dev').forEach(d => {
           d.classList.remove('dev-enter', 'dev-exit', ...(typeof ALL_TRANS_CLASSES !== 'undefined' ? ALL_TRANS_CLASSES : []));
