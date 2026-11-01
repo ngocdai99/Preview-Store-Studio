@@ -91,11 +91,7 @@ body.sidebar-collapsed .editor-resizer{
   min-height: 28px;
   padding: 13px 16px;
   border-radius: 17px;
-  transition: opacity 0.15s ease, background 0.15s ease;
-}
-
-.card-header:hover {
-  opacity: 0.92;
+  transition: background 0.15s ease;
 }
 
 .card:not(.collapsed) .card-header {
@@ -184,6 +180,7 @@ body.sidebar-collapsed .editor-resizer{
 .card.collapsed {
   padding: 0;
   gap: 0;
+  cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -193,9 +190,9 @@ body.sidebar-collapsed .editor-resizer{
 }
 
 .card.collapsed:hover {
-  background: linear-gradient(180deg, #171c2b 0%, #10141e 100%);
+  background: linear-gradient(180deg, #182030 0%, #121724 100%);
   border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 6px 24px -2px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .card h2 i{
   width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;flex-shrink:0;

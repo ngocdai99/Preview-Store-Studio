@@ -2113,6 +2113,10 @@ const headerJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules',
 assert(headerJsCode.includes("card.classList.toggle('collapsed')"), 'header.js provides click delegation on .card-header to toggle collapsed class');
 assert(headerJsCode.includes("card.classList.add('selected')"), 'header.js manages selected state when expanding cards');
 
+// 5. Collapsed card hover state: subtle tint without shadow elevation
+assert(bundledHtml.includes(':root[data-ui=light] .card.collapsed:hover') && bundledHtml.includes('#f5f5f7'), 'Light theme styles collapsed card hover with gentle tint #f5f5f7');
+assert(bundledHtml.includes('.card.collapsed:hover') && !bundledHtml.includes('.card.collapsed:hover{background:#ffffff!important;border-color:rgba(0,0,0,0.16)!important;box-shadow:0 3px 8px'), 'Collapsed card hover does not inflate excessive box shadow');
+
 // ---------------------------------------------------------------------
 // SUITE 31: Custom Age Rating Dropdown UI & Search Filter Verification
 // ---------------------------------------------------------------------
