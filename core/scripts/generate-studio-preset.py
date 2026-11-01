@@ -9,12 +9,12 @@ def enc_svg(s):
 icon_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1024" height="1024">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
     <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#6366f1"/>
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
     </linearGradient>
   </defs>
   <rect width="32" height="32" fill="url(#c6-bg)"/>
@@ -233,8 +233,8 @@ shot3_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" wid
       <stop offset="100%" stop-color="#141838"/>
     </linearGradient>
     <linearGradient id="c6m" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
     <linearGradient id="acc3" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#38bdf8"/>
@@ -248,10 +248,10 @@ shot3_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" wid
   <text x="230" y="195" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Instant alpha channel detection &amp; specification checks</text>
   <!-- Hero Icon Box -->
   <g transform="translate(140, 240)">
-    <rect width="180" height="180" rx="42" fill="url(#c6m)" filter="drop-shadow(0 20px 30px rgba(59,130,246,0.5))"/>
+    <rect width="180" height="180" rx="42" fill="url(#c6m)" filter="drop-shadow(0 20px 30px rgba(234,88,12,0.45))"/>
     <rect x="58" y="25" width="94" height="102" rx="14" fill="rgba(255,255,255,0.2)" stroke="#fff" stroke-width="8"/>
     <circle cx="105" cy="35" r="4" fill="#fff"/>
-    <rect x="28" y="45" width="65" height="110" rx="16" fill="#6366f1" stroke="#fff" stroke-width="10"/>
+    <rect x="28" y="45" width="65" height="110" rx="16" fill="#d97706" stroke="#fff" stroke-width="10"/>
   </g>
   <!-- Spec List Card -->
   <g transform="translate(30, 460)">
