@@ -592,7 +592,7 @@ assert(ipadHtml.includes('ipad-nav-capsule') && ipadHtml.includes('ipad-capsule-
 assert(ipadHtml.includes('ipad-platforms-row') && ipadHtml.includes('iPad, iPhone'), 'iPad gallery features platforms support badge line (iPad, iPhone)');
 assert(ipadHtml.includes('ipad-desc-row') && ipadHtml.includes('ipad-dev-entity'), 'iPad features 2-column description and developer entity row');
 assert(bundledHtml.includes('.ipad-dev-entity-name') && (bundledHtml.includes('font-weight:400') || bundledHtml.includes('font-weight: 400')), 'iPad developer name uses font-weight 400 (regular weight)');
-assert(bundledHtml.includes('.ipad-dev-col{flex:0 0 160px') || bundledHtml.includes('max-width:160px'), 'iPad developer column has compact width to maximize description space');
+assert(bundledHtml.includes('.ipad-dev-col{flex:0 0 130px') || bundledHtml.includes('max-width:130px'), 'iPad developer column has compact 130px width to maximize description space');
 assert(ipadHtml.includes('ipad-desc-txt') && ipadHtml.includes('data-b="desc"'), 'iPad renders full description in description column');
 assert(ipadHtml.includes('data-b="promo"'), 'iPad supports optional promotional text banner in description column');
 assert(ipadHtml.includes('ipad-cat-pill') && ipadHtml.includes('data-b="cat"'), 'iPad displays category badge pill in description column');
