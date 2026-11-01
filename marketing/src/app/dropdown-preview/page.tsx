@@ -3,111 +3,153 @@
 import React, { useState } from "react";
 import { StageViewDropdown } from "@/components/ui/StageViewDropdown";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { Smartphone, ChevronDown } from "lucide-react";
+import { Smartphone, ChevronDown, Check, LayoutTemplate, Search } from "lucide-react";
 
 export default function DropdownPreviewPage() {
   const [currentView, setCurrentView] = useState<"detail" | "search">("search");
   const [isDual, setIsDual] = useState(true);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#060a12] text-slate-800 dark:text-slate-100 flex flex-col transition-colors selection:bg-indigo-500 selection:text-white">
-      {/* Top Header */}
-      <header className="h-14 border-b border-slate-200/80 dark:border-white/10 px-6 flex items-center justify-between bg-white/70 dark:bg-[#0c1222]/70 backdrop-blur-md sticky top-0 z-40">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 flex flex-col transition-colors">
+      {/* Top Bar */}
+      <header className="h-16 border-b border-slate-200 dark:border-white/10 px-6 sm:px-10 flex items-center justify-between bg-white dark:bg-[#0c1222] shadow-sm sticky top-0 z-50">
         <div className="flex items-center gap-3">
-          <span className="font-bold text-sm text-slate-900 dark:text-white">
-            Stage View Dropdown · macOS Style
-          </span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 font-mono">
-            {currentView} {isDual ? "+ dual" : "+ single"}
+          <h1 className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white">
+            Dropdown UI Showcase · Minimalist Menu
+          </h1>
+          <span className="text-xs px-2.5 py-0.5 rounded-full font-mono bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 font-bold">
+            {currentView} · dual: {isDual ? "ON" : "OFF"}
           </span>
         </div>
         <ThemeToggle />
       </header>
 
-      {/* Grid Canvas matching Store Preview Studio */}
-      <main className="flex-1 p-6 sm:p-10 flex flex-col items-center justify-start bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]">
-        {/* Real-size Floating Toolbar */}
-        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-white/95 dark:bg-[#0f172a]/95 border border-slate-200/90 dark:border-white/10 shadow-[0_8px_24px_-4px_rgba(15,23,42,0.08)] dark:shadow-[0_12px_32px_-4px_rgba(0,0,0,0.6)] backdrop-blur-xl mb-8">
-          <StageViewDropdown
-            initialView={currentView}
-            initialDual={isDual}
-            onViewChange={(v) => setCurrentView(v)}
-            onDualChange={(d) => setIsDual(d)}
-          />
-
-          <button
-            type="button"
-            className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-[12px] font-medium bg-white dark:bg-[#0e1526] text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.04)] cursor-pointer"
-          >
-            <Smartphone className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[2]" />
-            <span>Phone</span>
-            <ChevronDown className="w-3 h-3 text-slate-400 stroke-[2.2]" />
-          </button>
-        </div>
-
-        {/* Realistic Dual Phone Stage */}
-        <div className="flex items-center justify-center gap-8 flex-wrap">
-          {/* Phone 1: App Store (iPhone) */}
-          <div className="flex flex-col items-center gap-3">
-            <span className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              App Store · iPhone
+      {/* Main Focus Area (Pure Dropdown Inspection, No Distractions) */}
+      <main className="flex-1 flex flex-col items-center justify-center p-8 sm:p-16">
+        <div className="w-full max-w-2xl flex flex-col items-center gap-10">
+          {/* Card 1: Live Interactive Toolbar */}
+          <div className="w-full rounded-3xl p-8 bg-white dark:bg-[#0e1628] border border-slate-200 dark:border-white/10 shadow-[0_12px_40px_rgba(15,23,42,0.08)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.6)] flex flex-col items-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-6">
+              1. Live Interactive Toolbar (Bấm vào để thử đóng / mở)
             </span>
-            <div className="w-[280px] h-[580px] rounded-[48px] p-3 bg-black border-[4px] border-slate-800 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.4)] flex flex-col justify-between overflow-hidden relative">
-              {/* Dynamic Island */}
-              <div className="w-24 h-5 rounded-full bg-black mx-auto mb-3 mt-1" />
-              <div className="p-2 space-y-3">
-                <div className="h-6 rounded-lg bg-white/10 flex items-center px-2 text-[10px] text-slate-400">
-                  {currentView === "search" ? "🔍 Notion" : "Notion: Notes, Tasks"}
-                </div>
-                <div className="flex gap-2.5 items-center">
-                  <div className="w-12 h-12 rounded-xl bg-white/20" />
-                  <div className="space-y-1">
-                    <div className="h-3.5 w-24 bg-white/30 rounded" />
-                    <div className="h-2.5 w-16 bg-white/15 rounded" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-1.5 pt-2">
-                  <div className="h-32 bg-white/10 rounded-lg" />
-                  <div className="h-32 bg-white/10 rounded-lg" />
-                  <div className="h-32 bg-white/10 rounded-lg" />
-                </div>
+
+            <div className="h-48 flex items-start justify-center">
+              <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-100/90 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 shadow-sm">
+                <StageViewDropdown
+                  initialView={currentView}
+                  initialDual={isDual}
+                  onViewChange={(v) => setCurrentView(v)}
+                  onDualChange={(d) => setIsDual(d)}
+                />
+
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-[12.5px] font-semibold bg-white dark:bg-[#0c1222] text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/15 shadow-[0_2px_8px_rgba(15,23,42,0.06)] cursor-pointer"
+                >
+                  <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
+                  <span>Phone</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 stroke-[2.4]" />
+                </button>
               </div>
-              <div className="h-1 w-28 bg-white/40 rounded-full mx-auto mb-2" />
             </div>
           </div>
 
-          {/* Phone 2: Google Play (Android) */}
-          {isDual && (
-            <div className="flex flex-col items-center gap-3 animate-in fade-in duration-200">
-              <span className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                Google Play · Android
-              </span>
-              <div className="w-[280px] h-[580px] rounded-[42px] p-3 bg-black border-[4px] border-slate-800 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.4)] flex flex-col justify-between overflow-hidden relative">
-                {/* Punch hole camera */}
-                <div className="w-3.5 h-3.5 rounded-full bg-slate-900 border border-slate-800 mx-auto mt-1" />
-                <div className="p-2 space-y-3">
-                  <div className="h-6 rounded-lg bg-white/10 flex items-center px-2 text-[10px] text-slate-400">
-                    {currentView === "search" ? "🔍 Notion" : "Notion"}
-                  </div>
-                  <div className="flex gap-2.5 items-center">
-                    <div className="w-12 h-12 rounded-xl bg-white/20" />
-                    <div className="space-y-1">
-                      <div className="h-3.5 w-24 bg-white/30 rounded" />
-                      <div className="h-2.5 w-16 bg-white/15 rounded" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-1.5 pt-2">
-                    <div className="h-32 bg-white/10 rounded-lg" />
-                    <div className="h-32 bg-white/10 rounded-lg" />
-                    <div className="h-32 bg-white/10 rounded-lg" />
-                  </div>
-                </div>
-                <div className="h-1 w-20 bg-white/30 rounded-full mx-auto mb-2" />
+          {/* Card 2: Permanently Expanded Popover (Soi trực tiếp từng pixel, không sợ bị tắt) */}
+          <div className="w-full rounded-3xl p-8 bg-white dark:bg-[#0e1628] border border-slate-200 dark:border-white/10 shadow-[0_12px_40px_rgba(15,23,42,0.08)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.6)] flex flex-col items-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-6">
+              2. Mở cố định để soi chi tiết (Không bao giờ tắt khi click)
+            </span>
+
+            {/* Standalone Visible Menu */}
+            <div className="w-[220px] rounded-2xl p-2 bg-white dark:bg-[#0e1628] border-2 border-slate-200 dark:border-white/15 shadow-[0_20px_48px_-8px_rgba(15,23,42,0.22),0_4px_16px_rgba(15,23,42,0.08)] dark:shadow-[0_24px_60px_-8px_rgba(0,0,0,0.85)] select-none">
+              <div className="px-2.5 pt-1.5 pb-1 text-[9.5px] font-extrabold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500">
+                Preview Screen
               </div>
+
+              <div className="space-y-1">
+                {/* Detail View */}
+                <button
+                  type="button"
+                  onClick={() => setCurrentView("detail")}
+                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition-all cursor-pointer ${
+                    currentView === "detail"
+                      ? "bg-purple-500/10 dark:bg-purple-500/20 text-purple-950 dark:text-purple-200 font-bold border border-purple-500/25 shadow-sm"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-transparent"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <LayoutTemplate
+                      className={`w-4 h-4 stroke-[2] shrink-0 ${
+                        currentView === "detail"
+                          ? "text-purple-600 dark:text-purple-400"
+                          : "text-slate-400 dark:text-slate-500"
+                      }`}
+                    />
+                    <span className="text-[12.5px] tracking-tight">Detail View</span>
+                  </div>
+                  {currentView === "detail" && (
+                    <Check className="w-4 h-4 text-purple-600 dark:text-purple-400 stroke-[2.8] shrink-0" />
+                  )}
+                </button>
+
+                {/* Search Result */}
+                <button
+                  type="button"
+                  onClick={() => setCurrentView("search")}
+                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition-all cursor-pointer ${
+                    currentView === "search"
+                      ? "bg-amber-500/10 dark:bg-amber-500/20 text-amber-950 dark:text-amber-200 font-bold border border-amber-500/25 shadow-sm"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-transparent"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Search
+                      className={`w-4 h-4 stroke-[2] shrink-0 ${
+                        currentView === "search"
+                          ? "text-amber-600 dark:text-amber-400"
+                          : "text-slate-400 dark:text-slate-500"
+                      }`}
+                    />
+                    <span className="text-[12.5px] tracking-tight">Search Result</span>
+                  </div>
+                  {currentView === "search" && (
+                    <Check className="w-4 h-4 text-amber-600 dark:text-amber-400 stroke-[2.8] shrink-0" />
+                  )}
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div className="h-px bg-slate-200 dark:bg-white/10 my-2 mx-1" />
+
+              {/* Comparison Section */}
+              <div className="px-2.5 pt-0.5 pb-1 text-[9.5px] font-extrabold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500">
+                Comparison
+              </div>
+
+              {/* Dual Phone */}
+              <button
+                type="button"
+                onClick={() => setIsDual(!isDual)}
+                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition-all cursor-pointer ${
+                  isDual
+                    ? "bg-blue-500/10 dark:bg-blue-500/20 text-blue-950 dark:text-blue-200 font-bold border border-blue-500/25 shadow-sm"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-transparent"
+                }`}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <Smartphone
+                    className={`w-4 h-4 stroke-[2] shrink-0 ${
+                      isDual ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"
+                    }`}
+                  />
+                  <span className="text-[12.5px] tracking-tight">Dual Phone</span>
+                </div>
+                {isDual && (
+                  <Check className="w-4 h-4 text-blue-600 dark:text-blue-400 stroke-[2.8] shrink-0" />
+                )}
+              </button>
             </div>
-          )}
+          </div>
         </div>
       </main>
     </div>
