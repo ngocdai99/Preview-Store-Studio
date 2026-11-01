@@ -171,27 +171,24 @@ export const en = {
     items: [
       {
         quote:
-          "Before Preview Studio, every App Store submission felt like flying blind. We'd submit metadata, wait 2 days for review, only to realize the title wrapped awkwardly on smaller iPhones. Preview Studio saved us hours of costly revision rounds before our launch day.",
+          "Before Preview Studio, every App Store submission felt like flying blind. We'd submit metadata, wait 2 days for review, only to realize the title wrapped awkwardly on smaller iPhones. **Preview Studio saved us hours of costly revision rounds before our launch day.**",
         author: "Alex Rivera",
         role: "Startup Founder · Shipped 4 iOS Apps",
         highlight: "Saved hours before launch day",
-        avatarInitials: "AR",
       },
       {
         quote:
-          "Our clients always asked: 'Can we see what the store page will actually look like before we approve the screenshots?' We used to build messy PowerPoint decks. Now we just export clean 4K mockups or share the standalone file. It makes our agency deliverables look noticeably more polished and professional.",
+          "Our clients always asked: 'Can we see what the store page will actually look like before we approve the screenshots?' We used to build messy PowerPoint decks. **Now we just export clean 4K mockups or share the standalone file.** It makes our agency deliverables look noticeably more polished and professional.",
         author: "Marcus Vance",
         role: "Partner at AppCraft Studio · ASO & Growth Agency",
         highlight: "Agency-grade client deliverables",
-        avatarInitials: "MV",
       },
       {
         quote:
-          "Figma templates for App Store screenshots get outdated every time Apple changes bezel radiuses or introduces a new Dynamic Island. Preview Studio gives me instant, hardware-accurate frames and catches illegal icon transparency before engineering touches it.",
+          "Figma templates for App Store screenshots get outdated every time Apple changes bezel radiuses or introduces a new Dynamic Island. **Preview Studio gives me instant, hardware-accurate frames** and catches illegal icon transparency before engineering touches it.",
         author: "Elena Rostova",
         role: "Lead Product Designer · FinTech Mobile Suite",
         highlight: "Hardware-accurate Dynamic Island",
-        avatarInitials: "ER",
       },
     ],
   },

@@ -1,5 +1,21 @@
 import { siteConfig } from "@/config/site";
-import { Star } from "lucide-react";
+
+function renderHighlightedText(text: string) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong
+          key={index}
+          className="font-semibold text-slate-900 dark:text-white"
+        >
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
 
 export function Testimonials() {
   const { testimonials } = siteConfig;
@@ -11,7 +27,7 @@ export function Testimonials() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[40px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2] text-balance">
             {testimonials.title}
           </h2>
@@ -28,43 +44,22 @@ export function Testimonials() {
           {testimonials.items.map((item) => (
             <div
               key={item.author}
-              className="rounded-[20px] p-7 sm:p-8 flex flex-col justify-between
-                bg-white dark:bg-[#0c1222]
+              className="rounded-2xl p-7 sm:p-8 flex flex-col justify-between
+                bg-white dark:bg-[#0c1222]/80
                 border border-slate-200/80 dark:border-white/[0.08]
-                shadow-[0_1px_3px_rgba(15,23,42,0.03),0_6px_16px_rgba(15,23,42,0.02)]
-                dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]
                 hover:border-slate-300 dark:hover:border-white/[0.16]
-                transition-all duration-200"
+                transition-colors"
             >
-              <div>
-                {/* 5 Stars */}
-                <div className="flex items-center gap-1 text-amber-400 mb-5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-amber-400 stroke-amber-400"
-                    />
-                  ))}
-                </div>
+              <p className="text-[14.5px] sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
+                {renderHighlightedText(item.quote)}
+              </p>
 
-                {/* Quote Content */}
-                <p className="text-[14.5px] sm:text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
-                  &ldquo;{item.quote}&rdquo;
-                </p>
-              </div>
-
-              {/* Author Profile Footer */}
-              <div className="pt-6 mt-6 border-t border-slate-100 dark:border-white/[0.06] flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/[0.08] text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center justify-center border border-slate-200/70 dark:border-white/[0.08] shrink-0">
-                  {item.avatarInitials}
+              <div className="mt-7 pt-5 border-t border-slate-100 dark:border-white/[0.06]">
+                <div className="text-[14px] font-semibold text-slate-900 dark:text-white">
+                  {item.author}
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-[14.5px] font-bold text-[#0f172a] dark:text-white leading-snug">
-                    {item.author}
-                  </h3>
-                  <p className="text-[12.5px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
-                    {item.role}
-                  </p>
+                <div className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  {item.role}
                 </div>
               </div>
             </div>
