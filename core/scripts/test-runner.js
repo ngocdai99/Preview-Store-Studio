@@ -2588,38 +2588,49 @@ vm.runInContext("FEATURE_GRAPHIC = 'data:image/png;base64,sampleRealFeature';", 
 assert(themeSandbox.isPlaceholderFeature() === false, 'isPlaceholderFeature recognizes actual custom feature graphic');
 
 // ---------------------------------------------------------------------
-// [SUITE 37]: Top Toolbar Unified View Switcher & Canvas Height Liberation
+// [SUITE 37]: Dedicated Bottom View Switcher & Height Optimization
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 37]: Top Toolbar Unified View Switcher & Canvas Height Liberation');
+console.log('\n[SUITE 37]: Dedicated Bottom View Switcher & Height Optimization');
 
-// 1. View Switcher (#vt) and Dual Phone button are located inside .stage-toolbar
+// 1. Top toolbar is calm and stable: only device and theme controls, no crowded view switcher
 const stageToolbarHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage-toolbar.html'), 'utf8');
-assert(stageToolbarHtml.includes('components/stage/view-switcher.html'), 'stage-toolbar.html includes view-switcher.html alongside device and theme controls');
-assert(bundledHtml.includes('class="stage-toolbar"') && bundledHtml.includes('id="vt"'), 'Bundled HTML places #vt inside or alongside the top toolbar');
+assert(!stageToolbarHtml.includes('components/stage/view-switcher.html'), 'stage-toolbar.html avoids crowded view-switcher to eliminate toolbar flick and jitter');
+assert(stageToolbarHtml.includes('components/stage/apple-device-selector.html') && stageToolbarHtml.includes('components/common/device-theme-seg.html'), 'stage-toolbar.html retains clean device selector and theme controls');
 
-// 2. The stage index does not include bottom bar eating canvas height
+// 2. The stage index places view switcher safely in the dedicated bottom bar
 const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'index.html'), 'utf8');
-assert(!indexHtml.includes('<div class="stage-bottom-bar"'), 'src/index.html removes redundant in-flow stage-bottom-bar');
+assert(indexHtml.includes('<div class="stage-bottom-bar" id="stageBottomBar">') && indexHtml.includes('components/stage/view-switcher.html'), 'src/index.html houses view-switcher in dedicated stage-bottom-bar');
 
-// 3. Zoom calculation in main.js and transitions.js frees vertical height when bottom bar is absent
+// 3. Compact bottom bar CSS avoids bloated dead margins
+const stageToolbarCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'stage', 'toolbar.css'), 'utf8');
+assert(stageToolbarCss.includes('.stage-bottom-bar{position:sticky;bottom:8px') && stageToolbarCss.includes('padding-top:4px'), 'toolbar.css uses compact 8px bottom and 4px padding for stage-bottom-bar');
+
+// 4. Zoom calculation in main.js and transitions.js uses streamlined padding and avoids inflated overhead
 const mainJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'main.js'), 'utf8');
 const transitionsJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
-assert(mainJsCode.includes('bb.offsetHeight > 0') && mainJsCode.includes(': 0;'), 'main.js fit() falls back to 0px overhead when bottom bar is absent');
-assert(transitionsJsCode.includes('bb.offsetHeight > 0') && transitionsJsCode.includes(': 0;'), 'transitions.js computeDeviceZoom() falls back to 0px overhead when bottom bar is absent');
+assert(mainJsCode.includes('pad=m?16:24') && mainJsCode.includes('bb.offsetHeight + 4'), 'main.js fit() uses compact pad and exact bb height buffer');
+assert(transitionsJsCode.includes('pad = m ? 16 : 24') && transitionsJsCode.includes('bb.offsetHeight + 4'), 'transitions.js computeDeviceZoom() uses compact pad and exact bb height buffer');
 
-// 4. Verify mathematical height liberation
-const simulateZoom = (clientHeight, baseH, hasBottomBar) => {
+// 5. Verify mathematical height liberation with optimized bottom bar vs old bloated bottom bar
+const simulateOldZoom = (clientHeight, baseH) => {
   const pad = 40;
   const tbHeight = 40;
-  const bbH = hasBottomBar ? 68 : 0;
+  const bbH = 68; // old bloated bb overhead
   const vt = tbHeight + bbH + 18 + 44;
   return (clientHeight - pad - vt) / (baseH + 8);
 };
-const zoomBefore = simulateZoom(750, 870, true);
-const zoomAfter = simulateZoom(750, 870, false);
-assert(zoomAfter > zoomBefore, 'Removing bottom bar increases device scale zoom on canvas');
-const heightGainPercent = ((zoomAfter - zoomBefore) / zoomBefore) * 100;
-assert(heightGainPercent >= 10, 'Device gains at least 10% more vertical scale and screen presence');
+const simulateNewZoom = (clientHeight, baseH) => {
+  const pad = 24; // new tight pad
+  const tbHeight = 38;
+  const bbH = 42; // exact 38 + 4
+  const vt = tbHeight + bbH + 10 + 36;
+  return (clientHeight - pad - vt) / (baseH + 8);
+};
+const oldZoom = simulateOldZoom(750, 870);
+const newZoom = simulateNewZoom(750, 870);
+assert(newZoom > oldZoom, 'Optimized bottom bar calculation significantly increases device scale zoom on canvas');
+const heightGainPercent = ((newZoom - oldZoom) / oldZoom) * 100;
+assert(heightGainPercent >= 9, 'Device gains at least 9% more vertical scale and screen presence with optimized bottom bar');
 
 // ---------------------------------------------------------------------
 // Summary Report

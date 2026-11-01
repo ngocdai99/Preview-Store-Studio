@@ -4,11 +4,12 @@ let isExporting = false;
 const isM=()=>innerWidth<=820;
 function fit(){
   if(isExporting) return;
-  const st=document.querySelector('.stage'),m=isM(),pad=m?20:40;
+  const st=document.querySelector('.stage'),m=isM(),pad=m?16:24;
   const tb=document.querySelector('.stage-toolbar');
   const bb=document.querySelector('.stage-bottom-bar');
-  const bbH=(bb && bb.offsetHeight > 0) ? bb.offsetHeight + 14 : 0;
-  const vt=(tb?tb.offsetHeight:40) + bbH + (m?14:18) + 44;
+  const isBbVis = bb && bb.offsetHeight > 0 && (!bb.style.display || bb.style.display !== 'none');
+  const bbH=isBbVis ? bb.offsetHeight + 4 : 0;
+  const vt=(tb?tb.offsetHeight:38) + bbH + (m?8:10) + 36;
   const isDual = document.body.dataset.dual === 'true' || appleDevice === 'dual' || googleDevice === 'dual';
 
   let baseW = 416, baseH = 870;
