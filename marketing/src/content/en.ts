@@ -53,6 +53,22 @@ export const en = {
         badge: "Retina Hardware",
       },
       {
+        id: "viewports",
+        icon: "search" as const,
+        title: "Search Result & Dual-Phone Viewports",
+        description:
+          "Simulate both the product detail page and live App Store search feed cards. Toggle dual-phone mode to compare iOS and Android renderings side-by-side.",
+        badge: "Dual Viewports",
+      },
+      {
+        id: "cloner",
+        icon: "cloudDownload" as const,
+        title: "1-Click Live App Cloner",
+        description:
+          "Import real metadata, live ratings, subtitles, and screenshot galleries directly from any public App Store listing for instant competitor benchmarking.",
+        badge: "Competitor ASO",
+      },
+      {
         id: "compliance",
         icon: "shieldCheck" as const,
         title: "Smart Size & Compliance Detection",
@@ -71,9 +87,9 @@ export const en = {
       {
         id: "export",
         icon: "folderArchive" as const,
-        title: "1-Click Preset & Zip Export",
+        title: "Multi-Format Export & Dev Markdown",
         description:
-          "Export portable JSON presets to backup configurations or transfer between teammates. Bulk export clean 4K Retina screenshot bundles with instant client-side ZIP generation.",
+          "Bulk export clean 4K Retina PNG mockups and client-side ZIP bundles. Generate structured LISTING_METADATA.md and portable JSON presets for seamless developer handoff.",
         badge: "Ultra HD 4K",
       },
     ],

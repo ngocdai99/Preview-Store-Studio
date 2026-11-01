@@ -1,6 +1,8 @@
 import { siteConfig, type FeatureItem } from "@/config/site";
 import {
   Smartphone,
+  Search,
+  CloudDownload,
   ShieldCheck,
   Sparkles,
   FolderArchive,
@@ -9,6 +11,8 @@ import {
 
 const iconMap: Record<FeatureItem["icon"], LucideIcon> = {
   smartphone: Smartphone,
+  search: Search,
+  cloudDownload: CloudDownload,
   shieldCheck: ShieldCheck,
   sparkles: Sparkles,
   folderArchive: FolderArchive,
@@ -33,6 +37,27 @@ const featureThemes: Record<string, FeatureTheme> = {
     cardHoverShadow:
       "hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(59,130,246,0.25)]",
   },
+  viewports: {
+    iconBox:
+      "bg-sky-500/10 border-sky-500/20 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 group-hover:border-sky-500/40 group-hover:shadow-[0_0_20px_rgba(14,165,233,0.25)]",
+    badge:
+      "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/25",
+    radialGlow: "from-sky-500/15 via-cyan-500/10 to-transparent",
+    cardHoverBorder: "hover:border-sky-500/40 dark:hover:border-sky-500/40",
+    cardHoverShadow:
+      "hover:shadow-[0_20px_40px_-15px_rgba(14,165,233,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(14,165,233,0.25)]",
+  },
+  cloner: {
+    iconBox:
+      "bg-violet-500/10 border-violet-500/20 text-violet-600 dark:text-violet-400 group-hover:bg-violet-500/20 group-hover:border-violet-500/40 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.25)]",
+    badge:
+      "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/25",
+    radialGlow: "from-violet-500/15 via-purple-500/10 to-transparent",
+    cardHoverBorder:
+      "hover:border-violet-500/40 dark:hover:border-violet-500/40",
+    cardHoverShadow:
+      "hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(139,92,246,0.25)]",
+  },
   compliance: {
     iconBox:
       "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]",
@@ -46,14 +71,14 @@ const featureThemes: Record<string, FeatureTheme> = {
   },
   sync: {
     iconBox:
-      "bg-purple-500/10 border-purple-500/20 text-purple-600 dark:text-purple-400 group-hover:bg-purple-500/20 group-hover:border-purple-500/40 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.25)]",
+      "bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400 group-hover:bg-rose-500/20 group-hover:border-rose-500/40 group-hover:shadow-[0_0_20px_rgba(244,63,94,0.25)]",
     badge:
-      "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/25",
-    radialGlow: "from-purple-500/15 via-violet-500/10 to-transparent",
+      "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/25",
+    radialGlow: "from-rose-500/15 via-pink-500/10 to-transparent",
     cardHoverBorder:
-      "hover:border-purple-500/40 dark:hover:border-purple-500/40",
+      "hover:border-rose-500/40 dark:hover:border-rose-500/40",
     cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(168,85,247,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(168,85,247,0.25)]",
+      "hover:shadow-[0_20px_40px_-15px_rgba(244,63,94,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(244,63,94,0.25)]",
   },
   export: {
     iconBox:
@@ -74,6 +99,16 @@ const featureTags: Record<string, string[]> = {
     "Light & Dark OS",
     "Store Viewports",
   ],
+  viewports: [
+    "Search Feed Ribbon",
+    "Product Detail Page",
+    "Dual-Phone Comparison",
+  ],
+  cloner: [
+    "Live App Store Import",
+    "Competitor Research",
+    "Instant Draft Kickstart",
+  ],
   compliance: [
     "Official Store Specs",
     "Aspect Ratio Verification",
@@ -85,9 +120,10 @@ const featureTags: Record<string, string[]> = {
     "Live Title Length Guard",
   ],
   export: [
-    "Instant Client-Side ZIP",
-    "Portable JSON Presets",
-    "4K Retina Bundles",
+    "4K Retina PNGs",
+    "Client-Side ZIP",
+    "LISTING_METADATA.md",
+    "JSON Presets",
   ],
 };
 
@@ -116,8 +152,8 @@ export function Features() {
           </p>
         </div>
 
-        {/* 2x2 Balanced Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 max-w-5xl mx-auto">
+        {/* 6-Card 3x2 Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {features.items.map((feature) => {
             const Icon = iconMap[feature.icon] || Smartphone;
             const theme =
