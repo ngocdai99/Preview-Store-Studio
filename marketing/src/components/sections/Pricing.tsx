@@ -215,7 +215,7 @@ export function Pricing() {
           {/* Founder Note from Kai */}
           <div className="mt-8 max-w-lg mx-auto w-full">
             <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] shadow-[0_4px_20px_-4px_rgba(15,23,42,0.05)] dark:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.4)] flex items-start gap-3.5 sm:gap-4 transition-all">
-              {/* Avatar with Live Indicator */}
+              {/* Avatar with Static Status Indicator */}
               <div className="relative shrink-0">
                 <Image
                   src="/kai.jpg"
@@ -224,21 +224,15 @@ export function Pricing() {
                   height={44}
                   className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-200/90 dark:ring-white/15"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 ring-2 ring-white dark:ring-[#0c1222]" />
-                </span>
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#0c1222]" />
               </div>
 
               {/* Message Details */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                <div className="flex items-center gap-2 mb-1.5">
                   <span className="text-[13px] font-bold text-slate-900 dark:text-white">Kai</span>
                   <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300">
                     Kai DevLabs
-                  </span>
-                  <span className="ml-auto text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                    Direct 1-on-1 Support
                   </span>
                 </div>
                 <p className="text-[12.5px] sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300">
