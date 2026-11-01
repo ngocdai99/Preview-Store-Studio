@@ -116,14 +116,26 @@ export function Faq() {
                   </div>
                 </button>
 
-                {/* Body (Expand/Collapse Content) */}
-                {isOpen && (
-                  <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-slate-600 dark:text-slate-300 text-[14px] sm:text-[14.5px] leading-relaxed animate-in fade-in-50 duration-200">
-                    <div className="pt-3 border-t border-border/40 dark:border-white/[0.06] leading-relaxed">
-                      {item.answer}
+                {/* Body (Smooth Grid Expand/Collapse Content) */}
+                <div
+                  aria-hidden={!isOpen}
+                  className="grid transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  style={{
+                    gridTemplateRows: isOpen ? "1fr" : "0fr",
+                  }}
+                >
+                  <div className="overflow-hidden min-h-0">
+                    <div
+                      className={`px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-slate-600 dark:text-slate-300 text-[14px] sm:text-[14.5px] leading-relaxed transition-opacity duration-200 ease-out ${
+                        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+                      }`}
+                    >
+                      <div className="pt-3 border-t border-border/40 dark:border-white/[0.06] leading-relaxed">
+                        {item.answer}
+                      </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
