@@ -312,6 +312,10 @@
   .preset-banner-btn {
     padding: 3px 7px;
   }
+  #presetBtnBadge,
+  #draftBtnBadge {
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -319,10 +323,14 @@
     display: none;
   }
   .preset-banner-btn {
-    padding: 3px 6px;
+    padding: 4px 7px;
   }
-  #presetBtnBadge {
-    display: none;
+  .ms-pill-import .lbl-full,
+  .ms-pill-import .lbl-short {
+    display: none !important;
+  }
+  .ms-pill-import {
+    padding: 5px 8px;
   }
 }
 

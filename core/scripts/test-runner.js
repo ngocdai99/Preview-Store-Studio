@@ -884,6 +884,7 @@ assert(bundledHtml.includes('draftBtnBadge'), 'Draft button renders Draft status
 assert(bundledHtml.includes('presetBanner'), 'Application contains non-destructive Preset Preview Banner');
 assert(bundledHtml.includes('btnReturnToDraft'), 'Preset Preview Banner contains Return to My Draft restore button');
 assert(!bundledHtml.includes('<section class="stage">\n    <!-- Non-destructive Preset Preview Banner -->') && !bundledHtml.includes('<section class="stage">\n    <div class="preset-banner"'), 'Stage canvas removes in-flow presetBanner to prevent pushing toolbar and squeezing device height');
+assert(!bundledHtml.includes('.preset-banner {\n    display: none !important;'), 'Preset preview banner remains visible on responsive viewports < 860px');
 
 // Simulation of Non-destructive Preset Sandboxing State Machine
 let simUserDraft = {
