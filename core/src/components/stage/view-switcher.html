@@ -1,25 +1,87 @@
-<!-- View Switcher (Detail View / Search Result) -->
-<div class="vt" id="vt">
-  <span class="vt-pill"></span>
-  <button data-v="detail" class="on">
-    <span class="vt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><rect x="7" y="7" width="4" height="4" rx="1"></rect><line x1="14" y1="7.5" x2="17" y2="7.5"></line><line x1="14" y1="10.5" x2="16" y2="10.5"></line><line x1="7" y1="15" x2="17" y2="15"></line><line x1="7" y1="18" x2="13" y2="18"></line></svg></span>
-    <span>Detail View</span>
-  </button>
-  <button data-v="search">
-    <span class="vt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg></span>
-    <span>Search Result</span>
-  </button>
-</div>
-
-<!-- Dual Phone Comparison Toggle Button -->
-<div class="dual-phone-wrap" id="dualPhoneWrap">
-  <button type="button" class="dual-phone-btn" id="btnDualPhone" title="Compare iPhone & Android Phone side-by-side on canvas">
-    <span class="vt-ico">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="4" width="8" height="16" rx="2"></rect>
-        <rect x="14" y="4" width="8" height="16" rx="2"></rect>
+<!-- Stage View & Comparison Dropdown -->
+<div class="dropdown stage-view-dropdown" id="stageViewDropdown">
+  <button type="button" class="stage-view-btn" id="btnStageView" title="Preview screen & comparison layout" aria-haspopup="true" aria-expanded="false">
+    <span class="stage-view-ico" id="stageViewIco" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+        <rect x="7" y="7" width="4" height="4" rx="1"></rect>
+        <line x1="14" y1="7.5" x2="17" y2="7.5"></line>
+        <line x1="14" y1="10.5" x2="16" y2="10.5"></line>
+        <line x1="7" y1="15" x2="17" y2="15"></line>
+        <line x1="7" y1="18" x2="13" y2="18"></line>
       </svg>
     </span>
-    <span>Dual Phone</span>
+    <span class="stage-view-label" id="stageViewLabel">Detail View</span>
+    <span class="stage-view-badge" id="stageDualBadge" style="display:none;">Dual</span>
+    <span class="stage-view-arr" aria-hidden="true">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </span>
   </button>
+
+  <div class="menu stage-view-menu" id="vt" role="menu">
+    <div class="menu-label">
+      <span>Preview Screen</span>
+    </div>
+
+    <!-- Detail View Option -->
+    <button type="button" class="menu-item on" id="optViewDetail" data-v="detail" role="menuitem">
+      <span class="mi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+          <rect x="7" y="7" width="4" height="4" rx="1"></rect>
+          <line x1="14" y1="7.5" x2="17" y2="7.5"></line>
+          <line x1="14" y1="10.5" x2="16" y2="10.5"></line>
+          <line x1="7" y1="15" x2="17" y2="15"></line>
+          <line x1="7" y1="18" x2="13" y2="18"></line>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">Detail View</span>
+        <small>Product landing page</small>
+      </span>
+      <span class="mi-check" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </span>
+    </button>
+
+    <!-- Search Result Option -->
+    <button type="button" class="menu-item" id="optViewSearch" data-v="search" role="menuitem">
+      <span class="mi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="10.5" cy="10.5" r="6.5"></circle>
+          <line x1="15.5" y1="15.5" x2="21" y2="21"></line>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">Search Result</span>
+        <small>Listing card in search feed</small>
+      </span>
+      <span class="mi-check" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </span>
+    </button>
+
+    <div class="menu-div" id="dualPhoneDiv"></div>
+
+    <div class="menu-label" id="dualPhoneLabel">
+      <span>Comparison</span>
+    </div>
+
+    <!-- Dual Phone Comparison Toggle -->
+    <button type="button" class="menu-item toggle-item" id="btnDualPhone" role="menuitemcheckbox" aria-checked="false">
+      <span class="mi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="8" height="16" rx="2"></rect>
+          <rect x="14" y="4" width="8" height="16" rx="2"></rect>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">Dual Phone</span>
+        <small>Side-by-side iPhone &amp; Android</small>
+      </span>
+      <span class="mi-switch" id="dualPhoneSwitch" aria-hidden="true"></span>
+    </button>
+  </div>
 </div>

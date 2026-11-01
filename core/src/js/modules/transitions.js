@@ -121,7 +121,7 @@ function computeDeviceZoom(s, d){
 }
 
 function syncVtPill(container){
-  if(!container) return;
+  if(!container || container.classList.contains('menu')) return;
   let pill = container.querySelector('.vt-pill');
   if(!pill){
     pill = document.createElement('span');
@@ -663,6 +663,21 @@ function setView(v, force = false){
 
   $$('#vt button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   syncAllVtPills();
+
+  // Sync stage view dropdown label and icon
+  const lbl = $('stageViewLabel');
+  if(lbl) lbl.textContent = v === 'search' ? 'Search Result' : 'Detail View';
+  const ico = $('stageViewIco');
+  if(ico){
+    if(v === 'search'){
+      ico.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>';
+    } else {
+      ico.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><rect x="7" y="7" width="4" height="4" rx="1"></rect><line x1="14" y1="7.5" x2="17" y2="7.5"></line><line x1="14" y1="10.5" x2="16" y2="10.5"></line><line x1="7" y1="15" x2="17" y2="15"></line><line x1="7" y1="18" x2="13" y2="18"></line></svg>';
+    }
+  }
+  const stageMenu = $('vt');
+  if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
+
   $$('.phone [data-v]').forEach(e => {
     if(e.dataset.v === v){
       e.style.display = 'block';
@@ -708,7 +723,12 @@ function toggleDualPhone(forceState) {
   const nextDual = typeof forceState === 'boolean' ? forceState : !isCurrentlyDual;
 
   const btn = $('btnDualPhone');
-  if (btn) btn.classList.toggle('on', nextDual);
+  if (btn) {
+    btn.classList.toggle('on', nextDual);
+    btn.setAttribute('aria-checked', nextDual ? 'true' : 'false');
+  }
+  const badge = $('stageDualBadge');
+  if (badge) badge.style.display = nextDual ? 'inline-flex' : 'none';
 
   const activeStore = (typeof store !== 'undefined' && (store === 'apple' || store === 'google')) ? store : 'apple';
 
@@ -723,7 +743,11 @@ function toggleDualPhone(forceState) {
     }
     document.body.dataset.appleDevice = 'iphone';
     document.body.dataset.googleDevice = 'phone';
-    if (btn) btn.classList.toggle('on', nextDual);
+    if (btn) {
+      btn.classList.toggle('on', nextDual);
+      btn.setAttribute('aria-checked', nextDual ? 'true' : 'false');
+    }
+    if (badge) badge.style.display = nextDual ? 'inline-flex' : 'none';
 
     // Auto select Phone on device selector
     $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
@@ -773,8 +797,15 @@ function toggleDualPhone(forceState) {
   }
 }
 
+if ($('btnStageView')) {
+  setupDropdown('btnStageView', 'vt');
+}
+
 if ($('btnDualPhone')) {
-  $('btnDualPhone').onclick = () => toggleDualPhone();
+  $('btnDualPhone').onclick = (e) => {
+    e.stopPropagation();
+    toggleDualPhone();
+  };
 }
 
 // Mockup Light / Dark theme controller
