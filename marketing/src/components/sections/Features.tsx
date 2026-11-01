@@ -132,7 +132,6 @@ export function Features() {
                   border border-slate-200/90 dark:border-white/[0.08]
                   shadow-[0_2px_12px_rgba(15,23,42,0.03),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.95)]
                   dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.06)]
-                  hover:-translate-y-1.5
                   transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                   ${theme.cardHoverBorder}
                   ${theme.cardHoverShadow}
