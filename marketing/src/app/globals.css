@@ -18,6 +18,10 @@
   --nav-pill-bg: #334155;
   --nav-pill-hover-bg: #1e293b;
   --nav-pill-color: #ffffff;
+  --purple-brand: #6d28d9;
+  --purple-brand-hover: #5b21b6;
+  --purple-brand-light: rgba(109, 40, 217, 0.08);
+  --purple-brand-border: rgba(109, 40, 217, 0.28);
 }
 
 [data-theme="dark"], html.dark {
@@ -36,6 +40,10 @@
   --nav-pill-bg: #ffffff;
   --nav-pill-hover-bg: #f1f5f9;
   --nav-pill-color: #0f172a;
+  --purple-brand: #a78bfa;
+  --purple-brand-hover: #c084fc;
+  --purple-brand-light: rgba(167, 139, 250, 0.15);
+  --purple-brand-border: rgba(167, 139, 250, 0.35);
 }
 
 @theme inline {
@@ -49,6 +57,10 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-light: var(--accent-light);
+  --color-purple-brand: var(--purple-brand);
+  --color-purple-brand-hover: var(--purple-brand-hover);
+  --color-purple-brand-light: var(--purple-brand-light);
+  --color-purple-brand-border: var(--purple-brand-border);
 }
 
 html {
@@ -90,6 +102,19 @@ button:not([aria-expanded]):not(:disabled):active,
 .nav-pill-active:hover {
   background-color: var(--nav-pill-hover-bg) !important;
   color: var(--nav-pill-color) !important;
+}
+
+/* Global Brand Purple Helpers */
+.text-purple-brand {
+  color: var(--purple-brand);
+}
+
+.bg-purple-brand-light {
+  background-color: var(--purple-brand-light);
+}
+
+.border-purple-brand {
+  border-color: var(--purple-brand-border);
 }
 
 /* Pricing Announcement Slogan Banner */
