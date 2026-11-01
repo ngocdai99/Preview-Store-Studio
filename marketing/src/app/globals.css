@@ -55,3 +55,20 @@ body {
   transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   min-height: 100%;
 }
+
+/* Default Interactive Button & CTA Hover Scale (Tactile Micro-interactions) */
+button:not([aria-expanded]):not(:disabled),
+.btn-scale {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+  will-change: transform;
+}
+
+button:not([aria-expanded]):not(:disabled):hover,
+.btn-scale:hover {
+  transform: scale(1.03);
+}
+
+button:not([aria-expanded]):not(:disabled):active,
+.btn-scale:active {
+  transform: scale(0.97);
+}

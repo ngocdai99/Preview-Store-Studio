@@ -40,7 +40,7 @@ export function Hero() {
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href={hero.primaryCta.href}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-500/25 transition-all hover:shadow-indigo-500/40"
+            className="btn-scale w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-500/25 transition-all hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98]"
           >
             <span>{hero.primaryCta.label}</span>
             <ArrowRight className="w-4 h-4" />
@@ -48,7 +48,7 @@ export function Hero() {
 
           <Link
             href={hero.secondaryCta.href}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-card hover:bg-card-muted text-foreground border border-border font-medium text-sm sm:text-base px-6 py-3.5 rounded-xl transition-all shadow-sm"
+            className="btn-scale w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-card hover:bg-card-muted text-foreground border border-border font-medium text-sm sm:text-base px-6 py-3.5 rounded-xl transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98]"
           >
             <Sparkles className="w-4 h-4 text-indigo-500" />
             <span>{hero.secondaryCta.label}</span>
