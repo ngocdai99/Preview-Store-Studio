@@ -173,11 +173,11 @@
 .preset-banner {
   display: inline-flex;
   align-items: center;
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.28);
-  border-radius: 999px;
-  padding: 3px 10px;
-  margin-left: 6px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 2px 0;
+  margin-left: 8px;
   animation: bannerSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 25;
   white-space: nowrap;
@@ -212,8 +212,9 @@
 }
 
 :root[data-ui=light] .preset-banner {
-  background: rgba(245, 158, 11, 0.08);
-  border-color: rgba(245, 158, 11, 0.35);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 :root[data-ui=light] .preset-banner-info {
@@ -231,15 +232,17 @@
     margin-left: 0;
     margin-top: 2px;
     justify-content: center;
-    border-radius: 8px;
-    padding: 3px 8px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 2px 0;
     box-sizing: border-box;
   }
 }
 
 @media (max-width: 580px) {
   .preset-banner {
-    padding: 2px 7px;
+    padding: 2px 0;
   }
   .preset-banner-info {
     font-size: 11px;

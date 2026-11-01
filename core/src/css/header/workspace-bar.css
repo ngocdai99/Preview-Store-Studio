@@ -16,6 +16,17 @@
   overflow: visible;
 }
 
+.workspace-nav-main {
+  display: contents;
+}
+
+@media (min-width: 823px) {
+  #btnPresetPill { order: 1; }
+  #btnDraft { order: 2; }
+  .preset-banner { order: 3; margin-left: 8px; }
+  .workspace-export-dropdown { order: 4; margin-left: auto; }
+}
+
 :root[data-ui=light] .workspace-bar {
   background: rgba(248, 250, 252, 0.9);
   border-bottom-color: rgba(15, 23, 42, 0.08);
