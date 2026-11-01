@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import { Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
+import { Sparkles, ArrowRight, Info, ChevronRight, Zap, Crown } from "lucide-react";
 import { LaunchModal } from "@/components/ui/LaunchModal";
 
 export function Pricing() {
@@ -72,8 +72,21 @@ export function Pricing() {
                 }`}
               >
               <div>
-                {/* Header row: Title */}
-                <div className="mb-3">
+                {/* Header row: Icon + Title */}
+                <div className="flex items-center gap-3 mb-3">
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
+                      tier.isPopular
+                        ? "bg-purple-500/10 dark:bg-purple-500/15 border-purple-500/25 text-purple-600 dark:text-purple-400 shadow-xs"
+                        : "bg-blue-500/10 dark:bg-blue-500/15 border-blue-500/25 text-blue-600 dark:text-blue-400 shadow-xs"
+                    }`}
+                  >
+                    {tier.isPopular ? (
+                      <Crown className="w-4.5 h-4.5 stroke-[2.2]" />
+                    ) : (
+                      <Zap className="w-4.5 h-4.5 fill-current" />
+                    )}
+                  </div>
                   <h3 className="text-[22px] font-bold tracking-tight text-slate-900 dark:text-white">
                     {tier.name}
                   </h3>
