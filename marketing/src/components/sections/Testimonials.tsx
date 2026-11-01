@@ -12,11 +12,6 @@ export function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-semibold bg-slate-200/60 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 border border-slate-300/60 dark:border-white/[0.08] mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>{testimonials.badge}</span>
-          </div>
-
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[40px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2] text-balance">
             {testimonials.title}
           </h2>
