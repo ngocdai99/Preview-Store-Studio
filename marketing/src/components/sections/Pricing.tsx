@@ -57,17 +57,19 @@ export function Pricing() {
           <p className="mt-4 text-muted text-base text-balance">{pricing.description}</p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-12">
-          {pricing.tiers.map((tier) => (
-            <div
-              key={tier.id}
-              className={`relative rounded-[28px] p-7 sm:p-9 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#0c1222] border-2 border-transparent shadow-[0_4px_24px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] ${
-                tier.isPopular
-                  ? "hover:border-purple-500/50 dark:hover:border-purple-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(139,92,246,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(139,92,246,0.22)]"
-                  : "hover:border-blue-500/50 dark:hover:border-blue-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(6,182,212,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(6,182,212,0.22)]"
-              }`}
-            >
+        {/* Pricing Content Container (Constrained width for elegant card proportion) */}
+        <div className="max-w-[920px] mx-auto">
+          {/* Pricing Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-7 sm:gap-8 items-stretch mb-10">
+            {pricing.tiers.map((tier) => (
+              <div
+                key={tier.id}
+                className={`relative rounded-[26px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#0c1222] border-2 border-transparent shadow-[0_4px_24px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] ${
+                  tier.isPopular
+                    ? "hover:border-purple-500/50 dark:hover:border-purple-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(139,92,246,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(139,92,246,0.22)]"
+                    : "hover:border-blue-500/50 dark:hover:border-blue-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(6,182,212,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(6,182,212,0.22)]"
+                }`}
+              >
               <div>
                 {/* Header row: Title + Tier Pill on Left, Early Bird Pill on Right */}
                 <div className="flex items-center justify-between mb-3">
@@ -194,18 +196,19 @@ export function Pricing() {
           ))}
         </div>
 
-        {/* Scope Note */}
-        <div className="p-4 sm:p-6 rounded-2xl border border-border bg-card/60 flex items-start gap-3 text-xs sm:text-sm text-muted leading-relaxed">
-          <Info className="w-4 h-4 text-muted flex-shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <p>
-              <strong className="text-foreground">{pricing.scopeNote.coveredLabel}</strong>{" "}
-              {pricing.scopeNote.covered}
-            </p>
-            <p>
-              <strong className="text-muted">{pricing.scopeNote.notCoveredLabel}</strong>{" "}
-              {pricing.scopeNote.notCovered}
-            </p>
+          {/* Scope Note */}
+          <div className="p-4 sm:p-6 rounded-2xl border border-border bg-card/60 flex items-start gap-3 text-xs sm:text-sm text-muted leading-relaxed">
+            <Info className="w-4 h-4 text-muted flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p>
+                <strong className="text-foreground">{pricing.scopeNote.coveredLabel}</strong>{" "}
+                {pricing.scopeNote.covered}
+              </p>
+              <p>
+                <strong className="text-muted">{pricing.scopeNote.notCoveredLabel}</strong>{" "}
+                {pricing.scopeNote.notCovered}
+              </p>
+            </div>
           </div>
         </div>
       </div>
