@@ -28,13 +28,13 @@ interface FeatureTheme {
 const featureThemes: Record<string, FeatureTheme> = {
   frames: {
     iconBox:
-      "bg-orange-500/10 border-orange-500/20 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 group-hover:border-orange-500/40 group-hover:shadow-[0_0_20px_rgba(234,88,12,0.25)]",
+      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-[#00D085] group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 group-hover:shadow-[0_0_20px_rgba(0,208,133,0.25)]",
     badge:
-      "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/25",
-    radialGlow: "from-orange-500/15 via-amber-500/10 to-transparent",
-    cardHoverBorder: "hover:border-orange-500/40 dark:hover:border-orange-500/40",
+      "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
+    radialGlow: "from-emerald-500/15 via-[#00D085]/10 to-transparent",
+    cardHoverBorder: "hover:border-[#00D085]/40 dark:hover:border-[#00D085]/40",
     cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(234,88,12,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(234,88,12,0.25)]",
+      "hover:shadow-[0_20px_40px_-15px_rgba(0,101,51,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(0,101,51,0.25)]",
   },
   viewports: {
     iconBox:
@@ -48,14 +48,14 @@ const featureThemes: Record<string, FeatureTheme> = {
   },
   cloner: {
     iconBox:
-      "bg-orange-500/10 border-orange-500/20 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 group-hover:border-orange-500/40 group-hover:shadow-[0_0_20px_rgba(234,88,12,0.25)]",
+      "bg-teal-500/10 border-teal-500/20 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 group-hover:border-teal-500/40 group-hover:shadow-[0_0_20px_rgba(20,184,166,0.25)]",
     badge:
-      "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/25",
-    radialGlow: "from-orange-500/15 via-amber-500/10 to-transparent",
+      "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/25",
+    radialGlow: "from-teal-500/15 via-emerald-500/10 to-transparent",
     cardHoverBorder:
-      "hover:border-orange-500/40 dark:hover:border-orange-500/40",
+      "hover:border-teal-500/40 dark:hover:border-teal-500/40",
     cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(234,88,12,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(234,88,12,0.25)]",
+      "hover:shadow-[0_20px_40px_-15px_rgba(20,184,166,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(20,184,166,0.25)]",
   },
   compliance: {
     iconBox:
@@ -73,7 +73,7 @@ const featureThemes: Record<string, FeatureTheme> = {
       "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 group-hover:border-amber-500/40 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]",
     badge:
       "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/25",
-    radialGlow: "from-amber-500/15 via-orange-500/10 to-transparent",
+    radialGlow: "from-amber-500/15 via-yellow-500/10 to-transparent",
     cardHoverBorder: "hover:border-amber-500/40 dark:hover:border-amber-500/40",
     cardHoverShadow:
       "hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(245,158,11,0.25)]",
@@ -121,8 +121,8 @@ export function Features() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-[0.08em] bg-orange-500/10 dark:bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/25 dark:border-orange-500/30 mb-3.5 shadow-[0_2px_8px_rgba(249,115,22,0.08)]">
-            <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-[0.08em] bg-emerald-500/10 dark:bg-[#00D085]/15 text-emerald-700 dark:text-[#00D085] border border-emerald-500/25 dark:border-[#00D085]/30 mb-3.5 shadow-[0_2px_8px_rgba(0,208,133,0.08)]">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-[#00D085]" />
             <span>Features</span>
           </div>
 

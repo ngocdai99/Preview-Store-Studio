@@ -28,10 +28,10 @@ export function Pricing() {
             {pricing.tiers.map((tier) => (
               <div
                 key={tier.id}
-                className={`relative rounded-[26px] p-6 sm:px-7 sm:py-8 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#0c1222] border border-slate-200/90 dark:border-white/[0.08] shadow-[0_4px_24px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] ${
+                className={`relative rounded-[26px] p-6 sm:px-7 sm:py-8 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] shadow-[0_4px_24px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] ${
                   tier.isPopular
-                    ? "hover:shadow-[0_16px_44px_-6px_rgba(234,88,12,0.18),0_0_28px_rgba(249,115,22,0.12)] dark:hover:shadow-[0_16px_44px_-6px_rgba(234,88,12,0.25),0_0_32px_rgba(249,115,22,0.15)]"
-                    : "hover:shadow-[0_10px_30px_-6px_rgba(15,23,42,0.08)] dark:hover:shadow-[0_12px_36px_-6px_rgba(0,0,0,0.5)]"
+                    ? "hover:border-[#00D085]/50 dark:hover:border-[#00D085]/40 hover:shadow-[0_16px_44px_-6px_rgba(0,101,51,0.22),0_0_28px_rgba(0,208,133,0.12)] dark:hover:shadow-[0_16px_44px_-6px_rgba(0,101,51,0.35),0_0_32px_rgba(0,208,133,0.18)]"
+                    : "hover:border-slate-300 dark:hover:border-white/20 hover:shadow-[0_10px_30px_-6px_rgba(15,23,42,0.08)] dark:hover:shadow-[0_12px_36px_-6px_rgba(0,0,0,0.5)]"
                 }`}
               >
               {/* Top hairline accent line */}
@@ -188,7 +188,7 @@ export function Pricing() {
                   height={44}
                   className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-200/90 dark:ring-white/15"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#0c1222]" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#131413]" />
               </div>
 
               {/* Message Details */}

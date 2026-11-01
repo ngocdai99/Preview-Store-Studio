@@ -7,7 +7,7 @@ export function Comparison() {
     <section id="comparison" className="py-20 border-t border-border bg-background transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="section-badge text-[12px] font-extrabold uppercase tracking-[0.1em] text-orange-600 dark:text-orange-400 mb-3 block">
+          <span className="section-badge text-[12px] font-extrabold uppercase tracking-[0.1em] text-emerald-700 dark:text-[#00D085] mb-3 block">
             {comparison.badge}
           </span>
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
@@ -16,7 +16,7 @@ export function Comparison() {
         </div>
 
         {/* Editorial Stage Container */}
-        <div className="max-w-5xl mx-auto rounded-[28px] p-6 sm:p-10 lg:p-12 bg-white dark:bg-[#0b0f1b] border border-slate-200/90 dark:border-white/[0.08] shadow-[0_1px_3px_rgba(15,23,42,0.03),0_20px_48px_-12px_rgba(15,23,42,0.06)] dark:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.45)] transition-colors">
+        <div className="max-w-5xl mx-auto rounded-[28px] p-6 sm:p-10 lg:p-12 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] shadow-[0_1px_3px_rgba(15,23,42,0.03),0_20px_48px_-12px_rgba(15,23,42,0.06)] dark:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.45)] transition-colors">
           {/* Stage Header */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 pb-7 mb-7 border-b border-slate-100 dark:border-white/[0.06]">
             <div className="flex flex-col">
@@ -31,7 +31,7 @@ export function Comparison() {
               <h3 className="text-lg sm:text-[19px] font-extrabold tracking-tight text-slate-900 dark:text-white mb-1.5 leading-snug">
                 {comparison.goodColumnTitle}
               </h3>
-              <p className="text-xs sm:text-[13px] font-semibold text-orange-600 dark:text-orange-400">
+              <p className="text-xs sm:text-[13px] font-semibold text-emerald-700 dark:text-[#00D085]">
                 {comparison.goodColumnSubtitle}
               </p>
             </div>
@@ -64,7 +64,7 @@ export function Comparison() {
                 {/* Good column */}
                 <div className="flex flex-col gap-1.5 justify-between md:border-l md:border-slate-100 dark:md:border-white/[0.06] md:pl-8 lg:pl-12">
                   <div>
-                    <span className="font-mono text-[10.5px] font-bold tracking-[0.08em] uppercase text-orange-600 dark:text-orange-400 mb-1.5 block">
+                    <span className="font-mono text-[10.5px] font-bold tracking-[0.08em] uppercase text-emerald-700 dark:text-[#00D085] mb-1.5 block">
                       {beat.good.badge}
                     </span>
                     <h4 className="text-[15px] font-extrabold text-slate-900 dark:text-white leading-snug mb-2">
