@@ -52,23 +52,10 @@ export function Testimonials() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          {testimonials.badge && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[12px] font-semibold tracking-wide bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 mb-4 shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
-              {testimonials.badge}
-            </div>
-          )}
-
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[40px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2] text-balance">
             {testimonials.title}
           </h2>
-
-          {testimonials.subtitle && (
-            <p className="mt-3.5 text-[15px] sm:text-[16px] text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed text-balance">
-              {testimonials.subtitle}
-            </p>
-          )}
         </div>
 
         {/* Testimonials 3-Card Grid */}
