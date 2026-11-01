@@ -72,34 +72,26 @@ export function Pricing() {
                 }`}
               >
               <div>
-                {/* Header row: Title + Tier Pill on Left, Early Bird Pill on Right */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2.5">
-                    <h3
-                      className={`text-[22px] font-bold tracking-tight ${
-                        tier.isPopular
-                          ? "bg-[linear-gradient(135deg,#c084fc_0%,#60a5fa_100%)] bg-clip-text text-transparent inline-block"
-                          : "text-slate-900 dark:text-white"
-                      }`}
-                    >
-                      {tier.name}
-                    </h3>
-                    {tier.isPopular ? (
-                      <span className="inline-flex items-center justify-center text-[10px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#7c3aed_0%,#ec4899_100%)] px-2.5 py-0.5 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(236,72,153,0.35)] leading-tight">
-                        PRO
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center justify-center text-[10px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#1d4ed8_0%,#06b6d4_100%)] px-2.5 py-0.5 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(6,182,212,0.35)] leading-tight">
-                        PLUS
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Early Bird Pill */}
-                  <span className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#059669_0%,#10b981_100%)] px-2.5 py-1 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(16,185,129,0.35)] leading-tight shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.95)] shrink-0" />
-                    EARLY BIRD
-                  </span>
+                {/* Header row: Title + Tier Pill */}
+                <div className="flex items-center gap-2.5 mb-3">
+                  <h3
+                    className={`text-[22px] font-bold tracking-tight ${
+                      tier.isPopular
+                        ? "bg-[linear-gradient(135deg,#c084fc_0%,#60a5fa_100%)] bg-clip-text text-transparent inline-block"
+                        : "text-slate-900 dark:text-white"
+                    }`}
+                  >
+                    {tier.name}
+                  </h3>
+                  {tier.isPopular ? (
+                    <span className="inline-flex items-center justify-center text-[10px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#7c3aed_0%,#ec4899_100%)] px-2.5 py-0.5 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(236,72,153,0.35)] leading-tight">
+                      PRO
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center justify-center text-[10px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#1d4ed8_0%,#06b6d4_100%)] px-2.5 py-0.5 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(6,182,212,0.35)] leading-tight">
+                      PLUS
+                    </span>
+                  )}
                 </div>
 
                 <p className="text-[13.5px] text-slate-600 dark:text-slate-400 mb-6 leading-relaxed min-h-[42px]">
