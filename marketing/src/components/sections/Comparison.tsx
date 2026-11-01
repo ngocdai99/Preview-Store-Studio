@@ -18,7 +18,7 @@ export function Comparison() {
         {/* Editorial Stage Container */}
         <div className="max-w-5xl mx-auto rounded-[28px] p-6 sm:p-10 lg:p-12 bg-white dark:bg-[#0b0f1b] border border-slate-200/90 dark:border-white/[0.08] shadow-[0_1px_3px_rgba(15,23,42,0.03),0_20px_48px_-12px_rgba(15,23,42,0.06)] dark:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.45)] transition-colors">
           {/* Stage Header */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 pb-7 mb-7 border-b border-dashed border-slate-200/90 dark:border-white/[0.08]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 pb-7 mb-7 border-b border-slate-100 dark:border-white/[0.06]">
             <div className="flex flex-col">
               <h3 className="text-lg sm:text-[19px] font-extrabold tracking-tight text-slate-900 dark:text-white mb-1.5 leading-snug">
                 {comparison.badColumnTitle}
@@ -27,7 +27,7 @@ export function Comparison() {
                 {comparison.badColumnSubtitle}
               </p>
             </div>
-            <div className="flex flex-col md:border-l md:border-dashed border-slate-200/90 dark:border-white/[0.08] md:pl-8 lg:pl-12">
+            <div className="flex flex-col md:border-l md:border-slate-100 dark:md:border-white/[0.06] md:pl-8 lg:pl-12">
               <h3 className="text-lg sm:text-[19px] font-extrabold tracking-tight text-slate-900 dark:text-white mb-1.5 leading-snug">
                 {comparison.goodColumnTitle}
               </h3>
@@ -43,7 +43,7 @@ export function Comparison() {
               <div
                 key={beat.id}
                 className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 py-6 sm:py-7 ${
-                  idx > 0 ? "border-t border-dashed border-slate-200/90 dark:border-white/[0.08]" : "pt-0"
+                  idx > 0 ? "border-t border-slate-100 dark:border-white/[0.06]" : "pt-0"
                 } transition-colors`}
               >
                 {/* Bad column */}
@@ -62,7 +62,7 @@ export function Comparison() {
                 </div>
 
                 {/* Good column */}
-                <div className="flex flex-col gap-1.5 justify-between md:border-l md:border-dashed border-slate-200/90 dark:border-white/[0.08] md:pl-8 lg:pl-12">
+                <div className="flex flex-col gap-1.5 justify-between md:border-l md:border-slate-100 dark:md:border-white/[0.06] md:pl-8 lg:pl-12">
                   <div>
                     <span className="font-mono text-[10.5px] font-bold tracking-[0.08em] uppercase text-[#6d28d9] dark:text-[#a78bfa] mb-1.5 block">
                       {beat.good.badge}
