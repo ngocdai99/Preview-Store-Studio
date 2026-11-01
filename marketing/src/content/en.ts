@@ -8,9 +8,7 @@ export const en = {
   navigation: {
     pricingCta: "View Pricing",
     links: [
-      { label: "Features", href: "#features" },
       { label: "Why Us", href: "#comparison" },
-      { label: "Reviews", href: "#testimonials" },
       { label: "Pricing", href: "#pricing" },
       { label: "FAQ", href: "#faq" },
     ],
