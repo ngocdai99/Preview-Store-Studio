@@ -108,8 +108,8 @@ export function Navbar() {
                   onClick={(e) => handleNavClick(e, item.label, item.href)}
                   className={`btn-scale transition-colors duration-150 rounded-full px-3.5 py-1 text-[12px] sm:text-[12.5px] cursor-pointer ${
                     isSelected
-                      ? "font-semibold bg-[#334155] text-white hover:bg-[#1e293b] dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-xs"
-                      : "font-medium text-muted hover:text-foreground"
+                      ? "nav-pill-active font-semibold shadow-xs"
+                      : "font-medium text-muted hover:text-foreground hover:bg-card-muted/40"
                   }`}
                 >
                   {item.label}

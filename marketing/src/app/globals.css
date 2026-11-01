@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root, [data-theme="light"], html.light {
   --bg: #f8fafc;
   --card: #ffffff;
@@ -13,6 +15,9 @@
   --accent-light: #eff6ff;
   --accent-glow: rgba(37, 99, 235, 0.12);
   --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+  --nav-pill-bg: #334155;
+  --nav-pill-hover-bg: #1e293b;
+  --nav-pill-color: #ffffff;
 }
 
 [data-theme="dark"], html.dark {
@@ -28,6 +33,9 @@
   --accent-light: rgba(59, 130, 246, 0.15);
   --accent-glow: rgba(59, 130, 246, 0.2);
   --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+  --nav-pill-bg: #ffffff;
+  --nav-pill-hover-bg: #f1f5f9;
+  --nav-pill-color: #0f172a;
 }
 
 @theme inline {
@@ -71,4 +79,15 @@ button:not([aria-expanded]):not(:disabled):hover,
 button:not([aria-expanded]):not(:disabled):active,
 .btn-scale:active {
   transform: scale(0.97);
+}
+
+/* Nav Active Pill (Adaptive Light/Dark Selected Indicator) */
+.nav-pill-active {
+  background-color: var(--nav-pill-bg) !important;
+  color: var(--nav-pill-color) !important;
+}
+
+.nav-pill-active:hover {
+  background-color: var(--nav-pill-hover-bg) !important;
+  color: var(--nav-pill-color) !important;
 }
