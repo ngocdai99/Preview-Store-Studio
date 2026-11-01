@@ -144,7 +144,7 @@
   top: calc(100% + 6px);
   left: 0;
   right: auto;
-  width: 236px;
+  width: 196px;
   background: rgba(15, 23, 42, 0.96);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -176,7 +176,15 @@
 }
 
 .stage-view-menu .menu-label {
-  padding: 9px 14px 4px;
+  padding: 8px 14px 4px;
+}
+
+.stage-view-menu .menu-label span {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #64748b;
 }
 
 .stage-view-menu .menu-div {
@@ -189,13 +197,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+  gap: 10px;
+  height: 38px;
+  padding: 0 14px;
   border-radius: 0 !important;
   border: none !important;
   margin: 0 !important;
   background: transparent;
-  color: #cbd5e1;
+  color: #94a3b8;
   cursor: pointer;
   transition: background .16s ease, color .16s ease;
   box-sizing: border-box;
@@ -204,20 +213,32 @@
 }
 
 .stage-view-menu .menu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   color: #ffffff;
 }
 
 .stage-view-menu .menu-item.on,
 .stage-view-menu .menu-item.active {
-  background: rgba(59, 130, 246, 0.14);
+  background: rgba(59, 130, 246, 0.12);
   border: none !important;
   color: #ffffff;
 }
 
+.stage-view-menu .menu-item.on::before,
+.stage-view-menu .menu-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(180deg, #38bdf8, #2563eb);
+}
+
 .stage-view-menu .menu-item.on .mi-ico,
 .stage-view-menu .menu-item.active .mi-ico {
-  color: #60a5fa;
+  color: #38bdf8;
 }
 
 .stage-view-menu .mi-ico,
@@ -246,37 +267,47 @@
 
 .stage-view-menu .mi-t {
   display: flex;
-  flex-direction: column;
-  line-height: 1.25;
+  align-items: center;
+  line-height: 1;
   flex: 1;
   min-width: 0;
 }
 
 .stage-view-menu .mi-name {
-  font-size: 12.5px;
+  font-size: 13px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+}
+
+.stage-view-menu .menu-item.on .mi-name,
+.stage-view-menu .menu-item.active .mi-name {
   font-weight: 650;
+  color: #ffffff;
 }
 
 .stage-view-menu .mi-t small {
-  font-size: 10.5px;
-  color: #64748b;
-  margin-top: 1px;
+  display: none !important;
 }
 
-.stage-view-menu .menu-item:hover .mi-t small {
-  color: #94a3b8;
-}
-
-/* Checkmark indicator for radio-like view options */
+/* Premium circular badge tick for selected option */
 .stage-view-menu .mi-check {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  color: #38bdf8;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.45);
   margin-left: auto;
   flex-shrink: 0;
+}
+
+.stage-view-menu .mi-check svg {
+  width: 11px;
+  height: 11px;
+  stroke: #ffffff;
 }
 
 .stage-view-menu .menu-item.on .mi-check,
@@ -379,9 +410,14 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 
 :root[data-ui=light] .stage-view-menu .menu-item.on,
 :root[data-ui=light] .stage-view-menu .menu-item.active {
-  background: rgba(59, 130, 246, 0.08);
+  background: rgba(37, 99, 235, 0.08);
   border: none !important;
   color: #0f172a;
+}
+
+:root[data-ui=light] .stage-view-menu .menu-item.on::before,
+:root[data-ui=light] .stage-view-menu .menu-item.active::before {
+  background: #2563eb;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item.on .mi-ico,
@@ -389,8 +425,19 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
   color: #2563eb;
 }
 
-:root[data-ui=light] .stage-view-menu .mi-t small {
-  color: #64748b;
+:root[data-ui=light] .stage-view-menu .menu-item.on .mi-name,
+:root[data-ui=light] .stage-view-menu .menu-item.active .mi-name {
+  color: #0f172a;
+}
+
+:root[data-ui=light] .stage-view-menu .mi-check {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+}
+
+:root[data-ui=light] .stage-view-menu .mi-check svg {
+  stroke: #ffffff;
 }
 
 :root[data-ui=light] .stage-view-menu .mi-switch {
@@ -448,7 +495,7 @@ body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-fl
   right: auto !important;
   transform: translateX(-50%);
   transform-origin: top center;
-  width: 216px;
+  width: 176px;
   display: none !important;
 }
 

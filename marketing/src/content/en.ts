@@ -49,7 +49,7 @@ export const en = {
         icon: "smartphone" as const,
         title: "Realistic Modern Device Frames",
         description:
-          "Hardware bezels for iPhone, iPad, Android phones, and tablets. Supports landscape game mode viewports and dark/light OS themes.",
+          "Hardware bezels for iPhone, iPad, Android phones, and tablets. Supports authentic store viewports with dark and light OS themes.",
         badge: "Retina Hardware",
       },
       {

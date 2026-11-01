@@ -95,7 +95,7 @@ const featureTags: Record<string, string[]> = {
     "iPhone & iPad",
     "Android & Tablets",
     "Light & Dark OS",
-    "Landscape Gaming",
+    "Store Viewports",
   ],
   compliance: [
     "Official Store Specs",
