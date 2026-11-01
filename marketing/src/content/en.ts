@@ -18,6 +18,10 @@ export const en = {
     badge: "Mockup & Preview Studio for App Store & Google Play",
     titleLead: "Stop guessing how your app listing",
     titleAccent: "looks before submitting.",
+    subheadlineLead:
+      "Save 2 hours of back-and-forth with your client before every App Store submission.",
+    subheadlineFollow:
+      "App Store Connect & Google Play provide zero live preview — preview and refine your listings with confidence.",
     subheadline:
       "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide zero live preview — preview and refine your listings with confidence.",
     primaryCta: {
