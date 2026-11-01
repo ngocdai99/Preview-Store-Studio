@@ -29,7 +29,7 @@ export const en = {
       href: "#pricing",
     },
     secondaryCta: {
-      label: "Try Live Demo ↗",
+      label: "See Demo",
       href: "/demo",
     },
     trustBadges: [
@@ -230,7 +230,7 @@ export const en = {
           { text: "Single-User Lifetime Commercial License" },
         ] as TierFeature[],
         cta: {
-          label: "Get Plus Edition ($29)",
+          label: "Get Started",
           href: "https://gumroad.com/l/store-preview-studio?wanted=true&price=29",
         },
       },
@@ -256,7 +256,7 @@ export const en = {
           { text: "Agency Marketing & ASO Playbook", tag: "HTML offline" },
         ] as TierFeature[],
         cta: {
-          label: "Get Pro Studio ($39)",
+          label: "Get Started",
           href: "https://gumroad.com/l/store-preview-studio?wanted=true&price=39",
         },
       },

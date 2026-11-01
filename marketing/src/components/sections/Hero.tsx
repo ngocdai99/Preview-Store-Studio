@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export function Hero() {
   const { hero } = siteConfig;
@@ -36,9 +36,8 @@ export function Hero() {
 
           <a
             href={hero.secondaryCta.href}
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-white dark:bg-[#1D1E1D] hover:bg-slate-50 dark:hover:bg-[#282a28] text-slate-800 dark:text-slate-100 border border-slate-200/90 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 font-semibold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] transition-colors duration-150 shadow-xs"
+            className="group w-full sm:w-auto inline-flex items-center justify-center h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-white dark:bg-[#1D1E1D] hover:bg-slate-50 dark:hover:bg-[#282a28] text-slate-800 dark:text-slate-100 border border-slate-200/90 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 font-semibold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] transition-colors duration-150 shadow-xs"
           >
-            <Sparkles className="w-4 h-4 text-[#006533] dark:text-[#00D085] transition-transform duration-200 group-hover:rotate-12" />
             <span>{hero.secondaryCta.label}</span>
           </a>
         </div>

@@ -4,7 +4,6 @@ import {
   Search,
   CloudDownload,
   ShieldCheck,
-  Sparkles,
   FolderArchive,
   type LucideIcon,
 } from "lucide-react";
@@ -96,11 +95,6 @@ export function Features() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-[0.08em] bg-emerald-500/10 dark:bg-[#00D085]/15 text-emerald-700 dark:text-[#00D085] border border-emerald-500/25 dark:border-[#00D085]/30 mb-3.5 shadow-[0_2px_8px_rgba(0,208,133,0.08)]">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-[#00D085]" />
-            <span>Features</span>
-          </div>
-
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {features.headline}
           </h2>

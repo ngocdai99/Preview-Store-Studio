@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import { Sparkles, ArrowRight, Info } from "lucide-react";
+import { Sparkles, Info } from "lucide-react";
 import { LaunchModal } from "@/components/ui/LaunchModal";
 
 export function Pricing() {
@@ -144,14 +144,13 @@ export function Pricing() {
               <button
                 type="button"
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                className={`w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-colors duration-150 cursor-pointer shadow-xs ${
+                className={`w-full inline-flex items-center justify-center h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-colors duration-150 cursor-pointer shadow-xs ${
                   tier.isPopular
                     ? "bg-[#006533] hover:bg-[#007844] text-white border border-[#00D085]/35"
                     : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#1D1E1D] dark:hover:bg-[#282a28] dark:text-white dark:border dark:border-white/15"
                 }`}
               >
                 <span>{tier.cta.label}</span>
-                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
               </button>
             </div>
           ))}
