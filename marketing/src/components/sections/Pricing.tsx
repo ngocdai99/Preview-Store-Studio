@@ -151,7 +151,7 @@ export function Pricing() {
                 className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-150 cursor-pointer shadow-sm ${
                   tier.isPopular
                     ? "bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.18)] dark:shadow-[0_4px_16px_rgba(255,255,255,0.15)]"
-                    : "bg-[#ea580c] hover:bg-[#c2410c] text-white shadow-orange-500/20 hover:shadow-orange-500/30"
+                    : "bg-[linear-gradient(135deg,#f59e0b_0%,#ea580c_100%)] hover:bg-[linear-gradient(135deg,#fbbf24_0%,#d97706_100%)] text-white shadow-[0_4px_16px_rgba(234,88,12,0.25),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_6px_20px_rgba(234,88,12,0.4)]"
                 }`}
               >
                 <span>{tier.cta.label}</span>

@@ -4,14 +4,14 @@ export function BrandIcon({ className = "w-8 h-8" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 32 32" aria-hidden="true">
       <defs>
-        {/* Pure Electric Amber Orange Gradients (Thuần Cam Card 1) */}
+        {/* Signature Amber-Orange Gradient (#f59e0b -> #ea580c) */}
         <linearGradient id="brand-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f97316" />
+          <stop offset="0%" stopColor="#f59e0b" />
           <stop offset="100%" stopColor="#ea580c" />
         </linearGradient>
         <linearGradient id="brand-front" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ea580c" />
-          <stop offset="100%" stopColor="#c2410c" />
+          <stop offset="0%" stopColor="#fbbf24" />
+          <stop offset="100%" stopColor="#d97706" />
         </linearGradient>
       </defs>
       <rect width="32" height="32" rx="7" fill="url(#brand-bg)" />
