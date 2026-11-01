@@ -1204,6 +1204,10 @@ assert(
   bundledHtml.includes('.safe[data-google-safety].hl-target') && bundledHtml.includes('border-radius: 14px !important;'),
   'Data Safety card focus highlight maintains 14px border radius with yellow border'
 );
+assert(bundledHtml.includes('id="privBtnNone"') && bundledHtml.includes('id="privBtnCollected"'), 'Privacy card renders Data Not Collected and Data Collected segmented mode buttons');
+assert(bundledHtml.includes('id="privCustomDetails"'), 'Privacy card renders collapsible disclosures customization drawer');
+assert(bundledHtml.includes('function updatePrivacyModeUI'), 'Bundled application defines updatePrivacyModeUI');
+assert(bundledHtml.includes('function setPrivacyMode'), 'Bundled application defines setPrivacyMode');
 
 // 5. What's New Info Tooltip Popover & Dual Store Behavior
 assert(bundledHtml.includes('id="whatsNewInfoBtn"'), "What's New field header contains info tooltip button #whatsNewInfoBtn");
@@ -1455,6 +1459,7 @@ assert(normApple.shots[0].includes('1242x2688bb.png'), 'normalizeAppleApp upscal
 assert(normApple.supportsIpad === true, 'normalizeAppleApp detects iPad screenshots');
 assert(normApple.isUniversal === true, 'normalizeAppleApp detects Universal app');
 assert(normApple.featureGraphic !== undefined && (normApple.featureGraphic === '' || normApple.featureGraphic === BLANK_FEATURE), 'normalizeAppleApp explicitly clears feature graphic (does not auto-embed preset feature graphic)');
+assert(normApple.form.privLinked === '' && normApple.form.privNotLinked === '', 'normalizeAppleApp defaults to Data Not Collected for Apple App Store privacy compliance');
 
 // Smart developer filter test (App name with company suffix like Tâm Trí Lực)
 const mockDevSuffixApp = normalizeAppleApp({

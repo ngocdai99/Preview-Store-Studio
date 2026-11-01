@@ -60,7 +60,9 @@ function renderPrivacy(){
   const rawGoogleItems = parsePrivItems(googleStr);
   const googleItems = rawGoogleItems.length > 0
     ? rawGoogleItems
-    : ['No data shared with third parties', 'Data is encrypted in transit', 'You can request data deletion'];
+    : (linkedItems.length === 0 && notLinkedItems.length === 0
+        ? ['No data shared with third parties', 'No data collected', 'Data is encrypted in transit']
+        : ['No data shared with third parties', 'Data is encrypted in transit', 'You can request data deletion']);
 
   // Render Apple Privacy Section (Single "Data Not Collected" card or multi-category cards)
   $$('[data-apple-priv-wrap]').forEach(wrap => {
@@ -124,4 +126,133 @@ function renderPrivacy(){
 
     container.innerHTML = rowsHtml + '<span class="safe-more">See details</span>';
   });
+
+  if (typeof updatePrivacyModeUI === 'function') {
+    updatePrivacyModeUI();
+  }
+}
+
+function updatePrivacyModeUI() {
+  const linked = ($('f-priv-linked') && $('f-priv-linked').value !== undefined) ? $('f-priv-linked').value.trim() : '';
+  const notLinked = ($('f-priv-notlinked') && $('f-priv-notlinked').value !== undefined) ? $('f-priv-notlinked').value.trim() : '';
+  const isNone = (linked === '' && notLinked === '');
+
+  const btnNone = $('privBtnNone');
+  const btnCol = $('privBtnCollected');
+  const bannerTitle = $('privacyStatusLabel');
+  const banner = $('privacyMockBanner');
+  const bannerSub = banner ? banner.querySelector('.pcb-sub') : null;
+  const customDetails = $('privCustomDetails');
+
+  if (btnNone) {
+    btnNone.classList.toggle('active', isNone);
+    btnNone.setAttribute('aria-checked', isNone ? 'true' : 'false');
+  }
+  if (btnCol) {
+    btnCol.classList.toggle('active', !isNone);
+    btnCol.setAttribute('aria-checked', !isNone ? 'true' : 'false');
+  }
+  if (bannerTitle) {
+    bannerTitle.textContent = isNone ? 'Profile: Data Not Collected' : 'Profile: Data Collected';
+  }
+  if (bannerSub) {
+    bannerSub.textContent = isNone
+      ? 'The developer does not collect any data from this app.'
+      : 'Standard disclosures: Data Linked & Diagnostics.';
+  }
+  if (customDetails) {
+    customDetails.style.display = isNone ? 'none' : 'block';
+  }
+
+  // Synchronize customize text inputs if not focused
+  const inLinked = $('f-priv-linked-input');
+  const inNotLinked = $('f-priv-notlinked-input');
+  const inGoogle = $('f-priv-google-input');
+  if (inLinked && typeof document !== 'undefined' && document.activeElement !== inLinked) inLinked.value = linked;
+  if (inNotLinked && typeof document !== 'undefined' && document.activeElement !== inNotLinked) inNotLinked.value = notLinked;
+  if (inGoogle && typeof document !== 'undefined' && document.activeElement !== inGoogle && $('f-priv-google')) inGoogle.value = $('f-priv-google').value;
+}
+
+function setPrivacyMode(mode) {
+  const fLinked = $('f-priv-linked');
+  const fNotLinked = $('f-priv-notlinked');
+  const fGoogle = $('f-priv-google');
+
+  if (mode === 'none') {
+    if (fLinked) fLinked.value = '';
+    if (fNotLinked) fNotLinked.value = '';
+    if (fGoogle) fGoogle.value = 'No data shared with third parties, No data collected, Data is encrypted in transit';
+    if (typeof CURRENT_PRIVACY !== 'undefined') {
+      CURRENT_PRIVACY.linked = '';
+      CURRENT_PRIVACY.notLinked = '';
+      CURRENT_PRIVACY.google = 'No data shared with third parties, No data collected, Data is encrypted in transit';
+    }
+  } else {
+    const curLinked = fLinked ? fLinked.value.trim() : '';
+    const curNotLinked = fNotLinked ? fNotLinked.value.trim() : '';
+    if (!curLinked && !curNotLinked) {
+      if (fLinked) fLinked.value = 'User Content, Identifiers, Usage Data';
+      if (fNotLinked) fNotLinked.value = 'Diagnostics, Performance Data';
+      if (fGoogle) fGoogle.value = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion';
+      if (typeof CURRENT_PRIVACY !== 'undefined') {
+        CURRENT_PRIVACY.linked = 'User Content, Identifiers, Usage Data';
+        CURRENT_PRIVACY.notLinked = 'Diagnostics, Performance Data';
+        CURRENT_PRIVACY.google = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion';
+      }
+    }
+  }
+
+  renderPrivacy();
+  if (typeof debouncedSave === 'function') debouncedSave();
+}
+
+function initPrivacyModeControls() {
+  const btnNone = $('privBtnNone');
+  const btnCol = $('privBtnCollected');
+  if (btnNone) {
+    btnNone.onclick = () => setPrivacyMode('none');
+  }
+  if (btnCol) {
+    btnCol.onclick = () => setPrivacyMode('collected');
+  }
+
+  const inLinked = $('f-priv-linked-input');
+  const inNotLinked = $('f-priv-notlinked-input');
+  const inGoogle = $('f-priv-google-input');
+
+  const onCustomChange = () => {
+    if ($('f-priv-linked') && inLinked) $('f-priv-linked').value = inLinked.value;
+    if ($('f-priv-notlinked') && inNotLinked) $('f-priv-notlinked').value = inNotLinked.value;
+    if ($('f-priv-google') && inGoogle) $('f-priv-google').value = inGoogle.value;
+    if (typeof CURRENT_PRIVACY !== 'undefined') {
+      if (inLinked) CURRENT_PRIVACY.linked = inLinked.value;
+      if (inNotLinked) CURRENT_PRIVACY.notLinked = inNotLinked.value;
+      if (inGoogle) CURRENT_PRIVACY.google = inGoogle.value;
+    }
+    renderPrivacy();
+    if (typeof debouncedSave === 'function') debouncedSave();
+  };
+
+  if (inLinked) inLinked.oninput = onCustomChange;
+  if (inNotLinked) inNotLinked.oninput = onCustomChange;
+  if (inGoogle) inGoogle.oninput = onCustomChange;
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPrivacyModeControls);
+  } else {
+    initPrivacyModeControls();
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    renderPrivacy,
+    updatePrivacyModeUI,
+    setPrivacyMode,
+    parsePrivItems,
+    getApplePrivIcon,
+    getGoogleSafetyIcon
+  };
 }

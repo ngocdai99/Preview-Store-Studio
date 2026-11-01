@@ -117,6 +117,9 @@ function normalizeAppleApp(item) {
       email: 'support@' + bundleDomain,
       phone: '+1 800-555-0199',
       addr: 'Global',
+      privLinked: '',
+      privNotLinked: '',
+      privGoogle: 'No data shared with third parties, No data collected, Data is encrypted in transit',
       new: (item.releaseNotes || 'Performance improvements and bug fixes.').slice(0, 300),
       desc: (item.description || '').slice(0, 1000)
     },
