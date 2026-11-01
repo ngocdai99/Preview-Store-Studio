@@ -20,63 +20,38 @@ const iconMap: Record<FeatureItem["icon"], LucideIcon> = {
 interface FeatureTheme {
   iconBox: string;
   badge: string;
-  radialGlow: string;
-  cardHoverBorder: string;
-  cardHoverShadow: string;
 }
 
 const featureThemes: Record<string, FeatureTheme> = {
   frames: {
     iconBox:
-      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-[#00D085] group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 group-hover:shadow-[0_0_20px_rgba(0,208,133,0.25)]",
+      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-[#00D085] group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40",
     badge:
       "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
-    radialGlow: "from-emerald-500/15 via-[#00D085]/10 to-transparent",
-    cardHoverBorder: "hover:border-[#00D085]/40 dark:hover:border-[#00D085]/40",
-    cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(0,101,51,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(0,101,51,0.25)]",
   },
   viewports: {
     iconBox:
-      "bg-sky-500/10 border-sky-500/20 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 group-hover:border-sky-500/40 group-hover:shadow-[0_0_20px_rgba(14,165,233,0.25)]",
+      "bg-sky-500/10 border-sky-500/20 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 group-hover:border-sky-500/40",
     badge:
       "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/25",
-    radialGlow: "from-sky-500/15 via-cyan-500/10 to-transparent",
-    cardHoverBorder: "hover:border-sky-500/40 dark:hover:border-sky-500/40",
-    cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(14,165,233,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(14,165,233,0.25)]",
   },
   cloner: {
     iconBox:
-      "bg-teal-500/10 border-teal-500/20 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 group-hover:border-teal-500/40 group-hover:shadow-[0_0_20px_rgba(20,184,166,0.25)]",
+      "bg-teal-500/10 border-teal-500/20 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 group-hover:border-teal-500/40",
     badge:
       "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/25",
-    radialGlow: "from-teal-500/15 via-emerald-500/10 to-transparent",
-    cardHoverBorder:
-      "hover:border-teal-500/40 dark:hover:border-teal-500/40",
-    cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(20,184,166,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(20,184,166,0.25)]",
   },
   compliance: {
     iconBox:
-      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]",
+      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40",
     badge:
       "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
-    radialGlow: "from-emerald-500/15 via-teal-500/10 to-transparent",
-    cardHoverBorder:
-      "hover:border-emerald-500/40 dark:hover:border-emerald-500/40",
-    cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(16,185,129,0.25)]",
   },
   export: {
     iconBox:
-      "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 group-hover:border-amber-500/40 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]",
+      "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 group-hover:border-amber-500/40",
     badge:
       "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/25",
-    radialGlow: "from-amber-500/15 via-yellow-500/10 to-transparent",
-    cardHoverBorder: "hover:border-amber-500/40 dark:hover:border-amber-500/40",
-    cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(245,158,11,0.25)]",
   },
 };
 

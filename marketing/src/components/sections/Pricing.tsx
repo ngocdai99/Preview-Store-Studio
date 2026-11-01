@@ -144,10 +144,10 @@ export function Pricing() {
               <button
                 type="button"
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-150 cursor-pointer shadow-sm ${
+                className={`w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-colors duration-150 cursor-pointer shadow-xs ${
                   tier.isPopular
-                    ? "bg-[#006533] hover:bg-[#005028] text-white border border-[#00D085]/35 shadow-[0_4px_16px_rgba(0,101,51,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_8px_24px_rgba(0,208,133,0.35)]"
-                    : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#1D1E1D] dark:hover:bg-[#282a28] dark:text-white dark:border dark:border-white/15 shadow-sm hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
+                    ? "bg-[#006533] hover:bg-[#007844] text-white border border-[#00D085]/35"
+                    : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#1D1E1D] dark:hover:bg-[#282a28] dark:text-white dark:border dark:border-white/15"
                 }`}
               >
                 <span>{tier.cta.label}</span>
