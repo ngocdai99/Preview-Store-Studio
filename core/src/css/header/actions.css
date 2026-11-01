@@ -94,6 +94,7 @@
 
 .workspace-export-dropdown {
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 #btnExport {
