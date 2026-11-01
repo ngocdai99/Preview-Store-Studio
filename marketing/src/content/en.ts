@@ -207,10 +207,10 @@ export const en = {
     scopeNote: {
       coveredLabel: "What’s covered:",
       covered:
-        "Preview Studio previews what customers see (title, subtitle, description, icon, screenshots across phones & tablets).",
+        "100% of customer-facing store listings: titles, subtitles, descriptions, release notes, phone & tablet screenshots, app icons, age ratings, in-app purchase tags, and App Privacy & Data Safety cards across iOS and Android.",
       notCoveredLabel: "What’s not covered:",
       notCovered:
-        "It does not preview developer setup forms like App Privacy nutrition labels, Google Play Data Safety, In-App Purchases, or age rating questionnaires.",
+        "It is a visual preview & metadata drafting studio — it does not compile or upload binary builds (.ipa/.aab) and does not require developer login access to App Store Connect or Google Play Console.",
     },
     tiers: [
       {
@@ -226,13 +226,14 @@ export const en = {
           period: "one-time payment",
         },
         features: [
-          { text: "Clean 4K Ultra HD Export", tag: "No Watermark" },
-          { text: "iPhone, iPad & Android Phone/Tablet frames" },
+          { text: "1-Click Live App Cloner (App Store)", tag: "Competitor ASO" },
+          { text: "Dual-Phone & Search Feed Viewports" },
+          { text: "iPhone, iPad & Android Hardware Bezels", tag: "Dark/Light OS" },
           { text: "Smart Size & Icon Alpha Channel Detection" },
-          { text: "Store Listing Metadata Export", tag: "Markdown & Copy" },
-          { text: "Store Character & Emoji Counters" },
-          { text: "100% Offline Single-File Studio", tag: ".html" },
-          { text: "Single-User Commercial License" },
+          { text: "Clean 4K Ultra HD Export", tag: "No Watermark" },
+          { text: "LISTING_METADATA.md & JSON Presets", tag: "Dev Handoff" },
+          { text: "100% Private Offline Single-File Studio", tag: ".html" },
+          { text: "Single-User Lifetime Commercial License" },
         ] as TierFeature[],
         cta: {
           label: "Get Plus Edition ($29)",
