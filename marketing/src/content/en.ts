@@ -25,7 +25,7 @@ export const en = {
     subheadline:
       "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — preview and refine your listings with confidence.",
     primaryCta: {
-      label: "Get Lifetime Access — $29",
+      label: "Get Lifetime Access",
       href: "#pricing",
     },
     secondaryCta: {
