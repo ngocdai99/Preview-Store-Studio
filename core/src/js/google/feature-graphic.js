@@ -21,6 +21,7 @@ function isPlaceholderFeature(){
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
   if(!currentAsset) return true;
   if(typeof BLANK_FEATURE !== 'undefined' && currentAsset === BLANK_FEATURE) return true;
+  if(typeof BLANK_FEATURE_LIGHT !== 'undefined' && currentAsset === BLANK_FEATURE_LIGHT) return true;
   return false;
 }
 
@@ -106,6 +107,8 @@ function validateFeatureGraphic(){
   const dropZone = $('featureDropZone');
   if(!badge) return;
 
+  const runId = ++_featureValRunId;
+
   const placeholder = isPlaceholderFeature();
   if(dropZone){
     if(placeholder){
@@ -121,10 +124,13 @@ function validateFeatureGraphic(){
   }
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
-  if(!currentAsset || currentAsset === (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
+  if(placeholder || !currentAsset || currentAsset === (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '') || currentAsset === (typeof BLANK_FEATURE_LIGHT !== 'undefined' ? BLANK_FEATURE_LIGHT : '')){
     badge.style.display = 'none';
     badge.innerHTML = '';
-    if(dimTag) dimTag.style.display = 'none';
+    if(dimTag) {
+      dimTag.style.display = 'none';
+      dimTag.textContent = '';
+    }
     if(removeBtn) removeBtn.style.display = 'none';
     return;
   }
@@ -132,6 +138,7 @@ function validateFeatureGraphic(){
   // If current asset is an SVG (e.g. from preset or SVG upload), rasterize to 1024x500 PNG
   if(typeof rasterizeSvgToDimensions === 'function' && typeof currentAsset === 'string' && (currentAsset.startsWith('data:image/svg+xml') || currentAsset.includes('<svg'))){
     rasterizeSvgToDimensions(currentAsset, 1024, 500, pngData => {
+      if(runId !== _featureValRunId) return;
       FEATURE_GRAPHIC = pngData;
       // Also update any preset cache if active
       if(typeof CURRENT_PRESET_KEY !== 'undefined' && typeof PRESETS === 'object' && PRESETS[CURRENT_PRESET_KEY]){
@@ -143,8 +150,6 @@ function validateFeatureGraphic(){
   }
 
   if(removeBtn) removeBtn.style.display = 'inline-flex';
-
-  const runId = ++_featureValRunId;
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onload = () => {

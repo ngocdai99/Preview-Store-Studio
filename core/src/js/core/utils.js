@@ -245,9 +245,40 @@ function generateDisplayThumbnail(src, maxDim = 600) {
   });
 }
 
+function isLightUi() {
+  return typeof document !== 'undefined' && !!document.documentElement && document.documentElement.dataset.ui === 'light';
+}
+
 function getDisplaySrc(src, targetImg = null) {
-  if (!src || typeof src !== 'string') return (typeof PH !== 'undefined' ? PH : '');
-  if (src.startsWith('data:image/svg+xml') || src.length < 50000 || (typeof PH !== 'undefined' && src === PH)) {
+  // If no src or src is empty
+  if (!src || typeof src !== 'string') {
+    if (targetImg && targetImg.hasAttribute && targetImg.hasAttribute('data-feature')) {
+      return isLightUi() ? (typeof BLANK_FEATURE_LIGHT !== 'undefined' ? BLANK_FEATURE_LIGHT : BLANK_FEATURE) : (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
+    }
+    return isLightUi() ? (typeof PH_LIGHT !== 'undefined' ? PH_LIGHT : (typeof PH !== 'undefined' ? PH : '')) : (typeof PH !== 'undefined' ? PH : '');
+  }
+
+  // Handle Feature Graphic placeholders (adaptive to Light/Dark mode)
+  if (typeof BLANK_FEATURE !== 'undefined' && (src === BLANK_FEATURE || (typeof BLANK_FEATURE_LIGHT !== 'undefined' && src === BLANK_FEATURE_LIGHT))) {
+    return isLightUi() ? (typeof BLANK_FEATURE_LIGHT !== 'undefined' ? BLANK_FEATURE_LIGHT : BLANK_FEATURE) : BLANK_FEATURE;
+  }
+
+  // Handle Phone Screenshot placeholders
+  if (typeof PH !== 'undefined' && (src === PH || (typeof PH_LIGHT !== 'undefined' && src === PH_LIGHT))) {
+    return isLightUi() ? (typeof PH_LIGHT !== 'undefined' ? PH_LIGHT : PH) : PH;
+  }
+
+  // Handle iPad Screenshot placeholders
+  if (typeof PH_IPAD !== 'undefined' && (src === PH_IPAD || (typeof PH_IPAD_LIGHT !== 'undefined' && src === PH_IPAD_LIGHT))) {
+    return isLightUi() ? (typeof PH_IPAD_LIGHT !== 'undefined' ? PH_IPAD_LIGHT : PH_IPAD) : PH_IPAD;
+  }
+
+  // Handle Android Tablet Screenshot placeholders
+  if (typeof PH_TAB !== 'undefined' && (src === PH_TAB || (typeof PH_TAB_LIGHT !== 'undefined' && src === PH_TAB_LIGHT))) {
+    return isLightUi() ? (typeof PH_TAB_LIGHT !== 'undefined' ? PH_TAB_LIGHT : PH_TAB) : PH_TAB;
+  }
+
+  if (src.startsWith('data:image/svg+xml') || src.length < 50000) {
     return src;
   }
   if (THUMB_CACHE.has(src)) {
@@ -266,7 +297,10 @@ function getDisplaySrc(src, targetImg = null) {
 // --- Safe Image Creation ---
 const safe=(img)=>{
   img.referrerPolicy='no-referrer';
-  img.onerror=()=>{img.onerror=null;img.src=PH};
+  img.onerror=()=>{
+    img.onerror=null;
+    img.src = isLightUi() ? (typeof PH_LIGHT !== 'undefined' ? PH_LIGHT : (typeof PH !== 'undefined' ? PH : '')) : (typeof PH !== 'undefined' ? PH : '');
+  };
 };
 const mk=(src,alt='')=>{
   const i=new Image();i.alt=alt;safe(i);

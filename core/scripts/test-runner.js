@@ -2495,6 +2495,92 @@ assert(appleSectionsCss.includes('.phone.ipad .pg .pc:only-child') && appleSecti
 assert(appleSectionsCss.includes('.dev.ipad.landscape .phone.ipad .pg .pc:only-child') && appleSectionsCss.includes('width: 40%'), 'iPad landscape single privacy card is constrained to < 50% width (40%)');
 
 // ---------------------------------------------------------------------
+// [SUITE 36]: Light Mode Placeholder Skeletons & Adaptive Theming
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 36]: Light Mode Placeholder Skeletons & Adaptive Theming');
+
+const themesCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'themes.css'), 'utf8');
+assert(themesCss.includes(':root[data-ui=light] .feature-wrap') && themesCss.includes('#f8fafc'), 'Light theme styles .feature-wrap with clean soft light background');
+assert(themesCss.includes(':root[data-ui=light] .g-feature-banner') && themesCss.includes('#f8fafc'), 'Light theme styles .g-feature-banner with clean light surface');
+
+const utilsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'core', 'utils.js'), 'utf8');
+const featureGraphicCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'google', 'feature-graphic.js'), 'utf8');
+
+const themeMockDoc = {
+  documentElement: { dataset: { ui: 'light' } },
+  getElementById: () => ({ style: {}, classList: { toggle: () => {} }, onclick: null, addEventListener: () => {}, setAttribute: () => {} }),
+  querySelectorAll: () => [],
+  addEventListener: () => {}
+};
+
+const themeSandbox = {
+  document: themeMockDoc,
+  window: { addEventListener: () => {} },
+  console,
+  encodeURIComponent: global.encodeURIComponent,
+  decodeURIComponent: global.decodeURIComponent,
+  Set,
+  Map,
+  THUMB_CACHE: new Map(),
+  Image: class { constructor() { this.alt = ''; } },
+  $: id => themeMockDoc.getElementById(id),
+  $$: s => themeMockDoc.querySelectorAll(s),
+  initInfoPopover: () => {}
+};
+
+vm.createContext(themeSandbox);
+vm.runInContext(stateCode + `
+globalThis.BLANK_FEATURE = BLANK_FEATURE;
+globalThis.BLANK_FEATURE_LIGHT = BLANK_FEATURE_LIGHT;
+globalThis.PH = PH;
+globalThis.PH_LIGHT = PH_LIGHT;
+globalThis.PH_IPAD = PH_IPAD;
+globalThis.PH_IPAD_LIGHT = PH_IPAD_LIGHT;
+globalThis.PH_TAB = PH_TAB;
+globalThis.PH_TAB_LIGHT = PH_TAB_LIGHT;
+`, themeSandbox);
+
+vm.runInContext(utilsCode + `
+globalThis.isLightUi = isLightUi;
+globalThis.getDisplaySrc = getDisplaySrc;
+`, themeSandbox);
+
+vm.runInContext(featureGraphicCode + `
+globalThis.isPlaceholderFeature = isPlaceholderFeature;
+globalThis.validateFeatureGraphic = validateFeatureGraphic;
+`, themeSandbox);
+
+// Check Light Mode placeholders existence & SVG color
+assert(typeof themeSandbox.BLANK_FEATURE_LIGHT === 'string' && themeSandbox.BLANK_FEATURE_LIGHT.includes('data:image/svg+xml'), 'BLANK_FEATURE_LIGHT is a valid SVG data URI');
+assert(decodeURIComponent(themeSandbox.BLANK_FEATURE_LIGHT).includes('#f8fafc'), 'BLANK_FEATURE_LIGHT uses light surface fill #f8fafc');
+assert(typeof themeSandbox.PH_LIGHT === 'string' && decodeURIComponent(themeSandbox.PH_LIGHT).includes('#f8fafc'), 'PH_LIGHT uses light background #f8fafc');
+assert(typeof themeSandbox.PH_IPAD_LIGHT === 'string' && decodeURIComponent(themeSandbox.PH_IPAD_LIGHT).includes('#f8fafc'), 'PH_IPAD_LIGHT uses light background #f8fafc');
+assert(typeof themeSandbox.PH_TAB_LIGHT === 'string' && decodeURIComponent(themeSandbox.PH_TAB_LIGHT).includes('#f8fafc'), 'PH_TAB_LIGHT uses light background #f8fafc');
+
+// Check dynamic theme switching in getDisplaySrc
+assert(themeSandbox.isLightUi() === true, 'isLightUi() correctly identifies light mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.BLANK_FEATURE) === themeSandbox.BLANK_FEATURE_LIGHT, 'getDisplaySrc switches BLANK_FEATURE to light variant in light mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.PH) === themeSandbox.PH_LIGHT, 'getDisplaySrc switches PH to light variant in light mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.PH_IPAD) === themeSandbox.PH_IPAD_LIGHT, 'getDisplaySrc switches PH_IPAD to light variant in light mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.PH_TAB) === themeSandbox.PH_TAB_LIGHT, 'getDisplaySrc switches PH_TAB to light variant in light mode');
+
+// Switch to Dark Mode
+themeMockDoc.documentElement.dataset.ui = 'dark';
+assert(themeSandbox.isLightUi() === false, 'isLightUi() correctly identifies dark mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.BLANK_FEATURE) === themeSandbox.BLANK_FEATURE, 'getDisplaySrc retains dark BLANK_FEATURE in dark mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.PH) === themeSandbox.PH, 'getDisplaySrc retains dark PH in dark mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.PH_IPAD) === themeSandbox.PH_IPAD, 'getDisplaySrc retains dark PH_IPAD in dark mode');
+assert(themeSandbox.getDisplaySrc(themeSandbox.PH_TAB) === themeSandbox.PH_TAB, 'getDisplaySrc retains dark PH_TAB in dark mode');
+
+// Placeholder validator check
+vm.runInContext('FEATURE_GRAPHIC = BLANK_FEATURE;', themeSandbox);
+assert(themeSandbox.isPlaceholderFeature() === true, 'isPlaceholderFeature recognizes dark BLANK_FEATURE');
+vm.runInContext('FEATURE_GRAPHIC = BLANK_FEATURE_LIGHT;', themeSandbox);
+assert(themeSandbox.isPlaceholderFeature() === true, 'isPlaceholderFeature recognizes light BLANK_FEATURE_LIGHT');
+vm.runInContext("FEATURE_GRAPHIC = 'data:image/png;base64,sampleRealFeature';", themeSandbox);
+assert(themeSandbox.isPlaceholderFeature() === false, 'isPlaceholderFeature recognizes actual custom feature graphic');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

@@ -447,6 +447,95 @@ const PH_TAB = makeSvgDataUri(`
 </svg>
 `);
 
+// Light theme placeholder equivalents for bright, clean UI mode
+const PH_LIGHT = makeSvgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 2796" width="1290" height="2796">
+  <defs>
+    <linearGradient id="ph_light_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="ph_light_glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1290" height="2796" fill="url(#ph_light_bg)"/>
+  <rect x="50" y="50" width="1190" height="2696" rx="84" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="4"/>
+  <rect x="495" y="95" width="300" height="80" rx="40" fill="#ffffff" stroke="rgba(0,0,0,0.08)" stroke-width="2"/>
+  <g transform="translate(645, 1280)">
+    <circle cx="0" cy="0" r="140" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="3"/>
+    <rect x="-60" y="-45" width="120" height="90" rx="16" fill="none" stroke="url(#ph_light_glow)" stroke-width="7"/>
+    <circle cx="-25" cy="-18" r="12" fill="url(#ph_light_glow)"/>
+    <path d="M-55 35 L-15 -5 L20 30 L40 10 L55 35" fill="none" stroke="url(#ph_light_glow)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="50" cy="35" r="28" fill="#6366f1"/>
+    <path d="M50 22 L50 48 M37 35 L63 35" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+    <text x="0" y="210" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="52" font-weight="700" fill="#0f172a" text-anchor="middle" letter-spacing="-0.5">No Screenshot Uploaded</text>
+    <text x="0" y="275" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="34" font-weight="500" fill="#64748b" text-anchor="middle">iPhone 6.9&quot; Target: 1290 × 2796 px</text>
+    <text x="0" y="335" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="28" font-weight="400" fill="#94a3b8" text-anchor="middle">PNG or JPEG · Max 8 MB · Drag &amp; drop to upload</text>
+  </g>
+</svg>
+`);
+
+const PH_IPAD_LIGHT = makeSvgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2732" width="2048" height="2732">
+  <defs>
+    <linearGradient id="ph_ipad_light_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="ph_ipad_light_glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="2048" height="2732" fill="url(#ph_ipad_light_bg)"/>
+  <rect x="65" y="65" width="1918" height="2602" rx="72" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="4"/>
+  <circle cx="1024" cy="115" r="10" fill="rgba(0,0,0,0.12)"/>
+  <g transform="translate(1024, 1260)">
+    <circle cx="0" cy="0" r="180" fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.2)" stroke-width="3"/>
+    <rect x="-80" y="-105" width="160" height="210" rx="20" fill="none" stroke="url(#ph_ipad_light_glow)" stroke-width="7"/>
+    <circle cx="0" cy="-88" r="5" fill="url(#ph_ipad_light_glow)"/>
+    <line x1="-30" y1="88" x2="30" y2="88" stroke="url(#ph_ipad_light_glow)" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="65" cy="80" r="34" fill="#8b5cf6"/>
+    <path d="M65 64 L65 96 M49 80 L81 80" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+    <text x="0" y="240" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="64" font-weight="700" fill="#0f172a" text-anchor="middle" letter-spacing="-0.5">No iPad Screenshot Uploaded</text>
+    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#64748b" text-anchor="middle">iPad Pro 13&quot; Target: 2048 × 2732 px (3:4 Ratio)</text>
+    <text x="0" y="385" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="32" font-weight="400" fill="#94a3b8" text-anchor="middle">PNG or JPEG · Up to 8 MB · Supports Landscape &amp; Portrait</text>
+  </g>
+</svg>
+`);
+
+const PH_TAB_LIGHT = makeSvgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1600" width="2560" height="1600">
+  <defs>
+    <linearGradient id="ph_tab_light_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="ph_tab_light_glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="2560" height="1600" fill="url(#ph_tab_light_bg)"/>
+  <rect x="60" y="60" width="2440" height="1480" rx="60" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="4"/>
+  <g transform="translate(1280, 750)">
+    <circle cx="0" cy="0" r="160" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.2)" stroke-width="3"/>
+    <rect x="-100" y="-65" width="200" height="130" rx="16" fill="none" stroke="url(#ph_tab_light_glow)" stroke-width="7"/>
+    <circle cx="85" cy="0" r="5" fill="url(#ph_tab_light_glow)"/>
+    <circle cx="75" cy="50" r="30" fill="#10b981"/>
+    <path d="M75 36 L75 64 M61 50 L89 50" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+    <text x="0" y="220" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="56" font-weight="700" fill="#0f172a" text-anchor="middle">No Tablet Screenshot Uploaded</text>
+    <text x="0" y="295" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="34" font-weight="500" fill="#64748b" text-anchor="middle">Google Play Target: 16:10 or 16:9 Landscape · Up to 8 MB</text>
+    <text x="0" y="355" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="28" font-weight="400" fill="#94a3b8" text-anchor="middle">If empty, tablet mockups automatically display phone screenshots</text>
+  </g>
+</svg>
+`);
+
 // --- Feature Graphics (1024×500 px for Google Play) ---
 const DEFAULT_FEATURE = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500">
@@ -1106,6 +1195,19 @@ const BLANK_FEATURE = makeSvgDataUri(`
   <g transform="translate(480, 218)" stroke="#64748b" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <rect x="0" y="0" width="64" height="64" rx="12"/>
     <circle cx="20" cy="20" r="5"/>
+    <path d="M64 44 L46 26 L14 58"/>
+    <path d="M40 44 L48 34 L64 50"/>
+  </g>
+</svg>
+`);
+
+const BLANK_FEATURE_LIGHT = makeSvgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500">
+  <rect width="1024" height="500" fill="#f8fafc"/>
+  <rect x="20" y="20" width="984" height="460" rx="16" fill="none" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 10"/>
+  <g transform="translate(480, 218)" stroke="#94a3b8" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="0" width="64" height="64" rx="12" fill="#ffffff" fill-opacity="0.9"/>
+    <circle cx="20" cy="20" r="5" fill="#94a3b8"/>
     <path d="M64 44 L46 26 L14 58"/>
     <path d="M40 44 L48 34 L64 50"/>
   </g>
