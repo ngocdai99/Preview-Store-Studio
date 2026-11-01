@@ -13,7 +13,7 @@ export function Pricing() {
             href={siteConfig.gumroadUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="pricing-announcement-banner group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 cursor-pointer select-none no-underline transition-all duration-200 ease-out hover:scale-[1.025] active:scale-[0.98] border backdrop-blur-md bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] border-[rgba(139,92,246,0.38)] shadow-[0_4px_20px_-2px_rgba(139,92,246,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:border-[rgba(139,92,246,0.6)] hover:shadow-[0_8px_28px_-4px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] dark:bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] dark:border-[rgba(139,92,246,0.38)] [html:not(.dark)_&]:bg-white [html:not(.dark)_&]:border-[rgba(124,58,237,0.26)] [html:not(.dark)_&]:shadow-[0_4px_16px_rgba(124,58,237,0.08),0_1px_3px_rgba(15,23,42,0.04)] [html:not(.dark)_&]:hover:border-[rgba(124,58,237,0.5)] [html:not(.dark)_&]:hover:shadow-[0_8px_24px_rgba(124,58,237,0.14)]"
+            className="pricing-announcement-banner group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 cursor-pointer select-none no-underline transition-all duration-200 ease-out hover:scale-[1.008] active:scale-[0.995] border backdrop-blur-md bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] border-[rgba(139,92,246,0.38)] shadow-[0_4px_20px_-2px_rgba(139,92,246,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:border-[rgba(139,92,246,0.6)] hover:shadow-[0_8px_28px_-4px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] dark:bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] dark:border-[rgba(139,92,246,0.38)] [html:not(.dark)_&]:bg-white [html:not(.dark)_&]:border-[rgba(124,58,237,0.26)] [html:not(.dark)_&]:shadow-[0_4px_16px_rgba(124,58,237,0.08),0_1px_3px_rgba(15,23,42,0.04)] [html:not(.dark)_&]:hover:border-[rgba(124,58,237,0.5)] [html:not(.dark)_&]:hover:shadow-[0_8px_24px_rgba(124,58,237,0.14)]"
             aria-label={`${pricing.banner.tag}: ${pricing.banner.text}`}
           >
             {/* Glowing Pulse Dot */}
@@ -39,7 +39,7 @@ export function Pricing() {
 
             {/* Chevron Right Arrow */}
             <ChevronRight
-              className="announcement-arrow w-3.5 h-3.5 shrink-0 text-purple-300 dark:text-purple-300 [html:not(.dark)_&]:text-purple-600 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-1"
+              className="announcement-arrow w-3.5 h-3.5 shrink-0 text-purple-300 dark:text-purple-300 [html:not(.dark)_&]:text-purple-600 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5"
             />
           </a>
 

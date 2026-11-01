@@ -112,14 +112,14 @@ button:not([aria-expanded]):not(:disabled):active,
 }
 
 .pricing-announcement-banner:hover {
-  transform: scale(1.025);
+  transform: scale(1.008);
   border-color: rgba(139, 92, 246, 0.6);
   box-shadow: 0 8px 28px -4px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   text-decoration: none;
 }
 
 .pricing-announcement-banner:active {
-  transform: scale(0.98);
+  transform: scale(0.995);
 }
 
 .announcement-pulse-dot {
@@ -196,7 +196,7 @@ html:not(.dark) .pricing-announcement-banner {
 [data-theme="light"] .pricing-announcement-banner:hover,
 html.light .pricing-announcement-banner:hover,
 html:not(.dark) .pricing-announcement-banner:hover {
-  transform: scale(1.025);
+  transform: scale(1.008);
   border-color: rgba(124, 58, 237, 0.5);
   box-shadow: 0 8px 24px rgba(124, 58, 237, 0.14);
 }
@@ -237,7 +237,7 @@ html.dark .pricing-announcement-banner {
 
 [data-theme="dark"] .pricing-announcement-banner:hover,
 html.dark .pricing-announcement-banner:hover {
-  transform: scale(1.025);
+  transform: scale(1.008);
   border-color: rgba(139, 92, 246, 0.6);
   box-shadow: 0 8px 28px -4px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
