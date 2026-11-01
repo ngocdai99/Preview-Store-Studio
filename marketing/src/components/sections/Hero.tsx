@@ -28,7 +28,7 @@ export function Hero() {
         <div className="mt-1 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href={hero.primaryCta.href}
-            className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[linear-gradient(135deg,#3ecf8e_0%,#1ea672_100%)] hover:bg-[linear-gradient(135deg,#46e39d_0%,#24b47e_100%)] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] shadow-[0_4px_16px_rgba(62,207,142,0.38),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_24px_rgba(62,207,142,0.5)] transition-all duration-150"
+            className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[#006338] [background:oklch(0.43627_0.11_157.5)] hover:bg-[#007844] hover:[background:oklch(0.48_0.12_157.5)] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] border border-white/20 shadow-[0_4px_16px_rgba(0,99,56,0.38),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_8px_24px_rgba(0,99,56,0.5)] transition-all duration-150"
           >
             <span>{hero.primaryCta.label}</span>
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />

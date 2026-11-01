@@ -273,7 +273,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[linear-gradient(135deg,#3ecf8e_0%,#1ea672_100%)] hover:bg-[linear-gradient(135deg,#46e39d_0%,#24b47e_100%)] shadow-[0_4px_16px_rgba(62,207,142,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_6px_22px_rgba(62,207,142,0.5)] transition-all duration-150 disabled:opacity-60 cursor-pointer shrink-0"
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[#006338] [background:oklch(0.43627_0.11_157.5)] hover:bg-[#007844] hover:[background:oklch(0.48_0.12_157.5)] border border-white/20 shadow-[0_4px_16px_rgba(0,99,56,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_6px_22px_rgba(0,99,56,0.5)] transition-all duration-150 disabled:opacity-60 cursor-pointer shrink-0"
                 >
                   <span>{isSubmitting ? "Saving..." : "Get Early Invite"}</span>
                   <ArrowRight className="w-4 h-4 stroke-[2.5]" />
