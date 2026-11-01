@@ -268,17 +268,17 @@
 
 /* Card-Inspired UI for Detail View / Search Result Menu (#vt) */
 #vt.stage-view-menu {
-  width: 228px !important;
-  padding: 7px !important;
-  gap: 5px !important;
-  border-radius: 14px !important;
+  width: 204px !important;
+  padding: 6px !important;
+  gap: 4px !important;
+  border-radius: 12px !important;
   background: rgba(15, 23, 42, 0.96) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
 }
 
 #vt .menu-label {
-  padding: 4px 6px 5px !important;
+  padding: 4px 8px 3px !important;
 }
 #vt .menu-label span {
   font-size: 10px !important;
@@ -290,7 +290,7 @@
 
 #vt .menu-div {
   height: 1px !important;
-  margin: 4px 0 !important;
+  margin: 3px 0 !important;
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -300,9 +300,9 @@
   align-items: center !important;
   gap: 10px !important;
   height: auto !important;
-  min-height: 42px !important;
+  min-height: 38px !important;
   padding: 6px 10px !important;
-  border-radius: 9px !important;
+  border-radius: 8px !important;
   border: none !important;
   background: transparent !important;
   color: #f8fafc !important;
@@ -335,27 +335,30 @@
   color: #f1f5f9 !important;
 }
 
-/* Card Icon Chip (28x28 squircle) */
+/* Standalone Bare Icon (No container box) */
 #vt .mi-ico,
 :root[data-ui=light] #vt .mi-ico {
-  width: 28px !important;
-  height: 28px !important;
-  border-radius: 8px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
   position: relative !important;
-  overflow: hidden !important;
-  transition: all .22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  overflow: visible !important;
+  transition: color .18s ease !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 #vt .mi-ico svg,
 :root[data-ui=light] #vt .mi-ico svg {
-  width: 15px !important;
-  height: 15px !important;
-  stroke-width: 2.2 !important;
+  width: 17px !important;
+  height: 17px !important;
+  stroke-width: 2 !important;
   position: relative !important;
   z-index: 1 !important;
   display: block !important;
@@ -365,10 +368,11 @@
   display: none !important;
 }
 
-/* Option 1: Detail View (Purple - like Description Card) */
+/* Option 1: Detail View (Purple) */
 #optViewDetail .mi-ico {
-  background: rgba(139, 92, 246, 0.16) !important;
-  border: 1px solid rgba(139, 92, 246, 0.28) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   color: #c084fc !important;
 }
 #optViewDetail.on {
@@ -381,16 +385,17 @@
   font-weight: 700 !important;
 }
 #optViewDetail.on .mi-ico {
-  background: linear-gradient(135deg, #8b5cf6, #6366f1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #c084fc !important;
 }
 
-/* Option 2: Search Result (Amber - like App Identity Card) */
+/* Option 2: Search Result (Amber) */
 #optViewSearch .mi-ico {
-  background: rgba(245, 158, 11, 0.16) !important;
-  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   color: #fbbf24 !important;
 }
 #optViewSearch.on {
@@ -403,16 +408,17 @@
   font-weight: 700 !important;
 }
 #optViewSearch.on .mi-ico {
-  background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.45) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #fbbf24 !important;
 }
 
-/* Option 3: Dual Phone (Slate / Titanium Steel - subtle utility accent) */
+/* Option 3: Dual Phone (Slate) */
 #btnDualPhone .mi-ico {
-  background: rgba(148, 163, 184, 0.12) !important;
-  border: 1px solid rgba(148, 163, 184, 0.22) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   color: #94a3b8 !important;
 }
 #btnDualPhone.on {
@@ -425,10 +431,10 @@
   font-weight: 700 !important;
 }
 #btnDualPhone.on .mi-ico {
-  background: linear-gradient(135deg, #64748b, #475569) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  color: #ffffff !important;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #cbd5e1 !important;
 }
 
 /* Apple Device Menu Accents (Apple Blue) */
@@ -645,10 +651,11 @@
   color: #0f172a !important;
 }
 
-/* Light Detail View (Purple - like Description Card) */
+/* Light Detail View (Purple) */
 :root[data-ui=light] #optViewDetail .mi-ico {
-  background: rgba(124, 58, 237, 0.08) !important;
-  border: 1px solid rgba(124, 58, 237, 0.22) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   color: #7c3aed !important;
 }
 :root[data-ui=light] #optViewDetail.on {
@@ -661,16 +668,17 @@
   font-weight: 700 !important;
 }
 :root[data-ui=light] #optViewDetail.on .mi-ico {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  color: #ffffff !important;
-  box-shadow: 0 3px 10px rgba(124, 58, 237, 0.38) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #7c3aed !important;
 }
 
-/* Light Search Result (Amber - like App Identity Card) */
+/* Light Search Result (Amber) */
 :root[data-ui=light] #optViewSearch .mi-ico {
-  background: rgba(217, 119, 6, 0.08) !important;
-  border: 1px solid rgba(217, 119, 6, 0.24) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   color: #d97706 !important;
 }
 :root[data-ui=light] #optViewSearch.on {
@@ -683,17 +691,18 @@
   font-weight: 700 !important;
 }
 :root[data-ui=light] #optViewSearch.on .mi-ico {
-  background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  color: #ffffff !important;
-  box-shadow: 0 3px 10px rgba(217, 119, 6, 0.38) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #d97706 !important;
 }
 
-/* Light Dual Phone (Slate / Titanium Steel - subtle utility accent) */
+/* Light Dual Phone (Slate) */
 :root[data-ui=light] #btnDualPhone .mi-ico {
-  background: rgba(100, 116, 139, 0.08) !important;
-  border: 1px solid rgba(100, 116, 139, 0.2) !important;
-  color: #475569 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #64748b !important;
 }
 :root[data-ui=light] #btnDualPhone.on {
   border: none !important;
@@ -705,10 +714,10 @@
   font-weight: 700 !important;
 }
 :root[data-ui=light] #btnDualPhone.on .mi-ico {
-  background: linear-gradient(135deg, #475569, #334155) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  color: #ffffff !important;
-  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.2) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #334155 !important;
 }
 
 /* Button & Dropdown Synchronization */
