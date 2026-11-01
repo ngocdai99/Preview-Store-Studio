@@ -16,44 +16,6 @@ const iconMap: Record<FeatureItem["icon"], LucideIcon> = {
   folderArchive: FolderArchive,
 };
 
-interface FeatureTheme {
-  iconBox: string;
-  badge: string;
-}
-
-const featureThemes: Record<string, FeatureTheme> = {
-  frames: {
-    iconBox:
-      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-[#00D085] group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40",
-    badge:
-      "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
-  },
-  viewports: {
-    iconBox:
-      "bg-sky-500/10 border-sky-500/20 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 group-hover:border-sky-500/40",
-    badge:
-      "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/25",
-  },
-  cloner: {
-    iconBox:
-      "bg-teal-500/10 border-teal-500/20 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 group-hover:border-teal-500/40",
-    badge:
-      "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/25",
-  },
-  compliance: {
-    iconBox:
-      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40",
-    badge:
-      "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
-  },
-  export: {
-    iconBox:
-      "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 group-hover:border-amber-500/40",
-    badge:
-      "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/25",
-  },
-};
-
 const featureTags: Record<string, string[]> = {
   frames: [
     "iPhone & iPad",
@@ -108,8 +70,6 @@ export function Features() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {features.items.map((feature) => {
             const Icon = iconMap[feature.icon] || Smartphone;
-            const theme =
-              featureThemes[feature.id] || featureThemes.frames;
             const tags = featureTags[feature.id] || [];
             const isHeroCard = feature.id === "frames";
 
@@ -131,16 +91,10 @@ export function Features() {
                 <div className="relative z-10">
                   {/* Top Row: Icon + Badge */}
                   <div className="flex items-center justify-between mb-6">
-                    <div
-                      className={`w-12 h-12 rounded-[14px] border flex items-center justify-center transition-all duration-300 group-hover:scale-105 ${theme.iconBox}`}
-                    >
-                      <Icon className="w-6 h-6 stroke-[2.2]" />
-                    </div>
+                    <Icon className="w-6 h-6 text-slate-900 dark:text-white stroke-[2.2]" />
 
                     {feature.badge && (
-                      <span
-                        className={`text-[11px] font-bold tracking-[0.06em] uppercase px-3 py-1 rounded-full border shadow-sm transition-colors ${theme.badge}`}
-                      >
+                      <span className="text-[11px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-slate-400">
                         {feature.badge}
                       </span>
                     )}
