@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import { Sparkles, ArrowRight, Info, ChevronRight, Zap, Crown } from "lucide-react";
+import { Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
 import { LaunchModal } from "@/components/ui/LaunchModal";
 
 export function Pricing() {
@@ -71,25 +71,32 @@ export function Pricing() {
                     : "hover:border-blue-500/50 dark:hover:border-blue-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(6,182,212,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(6,182,212,0.22)]"
                 }`}
               >
+              {/* Top hairline accent line */}
+              <div
+                className={`absolute top-0 inset-x-0 h-[2px] rounded-t-[26px] bg-gradient-to-r ${
+                  tier.isPopular
+                    ? "from-purple-500/80 via-indigo-500/40 to-transparent"
+                    : "from-blue-500/70 via-sky-500/30 to-transparent"
+                }`}
+              />
+
               <div>
-                {/* Header row: Icon + Title */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
-                      tier.isPopular
-                        ? "bg-purple-500/10 dark:bg-purple-500/15 border-purple-500/25 text-purple-600 dark:text-purple-400 shadow-xs"
-                        : "bg-blue-500/10 dark:bg-blue-500/15 border-blue-500/25 text-blue-600 dark:text-blue-400 shadow-xs"
-                    }`}
-                  >
-                    {tier.isPopular ? (
-                      <Crown className="w-4.5 h-4.5 stroke-[2.2]" />
-                    ) : (
-                      <Zap className="w-4.5 h-4.5 fill-current" />
-                    )}
-                  </div>
+                {/* Header row: Title on left, License Scope on right */}
+                <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[22px] font-bold tracking-tight text-slate-900 dark:text-white">
                     {tier.name}
                   </h3>
+
+                  {tier.isPopular ? (
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-500/10 px-2.5 py-1 rounded-md border border-purple-200/80 dark:border-purple-500/25">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                      Commercial License
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center text-[11px] font-medium tracking-wide text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-white/[0.05] px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/[0.08]">
+                      Personal License
+                    </span>
+                  )}
                 </div>
 
                 <p className="text-[13.5px] text-slate-600 dark:text-slate-400 mb-6 leading-relaxed min-h-[42px]">
