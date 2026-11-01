@@ -1,16 +1,76 @@
-<!-- Google Play Device Selector (Phone / 7" / 10" Tablet) -->
-<div class="vt" id="gdt">
-  <span class="vt-pill"></span>
-  <button data-gd="phone" class="on" title="Android phone">
-    <span class="vt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg></span>
-    <span>Phone</span>
+<!-- Google Play Device Dropdown (Phone / 7" / 10" Tablet) -->
+<div class="dropdown stage-device-dropdown" id="gdt">
+  <button type="button" class="stage-view-btn" id="btnGoogleDevice" title="Select Android device preview" aria-haspopup="true" aria-expanded="false">
+    <span class="stage-view-ico" id="googleDeviceIco" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="6" y="2" width="12" height="20" rx="2.5"></rect>
+        <circle cx="12" cy="5" r="0.8" fill="currentColor"></circle>
+        <line x1="10" y1="19" x2="14" y2="19"></line>
+      </svg>
+    </span>
+    <span class="stage-view-label" id="googleDeviceLabel">Phone</span>
+    <span class="stage-view-arr" aria-hidden="true">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </span>
   </button>
-  <button data-gd="tab7" title="7-inch tablet">
-    <span class="vt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><line x1="10" y1="19" x2="14" y2="19"></line></svg></span>
-    <span>7" Tablet</span>
-  </button>
-  <button data-gd="tab10" title="10-inch tablet">
-    <span class="vt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><line x1="10" y1="17" x2="14" y2="17"></line></svg></span>
-    <span>10" Tablet</span>
-  </button>
+
+  <div class="menu stage-view-menu" id="menuGoogleDevice" role="menu">
+    <div class="menu-label">
+      <span>Android Device</span>
+    </div>
+
+    <!-- Phone Option -->
+    <button type="button" class="menu-item on" id="optGooglePhone" data-gd="phone" role="menuitem">
+      <span class="mi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="2" width="12" height="20" rx="2.5"></rect>
+          <circle cx="12" cy="5" r="0.8" fill="currentColor"></circle>
+          <line x1="10" y1="19" x2="14" y2="19"></line>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">Phone</span>
+        <small>Android smartphone</small>
+      </span>
+      <span class="mi-check" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </span>
+    </button>
+
+    <!-- 7" Tablet Option -->
+    <button type="button" class="menu-item" id="optGoogleTab7" data-gd="tab7" role="menuitem">
+      <span class="mi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2.5"></rect>
+          <line x1="10" y1="19" x2="14" y2="19"></line>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">7" Tablet</span>
+        <small>Small tablet preview</small>
+      </span>
+      <span class="mi-check" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </span>
+    </button>
+
+    <!-- 10" Tablet Option -->
+    <button type="button" class="menu-item" id="optGoogleTab10" data-gd="tab10" role="menuitem">
+      <span class="mi-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2.5"></rect>
+          <line x1="10" y1="17" x2="14" y2="17"></line>
+        </svg>
+      </span>
+      <span class="mi-t">
+        <span class="mi-name">10" Tablet</span>
+        <small>Large tablet preview</small>
+      </span>
+      <span class="mi-check" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </span>
+    </button>
+  </div>
 </div>

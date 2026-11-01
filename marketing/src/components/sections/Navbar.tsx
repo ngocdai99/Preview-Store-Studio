@@ -89,7 +89,7 @@ export function Navbar() {
           onClick={(e) => handleNavClick(e, "Studio", "#hero")}
           className="flex items-center gap-2 group shrink-0 h-[36px]"
         >
-          <BrandIcon className="w-7 h-7 rounded-lg shrink-0 transition-transform group-hover:scale-105" />
+          <BrandIcon className="w-7 h-7 rounded-lg shrink-0 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3" />
           <span className="font-bold text-[16px] tracking-tight text-foreground">
             {siteConfig.name}
           </span>

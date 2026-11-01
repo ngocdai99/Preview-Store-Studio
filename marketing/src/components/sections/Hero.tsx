@@ -12,9 +12,11 @@ export function Hero() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-blue-500/15 via-indigo-500/10 to-purple-500/15 blur-[130px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        {/* App Icon Centered */}
-        <div className="mb-6 p-2 rounded-2xl bg-card border border-border shadow-xl shadow-indigo-500/10 transition-colors">
-          <BrandIcon className="w-14 h-14" />
+        {/* Hero Brand App Icon */}
+        <div className="hero-icon-container mb-5 flex justify-center">
+          <div className="hero-app-icon w-[72px] h-[72px] rounded-[17px] cursor-pointer select-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[0_14px_32px_-6px_rgba(59,130,246,0.28),0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_36px_-6px_rgba(99,102,241,0.42),0_0_0_1px_rgba(255,255,255,0.18)] hover:-translate-y-1 hover:scale-105 hover:-rotate-[4deg] hover:shadow-[0_20px_42px_-6px_rgba(59,130,246,0.38),0_0_0_1px_rgba(0,0,0,0.14)] dark:hover:shadow-[0_22px_46px_-6px_rgba(99,102,241,0.55),0_0_0_1px_rgba(255,255,255,0.3)]">
+            <BrandIcon className="w-full h-full rounded-[17px]" />
+          </div>
         </div>
 
         {/* Category Badge */}
