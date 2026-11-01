@@ -54,10 +54,10 @@ export function Pricing() {
           {pricing.tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`relative rounded-[28px] p-7 sm:p-9 flex flex-col justify-between transition-all duration-200 bg-white dark:bg-[#0c1222] ${
+              className={`relative rounded-[28px] p-7 sm:p-9 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#0c1222] ${
                 tier.isPopular
-                  ? "border-2 border-[#8b5cf6] dark:border-[#a78bfa] shadow-[0_12px_36px_-6px_rgba(139,92,246,0.18)] dark:shadow-[0_16px_40px_-6px_rgba(139,92,246,0.25)] hover:border-[#7c3aed] dark:hover:border-[#c084fc]"
-                  : "border border-slate-200 dark:border-white/[0.08] shadow-[0_4px_24px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:border-slate-300 dark:hover:border-white/[0.16]"
+                  ? "border-2 border-purple-500/40 dark:border-purple-400/35 shadow-[0_8px_30px_-6px_rgba(139,92,246,0.14)] dark:shadow-[0_10px_32px_-6px_rgba(139,92,246,0.2)] hover:border-purple-600 dark:hover:border-purple-400 hover:shadow-[0_16px_44px_-6px_rgba(139,92,246,0.28)] dark:hover:shadow-[0_18px_48px_-6px_rgba(139,92,246,0.35)]"
+                  : "border-2 border-blue-500/30 dark:border-blue-400/25 shadow-[0_8px_30px_-6px_rgba(37,99,235,0.08)] dark:shadow-[0_10px_32px_-6px_rgba(0,0,0,0.3)] hover:border-blue-600 dark:hover:border-blue-400 hover:shadow-[0_16px_44px_-6px_rgba(6,182,212,0.22)] dark:hover:shadow-[0_18px_48px_-6px_rgba(6,182,212,0.28)]"
               }`}
             >
               <div>
