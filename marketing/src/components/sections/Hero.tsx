@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 
 export function Hero() {
@@ -60,16 +60,6 @@ export function Hero() {
             <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400 transition-transform duration-200 group-hover:rotate-12" />
             <span>{hero.secondaryCta.label}</span>
           </Link>
-        </div>
-
-        {/* Trust Badges */}
-        <div className="mt-7 pt-5 border-t border-border flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-xs text-muted">
-          {hero.trustBadges.map((badge) => (
-            <div key={badge} className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>{badge}</span>
-            </div>
-          ))}
         </div>
       </div>
     </section>
