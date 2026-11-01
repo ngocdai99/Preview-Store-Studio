@@ -142,12 +142,14 @@
   top: calc(100% + 6px);
   left: 0;
   right: auto;
-  width: 240px;
+  width: 236px;
   background: rgba(15, 23, 42, 0.96);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 14px;
-  padding: 6px;
+  border-radius: 12px;
+  padding: 0 !important;
+  gap: 0 !important;
+  overflow: hidden;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
   z-index: 250;
   display: none !important;
@@ -158,18 +160,29 @@
   display: flex !important;
 }
 
+.stage-view-menu .menu-label {
+  padding: 9px 14px 4px;
+}
+
+.stage-view-menu .menu-div {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 !important;
+}
+
 .stage-view-menu .menu-item {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 7px 10px;
-  border-radius: 10px;
-  border: 1px solid transparent;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 0 !important;
+  border: none !important;
+  margin: 0 !important;
   background: transparent;
   color: #cbd5e1;
   cursor: pointer;
-  transition: all .16s ease;
+  transition: background .16s ease, color .16s ease;
   box-sizing: border-box;
   text-align: left;
   width: 100%;
@@ -183,7 +196,7 @@
 .stage-view-menu .menu-item.on,
 .stage-view-menu .menu-item.active {
   background: rgba(59, 130, 246, 0.14);
-  border-color: rgba(59, 130, 246, 0.3);
+  border: none !important;
   color: #ffffff;
 }
 
@@ -192,20 +205,27 @@
   color: #60a5fa;
 }
 
-.stage-view-menu .mi-ico {
+.stage-view-menu .mi-ico,
+:root[data-ui=light] .stage-view-menu .mi-ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
   color: #94a3b8;
   flex-shrink: 0;
   transition: color .16s ease;
 }
 
 .stage-view-menu .mi-ico svg {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   display: block;
 }
 
@@ -316,8 +336,15 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
   box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16), 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
+:root[data-ui=light] .stage-view-menu .menu-div {
+  background: rgba(15, 23, 42, 0.08);
+}
+
 :root[data-ui=light] .stage-view-menu .menu-item {
   color: #334155;
+  border-radius: 0 !important;
+  border: none !important;
+  margin: 0 !important;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item:hover {
@@ -328,7 +355,7 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 :root[data-ui=light] .stage-view-menu .menu-item.on,
 :root[data-ui=light] .stage-view-menu .menu-item.active {
   background: rgba(59, 130, 246, 0.08);
-  border-color: rgba(59, 130, 246, 0.25);
+  border: none !important;
   color: #0f172a;
 }
 
