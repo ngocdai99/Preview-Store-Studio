@@ -143,7 +143,7 @@ export function Pricing() {
                     return (
                       <li
                         key={i}
-                        className="flex items-start gap-2.5 text-[14px] text-slate-700 dark:text-slate-200 leading-snug"
+                        className="flex items-start gap-2.5 text-[13.5px] sm:text-[14px] text-slate-700 dark:text-slate-200 leading-snug"
                       >
                         <svg
                           className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5 stroke-[2.6]"
@@ -159,7 +159,7 @@ export function Pricing() {
                           <span>{feature.text}</span>
                           {feature.tag && (
                             <span
-                              className={`inline-flex items-center ml-2 px-2 py-0.5 rounded-full text-[10.5px] font-semibold tracking-wide border ${
+                              className={`inline-flex items-center ml-2 px-2 py-0.5 rounded-full text-[10.5px] font-semibold tracking-wide border whitespace-nowrap shrink-0 ${
                                 feature.tag === "src/" ||
                                 feature.tag === "build.js" ||
                                 feature.tag === ".html"
