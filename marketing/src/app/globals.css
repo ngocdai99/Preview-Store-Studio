@@ -85,12 +85,12 @@ button:not([aria-expanded]):not(:disabled),
 
 button:not([aria-expanded]):not(:disabled):hover,
 .btn-scale:hover {
-  transform: scale(1.03);
+  transform: scale(1.01);
 }
 
 button:not([aria-expanded]):not(:disabled):active,
 .btn-scale:active {
-  transform: scale(0.97);
+  transform: scale(0.99);
 }
 
 /* Nav Active Pill (Adaptive Light/Dark Selected Indicator) */
