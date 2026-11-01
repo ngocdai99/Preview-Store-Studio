@@ -144,7 +144,11 @@ export function Pricing() {
                         className="flex items-start gap-2.5 text-[13.5px] sm:text-[14px] text-slate-700 dark:text-slate-200 leading-snug"
                       >
                         <svg
-                          className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5 stroke-[2.6]"
+                          className={`w-4 h-4 shrink-0 mt-0.5 stroke-[2.6] ${
+                            tier.isPopular
+                              ? "text-purple-600 dark:text-purple-400"
+                              : "text-blue-600 dark:text-blue-400"
+                          }`}
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -181,10 +185,10 @@ export function Pricing() {
               <button
                 type="button"
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] text-white tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] cursor-pointer ${
+                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] text-white tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] cursor-pointer shadow-sm ${
                   tier.isPopular
-                    ? "bg-[linear-gradient(135deg,#7c3aed_0%,#9333ea_50%,#c026d3_100%)] hover:opacity-95 shadow-[0_4px_16px_rgba(168,85,247,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_8px_24px_rgba(168,85,247,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]"
-                    : "bg-[linear-gradient(to_right,#1d4ed8_0%,#06b6d4_100%)] hover:opacity-95 shadow-[0_4px_16px_rgba(6,182,212,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_8px_24px_rgba(6,182,212,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]"
+                    ? "bg-[#7c3aed] hover:bg-[#6d28d9] shadow-purple-500/20 hover:shadow-purple-500/30"
+                    : "bg-[#2563eb] hover:bg-[#1d4ed8] shadow-blue-500/20 hover:shadow-blue-500/30"
                 }`}
               >
                 <span>{tier.cta.label}</span>
