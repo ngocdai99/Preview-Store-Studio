@@ -113,8 +113,14 @@ export function Faq() {
                 </button>
 
                 {/* Body (Smooth Accordion Expansion - Header stays 100% still) */}
-                <div className={`faq-accordion-grid ${isOpen ? "open" : ""}`}>
-                  <div className="faq-accordion-inner">
+                <div
+                  className={`faq-accordion-grid grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    isOpen
+                      ? "open grid-rows-[1fr] opacity-100"
+                      : "grid-rows-[0fr] opacity-0 pointer-events-none"
+                  }`}
+                >
+                  <div className="faq-accordion-inner overflow-hidden min-h-0">
                     <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-slate-600 dark:text-slate-300 text-[14px] sm:text-[14.5px] leading-relaxed">
                       <div className="pt-3 border-t border-border/40 dark:border-white/[0.06] leading-relaxed">
                         {item.answer}
