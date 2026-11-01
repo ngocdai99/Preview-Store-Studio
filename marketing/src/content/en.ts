@@ -21,9 +21,9 @@ export const en = {
     subheadlineLead:
       "Save 2 hours of back-and-forth with your client before every App Store submission.",
     subheadlineFollow:
-      "App Store Connect & Google Play provide zero live preview — preview and refine your listings with confidence.",
+      "App Store Connect & Google Play provide no live preview — inspect and refine your listings with total confidence.",
     subheadline:
-      "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide zero live preview — preview and refine your listings with confidence.",
+      "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — inspect and refine your listings with total confidence.",
     primaryCta: {
       label: "Get Lifetime Access — $29",
       href: "#pricing",
@@ -102,13 +102,13 @@ export const en = {
         bad: {
           title: "Marketers without developer accounts, drafting blindly in Google Docs",
           description:
-            "Writing copy in shared docs leads to endless back-and-forth with developers over character limits, missing specs, and broken layouts.",
+            "Writing copy in shared docs leads to misaligned specs with developers over character limits, missing assets, and broken layouts.",
         },
         good: {
           badge: "INDEPENDENT MARKETING WORKFLOW",
           title: "Preview and validate listings without needing developer accounts",
           description:
-            "Finalize store pages with confidence. Hand over paste-ready copy and assets to developers with zero back-and-forth.",
+            "Finalize store pages with confidence. Hand over paste-ready copy and assets to developers without confusion or misaligned specs.",
         },
       },
       {
@@ -156,7 +156,7 @@ export const en = {
           badge: "100% PRIVATE & OFFLINE",
           title: "One-time purchase · Pay once, keep forever",
           description:
-            "A self-contained HTML file running locally on your machine. Zero subscriptions, zero logins, and complete peace of mind.",
+            "A self-contained HTML file running locally on your machine. No subscriptions, no cloud logins, and complete data privacy.",
         },
       },
     ],
@@ -166,11 +166,11 @@ export const en = {
     badge: "Loved by creators, trusted by agencies",
     title: "See how founders and agencies ship\u00A0faster.",
     subtitle:
-      "Real stories from developers, designers, and ASO agencies who eliminated review guesswork and client\u00A0back-and-forth.",
+      "Real stories from developers, designers, and ASO agencies who eliminated review guesswork before release.",
     items: [
       {
         quote:
-          "Before Preview Studio, every App Store submission felt like flying blind. We'd submit metadata, wait 2 days for review, only to realize the title wrapped awkwardly on smaller iPhones. Preview Studio saved us hours of back-and-forth before our launch day.",
+          "Before Preview Studio, every App Store submission felt like flying blind. We'd submit metadata, wait 2 days for review, only to realize the title wrapped awkwardly on smaller iPhones. Preview Studio saved us hours of costly revision rounds before our launch day.",
         author: "Alex Rivera",
         role: "Startup Founder · Shipped 4 iOS Apps",
         highlight: "Saved hours before launch day",
@@ -178,10 +178,10 @@ export const en = {
       },
       {
         quote:
-          "Our clients always asked: 'Can we see what the store page will actually look like before we approve the screenshots?' We used to build messy PowerPoint decks. Now we just export clean 4K mockups or share the standalone file. It makes our agency deliverables look 10x more professional.",
+          "Our clients always asked: 'Can we see what the store page will actually look like before we approve the screenshots?' We used to build messy PowerPoint decks. Now we just export clean 4K mockups or share the standalone file. It makes our agency deliverables look noticeably more polished and professional.",
         author: "Marcus Vance",
         role: "Partner at AppCraft Studio · ASO & Growth Agency",
-        highlight: "10x more professional deliverables",
+        highlight: "Agency-grade client deliverables",
         avatarInitials: "MV",
       },
       {
@@ -196,13 +196,9 @@ export const en = {
   },
 
   pricing: {
-    banner: {
-      tag: "EARLY BIRD IS LIVE",
-      text: "Special launch pricing for early supporters · Instant offline delivery",
-    },
     title: "One-time purchase. No subscription.",
     description:
-      "Zero recurring fees. Standalone offline HTML studio. Pay once, keep your copy forever.",
+      "No recurring fees. Standalone offline studio. Pay once, keep your copy forever.",
     mostPopularBadge: "Most Popular",
     scopeNote: {
       coveredLabel: "What’s covered:",
@@ -306,7 +302,7 @@ export const en = {
         topic: "Scope & Coverage",
         question: "What parts of a store listing does Preview Studio actually cover?",
         answer:
-          "Preview Studio previews what customers see on your store page: title, subtitle, description, app icon, and screenshots across iOS, iPadOS, and Android. It does not preview developer setup forms like App Privacy nutrition labels, Google Play Data Safety, In-App Purchases, or age rating questionnaires — those remain managed directly inside Apple and Google consoles.",
+          "Preview Studio previews 100% of customer-facing store listings: titles, subtitles, release notes, full descriptions, phone & tablet screenshots, app icons, age ratings, in-app purchases, and App Privacy & Google Data Safety cards across iOS and Android. It focuses strictly on visual layout and metadata drafting — it does not compile app binaries (.ipa/.aab) or require direct developer console access.",
       },
       {
         id: "commercial-license",

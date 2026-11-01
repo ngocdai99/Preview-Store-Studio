@@ -47,9 +47,8 @@ export function Faq() {
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[41.2px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white mb-3 leading-[1.15] text-balance">
             {faq.title}
           </h2>
-          <p className="text-[15px] sm:text-[16px] text-[#475569] dark:text-slate-400 max-w-[620px] mx-auto leading-relaxed">
-            Everything you need to know about offline architecture,
-            <br className="hidden sm:inline" /> store review compliance, client handoff, and licensing.
+          <p className="text-[15px] sm:text-[16px] text-[#475569] dark:text-slate-400 max-w-[620px] mx-auto leading-relaxed text-balance">
+            {faq.description}
           </p>
         </div>
 
@@ -104,7 +103,7 @@ export function Faq() {
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isOpen
-                        ? "bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] text-white shadow-[0_4px_14px_rgba(99,102,241,0.4)] border-transparent"
+                        ? "bg-indigo-600 text-white shadow-[0_4px_14px_rgba(99,102,241,0.3)] border-transparent"
                         : "bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 group-hover:bg-slate-200 dark:group-hover:bg-white/10 group-hover:text-foreground"
                     }`}
                   >

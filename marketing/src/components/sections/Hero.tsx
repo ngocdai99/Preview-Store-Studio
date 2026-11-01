@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 
 export function Hero() {
@@ -21,10 +21,9 @@ export function Hero() {
 
         {/* Category Badge Pill */}
         <div className="hero-badge group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 cursor-default select-none transition-all duration-200 ease-out hover:scale-[1.015] bg-white/95 dark:bg-white/[0.05] backdrop-blur-md border border-slate-200/90 dark:border-white/[0.12] hover:border-slate-300 dark:hover:border-white/[0.22] shadow-[0_2px_10px_rgba(15,23,42,0.04),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_#ffffff] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.14)]">
-          {/* Glowing Green Jewel Dot */}
+          {/* Steady Calm Emerald Dot (No Flashy Ping) */}
           <span className="badge-dot relative flex h-2 w-2 shrink-0 items-center justify-center" aria-hidden="true">
-            <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-emerald-400 opacity-70" />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#10b981] shadow-[0_0_8px_#10b981] dark:shadow-[0_0_10px_#34d399]" />
+            <span className="inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
           </span>
           <span className="text-[13px] sm:text-[13.5px] font-medium tracking-[-0.01em] text-[#334155] dark:text-[#cbd5e1] group-hover:text-[#0f172a] dark:group-hover:text-white transition-colors duration-150">
             {hero.badge}
@@ -32,23 +31,23 @@ export function Hero() {
         </div>
 
         {/* Main H1 */}
-        <h1 className="text-[34px] sm:text-[46px] lg:text-[56px] font-extrabold tracking-[-0.03em] max-w-4xl mx-auto mb-5 leading-[1.15] text-[#0f172a] [html:not(.dark)_&]:bg-[linear-gradient(180deg,#0f172a_40%,#334155_100%)] [html:not(.dark)_&]:bg-clip-text [html:not(.dark)_&]:text-transparent dark:text-white dark:bg-[linear-gradient(180deg,#ffffff_40%,#94a3b8_100%)] dark:bg-clip-text dark:text-transparent">
+        <h1 className="text-[34px] sm:text-[46px] lg:text-[56px] font-extrabold tracking-[-0.03em] max-w-4xl mx-auto mb-5 leading-[1.15] text-[#0f172a] [html:not(.dark)_&]:bg-[linear-gradient(180deg,#0f172a_40%,#334155_100%)] [html:not(.dark)_&]:bg-clip-text [html:not(.dark)_&]:text-transparent dark:text-white dark:bg-[linear-gradient(180deg,#ffffff_40%,#94a3b8_100%)] dark:bg-clip-text dark:text-transparent text-balance">
           {hero.titleLead} <br className="hidden sm:inline" />
           {hero.titleAccent}
         </h1>
 
         {/* Sub-headline */}
-        <p className="hero-sub text-[16.5px] sm:text-[18.26px] text-[#475569] dark:text-slate-400 max-w-[820px] mx-auto mb-6 leading-[1.6]">
-          <span>{hero.subheadlineLead || "Save 2 hours of back-and-forth with your client before every App Store submission."}</span>
+        <p className="hero-sub text-[16.5px] sm:text-[18px] text-[#475569] dark:text-slate-400 max-w-[820px] mx-auto mb-6 leading-[1.6] text-balance">
+          <span>{hero.subheadlineLead}</span>
           <br className="hidden sm:inline" />{" "}
-          <span>{hero.subheadlineFollow || "App Store Connect & Google Play provide zero live preview — preview and refine your listings with confidence."}</span>
+          <span>{hero.subheadlineFollow}</span>
         </p>
 
         {/* CTAs */}
         <div className="mt-1 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href={hero.primaryCta.href}
-            className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[linear-gradient(135deg,#3b82f6_0%,#6366f1_50%,#8b5cf6_100%)] hover:bg-[linear-gradient(135deg,#2563eb_0%,#4f46e5_50%,#7c3aed_100%)] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] shadow-[0_4px_16px_rgba(99,102,241,0.28),inset_0_1px_0_rgba(255,255,255,0.32)] hover:shadow-[0_8px_24px_rgba(99,102,241,0.42),inset_0_1px_0_rgba(255,255,255,0.42)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.985]"
+            className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] shadow-[0_4px_16px_rgba(99,102,241,0.28)] hover:shadow-[0_8px_24px_rgba(99,102,241,0.38)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.985]"
           >
             <span>{hero.primaryCta.label}</span>
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -58,7 +57,6 @@ export function Hero() {
             href={hero.secondaryCta.href}
             className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-white dark:bg-[#0e1526] hover:bg-slate-50 dark:hover:bg-[#152038] text-slate-800 dark:text-slate-100 border border-slate-200/90 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 font-semibold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] transition-all duration-200 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_4px_14px_rgba(15,23,42,0.08)] hover:scale-[1.02] active:scale-[0.985]"
           >
-            <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400 transition-transform duration-200 group-hover:rotate-12" />
             <span>{hero.secondaryCta.label}</span>
           </Link>
         </div>
@@ -67,7 +65,7 @@ export function Hero() {
         <div className="mt-7 pt-5 border-t border-border flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-xs text-muted">
           {hero.trustBadges.map((badge) => (
             <div key={badge} className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>{badge}</span>
             </div>
           ))}
