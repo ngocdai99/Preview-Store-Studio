@@ -66,22 +66,11 @@ export function Testimonials() {
             return (
               <div
                 key={item.author}
-                className={`group relative overflow-hidden rounded-2xl p-7 sm:p-8 flex flex-col justify-between
-                  bg-white dark:bg-[#1D1E1D]
-                  border border-slate-200/80 dark:border-white/[0.08]
-                  shadow-[0_1px_3px_rgba(15,23,42,0.03),0_6px_16px_rgba(15,23,42,0.02)]
-                  dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]
-                  ${accent.borderHover}
-                  transition-all duration-300`}
+                className="group relative overflow-hidden rounded-2xl p-7 sm:p-8 flex flex-col justify-between bg-white dark:bg-[#1D1E1D] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-colors duration-200"
               >
                 {/* Top hairline accent line */}
                 <div
-                  className={`absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r ${accent.topLine}`}
-                />
-
-                {/* Subtle ambient corner glow */}
-                <div
-                  className={`absolute -top-12 -right-12 w-28 h-28 rounded-full ${accent.glow} blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500`}
+                  className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white dark:via-white/10 to-transparent"
                 />
 
                 <div className="relative z-10">

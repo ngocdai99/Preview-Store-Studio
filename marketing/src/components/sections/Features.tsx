@@ -150,21 +150,14 @@ export function Features() {
                 className={`group relative rounded-[24px] p-7 sm:p-8 flex flex-col justify-between overflow-hidden
                   bg-white dark:bg-[#1D1E1D]
                   border border-slate-200/90 dark:border-white/[0.08]
-                  shadow-[0_2px_12px_rgba(15,23,42,0.03),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.95)]
-                  dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.06)]
-                  transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                  hover:border-slate-300 dark:hover:border-white/[0.16]
+                  shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)]
+                  transition-colors duration-200
                   ${isHeroCard ? "md:col-span-2 lg:col-span-2" : "col-span-1"}
-                  ${theme.cardHoverBorder}
-                  ${theme.cardHoverShadow}
                 `}
               >
                 {/* Hairline reflection at top border */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white dark:via-white/20 to-transparent pointer-events-none" />
-
-                {/* Subtle corner radial glow on hover */}
-                <div
-                  className={`absolute -top-20 -right-20 w-52 h-52 rounded-full bg-gradient-to-br ${theme.radialGlow} blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none`}
-                />
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white dark:via-white/10 to-transparent pointer-events-none" />
 
                 <div className="relative z-10">
                   {/* Top Row: Icon + Badge */}
