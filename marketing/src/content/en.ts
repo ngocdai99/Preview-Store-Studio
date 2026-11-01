@@ -165,6 +165,8 @@ export const en = {
   testimonials: {
     badge: "Loved by creators, trusted by agencies",
     title: "See how founders and agencies ship faster.",
+    subtitle:
+      "Real stories from developers, designers, and ASO agencies who eliminated review guesswork and client back-and-forth.",
     items: [
       {
         quote:
