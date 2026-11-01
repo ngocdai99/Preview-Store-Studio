@@ -1398,6 +1398,7 @@ assert(bundledHtml.includes('function parseStoreInput'), 'Bundled application de
 assert(bundledHtml.includes('function normalizeAppleApp'), 'Bundled application defines normalizeAppleApp');
 assert(bundledHtml.includes('function checkAndLoadStoreParams'), 'Bundled application defines checkAndLoadStoreParams');
 assert(bundledHtml.includes('Uses official Apple iTunes public API'), 'Store import modal includes legal disclaimer for public API usage');
+assert(bundledHtml.includes("Apple's public API does not provide a separate Subtitle field"), 'Store import modal clarifies Subtitle API limitation to user');
 assert((bundledHtml.includes('Clone from Apple App Store') || bundledHtml.includes('Import from Apple App Store')) && bundledHtml.includes('iOS only'), 'Store import modal explicitly designates Apple App Store and iOS only badge');
 assert(bundledHtml.includes('Google Play is not supported due to store API limits'), 'Store import modal explicitly clarifies Google Play limitation up front');
 
@@ -1453,6 +1454,15 @@ assert(normApple.shots[0].includes('1242x2688bb.png'), 'normalizeAppleApp upscal
 assert(normApple.supportsIpad === true, 'normalizeAppleApp detects iPad screenshots');
 assert(normApple.isUniversal === true, 'normalizeAppleApp detects Universal app');
 assert(normApple.featureGraphic !== undefined && (normApple.featureGraphic === '' || normApple.featureGraphic === BLANK_FEATURE), 'normalizeAppleApp explicitly clears feature graphic (does not auto-embed preset feature graphic)');
+
+// Smart developer filter test (App name with company suffix like Tâm Trí Lực)
+const mockDevSuffixApp = normalizeAppleApp({
+  trackName: '5 Phút Thuộc Bài - Tâm Trí Lực',
+  artistName: 'TAM TRI LUC TRAINING JOINT STOCK COMPANY',
+  primaryGenreName: 'Education'
+});
+assert(mockDevSuffixApp.form.name === '5 Phút Thuộc Bài', 'normalizeAppleApp extracts actual app name when suffix matches developer name');
+assert(mockDevSuffixApp.form.sub === 'Official Education App', 'normalizeAppleApp prevents developer name from being mistakenly set as subtitle');
 
 // Test iPhone-only app normalization
 const normIphoneOnly = normalizeAppleApp({

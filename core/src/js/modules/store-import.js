@@ -40,10 +40,25 @@ function normalizeAppleApp(item) {
   let name = rawName;
   let sub = '';
 
+  const devCompany = (item.artistName || item.sellerName || '').trim();
+  const cleanStr = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleanDev = cleanStr(devCompany);
+
   const splitMatch = rawName.split(/\s*[-–—:]\s*/);
   if (splitMatch.length >= 2 && splitMatch[0].length >= 2) {
-    name = splitMatch[0].trim();
-    sub = splitMatch.slice(1).join(' · ').trim();
+    const candidateName = splitMatch[0].trim();
+    const candidateSub = splitMatch.slice(1).join(' · ').trim();
+    const cleanSub = cleanStr(candidateSub);
+
+    // If candidateSub matches or is part of developer/seller company name, it is a company attribution suffix, NOT a subtitle
+    const isDevCompany = cleanSub.length >= 3 && cleanDev.includes(cleanSub);
+    if (isDevCompany) {
+      name = candidateName;
+      sub = 'Official ' + (item.primaryGenreName || 'Mobile') + ' App';
+    } else {
+      name = candidateName;
+      sub = candidateSub;
+    }
   } else {
     sub = 'Official ' + (item.primaryGenreName || 'Mobile') + ' App';
   }
