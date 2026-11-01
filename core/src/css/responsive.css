@@ -74,6 +74,10 @@
   main{flex-direction:column;min-height:0}
   .editor{width:100%;min-width:0;border:0;flex:1;padding:14px;gap:12px;margin-left:0!important;visibility:visible!important;pointer-events:auto!important;transition:none!important}
   .stage{padding:14px 10px 24px;flex:1;gap:14px}
+  .stage-toolbar{flex-wrap:wrap;justify-content:center;gap:8px;padding:4px 8px}
+  .stage-toolbar-center{order:1;flex:0 0 auto}
+  .stage-toolbar-right{order:2;flex:0 0 auto}
+  .stage-toolbar-left{order:3;flex:0 0 100%;justify-content:center;margin-top:2px}
   body[data-panel=edit] .stage{display:none}
   body[data-panel=view] .editor{display:none}
   input[type=text],textarea{font-size:15px}

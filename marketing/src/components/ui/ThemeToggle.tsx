@@ -38,7 +38,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="w-8 h-8 rounded-full border border-border bg-card-muted shrink-0" aria-hidden="true" />
+      <div className="w-[36px] h-[36px] rounded-full border border-border bg-card-muted shrink-0" aria-hidden="true" />
     );
   }
 
@@ -48,12 +48,12 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-      className="w-8 h-8 rounded-full border border-border bg-card-muted hover:bg-card text-foreground flex items-center justify-center transition-all shrink-0"
+      className="btn-scale w-[36px] h-[36px] rounded-full border border-border bg-card-muted hover:bg-card text-foreground flex items-center justify-center transition-all shrink-0 cursor-pointer"
     >
       {theme === "dark" ? (
-        <Sun className="w-3.5 h-3.5 text-foreground transition-transform hover:rotate-45" />
+        <Sun className="w-4 h-4 text-foreground transition-transform hover:rotate-45" />
       ) : (
-        <Moon className="w-3.5 h-3.5 text-foreground transition-transform hover:-rotate-12" />
+        <Moon className="w-4 h-4 text-foreground transition-transform hover:-rotate-12" />
       )}
     </button>
   );

@@ -2595,11 +2595,11 @@ vm.runInContext("FEATURE_GRAPHIC = 'data:image/png;base64,sampleRealFeature';", 
 assert(themeSandbox.isPlaceholderFeature() === false, 'isPlaceholderFeature recognizes actual custom feature graphic');
 
 // ---------------------------------------------------------------------
-// [SUITE 37]: 3-Zone Stage Architecture (Left Vertical Views, Center Device, Right Theme)
+// [SUITE 37]: 3-Zone Stage Architecture (Left Views & Dual Phone, Center Device, Right Theme)
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 37]: 3-Zone Stage Architecture (Left Vertical Views, Center Device, Right Theme)');
+console.log('\n[SUITE 37]: 3-Zone Stage Architecture (Left Views & Dual Phone, Center Device, Right Theme)');
 
-// 1. Stage Toolbar defines 3 distinct zones: Left (Vertical Views), Center (Device Selectors), Right (Theme Toggle)
+// 1. Stage Toolbar defines 3 distinct zones: Left (Views & Dual Phone), Center (Device Selectors), Right (Theme Toggle)
 const stageToolbarHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage-toolbar.html'), 'utf8');
 assert(stageToolbarHtml.includes('id="stageToolbarLeft"') && stageToolbarHtml.includes('components/stage/view-switcher.html'), 'stage-toolbar.html houses view-switcher in stageToolbarLeft');
 assert(stageToolbarHtml.includes('id="stageToolbarCenter"') && stageToolbarHtml.includes('components/stage/apple-device-selector.html'), 'stage-toolbar.html houses device selector in stageToolbarCenter');
@@ -2609,11 +2609,11 @@ assert(stageToolbarHtml.includes('id="stageToolbarRight"') && stageToolbarHtml.i
 const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'index.html'), 'utf8');
 assert(!indexHtml.includes('<div class="stage-bottom-bar"'), 'src/index.html removes in-flow stage-bottom-bar to prevent squeezing device height');
 
-// 3. Toolbar CSS formats left view switcher vertically (.vt.vt-vertical) and anchors left & right zones
+// 3. Toolbar CSS uses unified in-flow stage toolbar layout (non-absolute, preventing overlay on device)
 const stageToolbarCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'stage', 'toolbar.css'), 'utf8');
-assert(/\.stage-toolbar-left\s*\{[^}]*position:\s*absolute;\s*left:\s*16px/.test(stageToolbarCss), 'toolbar.css pins stage-toolbar-left to absolute left: 16px');
-assert(/\.stage-toolbar-right\s*\{[^}]*position:\s*absolute;\s*right:\s*16px/.test(stageToolbarCss), 'toolbar.css pins stage-toolbar-right to absolute right: 16px');
-assert(/\.vt\.vt-vertical\s*\{[^}]*flex-direction:\s*column/.test(stageToolbarCss), 'toolbar.css formats .vt.vt-vertical as a vertical flex column');
+assert(/\.stage-toolbar\s*\{[^}]*justify-content:\s*space-between/.test(stageToolbarCss), 'toolbar.css organizes stage-toolbar with space-between layout');
+assert(/\.stage-toolbar-left\s*\{[^}]*display:\s*flex/.test(stageToolbarCss), 'toolbar.css formats stage-toolbar-left as flex in normal flow');
+assert(!/\.stage-toolbar-left\s*\{[^}]*position:\s*absolute/.test(stageToolbarCss), 'toolbar.css eliminates position: absolute on stage-toolbar-left to prevent device overlap');
 
 // 4. Transitions JS supports vertical pill animation (translateY)
 const transitionsJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');

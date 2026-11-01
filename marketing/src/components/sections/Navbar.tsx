@@ -87,7 +87,7 @@ export function Navbar() {
         <Link
           href="/"
           onClick={(e) => handleNavClick(e, "Studio", "#hero")}
-          className="flex items-center gap-2 group shrink-0"
+          className="flex items-center gap-2 group shrink-0 h-[36px]"
         >
           <BrandIcon className="w-7 h-7 rounded-lg shrink-0 transition-transform group-hover:scale-105" />
           <span className="font-bold text-[16px] tracking-tight text-foreground">
@@ -106,7 +106,7 @@ export function Navbar() {
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.label, item.href)}
-                  className={`btn-scale transition-colors duration-150 rounded-full px-3.5 py-1 text-[13px] cursor-pointer ${
+                  className={`btn-scale inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] transition-colors duration-150 cursor-pointer ${
                     isSelected
                       ? "nav-pill-active font-semibold shadow-xs"
                       : "font-medium text-muted hover:text-foreground hover:bg-card-muted/40"
@@ -119,7 +119,7 @@ export function Navbar() {
           </nav>
 
           {/* Vertical Divider */}
-          <div className="hidden sm:block h-3.5 w-[1px] bg-border" aria-hidden="true" />
+          <div className="hidden sm:block h-4 w-[1px] bg-border" aria-hidden="true" />
 
           {/* Theme Toggle */}
           <ThemeToggle />
@@ -128,7 +128,7 @@ export function Navbar() {
           <Link
             href="#pricing"
             onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
-            className="btn-scale inline-flex items-center gap-1.5 text-[13px] font-semibold bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#8b5cf6] hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white px-3.5 sm:px-4 py-1.5 rounded-full shadow-none sm:shadow-[0_1px_2px_rgba(99,102,241,0.15)] transition-all shrink-0 cursor-pointer"
+            className="btn-scale inline-flex items-center justify-center h-[36px] gap-1.5 text-[13px] font-semibold bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#8b5cf6] hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white px-4 rounded-full shadow-none sm:shadow-[0_1px_2px_rgba(99,102,241,0.15)] transition-all shrink-0 cursor-pointer"
           >
             <span>{siteConfig.navPricingCta}</span>
             <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
