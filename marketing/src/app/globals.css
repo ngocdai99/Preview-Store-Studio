@@ -10,40 +10,40 @@
   --border-subtle: #edf2f7;
   --foreground: #0f172a;
   --muted: #475569;
-  --accent: #1ea672; /* Supabase Emerald (Light Mode contrast) */
-  --accent-hover: #168d60;
-  --accent-light: rgba(62, 207, 142, 0.12);
-  --accent-glow: rgba(62, 207, 142, 0.22);
-  --brand-gradient: linear-gradient(135deg, #3ecf8e 0%, #1ea672 100%);
+  --accent: #006533; /* Xanh đậm */
+  --accent-hover: #005028;
+  --accent-light: rgba(0, 101, 51, 0.12);
+  --accent-glow: rgba(0, 101, 51, 0.22);
+  --brand-gradient: linear-gradient(135deg, #00D085 0%, #006533 100%);
   --nav-pill-bg: #334155;
   --nav-pill-hover-bg: #1e293b;
   --nav-pill-color: #ffffff;
-  --purple-brand: #1ea672;
-  --purple-brand-hover: #168d60;
-  --purple-brand-light: rgba(62, 207, 142, 0.10);
-  --purple-brand-border: rgba(62, 207, 142, 0.30);
+  --purple-brand: #006533;
+  --purple-brand-hover: #005028;
+  --purple-brand-light: rgba(0, 101, 51, 0.10);
+  --purple-brand-border: rgba(0, 101, 51, 0.30);
 }
 
 [data-theme="dark"], html.dark {
-  --bg: #070a14;
-  --card: #0e1526;
-  --card-muted: #131d33;
-  --border: #1e293b;
-  --border-subtle: #172033;
+  --bg: #131413; /* Đen nền Supabase */
+  --card: #1D1E1D; /* Đen xám card/surface */
+  --card-muted: #171817;
+  --border: #282928;
+  --border-subtle: #212221;
   --foreground: #f8fafc;
-  --muted: #94a3b8;
-  --accent: #3ecf8e; /* Supabase Trademark Green */
-  --accent-hover: #4ef0a3;
-  --accent-light: rgba(62, 207, 142, 0.15);
-  --accent-glow: rgba(62, 207, 142, 0.30);
-  --brand-gradient: linear-gradient(135deg, #3ecf8e 0%, #1ea672 100%);
+  --muted: #989A99; /* Text xám */
+  --accent: #00D085; /* Xanh sáng */
+  --accent-hover: #26e099;
+  --accent-light: rgba(0, 208, 133, 0.15);
+  --accent-glow: rgba(0, 208, 133, 0.30);
+  --brand-gradient: linear-gradient(135deg, #00D085 0%, #006533 100%);
   --nav-pill-bg: #ffffff;
   --nav-pill-hover-bg: #f1f5f9;
   --nav-pill-color: #0f172a;
-  --purple-brand: #3ecf8e;
-  --purple-brand-hover: #4ef0a3;
-  --purple-brand-light: rgba(62, 207, 142, 0.15);
-  --purple-brand-border: rgba(62, 207, 142, 0.35);
+  --purple-brand: #00D085;
+  --purple-brand-hover: #26e099;
+  --purple-brand-light: rgba(0, 208, 133, 0.15);
+  --purple-brand-border: rgba(0, 208, 133, 0.35);
 }
 
 @theme inline {

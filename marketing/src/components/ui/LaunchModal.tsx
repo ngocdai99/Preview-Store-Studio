@@ -127,7 +127,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-950/60 dark:bg-[#070a14]/80 backdrop-blur-xl animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-950/60 dark:bg-[#131413]/85 backdrop-blur-xl animate-in fade-in duration-200"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -137,12 +137,12 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
     >
       {/* Ambient background glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[380px] bg-[radial-gradient(circle,rgba(99,102,241,0.25)_0%,rgba(139,92,246,0.12)_45%,transparent_70%)] pointer-events-none blur-3xl -z-10"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[380px] bg-[radial-gradient(circle,rgba(0,208,133,0.18)_0%,rgba(0,101,51,0.12)_45%,transparent_70%)] pointer-events-none blur-3xl -z-10"
         aria-hidden="true"
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-[520px] rounded-[26px] p-6 sm:p-8 bg-white dark:bg-[#0e1526] border border-slate-200/90 dark:border-white/10 shadow-[0_32px_80px_-15px_rgba(15,23,42,0.18),0_0_0_1px_rgba(0,0,0,0.04)] dark:shadow-[0_32px_80px_-15px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.05),inset_0_1px_0_rgba(255,255,255,0.2)] overflow-hidden scale-100 transition-all duration-300">
+      <div className="relative w-full max-w-[520px] rounded-[26px] p-6 sm:p-8 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/10 shadow-[0_32px_80px_-15px_rgba(15,23,42,0.18),0_0_0_1px_rgba(0,0,0,0.04)] dark:shadow-[0_32px_80px_-15px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.05),inset_0_1px_0_rgba(255,255,255,0.2)] overflow-hidden scale-100 transition-all duration-300">
         {/* Top subtle sheen */}
         <div
           className="absolute top-0 left-[20%] right-[20%] h-px bg-gradient-to-r from-transparent via-blue-500/25 dark:via-white/40 to-transparent pointer-events-none"
@@ -167,7 +167,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
               <div
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold border border-white/40 ${
                   isPro
-                    ? "bg-[linear-gradient(135deg,#3ecf8e_0%,#1ea672_100%)] text-white shadow-sm"
+                    ? "bg-[linear-gradient(135deg,#00D085_0%,#006533_100%)] text-white shadow-sm"
                     : "bg-[#0f172a] text-white dark:bg-white/[0.12] dark:text-slate-100 shadow-sm"
                 }`}
               >
@@ -273,7 +273,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[#006338] [background:oklch(0.43627_0.11_157.5)] hover:bg-[#007844] hover:[background:oklch(0.48_0.12_157.5)] border border-white/20 shadow-[0_4px_16px_rgba(0,99,56,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_6px_22px_rgba(0,99,56,0.5)] transition-all duration-150 disabled:opacity-60 cursor-pointer shrink-0"
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[#006533] hover:bg-[#005028] border border-[#00D085]/35 shadow-[0_4px_16px_rgba(0,101,51,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_6px_22px_rgba(0,208,133,0.35)] transition-all duration-150 disabled:opacity-60 cursor-pointer shrink-0"
                 >
                   <span>{isSubmitting ? "Saving..." : "Get Early Invite"}</span>
                   <ArrowRight className="w-4 h-4 stroke-[2.5]" />

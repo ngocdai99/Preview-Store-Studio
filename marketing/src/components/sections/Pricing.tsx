@@ -38,7 +38,7 @@ export function Pricing() {
               <div
                 className={`absolute top-0 inset-x-0 h-[2px] rounded-t-[26px] bg-gradient-to-r ${
                   tier.isPopular
-                    ? "from-[#3ecf8e] via-emerald-400 to-transparent"
+                    ? "from-[#00D085] via-emerald-400 to-transparent"
                     : "from-slate-700/60 via-slate-500/30 to-transparent dark:from-white/30 dark:via-white/10 to-transparent"
                 }`}
               />
@@ -150,8 +150,8 @@ export function Pricing() {
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
                 className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-150 cursor-pointer shadow-sm ${
                   tier.isPopular
-                    ? "bg-[#006338] [background:oklch(0.43627_0.11_157.5)] hover:bg-[#007844] hover:[background:oklch(0.48_0.12_157.5)] text-white border border-white/20 shadow-[0_4px_16px_rgba(0,99,56,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_8px_24px_rgba(0,99,56,0.5)]"
-                    : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-white/[0.08] dark:hover:bg-white/[0.14] dark:text-white dark:border dark:border-white/15 shadow-sm hover:shadow-[0_4px_12px_rgba(15,23,42,0.1)]"
+                    ? "bg-[#006533] hover:bg-[#005028] text-white border border-[#00D085]/35 shadow-[0_4px_16px_rgba(0,101,51,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_8px_24px_rgba(0,208,133,0.35)]"
+                    : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#1D1E1D] dark:hover:bg-[#282a28] dark:text-white dark:border dark:border-white/15 shadow-sm hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
                 }`}
               >
                 <span>{tier.cta.label}</span>
