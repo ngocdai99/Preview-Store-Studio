@@ -31,7 +31,7 @@ export function Comparison() {
               <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-1.5">
                 {comparison.goodColumnTitle}
               </h3>
-              <p className="text-xs sm:text-[13.5px] font-medium text-indigo-600 dark:text-indigo-400">
+              <p className="text-xs sm:text-[13.5px] font-medium text-[#a78bfa]">
                 {comparison.goodColumnSubtitle}
               </p>
             </div>
@@ -58,7 +58,7 @@ export function Comparison() {
 
               {/* Good column */}
               <div className="flex flex-col">
-                <span className="text-[10.5px] sm:text-[11px] font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase mb-3 font-mono">
+                <span className="text-[10.5px] sm:text-[11px] font-bold tracking-wider text-[#a78bfa] uppercase mb-3 font-mono">
                   {beat.good.badge}
                 </span>
                 <h4 className="text-[15px] sm:text-[16.5px] font-bold text-slate-900 dark:text-white leading-snug mb-2.5">
