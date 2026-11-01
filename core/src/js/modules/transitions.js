@@ -89,7 +89,7 @@ function computeDeviceZoom(s, d){
   const st = document.querySelector('.stage'), m = isM(), pad = m ? 20 : 40;
   const tb = document.querySelector('.stage-toolbar');
   const bb = document.querySelector('.stage-bottom-bar');
-  const bbH = (bb && bb.offsetHeight > 0) ? bb.offsetHeight + 14 : 54;
+  const bbH = (bb && bb.offsetHeight > 0) ? bb.offsetHeight + 14 : 0;
   const vt = (tb ? tb.offsetHeight : 40) + bbH + (m ? 14 : 18) + 44;
   const isDual = d === 'dual' || document.body.dataset.dual === 'true';
   let baseW = 416, baseH = 870;

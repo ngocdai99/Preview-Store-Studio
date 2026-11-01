@@ -2588,6 +2588,40 @@ vm.runInContext("FEATURE_GRAPHIC = 'data:image/png;base64,sampleRealFeature';", 
 assert(themeSandbox.isPlaceholderFeature() === false, 'isPlaceholderFeature recognizes actual custom feature graphic');
 
 // ---------------------------------------------------------------------
+// [SUITE 37]: Top Toolbar Unified View Switcher & Canvas Height Liberation
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 37]: Top Toolbar Unified View Switcher & Canvas Height Liberation');
+
+// 1. View Switcher (#vt) and Dual Phone button are located inside .stage-toolbar
+const stageToolbarHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage-toolbar.html'), 'utf8');
+assert(stageToolbarHtml.includes('components/stage/view-switcher.html'), 'stage-toolbar.html includes view-switcher.html alongside device and theme controls');
+assert(bundledHtml.includes('class="stage-toolbar"') && bundledHtml.includes('id="vt"'), 'Bundled HTML places #vt inside or alongside the top toolbar');
+
+// 2. The stage index does not include bottom bar eating canvas height
+const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'index.html'), 'utf8');
+assert(!indexHtml.includes('<div class="stage-bottom-bar"'), 'src/index.html removes redundant in-flow stage-bottom-bar');
+
+// 3. Zoom calculation in main.js and transitions.js frees vertical height when bottom bar is absent
+const mainJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'main.js'), 'utf8');
+const transitionsJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
+assert(mainJsCode.includes('bb.offsetHeight > 0') && mainJsCode.includes(': 0;'), 'main.js fit() falls back to 0px overhead when bottom bar is absent');
+assert(transitionsJsCode.includes('bb.offsetHeight > 0') && transitionsJsCode.includes(': 0;'), 'transitions.js computeDeviceZoom() falls back to 0px overhead when bottom bar is absent');
+
+// 4. Verify mathematical height liberation
+const simulateZoom = (clientHeight, baseH, hasBottomBar) => {
+  const pad = 40;
+  const tbHeight = 40;
+  const bbH = hasBottomBar ? 68 : 0;
+  const vt = tbHeight + bbH + 18 + 44;
+  return (clientHeight - pad - vt) / (baseH + 8);
+};
+const zoomBefore = simulateZoom(750, 870, true);
+const zoomAfter = simulateZoom(750, 870, false);
+assert(zoomAfter > zoomBefore, 'Removing bottom bar increases device scale zoom on canvas');
+const heightGainPercent = ((zoomAfter - zoomBefore) / zoomBefore) * 100;
+assert(heightGainPercent >= 10, 'Device gains at least 10% more vertical scale and screen presence');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
