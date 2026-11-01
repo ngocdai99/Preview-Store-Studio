@@ -2113,8 +2113,11 @@ const headerJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules',
 assert(headerJsCode.includes("card.classList.toggle('collapsed')"), 'header.js provides click delegation on .card-header to toggle collapsed class');
 assert(headerJsCode.includes("card.classList.add('selected')"), 'header.js manages selected state when expanding cards');
 
-// 5. Collapsed card hover state: subtle tint without shadow elevation
-assert(bundledHtml.includes(':root[data-ui=light] .card.collapsed:hover') && bundledHtml.includes('#f5f5f7'), 'Light theme styles collapsed card hover with gentle tint #f5f5f7');
+// 5. Collapsed card hover state: harmonic subtle tint without shadow elevation
+assert(bundledHtml.includes(':root[data-ui=light] .card.collapsed:hover') && bundledHtml.includes('#f4f8fe'), 'Light theme styles generic collapsed card hover with clean ice blue tint #f4f8fe');
+assert(bundledHtml.includes(':root[data-ui=light] #identityCard.collapsed:hover') && bundledHtml.includes('#fffdf5'), 'Light theme provides warm golden tint #fffdf5 on identity card hover');
+assert(bundledHtml.includes(':root[data-ui=light] #shotsCard.collapsed:hover') && bundledHtml.includes('#fff8f9'), 'Light theme provides soft rose tint #fff8f9 on shots card hover');
+assert(bundledHtml.includes(':root[data-ui=light] #statsCard.collapsed:hover') && bundledHtml.includes('#f6fdf9'), 'Light theme provides soft mint tint #f6fdf9 on stats card hover');
 assert(bundledHtml.includes('.card.collapsed:hover') && !bundledHtml.includes('.card.collapsed:hover{background:#ffffff!important;border-color:rgba(0,0,0,0.16)!important;box-shadow:0 3px 8px'), 'Collapsed card hover does not inflate excessive box shadow');
 
 // ---------------------------------------------------------------------

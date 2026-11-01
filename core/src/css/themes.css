@@ -113,6 +113,22 @@
 #supportCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 14px rgba(13,148,136,0.45)!important}
 #supportCard.selected:not(.collapsed) .card-num{background:rgba(20,184,166,0.14);color:#2dd4bf;border-color:rgba(20,184,166,0.35)}
 
+/* Collapsed Card Hover in Dark Mode: Subtle Harmonic Tone, No Shadow Spike */
+.card.collapsed:hover{
+  background:linear-gradient(180deg,#141c2c 0%,#0e1420 100%)!important;
+  border-color:rgba(255,255,255,0.14)!important;
+  box-shadow:0 4px 20px -2px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,0.08)!important;
+  transform:none!important;
+}
+#identityCard.collapsed:hover{background:linear-gradient(180deg,#1e1810 0%,#130f08 100%)!important;border-color:rgba(245,158,11,0.32)!important}
+#contentCard.collapsed:hover{background:linear-gradient(180deg,#1a1426 0%,#110b1a 100%)!important;border-color:rgba(168,85,247,0.32)!important}
+#shotsCard.collapsed:hover{background:linear-gradient(180deg,#1f1116 0%,#14090e 100%)!important;border-color:rgba(244,63,94,0.32)!important}
+#statsCard.collapsed:hover{background:linear-gradient(180deg,#0f1d16 0%,#09130e 100%)!important;border-color:rgba(16,185,129,0.32)!important}
+#ipadCard.collapsed:hover, #tabCard.collapsed:hover{background:linear-gradient(180deg,#0e1a24 0%,#091118 100%)!important;border-color:rgba(14,165,233,0.32)!important}
+#featureCard.collapsed:hover{background:linear-gradient(180deg,#1e140d 0%,#140d07 100%)!important;border-color:rgba(249,115,22,0.32)!important}
+#privacyCard.collapsed:hover{background:linear-gradient(180deg,#131626 0%,#0c0e1a 100%)!important;border-color:rgba(99,102,241,0.32)!important}
+#supportCard.collapsed:hover{background:linear-gradient(180deg,#0e1c1c 0%,#081212 100%)!important;border-color:rgba(20,184,166,0.32)!important}
+
 /* Form Action Button Icons */
 .btn-mini-ico{display:inline-flex;align-items:center;justify-content:center;margin-right:0;vertical-align:-1px;flex-shrink:0}
 .btn-mini-ico svg{width:13.5px;height:13.5px;stroke-width:2.2;display:block}
@@ -450,13 +466,21 @@
   :root[data-ui=light] #supportCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(13,148,136,0.38)!important}
   :root[data-ui=light] #supportCard.selected:not(.collapsed) .card-num{background:rgba(13,148,136,0.1);color:#0f766e;border-color:rgba(13,148,136,0.28)}
 
-  /* Collapsed Card Hover in Light Mode: Gentle Tint without Shadow Elevation */
+  /* Collapsed Card Hover in Light Mode: Subtle Harmonic Tone, No Shadow Spike */
   :root[data-ui=light] .card.collapsed:hover{
-    background:#f5f5f7!important;
-    border-color:rgba(0,0,0,0.14)!important;
+    background:#f4f8fe!important;
+    border-color:rgba(0,113,227,0.22)!important;
     box-shadow:0 1px 3px rgba(15,23,42,0.06),0 6px 16px -2px rgba(15,23,42,0.08)!important;
     transform:none!important;
   }
+  :root[data-ui=light] #identityCard.collapsed:hover{background:#fffdf5!important;border-color:rgba(245,158,11,0.3)!important}
+  :root[data-ui=light] #contentCard.collapsed:hover{background:#fbf9ff!important;border-color:rgba(124,58,237,0.3)!important}
+  :root[data-ui=light] #shotsCard.collapsed:hover{background:#fff8f9!important;border-color:rgba(225,29,72,0.3)!important}
+  :root[data-ui=light] #statsCard.collapsed:hover{background:#f6fdf9!important;border-color:rgba(5,150,105,0.3)!important}
+  :root[data-ui=light] #ipadCard.collapsed:hover, :root[data-ui=light] #tabCard.collapsed:hover{background:#f2f9fe!important;border-color:rgba(2,132,199,0.3)!important}
+  :root[data-ui=light] #featureCard.collapsed:hover{background:#fff8f2!important;border-color:rgba(234,88,12,0.3)!important}
+  :root[data-ui=light] #privacyCard.collapsed:hover{background:#f6f7ff!important;border-color:rgba(79,70,229,0.3)!important}
+  :root[data-ui=light] #supportCard.collapsed:hover{background:#f2fbfb!important;border-color:rgba(13,148,136,0.3)!important}
 
   /* Form Upload and Action Buttons in Light Mode with Soft Elevation */
   :root[data-ui=light] .mini{
