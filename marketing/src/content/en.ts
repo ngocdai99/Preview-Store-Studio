@@ -285,15 +285,8 @@ export const en = {
   faq: {
     title: "Frequently Asked Questions",
     description:
-      "Everything you need to know about offline architecture, store review compliance, client handoff, and licensing.",
+      "Everything you need to know about store review compliance, client handoff, and lifetime updates.",
     items: [
-      {
-        id: "offline-architecture",
-        topic: "Offline Architecture",
-        question: "Does Store Preview Studio require an active internet connection?",
-        answer:
-          "No. Store Preview Studio runs 100% locally in your browser. All scripts, icons, CSS styles, and fonts are completely self-contained. You can use it on airplanes, remote locations, or behind corporate firewalls with no telemetry and no external server calls.",
-      },
       {
         id: "store-review-policy",
         topic: "Store Review Policy",
@@ -301,20 +294,6 @@ export const en = {
           "Can Store Preview Studio guarantee that my app will pass App Store or Google Play review?",
         answer:
           "No, and no software tool on the market can. Store Preview Studio gives you realistic visual mockups and catches mechanical formatting mistakes (such as wrong icon dimensions, transparent alpha channels on iOS, or invalid screenshot aspect ratios). However, final app approval is determined entirely by the official Apple and Google review teams based on your compiled code, privacy policies, and store guidelines.",
-      },
-      {
-        id: "scope-coverage",
-        topic: "Scope & Coverage",
-        question: "What parts of a store listing does Preview Studio actually cover?",
-        answer:
-          "Preview Studio previews 100% of customer-facing store listings: titles, subtitles, release notes, full descriptions, phone & tablet screenshots, app icons, age ratings, in-app purchases, and App Privacy & Google Data Safety cards across iOS and Android. It focuses strictly on visual layout and metadata drafting — it does not compile app binaries (.ipa/.aab) or require direct developer console access.",
-      },
-      {
-        id: "commercial-license",
-        topic: "Commercial License",
-        question: "Can I use Store Preview Studio for client projects?",
-        answer:
-          "Yes! Both the Plus and Pro tiers include full commercial licenses. You can author, optimize, and present store listings for as many apps as you wish — on a single-user basis. If you need multiple seats or unlimited client work, upgrade to Pro Studio which includes a full Team & Agency license.",
       },
       {
         id: "client-handoff",
