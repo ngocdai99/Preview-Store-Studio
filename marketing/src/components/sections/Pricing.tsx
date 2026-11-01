@@ -77,7 +77,7 @@ export function Pricing() {
                     <h3
                       className={`text-[22px] font-bold tracking-tight ${
                         tier.isPopular
-                          ? "text-[#7c3aed] dark:text-[#c084fc] [html:not(.dark)_&]:bg-[linear-gradient(135deg,#7c3aed_0%,#2563eb_100%)] [html:not(.dark)_&]:bg-clip-text [html:not(.dark)_&]:text-transparent dark:bg-[linear-gradient(135deg,#c084fc_0%,#60a5fa_100%)] dark:bg-clip-text dark:text-transparent"
+                          ? "bg-[linear-gradient(135deg,#c084fc_0%,#60a5fa_100%)] bg-clip-text text-transparent inline-block"
                           : "text-slate-900 dark:text-white"
                       }`}
                     >
