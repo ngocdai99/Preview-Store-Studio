@@ -236,7 +236,7 @@ export function Pricing() {
                   </span>
                 </div>
                 <p className="text-[12.5px] sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300">
-                  &ldquo;Need a custom device frame or have a question? Just reply to your receipt email &mdash; I answer every message personally.&rdquo;
+                  &ldquo;I built Store Preview Studio for my own daily app workflow. If you ever need a new device frame or hit a bug, just reply to your receipt email &mdash; no bots, no ticket queues.&rdquo;
                 </p>
               </div>
             </div>
