@@ -268,30 +268,32 @@
 
 /* Card-Inspired UI for Detail View / Search Result Menu (#vt) */
 #vt.stage-view-menu {
-  width: 204px !important;
-  padding: 6px !important;
-  gap: 4px !important;
+  width: 196px !important;
+  padding: 0 !important;
+  gap: 0 !important;
   border-radius: 12px !important;
   background: rgba(15, 23, 42, 0.96) !important;
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  overflow: hidden !important;
 }
 
 #vt .menu-label {
-  padding: 4px 8px 3px !important;
+  padding: 8px 14px 4px !important;
 }
 #vt .menu-label span {
   font-size: 10px !important;
-  font-weight: 750 !important;
+  font-weight: 700 !important;
   letter-spacing: .06em !important;
   text-transform: uppercase !important;
-  color: #94a3b8 !important;
+  color: #64748b !important;
 }
 
 #vt .menu-div {
   height: 1px !important;
-  margin: 3px 0 !important;
-  background: rgba(255, 255, 255, 0.1) !important;
+  margin: 0 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
 }
 
 #vt .menu-item {
@@ -299,27 +301,40 @@
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
-  height: auto !important;
-  min-height: 38px !important;
-  padding: 6px 10px !important;
-  border-radius: 8px !important;
+  height: 38px !important;
+  padding: 0 14px !important;
+  border-radius: 0 !important;
   border: none !important;
+  margin: 0 !important;
   background: transparent !important;
-  color: #f8fafc !important;
+  color: #94a3b8 !important;
   box-shadow: none !important;
   cursor: pointer !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  transition: all .18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: background .16s ease, color .16s ease !important;
 }
 
-#vt .menu-item::before {
-  display: none !important;
+#vt .menu-item.on::before,
+#vt .menu-item.active::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 6px !important;
+  bottom: 6px !important;
+  width: 3.5px !important;
+  border-radius: 0 3px 3px 0 !important;
 }
 
 #vt .menu-item:hover:not(.on) {
   background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
   border: none !important;
+}
+
+#vt .menu-item:hover:not(.on) .mi-ico {
+  color: #ffffff !important;
 }
 
 #vt .menu-item .mi-t {
@@ -330,9 +345,10 @@
 }
 
 #vt .menu-item .mi-name {
-  font-size: 12.5px !important;
-  font-weight: 650 !important;
-  color: #f1f5f9 !important;
+  font-size: 13px !important;
+  font-weight: 550 !important;
+  letter-spacing: -0.01em !important;
+  color: #cbd5e1 !important;
 }
 
 /* Standalone Bare Icon (No container box) */
@@ -353,6 +369,7 @@
   transition: color .18s ease !important;
   margin: 0 !important;
   padding: 0 !important;
+  color: #94a3b8;
 }
 #vt .mi-ico svg,
 :root[data-ui=light] #vt .mi-ico svg {
@@ -369,20 +386,17 @@
 }
 
 /* Option 1: Detail View (Purple) */
-#optViewDetail .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #c084fc !important;
-}
 #optViewDetail.on {
   border: none !important;
-  background: rgba(139, 92, 246, 0.16) !important;
+  background: rgba(139, 92, 246, 0.14) !important;
   box-shadow: none !important;
+}
+#optViewDetail.on::before {
+  background: linear-gradient(180deg, #c084fc, #8b5cf6) !important;
 }
 #optViewDetail.on .mi-name {
   color: #ffffff !important;
-  font-weight: 700 !important;
+  font-weight: 650 !important;
 }
 #optViewDetail.on .mi-ico {
   background: transparent !important;
@@ -392,20 +406,17 @@
 }
 
 /* Option 2: Search Result (Amber) */
-#optViewSearch .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #fbbf24 !important;
-}
 #optViewSearch.on {
   border: none !important;
-  background: rgba(245, 158, 11, 0.16) !important;
+  background: rgba(245, 158, 11, 0.14) !important;
   box-shadow: none !important;
+}
+#optViewSearch.on::before {
+  background: linear-gradient(180deg, #fcd34d, #f59e0b) !important;
 }
 #optViewSearch.on .mi-name {
   color: #ffffff !important;
-  font-weight: 700 !important;
+  font-weight: 650 !important;
 }
 #optViewSearch.on .mi-ico {
   background: transparent !important;
@@ -414,21 +425,18 @@
   color: #fbbf24 !important;
 }
 
-/* Option 3: Dual Phone (Slate) */
-#btnDualPhone .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #94a3b8 !important;
-}
+/* Option 3: Dual Phone (Titanium Slate - Strictly Avoids App Store Blue & Google Play Green) */
 #btnDualPhone.on {
   border: none !important;
   background: rgba(148, 163, 184, 0.12) !important;
   box-shadow: none !important;
 }
+#btnDualPhone.on::before {
+  background: linear-gradient(180deg, #cbd5e1, #94a3b8) !important;
+}
 #btnDualPhone.on .mi-name {
   color: #ffffff !important;
-  font-weight: 700 !important;
+  font-weight: 650 !important;
 }
 #btnDualPhone.on .mi-ico {
   background: transparent !important;
@@ -621,6 +629,13 @@
   background: #ffffff !important;
   border: 1px solid rgba(15, 23, 42, 0.12) !important;
   box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.14), 0 4px 12px -2px rgba(15, 23, 42, 0.06) !important;
+  padding: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+:root[data-ui=light] #vt .menu-label {
+  padding: 8px 14px 4px !important;
 }
 
 :root[data-ui=light] #vt .menu-label span {
@@ -629,39 +644,59 @@
 
 :root[data-ui=light] #vt .menu-div {
   background: rgba(15, 23, 42, 0.08) !important;
+  margin: 0 !important;
 }
 
 :root[data-ui=light] #vt .menu-item {
   background: transparent !important;
   border: none !important;
-  border-radius: 9px !important;
-  color: #1e293b !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 14px !important;
+  height: 38px !important;
+  color: #334155 !important;
   box-shadow: none !important;
 }
 
 :root[data-ui=light] #vt .menu-item:hover:not(.on) {
-  background: rgba(15, 23, 42, 0.05) !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+  color: #0f172a !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-:root[data-ui=light] #vt .menu-item .mi-name,
-:root[data-ui=light] #vt .menu-item.on .mi-name,
-:root[data-ui=light] #vt .menu-item:hover .mi-name {
+:root[data-ui=light] #vt .menu-item:hover:not(.on) .mi-ico {
+  color: #0f172a !important;
+}
+
+:root[data-ui=light] #vt .menu-item:not(.on) .mi-ico {
+  color: #64748b !important;
+}
+
+:root[data-ui=light] #vt .menu-item .mi-name {
+  color: #334155 !important;
+  font-size: 13px !important;
+  font-weight: 550 !important;
+}
+
+:root[data-ui=light] #vt .menu-item.on .mi-name {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+:root[data-ui=light] #vt .menu-item:hover:not(.on) .mi-name {
   color: #0f172a !important;
 }
 
 /* Light Detail View (Purple) */
-:root[data-ui=light] #optViewDetail .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #7c3aed !important;
-}
 :root[data-ui=light] #optViewDetail.on {
   border: none !important;
-  background: rgba(124, 58, 237, 0.09) !important;
+  background: rgba(124, 58, 237, 0.08) !important;
   box-shadow: none !important;
+  color: #0f172a !important;
+}
+:root[data-ui=light] #optViewDetail.on::before {
+  background: #7c3aed !important;
 }
 :root[data-ui=light] #optViewDetail.on .mi-name {
   color: #0f172a !important;
@@ -675,16 +710,14 @@
 }
 
 /* Light Search Result (Amber) */
-:root[data-ui=light] #optViewSearch .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #d97706 !important;
-}
 :root[data-ui=light] #optViewSearch.on {
   border: none !important;
-  background: rgba(217, 119, 6, 0.09) !important;
+  background: rgba(217, 119, 6, 0.08) !important;
   box-shadow: none !important;
+  color: #0f172a !important;
+}
+:root[data-ui=light] #optViewSearch.on::before {
+  background: #d97706 !important;
 }
 :root[data-ui=light] #optViewSearch.on .mi-name {
   color: #0f172a !important;
@@ -697,17 +730,15 @@
   color: #d97706 !important;
 }
 
-/* Light Dual Phone (Slate) */
-:root[data-ui=light] #btnDualPhone .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #64748b !important;
-}
+/* Light Dual Phone (Titanium Slate - Strictly Avoids App Store Blue & Google Play Green) */
 :root[data-ui=light] #btnDualPhone.on {
   border: none !important;
   background: rgba(71, 85, 105, 0.08) !important;
   box-shadow: none !important;
+  color: #0f172a !important;
+}
+:root[data-ui=light] #btnDualPhone.on::before {
+  background: #475569 !important;
 }
 :root[data-ui=light] #btnDualPhone.on .mi-name {
   color: #0f172a !important;
@@ -717,7 +748,7 @@
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  color: #334155 !important;
+  color: #475569 !important;
 }
 
 /* Button & Dropdown Synchronization */

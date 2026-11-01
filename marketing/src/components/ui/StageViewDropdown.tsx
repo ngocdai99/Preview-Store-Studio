@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   ChevronDown,
-  Check,
   Search,
   LayoutTemplate,
   Smartphone,
@@ -33,7 +32,6 @@ export function StageViewDropdown({
 
   const isOpen = forceOpen !== undefined ? forceOpen : internalOpen;
 
-  // Close when clicking outside (only if not forced open)
   useEffect(() => {
     if (forceOpen !== undefined) return;
 
@@ -86,14 +84,14 @@ export function StageViewDropdown({
         className={`group inline-flex items-center gap-2 h-9 px-3 rounded-xl text-[12.5px] font-semibold transition-all duration-200 cursor-pointer border ${
           isOpen
             ? isDetail
-              ? "bg-purple-50 dark:bg-purple-500/15 text-purple-950 dark:text-purple-200 border-purple-400 dark:border-purple-400/50 shadow-[0_2px_12px_rgba(168,85,247,0.25),0_0_0_2px_rgba(168,85,247,0.2)]"
-              : "bg-amber-50 dark:bg-amber-500/15 text-amber-950 dark:text-amber-200 border-amber-400 dark:border-amber-400/50 shadow-[0_2px_12px_rgba(245,158,11,0.25),0_0_0_2px_rgba(245,158,11,0.2)]"
-            : "bg-white dark:bg-[#0c1222] text-slate-800 dark:text-slate-100 border-slate-300 dark:border-white/15 hover:border-slate-400 dark:hover:border-white/30 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
+              ? "bg-purple-50/80 dark:bg-purple-500/10 text-purple-950 dark:text-purple-200 border-purple-400 dark:border-purple-400/50 shadow-[0_2px_10px_rgba(168,85,247,0.2)]"
+              : "bg-amber-50/80 dark:bg-amber-500/10 text-amber-950 dark:text-amber-200 border-amber-400 dark:border-amber-400/50 shadow-[0_2px_10px_rgba(245,158,11,0.2)]"
+            : "bg-white dark:bg-[#0c1222] text-slate-800 dark:text-slate-100 border-slate-300 dark:border-white/15 hover:border-slate-400 dark:hover:border-white/30 shadow-[0_1px_3px_rgba(15,23,42,0.06)]"
         }`}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        {/* Bare Leading Icon */}
+        {/* Leading Bare Icon */}
         <span
           className={`shrink-0 transition-colors ${
             isDetail ? "text-purple-600 dark:text-purple-400" : "text-amber-600 dark:text-amber-400"
@@ -109,14 +107,14 @@ export function StageViewDropdown({
         {/* View Name */}
         <span className="tracking-tight">{isDetail ? "Detail View" : "Search Result"}</span>
 
-        {/* Subtle Dual Badge */}
+        {/* Dual Pill Badge */}
         {isDual && (
-          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-900 text-white dark:bg-white/20 dark:text-slate-100 leading-none shadow-sm">
+          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-800 text-white dark:bg-white/20 dark:text-slate-100 leading-none shadow-sm">
             Dual
           </span>
         )}
 
-        {/* Caret Down */}
+        {/* Caret Down / Up */}
         <ChevronDown
           className={`w-3.5 h-3.5 text-slate-400 dark:text-slate-500 stroke-[2.4] transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -124,91 +122,91 @@ export function StageViewDropdown({
         />
       </button>
 
-      {/* High-Contrast Floating Popover Menu */}
+      {/* Dropdown Menu (Edge Strip Indicator Pattern matching Device Selector) */}
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-[210px] rounded-2xl p-1.5 z-50 bg-white dark:bg-[#0e1628] border-2 border-slate-200/90 dark:border-white/15 shadow-[0_20px_48px_-8px_rgba(15,23,42,0.24),0_4px_16px_rgba(15,23,42,0.08)] dark:shadow-[0_24px_60px_-8px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.08)] animate-in fade-in zoom-in-95 duration-150 origin-top-left">
+        <div className="absolute left-0 mt-1.5 w-[196px] rounded-xl py-0 z-50 bg-white dark:bg-[#0f172a] border border-slate-200/90 dark:border-white/15 shadow-[0_16px_36px_-4px_rgba(15,23,42,0.14),0_4px_12px_-2px_rgba(15,23,42,0.06)] dark:shadow-[0_20px_50px_-6px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-150 origin-top-left overflow-hidden">
           {/* Section: Preview Screen */}
-          <div className="px-2.5 pt-1.5 pb-1 text-[9.5px] font-extrabold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500">
+          <div className="px-3.5 pt-2.5 pb-1 text-[10px] font-bold uppercase tracking-[0.06em] text-slate-400 dark:text-slate-500">
             Preview Screen
           </div>
 
-          <div className="space-y-1">
+          <div>
             {/* Option: Detail View */}
             <button
               type="button"
               onClick={() => handleSelectView("detail")}
-              className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition-all duration-150 cursor-pointer ${
+              className={`relative w-full h-[38px] flex items-center gap-2.5 px-3.5 text-left transition-colors cursor-pointer ${
                 isDetail
-                  ? "bg-purple-500/10 dark:bg-purple-500/20 text-purple-950 dark:text-purple-200 font-bold border border-purple-500/25 shadow-sm"
-                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-transparent"
+                  ? "bg-purple-500/10 dark:bg-purple-500/15 text-slate-900 dark:text-white font-bold"
+                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
               }`}
             >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <LayoutTemplate
-                  className={`w-4 h-4 stroke-[2] shrink-0 ${
-                    isDetail ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-500"
-                  }`}
-                />
-                <span className="text-[12.5px] tracking-tight">Detail View</span>
-              </div>
+              {/* Left Vertical Indicator Strip */}
               {isDetail && (
-                <Check className="w-4 h-4 text-purple-600 dark:text-purple-400 stroke-[2.8] shrink-0" />
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] bg-purple-600 dark:bg-purple-400" />
               )}
+
+              <LayoutTemplate
+                className={`w-4 h-4 stroke-[2.2] shrink-0 ${
+                  isDetail ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-500"
+                }`}
+              />
+              <span className="text-[13px] tracking-tight">Detail View</span>
             </button>
 
             {/* Option: Search Result */}
             <button
               type="button"
               onClick={() => handleSelectView("search")}
-              className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition-all duration-150 cursor-pointer ${
+              className={`relative w-full h-[38px] flex items-center gap-2.5 px-3.5 text-left transition-colors cursor-pointer ${
                 !isDetail
-                  ? "bg-amber-500/10 dark:bg-amber-500/20 text-amber-950 dark:text-amber-200 font-bold border border-amber-500/25 shadow-sm"
-                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-transparent"
+                  ? "bg-amber-500/10 dark:bg-amber-500/15 text-slate-900 dark:text-white font-bold"
+                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
               }`}
             >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <Search
-                  className={`w-4 h-4 stroke-[2] shrink-0 ${
-                    !isDetail ? "text-amber-600 dark:text-amber-400" : "text-slate-400 dark:text-slate-500"
-                  }`}
-                />
-                <span className="text-[12.5px] tracking-tight">Search Result</span>
-              </div>
+              {/* Left Vertical Indicator Strip */}
               {!isDetail && (
-                <Check className="w-4 h-4 text-amber-600 dark:text-amber-400 stroke-[2.8] shrink-0" />
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] bg-amber-500 dark:bg-amber-400" />
               )}
+
+              <Search
+                className={`w-4 h-4 stroke-[2.2] shrink-0 ${
+                  !isDetail ? "text-amber-600 dark:text-amber-400" : "text-slate-400 dark:text-slate-500"
+                }`}
+              />
+              <span className="text-[13px] tracking-tight">Search Result</span>
             </button>
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-slate-200 dark:bg-white/10 my-1.5 mx-1" />
+          {/* Full-width Divider */}
+          <div className="h-px bg-slate-100 dark:bg-white/[0.08]" />
 
           {/* Section: Comparison */}
-          <div className="px-2.5 pt-0.5 pb-1 text-[9.5px] font-extrabold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500">
+          <div className="px-3.5 pt-2 pb-1 text-[10px] font-bold uppercase tracking-[0.06em] text-slate-400 dark:text-slate-500">
             Comparison
           </div>
 
-          {/* Option: Dual Phone (Neutral Slate / Titanium - Avoids Store Blue & Green) */}
+          {/* Option: Dual Phone (Titanium Slate Indicator - Strictly Avoids Store Blue & Green) */}
           <button
             type="button"
             onClick={handleToggleDual}
-            className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition-all duration-150 cursor-pointer ${
+            className={`relative w-full h-[38px] flex items-center gap-2.5 px-3.5 text-left transition-colors cursor-pointer ${
               isDual
-                ? "bg-slate-100 dark:bg-white/15 text-slate-900 dark:text-white font-bold border border-slate-300/80 dark:border-white/20 shadow-sm"
-                : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-transparent"
+                ? "bg-slate-500/10 dark:bg-slate-500/15 text-slate-900 dark:text-white font-bold"
+                : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
             }`}
           >
-            <div className="flex items-center gap-2.5 min-w-0">
-              <Smartphone
-                className={`w-4 h-4 stroke-[2] shrink-0 ${
-                  isDual ? "text-slate-800 dark:text-white" : "text-slate-400 dark:text-slate-500"
-                }`}
-              />
-              <span className="text-[12.5px] tracking-tight">Dual Phone</span>
-            </div>
+            {/* Left Vertical Indicator Strip */}
             {isDual && (
-              <Check className="w-4 h-4 text-slate-800 dark:text-white stroke-[2.8] shrink-0" />
+              <span className="absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] bg-slate-600 dark:bg-slate-300" />
             )}
+
+            <Smartphone
+              className={`w-4 h-4 stroke-[2.2] shrink-0 ${
+                isDual ? "text-slate-700 dark:text-slate-200" : "text-slate-400 dark:text-slate-500"
+              }`}
+            />
+            <span className="text-[13px] tracking-tight">Dual Phone</span>
           </button>
         </div>
       )}
