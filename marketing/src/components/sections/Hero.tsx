@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { BrandIcon } from "@/components/ui/BrandIcon";
 
 export function Hero() {
   const { hero } = siteConfig;
@@ -12,24 +11,6 @@ export function Hero() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-blue-500/15 via-indigo-500/10 to-purple-500/15 blur-[130px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        {/* Hero Brand App Icon */}
-        <div className="hero-icon-container mb-5 flex justify-center">
-          <div className="hero-app-icon w-[72px] h-[72px] rounded-[17px] cursor-pointer select-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[0_14px_32px_-6px_rgba(59,130,246,0.28),0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_36px_-6px_rgba(99,102,241,0.42),0_0_0_1px_rgba(255,255,255,0.18)] hover:-translate-y-1 hover:scale-105 hover:-rotate-[4deg] hover:shadow-[0_20px_42px_-6px_rgba(59,130,246,0.38),0_0_0_1px_rgba(0,0,0,0.14)] dark:hover:shadow-[0_22px_46px_-6px_rgba(99,102,241,0.55),0_0_0_1px_rgba(255,255,255,0.3)]">
-            <BrandIcon className="w-full h-full rounded-[17px]" />
-          </div>
-        </div>
-
-        {/* Category Badge Pill */}
-        <div className="hero-badge group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 cursor-default select-none transition-all duration-200 ease-out hover:scale-[1.015] bg-white/95 dark:bg-white/[0.05] backdrop-blur-md border border-slate-200/90 dark:border-white/[0.12] hover:border-slate-300 dark:hover:border-white/[0.22] shadow-[0_2px_10px_rgba(15,23,42,0.04),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_#ffffff] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.14)]">
-          {/* Calm Static Purple Dot */}
-          <span className="badge-dot relative flex h-2 w-2 shrink-0 items-center justify-center" aria-hidden="true">
-            <span className="inline-flex rounded-full h-1.5 w-1.5 bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.6)]" />
-          </span>
-          <span className="text-[13px] sm:text-[13.5px] font-medium tracking-[-0.01em] text-[#334155] dark:text-[#cbd5e1] group-hover:text-[#0f172a] dark:group-hover:text-white transition-colors duration-150">
-            {hero.badge}
-          </span>
-        </div>
-
         {/* Main H1 */}
         <h1 className="text-[34px] sm:text-[46px] lg:text-[56px] font-extrabold tracking-[-0.03em] max-w-4xl mx-auto mb-5 leading-[1.15] text-[#0f172a] [html:not(.dark)_&]:bg-[linear-gradient(180deg,#0f172a_40%,#334155_100%)] [html:not(.dark)_&]:bg-clip-text [html:not(.dark)_&]:text-transparent dark:text-white dark:bg-[linear-gradient(180deg,#ffffff_40%,#94a3b8_100%)] dark:bg-clip-text dark:text-transparent">
           {hero.titleLead} <br className="hidden sm:inline" />
