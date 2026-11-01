@@ -334,10 +334,7 @@ export const en = {
   },
 
   footer: {
-    tagline: "The zero-server studio to preview and validate mobile listings.",
-    badge: "100% Offline & Private",
-    trustNote: "Zero Servers · Standalone HTML · Pay Once, Keep Forever",
-    copyright: "© 2026 Store Preview Studio. Built for mobile craftspeople\u00A0worldwide.",
+    copyright: "© 2026 Store Preview Studio",
     links: [
       { label: "Why Us", href: "#comparison" },
       { label: "Features", href: "#features" },
