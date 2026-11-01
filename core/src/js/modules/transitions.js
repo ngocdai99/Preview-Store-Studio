@@ -121,7 +121,7 @@ function computeDeviceZoom(s, d){
 }
 
 function syncVtPill(container){
-  if(!container || container.classList.contains('menu')) return;
+  if(!container || container.classList.contains('menu') || container.classList.contains('stage-device-dropdown')) return;
   let pill = container.querySelector('.vt-pill');
   if(!pill){
     pill = document.createElement('span');
@@ -172,7 +172,37 @@ function syncAllVtPills(){
       if(el) syncVtPill(el);
     });
     syncSegPill();
+    if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   });
+}
+
+function syncDeviceDropdowns() {
+  const curA = (typeof appleDevice !== 'undefined' && appleDevice && appleDevice !== 'dual') ? appleDevice : 'iphone';
+  const curG = (typeof googleDevice !== 'undefined' && googleDevice && googleDevice !== 'dual') ? googleDevice : 'phone';
+
+  const lblA = $('appleDeviceLabel');
+  if (lblA) lblA.textContent = curA === 'ipad' ? 'iPad' : 'iPhone';
+  const icoA = $('appleDeviceIco');
+  if (icoA) {
+    if (curA === 'ipad') {
+      icoA.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+    } else {
+      icoA.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"></rect><line x1="10.5" y1="5" x2="13.5" y2="5"></line><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+    }
+  }
+
+  const lblG = $('googleDeviceLabel');
+  if (lblG) lblG.textContent = curG === 'tab7' ? '7" Tablet' : (curG === 'tab10' ? '10" Tablet' : 'Phone');
+  const icoG = $('googleDeviceIco');
+  if (icoG) {
+    if (curG === 'tab10') {
+      icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><line x1="10" y1="17" x2="14" y2="17"></line></svg>';
+    } else if (curG === 'tab7') {
+      icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+    } else {
+      icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+    }
+  }
 }
 if (typeof window !== 'undefined') {
   window.addEventListener('resize', syncSegPill);
@@ -802,6 +832,14 @@ if ($('btnStageView')) {
   setupDropdown('btnStageView', 'vt');
 }
 
+if ($('btnAppleDevice')) {
+  setupDropdown('btnAppleDevice', 'menuAppleDevice');
+}
+
+if ($('btnGoogleDevice')) {
+  setupDropdown('btnGoogleDevice', 'menuGoogleDevice');
+}
+
 if ($('btnDualPhone')) {
   $('btnDualPhone').onclick = () => {
     toggleDualPhone();
@@ -814,6 +852,21 @@ if ($('btnDualPhone')) {
 $$('#vt .menu-item').forEach(item => {
   item.addEventListener('click', () => {
     const stageMenu = $('vt');
+    if (stageMenu) stageMenu.classList.remove('show');
+  });
+});
+
+// Auto-close Apple & Google device dropdowns when item is clicked
+$$('#dt .menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const stageMenu = $('menuAppleDevice');
+    if (stageMenu) stageMenu.classList.remove('show');
+  });
+});
+
+$$('#gdt .menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const stageMenu = $('menuGoogleDevice');
     if (stageMenu) stageMenu.classList.remove('show');
   });
 });

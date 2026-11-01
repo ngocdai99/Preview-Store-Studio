@@ -3,10 +3,13 @@
 let appleDevice = 'iphone'; // 'iphone' | 'ipad' | 'dual'
 
 function setAppleDevice(d, animate = true){
+  const stageMenu = $('menuAppleDevice');
+  if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   if(d !== 'ipad' && d !== 'dual') d = 'iphone';
   const wasDual = document.body.dataset.dual === 'true';
   const nextDual = d === 'dual';
   if(appleDevice === d && document.body.dataset.appleDevice === d && wasDual === nextDual){
+    if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     syncAllVtPills();
     return;
   }
@@ -34,6 +37,7 @@ function setAppleDevice(d, animate = true){
     if(typeof renderIpadShots === 'function') renderIpadShots();
     update();
     syncAppleNavScroll();
+    if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     saveState();
   };
   if(nextDual || wasDual){
@@ -45,6 +49,7 @@ function setAppleDevice(d, animate = true){
   }
   transitionDevice('apple', d, applyState, animate);
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
+  if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   syncAllVtPills();
 }
 $$('#dt [data-d]').forEach(b => b.onclick = () => setAppleDevice(b.dataset.d));

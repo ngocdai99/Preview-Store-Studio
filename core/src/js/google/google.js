@@ -328,10 +328,13 @@ function applyGoogleDevice(){
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){
+  const stageMenu = $('menuGoogleDevice');
+  if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   const nextDev = (d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone';
   const wasDual = document.body.dataset.dual === 'true';
   const nextDual = nextDev === 'dual';
   if(googleDevice === nextDev && document.body.dataset.googleDevice === (nextDual ? 'phone' : nextDev) && wasDual === nextDual){
+    if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     syncAllVtPills();
     return;
   }
@@ -345,6 +348,7 @@ function setGoogleDevice(d, animate = true){
       document.body.dataset.appleDevice = 'iphone';
     }
     applyGoogleDevice();
+    if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     saveState();
   };
   if(nextDual || wasDual){
@@ -357,6 +361,7 @@ function setGoogleDevice(d, animate = true){
   transitionDevice('google', nextDev, applyState, animate);
   const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+  if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   syncAllVtPills();
 }
 $$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));

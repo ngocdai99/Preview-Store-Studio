@@ -15,7 +15,7 @@ export const en = {
   },
 
   hero: {
-    badge: "Mockup Studio for App Store & Google Play",
+    badge: "Mockup & Preview Studio for App Store & Google Play",
     titleLead: "Stop guessing how your app listing",
     titleAccent: "looks before submitting.",
     subheadline:
