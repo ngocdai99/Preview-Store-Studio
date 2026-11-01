@@ -2,18 +2,18 @@
 body[data-store=google] .dev.apple,
 body[data-store=google] .dev.ipad{display:none!important}
 body[data-store=google] .dev.google{display:block}
-body[data-store=google] #vt{display:flex!important}
+body[data-store=google] #stageViewDropdown{display:inline-flex}
 
 body[data-store=apple] .dev.google{display:none!important}
-body[data-store=apple] #vt{display:flex!important}
+body[data-store=apple] #stageViewDropdown{display:inline-flex}
 
 body[data-store=apple][data-apple-device="iphone"] .dev.apple.single{display:block}
 body[data-store=apple][data-apple-device="iphone"] .dev.ipad{display:none!important}
-body[data-store=apple][data-apple-device="iphone"] #vt{display:flex!important}
+body[data-store=apple][data-apple-device="iphone"] #stageViewDropdown{display:inline-flex}
 
 body[data-store=apple][data-apple-device="ipad"] .dev.ipad{display:block!important}
 body[data-store=apple][data-apple-device="ipad"] .dev.apple.single{display:none!important}
-body[data-store=apple][data-apple-device="ipad"] #vt{display:flex!important}
+body[data-store=apple][data-apple-device="ipad"] #stageViewDropdown{display:inline-flex}
 
 /* Dual Store Phone Preview (iPhone + Android Phone Side-by-Side) */
 body[data-dual="true"] .dev.apple.single,
@@ -21,7 +21,7 @@ body[data-dual="true"] #dev-phone.dev.google{display:block!important}
 body[data-dual="true"] .dev.ipad,
 body[data-dual="true"] .dev.gtab7,
 body[data-dual="true"] .dev.gtab10{display:none!important}
-body[data-dual="true"] #vt{display:flex!important}
+body[data-dual="true"] #stageViewDropdown{display:inline-flex}
 
 /* Hardware-accelerated store & dual mode transition animations */
 body.is-animating-store .dev.apple.single,

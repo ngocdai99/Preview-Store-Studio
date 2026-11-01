@@ -150,6 +150,12 @@
   padding: 6px;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
   z-index: 250;
+  display: none !important;
+}
+
+.stage-view-menu.show,
+#vt.stage-view-menu.show {
+  display: flex !important;
 }
 
 .stage-view-menu .menu-item {
