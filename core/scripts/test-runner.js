@@ -1399,6 +1399,7 @@ assert(bundledHtml.includes('function normalizeAppleApp'), 'Bundled application 
 assert(bundledHtml.includes('function checkAndLoadStoreParams'), 'Bundled application defines checkAndLoadStoreParams');
 assert(bundledHtml.includes('Uses official Apple iTunes public API'), 'Store import modal includes legal disclaimer for public API usage');
 assert(bundledHtml.includes("Apple's public API does not provide a separate Subtitle field"), 'Store import modal clarifies Subtitle API limitation to user');
+assert(bundledHtml.includes("App Name &amp; Subtitle in App Identity"), 'Store import modal references App Identity card');
 assert((bundledHtml.includes('Clone from Apple App Store') || bundledHtml.includes('Import from Apple App Store')) && bundledHtml.includes('iOS only'), 'Store import modal explicitly designates Apple App Store and iOS only badge');
 assert(bundledHtml.includes('Google Play is not supported due to store API limits'), 'Store import modal explicitly clarifies Google Play limitation up front');
 
