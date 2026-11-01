@@ -19,9 +19,8 @@ const ROOT = path.join(__dirname, '..');
 const PRESETS_DIR = path.join(ROOT, 'presets');
 const OUT_FILE = path.join(ROOT, 'docs', 'showcase-data.js');
 
-// Display order + short labels for the showcase pills (include Store Preview Studio)
+// Display order + short labels for the showcase pills
 const ORDER = [
-  { file: 'store-preview-studio-template.json', key: 'studio', tag: 'Studio' },
   { file: 'saas-app-template.json', key: 'taskflow', tag: 'SaaS' },
   { file: 'fitness-tracker-template.json', key: 'pulsefit', tag: 'Fitness' },
   { file: 'zenmind-meditation-template.json', key: 'zenmind', tag: 'Health' },

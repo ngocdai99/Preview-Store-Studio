@@ -196,24 +196,20 @@ assert(!!PRESETS.pulsefit, 'Preset PulseFit exists');
 assert(!!PRESETS.zenmind, 'Preset ZenMind exists');
 assert(!!PRESETS.cyberstrike, 'Preset CyberStrike exists');
 assert(!!PRESETS.edulearn, 'Preset SkillSphere (Education) exists');
-assert(!!PRESETS.studio, 'Preset Store Preview Studio exists');
 
 assert(PRESETS.pulsefit.icon !== PRESETS.taskflow.icon, 'PulseFit icon is distinct from TaskFlow icon');
 assert(PRESETS.zenmind.icon !== PRESETS.taskflow.icon, 'ZenMind icon is distinct from TaskFlow icon');
 assert(PRESETS.pulsefit.icon !== PRESETS.zenmind.icon, 'PulseFit icon is distinct from ZenMind icon');
 assert(PRESETS.cyberstrike.icon !== PRESETS.taskflow.icon, 'CyberStrike icon is distinct from TaskFlow icon');
 assert(PRESETS.edulearn.icon !== PRESETS.taskflow.icon, 'SkillSphere icon is distinct from TaskFlow icon');
-assert(PRESETS.studio.icon !== PRESETS.taskflow.icon, 'Store Preview Studio icon is distinct from TaskFlow icon');
 
 assert(PRESETS.pulsefit.shots[0] !== PRESETS.taskflow.shots[0], 'PulseFit screenshots are distinct from TaskFlow');
 assert(PRESETS.zenmind.shots[0] !== PRESETS.taskflow.shots[0], 'ZenMind screenshots are distinct from TaskFlow');
 assert(PRESETS.edulearn.shots[0] !== PRESETS.taskflow.shots[0], 'SkillSphere screenshots are distinct from TaskFlow');
-assert(PRESETS.studio.shots[0] !== PRESETS.taskflow.shots[0], 'Store Preview Studio screenshots are distinct from TaskFlow');
 assert(PRESETS.pulsefit.shots.length === 4, 'PulseFit has exactly 4 screenshots');
 assert(PRESETS.zenmind.shots.length === 4, 'ZenMind has exactly 4 screenshots');
 assert(PRESETS.cyberstrike.shots.length === 4, 'CyberStrike has exactly 4 screenshots');
 assert(PRESETS.edulearn.shots.length === 4, 'SkillSphere has exactly 4 screenshots');
-assert(PRESETS.studio.shots.length === 4, 'Store Preview Studio has exactly 4 screenshots');
 
 // Check 1024x1024 square opaque specifications
 [
@@ -221,8 +217,7 @@ assert(PRESETS.studio.shots.length === 4, 'Store Preview Studio has exactly 4 sc
   { name: 'PulseFit', icon: PRESETS.pulsefit.icon },
   { name: 'ZenMind', icon: PRESETS.zenmind.icon },
   { name: 'CyberStrike', icon: PRESETS.cyberstrike.icon },
-  { name: 'SkillSphere', icon: PRESETS.edulearn.icon },
-  { name: 'StorePreviewStudio', icon: PRESETS.studio.icon }
+  { name: 'SkillSphere', icon: PRESETS.edulearn.icon }
 ].forEach(p => {
   const decoded = decodeURIComponent(p.icon);
   assert(decoded.includes('width="1024"') && decoded.includes('height="1024"'), `${p.name} icon specifies 1024x1024 dimensions`);
@@ -230,7 +225,7 @@ assert(PRESETS.studio.shots.length === 4, 'Store Preview Studio has exactly 4 sc
 });
 
 // Verify template files in presets/
-const presetFiles = ['saas-app-template.json', 'fitness-tracker-template.json', 'zenmind-meditation-template.json', 'cyberstrike-rpg-game-template.json', 'education-language-template.json', 'store-preview-studio-template.json'];
+const presetFiles = ['saas-app-template.json', 'fitness-tracker-template.json', 'zenmind-meditation-template.json', 'cyberstrike-rpg-game-template.json', 'education-language-template.json'];
 presetFiles.forEach(file => {
   const fullPath = path.join(ROOT_DIR, 'presets', file);
   assert(fs.existsSync(fullPath), `Preset file presets/${file} exists`);
@@ -250,7 +245,7 @@ const testNow = new Date();
 const currentTestYear = String(testNow.getFullYear());
 const currentTestMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][testNow.getMonth()];
 
-['studio', 'taskflow', 'pulsefit', 'zenmind', 'cyberstrike', 'edulearn'].forEach(key => {
+['taskflow', 'pulsefit', 'zenmind', 'cyberstrike', 'edulearn'].forEach(key => {
   const p = PRESETS[key];
   assert(p.rdate && p.rdate.includes(currentTestYear) && p.rdate.includes(currentTestMonth), `Preset ${key} release date '${p.rdate}' contains current month (${currentTestMonth}) and year (${currentTestYear})`);
   assert(Array.isArray(p.reviews) && p.reviews.length >= 2, `Preset ${key} contains an array of at least 2 reviews`);
@@ -1614,7 +1609,6 @@ function testResolveDraftPillIcon(uDraft, activePreset, presetIcons, isCustom, a
 
 const mockPresetIcons = {
   none: 'data:image/svg+xml;blank',
-  studio: 'data:image/svg+xml;studio',
   taskflow: 'data:image/svg+xml;taskflow',
   pulsefit: 'data:image/svg+xml;pulsefit',
   zenmind: 'data:image/svg+xml;zenmind',
@@ -1623,10 +1617,10 @@ const mockPresetIcons = {
 };
 let testDraft = { isCustomIcon: false, icon: 'data:image/svg+xml;blank' };
 
-// Test 1: Selecting studio template updates pill icon to studio vector icon
-let resolved = testResolveDraftPillIcon(testDraft, 'studio', mockPresetIcons, false, mockPresetIcons.studio, mockPresetIcons.none);
-assert(resolved === mockPresetIcons.studio, 'Draft pill icon dynamically resolves to Store Preview Studio template icon');
-assert(testDraft.icon === mockPresetIcons.studio, 'Draft model icon synchronizes with Store Preview Studio icon');
+// Test 1: Selecting taskflow template updates pill icon to taskflow vector icon
+let resolved = testResolveDraftPillIcon(testDraft, 'taskflow', mockPresetIcons, false, mockPresetIcons.taskflow, mockPresetIcons.none);
+assert(resolved === mockPresetIcons.taskflow, 'Draft pill icon dynamically resolves to TaskFlow template icon');
+assert(testDraft.icon === mockPresetIcons.taskflow, 'Draft model icon synchronizes with TaskFlow icon');
 
 // Test 2: Selecting pulsefit template updates pill icon to pulsefit vector icon
 resolved = testResolveDraftPillIcon(testDraft, 'pulsefit', mockPresetIcons, false, mockPresetIcons.pulsefit, mockPresetIcons.none);
@@ -1639,7 +1633,7 @@ assert(resolved === mockPresetIcons.cyberstrike, 'Draft pill icon dynamically re
 // Test 4: Custom uploaded icon takes absolute precedence over presets
 testDraft.isCustomIcon = true;
 testDraft.icon = 'data:image/png;customAppIcon';
-resolved = testResolveDraftPillIcon(testDraft, 'studio', mockPresetIcons, true, 'data:image/png;customAppIcon', mockPresetIcons.none);
+resolved = testResolveDraftPillIcon(testDraft, 'taskflow', mockPresetIcons, true, 'data:image/png;customAppIcon', mockPresetIcons.none);
 assert(resolved === 'data:image/png;customAppIcon', 'User-uploaded custom icon takes precedence over template icons');
 
 // Test 5: Resetting draft clears icon back to blank placeholder
@@ -1739,8 +1733,8 @@ assert(bundledHtml.includes('activePresetKey') && bundledHtml.includes('presetPi
 assert(bundledHtml.includes('presetPill.querySelector(\'#presetPillCloseBtn\')'), 'updateDraftPill binds click handler to preset pill close button');
 
 // Test 4: Functional simulation of Preset Pill close and re-open workflow
-let suite22PresetKey = 'studio';
-let suite22ActivePreset = 'studio';
+let suite22PresetKey = 'taskflow';
+let suite22ActivePreset = 'taskflow';
 const suite22Draft = { form: { name: 'My Test Draft' } };
 const suite22PresetClasses = new Set();
 const suite22DraftClasses = new Set();
@@ -1793,7 +1787,7 @@ function suite22LoadPreset(key) {
   suite22UpdatePills();
 }
 
-// Initial state: viewing studio preset
+// Initial state: viewing taskflow preset
 suite22UpdatePills();
 assert(suite22PresetPill.style.display === 'inline-flex', 'Initially preset pill is displayed');
 assert(suite22PresetPill.classList.contains('on'), 'Preset pill is active while viewing preset');

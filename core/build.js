@@ -214,8 +214,8 @@ function build(options = {}) {
     const duration = Date.now() - startTime;
     const sizeKb = (fs.statSync(outTarget).size / 1024).toFixed(1);
     const tierLabel = (options.tier === 'plus' || options.tier === 'standard')
-      ? ` ${c.yellow}[Plus 6-Preset]${c.reset}`
-      : (options.minify ? ` ${c.cyan}[Minified 6-Preset]${c.reset}` : ` ${c.gray}[Full 6-Preset]${c.reset}`);
+      ? ` ${c.yellow}[Plus 5-Preset]${c.reset}`
+      : (options.minify ? ` ${c.cyan}[Minified 5-Preset]${c.reset}` : ` ${c.gray}[Full 5-Preset]${c.reset}`);
 
     console.log(`  ${c.green}[OK]${c.reset} Bundled: ${c.brightGreen}${outTarget}${c.reset}`);
     console.log(`    ${c.gray}Variant:${c.reset}${tierLabel} ${c.gray}· Size:${c.reset} ${c.yellow}${sizeKb} KB${c.reset} ${c.gray}· Time:${c.reset} ${duration}ms`);
