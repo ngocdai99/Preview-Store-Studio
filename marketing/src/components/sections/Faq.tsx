@@ -64,7 +64,7 @@ export function Faq() {
                 className={`group rounded-[18px] transition-colors duration-200 overflow-hidden border ${
                   isOpen
                     ? "bg-card dark:bg-[#0e1526] border-[var(--purple-brand)]/50 shadow-[0_12px_32px_-6px_rgba(139,92,246,0.22)] [html:not(.dark)_&]:shadow-[0_12px_32px_-4px_rgba(109,40,217,0.12)]"
-                    : "bg-card/90 dark:bg-[#0e1526]/85 border-border hover:border-slate-400/40 dark:hover:border-white/[0.18] shadow-xs"
+                    : "bg-card/90 dark:bg-[#0e1526]/85 hover:bg-slate-100/70 dark:hover:bg-[#152038] border-border hover:border-slate-400/40 dark:hover:border-white/[0.18] shadow-xs"
                 }`}
               >
                 {/* Header (Stable, motionless collapse card) */}
@@ -72,7 +72,9 @@ export function Faq() {
                   type="button"
                   onClick={() => toggle(item.id)}
                   aria-expanded={isOpen}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer select-none transition-colors duration-150 hover:bg-card-muted/30 dark:hover:bg-white/[0.02]"
+                  className={`w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer select-none transition-colors duration-150 ${
+                    isOpen ? "hover:bg-card-muted/20 dark:hover:bg-white/[0.02]" : "bg-transparent"
+                  }`}
                 >
                   <div className="flex flex-col gap-1.5 flex-1 min-w-0">
                     {/* Meta Row: Sequence Number + Small Icon + Topic Tag */}
