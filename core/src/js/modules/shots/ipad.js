@@ -59,18 +59,50 @@ function renderIpadShots(){
     });
   });
 
-  // Update iPad Search Result Carousel
+  // Update iPad Search Result 2-Column Grid Card
   $$('[data-shots=ipad-shots]').forEach(c => {
     c.innerHTML = '';
     const valid = effectiveShots.filter(s => s && typeof s === 'string' && s.trim());
     if(valid.length === 0){
-      for(let i = 0; i < 3; i++){
+      c.classList.remove('has-landscape');
+      for(let i = 0; i < 2; i++){
         const sk = document.createElement('div');
-        sk.className = 'sr-skel-shot ipad-skel-shot';
+        sk.className = 'ipad-skel-shot';
         c.appendChild(sk);
       }
     } else {
-      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH), 'Result ' + (i + 1))));
+      const firstShot = valid[0];
+      const isLandscapeUrl = (typeof firstShot === 'string') && (/\/2732x2048bb|\/2688x1242bb/i.test(firstShot) || firstShot.includes('landscape'));
+      c.classList.toggle('has-landscape', isLandscapeUrl);
+
+      const count = isLandscapeUrl ? 1 : Math.min(2, valid.length);
+      for (let i = 0; i < count; i++) {
+        const s = valid[i];
+        const img = mk(s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH), 'Result ' + (i + 1));
+        img.className = 'ipad-sr-shot';
+        if (isLandscapeUrl) {
+          img.classList.add('landscape-shot');
+        } else {
+          img.classList.add('portrait-shot');
+        }
+        img.onload = function() {
+          if (this.naturalWidth > this.naturalHeight * 1.15) {
+            c.classList.add('has-landscape');
+            this.classList.add('landscape-shot');
+            this.classList.remove('portrait-shot');
+            while (c.children.length > 1) {
+              c.removeChild(c.lastChild);
+            }
+          }
+        };
+        c.appendChild(img);
+      }
+
+      if (!isLandscapeUrl && valid.length === 1) {
+        const sk = document.createElement('div');
+        sk.className = 'ipad-skel-shot';
+        c.appendChild(sk);
+      }
     }
   });
 

@@ -241,6 +241,223 @@
 .ipad-tab{display:none!important}
 .ipad-tab div span svg{width:22px;height:22px}
 
+/* ---------- iPad Search Results View (Authentic 2-Column Grid) ---------- */
+.ipad-search-view {
+  padding-top: 16px;
+}
+.ipad-search-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.ipad-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 0;
+  background: var(--cd);
+  color: var(--t);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+.ipad-filter-btn:hover {
+  opacity: 0.85;
+}
+.ipad-filter-arrow {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.5;
+  color: var(--t);
+}
+.ipad-search-pill-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  background: var(--cd);
+  color: var(--s);
+  font-size: 14px;
+}
+.ipad-search-ico {
+  width: 15px;
+  height: 15px;
+  color: var(--s);
+  flex-shrink: 0;
+}
+.ipad-search-query {
+  color: var(--t);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ipad-search-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 22px;
+  padding-bottom: 50px;
+}
+.ipad-sr-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ipad-sr-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.ipad-sr-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 13px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--cd);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+}
+.ipad-sr-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ipad-sr-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ipad-sr-app-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--t);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ipad-sr-app-sub {
+  font-size: 12.5px;
+  color: var(--s);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ipad-sr-stars-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--s);
+  margin-top: 1px;
+}
+.ipad-sr-stars {
+  letter-spacing: -0.5px;
+  color: #ff9500;
+  font-size: 10.5px;
+}
+.phone.ipad[data-theme=dark] .ipad-sr-stars {
+  color: #ff9f0a;
+}
+.ipad-sr-get-wrap {
+  flex-shrink: 0;
+}
+button.get.ipad-sr-get-btn {
+  height: 28px;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: var(--cd);
+  color: var(--bl);
+  font-size: 13px;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: opacity 0.15s ease;
+}
+button.get.ipad-sr-get-btn:hover {
+  opacity: 0.8;
+}
+.ipad-sr-media {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  border-radius: 10px;
+}
+.ipad-sr-media.has-landscape {
+  grid-template-columns: 1fr;
+}
+.ipad-sr-shot {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  background: var(--cd);
+}
+.ipad-sr-shot.portrait-shot {
+  aspect-ratio: 2048 / 2732;
+}
+.ipad-sr-shot.landscape-shot {
+  aspect-ratio: 2732 / 2048;
+}
+.ipad-skel-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 13px;
+  background: var(--cd);
+  flex-shrink: 0;
+}
+.ipad-skel-line {
+  height: 11px;
+  border-radius: 5px;
+  background: var(--cd);
+  margin-bottom: 5px;
+}
+.ipad-skel-line.w-40 { width: 40%; }
+.ipad-skel-line.w-45 { width: 45%; }
+.ipad-skel-line.w-55 { width: 55%; }
+.ipad-skel-line.w-60 { width: 60%; }
+.ipad-skel-line.w-75 { width: 75%; }
+.ipad-skel-line.w-80 { width: 80%; }
+.ipad-skel-stars {
+  font-size: 10.5px;
+  color: var(--s);
+  opacity: 0.35;
+  letter-spacing: -0.5px;
+}
+.ipad-skel-btn {
+  width: 54px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--cd);
+}
+.ipad-sr-skel-shots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+.ipad-skel-shot {
+  width: 100%;
+  aspect-ratio: 2048 / 2732;
+  border-radius: 10px;
+  background: var(--cd);
+}
+
 /* Screen container */
 .phone{
   width:390px;height:844px;border-radius:53px;overflow:hidden;position:relative;display:flex;flex-direction:column;

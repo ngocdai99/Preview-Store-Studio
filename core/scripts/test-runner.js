@@ -537,6 +537,9 @@ assert(commonHtml.includes('id="ipadSlist"') && commonHtml.includes('id="addIpad
 // 2. Mockup Attribute Verification
 assert(ipadHtml.includes('data-shots="ipad-gal"'), 'ipad.html uses data-shots="ipad-gal" for isolated iPad gallery');
 assert(ipadHtml.includes('data-shots="ipad-shots"'), 'ipad.html uses data-shots="ipad-shots" for search gallery');
+assert(ipadHtml.includes('class="ipad-search-bar-row"') && ipadHtml.includes('class="ipad-filter-btn"'), 'ipad search view includes authentic filter button and search pill row');
+assert(ipadHtml.includes('class="ipad-search-grid"') && ipadHtml.includes('class="ipad-sr-card ipad-sr-primary"'), 'ipad search view renders 2-column grid with primary app card');
+assert(ipadHtml.includes('class="ipad-sr-card ipad-sr-skel"'), 'ipad search view includes authentic neighbor competitor skeleton cards');
 assert(stageTbHtml.includes('data-d="iphone"') && stageTbHtml.includes('data-d="ipad"'), 'stage-toolbar.html provides both iPhone and iPad device selectors');
 assert(!brandHtml.includes('class="window-dots"'), 'brand.html removes redundant decorative window dots to maximize header workspace');
 

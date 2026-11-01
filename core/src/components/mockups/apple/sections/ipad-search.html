@@ -1,15 +1,105 @@
-<!-- Apple iPad Search View -->
-<div data-v="search" style="display:none">
-  <div class="ipad-s-title">Search</div>
-  <div class="sbox ipad-sbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span data-b="name">TaskFlow</span></div>
-  <div class="sr ipad-sr">
-    <img data-icon alt="">
-    <div style="flex:1;min-width:0">
-      <div class="n" data-b="name"></div>
-      <div class="a-sub" data-b="sub" style="margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
-      <div class="st" style="font-size:12px;color:var(--s);margin-top:3px">★★★★★ <span class="sv" data-stat="rating">4.9</span> (<span class="sv" data-stat="count">1.8K</span>)</div>
+<!-- Apple iPad Search View (Authentic iPadOS 18 2-Column Grid) -->
+<div data-v="search" class="ipad-search-view" style="display:none">
+  <!-- Top Bar: Filter Dropdown + Search Pill -->
+  <div class="ipad-search-bar-row">
+    <button type="button" class="ipad-filter-btn" aria-label="Filters">
+      <span>Bộ lọc</span>
+      <svg class="ipad-filter-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <div class="ipad-search-pill-wrap">
+      <svg class="ipad-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <span class="ipad-search-query" data-b="name">Search</span>
     </div>
-    <button class="get ipad-get">GET</button>
   </div>
-  <div class="shots ipad-shots" data-shots="ipad-shots"></div>
+
+  <!-- 2-Column Search Results Grid -->
+  <div class="ipad-search-grid">
+    <!-- Card 1: Active App Result Card -->
+    <div class="ipad-sr-card ipad-sr-primary">
+      <div class="ipad-sr-card-head">
+        <div class="ipad-sr-icon">
+          <img data-icon alt="App Icon">
+        </div>
+        <div class="ipad-sr-card-info">
+          <div class="ipad-sr-app-title" data-b="name">App Name</div>
+          <div class="ipad-sr-app-sub" data-b="sub">App Subtitle</div>
+          <div class="ipad-sr-stars-row">
+            <span class="ipad-sr-stars">★★★★★</span>
+            <span class="ipad-sr-rating-val" data-stat="rating">4.9</span>
+            <span class="ipad-sr-rating-cnt">(<span class="sv" data-stat="count">1.8K</span>)</span>
+          </div>
+        </div>
+        <div class="ipad-sr-get-wrap">
+          <button type="button" class="get ipad-sr-get-btn">Nhận</button>
+        </div>
+      </div>
+      <!-- Adaptive media container: 1 landscape shot OR 2 portrait shots -->
+      <div class="ipad-sr-media shots" data-shots="ipad-shots">
+        <div class="ipad-skel-shot"></div>
+        <div class="ipad-skel-shot"></div>
+      </div>
+    </div>
+
+    <!-- Card 2: Competitor Skeleton Card (Top Right) -->
+    <div class="ipad-sr-card ipad-sr-skel" aria-hidden="true">
+      <div class="ipad-sr-card-head">
+        <div class="ipad-skel-icon"></div>
+        <div class="ipad-sr-card-info">
+          <div class="ipad-skel-line w-45"></div>
+          <div class="ipad-skel-line w-75"></div>
+          <div class="ipad-skel-stars">★★★★★</div>
+        </div>
+        <div class="ipad-sr-get-wrap">
+          <div class="ipad-skel-btn"></div>
+        </div>
+      </div>
+      <div class="ipad-sr-skel-shots">
+        <div class="ipad-skel-shot"></div>
+        <div class="ipad-skel-shot"></div>
+      </div>
+    </div>
+
+    <!-- Card 3: Competitor Skeleton Card (Bottom Left) -->
+    <div class="ipad-sr-card ipad-sr-skel" aria-hidden="true">
+      <div class="ipad-sr-card-head">
+        <div class="ipad-skel-icon"></div>
+        <div class="ipad-sr-card-info">
+          <div class="ipad-skel-line w-55"></div>
+          <div class="ipad-skel-line w-60"></div>
+          <div class="ipad-skel-stars">★★★★★</div>
+        </div>
+        <div class="ipad-sr-get-wrap">
+          <div class="ipad-skel-btn"></div>
+        </div>
+      </div>
+      <div class="ipad-sr-skel-shots">
+        <div class="ipad-skel-shot"></div>
+        <div class="ipad-skel-shot"></div>
+      </div>
+    </div>
+
+    <!-- Card 4: Competitor Skeleton Card (Bottom Right) -->
+    <div class="ipad-sr-card ipad-sr-skel" aria-hidden="true">
+      <div class="ipad-sr-card-head">
+        <div class="ipad-skel-icon"></div>
+        <div class="ipad-sr-card-info">
+          <div class="ipad-skel-line w-40"></div>
+          <div class="ipad-skel-line w-80"></div>
+          <div class="ipad-skel-stars">★★★★★</div>
+        </div>
+        <div class="ipad-sr-get-wrap">
+          <div class="ipad-skel-btn"></div>
+        </div>
+      </div>
+      <div class="ipad-sr-skel-shots">
+        <div class="ipad-skel-shot"></div>
+        <div class="ipad-skel-shot"></div>
+      </div>
+    </div>
+  </div>
 </div>
