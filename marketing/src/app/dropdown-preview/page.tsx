@@ -126,26 +126,26 @@ export default function DropdownPreviewPage() {
                 Comparison
               </div>
 
-              {/* Dual Phone */}
+              {/* Dual Phone (Neutral Titanium Slate - Avoids Apple Blue and Google Green) */}
               <button
                 type="button"
                 onClick={() => setIsDual(!isDual)}
                 className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition-all cursor-pointer ${
                   isDual
-                    ? "bg-blue-500/10 dark:bg-blue-500/20 text-blue-950 dark:text-blue-200 font-bold border border-blue-500/25 shadow-sm"
+                    ? "bg-slate-100 dark:bg-white/15 text-slate-900 dark:text-white font-bold border border-slate-300/80 dark:border-white/20 shadow-sm"
                     : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-transparent"
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <Smartphone
                     className={`w-4 h-4 stroke-[2] shrink-0 ${
-                      isDual ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"
+                      isDual ? "text-slate-800 dark:text-white" : "text-slate-400 dark:text-slate-500"
                     }`}
                   />
                   <span className="text-[12.5px] tracking-tight">Dual Phone</span>
                 </div>
                 {isDual && (
-                  <Check className="w-4 h-4 text-blue-600 dark:text-blue-400 stroke-[2.8] shrink-0" />
+                  <Check className="w-4 h-4 text-slate-800 dark:text-white stroke-[2.8] shrink-0" />
                 )}
               </button>
             </div>
