@@ -23,7 +23,7 @@ export function Comparison() {
               <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-1.5">
                 {comparison.badColumnTitle}
               </h3>
-              <p className="text-xs sm:text-[13.5px] font-medium text-slate-500 dark:text-slate-400">
+              <p className="text-xs sm:text-[13.5px] font-medium text-[#334155] dark:text-slate-400">
                 {comparison.badColumnSubtitle}
               </p>
             </div>
@@ -50,13 +50,13 @@ export function Comparison() {
                 {/* Bad column */}
                 <div className="p-7 sm:p-10 lg:p-12 md:border-r md:border-dashed border-slate-200/80 dark:border-white/[0.08] flex flex-col justify-between">
                   <div>
-                    <span className="text-[10.5px] sm:text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-3 block font-mono">
+                    <span className="text-[10.5px] sm:text-[11px] font-bold tracking-wider text-[#475569] dark:text-slate-400 uppercase mb-3 block font-mono">
                       {beat.number} / {beat.category}
                     </span>
                     <h4 className="text-[15px] sm:text-[16.5px] font-bold text-slate-900 dark:text-slate-100 leading-snug mb-2.5">
                       {beat.bad.title}
                     </h4>
-                    <p className="text-xs sm:text-[13.5px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                    <p className="text-xs sm:text-[13.5px] text-[#334155] dark:text-slate-400 leading-relaxed">
                       {beat.bad.description}
                     </p>
                   </div>
@@ -71,7 +71,7 @@ export function Comparison() {
                     <h4 className="text-[15px] sm:text-[16.5px] font-bold text-slate-900 dark:text-white leading-snug mb-2.5">
                       {beat.good.title}
                     </h4>
-                    <p className="text-xs sm:text-[13.5px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                    <p className="text-xs sm:text-[13.5px] text-[#334155] dark:text-slate-400 leading-relaxed">
                       {beat.good.description}
                     </p>
                   </div>
