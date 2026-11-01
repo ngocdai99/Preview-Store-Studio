@@ -59,17 +59,18 @@ export function Faq() {
             return (
               <div
                 key={item.id}
-                className={`group rounded-[18px] transition-all duration-200 overflow-hidden border ${
+                className={`group rounded-[18px] transition-colors duration-200 overflow-hidden border ${
                   isOpen
-                    ? "bg-gradient-to-b from-card to-card-muted/60 dark:from-[#0e1526]/95 dark:to-[#0a101e]/98 border-[var(--purple-brand)]/50 shadow-[0_12px_32px_-6px_rgba(139,92,246,0.22)] [html:not(.dark)_&]:shadow-[0_12px_32px_-4px_rgba(109,40,217,0.12)]"
-                    : "bg-card/90 dark:bg-[#0e1526]/85 border-border hover:border-slate-400/40 dark:hover:border-white/[0.18] shadow-xs hover:scale-[1.008]"
+                    ? "bg-card dark:bg-[#0e1526] border-[var(--purple-brand)]/50 shadow-[0_12px_32px_-6px_rgba(139,92,246,0.22)] [html:not(.dark)_&]:shadow-[0_12px_32px_-4px_rgba(109,40,217,0.12)]"
+                    : "bg-card/90 dark:bg-[#0e1526]/85 border-border hover:border-slate-400/40 dark:hover:border-white/[0.18] shadow-xs"
                 }`}
               >
+                {/* Header (Stable, motionless collapse card) */}
                 <button
                   type="button"
                   onClick={() => toggle(item.id)}
                   aria-expanded={isOpen}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer select-none"
+                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer select-none transition-colors duration-150 hover:bg-card-muted/30 dark:hover:bg-white/[0.02]"
                 >
                   <div className="flex flex-col gap-1.5 flex-1 min-w-0">
                     {/* Meta Row: Sequence Number + Small Icon + Topic Tag */}
@@ -97,26 +98,30 @@ export function Faq() {
 
                   {/* 36x36px Tactile Chevron Bubble */}
                   <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 ${
+                    className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isOpen
                         ? "bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] text-white shadow-[0_4px_14px_rgba(99,102,241,0.4)] border-transparent"
                         : "bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 group-hover:bg-slate-200 dark:group-hover:bg-white/10 group-hover:text-foreground"
                     }`}
                   >
                     <ChevronDown
-                      className={`w-4 h-4 stroke-[2.5] transition-transform duration-200 ${
+                      className={`w-4 h-4 stroke-[2.5] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         isOpen ? "rotate-180" : ""
                       }`}
                     />
                   </div>
                 </button>
 
-                {/* Answer Content */}
-                {isOpen && (
-                  <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-slate-600 dark:text-slate-300 text-[14px] sm:text-[14.5px] leading-relaxed">
-                    <div className="pt-1 leading-relaxed">{item.answer}</div>
+                {/* Body (Smooth Accordion Expansion - Header stays 100% still) */}
+                <div className={`faq-accordion-grid ${isOpen ? "open" : ""}`}>
+                  <div className="faq-accordion-inner">
+                    <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-slate-600 dark:text-slate-300 text-[14px] sm:text-[14.5px] leading-relaxed">
+                      <div className="pt-3 border-t border-border/40 dark:border-white/[0.06] leading-relaxed">
+                        {item.answer}
+                      </div>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
