@@ -167,8 +167,8 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
               <div
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold border border-white/40 ${
                   isPro
-                    ? "bg-[#0f172a] text-white dark:bg-white dark:text-slate-900 shadow-sm"
-                    : "bg-[linear-gradient(135deg,#f59e0b_0%,#ea580c_100%)] text-white shadow-sm"
+                    ? "bg-[linear-gradient(135deg,#f59e0b_0%,#ea580c_100%)] text-white shadow-sm"
+                    : "bg-[#0f172a] text-white dark:bg-white/[0.12] dark:text-slate-100 shadow-sm"
                 }`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] shadow-[0_0_8px_rgba(52,211,153,0.95)] shrink-0" />
