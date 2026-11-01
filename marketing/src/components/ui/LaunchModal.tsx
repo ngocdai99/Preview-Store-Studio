@@ -63,11 +63,32 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
 
     setIsSubmitting(true);
 
+    let appId = "";
+    let appName = "";
+    let devName = "";
+
+    try {
+      const savedV = sessionStorage.getItem("sps_verified_app");
+      if (savedV) {
+        const vApp = JSON.parse(savedV);
+        appId = vApp?.appid || "";
+        appName = vApp?.app || "";
+        devName = vApp?.dev || "";
+      }
+    } catch {
+      // Ignore sessionStorage error
+    }
+
+    const isoTime = new Date().toISOString();
     const waitlistData = {
       email: cleanEmail,
       tier: tierName,
       price: tierPrice,
-      time: new Date().toISOString(),
+      appid: appId,
+      app: appName,
+      dev: devName,
+      time: isoTime,
+      timestamp: isoTime,
     };
 
     try {
@@ -76,15 +97,28 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
       // Ignore localStorage error
     }
 
+    const targetUrl =
+      (typeof window !== "undefined" && (window as unknown as { SPS_WAITLIST_ENDPOINT?: string }).SPS_WAITLIST_ENDPOINT) ||
+      GOOGLE_SCRIPT_URL;
+
     try {
-      await fetch(GOOGLE_SCRIPT_URL, {
+      await fetch(targetUrl, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(waitlistData),
       });
-    } catch {
-      // Ignore network errors in no-cors
+    } catch (err) {
+      console.warn("[Waitlist] Error posting to sheet:", err);
+    }
+
+    // Track Clarity if available
+    if (typeof window !== "undefined" && typeof (window as unknown as { clarity?: (action: string, event: string) => void }).clarity === "function") {
+      try {
+        (window as unknown as { clarity: (action: string, event: string) => void }).clarity("event", "early_bird_signup");
+      } catch {
+        // Ignore clarity error
+      }
     }
 
     setIsSubmitting(false);
