@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site";
-import { Check, Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
+import { Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
 
 export function Pricing() {
   const { pricing } = siteConfig;
@@ -54,69 +54,116 @@ export function Pricing() {
           {pricing.tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`relative rounded-3xl p-8 flex flex-col justify-between transition-all shadow-sm ${
+              className={`relative rounded-[28px] p-7 sm:p-9 flex flex-col justify-between transition-all duration-200 bg-white dark:bg-[#0c1222] ${
                 tier.isPopular
-                  ? "bg-card border-2 border-indigo-500/70 shadow-xl shadow-indigo-500/10"
-                  : "bg-card border border-border hover:border-foreground/20"
+                  ? "border-2 border-[#8b5cf6] dark:border-[#a78bfa] shadow-[0_12px_36px_-6px_rgba(139,92,246,0.18)] dark:shadow-[0_16px_40px_-6px_rgba(139,92,246,0.25)] hover:border-[#7c3aed] dark:hover:border-[#c084fc]"
+                  : "border border-slate-200 dark:border-white/[0.08] shadow-[0_4px_24px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:border-slate-300 dark:hover:border-white/[0.16]"
               }`}
             >
-              {tier.isPopular && (
-                <div className="absolute -top-3 right-8 px-3.5 py-1 rounded-full text-[11px] font-semibold tracking-wider bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  {pricing.mostPopularBadge}
-                </div>
-              )}
-
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-foreground">{tier.name}</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-card-muted text-muted border border-border tracking-wider">
-                    {tier.badge}
+                {/* Header row: Title + Tier Pill on Left, Early Bird Pill on Right */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <h3
+                      className={`text-[22px] font-bold tracking-tight ${
+                        tier.isPopular
+                          ? "text-[#7c3aed] dark:text-[#c084fc] [html:not(.dark)_&]:bg-[linear-gradient(135deg,#7c3aed_0%,#2563eb_100%)] [html:not(.dark)_&]:bg-clip-text [html:not(.dark)_&]:text-transparent dark:bg-[linear-gradient(135deg,#c084fc_0%,#60a5fa_100%)] dark:bg-clip-text dark:text-transparent"
+                          : "text-slate-900 dark:text-white"
+                      }`}
+                    >
+                      {tier.name}
+                    </h3>
+                    {tier.isPopular ? (
+                      <span className="inline-flex items-center justify-center text-[10px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#7c3aed_0%,#ec4899_100%)] px-2.5 py-0.5 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(236,72,153,0.35)] leading-tight">
+                        PRO
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center justify-center text-[10px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#1d4ed8_0%,#06b6d4_100%)] px-2.5 py-0.5 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(6,182,212,0.35)] leading-tight">
+                        PLUS
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Early Bird Pill */}
+                  <span className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold tracking-[0.08em] uppercase text-white bg-[linear-gradient(to_right,#059669_0%,#10b981_100%)] px-2.5 py-1 rounded-full border border-white/40 shadow-[0_2px_8px_rgba(16,185,129,0.35)] leading-tight shrink-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.95)] shrink-0" />
+                    EARLY BIRD
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-sm text-muted mb-6 leading-relaxed">
+                <p className="text-[13.5px] text-slate-600 dark:text-slate-400 mb-6 leading-relaxed min-h-[42px]">
                   {tier.description}
                 </p>
 
                 {/* Price Display */}
-                <div className="flex items-baseline gap-2 mb-8 pb-6 border-b border-border">
-                  <span className="text-muted line-through text-lg">
+                <div className="flex items-baseline gap-2.5 mb-7 pb-6 border-b border-slate-100 dark:border-white/[0.08]">
+                  <span className="text-2xl sm:text-[26px] font-bold text-slate-400 dark:text-slate-500 line-through tracking-tight">
                     {tier.price.currency}
                     {tier.price.original}
                   </span>
-                  <span className="text-4xl sm:text-5xl font-extrabold text-foreground">
+                  <span className="text-4xl sm:text-[50px] font-black text-slate-900 dark:text-white leading-none tracking-[-0.03em]">
                     {tier.price.currency}
                     {tier.price.current}
                   </span>
-                  <span className="text-xs text-muted font-medium">
-                    /{tier.price.period}
+                  <span className="text-[13.5px] font-medium text-slate-500 dark:text-slate-400 ml-1">
+                    {tier.price.period}
                   </span>
                 </div>
 
                 {/* Features List */}
                 <ul className="space-y-3.5 mb-8">
-                  {tier.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm">
-                      <div className="mt-0.5 w-4 h-4 rounded-full bg-card-muted text-foreground flex items-center justify-center flex-shrink-0 border border-border">
-                        <Check className="w-2.5 h-2.5 stroke-[2.5]" />
-                      </div>
-                      <span
-                        className={
-                          feature.isPrimary
-                            ? "font-semibold text-foreground"
-                            : "text-foreground/80"
-                        }
-                      >
-                        {feature.text}
-                        {feature.tag && (
-                          <span className="ml-2 text-[10px] font-medium px-1.5 py-0.5 rounded bg-card-muted text-muted border border-border">
-                            {feature.tag}
+                  {tier.features.map((feature, i) => {
+                    if (feature.isPrimary) {
+                      return (
+                        <li
+                          key={i}
+                          className="flex items-center gap-2.5 text-[13.5px] text-purple-700 dark:text-purple-300 font-semibold pb-3 mb-2 border-b border-purple-200/60 dark:border-purple-500/25"
+                        >
+                          <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                          <span>
+                            <strong className="text-slate-900 dark:text-white font-bold">
+                              {feature.text.replace(", plus:", "")}
+                            </strong>
+                            , plus:
                           </span>
-                        )}
-                      </span>
-                    </li>
-                  ))}
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li
+                        key={i}
+                        className="flex items-start gap-2.5 text-[14px] text-slate-700 dark:text-slate-200 leading-snug"
+                      >
+                        <svg
+                          className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5 stroke-[2.6]"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span className="flex-1">
+                          <span>{feature.text}</span>
+                          {feature.tag && (
+                            <span
+                              className={`inline-flex items-center ml-2 px-2 py-0.5 rounded-full text-[10.5px] font-semibold tracking-wide border ${
+                                feature.tag === "src/" || feature.tag === "build.js" || feature.tag === ".html"
+                                  ? "font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 rounded-md"
+                                  : tier.isPopular
+                                  ? "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-500/20"
+                                  : "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200/80 dark:border-blue-500/20"
+                              }`}
+                            >
+                              {feature.tag}
+                            </span>
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
@@ -125,14 +172,14 @@ export function Pricing() {
                 href={tier.cta.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`btn-scale w-full inline-flex items-center justify-center gap-2 font-semibold text-sm sm:text-base px-6 py-3.5 rounded-xl transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98] ${
+                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] text-white tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] ${
                   tier.isPopular
-                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40"
-                    : "bg-card-muted hover:bg-card text-foreground border border-border"
+                    ? "bg-[linear-gradient(135deg,#7c3aed_0%,#9333ea_50%,#c026d3_100%)] hover:opacity-95 shadow-[0_4px_16px_rgba(168,85,247,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_8px_24px_rgba(168,85,247,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]"
+                    : "bg-[linear-gradient(to_right,#1d4ed8_0%,#06b6d4_100%)] hover:opacity-95 shadow-[0_4px_16px_rgba(6,182,212,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_8px_24px_rgba(6,182,212,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]"
                 }`}
               >
                 <span>{tier.cta.label}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
               </a>
             </div>
           ))}
