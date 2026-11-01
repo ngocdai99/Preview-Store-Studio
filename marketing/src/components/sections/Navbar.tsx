@@ -90,7 +90,7 @@ export function Navbar() {
           className="flex items-center gap-2 group shrink-0"
         >
           <BrandIcon className="w-7 h-7 rounded-lg shrink-0 transition-transform group-hover:scale-105" />
-          <span className="font-bold text-[13px] sm:text-[14px] tracking-tight text-foreground">
+          <span className="font-bold text-[16px] tracking-tight text-foreground">
             {siteConfig.name}
           </span>
         </Link>
@@ -106,7 +106,7 @@ export function Navbar() {
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.label, item.href)}
-                  className={`btn-scale transition-colors duration-150 rounded-full px-3.5 py-1 text-[12px] sm:text-[12.5px] cursor-pointer ${
+                  className={`btn-scale transition-colors duration-150 rounded-full px-3.5 py-1 text-[13px] cursor-pointer ${
                     isSelected
                       ? "nav-pill-active font-semibold shadow-xs"
                       : "font-medium text-muted hover:text-foreground hover:bg-card-muted/40"
@@ -128,10 +128,10 @@ export function Navbar() {
           <Link
             href="#pricing"
             onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
-            className="btn-scale inline-flex items-center gap-1 text-[11.5px] sm:text-[12.5px] font-semibold bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#8b5cf6] hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white px-3.5 sm:px-4 py-1.5 rounded-full shadow-none sm:shadow-[0_1px_2px_rgba(99,102,241,0.15)] transition-all shrink-0 cursor-pointer"
+            className="btn-scale inline-flex items-center gap-1.5 text-[13px] font-semibold bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#8b5cf6] hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white px-3.5 sm:px-4 py-1.5 rounded-full shadow-none sm:shadow-[0_1px_2px_rgba(99,102,241,0.15)] transition-all shrink-0 cursor-pointer"
           >
             <span>{siteConfig.navPricingCta}</span>
-            <ChevronRight className="w-3 h-3 stroke-[2.5]" />
+            <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
           </Link>
         </div>
       </div>
