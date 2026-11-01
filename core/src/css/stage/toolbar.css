@@ -130,7 +130,7 @@ body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap {
   justify-content: center;
   width: 16px;
   height: 16px;
-  color: #818cf8;
+  color: #60a5fa;
   opacity: .95;
   transition: color .2s ease, opacity .2s ease, transform .25s ease;
   flex-shrink: 0;
@@ -148,7 +148,7 @@ body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap {
 }
 
 .dual-phone-btn:hover:not(.on) .vt-ico {
-  color: #a5b4fc !important;
+  color: #93c5fd !important;
   opacity: 1 !important;
   transform: scale(1.1);
 }
@@ -157,15 +157,15 @@ body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap {
   transform: scale(.95);
 }
 
-/* Active State in Dark Mode (Royal Indigo-Violet Gradient Pro Accent) */
+/* Active State in Dark Mode (Exact matching #btnExport Menu Indigo Blue Gradient) */
 .dual-phone-btn.on,
 body[data-dual="true"] .dual-phone-btn {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 55%, #8b5cf6 100%) !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 4px 16px -2px rgba(99, 102, 241, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 16px -2px rgba(99, 102, 241, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .25) !important;
-  font-weight: 750 !important;
+  font-weight: 700 !important;
 }
 
 .dual-phone-btn.on .vt-ico,
@@ -187,31 +187,31 @@ body[data-dual="true"] .dual-phone-btn .vt-ico {
 }
 
 :root[data-ui=light] .dual-phone-btn .vt-ico {
-  color: #6366f1 !important;
+  color: #3b82f6 !important;
   opacity: .95;
 }
 
 :root[data-ui=light] .dual-phone-btn:hover:not(.on) {
-  color: #1e1b4b !important;
+  color: #1e3a8a !important;
 }
 
 :root[data-ui=light] .dual-phone-btn:hover:not(.on) .vt-ico {
-  color: #4f46e5 !important;
+  color: #2563eb !important;
   opacity: 1;
   transform: scale(1.1);
 }
 
-/* Active / Selected State in Light Mode (Royal Indigo-Violet Gradient Pro Accent) */
+/* Active / Selected State in Light Mode (Exact matching #btnExport Light Indigo Blue Gradient) */
 :root[data-ui=light] .dual-phone-btn.on,
 :root[data-ui=light] body[data-dual="true"] .dual-phone-btn,
 :root[data-ui=light] #dualPhoneWrap .dual-phone-btn.on,
 :root[data-ui=light] body[data-dual="true"] #dualPhoneWrap .dual-phone-btn {
-  background: linear-gradient(135deg, #4f46e5 0%, #6d28d9 100%) !important;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
   color: #ffffff !important;
-  border: 1px solid #4338ca !important;
-  box-shadow: 0 4px 14px -2px rgba(79, 70, 229, 0.45), 0 2px 4px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 4px 14px -2px rgba(99, 102, 241, 0.45), 0 2px 4px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
   text-shadow: none !important;
-  font-weight: 750 !important;
+  font-weight: 700 !important;
 }
 
 :root[data-ui=light] .dual-phone-btn.on .vt-ico,
