@@ -77,14 +77,6 @@ export const en = {
         badge: "Automated QA",
       },
       {
-        id: "sync",
-        icon: "sparkles" as const,
-        title: "Dual-Store Sync & Unicode Counters",
-        description:
-          "Author Apple & Google listings side-by-side. Uses native grapheme cluster segmentation (Intl.Segmenter) so complex emojis and multi-byte symbols match exact store character limits without unexpected console truncation.",
-        badge: "Unicode-Accurate",
-      },
-      {
         id: "export",
         icon: "folderArchive" as const,
         title: "Multi-Format Export & Dev Markdown",

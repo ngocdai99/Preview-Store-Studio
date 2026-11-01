@@ -14,7 +14,6 @@ const iconMap: Record<FeatureItem["icon"], LucideIcon> = {
   search: Search,
   cloudDownload: CloudDownload,
   shieldCheck: ShieldCheck,
-  sparkles: Sparkles,
   folderArchive: FolderArchive,
 };
 
@@ -69,17 +68,6 @@ const featureThemes: Record<string, FeatureTheme> = {
     cardHoverShadow:
       "hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(16,185,129,0.25)]",
   },
-  sync: {
-    iconBox:
-      "bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400 group-hover:bg-rose-500/20 group-hover:border-rose-500/40 group-hover:shadow-[0_0_20px_rgba(244,63,94,0.25)]",
-    badge:
-      "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/25",
-    radialGlow: "from-rose-500/15 via-pink-500/10 to-transparent",
-    cardHoverBorder:
-      "hover:border-rose-500/40 dark:hover:border-rose-500/40",
-    cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(244,63,94,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(244,63,94,0.25)]",
-  },
   export: {
     iconBox:
       "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 group-hover:border-amber-500/40 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]",
@@ -114,11 +102,6 @@ const featureTags: Record<string, string[]> = {
     "Aspect Ratio Verification",
     "Alpha Transparency Alert",
   ],
-  sync: [
-    "Side-by-Side Dual Store",
-    "Intl.Segmenter Emojis",
-    "Live Title Length Guard",
-  ],
   export: [
     "4K Retina PNGs",
     "Client-Side ZIP",
@@ -152,13 +135,14 @@ export function Features() {
           </p>
         </div>
 
-        {/* 6-Card 3x2 Grid */}
+        {/* 5-Card Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {features.items.map((feature) => {
             const Icon = iconMap[feature.icon] || Smartphone;
             const theme =
               featureThemes[feature.id] || featureThemes.frames;
             const tags = featureTags[feature.id] || [];
+            const isHeroCard = feature.id === "frames";
 
             return (
               <div
@@ -169,6 +153,7 @@ export function Features() {
                   shadow-[0_2px_12px_rgba(15,23,42,0.03),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.95)]
                   dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.06)]
                   transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                  ${isHeroCard ? "md:col-span-2 lg:col-span-2" : "col-span-1"}
                   ${theme.cardHoverBorder}
                   ${theme.cardHoverShadow}
                 `}
