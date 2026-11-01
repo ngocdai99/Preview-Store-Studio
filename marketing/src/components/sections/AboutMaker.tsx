@@ -13,7 +13,7 @@ export function AboutMaker() {
             <span>{aboutMaker.badge}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-6 text-balance">
             {aboutMaker.title}
           </h2>
 

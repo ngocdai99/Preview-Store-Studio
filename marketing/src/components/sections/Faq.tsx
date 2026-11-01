@@ -44,7 +44,7 @@ export function Faq() {
     <section id="faq" className="py-20 border-t border-border bg-card/30 transition-colors">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[41.2px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white mb-3 leading-[1.15]">
+          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[41.2px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white mb-3 leading-[1.15] text-balance">
             {faq.title}
           </h2>
           <p className="text-[15px] sm:text-[16px] text-[#475569] dark:text-slate-400 max-w-[620px] mx-auto leading-relaxed">

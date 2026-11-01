@@ -54,18 +54,18 @@ export function Testimonials() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+        <div className="text-center max-w-4xl mx-auto mb-14 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-[0.08em] bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 mb-4 shadow-[0_2px_8px_rgba(168,85,247,0.06)]">
             <Sparkles className="w-3.5 h-3.5" />
             <span>{testimonials.badge}</span>
           </div>
 
-          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15]">
+          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {testimonials.title}
           </h2>
 
           {testimonials.subtitle && (
-            <p className="mt-3.5 text-[15px] sm:text-[16.5px] text-[#475569] dark:text-slate-400 max-w-[640px] mx-auto leading-relaxed">
+            <p className="mt-3.5 text-[15px] sm:text-[16.5px] text-[#475569] dark:text-slate-400 max-w-[620px] mx-auto leading-relaxed text-balance">
               {testimonials.subtitle}
             </p>
           )}

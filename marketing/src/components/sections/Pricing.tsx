@@ -43,10 +43,10 @@ export function Pricing() {
             />
           </a>
 
-          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15]">
+          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {pricing.title}
           </h2>
-          <p className="mt-4 text-muted text-base">{pricing.description}</p>
+          <p className="mt-4 text-muted text-base text-balance">{pricing.description}</p>
         </div>
 
         {/* Pricing Cards */}
