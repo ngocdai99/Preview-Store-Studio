@@ -96,9 +96,13 @@
   justify-content: center;
   width: 15px;
   height: 15px;
-  color: #60a5fa;
+  color: #818cf8;
   flex-shrink: 0;
 }
+
+#btnStageView .stage-view-ico { color: #818cf8; }
+#btnAppleDevice .stage-view-ico { color: #60a5fa; }
+#btnGoogleDevice .stage-view-ico { color: #34d399; }
 
 .stage-view-ico svg {
   width: 15px;
@@ -219,7 +223,7 @@
 
 .stage-view-menu .menu-item.on,
 .stage-view-menu .menu-item.active {
-  background: rgba(59, 130, 246, 0.12);
+  background: rgba(79, 70, 229, 0.14);
   border: none !important;
   color: #ffffff;
 }
@@ -233,12 +237,48 @@
   bottom: 6px;
   width: 3px;
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(180deg, #38bdf8, #2563eb);
+  background: linear-gradient(180deg, #818cf8, #4f46e5);
 }
 
 .stage-view-menu .menu-item.on .mi-ico,
 .stage-view-menu .menu-item.active .mi-ico {
+  color: #818cf8;
+}
+
+/* Apple Menu Adaptive Accents (Apple Blue) */
+#menuAppleDevice .menu-item.on,
+#menuAppleDevice .menu-item.active {
+  background: rgba(0, 113, 227, 0.14);
+}
+#menuAppleDevice .menu-item.on::before,
+#menuAppleDevice .menu-item.active::before {
+  background: linear-gradient(180deg, #38bdf8, #0071e3);
+}
+#menuAppleDevice .menu-item.on .mi-ico,
+#menuAppleDevice .menu-item.active .mi-ico {
   color: #38bdf8;
+}
+#menuAppleDevice .mi-check {
+  background: linear-gradient(135deg, #0071e3, #38bdf8);
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.45);
+}
+
+/* Google Play Menu Adaptive Accents (Google Green) */
+#menuGoogleDevice .menu-item.on,
+#menuGoogleDevice .menu-item.active {
+  background: rgba(5, 150, 105, 0.14);
+}
+#menuGoogleDevice .menu-item.on::before,
+#menuGoogleDevice .menu-item.active::before {
+  background: linear-gradient(180deg, #34d399, #059669);
+}
+#menuGoogleDevice .menu-item.on .mi-ico,
+#menuGoogleDevice .menu-item.active .mi-ico {
+  color: #34d399;
+}
+#menuGoogleDevice .mi-check {
+  background: linear-gradient(135deg, #059669, #34d399);
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.45);
 }
 
 .stage-view-menu .mi-ico,
@@ -365,12 +405,29 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
   box-shadow: 0 6px 20px -2px rgba(15, 23, 42, 0.14), 0 3px 8px -1px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff !important;
 }
 
-:root[data-ui=light] .stage-view-dropdown:has(.menu.show) .stage-view-btn,
-:root[data-ui=light] .stage-device-dropdown:has(.menu.show) .stage-view-btn {
+:root[data-ui=light] #btnStageView .stage-view-ico { color: #4f46e5; }
+:root[data-ui=light] #btnAppleDevice .stage-view-ico { color: #0071e3; }
+:root[data-ui=light] #btnGoogleDevice .stage-view-ico { color: #059669; }
+
+:root[data-ui=light] #stageViewDropdown:has(.menu.show) .stage-view-btn {
   background: #ffffff !important;
-  border-color: rgba(59, 130, 246, 0.5) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
   color: #0f172a !important;
-  box-shadow: 0 6px 20px -2px rgba(59, 130, 246, 0.18), 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 6px 20px -2px rgba(99, 102, 241, 0.18), 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+:root[data-ui=light] #dt:has(.menu.show) .stage-view-btn {
+  background: #ffffff !important;
+  border-color: rgba(0, 113, 227, 0.5) !important;
+  color: #0f172a !important;
+  box-shadow: 0 6px 20px -2px rgba(0, 113, 227, 0.18), 0 0 0 2px rgba(0, 113, 227, 0.2) !important;
+}
+
+:root[data-ui=light] #gdt:has(.menu.show) .stage-view-btn {
+  background: #ffffff !important;
+  border-color: rgba(5, 150, 105, 0.5) !important;
+  color: #0f172a !important;
+  box-shadow: 0 6px 20px -2px rgba(5, 150, 105, 0.18), 0 0 0 2px rgba(5, 150, 105, 0.2) !important;
 }
 
 :root[data-ui=light] .stage-view-arr {
@@ -379,10 +436,6 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 
 :root[data-ui=light] .stage-view-btn:hover .stage-view-arr {
   color: #0f172a;
-}
-
-:root[data-ui=light] .stage-view-ico {
-  color: #2563eb;
 }
 
 :root[data-ui=light] .stage-view-menu,
@@ -410,19 +463,19 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 
 :root[data-ui=light] .stage-view-menu .menu-item.on,
 :root[data-ui=light] .stage-view-menu .menu-item.active {
-  background: rgba(37, 99, 235, 0.08);
+  background: rgba(79, 70, 229, 0.08);
   border: none !important;
   color: #0f172a;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item.on::before,
 :root[data-ui=light] .stage-view-menu .menu-item.active::before {
-  background: #2563eb;
+  background: #4f46e5;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item.on .mi-ico,
 :root[data-ui=light] .stage-view-menu .menu-item.active .mi-ico {
-  color: #2563eb;
+  color: #4f46e5;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item.on .mi-name,
@@ -431,13 +484,49 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 }
 
 :root[data-ui=light] .stage-view-menu .mi-check {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: #ffffff;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
 }
 
 :root[data-ui=light] .stage-view-menu .mi-check svg {
   stroke: #ffffff;
+}
+
+/* Apple Light Mode Menu */
+:root[data-ui=light] #menuAppleDevice .menu-item.on,
+:root[data-ui=light] #menuAppleDevice .menu-item.active {
+  background: rgba(0, 113, 227, 0.08);
+}
+:root[data-ui=light] #menuAppleDevice .menu-item.on::before,
+:root[data-ui=light] #menuAppleDevice .menu-item.active::before {
+  background: #0071e3;
+}
+:root[data-ui=light] #menuAppleDevice .menu-item.on .mi-ico,
+:root[data-ui=light] #menuAppleDevice .menu-item.active .mi-ico {
+  color: #0071e3;
+}
+:root[data-ui=light] #menuAppleDevice .mi-check {
+  background: linear-gradient(135deg, #0071e3, #2563eb);
+  box-shadow: 0 2px 6px rgba(0, 113, 227, 0.35);
+}
+
+/* Google Light Mode Menu */
+:root[data-ui=light] #menuGoogleDevice .menu-item.on,
+:root[data-ui=light] #menuGoogleDevice .menu-item.active {
+  background: rgba(5, 150, 105, 0.08);
+}
+:root[data-ui=light] #menuGoogleDevice .menu-item.on::before,
+:root[data-ui=light] #menuGoogleDevice .menu-item.active::before {
+  background: #059669;
+}
+:root[data-ui=light] #menuGoogleDevice .menu-item.on .mi-ico,
+:root[data-ui=light] #menuGoogleDevice .menu-item.active .mi-ico {
+  color: #059669;
+}
+:root[data-ui=light] #menuGoogleDevice .mi-check {
+  background: linear-gradient(135deg, #059669, #10b981);
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.35);
 }
 
 :root[data-ui=light] .stage-view-menu .mi-switch {
