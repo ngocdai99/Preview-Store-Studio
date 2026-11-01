@@ -177,7 +177,7 @@ export function Pricing() {
                   height={44}
                   className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-200/90 dark:ring-white/15"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#131413]" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#006533] ring-2 ring-white dark:ring-[#1D1E1D]" />
               </div>
 
               {/* Message Details */}
