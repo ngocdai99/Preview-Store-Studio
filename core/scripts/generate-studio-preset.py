@@ -170,7 +170,7 @@ shot2_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" wid
   <text x="230" y="80" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#818cf8" text-anchor="middle">METADATA COMPLIANCE</text>
   <text x="230" y="125" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">Store Limits &amp;</text>
   <text x="230" y="160" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#acc2)" text-anchor="middle">Pre-Flight Audit</text>
-  <text x="230" y="195" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Eliminates submission rejection risks before release</text>
+  <text x="230" y="195" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Catches formatting &amp; dimension issues before release</text>
   <!-- Card Checklist -->
   <g transform="translate(30, 240)">
     <rect width="400" height="470" rx="24" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
@@ -221,7 +221,7 @@ shot2_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" wid
     <text x="30" y="45" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Ready For Submission</text>
     <text x="30" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Export verified metadata and mockups directly into your developer release pipeline.</text>
     <rect x="30" y="105" width="340" height="46" rx="23" fill="url(#acc2)"/>
-    <text x="200" y="134" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">100% STORE COMPLIANT</text>
+    <text x="200" y="134" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">SPEC-VERIFIED METADATA</text>
   </g>
 </svg>"""
 
@@ -281,7 +281,7 @@ shot3_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" wid
   <g transform="translate(30, 830)">
     <rect width="400" height="90" rx="20" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5"/>
     <text x="200" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#34d399" text-anchor="middle">🛡️ 100% ITMS-90717 COMPLIANT</text>
-    <text x="200" y="65" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">No transparent pixel rejections on App Store Connect</text>
+    <text x="200" y="65" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">Guards against transparent icon upload errors (ITMS-90717)</text>
   </g>
 </svg>"""
 
@@ -370,7 +370,7 @@ preset_data = {
     "privNotLinked": "Diagnostics",
     "privGoogle": "No data shared with third parties, Data is encrypted in transit, You can request data deletion",
     "new": "Version 2.1.0 Update:\n- Live dual-store viewports (iPhone, iPad & Android layouts)\n- App Icon Inspector with ITMS-90717 alpha compliance audit\n- Ultra HD 3x PNG mockups & 1-click bulk ZIP export\n- Developer Markdown generator\n- 100% standalone offline operation with zero telemetry",
-    "desc": "Store Preview Studio is the professional listing designer and pre-flight audit studio for iOS and Android developers, indie creators, and digital agencies.\n\nCraft high-converting App Store Connect and Google Play Console product listings side-by-side with instantaneous real-time sync, automated store limit validation, and Retina-grade mockup generation — 100% offline in your browser.\n\nCORE CAPABILITIES:\n• Dual-Store Live Viewports: Simultaneously visualize how your app listing looks on both iOS and Android before publishing.\n• Pre-Flight Compliance Audit: Automated real-time checking of title lengths, character limits, and store requirements to prevent rejections.\n• App Icon Inspector: Audit master 1024x1024 icons, test transparency compliance against Apple ITMS-90717 guidelines, and preview adaptive squircle shapes.\n• Ultra HD 3x Multi-Format Export: Download pristine 3x Retina PNG device mockups, comprehensive client-side ZIP bundles, and developer Markdown specifications in 1 click.\n• 100% Client-Side Privacy: Operates completely offline with zero tracking, zero server dependencies, and zero monthly subscriptions.\n\nPRICING & LICENSING:\nPay once on Gumroad, own forever. No subscriptions, no cloud vendor lock-in."
+    "desc": "Store Preview Studio is the professional listing designer and pre-flight audit studio for iOS and Android developers, indie creators, and digital agencies.\n\nCraft high-converting App Store Connect and Google Play Console product listings side-by-side with instantaneous real-time sync, automated store limit validation, and Retina-grade mockup generation — 100% offline in your browser.\n\nCORE CAPABILITIES:\n• Dual-Store Live Viewports: Simultaneously visualize how your app listing looks on both iOS and Android before publishing.\n• Pre-Flight Compliance Audit: Automated real-time checking of title lengths, character limits, and store dimension requirements.\n• App Icon Inspector: Audit master 1024x1024 icons, test transparency compliance against Apple ITMS-90717 guidelines, and preview adaptive squircle shapes.\n• Ultra HD 3x Multi-Format Export: Download pristine 3x Retina PNG device mockups, comprehensive client-side ZIP bundles, and developer Markdown specifications in 1 click.\n• 100% Client-Side Privacy: Operates completely offline with zero tracking, zero server dependencies, and zero monthly subscriptions.\n\nPRICING & LICENSING:\nPay once on Gumroad, own forever. No subscriptions, no cloud vendor lock-in."
   },
   "icon": enc_svg(icon_svg),
   "featureGraphic": enc_svg(feature_svg),

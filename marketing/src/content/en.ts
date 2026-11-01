@@ -42,7 +42,7 @@ export const en = {
   features: {
     headline: "Built for mobile developers, agencies, and ASO pros.",
     subheadline:
-      "Everything you need to craft, review, and ship perfect app listings without messy spreadsheets or design templates.",
+      "Everything you need to craft, review, and ship store-ready app listings without messy spreadsheets or design templates.",
     items: [
       {
         id: "frames",
@@ -65,8 +65,8 @@ export const en = {
         icon: "sparkles" as const,
         title: "Dual-Store Sync & Unicode Counters",
         description:
-          "Author Apple & Google listings side-by-side. Uses native grapheme cluster segmentation (Intl.Segmenter) so complex emojis and symbols never trigger surprise store metadata rejections.",
-        badge: "Zero Rejections",
+          "Author Apple & Google listings side-by-side. Uses native grapheme cluster segmentation (Intl.Segmenter) so complex emojis and multi-byte symbols match exact store character limits without unexpected console truncation.",
+        badge: "Unicode-Accurate",
       },
       {
         id: "export",
