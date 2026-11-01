@@ -29,7 +29,6 @@ export const siteConfig = {
   comparison: en.comparison,
   testimonials: en.testimonials,
   pricing: en.pricing,
-  aboutMaker: en.aboutMaker,
   faq: en.faq,
   footer: en.footer,
 };

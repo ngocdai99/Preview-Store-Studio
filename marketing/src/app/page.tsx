@@ -4,7 +4,6 @@ import { Features } from "@/components/sections/Features";
 import { Comparison } from "@/components/sections/Comparison";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
-import { AboutMaker } from "@/components/sections/AboutMaker";
 import { Faq } from "@/components/sections/Faq";
 import { Footer } from "@/components/sections/Footer";
 
@@ -18,7 +17,6 @@ export default function HomePage() {
         <Comparison />
         <Testimonials />
         <Pricing />
-        <AboutMaker />
         <Faq />
       </main>
       <Footer />
