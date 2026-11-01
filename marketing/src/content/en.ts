@@ -87,21 +87,21 @@ export const en = {
     badge: "The Problem vs The Solution",
     title: "The blind submission headache is over.",
     badColumnTitle: "Without Preview Studio",
-    badColumnSubtitle: "Blind form fields, spreadsheets & $29/mo recurring subscriptions",
+    badColumnSubtitle: "Blind form fields, spreadsheets & fragmented drafts",
     goodColumnTitle: "With Preview Studio",
-    goodColumnSubtitle: "Interactive visual workspace · 100% Offline · Pay once, keep forever",
+    goodColumnSubtitle: "Interactive visual workspace · 100% Offline",
     beats: [
       {
         id: "beat-1",
         number: "01",
-        category: "Team Access & Handoff",
+        category: "TEAM ACCESS & HANDOFF",
         bad: {
           title: "Marketers without developer accounts, drafting blindly in Google Docs",
           description:
             "Writing copy in shared docs leads to endless back-and-forth with developers over character limits, missing specs, and broken layouts.",
         },
         good: {
-          badge: "Independent Marketing Workflow",
+          badge: "INDEPENDENT MARKETING WORKFLOW",
           title: "Preview and validate listings without needing developer accounts",
           description:
             "Finalize store pages with confidence. Hand over paste-ready copy and assets to developers with zero back-and-forth.",
@@ -110,14 +110,14 @@ export const en = {
       {
         id: "beat-2",
         number: "02",
-        category: "Release Planning",
+        category: "RELEASE PLANNING",
         bad: {
           title: "No visibility into which changes require a new app release",
           description:
             "No way to know whether an edit can go live instantly or requires developers to compile and submit a new binary — leading to surprise rebuild requests and delayed campaigns.",
         },
         good: {
-          badge: "Proactive Release Planning",
+          badge: "PROACTIVE RELEASE PLANNING",
           title: "Know what updates live vs. what needs a new release",
           description:
             "Plan marketing campaigns with confidence, and only loop in developers when a new app release is actually required.",
@@ -126,33 +126,33 @@ export const en = {
       {
         id: "beat-3",
         number: "03",
-        category: "Visual Context & Mockups",
+        category: "VISUAL CONTEXT",
         bad: {
-          title: "Drafting blindly with zero device preview or outdated frames",
+          title: "Drafting blindly with zero device preview",
           description:
             "Typing copy into raw form inputs leaves you guessing. Awkward line wraps and cut-off text stay hidden until the app is live.",
         },
         good: {
-          badge: "Visual Device Mockups",
-          title: "Authentic, pixel-perfect iOS & Android mockups",
+          badge: "VISUAL DEVICE MOCKUPS",
+          title: "Authentic iOS & Android mockups",
           description:
-            "Preview in real time across iPhone (Dynamic Island), iPad, and Android screens. Catch awkward truncations and layout bugs long before release day.",
+            "Preview in real time across iPhone, iPad, and Android screens. Catch awkward truncations and layout bugs long before release day.",
         },
       },
       {
         id: "beat-4",
         number: "04",
-        category: "Pricing & Privacy",
+        category: "PRICING & PRIVACY",
         bad: {
-          title: "$29/mo recurring subscriptions & mandatory cloud uploads",
+          title: "$29/mo subscriptions & cloud accounts",
           description:
-            "Third-party SaaS tools charge recurring monthly fees and force you to upload unreleased client assets to third-party cloud servers.",
+            "Third-party SaaS tools charge recurring monthly fees and require cloud accounts just to preview marketing assets before launch.",
         },
         good: {
-          badge: "100% Private & Offline",
+          badge: "100% PRIVATE & OFFLINE",
           title: "One-time purchase · Pay once, keep forever",
           description:
-            "A self-contained HTML file running locally on your machine. Zero subscriptions, zero logins, zero servers, and complete peace of mind.",
+            "A self-contained HTML file running locally on your machine. Zero subscriptions, zero logins, and complete peace of mind.",
         },
       },
     ],
