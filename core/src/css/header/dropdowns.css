@@ -224,6 +224,19 @@
   color: #92400e;
 }
 
+@media (max-width: 822px) {
+  .preset-banner {
+    order: 10;
+    width: 100%;
+    margin-left: 0;
+    margin-top: 2px;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 3px 8px;
+    box-sizing: border-box;
+  }
+}
+
 @media (max-width: 580px) {
   .preset-banner {
     padding: 2px 7px;
