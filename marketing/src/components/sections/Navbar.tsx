@@ -5,25 +5,30 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Menu, X } from "lucide-react";
 
 export function Navbar() {
   const [activeTab, setActiveTab] = useState<string>("Studio");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isClickScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navItems = [
     { label: "Studio", href: "#hero" },
-    ...siteConfig.navigation,
+    { label: "Features", href: "#features" },
+    { label: "Why Us", href: "#comparison" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "FAQ", href: "#faq" },
   ];
 
   // Scroll spy to dynamically sync selected tab with current section in view
   useEffect(() => {
     const handleScroll = () => {
-      // If user just clicked a nav tab, do not let scroll-spy override the active tab during smooth scroll
       if (isClickScrollingRef.current) return;
 
       const scrollPos = window.scrollY + 140;
       const compEl = document.getElementById("comparison");
+      const featEl = document.getElementById("features");
       const pricingEl = document.getElementById("pricing");
       const faqEl = document.getElementById("faq");
 
@@ -33,6 +38,8 @@ export function Navbar() {
         setActiveTab("Pricing");
       } else if (compEl && scrollPos >= compEl.offsetTop) {
         setActiveTab("Why Us");
+      } else if (featEl && scrollPos >= featEl.offsetTop) {
+        setActiveTab("Features");
       } else {
         setActiveTab("Studio");
       }
@@ -53,10 +60,9 @@ export function Navbar() {
     label: string,
     href: string
   ) => {
-    // 1. Instantly switch active state immediately (0ms delay)
     setActiveTab(label);
+    setMobileMenuOpen(false);
 
-    // 2. Lock scroll-spy listener during smooth scroll animation
     isClickScrollingRef.current = true;
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
@@ -65,7 +71,6 @@ export function Navbar() {
       isClickScrollingRef.current = false;
     }, 1000);
 
-    // 3. Perform smooth scroll
     if (href.startsWith("#")) {
       e.preventDefault();
       const target = document.querySelector(href);
@@ -80,49 +85,35 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-3 sm:top-4 z-50 w-full px-3 sm:px-6 pointer-events-none">
-      <div className="max-w-5xl mx-auto h-12 sm:h-13 px-3 sm:px-4 rounded-full border border-border bg-card/90 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:shadow-xl dark:shadow-black/40 flex items-center justify-between pointer-events-auto transition-colors">
-        {/* Brand */}
-        <Link
-          href="/"
-          onClick={(e) => handleNavClick(e, "Studio", "#hero")}
-          className="flex items-center gap-2 group shrink-0 h-[36px]"
-        >
-          <BrandIcon className="w-7 h-7 rounded-lg shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
-          <span className="font-bold text-[16px] tracking-tight text-foreground">
-            {siteConfig.name}
-          </span>
-        </Link>
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 dark:border-[#282928] bg-white/85 dark:bg-[#131413]/85 backdrop-blur-md transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
+        {/* Left Section: Brand Logo & Navigation Links (Supabase style) */}
+        <div className="flex items-center gap-6 lg:gap-8">
+          <Link
+            href="/"
+            onClick={(e) => handleNavClick(e, "Studio", "#hero")}
+            className="flex items-center gap-2.5 group shrink-0"
+          >
+            <BrandIcon className="w-6 h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
+            <span className="font-bold text-[15.5px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white">
+              {siteConfig.name}
+            </span>
+          </Link>
 
-        {/* Right Section: Desktop Nav + Divider + Theme Toggle + CTA */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          {/* Navigation Links with Interactive Active Pill */}
-          <nav className="hidden md:flex items-center gap-1 sm:gap-1.5">
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex items-center gap-5 lg:gap-6">
             {navItems.map((item) => {
               const isSelected = activeTab === item.label;
-              const isStaticPage = !item.href.startsWith("#");
-
-              if (isStaticPage) {
-                return (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] font-medium text-muted hover:text-foreground hover:bg-card-muted/40 transition-colors duration-150 cursor-pointer"
-                  >
-                    {item.label}
-                  </a>
-                );
-              }
 
               return (
                 <Link
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.label, item.href)}
-                  className={`inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] transition-colors duration-150 cursor-pointer ${
+                  className={`text-[13.5px] transition-colors duration-150 ${
                     isSelected
-                      ? "nav-pill-active font-semibold shadow-xs"
-                      : "font-medium text-muted hover:text-foreground hover:bg-card-muted/40"
+                      ? "text-slate-900 dark:text-white font-semibold"
+                      : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
                   }`}
                 >
                   {item.label}
@@ -130,14 +121,68 @@ export function Navbar() {
               );
             })}
           </nav>
+        </div>
 
-          {/* Vertical Divider */}
-          <div className="hidden sm:block h-4 w-[1px] bg-border" aria-hidden="true" />
-
-          {/* Theme Toggle */}
+        {/* Right Section: Theme Toggle + Demo Link + Supabase Emerald CTA Button */}
+        <div className="flex items-center gap-2.5 sm:gap-3.5">
           <ThemeToggle />
+
+          <a
+            href="/demo.html"
+            className="hidden sm:inline-flex items-center text-[13px] font-medium text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 transition-colors"
+          >
+            Live Demo
+          </a>
+
+          <Link
+            href="#pricing"
+            onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
+            className="btn-scale inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[13px] font-semibold text-white bg-[#006533] hover:bg-[#005028] border border-[#00D085]/35 shadow-xs transition-all duration-150 shrink-0"
+          >
+            <span>Get Access</span>
+          </Link>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
+            aria-label="Toggle mobile menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5 stroke-[2]" />
+            ) : (
+              <Menu className="w-5 h-5 stroke-[2]" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Dropdown Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-slate-200/90 dark:border-[#282928] bg-white/95 dark:bg-[#131413]/95 backdrop-blur-xl px-4 py-3 space-y-1">
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              onClick={(e) => handleNavClick(e, item.label, item.href)}
+              className={`block px-3 py-2 rounded-md text-[14px] transition-colors ${
+                activeTab === item.label
+                  ? "text-slate-900 dark:text-white font-semibold bg-slate-100 dark:bg-white/[0.06]"
+                  : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <a
+            href="/demo.html"
+            className="block px-3 py-2 text-[14px] text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
+          >
+            Live Demo
+          </a>
+        </div>
+      )}
     </header>
   );
 }
