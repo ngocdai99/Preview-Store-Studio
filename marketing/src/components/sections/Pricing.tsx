@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site";
-import { Check, Sparkles, ArrowRight, Info } from "lucide-react";
+import { Check, Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
 
 export function Pricing() {
   const { pricing } = siteConfig;
@@ -9,12 +9,19 @@ export function Pricing() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Head */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-card-muted text-muted border border-border mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-            <span className="font-semibold text-foreground">{pricing.banner.tag}</span>
-            <span>·</span>
-            <span>{pricing.banner.text}</span>
-          </div>
+          <a
+            href={siteConfig.gumroadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pricing-announcement-banner group"
+            aria-label={`${pricing.banner.tag}: ${pricing.banner.text}`}
+          >
+            <span className="announcement-pulse-dot" aria-hidden="true" />
+            <span className="announcement-tag">{pricing.banner.tag}</span>
+            <span className="announcement-sep" aria-hidden="true">·</span>
+            <span className="announcement-text">{pricing.banner.text}</span>
+            <ChevronRight className="announcement-arrow w-3.5 h-3.5" strokeWidth={2.5} />
+          </a>
 
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground">
             {pricing.title}
