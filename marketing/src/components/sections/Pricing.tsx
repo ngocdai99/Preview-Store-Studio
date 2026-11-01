@@ -57,14 +57,14 @@ export function Pricing() {
           <p className="mt-4 text-muted text-base text-balance">{pricing.description}</p>
         </div>
 
-        {/* Pricing Content Container (Constrained width for elegant card proportion) */}
-        <div className="max-w-[920px] mx-auto">
+        {/* Pricing Content Container (Optimized width so tags and lines never awkwardly wrap) */}
+        <div className="max-w-[1020px] mx-auto">
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7 sm:gap-8 items-stretch mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 items-stretch mb-10">
             {pricing.tiers.map((tier) => (
               <div
                 key={tier.id}
-                className={`relative rounded-[26px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#0c1222] border-2 border-transparent shadow-[0_4px_24px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] ${
+                className={`relative rounded-[26px] p-6 sm:px-7 sm:py-8 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#0c1222] border-2 border-transparent shadow-[0_4px_24px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] ${
                   tier.isPopular
                     ? "hover:border-purple-500/50 dark:hover:border-purple-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(139,92,246,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(139,92,246,0.22)]"
                     : "hover:border-blue-500/50 dark:hover:border-blue-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(6,182,212,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(6,182,212,0.22)]"

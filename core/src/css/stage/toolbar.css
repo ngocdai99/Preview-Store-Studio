@@ -762,19 +762,6 @@
   color: #059669;
 }
 
-:root[data-ui=light] .stage-view-menu .mi-switch {
-  background: rgba(15, 23, 42, 0.16);
-}
-
-:root[data-ui=light] .stage-view-menu #btnDualPhone.on .mi-switch,
-:root[data-ui=light] body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch {
-  background: linear-gradient(135deg, #475569, #334155) !important;
-}
-:root[data-ui=light] .stage-view-menu #btnDualPhone.on .mi-switch::after,
-:root[data-ui=light] body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
-  background: #ffffff;
-}
-
 /* Tablet hiding for comparison section in stage view menu */
 body[data-store="apple"][data-apple-device="ipad"] #dualPhoneWrap,
 body[data-store="apple"][data-apple-device="ipad"] #dualPhoneDiv,
