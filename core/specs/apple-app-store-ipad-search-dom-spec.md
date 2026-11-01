@@ -1,6 +1,6 @@
 # Apple App Store · Chuẩn Cấu Trúc DOM Cho iPad · Search Results View (DOM Specification)
 
-> **Phạm vi thiết bị:** Apple iPad (iPad Pro 13", iPad Air, iPad Mini · Portrait & Landscape).
+> **Phạm vi thiết bị:** Apple iPad (Portrait & Landscape).
 > **Cơ sở tham chiếu:** Giao diện thực tế của Apple App Store trên iPad khi thực hiện tìm kiếm ứng dụng (ảnh chụp màn hình thực tế: Thanh tìm kiếm trên đỉnh kèm nút Bộ lọc (Filters), Lưới kết quả 2 cột đối xứng `grid-template-columns: repeat(2, 1fr)`).
 > **Mục đích:** Quy chuẩn hóa cấu trúc cây DOM, semantic HTML, thứ tự render, data-bind attributes, và hệ thống class CSS cho màn hình **Search Results** trên iPad trong Preview Studio.
 

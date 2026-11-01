@@ -85,7 +85,7 @@
 - [ ] **[P1]** Dropdown độ tuổi (Age Rating) $\rightarrow$ Chọn 4+, 9+, 12+, 17+ (Apple) hoặc 3+, 7+, 12+, 16+, 18+ (Google) hiển thị đúng badge.
 
 ### 2.5 Card 5: Tablet / iPad Screenshots
-- [ ] **[P1]** Upload ảnh iPad Pro 13" (Apple) hoặc Tablet 10" (Google):
+- [ ] **[P1]** Upload ảnh iPad (Apple) hoặc Tablet (Google):
   - Chuyển tab view sang Tablet $\rightarrow$ Ảnh hiển thị sắc nét, không bị méo tỉ lệ.
 
 ### 2.6 Card 6 (Google): Feature Graphic
@@ -119,7 +119,7 @@
 
 - [ ] **[P0]** **Chuyển đổi Thiết bị (Device Selector)**:
   - Bấm chọn iPhone $\rightarrow$ Render iPhone Mockup.
-  - Bấm chọn iPad $\rightarrow$ Render iPad Pro 13" Mockup.
+  - Bấm chọn iPad $\rightarrow$ Render iPad Mockup.
 - [ ] **[P1]** **Chuyển Viewport (Product Detail ↔ Search Results)**:
   - Apple: Xem trang chi tiết App vs Xem kết quả tìm kiếm (Search Card hiển thị icon, tên, rating, 3 screenshots nằm ngang).
   - Google Play: Xem trang chi tiết vs Xem Search Card.

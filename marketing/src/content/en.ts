@@ -45,7 +45,7 @@ export const en = {
         icon: "smartphone" as const,
         title: "Realistic Modern Device Frames",
         description:
-          "Hardware bezels for iPhone 16/15 Pro with Dynamic Island, iPad Pro, Android flagship phones, and tablets. Supports landscape game mode viewports and dark/light OS themes.",
+          "Hardware bezels for iPhone, iPad, Android phones, and tablets. Supports landscape game mode viewports and dark/light OS themes.",
         badge: "Retina Hardware",
       },
       {
@@ -53,7 +53,7 @@ export const en = {
         icon: "shieldCheck" as const,
         title: "Smart Size & Compliance Detection",
         description:
-          "Automatically verifies screenshot dimensions against official App Store (6.7\", 6.5\", iPad 12.9\") & Google Play guidelines. Warns you instantly about invalid aspect ratios and illegal iOS icon transparency (alpha channels).",
+          "Automatically verifies screenshot dimensions against official App Store & Google Play guidelines. Warns you instantly about invalid aspect ratios and illegal iOS icon transparency (alpha channels).",
         badge: "Automated QA",
       },
       {
