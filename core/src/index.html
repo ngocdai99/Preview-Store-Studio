@@ -32,23 +32,6 @@ try{document.documentElement.dataset.ui = localStorage.getItem("store_preview_st
 
   <!-- Stage Area (Right Canvas / Device Mockups) -->
   <section class="stage">
-    <!-- Non-destructive Preset Preview Banner -->
-    <div class="preset-banner" id="presetBanner" style="display: none;">
-      <div class="preset-banner-info">
-        <span class="preset-banner-dot"></span>
-        <span class="preset-banner-text" id="presetBannerText">
-          Viewing preset: <strong id="presetBannerName">TaskFlow</strong> · Your draft is saved safely.
-        </span>
-      </div>
-      <button type="button" class="preset-banner-btn" id="btnReturnToDraft" title="Return to your saved draft">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 14 4 9 9 4"></polyline>
-          <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
-        </svg>
-        <span>Return to My Draft</span>
-      </button>
-    </div>
-
     <!-- @include "components/stage-toolbar.html" -->
     <div class="stage-devices" id="stageDevices">
       <!-- @include "components/mockups/apple/iphone.html" -->

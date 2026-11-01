@@ -479,11 +479,11 @@ function updatePresetBanner(){
     
     if(textEl){
       if(isPresetModified){
-        textEl.innerHTML = '<strong>Preview only: edits won\'t be saved</strong> · Your draft is saved safely.';
+        textEl.innerHTML = '<strong>Preview only: edits won\'t be saved</strong><span class="preset-banner-sub"> · Your draft is saved safely.</span>';
       } else if(CURRENT_PRESET_KEY === 'imported'){
-        textEl.innerHTML = 'Viewing imported app: <strong id="presetBannerName">' + escapeHtml(pName) + '</strong> · Your draft is saved safely.';
+        textEl.innerHTML = 'Viewing imported app: <strong id="presetBannerName">' + escapeHtml(pName) + '</strong><span class="preset-banner-sub"> · Your draft is saved safely.</span>';
       } else {
-        textEl.innerHTML = 'Viewing preset: <strong id="presetBannerName">' + escapeHtml(pName) + '</strong> · Your draft is saved safely.';
+        textEl.innerHTML = 'Viewing preset: <strong id="presetBannerName">' + escapeHtml(pName) + '</strong><span class="preset-banner-sub"> · Your draft is saved safely.</span>';
       }
     }
   } else {

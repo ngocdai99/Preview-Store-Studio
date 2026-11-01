@@ -14,6 +14,23 @@
     <small id="draftBtnBadge">Draft</small>
   </button>
 
+  <!-- Non-destructive Preset Preview Banner (Moved out of stage canvas to prevent layout shift and device clipping) -->
+  <div class="preset-banner" id="presetBanner" style="display: none;">
+    <div class="preset-banner-info">
+      <span class="preset-banner-dot"></span>
+      <span class="preset-banner-text" id="presetBannerText">
+        Viewing preset: <strong id="presetBannerName">TaskFlow</strong><span class="preset-banner-sub"> · Your draft is saved safely.</span>
+      </span>
+    </div>
+    <button type="button" class="preset-banner-btn" id="btnReturnToDraft" title="Return to your saved draft">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 14 4 9 9 4"></polyline>
+        <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+      </svg>
+      <span>Return to My Draft</span>
+    </button>
+  </div>
+
   <!-- App Store Clone Button -->
   <button type="button" class="ms-pill ms-pill-import" id="btnOpenStoreImport" title="Clone live app from App Store">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

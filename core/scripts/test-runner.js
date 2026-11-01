@@ -881,8 +881,9 @@ function testGetDisplaySrc(src, cache) {
 assert(bundledHtml.includes('sps_core_user_draft'), 'Bundled application defines sps_core_user_draft storage key');
 assert(bundledHtml.includes('btnDraft'), 'Header contains My App (Draft) button placed next to Presets');
 assert(bundledHtml.includes('draftBtnBadge'), 'Draft button renders Draft status indicator pill');
-assert(bundledHtml.includes('presetBanner'), 'Stage DOM contains non-destructive Preset Preview Banner');
+assert(bundledHtml.includes('presetBanner'), 'Application contains non-destructive Preset Preview Banner');
 assert(bundledHtml.includes('btnReturnToDraft'), 'Preset Preview Banner contains Return to My Draft restore button');
+assert(!bundledHtml.includes('<section class="stage">\n    <!-- Non-destructive Preset Preview Banner -->') && !bundledHtml.includes('<section class="stage">\n    <div class="preset-banner"'), 'Stage canvas removes in-flow presetBanner to prevent pushing toolbar and squeezing device height');
 
 // Simulation of Non-destructive Preset Sandboxing State Machine
 let simUserDraft = {
