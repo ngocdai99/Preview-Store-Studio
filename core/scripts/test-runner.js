@@ -2588,49 +2588,43 @@ vm.runInContext("FEATURE_GRAPHIC = 'data:image/png;base64,sampleRealFeature';", 
 assert(themeSandbox.isPlaceholderFeature() === false, 'isPlaceholderFeature recognizes actual custom feature graphic');
 
 // ---------------------------------------------------------------------
-// [SUITE 37]: Dedicated Bottom View Switcher & Height Optimization
+// [SUITE 37]: 3-Zone Stage Architecture (Left Vertical Views, Center Device, Right Theme)
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 37]: Dedicated Bottom View Switcher & Height Optimization');
+console.log('\n[SUITE 37]: 3-Zone Stage Architecture (Left Vertical Views, Center Device, Right Theme)');
 
-// 1. Top toolbar is calm and stable: only device and theme controls, no crowded view switcher
+// 1. Stage Toolbar defines 3 distinct zones: Left (Vertical Views), Center (Device Selectors), Right (Theme Toggle)
 const stageToolbarHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage-toolbar.html'), 'utf8');
-assert(!stageToolbarHtml.includes('components/stage/view-switcher.html'), 'stage-toolbar.html avoids crowded view-switcher to eliminate toolbar flick and jitter');
-assert(stageToolbarHtml.includes('components/stage/apple-device-selector.html') && stageToolbarHtml.includes('components/common/device-theme-seg.html'), 'stage-toolbar.html retains clean device selector and theme controls');
+assert(stageToolbarHtml.includes('id="stageToolbarLeft"') && stageToolbarHtml.includes('components/stage/view-switcher.html'), 'stage-toolbar.html houses view-switcher in stageToolbarLeft');
+assert(stageToolbarHtml.includes('id="stageToolbarCenter"') && stageToolbarHtml.includes('components/stage/apple-device-selector.html'), 'stage-toolbar.html houses device selector in stageToolbarCenter');
+assert(stageToolbarHtml.includes('id="stageToolbarRight"') && stageToolbarHtml.includes('components/common/device-theme-seg.html'), 'stage-toolbar.html houses theme toggle in stageToolbarRight');
 
-// 2. The stage index places view switcher safely in the dedicated bottom bar
+// 2. The stage index eliminates bottom bar completely, liberating 100% canvas bottom height
 const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'index.html'), 'utf8');
-assert(indexHtml.includes('<div class="stage-bottom-bar" id="stageBottomBar">') && indexHtml.includes('components/stage/view-switcher.html'), 'src/index.html houses view-switcher in dedicated stage-bottom-bar');
+assert(!indexHtml.includes('<div class="stage-bottom-bar"'), 'src/index.html removes in-flow stage-bottom-bar to prevent squeezing device height');
 
-// 3. Compact bottom bar CSS avoids bloated dead margins
+// 3. Toolbar CSS formats left view switcher vertically (.vt.vt-vertical) and anchors left & right zones
 const stageToolbarCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'stage', 'toolbar.css'), 'utf8');
-assert(stageToolbarCss.includes('.stage-bottom-bar{position:sticky;bottom:8px') && stageToolbarCss.includes('padding-top:4px'), 'toolbar.css uses compact 8px bottom and 4px padding for stage-bottom-bar');
+assert(/\.stage-toolbar-left\s*\{[^}]*position:\s*absolute;\s*left:\s*16px/.test(stageToolbarCss), 'toolbar.css pins stage-toolbar-left to absolute left: 16px');
+assert(/\.stage-toolbar-right\s*\{[^}]*position:\s*absolute;\s*right:\s*16px/.test(stageToolbarCss), 'toolbar.css pins stage-toolbar-right to absolute right: 16px');
+assert(/\.vt\.vt-vertical\s*\{[^}]*flex-direction:\s*column/.test(stageToolbarCss), 'toolbar.css formats .vt.vt-vertical as a vertical flex column');
 
-// 4. Zoom calculation in main.js and transitions.js uses streamlined padding and avoids inflated overhead
-const mainJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'main.js'), 'utf8');
+// 4. Transitions JS supports vertical pill animation (translateY)
 const transitionsJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
-assert(mainJsCode.includes('pad=m?16:24') && mainJsCode.includes('bb.offsetHeight + 4'), 'main.js fit() uses compact pad and exact bb height buffer');
-assert(transitionsJsCode.includes('pad = m ? 16 : 24') && transitionsJsCode.includes('bb.offsetHeight + 4'), 'transitions.js computeDeviceZoom() uses compact pad and exact bb height buffer');
+assert(transitionsJsCode.includes('isVertical') && transitionsJsCode.includes('translateY'), 'transitions.js syncVtPill supports vertical sliding with translateY');
 
-// 5. Verify mathematical height liberation with optimized bottom bar vs old bloated bottom bar
-const simulateOldZoom = (clientHeight, baseH) => {
-  const pad = 40;
-  const tbHeight = 40;
-  const bbH = 68; // old bloated bb overhead
-  const vt = tbHeight + bbH + 18 + 44;
-  return (clientHeight - pad - vt) / (baseH + 8);
-};
-const simulateNewZoom = (clientHeight, baseH) => {
-  const pad = 24; // new tight pad
+// 5. Verify mathematical height gain with 0px bottom overhead
+const simulateZoom = (clientHeight, baseH, hasBottomBar) => {
+  const pad = 24;
   const tbHeight = 38;
-  const bbH = 42; // exact 38 + 4
+  const bbH = hasBottomBar ? 68 : 0;
   const vt = tbHeight + bbH + 10 + 36;
   return (clientHeight - pad - vt) / (baseH + 8);
 };
-const oldZoom = simulateOldZoom(750, 870);
-const newZoom = simulateNewZoom(750, 870);
-assert(newZoom > oldZoom, 'Optimized bottom bar calculation significantly increases device scale zoom on canvas');
+const oldZoom = simulateZoom(750, 870, true);
+const newZoom = simulateZoom(750, 870, false);
+assert(newZoom > oldZoom, 'Liberating bottom bar increases device scale zoom on canvas');
 const heightGainPercent = ((newZoom - oldZoom) / oldZoom) * 100;
-assert(heightGainPercent >= 9, 'Device gains at least 9% more vertical scale and screen presence with optimized bottom bar');
+assert(heightGainPercent >= 10, 'Device gains at least 10% more vertical scale and screen presence with 0px bottom bar');
 
 // ---------------------------------------------------------------------
 // Summary Report

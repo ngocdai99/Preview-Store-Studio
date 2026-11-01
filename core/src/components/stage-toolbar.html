@@ -1,5 +1,17 @@
 <div class="stage-toolbar">
-  <!-- @include "components/stage/apple-device-selector.html" -->
-  <!-- @include "components/stage/google-device-selector.html" -->
-  <!-- @include "components/common/device-theme-seg.html" -->
+  <!-- Left Side: Vertical View Switcher & Dual Phone -->
+  <div class="stage-toolbar-left" id="stageToolbarLeft">
+    <!-- @include "components/stage/view-switcher.html" -->
+  </div>
+
+  <!-- Center: Device Selectors -->
+  <div class="stage-toolbar-center" id="stageToolbarCenter">
+    <!-- @include "components/stage/apple-device-selector.html" -->
+    <!-- @include "components/stage/google-device-selector.html" -->
+  </div>
+
+  <!-- Right Side: Device Theme Toggle -->
+  <div class="stage-toolbar-right" id="stageToolbarRight">
+    <!-- @include "components/common/device-theme-seg.html" -->
+  </div>
 </div>

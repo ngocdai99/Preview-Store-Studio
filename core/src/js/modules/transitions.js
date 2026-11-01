@@ -129,9 +129,17 @@ function syncVtPill(container){
     container.prepend(pill);
   }
   const activeBtn = container.querySelector('button.on');
+  const isVertical = container.classList.contains('vt-vertical');
   if(activeBtn && container.offsetParent !== null && activeBtn.offsetWidth > 0){
-    pill.style.width = activeBtn.offsetWidth + 'px';
-    pill.style.transform = 'translateX(' + activeBtn.offsetLeft + 'px)';
+    if(isVertical){
+      pill.style.width = 'calc(100% - 8px)';
+      pill.style.height = activeBtn.offsetHeight + 'px';
+      pill.style.transform = 'translateY(' + activeBtn.offsetTop + 'px)';
+    } else {
+      pill.style.width = activeBtn.offsetWidth + 'px';
+      pill.style.height = '';
+      pill.style.transform = 'translateX(' + activeBtn.offsetLeft + 'px)';
+    }
     pill.style.opacity = '1';
   } else {
     pill.style.opacity = '0';

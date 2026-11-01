@@ -1,10 +1,72 @@
 /* ---------- STAGE TOOLBAR & CONTROLS ---------- */
-.stage-toolbar{display:flex;gap:12px;align-items:center;flex-shrink:0;z-index:20;flex-wrap:wrap;justify-content:center}
-.stage-bottom-bar{position:sticky;bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;z-index:25;margin-top:auto;padding-top:4px;pointer-events:none}
-.stage-bottom-bar > *{pointer-events:auto}
-body[data-store=google][data-google-device="tab10"] .stage-bottom-bar{display:none!important}
+.stage-toolbar{
+  position:relative;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  z-index:20;
+  min-height:38px;
+}
+.stage-toolbar-left{
+  position:absolute;
+  left:16px;
+  top:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  z-index:25;
+}
+.stage-toolbar-center{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+.stage-toolbar-right{
+  position:absolute;
+  right:16px;
+  top:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  z-index:25;
+}
 
-/* Dual Phone Comparison Toggle Button in Stage Bottom Bar */
+/* Vertical Styling for Left View Switcher */
+.vt.vt-vertical{
+  flex-direction:column;
+  align-items:stretch;
+  gap:3px;
+  padding:4px;
+}
+.vt.vt-vertical .vt-pill{
+  top:0;
+  left:4px;
+  right:4px;
+  width:calc(100% - 8px)!important;
+  transition:transform .25s cubic-bezier(.2, .9, .3, 1.15), height .2s ease, opacity .2s ease;
+}
+.vt.vt-vertical button{
+  width:100%;
+  justify-content:flex-start;
+  padding:7px 13px;
+}
+.stage-toolbar-left .dual-phone-wrap,
+.stage-toolbar-left #dualPhoneWrap{
+  width:100%;
+  box-sizing:border-box;
+}
+.stage-toolbar-left .dual-phone-btn{
+  width:100%;
+  justify-content:flex-start;
+  padding:7px 13px;
+}
+
+.stage-bottom-bar{display:none!important}
+
+/* Dual Phone Comparison Toggle Button */
 .dual-phone-wrap,
 #dualPhoneWrap {
   position: relative;
