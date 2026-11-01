@@ -9,7 +9,6 @@ export const en = {
     pricingCta: "View Pricing",
     links: [
       { label: "Why Us", href: "#comparison" },
-      { label: "Live Demo", href: "/demo" },
       { label: "Pricing", href: "#pricing" },
       { label: "FAQ", href: "#faq" },
     ],
