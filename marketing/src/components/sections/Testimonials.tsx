@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import { Quote } from "lucide-react";
 
 function renderHighlightedText(text: string) {
   const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -17,6 +18,30 @@ function renderHighlightedText(text: string) {
   });
 }
 
+const cardAccents = [
+  {
+    borderHover: "hover:border-violet-500/40 dark:hover:border-violet-500/40",
+    topLine: "from-violet-500 via-indigo-500/50 to-transparent",
+    glow: "bg-violet-500/10 dark:bg-violet-500/15",
+    quoteColor: "text-violet-600 dark:text-violet-400",
+    pill: "bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300 border-violet-200/80 dark:border-violet-500/25",
+  },
+  {
+    borderHover: "hover:border-blue-500/40 dark:hover:border-blue-500/40",
+    topLine: "from-blue-500 via-sky-500/50 to-transparent",
+    glow: "bg-blue-500/10 dark:bg-blue-500/15",
+    quoteColor: "text-blue-600 dark:text-blue-400",
+    pill: "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300 border-blue-200/80 dark:border-blue-500/25",
+  },
+  {
+    borderHover: "hover:border-emerald-500/40 dark:hover:border-emerald-500/40",
+    topLine: "from-emerald-500 via-teal-500/50 to-transparent",
+    glow: "bg-emerald-500/10 dark:bg-emerald-500/15",
+    quoteColor: "text-emerald-600 dark:text-emerald-400",
+    pill: "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-500/25",
+  },
+];
+
 export function Testimonials() {
   const { testimonials } = siteConfig;
 
@@ -27,7 +52,14 @@ export function Testimonials() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+          {testimonials.badge && (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[12px] font-semibold tracking-wide bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 mb-4 shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+              {testimonials.badge}
+            </div>
+          )}
+
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[40px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2] text-balance">
             {testimonials.title}
           </h2>
@@ -41,29 +73,66 @@ export function Testimonials() {
 
         {/* Testimonials 3-Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
-          {testimonials.items.map((item) => (
-            <div
-              key={item.author}
-              className="rounded-2xl p-7 sm:p-8 flex flex-col justify-between
-                bg-white dark:bg-[#0c1222]/80
-                border border-slate-200/80 dark:border-white/[0.08]
-                hover:border-slate-300 dark:hover:border-white/[0.16]
-                transition-colors"
-            >
-              <p className="text-[14.5px] sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
-                {renderHighlightedText(item.quote)}
-              </p>
+          {testimonials.items.map((item, index) => {
+            const accent = cardAccents[index % cardAccents.length];
 
-              <div className="mt-7 pt-5 border-t border-slate-100 dark:border-white/[0.06]">
-                <div className="text-[14px] font-semibold text-slate-900 dark:text-white">
-                  {item.author}
+            return (
+              <div
+                key={item.author}
+                className={`group relative overflow-hidden rounded-2xl p-7 sm:p-8 flex flex-col justify-between
+                  bg-white dark:bg-[#0c1222]/85
+                  border border-slate-200/80 dark:border-white/[0.08]
+                  shadow-[0_1px_3px_rgba(15,23,42,0.03),0_6px_16px_rgba(15,23,42,0.02)]
+                  dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]
+                  ${accent.borderHover}
+                  transition-all duration-300`}
+              >
+                {/* Top hairline accent line */}
+                <div
+                  className={`absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r ${accent.topLine}`}
+                />
+
+                {/* Subtle ambient corner glow */}
+                <div
+                  className={`absolute -top-12 -right-12 w-28 h-28 rounded-full ${accent.glow} blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500`}
+                />
+
+                <div className="relative z-10">
+                  {/* Card Header: Accent Quote Icon + Highlight Pill */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div
+                      className={`w-8 h-8 rounded-lg bg-slate-100/80 dark:bg-white/[0.05] border border-slate-200/60 dark:border-white/[0.08] flex items-center justify-center ${accent.quoteColor}`}
+                    >
+                      <Quote className="w-4 h-4 fill-current opacity-85" />
+                    </div>
+
+                    {item.highlight && (
+                      <span
+                        className={`inline-flex items-center text-[11px] font-bold tracking-tight px-2.5 py-0.5 rounded-full border ${accent.pill}`}
+                      >
+                        {item.highlight}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Quote Body */}
+                  <p className="text-[14.5px] sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
+                    {renderHighlightedText(item.quote)}
+                  </p>
                 </div>
-                <div className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  {item.role}
+
+                {/* Author Signature */}
+                <div className="relative z-10 mt-7 pt-5 border-t border-slate-100 dark:border-white/[0.06]">
+                  <div className="text-[14px] font-bold text-slate-900 dark:text-white">
+                    {item.author}
+                  </div>
+                  <div className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    {item.role}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
