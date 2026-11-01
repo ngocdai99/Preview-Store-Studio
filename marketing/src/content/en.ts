@@ -9,6 +9,7 @@ export const en = {
     pricingCta: "View Pricing",
     links: [
       { label: "Why Us", href: "#comparison" },
+      { label: "Live Demo", href: "/demo" },
       { label: "Pricing", href: "#pricing" },
       { label: "FAQ", href: "#faq" },
     ],
@@ -29,8 +30,8 @@ export const en = {
       href: "#pricing",
     },
     secondaryCta: {
-      label: "Explore Features",
-      href: "#features",
+      label: "Try Live Demo ↗",
+      href: "/demo",
     },
     trustBadges: [
       "100% Offline & Private",
@@ -336,6 +337,7 @@ export const en = {
   footer: {
     copyright: "© 2026 Store Preview Studio by Kai DevLabs",
     links: [
+      { label: "Live Demo", href: "/demo" },
       { label: "Why Us", href: "#comparison" },
       { label: "Features", href: "#features" },
       { label: "Reviews", href: "#testimonials" },

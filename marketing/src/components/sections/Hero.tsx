@@ -53,13 +53,13 @@ export function Hero() {
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
 
-          <Link
+          <a
             href={hero.secondaryCta.href}
             className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-white dark:bg-[#0e1526] hover:bg-slate-50 dark:hover:bg-[#152038] text-slate-800 dark:text-slate-100 border border-slate-200/90 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 font-semibold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] transition-all duration-200 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_4px_14px_rgba(15,23,42,0.08)] hover:scale-[1.01] active:scale-[0.99]"
           >
             <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400 transition-transform duration-200 group-hover:rotate-12" />
             <span>{hero.secondaryCta.label}</span>
-          </Link>
+          </a>
         </div>
       </div>
     </section>

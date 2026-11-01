@@ -101,6 +101,20 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-1 sm:gap-1.5">
             {navItems.map((item) => {
               const isSelected = activeTab === item.label;
+              const isStaticPage = !item.href.startsWith("#");
+
+              if (isStaticPage) {
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="btn-scale inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] font-medium text-muted hover:text-foreground hover:bg-card-muted/40 transition-colors duration-150 cursor-pointer"
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
               return (
                 <Link
                   key={item.label}
