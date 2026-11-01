@@ -1,23 +1,30 @@
+"use client";
+
+import { useState } from "react";
 import { siteConfig } from "@/config/site";
 import { Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
+import { LaunchModal } from "@/components/ui/LaunchModal";
 
 export function Pricing() {
   const { pricing } = siteConfig;
+  const [selectedTier, setSelectedTier] = useState<"plus" | "pro" | null>(null);
 
   return (
     <section id="pricing" className="py-20 border-t border-border bg-background transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Head */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <a
-            href={siteConfig.gumroadUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={() => setSelectedTier("plus")}
             className="pricing-announcement-banner group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 cursor-pointer select-none no-underline transition-all duration-200 ease-out hover:scale-[1.008] active:scale-[0.995] border backdrop-blur-md bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] border-[rgba(139,92,246,0.38)] shadow-[0_4px_20px_-2px_rgba(139,92,246,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:border-[rgba(139,92,246,0.6)] hover:shadow-[0_8px_28px_-4px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] dark:bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] dark:border-[rgba(139,92,246,0.38)] [html:not(.dark)_&]:bg-white [html:not(.dark)_&]:border-[rgba(124,58,237,0.26)] [html:not(.dark)_&]:shadow-[0_4px_16px_rgba(124,58,237,0.08),0_1px_3px_rgba(15,23,42,0.04)] [html:not(.dark)_&]:hover:border-[rgba(124,58,237,0.5)] [html:not(.dark)_&]:hover:shadow-[0_8px_24px_rgba(124,58,237,0.14)]"
             aria-label={`${pricing.banner.tag}: ${pricing.banner.text}`}
           >
             {/* Glowing Pulse Dot */}
-            <span className="announcement-pulse-dot relative flex h-2 w-2 shrink-0 items-center justify-center" aria-hidden="true">
+            <span
+              className="announcement-pulse-dot relative flex h-2 w-2 shrink-0 items-center justify-center"
+              aria-hidden="true"
+            >
               <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#10b981] shadow-[0_0_8px_#10b981]" />
             </span>
@@ -28,7 +35,10 @@ export function Pricing() {
             </span>
 
             {/* Separator */}
-            <span className="announcement-sep text-[12px] font-bold text-white/35 dark:text-white/35 [html:not(.dark)_&]:text-slate-400 shrink-0 leading-none" aria-hidden="true">
+            <span
+              className="announcement-sep text-[12px] font-bold text-white/35 dark:text-white/35 [html:not(.dark)_&]:text-slate-400 shrink-0 leading-none"
+              aria-hidden="true"
+            >
               ·
             </span>
 
@@ -38,10 +48,8 @@ export function Pricing() {
             </span>
 
             {/* Chevron Right Arrow */}
-            <ChevronRight
-              className="announcement-arrow w-3.5 h-3.5 shrink-0 text-purple-300 dark:text-purple-300 [html:not(.dark)_&]:text-purple-600 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5"
-            />
-          </a>
+            <ChevronRight className="announcement-arrow w-3.5 h-3.5 shrink-0 text-purple-300 dark:text-purple-300 [html:not(.dark)_&]:text-purple-600 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5" />
+          </button>
 
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {pricing.title}
@@ -150,7 +158,9 @@ export function Pricing() {
                           {feature.tag && (
                             <span
                               className={`inline-flex items-center ml-2 px-2 py-0.5 rounded-full text-[10.5px] font-semibold tracking-wide border ${
-                                feature.tag === "src/" || feature.tag === "build.js" || feature.tag === ".html"
+                                feature.tag === "src/" ||
+                                feature.tag === "build.js" ||
+                                feature.tag === ".html"
                                   ? "font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 rounded-md"
                                   : tier.isPopular
                                   ? "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-500/20"
@@ -168,11 +178,10 @@ export function Pricing() {
               </div>
 
               {/* Buy CTA */}
-              <a
-                href={tier.cta.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] text-white tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] ${
+              <button
+                type="button"
+                onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
+                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] text-white tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] cursor-pointer ${
                   tier.isPopular
                     ? "bg-[linear-gradient(135deg,#7c3aed_0%,#9333ea_50%,#c026d3_100%)] hover:opacity-95 shadow-[0_4px_16px_rgba(168,85,247,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_8px_24px_rgba(168,85,247,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]"
                     : "bg-[linear-gradient(to_right,#1d4ed8_0%,#06b6d4_100%)] hover:opacity-95 shadow-[0_4px_16px_rgba(6,182,212,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_8px_24px_rgba(6,182,212,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]"
@@ -180,7 +189,7 @@ export function Pricing() {
               >
                 <span>{tier.cta.label}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-              </a>
+              </button>
             </div>
           ))}
         </div>
@@ -200,6 +209,15 @@ export function Pricing() {
           </div>
         </div>
       </div>
+
+      {/* Early Bird Launch Modal */}
+      {selectedTier !== null && (
+        <LaunchModal
+          isOpen={true}
+          onClose={() => setSelectedTier(null)}
+          tierId={selectedTier}
+        />
+      )}
     </section>
   );
 }
