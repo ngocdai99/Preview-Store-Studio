@@ -82,6 +82,7 @@
 }
 
 .stage-view-dropdown:has(.menu.show) .stage-view-btn,
+.stage-device-dropdown:has(.menu.show) .stage-view-btn,
 .stage-view-btn.active {
   border-color: rgba(99, 102, 241, 0.45);
   color: #ffffff;
@@ -117,7 +118,8 @@
   flex-shrink: 0;
 }
 
-.stage-view-dropdown:has(.menu.show) .stage-view-arr {
+.stage-view-dropdown:has(.menu.show) .stage-view-arr,
+.stage-device-dropdown:has(.menu.show) .stage-view-arr {
   transform: rotate(180deg);
   color: #ffffff;
 }
@@ -319,7 +321,8 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
   box-shadow: 0 6px 20px -2px rgba(15, 23, 42, 0.14), 0 3px 8px -1px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff !important;
 }
 
-:root[data-ui=light] .stage-view-dropdown:has(.menu.show) .stage-view-btn {
+:root[data-ui=light] .stage-view-dropdown:has(.menu.show) .stage-view-btn,
+:root[data-ui=light] .stage-device-dropdown:has(.menu.show) .stage-view-btn {
   background: #ffffff !important;
   border-color: rgba(59, 130, 246, 0.5) !important;
   color: #0f172a !important;
@@ -403,9 +406,30 @@ body[data-store="google"][data-google-device="tab10"] #btnDualPhone {
 }
 #dt, #gdt { display: none !important; }
 body[data-ui-store="apple"] #dt,
-body[data-store="apple"]:not([data-ui-store="google"]) #dt { display: flex !important; }
+body[data-store="apple"]:not([data-ui-store="google"]) #dt { display: inline-flex !important; }
 body[data-ui-store="google"] #gdt,
-body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: flex !important; }
+body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-flex !important; }
+
+/* Stage Device Dropdown Menus */
+.stage-device-dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+#menuAppleDevice,
+#menuGoogleDevice {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 216px;
+  display: none !important;
+}
+
+#menuAppleDevice.show,
+#menuGoogleDevice.show {
+  display: flex !important;
+}
 .vt{
   position:relative;display:flex;background:rgba(15,23,42,.88);backdrop-filter:blur(16px);border-radius:14px;padding:4px;gap:4px;
   border:1px solid rgba(255,255,255,.13);
