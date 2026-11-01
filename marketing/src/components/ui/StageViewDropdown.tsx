@@ -12,6 +12,7 @@ export interface StageViewDropdownProps {
   initialView?: "detail" | "search";
   initialDual?: boolean;
   forceOpen?: boolean;
+  colorScheme?: "monochrome" | "indigo" | "rainbow";
   onViewChange?: (view: "detail" | "search") => void;
   onDualChange?: (dual: boolean) => void;
   className?: string;
@@ -21,6 +22,7 @@ export function StageViewDropdown({
   initialView = "search",
   initialDual = true,
   forceOpen,
+  colorScheme = "monochrome",
   onViewChange,
   onDualChange,
   className = "",
@@ -73,6 +75,65 @@ export function StageViewDropdown({
 
   const isDetail = activeView === "detail";
 
+  // Trigger button styling
+  let triggerBtnActiveStyle = "bg-slate-100/90 dark:bg-white/[0.08] text-slate-900 dark:text-white border-slate-400/80 dark:border-white/30 shadow-sm";
+  let triggerIconColor = "text-slate-900 dark:text-white";
+
+  if (colorScheme === "indigo") {
+    triggerBtnActiveStyle = "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-950 dark:text-indigo-200 border-indigo-400 dark:border-indigo-400/50 shadow-[0_2px_10px_rgba(99,102,241,0.18)]";
+    triggerIconColor = "text-indigo-600 dark:text-indigo-400";
+  } else if (colorScheme === "rainbow") {
+    if (isDetail) {
+      triggerBtnActiveStyle = "bg-purple-50/80 dark:bg-purple-500/10 text-purple-950 dark:text-purple-200 border-purple-400 dark:border-purple-400/50 shadow-[0_2px_10px_rgba(168,85,247,0.2)]";
+      triggerIconColor = "text-purple-600 dark:text-purple-400";
+    } else {
+      triggerBtnActiveStyle = "bg-amber-50/80 dark:bg-amber-500/10 text-amber-950 dark:text-amber-200 border-amber-400 dark:border-amber-400/50 shadow-[0_2px_10px_rgba(245,158,11,0.2)]";
+      triggerIconColor = "text-amber-600 dark:text-amber-400";
+    }
+  }
+
+  // Active items styling
+  const getActiveItemClasses = (type: "detail" | "search" | "dual") => {
+    if (colorScheme === "indigo") {
+      return {
+        row: "bg-indigo-500/10 dark:bg-indigo-500/15 text-slate-900 dark:text-white font-bold",
+        strip: "bg-indigo-600 dark:bg-indigo-400",
+        ico: "text-indigo-600 dark:text-indigo-400",
+      };
+    }
+    if (colorScheme === "rainbow") {
+      if (type === "detail") {
+        return {
+          row: "bg-purple-500/10 dark:bg-purple-500/15 text-slate-900 dark:text-white font-bold",
+          strip: "bg-purple-600 dark:bg-purple-400",
+          ico: "text-purple-600 dark:text-purple-400",
+        };
+      }
+      if (type === "search") {
+        return {
+          row: "bg-amber-500/10 dark:bg-amber-500/15 text-slate-900 dark:text-white font-bold",
+          strip: "bg-amber-500 dark:bg-amber-400",
+          ico: "text-amber-600 dark:text-amber-400",
+        };
+      }
+      return {
+        row: "bg-slate-500/10 dark:bg-slate-500/15 text-slate-900 dark:text-white font-bold",
+        strip: "bg-slate-600 dark:bg-slate-300",
+        ico: "text-slate-700 dark:text-slate-200",
+      };
+    }
+    // Default: monochrome (Titanium Slate)
+    return {
+      row: "bg-slate-900/[0.06] dark:bg-white/[0.08] text-slate-900 dark:text-white font-bold",
+      strip: "bg-slate-900 dark:bg-white",
+      ico: "text-slate-900 dark:text-white",
+    };
+  };
+
+  const detailActive = getActiveItemClasses("detail");
+  const searchActive = getActiveItemClasses("search");
+  const dualActive = getActiveItemClasses("dual");
+
   return (
     <div ref={containerRef} className={`relative inline-block text-left select-none ${className}`}>
       {/* Trigger Button */}
@@ -83,20 +144,14 @@ export function StageViewDropdown({
         }}
         className={`group inline-flex items-center gap-2 h-9 px-3 rounded-xl text-[12.5px] font-semibold transition-all duration-200 cursor-pointer border ${
           isOpen
-            ? isDetail
-              ? "bg-purple-50/80 dark:bg-purple-500/10 text-purple-950 dark:text-purple-200 border-purple-400 dark:border-purple-400/50 shadow-[0_2px_10px_rgba(168,85,247,0.2)]"
-              : "bg-amber-50/80 dark:bg-amber-500/10 text-amber-950 dark:text-amber-200 border-amber-400 dark:border-amber-400/50 shadow-[0_2px_10px_rgba(245,158,11,0.2)]"
+            ? triggerBtnActiveStyle
             : "bg-white dark:bg-[#0c1222] text-slate-800 dark:text-slate-100 border-slate-300 dark:border-white/15 hover:border-slate-400 dark:hover:border-white/30 shadow-[0_1px_3px_rgba(15,23,42,0.06)]"
         }`}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
         {/* Leading Bare Icon */}
-        <span
-          className={`shrink-0 transition-colors ${
-            isDetail ? "text-purple-600 dark:text-purple-400" : "text-amber-600 dark:text-amber-400"
-          }`}
-        >
+        <span className={`shrink-0 transition-colors ${isOpen ? triggerIconColor : "text-slate-600 dark:text-slate-300"}`}>
           {isDetail ? (
             <LayoutTemplate className="w-4 h-4 stroke-[2.2]" />
           ) : (
@@ -137,18 +192,18 @@ export function StageViewDropdown({
               onClick={() => handleSelectView("detail")}
               className={`relative w-full h-[38px] flex items-center gap-2.5 px-3.5 text-left transition-colors cursor-pointer ${
                 isDetail
-                  ? "bg-purple-500/10 dark:bg-purple-500/15 text-slate-900 dark:text-white font-bold"
+                  ? detailActive.row
                   : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
               }`}
             >
               {/* Left Vertical Indicator Strip */}
               {isDetail && (
-                <span className="absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] bg-purple-600 dark:bg-purple-400" />
+                <span className={`absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] ${detailActive.strip}`} />
               )}
 
               <LayoutTemplate
                 className={`w-4 h-4 stroke-[2.2] shrink-0 ${
-                  isDetail ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-500"
+                  isDetail ? detailActive.ico : "text-slate-400 dark:text-slate-500"
                 }`}
               />
               <span className="text-[13px] tracking-tight">Detail View</span>
@@ -160,18 +215,18 @@ export function StageViewDropdown({
               onClick={() => handleSelectView("search")}
               className={`relative w-full h-[38px] flex items-center gap-2.5 px-3.5 text-left transition-colors cursor-pointer ${
                 !isDetail
-                  ? "bg-amber-500/10 dark:bg-amber-500/15 text-slate-900 dark:text-white font-bold"
+                  ? searchActive.row
                   : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
               }`}
             >
               {/* Left Vertical Indicator Strip */}
               {!isDetail && (
-                <span className="absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] bg-amber-500 dark:bg-amber-400" />
+                <span className={`absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] ${searchActive.strip}`} />
               )}
 
               <Search
                 className={`w-4 h-4 stroke-[2.2] shrink-0 ${
-                  !isDetail ? "text-amber-600 dark:text-amber-400" : "text-slate-400 dark:text-slate-500"
+                  !isDetail ? searchActive.ico : "text-slate-400 dark:text-slate-500"
                 }`}
               />
               <span className="text-[13px] tracking-tight">Search Result</span>
@@ -186,24 +241,24 @@ export function StageViewDropdown({
             Comparison
           </div>
 
-          {/* Option: Dual Phone (Titanium Slate Indicator - Strictly Avoids Store Blue & Green) */}
+          {/* Option: Dual Phone */}
           <button
             type="button"
             onClick={handleToggleDual}
             className={`relative w-full h-[38px] flex items-center gap-2.5 px-3.5 text-left transition-colors cursor-pointer ${
               isDual
-                ? "bg-slate-500/10 dark:bg-slate-500/15 text-slate-900 dark:text-white font-bold"
+                ? dualActive.row
                 : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
             }`}
           >
             {/* Left Vertical Indicator Strip */}
             {isDual && (
-              <span className="absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] bg-slate-600 dark:bg-slate-300" />
+              <span className={`absolute left-0 top-1.5 bottom-1.5 w-[3.5px] rounded-r-[3px] ${dualActive.strip}`} />
             )}
 
             <Smartphone
               className={`w-4 h-4 stroke-[2.2] shrink-0 ${
-                isDual ? "text-slate-700 dark:text-slate-200" : "text-slate-400 dark:text-slate-500"
+                isDual ? dualActive.ico : "text-slate-400 dark:text-slate-500"
               }`}
             />
             <span className="text-[13px] tracking-tight">Dual Phone</span>

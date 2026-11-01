@@ -385,64 +385,24 @@
   display: none !important;
 }
 
-/* Option 1: Detail View (Purple) */
-#optViewDetail.on {
+/* Unified Monochromatic Titanium Slate Scheme for Stage View Menu (#vt) */
+#vt .menu-item.on {
   border: none !important;
-  background: rgba(139, 92, 246, 0.14) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
   box-shadow: none !important;
 }
-#optViewDetail.on::before {
-  background: linear-gradient(180deg, #c084fc, #8b5cf6) !important;
+#vt .menu-item.on::before {
+  background: linear-gradient(180deg, #ffffff, #cbd5e1) !important;
 }
-#optViewDetail.on .mi-name {
+#vt .menu-item.on .mi-name {
   color: #ffffff !important;
   font-weight: 650 !important;
 }
-#optViewDetail.on .mi-ico {
+#vt .menu-item.on .mi-ico {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  color: #c084fc !important;
-}
-
-/* Option 2: Search Result (Amber) */
-#optViewSearch.on {
-  border: none !important;
-  background: rgba(245, 158, 11, 0.14) !important;
-  box-shadow: none !important;
-}
-#optViewSearch.on::before {
-  background: linear-gradient(180deg, #fcd34d, #f59e0b) !important;
-}
-#optViewSearch.on .mi-name {
   color: #ffffff !important;
-  font-weight: 650 !important;
-}
-#optViewSearch.on .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #fbbf24 !important;
-}
-
-/* Option 3: Dual Phone (Titanium Slate - Strictly Avoids App Store Blue & Google Play Green) */
-#btnDualPhone.on {
-  border: none !important;
-  background: rgba(148, 163, 184, 0.12) !important;
-  box-shadow: none !important;
-}
-#btnDualPhone.on::before {
-  background: linear-gradient(180deg, #cbd5e1, #94a3b8) !important;
-}
-#btnDualPhone.on .mi-name {
-  color: #ffffff !important;
-  font-weight: 650 !important;
-}
-#btnDualPhone.on .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #cbd5e1 !important;
 }
 
 /* Apple Device Menu Accents (Apple Blue) */
@@ -688,91 +648,38 @@
   color: #0f172a !important;
 }
 
-/* Light Detail View (Purple) */
-:root[data-ui=light] #optViewDetail.on {
+/* Unified Monochromatic Titanium Slate Scheme for Stage View Menu (#vt) - Light Mode */
+:root[data-ui=light] #vt .menu-item.on {
   border: none !important;
-  background: rgba(124, 58, 237, 0.08) !important;
+  background: rgba(15, 23, 42, 0.06) !important;
   box-shadow: none !important;
   color: #0f172a !important;
 }
-:root[data-ui=light] #optViewDetail.on::before {
-  background: #7c3aed !important;
+:root[data-ui=light] #vt .menu-item.on::before {
+  background: #0f172a !important;
 }
-:root[data-ui=light] #optViewDetail.on .mi-name {
-  color: #0f172a !important;
-  font-weight: 700 !important;
-}
-:root[data-ui=light] #optViewDetail.on .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #7c3aed !important;
-}
-
-/* Light Search Result (Amber) */
-:root[data-ui=light] #optViewSearch.on {
-  border: none !important;
-  background: rgba(217, 119, 6, 0.08) !important;
-  box-shadow: none !important;
-  color: #0f172a !important;
-}
-:root[data-ui=light] #optViewSearch.on::before {
-  background: #d97706 !important;
-}
-:root[data-ui=light] #optViewSearch.on .mi-name {
+:root[data-ui=light] #vt .menu-item.on .mi-name {
   color: #0f172a !important;
   font-weight: 700 !important;
 }
-:root[data-ui=light] #optViewSearch.on .mi-ico {
+:root[data-ui=light] #vt .menu-item.on .mi-ico {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  color: #d97706 !important;
-}
-
-/* Light Dual Phone (Titanium Slate - Strictly Avoids App Store Blue & Google Play Green) */
-:root[data-ui=light] #btnDualPhone.on {
-  border: none !important;
-  background: rgba(71, 85, 105, 0.08) !important;
-  box-shadow: none !important;
   color: #0f172a !important;
-}
-:root[data-ui=light] #btnDualPhone.on::before {
-  background: #475569 !important;
-}
-:root[data-ui=light] #btnDualPhone.on .mi-name {
-  color: #0f172a !important;
-  font-weight: 700 !important;
-}
-:root[data-ui=light] #btnDualPhone.on .mi-ico {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: #475569 !important;
 }
 
 /* Button & Dropdown Synchronization */
-#stageViewDropdown:has(#optViewDetail.on) #btnStageView .stage-view-ico { color: #c084fc; }
-:root[data-ui=light] #stageViewDropdown:has(#optViewDetail.on) #btnStageView .stage-view-ico { color: #7c3aed; }
-#stageViewDropdown:has(#optViewSearch.on) #btnStageView .stage-view-ico { color: #fbbf24; }
-:root[data-ui=light] #stageViewDropdown:has(#optViewSearch.on) #btnStageView .stage-view-ico { color: #d97706; }
+#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #f8fafc; }
+:root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #0f172a; }
 
-#stageViewDropdown:has(#optViewDetail.on):has(.menu.show) .stage-view-btn {
-  border-color: rgba(139, 92, 246, 0.45) !important;
-  box-shadow: 0 2px 6px -1px rgba(139, 92, 246, 0.18), 0 0 0 2px rgba(139, 92, 246, 0.2) !important;
+#stageViewDropdown:has(.menu.show) .stage-view-btn {
+  border-color: rgba(255, 255, 255, 0.32) !important;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(255, 255, 255, 0.12) !important;
 }
-:root[data-ui=light] #stageViewDropdown:has(#optViewDetail.on):has(.menu.show) .stage-view-btn {
-  border-color: rgba(124, 58, 237, 0.45) !important;
-  box-shadow: 0 2px 6px -1px rgba(124, 58, 237, 0.12), 0 0 0 2px rgba(124, 58, 237, 0.15) !important;
-}
-
-#stageViewDropdown:has(#optViewSearch.on):has(.menu.show) .stage-view-btn {
-  border-color: rgba(245, 158, 11, 0.45) !important;
-  box-shadow: 0 2px 6px -1px rgba(245, 158, 11, 0.18), 0 0 0 2px rgba(245, 158, 11, 0.2) !important;
-}
-:root[data-ui=light] #stageViewDropdown:has(#optViewSearch.on):has(.menu.show) .stage-view-btn {
-  border-color: rgba(217, 119, 6, 0.45) !important;
-  box-shadow: 0 2px 6px -1px rgba(217, 119, 6, 0.12), 0 0 0 2px rgba(217, 119, 6, 0.15) !important;
+:root[data-ui=light] #stageViewDropdown:has(.menu.show) .stage-view-btn {
+  border-color: rgba(15, 23, 42, 0.28) !important;
+  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.08), 0 0 0 2px rgba(15, 23, 42, 0.06) !important;
 }
 
 /* Apple Light Mode Device Menu */
