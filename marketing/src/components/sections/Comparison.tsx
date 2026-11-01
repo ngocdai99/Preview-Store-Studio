@@ -7,10 +7,10 @@ export function Comparison() {
     <section id="comparison" className="py-20 border-t border-border bg-background transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 mb-4">
+          <p className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#a78bfa] mb-3 font-mono">
             {comparison.badge}
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          </p>
+          <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-foreground leading-[1.15]">
             {comparison.title}
           </h2>
         </div>
