@@ -28,13 +28,13 @@ interface FeatureTheme {
 const featureThemes: Record<string, FeatureTheme> = {
   frames: {
     iconBox:
-      "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 group-hover:border-blue-500/40 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.25)]",
+      "bg-orange-500/10 border-orange-500/20 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 group-hover:border-orange-500/40 group-hover:shadow-[0_0_20px_rgba(234,88,12,0.25)]",
     badge:
-      "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/25",
-    radialGlow: "from-blue-500/15 via-indigo-500/10 to-transparent",
-    cardHoverBorder: "hover:border-blue-500/40 dark:hover:border-blue-500/40",
+      "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/25",
+    radialGlow: "from-orange-500/15 via-amber-500/10 to-transparent",
+    cardHoverBorder: "hover:border-orange-500/40 dark:hover:border-orange-500/40",
     cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(59,130,246,0.25)]",
+      "hover:shadow-[0_20px_40px_-15px_rgba(234,88,12,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(234,88,12,0.25)]",
   },
   viewports: {
     iconBox:
@@ -48,14 +48,14 @@ const featureThemes: Record<string, FeatureTheme> = {
   },
   cloner: {
     iconBox:
-      "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 group-hover:border-blue-500/40 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.25)]",
+      "bg-orange-500/10 border-orange-500/20 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 group-hover:border-orange-500/40 group-hover:shadow-[0_0_20px_rgba(234,88,12,0.25)]",
     badge:
-      "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/25",
-    radialGlow: "from-blue-500/15 via-indigo-500/10 to-transparent",
+      "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/25",
+    radialGlow: "from-orange-500/15 via-amber-500/10 to-transparent",
     cardHoverBorder:
-      "hover:border-blue-500/40 dark:hover:border-blue-500/40",
+      "hover:border-orange-500/40 dark:hover:border-orange-500/40",
     cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(59,130,246,0.25)]",
+      "hover:shadow-[0_20px_40px_-15px_rgba(234,88,12,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(234,88,12,0.25)]",
   },
   compliance: {
     iconBox:

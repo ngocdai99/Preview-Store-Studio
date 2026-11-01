@@ -142,7 +142,7 @@ export function Navbar() {
           <Link
             href="#pricing"
             onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
-            className="btn-scale inline-flex items-center justify-center h-[36px] gap-1.5 text-[13px] font-semibold bg-[#0071e3] hover:bg-[#0077ed] text-white px-4 rounded-full shadow-sm shadow-blue-500/20 transition-all shrink-0 cursor-pointer"
+            className="btn-scale inline-flex items-center justify-center h-[36px] gap-1.5 text-[13px] font-semibold bg-[#ea580c] hover:bg-[#c2410c] text-white px-4 rounded-full shadow-sm shadow-orange-500/25 transition-all shrink-0 cursor-pointer"
           >
             <span>{siteConfig.navPricingCta}</span>
             <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />

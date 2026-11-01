@@ -168,7 +168,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold border border-white/40 ${
                   isPro
                     ? "bg-[#0f172a] text-white dark:bg-white dark:text-slate-900 shadow-sm"
-                    : "bg-[#0071e3] text-white shadow-sm"
+                    : "bg-[#ea580c] text-white shadow-sm"
                 }`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] shadow-[0_0_8px_rgba(52,211,153,0.95)] shrink-0" />
@@ -273,7 +273,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[#0071e3] hover:bg-[#0077ed] shadow-[0_4px_16px_rgba(0,113,227,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_6px_22px_rgba(0,113,227,0.5)] transition-all duration-150 disabled:opacity-60 cursor-pointer shrink-0"
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[#ea580c] hover:bg-[#c2410c] shadow-[0_4px_16px_rgba(234,88,12,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_6px_22px_rgba(234,88,12,0.5)] transition-all duration-150 disabled:opacity-60 cursor-pointer shrink-0"
                 >
                   <span>{isSubmitting ? "Saving..." : "Get Early Invite"}</span>
                   <ArrowRight className="w-4 h-4 stroke-[2.5]" />
