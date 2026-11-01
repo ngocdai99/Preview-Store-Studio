@@ -64,7 +64,7 @@
   .seg{width:100%;max-width:100%;min-width:0;display:flex}
   .seg button{flex:1 1 0;min-width:0;padding:7px 6px;font-size:12.5px;gap:5px;white-space:nowrap}
   .workspace-bar{padding:6px 12px;gap:6px;min-height:42px;flex-wrap:nowrap}
-  #draftBtnTitle{max-width:none}
+  #draftBtnTitle, #presetBtnTitle{max-width:130px}
   #btnExport .lbl{display:none}
   #btnExport{padding:6px 9px}
   #btnDraft .ms-pill-reset-btn, #btnPresetPill .ms-pill-reset-btn{display:inline-flex;width:18px;height:18px;font-size:11px;margin-left:4px;flex-shrink:0}
@@ -86,7 +86,7 @@
 /* Small Tablet & Intermediate Viewports: <= 680px */
 @media(max-width:680px){
   .workspace-bar{padding:6px 10px;gap:6px;flex-wrap:nowrap}
-  #draftBtnTitle{max-width:none}
+  #draftBtnTitle, #presetBtnTitle{max-width:110px}
   #btnPresets{padding:6px 10px;font-size:12px;gap:4px}
   #btnExport{padding:6px 9px;font-size:12px;gap:5px}
   .ms-pill-import{padding:5px 9px;font-size:12px;gap:5px}
@@ -94,7 +94,7 @@
 
 /* Viewport <= 580px: short label for import */
 @media(max-width:580px){
-  #draftBtnTitle{max-width:none}
+  #draftBtnTitle, #presetBtnTitle{max-width:90px}
   .ms-pill-import .lbl-full{display:none}
   .ms-pill-import .lbl-short{display:inline}
 }
@@ -107,7 +107,7 @@
   .right{gap:5px}
   .header-center{margin-top:0}
   .workspace-bar{padding:6px 8px;gap:5px;flex-wrap:nowrap}
-  #draftBtnTitle{max-width:none;font-size:12px}
+  #draftBtnTitle, #presetBtnTitle{max-width:80px;font-size:12px}
   #btnDraft small{font-size:9.5px;padding:1px 4px}
   #btnDraft .ms-pill-reset-btn, #btnPresetPill .ms-pill-reset-btn{width:16px;height:16px;font-size:10px}
   #btnPresets{padding:5px 8px;font-size:11.5px}
@@ -120,7 +120,7 @@
 @media(max-width:420px){
   .workspace-bar{padding:5px 6px;gap:4px;flex-wrap:nowrap}
   #draftBtnBadge{display:none}
-  #draftBtnTitle{max-width:none}
+  #draftBtnTitle, #presetBtnTitle{max-width:65px}
   .ms-pill-import .lbl-full, .ms-pill-import .lbl-short{display:none}
   .ms-pill-import{padding:5px 8px}
   #btnExport .lbl{display:none}
@@ -132,7 +132,7 @@
   .brand h1{font-size:11.5px}
   .logo{width:26px;height:26px}
   .workspace-bar{padding:5px 4px;gap:3px;flex-wrap:nowrap}
-  #draftBtnTitle{max-width:none}
+  #draftBtnTitle, #presetBtnTitle{max-width:50px}
   .seg button{padding:5px 2px;font-size:11px;gap:3px}
   .seg button span:not(.s-ico){font-size:10.5px}
 }

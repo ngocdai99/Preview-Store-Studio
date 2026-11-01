@@ -272,14 +272,57 @@
   color: #1e40af;
 }
 
+.preset-banner .btn-lbl-short {
+  display: none;
+}
+
 @media (max-width: 1200px) {
   .preset-banner-sub {
     display: none;
   }
 }
+
 @media (max-width: 860px) {
   .preset-banner {
-    display: none !important;
+    margin-left: 4px;
+    gap: 6px;
+  }
+  .preset-banner-info {
+    font-size: 11.5px;
+    gap: 6px;
+  }
+  .preset-banner-btn {
+    padding: 3px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .preset-banner .btn-lbl-full {
+    display: none;
+  }
+  .preset-banner .btn-lbl-short {
+    display: inline;
+  }
+}
+
+@media (max-width: 640px) {
+  .preset-banner-lbl,
+  .preset-banner-edit-sub {
+    display: none;
+  }
+  .preset-banner-btn {
+    padding: 3px 7px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preset-banner .btn-lbl-short {
+    display: none;
+  }
+  .preset-banner-btn {
+    padding: 3px 6px;
+  }
+  #presetBtnBadge {
+    display: none;
   }
 }
 
