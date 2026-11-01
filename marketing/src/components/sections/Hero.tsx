@@ -21,10 +21,10 @@ export function Hero() {
 
         {/* Category Badge Pill */}
         <div className="hero-badge group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 cursor-default select-none transition-all duration-200 ease-out hover:scale-[1.015] bg-white/95 dark:bg-white/[0.05] backdrop-blur-md border border-slate-200/90 dark:border-white/[0.12] hover:border-slate-300 dark:hover:border-white/[0.22] shadow-[0_2px_10px_rgba(15,23,42,0.04),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_#ffffff] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.14)]">
-          {/* Glowing Pulse Dot */}
+          {/* Glowing Green Jewel Dot */}
           <span className="badge-dot relative flex h-2 w-2 shrink-0 items-center justify-center" aria-hidden="true">
-            <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-sky-400 opacity-60" />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#0284c7] dark:bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]" />
+            <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-emerald-400 opacity-70" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#10b981] shadow-[0_0_8px_#10b981] dark:shadow-[0_0_10px_#34d399]" />
           </span>
           <span className="text-[13px] sm:text-[13.5px] font-medium tracking-[-0.01em] text-[#334155] dark:text-[#cbd5e1] group-hover:text-[#0f172a] dark:group-hover:text-white transition-colors duration-150">
             {hero.badge}
