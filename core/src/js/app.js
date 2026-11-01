@@ -4126,9 +4126,11 @@ function renderIpadShots(){
   // Update iPad Search Result 2-Column Grid Card
   $$('[data-shots=ipad-shots]').forEach(c => {
     c.innerHTML = '';
+    const searchView = c.closest('.ipad-search-view') || $('.ipad-search-view');
     const valid = effectiveShots.filter(s => s && typeof s === 'string' && s.trim());
     if(valid.length === 0){
       c.classList.remove('has-landscape');
+      if (searchView) searchView.classList.remove('has-landscape');
       for(let i = 0; i < 2; i++){
         const sk = document.createElement('div');
         sk.className = 'ipad-skel-shot';
@@ -4138,6 +4140,7 @@ function renderIpadShots(){
       const firstShot = valid[0];
       const isLandscapeUrl = (typeof firstShot === 'string') && (/\/2732x2048bb|\/2688x1242bb/i.test(firstShot) || firstShot.includes('landscape'));
       c.classList.toggle('has-landscape', isLandscapeUrl);
+      if (searchView) searchView.classList.toggle('has-landscape', isLandscapeUrl);
 
       const count = isLandscapeUrl ? 1 : Math.min(2, valid.length);
       for (let i = 0; i < count; i++) {
@@ -4152,11 +4155,17 @@ function renderIpadShots(){
         img.onload = function() {
           if (this.naturalWidth > this.naturalHeight * 1.15) {
             c.classList.add('has-landscape');
+            if (searchView) searchView.classList.add('has-landscape');
             this.classList.add('landscape-shot');
             this.classList.remove('portrait-shot');
             while (c.children.length > 1) {
               c.removeChild(c.lastChild);
             }
+          } else if (this.naturalHeight > this.naturalWidth * 1.15 && c.classList.contains('has-landscape')) {
+            c.classList.remove('has-landscape');
+            if (searchView) searchView.classList.remove('has-landscape');
+            this.classList.remove('landscape-shot');
+            this.classList.add('portrait-shot');
           }
         };
         c.appendChild(img);

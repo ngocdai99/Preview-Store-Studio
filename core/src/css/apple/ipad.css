@@ -25,6 +25,18 @@
   height:38px;padding:10px 24px 0;display:flex;justify-content:space-between;align-items:center;
   font-size:13px;font-weight:600;flex-shrink:0;z-index:6;
 }
+.ipad-sb .sb-icons{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  color:currentColor;
+  user-select:none;
+  pointer-events:none;
+}
+.ipad-sb .sb-ico{
+  display:block;
+  flex-shrink:0;
+}
 .ipad-scr{padding:0 36px 36px}
 .ipad-nav{
   position:sticky;top:0;z-index:10;
@@ -310,12 +322,14 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100%;
 }
 .ipad-sr-card-head {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
+  height: 56px;
 }
 .ipad-sr-icon {
   width: 56px;
@@ -456,6 +470,18 @@ button.get.ipad-sr-get-btn:hover {
   aspect-ratio: 2048 / 2732;
   border-radius: 10px;
   background: var(--cd);
+}
+.ipad-search-view.has-landscape .ipad-sr-skel-shots,
+.ipad-search-view:has(.has-landscape) .ipad-sr-skel-shots {
+  grid-template-columns: 1fr;
+}
+.ipad-search-view.has-landscape .ipad-skel-shot,
+.ipad-search-view:has(.has-landscape) .ipad-skel-shot {
+  aspect-ratio: 2732 / 2048;
+}
+.ipad-search-view.has-landscape .ipad-sr-skel-shots .ipad-skel-shot:nth-child(n+2),
+.ipad-search-view:has(.has-landscape) .ipad-sr-skel-shots .ipad-skel-shot:nth-child(n+2) {
+  display: none;
 }
 
 /* Screen container */

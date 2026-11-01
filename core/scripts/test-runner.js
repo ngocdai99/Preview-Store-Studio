@@ -525,6 +525,7 @@ const stageTbHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 
 const brandHtml = resolveTestHtmlIncludes(fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'header', 'brand.html'), 'utf8'));
 const shotsJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots.js'), 'utf8');
 const appleJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'apple', 'apple.js'), 'utf8');
+const ipadCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'ipad.css'), 'utf8');
 
 // 1. Destination Markup Verification
 assert(commonHtml.includes('id="destAppleGroup"'), 'common.html contains destAppleGroup destination section');
@@ -540,6 +541,10 @@ assert(ipadHtml.includes('data-shots="ipad-shots"'), 'ipad.html uses data-shots=
 assert(ipadHtml.includes('class="ipad-search-bar-row"') && ipadHtml.includes('class="ipad-filter-btn"'), 'ipad search view includes authentic filter button and search pill row');
 assert(ipadHtml.includes('class="ipad-search-grid"') && ipadHtml.includes('class="ipad-sr-card ipad-sr-primary"'), 'ipad search view renders 2-column grid with primary app card');
 assert(ipadHtml.includes('class="ipad-sr-card ipad-sr-skel"'), 'ipad search view includes authentic neighbor competitor skeleton cards');
+assert(ipadHtml.includes('sb-ico-signal') && ipadHtml.includes('sb-ico-wifi') && ipadHtml.includes('sb-ico-battery'), 'ipad status bar includes standard signal, wifi, and battery vector icons matching iPhone');
+assert(!ipadHtml.includes('Bộ lọc') && ipadHtml.includes('Filters'), 'ipad search view standardizes to English Filters');
+assert(!ipadHtml.includes('Nhận') && ipadHtml.includes('GET'), 'ipad search view standardizes to English GET button');
+assert(ipadCss.includes('.ipad-search-view:has(.has-landscape) .ipad-sr-skel-shots') || ipadCss.includes('.ipad-search-view.has-landscape .ipad-sr-skel-shots'), 'ipad css adapts skeleton search card height and columns dynamically for landscape apps');
 assert(stageTbHtml.includes('data-d="iphone"') && stageTbHtml.includes('data-d="ipad"'), 'stage-toolbar.html provides both iPhone and iPad device selectors');
 assert(!brandHtml.includes('class="window-dots"'), 'brand.html removes redundant decorative window dots to maximize header workspace');
 
