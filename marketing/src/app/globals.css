@@ -14,14 +14,14 @@
   --accent-hover: #1d4ed8;
   --accent-light: #eff6ff;
   --accent-glow: rgba(37, 99, 235, 0.12);
-  --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+  --brand-gradient: linear-gradient(135deg, #0071e3 0%, #0284c7 100%);
   --nav-pill-bg: #334155;
   --nav-pill-hover-bg: #1e293b;
   --nav-pill-color: #ffffff;
-  --purple-brand: #6d28d9;
-  --purple-brand-hover: #5b21b6;
-  --purple-brand-light: rgba(109, 40, 217, 0.08);
-  --purple-brand-border: rgba(109, 40, 217, 0.28);
+  --purple-brand: #0071e3;
+  --purple-brand-hover: #0077ed;
+  --purple-brand-light: rgba(0, 113, 227, 0.08);
+  --purple-brand-border: rgba(0, 113, 227, 0.28);
 }
 
 [data-theme="dark"], html.dark {
@@ -32,18 +32,18 @@
   --border-subtle: #172033;
   --foreground: #f8fafc;
   --muted: #94a3b8;
-  --accent: #3b82f6; /* Official App Icon Blue */
-  --accent-hover: #60a5fa;
-  --accent-light: rgba(59, 130, 246, 0.15);
-  --accent-glow: rgba(59, 130, 246, 0.2);
-  --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+  --accent: #0071e3; /* Apple Electric Blue */
+  --accent-hover: #38bdf8;
+  --accent-light: rgba(0, 113, 227, 0.15);
+  --accent-glow: rgba(0, 113, 227, 0.2);
+  --brand-gradient: linear-gradient(135deg, #0071e3 0%, #0ea5e9 100%);
   --nav-pill-bg: #ffffff;
   --nav-pill-hover-bg: #f1f5f9;
   --nav-pill-color: #0f172a;
-  --purple-brand: #a78bfa;
-  --purple-brand-hover: #c084fc;
-  --purple-brand-light: rgba(167, 139, 250, 0.15);
-  --purple-brand-border: rgba(167, 139, 250, 0.35);
+  --purple-brand: #38bdf8;
+  --purple-brand-hover: #60a5fa;
+  --purple-brand-light: rgba(56, 189, 248, 0.15);
+  --purple-brand-border: rgba(56, 189, 248, 0.35);
 }
 
 @theme inline {

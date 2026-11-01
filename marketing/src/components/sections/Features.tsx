@@ -48,14 +48,14 @@ const featureThemes: Record<string, FeatureTheme> = {
   },
   cloner: {
     iconBox:
-      "bg-violet-500/10 border-violet-500/20 text-violet-600 dark:text-violet-400 group-hover:bg-violet-500/20 group-hover:border-violet-500/40 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.25)]",
+      "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 group-hover:border-blue-500/40 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.25)]",
     badge:
-      "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/25",
-    radialGlow: "from-violet-500/15 via-purple-500/10 to-transparent",
+      "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/25",
+    radialGlow: "from-blue-500/15 via-indigo-500/10 to-transparent",
     cardHoverBorder:
-      "hover:border-violet-500/40 dark:hover:border-violet-500/40",
+      "hover:border-blue-500/40 dark:hover:border-blue-500/40",
     cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(139,92,246,0.25)]",
+      "hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(59,130,246,0.25)]",
   },
   compliance: {
     iconBox:

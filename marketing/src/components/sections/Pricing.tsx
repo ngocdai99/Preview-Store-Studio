@@ -30,7 +30,7 @@ export function Pricing() {
                 key={tier.id}
                 className={`relative rounded-[26px] p-6 sm:px-7 sm:py-8 flex flex-col justify-between transition-all duration-300 ease-out bg-white dark:bg-[#0c1222] border-2 border-transparent shadow-[0_4px_24px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] ${
                   tier.isPopular
-                    ? "hover:border-purple-500/50 dark:hover:border-purple-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(139,92,246,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(139,92,246,0.22)]"
+                    ? "hover:border-slate-400 dark:hover:border-white/30 hover:shadow-[0_14px_40px_-6px_rgba(15,23,42,0.16)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.6)]"
                     : "hover:border-blue-500/50 dark:hover:border-blue-400/45 hover:shadow-[0_12px_36px_-6px_rgba(15,23,42,0.1),0_0_28px_rgba(6,182,212,0.15)] dark:hover:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.5),0_0_28px_rgba(6,182,212,0.22)]"
                 }`}
               >
@@ -38,7 +38,7 @@ export function Pricing() {
               <div
                 className={`absolute top-0 inset-x-0 h-[2px] rounded-t-[26px] bg-gradient-to-r ${
                   tier.isPopular
-                    ? "from-purple-500/80 via-indigo-500/40 to-transparent"
+                    ? "from-slate-800 via-slate-600 to-transparent dark:from-white/70 dark:via-white/30 to-transparent"
                     : "from-blue-500/70 via-sky-500/30 to-transparent"
                 }`}
               />
@@ -51,8 +51,8 @@ export function Pricing() {
                   </h3>
 
                   {tier.isPopular ? (
-                    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-500/10 px-2.5 py-1 rounded-md border border-purple-200/80 dark:border-purple-500/25">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-white/[0.08] px-2.5 py-1 rounded-md border border-slate-300/80 dark:border-white/15">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
                       Commercial License
                     </span>
                   ) : (
@@ -88,9 +88,9 @@ export function Pricing() {
                       return (
                         <li
                           key={i}
-                          className="flex items-center gap-2.5 text-[13.5px] text-purple-700 dark:text-purple-300 font-semibold pb-3 mb-2 border-b border-purple-200/60 dark:border-purple-500/25"
+                          className="flex items-center gap-2.5 text-[13.5px] text-slate-900 dark:text-white font-semibold pb-3 mb-2 border-b border-slate-200 dark:border-white/10"
                         >
-                          <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                          <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
                           <span>
                             <strong className="text-slate-900 dark:text-white font-bold">
                               {feature.text.replace(", plus:", "")}
@@ -109,7 +109,7 @@ export function Pricing() {
                         <svg
                           className={`w-4 h-4 shrink-0 mt-0.5 stroke-[2.6] ${
                             tier.isPopular
-                              ? "text-purple-600 dark:text-purple-400"
+                              ? "text-slate-900 dark:text-white"
                               : "text-blue-600 dark:text-blue-400"
                           }`}
                           viewBox="0 0 24 24"
@@ -130,7 +130,7 @@ export function Pricing() {
                                 feature.tag === ".html"
                                   ? "font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 rounded-md"
                                   : tier.isPopular
-                                  ? "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-500/20"
+                                  ? "bg-slate-100 dark:bg-white/[0.08] text-slate-800 dark:text-slate-200 border-slate-200 dark:border-white/10"
                                   : "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200/80 dark:border-blue-500/20"
                               }`}
                             >
@@ -148,10 +148,10 @@ export function Pricing() {
               <button
                 type="button"
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] text-white tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] cursor-pointer shadow-sm ${
+                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] cursor-pointer shadow-sm ${
                   tier.isPopular
-                    ? "bg-[#7c3aed] hover:bg-[#6d28d9] shadow-purple-500/20 hover:shadow-purple-500/30"
-                    : "bg-[#2563eb] hover:bg-[#1d4ed8] shadow-blue-500/20 hover:shadow-blue-500/30"
+                    ? "bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.18)] dark:shadow-[0_4px_16px_rgba(255,255,255,0.15)]"
+                    : "bg-[#0071e3] hover:bg-[#0077ed] text-white shadow-blue-500/20 hover:shadow-blue-500/30"
                 }`}
               >
                 <span>{tier.cta.label}</span>

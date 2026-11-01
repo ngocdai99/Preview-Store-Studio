@@ -145,7 +145,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
       <div className="relative w-full max-w-[520px] rounded-[26px] p-6 sm:p-8 bg-white dark:bg-[#0e1526] border border-slate-200/90 dark:border-white/10 shadow-[0_32px_80px_-15px_rgba(15,23,42,0.18),0_0_0_1px_rgba(0,0,0,0.04)] dark:shadow-[0_32px_80px_-15px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.05),inset_0_1px_0_rgba(255,255,255,0.2)] overflow-hidden scale-100 transition-all duration-300">
         {/* Top subtle sheen */}
         <div
-          className="absolute top-0 left-[20%] right-[20%] h-px bg-gradient-to-r from-transparent via-purple-500/25 dark:via-white/40 to-transparent pointer-events-none"
+          className="absolute top-0 left-[20%] right-[20%] h-px bg-gradient-to-r from-transparent via-blue-500/25 dark:via-white/40 to-transparent pointer-events-none"
           aria-hidden="true"
         />
 
@@ -165,10 +165,10 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
             <div className="flex items-center gap-2.5 flex-wrap mb-3.5">
               {/* Dynamic Tier Badge */}
               <div
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold text-white border border-white/40 ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold border border-white/40 ${
                   isPro
-                    ? "bg-[linear-gradient(to_right,#7c3aed_0%,#ec4899_100%)] shadow-[0_2px_8px_rgba(236,72,153,0.35),inset_0_1px_0_rgba(255,255,255,0.3)]"
-                    : "bg-[linear-gradient(to_right,#1d4ed8_0%,#06b6d4_100%)] shadow-[0_2px_8px_rgba(6,182,212,0.35),inset_0_1px_0_rgba(255,255,255,0.3)]"
+                    ? "bg-[#0f172a] text-white dark:bg-white dark:text-slate-900 shadow-sm"
+                    : "bg-[#0071e3] text-white shadow-sm"
                 }`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] shadow-[0_0_8px_rgba(52,211,153,0.95)] shrink-0" />
@@ -207,7 +207,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
               {/* Perk 1 */}
               <div className="bg-slate-50 dark:bg-white/[0.035] border border-slate-200/80 dark:border-white/[0.08] rounded-2xl p-4 text-center flex flex-col items-center gap-2">
-                <div className="w-9 h-9 rounded-[10px] flex items-center justify-center bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 shrink-0">
+                <div className="w-9 h-9 rounded-[10px] flex items-center justify-center bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 shrink-0">
                   <svg
                     className="w-4 h-4 stroke-current stroke-[2.2] fill-none"
                     viewBox="0 0 24 24"
@@ -273,7 +273,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[linear-gradient(135deg,#3b82f6_0%,#6366f1_55%,#8b5cf6_100%)] shadow-[0_4px_16px_rgba(99,102,241,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_6px_22px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 cursor-pointer shrink-0"
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-[13.5px] text-white bg-[#0071e3] hover:bg-[#0077ed] shadow-[0_4px_16px_rgba(0,113,227,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_6px_22px_rgba(0,113,227,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 cursor-pointer shrink-0"
                 >
                   <span>{isSubmitting ? "Saving..." : "Get Early Invite"}</span>
                   <ArrowRight className="w-4 h-4 stroke-[2.5]" />

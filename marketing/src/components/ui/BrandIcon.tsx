@@ -4,14 +4,14 @@ export function BrandIcon({ className = "w-8 h-8" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 32 32" aria-hidden="true">
       <defs>
-        {/* Official Concept 6 App Icon Gradients */}
+        {/* Apple Electric Blue & Cyan Gradients */}
         <linearGradient id="brand-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3b82f6" />
-          <stop offset="100%" stopColor="#8b5cf6" />
+          <stop offset="0%" stopColor="#0071e3" />
+          <stop offset="100%" stopColor="#0284c7" />
         </linearGradient>
         <linearGradient id="brand-front" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3b82f6" />
-          <stop offset="100%" stopColor="#6366f1" />
+          <stop offset="0%" stopColor="#2563eb" />
+          <stop offset="100%" stopColor="#0ea5e9" />
         </linearGradient>
       </defs>
       <rect width="32" height="32" rx="7" fill="url(#brand-bg)" />
