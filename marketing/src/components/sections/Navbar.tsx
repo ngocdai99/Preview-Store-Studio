@@ -89,7 +89,7 @@ export function Navbar() {
           onClick={(e) => handleNavClick(e, "Studio", "#hero")}
           className="flex items-center gap-2 group shrink-0 h-[36px]"
         >
-          <BrandIcon className="w-7 h-7 rounded-lg shrink-0 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3" />
+          <BrandIcon className="w-7 h-7 rounded-lg shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
           <span className="font-bold text-[16px] tracking-tight text-foreground">
             {siteConfig.name}
           </span>
@@ -108,7 +108,7 @@ export function Navbar() {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="btn-scale inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] font-medium text-muted hover:text-foreground hover:bg-card-muted/40 transition-colors duration-150 cursor-pointer"
+                    className="inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] font-medium text-muted hover:text-foreground hover:bg-card-muted/40 transition-colors duration-150 cursor-pointer"
                   >
                     {item.label}
                   </a>
@@ -120,7 +120,7 @@ export function Navbar() {
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.label, item.href)}
-                  className={`btn-scale inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] transition-colors duration-150 cursor-pointer ${
+                  className={`inline-flex items-center justify-center h-[36px] px-3.5 rounded-full text-[13px] transition-colors duration-150 cursor-pointer ${
                     isSelected
                       ? "nav-pill-active font-semibold shadow-xs"
                       : "font-medium text-muted hover:text-foreground hover:bg-card-muted/40"

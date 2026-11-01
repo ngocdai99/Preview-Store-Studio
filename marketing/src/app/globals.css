@@ -76,21 +76,17 @@ body {
   min-height: 100%;
 }
 
-/* Default Interactive Button & CTA Hover Scale (Tactile Micro-interactions) */
-button:not([aria-expanded]):not(:disabled),
+/* Default Interactive Button & CTA Hover (Subtle & Restrained Micro-interactions) */
 .btn-scale {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
-  will-change: transform;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
 }
 
-button:not([aria-expanded]):not(:disabled):hover,
 .btn-scale:hover {
-  transform: scale(1.01);
+  transform: translateY(-0.5px);
 }
 
-button:not([aria-expanded]):not(:disabled):active,
 .btn-scale:active {
-  transform: scale(0.99);
+  transform: translateY(0);
 }
 
 /* Nav Active Pill (Adaptive Light/Dark Selected Indicator) */

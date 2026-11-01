@@ -148,7 +148,7 @@ export function Pricing() {
               <button
                 type="button"
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-200 hover:scale-[1.015] active:scale-[0.985] cursor-pointer shadow-sm ${
+                className={`btn-scale w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-150 cursor-pointer shadow-sm ${
                   tier.isPopular
                     ? "bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.18)] dark:shadow-[0_4px_16px_rgba(255,255,255,0.15)]"
                     : "bg-[#0071e3] hover:bg-[#0077ed] text-white shadow-blue-500/20 hover:shadow-blue-500/30"
