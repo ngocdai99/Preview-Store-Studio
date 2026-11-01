@@ -5,7 +5,6 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { ChevronRight } from "lucide-react";
 
 export function Navbar() {
   const [activeTab, setActiveTab] = useState<string>("Studio");
@@ -137,16 +136,6 @@ export function Navbar() {
 
           {/* Theme Toggle */}
           <ThemeToggle />
-
-          {/* Pricing CTA */}
-          <Link
-            href="#pricing"
-            onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
-            className="btn-scale inline-flex items-center justify-center h-[36px] gap-1.5 text-[13px] font-semibold bg-[#ea580c] hover:bg-[#c2410c] text-white px-4 rounded-full shadow-sm shadow-orange-500/25 transition-all shrink-0 cursor-pointer"
-          >
-            <span>{siteConfig.navPricingCta}</span>
-            <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
-          </Link>
         </div>
       </div>
     </header>
