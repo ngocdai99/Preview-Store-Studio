@@ -7,7 +7,7 @@ export function Hero() {
   const { hero } = siteConfig;
 
   return (
-    <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden">
+    <section id="hero" className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden">
       {/* Background Soft Indigo Aurora Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-blue-500/15 via-indigo-500/10 to-purple-500/15 blur-[130px] rounded-full pointer-events-none -z-10" />
 
