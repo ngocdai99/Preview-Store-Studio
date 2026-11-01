@@ -8019,6 +8019,9 @@ function setStore(s, animate = true){
 }
 
 function setView(v, force = false){
+  const stageMenu = $('vt');
+  if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
+
   const activeBtn = document.querySelector('#vt button.on');
   const activeView = activeBtn ? activeBtn.dataset.v : null;
   if (!force && activeView === v) return;
@@ -8037,8 +8040,6 @@ function setView(v, force = false){
       ico.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><rect x="7" y="7" width="4" height="4" rx="1"></rect><line x1="14" y1="7.5" x2="17" y2="7.5"></line><line x1="14" y1="10.5" x2="16" y2="10.5"></line><line x1="7" y1="15" x2="17" y2="15"></line><line x1="7" y1="18" x2="13" y2="18"></line></svg>';
     }
   }
-  const stageMenu = $('vt');
-  if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
 
   $$('.phone [data-v]').forEach(e => {
     if(e.dataset.v === v){
@@ -8164,11 +8165,20 @@ if ($('btnStageView')) {
 }
 
 if ($('btnDualPhone')) {
-  $('btnDualPhone').onclick = (e) => {
-    e.stopPropagation();
+  $('btnDualPhone').onclick = () => {
     toggleDualPhone();
+    const stageMenu = $('vt');
+    if (stageMenu) stageMenu.classList.remove('show');
   };
 }
+
+// Auto-close stage view dropdown whenever any item is clicked
+$$('#vt .menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const stageMenu = $('vt');
+    if (stageMenu) stageMenu.classList.remove('show');
+  });
+});
 
 // Mockup Light / Dark theme controller
 function setDeviceTheme(theme, save = true){
