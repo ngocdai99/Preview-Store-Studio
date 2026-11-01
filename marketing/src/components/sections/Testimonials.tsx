@@ -48,7 +48,7 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="py-20 sm:py-24 border-t border-border bg-slate-50/50 dark:bg-[#080d1a]/50 transition-colors"
+      className="py-20 sm:py-24 border-t border-border bg-slate-50/50 dark:bg-[#131413] transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -67,7 +67,7 @@ export function Testimonials() {
               <div
                 key={item.author}
                 className={`group relative overflow-hidden rounded-2xl p-7 sm:p-8 flex flex-col justify-between
-                  bg-white dark:bg-[#0c1222]/85
+                  bg-white dark:bg-[#1D1E1D]
                   border border-slate-200/80 dark:border-white/[0.08]
                   shadow-[0_1px_3px_rgba(15,23,42,0.03),0_6px_16px_rgba(15,23,42,0.02)]
                   dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]

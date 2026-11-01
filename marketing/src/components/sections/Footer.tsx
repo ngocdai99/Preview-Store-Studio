@@ -7,7 +7,7 @@ export function Footer() {
   const { footer } = siteConfig;
 
   return (
-    <footer className="border-t border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-[#080d1a] py-8 sm:py-10 transition-colors">
+    <footer className="border-t border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-[#131413] py-8 sm:py-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-5 text-xs text-slate-500 dark:text-slate-400">
         {/* Brand & Copyright */}
         <div className="flex items-center gap-2.5">

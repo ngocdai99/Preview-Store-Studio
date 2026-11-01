@@ -257,7 +257,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
 
             {/* Email Form */}
             <form onSubmit={handleSubmit} className="space-y-3">
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center bg-white dark:bg-slate-900/90 border-2 border-slate-200 dark:border-white/15 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 rounded-2xl p-1.5 sm:p-2 gap-2 shadow-[inset_0_1px_2px_rgba(15,23,42,0.04)] focus-within:ring-4 focus-within:ring-indigo-500/15 transition-all">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center bg-white dark:bg-[#171817] border-2 border-slate-200 dark:border-white/15 focus-within:border-[#00D085] dark:focus-within:border-[#00D085] rounded-2xl p-1.5 sm:p-2 gap-2 shadow-[inset_0_1px_2px_rgba(15,23,42,0.04)] focus-within:ring-4 focus-within:ring-[#00D085]/15 transition-all">
                 <div className="flex items-center gap-2 px-3 py-1.5 flex-1 min-w-0">
                   <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
                   <input

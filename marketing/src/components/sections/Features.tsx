@@ -116,7 +116,7 @@ export function Features() {
   return (
     <section
       id="features"
-      className="pt-12 pb-20 sm:pt-14 sm:pb-24 border-t border-border bg-slate-50/50 dark:bg-[#080d1a]/50 transition-colors relative overflow-hidden"
+      className="pt-12 pb-20 sm:pt-14 sm:pb-24 border-t border-border bg-slate-50/50 dark:bg-[#131413] transition-colors relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -148,7 +148,7 @@ export function Features() {
               <div
                 key={feature.id}
                 className={`group relative rounded-[24px] p-7 sm:p-8 flex flex-col justify-between overflow-hidden
-                  bg-white dark:bg-[#0c1222]
+                  bg-white dark:bg-[#1D1E1D]
                   border border-slate-200/90 dark:border-white/[0.08]
                   shadow-[0_2px_12px_rgba(15,23,42,0.03),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.95)]
                   dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.06)]
