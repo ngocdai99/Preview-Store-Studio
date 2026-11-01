@@ -334,7 +334,7 @@ export const en = {
   },
 
   footer: {
-    copyright: "© 2026 Store Preview Studio",
+    copyright: "© 2026 Store Preview Studio by Kai DevLabs",
     links: [
       { label: "Why Us", href: "#comparison" },
       { label: "Features", href: "#features" },

@@ -17,8 +17,9 @@ export const siteConfig = {
   ogImage: "https://store-preview-studio.pages.dev/og-image.png?v=20261026-4k",
   gumroadUrl: "https://gumroad.com/l/store-preview-studio",
   creator: {
-    name: "Independent Craftsperson",
-    twitter: "@StorePreviewer",
+    name: "Kai",
+    brand: "Kai DevLabs",
+    avatar: "/kai.jpg",
   },
 
   // Dictionary Content (Language: English)

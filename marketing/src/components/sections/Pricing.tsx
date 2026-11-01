@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
 import { LaunchModal } from "@/components/ui/LaunchModal";
@@ -208,6 +209,27 @@ export function Pricing() {
                 <strong className="text-muted">{pricing.scopeNote.notCoveredLabel}</strong>{" "}
                 {pricing.scopeNote.notCovered}
               </p>
+            </div>
+          </div>
+
+          {/* Founder Note from Kai */}
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 p-4 sm:px-6 sm:py-3.5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] text-center sm:text-left">
+            <Image
+              src="/kai.jpg"
+              alt="Kai from Kai DevLabs"
+              width={44}
+              height={44}
+              className="w-11 h-11 rounded-full object-cover ring-2 ring-purple-500/30 dark:ring-purple-400/30 shrink-0"
+            />
+            <div className="text-xs sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300">
+              <span className="font-bold text-slate-900 dark:text-white">A note from Kai (Kai DevLabs):</span>{" "}
+              <span>
+                Store Preview Studio is crafted with care by an independent developer. Need a custom device frame or have a question? Simply{" "}
+                <strong className="text-slate-900 dark:text-white underline decoration-purple-500/50 underline-offset-2">
+                  reply to your license receipt email
+                </strong>{" "}
+                to talk directly with me. No automated bots, no ticket queues.
+              </span>
             </div>
           </div>
         </div>
