@@ -23,10 +23,10 @@ export function Features() {
     <section id="features" className="py-20 border-t border-border bg-card/30 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15]">
             {features.headline}
           </h2>
-          <p className="mt-4 text-muted text-sm sm:text-base leading-relaxed">
+          <p className="mt-3 text-muted text-sm sm:text-base leading-relaxed">
             {features.subheadline}
           </p>
         </div>

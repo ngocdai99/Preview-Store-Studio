@@ -43,7 +43,7 @@ export function Pricing() {
             />
           </a>
 
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground">
+          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15]">
             {pricing.title}
           </h2>
           <p className="mt-4 text-muted text-base">{pricing.description}</p>

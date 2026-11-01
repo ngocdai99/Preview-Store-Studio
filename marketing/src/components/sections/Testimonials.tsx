@@ -11,7 +11,7 @@ export function Testimonials() {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-card-muted text-muted border border-border mb-4">
             {testimonials.badge}
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15]">
             {testimonials.title}
           </h2>
         </div>
