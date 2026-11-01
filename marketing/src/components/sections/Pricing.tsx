@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site";
-import { Check, ArrowRight, Info } from "lucide-react";
+import { Check, Sparkles, ArrowRight, Info, ChevronRight } from "lucide-react";
 
 export function Pricing() {
   const { pricing } = siteConfig;
@@ -9,6 +9,40 @@ export function Pricing() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Head */}
         <div className="text-center max-w-3xl mx-auto mb-16">
+          <a
+            href={siteConfig.gumroadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pricing-announcement-banner group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-6 cursor-pointer select-none no-underline transition-all duration-200 ease-out hover:scale-[1.008] active:scale-[0.995] border backdrop-blur-md bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] border-[rgba(139,92,246,0.38)] shadow-[0_4px_20px_-2px_rgba(139,92,246,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:border-[rgba(139,92,246,0.6)] hover:shadow-[0_8px_28px_-4px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] dark:bg-[linear-gradient(135deg,rgba(139,92,246,0.14)_0%,rgba(59,130,246,0.10)_100%)] dark:border-[rgba(139,92,246,0.38)] [html:not(.dark)_&]:bg-white [html:not(.dark)_&]:border-[rgba(124,58,237,0.26)] [html:not(.dark)_&]:shadow-[0_4px_16px_rgba(124,58,237,0.08),0_1px_3px_rgba(15,23,42,0.04)] [html:not(.dark)_&]:hover:border-[rgba(124,58,237,0.5)] [html:not(.dark)_&]:hover:shadow-[0_8px_24px_rgba(124,58,237,0.14)]"
+            aria-label={`${pricing.banner.tag}: ${pricing.banner.text}`}
+          >
+            {/* Glowing Pulse Dot */}
+            <span className="announcement-pulse-dot relative flex h-2 w-2 shrink-0 items-center justify-center" aria-hidden="true">
+              <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#10b981] shadow-[0_0_8px_#10b981]" />
+            </span>
+
+            {/* Tag with Gradient Text */}
+            <span className="announcement-tag text-[11px] font-extrabold tracking-[0.08em] uppercase shrink-0 leading-none bg-gradient-to-r from-purple-400 to-blue-400 dark:from-purple-300 dark:to-blue-400 [html:not(.dark)_&]:from-purple-700 [html:not(.dark)_&]:to-blue-600 bg-clip-text text-transparent">
+              {pricing.banner.tag}
+            </span>
+
+            {/* Separator */}
+            <span className="announcement-sep text-[12px] font-bold text-white/35 dark:text-white/35 [html:not(.dark)_&]:text-slate-400 shrink-0 leading-none" aria-hidden="true">
+              ·
+            </span>
+
+            {/* Slogan Text */}
+            <span className="announcement-text text-[13px] sm:text-[13.5px] font-semibold text-slate-100 dark:text-slate-100 [html:not(.dark)_&]:text-slate-900 tracking-[-0.01em] leading-snug">
+              {pricing.banner.text}
+            </span>
+
+            {/* Chevron Right Arrow */}
+            <ChevronRight
+              className="announcement-arrow w-3.5 h-3.5 shrink-0 text-purple-300 dark:text-purple-300 [html:not(.dark)_&]:text-purple-600 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5"
+            />
+          </a>
+
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {pricing.title}
           </h2>
@@ -27,7 +61,8 @@ export function Pricing() {
               }`}
             >
               {tier.isPopular && (
-                <div className="absolute -top-3 right-8 px-3 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-indigo-600 text-white shadow-sm">
+                <div className="absolute -top-3 right-8 px-3.5 py-1 rounded-full text-[11px] font-semibold tracking-wider bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
                   {pricing.mostPopularBadge}
                 </div>
               )}
@@ -92,7 +127,7 @@ export function Pricing() {
                 rel="noopener noreferrer"
                 className={`btn-scale w-full inline-flex items-center justify-center gap-2 font-semibold text-sm sm:text-base px-6 py-3.5 rounded-xl transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98] ${
                   tier.isPopular
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-500/20"
+                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40"
                     : "bg-card-muted hover:bg-card text-foreground border border-border"
                 }`}
               >

@@ -21,9 +21,9 @@ export const en = {
     subheadlineLead:
       "Save 2 hours of back-and-forth with your client before every App Store submission.",
     subheadlineFollow:
-      "App Store Connect & Google Play provide no live preview — inspect and refine your listings with total confidence.",
+      "App Store Connect & Google Play provide no live preview — preview and refine your listings with confidence.",
     subheadline:
-      "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — inspect and refine your listings with total confidence.",
+      "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — preview and refine your listings with confidence.",
     primaryCta: {
       label: "Get Lifetime Access — $29",
       href: "#pricing",
@@ -102,7 +102,7 @@ export const en = {
         bad: {
           title: "Marketers without developer accounts, drafting blindly in Google Docs",
           description:
-            "Writing copy in shared docs leads to misaligned specs with developers over character limits, missing assets, and broken layouts.",
+            "Writing copy in shared docs leads to misaligned specs with developers over character limits, missing specs, and broken layouts.",
         },
         good: {
           badge: "INDEPENDENT MARKETING WORKFLOW",
@@ -196,9 +196,13 @@ export const en = {
   },
 
   pricing: {
+    banner: {
+      tag: "EARLY BIRD IS LIVE",
+      text: "Special launch pricing for early supporters · Instant offline delivery",
+    },
     title: "One-time purchase. No subscription.",
     description:
-      "No recurring fees. Standalone offline studio. Pay once, keep your copy forever.",
+      "No recurring fees. Standalone offline HTML studio. Pay once, keep your copy forever.",
     mostPopularBadge: "Most Popular",
     scopeNote: {
       coveredLabel: "What’s covered:",
@@ -287,7 +291,7 @@ export const en = {
         topic: "Offline Architecture",
         question: "Does Store Preview Studio require an active internet connection?",
         answer:
-          "No. Store Preview Studio runs 100% locally in your browser. All scripts, icons, CSS styles, and fonts are completely self-contained. You can use it on airplanes, remote locations, or behind corporate firewalls with zero telemetry and zero external server calls.",
+          "No. Store Preview Studio runs 100% locally in your browser. All scripts, icons, CSS styles, and fonts are completely self-contained. You can use it on airplanes, remote locations, or behind corporate firewalls with no telemetry and no external server calls.",
       },
       {
         id: "store-review-policy",
@@ -317,7 +321,7 @@ export const en = {
         question:
           "Do my clients need a $99/year Apple Developer or Google Play account to view previews?",
         answer:
-          "No! In native store consoles, clients cannot view or review listings unless they hold a paid developer account and console invite. With Store Preview Studio, you simply hand over the standalone HTML file or export JSON presets — clients can review realistic listings directly in any browser with zero logins and zero fees.",
+          "No! In native store consoles, clients cannot view or review listings unless they hold a paid developer account and console invite. With Store Preview Studio, you simply hand over the standalone HTML file or export JSON presets — clients can review realistic listings directly in any browser with no logins and no extra fees.",
       },
       {
         id: "product-updates",

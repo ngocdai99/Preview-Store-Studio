@@ -4,6 +4,7 @@ import {
   Search,
   CloudDownload,
   ShieldCheck,
+  Sparkles,
   FolderArchive,
   type LucideIcon,
 } from "lucide-react";
@@ -14,6 +15,69 @@ const iconMap: Record<FeatureItem["icon"], LucideIcon> = {
   cloudDownload: CloudDownload,
   shieldCheck: ShieldCheck,
   folderArchive: FolderArchive,
+};
+
+interface FeatureTheme {
+  iconBox: string;
+  badge: string;
+  radialGlow: string;
+  cardHoverBorder: string;
+  cardHoverShadow: string;
+}
+
+const featureThemes: Record<string, FeatureTheme> = {
+  frames: {
+    iconBox:
+      "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 group-hover:border-blue-500/40 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.25)]",
+    badge:
+      "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/25",
+    radialGlow: "from-blue-500/15 via-indigo-500/10 to-transparent",
+    cardHoverBorder: "hover:border-blue-500/40 dark:hover:border-blue-500/40",
+    cardHoverShadow:
+      "hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(59,130,246,0.25)]",
+  },
+  viewports: {
+    iconBox:
+      "bg-sky-500/10 border-sky-500/20 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 group-hover:border-sky-500/40 group-hover:shadow-[0_0_20px_rgba(14,165,233,0.25)]",
+    badge:
+      "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/25",
+    radialGlow: "from-sky-500/15 via-cyan-500/10 to-transparent",
+    cardHoverBorder: "hover:border-sky-500/40 dark:hover:border-sky-500/40",
+    cardHoverShadow:
+      "hover:shadow-[0_20px_40px_-15px_rgba(14,165,233,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(14,165,233,0.25)]",
+  },
+  cloner: {
+    iconBox:
+      "bg-violet-500/10 border-violet-500/20 text-violet-600 dark:text-violet-400 group-hover:bg-violet-500/20 group-hover:border-violet-500/40 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.25)]",
+    badge:
+      "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/25",
+    radialGlow: "from-violet-500/15 via-purple-500/10 to-transparent",
+    cardHoverBorder:
+      "hover:border-violet-500/40 dark:hover:border-violet-500/40",
+    cardHoverShadow:
+      "hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(139,92,246,0.25)]",
+  },
+  compliance: {
+    iconBox:
+      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]",
+    badge:
+      "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
+    radialGlow: "from-emerald-500/15 via-teal-500/10 to-transparent",
+    cardHoverBorder:
+      "hover:border-emerald-500/40 dark:hover:border-emerald-500/40",
+    cardHoverShadow:
+      "hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(16,185,129,0.25)]",
+  },
+  export: {
+    iconBox:
+      "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 group-hover:border-amber-500/40 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]",
+    badge:
+      "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/25",
+    radialGlow: "from-amber-500/15 via-orange-500/10 to-transparent",
+    cardHoverBorder: "hover:border-amber-500/40 dark:hover:border-amber-500/40",
+    cardHoverShadow:
+      "hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(245,158,11,0.25)]",
+  },
 };
 
 const featureTags: Record<string, string[]> = {
@@ -57,6 +121,11 @@ export function Features() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-[0.08em] bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 mb-4 shadow-[0_2px_8px_rgba(59,130,246,0.06)]">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Studio Capabilities</span>
+          </div>
+
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {features.headline}
           </h2>
@@ -70,6 +139,8 @@ export function Features() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {features.items.map((feature) => {
             const Icon = iconMap[feature.icon] || Smartphone;
+            const theme =
+              featureThemes[feature.id] || featureThemes.frames;
             const tags = featureTags[feature.id] || [];
             const isHeroCard = feature.id === "frames";
 
@@ -81,21 +152,36 @@ export function Features() {
                   border border-slate-200/90 dark:border-white/[0.08]
                   shadow-[0_2px_12px_rgba(15,23,42,0.03),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.95)]
                   dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.06)]
-                  hover:border-slate-300 dark:hover:border-white/[0.16]
-                  hover:shadow-[0_12px_32px_-8px_rgba(15,23,42,0.08)] dark:hover:shadow-[0_16px_36px_-8px_rgba(0,0,0,0.45)]
                   transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                   ${isHeroCard ? "md:col-span-2 lg:col-span-2" : "col-span-1"}
+                  ${theme.cardHoverBorder}
+                  ${theme.cardHoverShadow}
                 `}
               >
                 {/* Hairline reflection at top border */}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white dark:via-white/20 to-transparent pointer-events-none" />
 
+                {/* Subtle corner radial glow on hover */}
+                <div
+                  className={`absolute -top-20 -right-20 w-52 h-52 rounded-full bg-gradient-to-br ${theme.radialGlow} blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none`}
+                />
+
                 <div className="relative z-10">
-                  {/* Clean Icon Container */}
-                  <div className="mb-6">
-                    <div className="w-12 h-12 rounded-[14px] bg-slate-100 dark:bg-white/[0.06] text-slate-800 dark:text-slate-200 border border-slate-200/70 dark:border-white/[0.08] flex items-center justify-center transition-all duration-200 group-hover:scale-105 group-hover:bg-indigo-50 group-hover:text-indigo-600 dark:group-hover:bg-indigo-950/40 dark:group-hover:text-indigo-400 group-hover:border-indigo-200 dark:group-hover:border-indigo-500/30">
+                  {/* Top Row: Icon + Badge */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div
+                      className={`w-12 h-12 rounded-[14px] border flex items-center justify-center transition-all duration-300 group-hover:scale-105 ${theme.iconBox}`}
+                    >
                       <Icon className="w-6 h-6 stroke-[2.2]" />
                     </div>
+
+                    {feature.badge && (
+                      <span
+                        className={`text-[11px] font-bold tracking-[0.06em] uppercase px-3 py-1 rounded-full border shadow-sm transition-colors ${theme.badge}`}
+                      >
+                        {feature.badge}
+                      </span>
+                    )}
                   </div>
 
                   {/* Title */}

@@ -7,6 +7,9 @@ export function Comparison() {
     <section id="comparison" className="py-20 border-t border-border bg-background transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
+          <span className="section-badge text-[12px] font-extrabold uppercase tracking-[0.1em] text-[#6d28d9] dark:text-[#a78bfa] mb-3 block">
+            {comparison.badge}
+          </span>
           <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {comparison.title}
           </h2>
