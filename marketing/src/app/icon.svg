@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#ea580c"/>
+      <stop offset="0%" stop-color="#3ecf8e"/>
+      <stop offset="100%" stop-color="#1a8c5b"/>
     </linearGradient>
     <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#d97706"/>
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#24b47e"/>
     </linearGradient>
   </defs>
-  <!-- Amber-Orange Gradient Background -->
+  <!-- Supabase Emerald Gradient Background -->
   <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
   
   <!-- Back Layer Device: iPad Tablet -->

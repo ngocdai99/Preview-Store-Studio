@@ -20,11 +20,11 @@ function renderHighlightedText(text: string) {
 
 const cardAccents = [
   {
-    borderHover: "hover:border-orange-500/40 dark:hover:border-orange-500/40",
-    topLine: "from-[#ea580c] via-orange-500/50 to-transparent",
-    glow: "bg-orange-500/10 dark:bg-orange-500/15",
-    quoteColor: "text-orange-600 dark:text-orange-400",
-    pill: "bg-orange-50 text-orange-700 dark:bg-orange-500/10 dark:text-orange-300 border-orange-200/80 dark:border-orange-500/25",
+    borderHover: "hover:border-[#3ecf8e]/40 dark:hover:border-[#3ecf8e]/40",
+    topLine: "from-[#3ecf8e] via-emerald-400/60 to-transparent",
+    glow: "bg-[#3ecf8e]/10 dark:bg-[#3ecf8e]/15",
+    quoteColor: "text-[#1ea672] dark:text-[#3ecf8e]",
+    pill: "bg-emerald-50 text-emerald-800 dark:bg-[#3ecf8e]/10 dark:text-[#3ecf8e] border-emerald-200/80 dark:border-[#3ecf8e]/25",
   },
   {
     borderHover: "hover:border-slate-400 dark:hover:border-white/30",

@@ -10,18 +10,18 @@
   --border-subtle: #edf2f7;
   --foreground: #0f172a;
   --muted: #475569;
-  --accent: #ea580c; /* Pure Electric Amber Orange (Card 1 App Identity) */
-  --accent-hover: #c2410c;
-  --accent-light: #fff7ed;
-  --accent-glow: rgba(234, 88, 12, 0.15);
-  --brand-gradient: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+  --accent: #1ea672; /* Supabase Emerald (Light Mode contrast) */
+  --accent-hover: #168d60;
+  --accent-light: rgba(62, 207, 142, 0.12);
+  --accent-glow: rgba(62, 207, 142, 0.22);
+  --brand-gradient: linear-gradient(135deg, #3ecf8e 0%, #1ea672 100%);
   --nav-pill-bg: #334155;
   --nav-pill-hover-bg: #1e293b;
   --nav-pill-color: #ffffff;
-  --purple-brand: #ea580c;
-  --purple-brand-hover: #c2410c;
-  --purple-brand-light: rgba(234, 88, 12, 0.08);
-  --purple-brand-border: rgba(234, 88, 12, 0.28);
+  --purple-brand: #1ea672;
+  --purple-brand-hover: #168d60;
+  --purple-brand-light: rgba(62, 207, 142, 0.10);
+  --purple-brand-border: rgba(62, 207, 142, 0.30);
 }
 
 [data-theme="dark"], html.dark {
@@ -32,18 +32,18 @@
   --border-subtle: #172033;
   --foreground: #f8fafc;
   --muted: #94a3b8;
-  --accent: #f97316; /* Vibrant Orange Ember */
-  --accent-hover: #fb923c;
-  --accent-light: rgba(249, 115, 22, 0.15);
-  --accent-glow: rgba(249, 115, 22, 0.25);
-  --brand-gradient: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
+  --accent: #3ecf8e; /* Supabase Trademark Green */
+  --accent-hover: #4ef0a3;
+  --accent-light: rgba(62, 207, 142, 0.15);
+  --accent-glow: rgba(62, 207, 142, 0.30);
+  --brand-gradient: linear-gradient(135deg, #3ecf8e 0%, #1ea672 100%);
   --nav-pill-bg: #ffffff;
   --nav-pill-hover-bg: #f1f5f9;
   --nav-pill-color: #0f172a;
-  --purple-brand: #f97316;
-  --purple-brand-hover: #fb923c;
-  --purple-brand-light: rgba(249, 115, 22, 0.15);
-  --purple-brand-border: rgba(249, 115, 22, 0.35);
+  --purple-brand: #3ecf8e;
+  --purple-brand-hover: #4ef0a3;
+  --purple-brand-light: rgba(62, 207, 142, 0.15);
+  --purple-brand-border: rgba(62, 207, 142, 0.35);
 }
 
 @theme inline {

@@ -7,8 +7,8 @@ export function Hero() {
 
   return (
     <section id="hero" className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden">
-      {/* Background Soft Pure Orange Aurora Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-orange-500/18 via-amber-500/12 to-orange-600/15 blur-[130px] rounded-full pointer-events-none -z-10" />
+      {/* Background Soft Supabase Emerald Aurora Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-emerald-400/22 via-[#3ecf8e]/16 to-teal-600/18 blur-[130px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
         {/* Main H1 */}
@@ -28,7 +28,7 @@ export function Hero() {
         <div className="mt-1 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href={hero.primaryCta.href}
-            className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[linear-gradient(135deg,#f59e0b_0%,#ea580c_100%)] hover:bg-[linear-gradient(135deg,#fbbf24_0%,#d97706_100%)] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] shadow-[0_4px_16px_rgba(234,88,12,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_8px_24px_rgba(234,88,12,0.5)] transition-all duration-150"
+            className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[linear-gradient(135deg,#3ecf8e_0%,#1ea672_100%)] hover:bg-[linear-gradient(135deg,#46e39d_0%,#24b47e_100%)] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] shadow-[0_4px_16px_rgba(62,207,142,0.38),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_8px_24px_rgba(62,207,142,0.5)] transition-all duration-150"
           >
             <span>{hero.primaryCta.label}</span>
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -38,7 +38,7 @@ export function Hero() {
             href={hero.secondaryCta.href}
             className="btn-scale group w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-white dark:bg-[#0e1526] hover:bg-slate-50 dark:hover:bg-[#152038] text-slate-800 dark:text-slate-100 border border-slate-200/90 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 font-semibold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] transition-all duration-150 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:shadow-[0_4px_14px_rgba(15,23,42,0.08)]"
           >
-            <Sparkles className="w-4 h-4 text-orange-500 dark:text-orange-400 transition-transform duration-200 group-hover:rotate-12" />
+            <Sparkles className="w-4 h-4 text-[#1ea672] dark:text-[#3ecf8e] transition-transform duration-200 group-hover:rotate-12" />
             <span>{hero.secondaryCta.label}</span>
           </a>
         </div>

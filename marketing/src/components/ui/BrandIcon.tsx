@@ -4,14 +4,14 @@ export function BrandIcon({ className = "w-8 h-8" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 32 32" aria-hidden="true">
       <defs>
-        {/* Signature Amber-Orange Gradient (#f59e0b -> #ea580c) */}
+        {/* Supabase Emerald Gradient (#3ecf8e -> #1a8c5b) */}
         <linearGradient id="brand-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f59e0b" />
-          <stop offset="100%" stopColor="#ea580c" />
+          <stop offset="0%" stopColor="#3ecf8e" />
+          <stop offset="100%" stopColor="#1a8c5b" />
         </linearGradient>
         <linearGradient id="brand-front" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fbbf24" />
-          <stop offset="100%" stopColor="#d97706" />
+          <stop offset="0%" stopColor="#6ee7b7" />
+          <stop offset="100%" stopColor="#24b47e" />
         </linearGradient>
       </defs>
       <rect width="32" height="32" rx="7" fill="url(#brand-bg)" />
