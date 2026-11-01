@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -35,30 +34,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full scroll-smooth dark" data-theme="dark" suppressHydrationWarning>
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased transition-colors duration-200">
-        <Script
-          id="theme-initializer"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                var t = localStorage.getItem('sps_theme');
-                if (!t) {
-                  t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-                }
-                document.documentElement.setAttribute('data-theme', t);
-                if (t === 'dark') {
-                  document.documentElement.classList.add('dark');
-                  document.documentElement.classList.remove('light');
-                } else {
-                  document.documentElement.classList.add('light');
-                  document.documentElement.classList.remove('dark');
-                }
-              } catch (_) {}
-            `,
-          }}
-        />
+    <html lang="en" className="h-full scroll-smooth dark" data-theme="dark">
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased">
         {children}
       </body>
     </html>

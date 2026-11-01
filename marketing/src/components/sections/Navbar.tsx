@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { BrandIcon } from "@/components/ui/BrandIcon";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Menu, X } from "lucide-react";
 
 export function Navbar() {
@@ -123,10 +122,8 @@ export function Navbar() {
           </nav>
         </div>
 
-        {/* Right Section: Theme Toggle + Demo Link + Supabase Emerald CTA Button */}
+        {/* Right Section: Demo Link + Supabase Emerald CTA Button */}
         <div className="flex items-center gap-2.5 sm:gap-3.5">
-          <ThemeToggle />
-
           <a
             href="/demo.html"
             className="hidden sm:inline-flex items-center text-[13px] font-medium text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 transition-colors"

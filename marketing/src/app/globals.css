@@ -2,30 +2,8 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root, [data-theme="light"], html.light {
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --card-muted: #f1f5f9;
-  --border: #e2e8f0;
-  --border-subtle: #edf2f7;
-  --foreground: #0f172a;
-  --muted: #475569;
-  --accent: #006533; /* Xanh đậm */
-  --accent-hover: #005028;
-  --accent-light: rgba(0, 101, 51, 0.12);
-  --accent-glow: rgba(0, 101, 51, 0.22);
-  --brand-gradient: linear-gradient(135deg, #00D085 0%, #006533 100%);
-  --nav-pill-bg: #334155;
-  --nav-pill-hover-bg: #1e293b;
-  --nav-pill-color: #ffffff;
-  --purple-brand: #006533;
-  --purple-brand-hover: #005028;
-  --purple-brand-light: rgba(0, 101, 51, 0.10);
-  --purple-brand-border: rgba(0, 101, 51, 0.30);
-}
-
-[data-theme="dark"], html.dark {
-  --bg: #131413; /* Đen nền Supabase */
+:root, [data-theme="dark"], html.dark {
+  --bg: #131413; /* Đen nền Supabase (Pure Dark Only) */
   --card: #1D1E1D; /* Đen xám card/surface */
   --card-muted: #171817;
   --border: #282928;
@@ -44,6 +22,7 @@
   --purple-brand-hover: #26e099;
   --purple-brand-light: rgba(0, 208, 133, 0.15);
   --purple-brand-border: rgba(0, 208, 133, 0.35);
+  color-scheme: dark;
 }
 
 @theme inline {
