@@ -76,14 +76,6 @@ export const en = {
           "Export portable JSON presets to backup configurations or transfer between teammates. Bulk export clean 4K Retina screenshot bundles with instant client-side ZIP generation.",
         badge: "Ultra HD 4K",
       },
-      {
-        id: "offline",
-        icon: "wifiOff" as const,
-        title: "100% Private & Standalone Offline",
-        description:
-          "Zero servers, zero analytics, zero external API dependencies. A single self-contained HTML file that runs straight in any browser. Your unreleased client assets and secret copy never leave your local RAM.",
-        badge: "Air-gapped",
-      },
     ],
   },
 

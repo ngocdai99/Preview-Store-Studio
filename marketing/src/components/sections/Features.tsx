@@ -4,7 +4,6 @@ import {
   ShieldCheck,
   Sparkles,
   FolderArchive,
-  WifiOff,
   type LucideIcon,
 } from "lucide-react";
 
@@ -13,7 +12,6 @@ const iconMap: Record<FeatureItem["icon"], LucideIcon> = {
   shieldCheck: ShieldCheck,
   sparkles: Sparkles,
   folderArchive: FolderArchive,
-  wifiOff: WifiOff,
 };
 
 interface FeatureTheme {
@@ -22,7 +20,6 @@ interface FeatureTheme {
   radialGlow: string;
   cardHoverBorder: string;
   cardHoverShadow: string;
-  tagBg: string;
 }
 
 const featureThemes: Record<string, FeatureTheme> = {
@@ -35,8 +32,6 @@ const featureThemes: Record<string, FeatureTheme> = {
     cardHoverBorder: "hover:border-blue-500/40 dark:hover:border-blue-500/40",
     cardHoverShadow:
       "hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(59,130,246,0.25)]",
-    tagBg:
-      "bg-blue-50/70 text-blue-700 border-blue-200/60 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-500/20",
   },
   compliance: {
     iconBox:
@@ -48,8 +43,6 @@ const featureThemes: Record<string, FeatureTheme> = {
       "hover:border-emerald-500/40 dark:hover:border-emerald-500/40",
     cardHoverShadow:
       "hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(16,185,129,0.25)]",
-    tagBg:
-      "bg-emerald-50/70 text-emerald-700 border-emerald-200/60 dark:bg-emerald-950/30 dark:text-emerald-300 dark:border-emerald-500/20",
   },
   sync: {
     iconBox:
@@ -61,8 +54,6 @@ const featureThemes: Record<string, FeatureTheme> = {
       "hover:border-purple-500/40 dark:hover:border-purple-500/40",
     cardHoverShadow:
       "hover:shadow-[0_20px_40px_-15px_rgba(168,85,247,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(168,85,247,0.25)]",
-    tagBg:
-      "bg-purple-50/70 text-purple-700 border-purple-200/60 dark:bg-purple-950/30 dark:text-purple-300 dark:border-purple-500/20",
   },
   export: {
     iconBox:
@@ -73,20 +64,6 @@ const featureThemes: Record<string, FeatureTheme> = {
     cardHoverBorder: "hover:border-amber-500/40 dark:hover:border-amber-500/40",
     cardHoverShadow:
       "hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(245,158,11,0.25)]",
-    tagBg:
-      "bg-amber-50/70 text-amber-700 border-amber-200/60 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-500/20",
-  },
-  offline: {
-    iconBox:
-      "bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400 group-hover:bg-rose-500/20 group-hover:border-rose-500/40 group-hover:shadow-[0_0_20px_rgba(244,63,94,0.25)]",
-    badge:
-      "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/25",
-    radialGlow: "from-rose-500/15 via-pink-500/10 to-transparent",
-    cardHoverBorder: "hover:border-rose-500/40 dark:hover:border-rose-500/40",
-    cardHoverShadow:
-      "hover:shadow-[0_20px_40px_-15px_rgba(244,63,94,0.15)] dark:hover:shadow-[0_24px_48px_-15px_rgba(244,63,94,0.25)]",
-    tagBg:
-      "bg-rose-50/70 text-rose-700 border-rose-200/60 dark:bg-rose-950/30 dark:text-rose-300 dark:border-rose-500/20",
   },
 };
 
@@ -111,11 +88,6 @@ const featureTags: Record<string, string[]> = {
     "Instant Client-Side ZIP",
     "Portable JSON Presets",
     "4K Retina Bundles",
-  ],
-  offline: [
-    "Zero Network Calls",
-    "100% In-Memory RAM",
-    "Self-Contained File",
   ],
 };
 
@@ -144,31 +116,18 @@ export function Features() {
           </p>
         </div>
 
-        {/* 6-Column Bento Grid: Row 1 has two 3-col hero cards, Row 2 has three 2-col cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-          {features.items.map((feature, idx) => {
+        {/* 2x2 Balanced Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 max-w-5xl mx-auto">
+          {features.items.map((feature) => {
             const Icon = iconMap[feature.icon] || Smartphone;
             const theme =
               featureThemes[feature.id] || featureThemes.frames;
             const tags = featureTags[feature.id] || [];
 
-            // Bento span rules:
-            // Item 0 & 1: 50% on desktop (lg:col-span-3)
-            // Item 2 & 3: 33.3% on desktop (lg:col-span-2)
-            // Item 4: 33.3% on desktop (lg:col-span-2) and spans full 2-cols on tablet (md:col-span-2)
-            const colSpanClass =
-              idx === 0 || idx === 1
-                ? "md:col-span-1 lg:col-span-3"
-                : idx === 4
-                ? "md:col-span-2 lg:col-span-2"
-                : "md:col-span-1 lg:col-span-2";
-
-            const isHeroCard = idx === 0 || idx === 1;
-
             return (
               <div
                 key={feature.id}
-                className={`group relative rounded-[24px] flex flex-col justify-between overflow-hidden
+                className={`group relative rounded-[24px] p-7 sm:p-8 flex flex-col justify-between overflow-hidden
                   bg-white dark:bg-[#0c1222]
                   border border-slate-200/90 dark:border-white/[0.08]
                   shadow-[0_2px_12px_rgba(15,23,42,0.03),0_1px_2px_rgba(15,23,42,0.02),inset_0_1px_0_rgba(255,255,255,0.95)]
@@ -177,8 +136,6 @@ export function Features() {
                   transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                   ${theme.cardHoverBorder}
                   ${theme.cardHoverShadow}
-                  ${colSpanClass}
-                  ${isHeroCard ? "p-7 sm:p-9" : "p-6 sm:p-7"}
                 `}
               >
                 {/* Hairline reflection at top border */}
@@ -208,13 +165,7 @@ export function Features() {
                   </div>
 
                   {/* Title */}
-                  <h3
-                    className={`font-extrabold text-[#0f172a] dark:text-white tracking-[-0.015em] leading-snug transition-colors ${
-                      isHeroCard
-                        ? "text-[20px] sm:text-[21px]"
-                        : "text-[18px] sm:text-[19px]"
-                    }`}
-                  >
+                  <h3 className="text-[19px] sm:text-[20px] font-extrabold text-[#0f172a] dark:text-white tracking-[-0.015em] leading-snug transition-colors">
                     {feature.title}
                   </h3>
 
