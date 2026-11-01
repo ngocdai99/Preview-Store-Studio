@@ -86,7 +86,7 @@ export function Pricing() {
                           key={i}
                           className="flex items-center gap-2.5 text-[13.5px] text-slate-900 dark:text-white font-semibold pb-3 mb-2 border-b border-slate-200 dark:border-white/10"
                         >
-                          <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                          <Sparkles className="w-4 h-4 text-emerald-500 dark:text-[#00D085] shrink-0" />
                           <span>
                             <strong className="text-slate-900 dark:text-white font-bold">
                               {feature.text.replace(", plus:", "")}
@@ -103,11 +103,7 @@ export function Pricing() {
                         className="flex items-start gap-2.5 text-[13.5px] sm:text-[14px] text-slate-700 dark:text-slate-200 leading-snug"
                       >
                         <svg
-                          className={`w-4 h-4 shrink-0 mt-0.5 stroke-[2.6] ${
-                            tier.isPopular
-                              ? "text-slate-900 dark:text-white"
-                              : "text-blue-600 dark:text-blue-400"
-                          }`}
+                          className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.6] text-emerald-500 dark:text-[#00D085]"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -125,9 +121,7 @@ export function Pricing() {
                                 feature.tag === "build.js" ||
                                 feature.tag === ".html"
                                   ? "font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 rounded-md"
-                                  : tier.isPopular
-                                  ? "bg-slate-100 dark:bg-white/[0.08] text-slate-800 dark:text-slate-200 border-slate-200 dark:border-white/10"
-                                  : "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200/80 dark:border-blue-500/20"
+                                  : "bg-slate-100 dark:bg-white/[0.08] text-slate-800 dark:text-slate-200 border-slate-200 dark:border-white/10"
                               }`}
                             >
                               {feature.tag}

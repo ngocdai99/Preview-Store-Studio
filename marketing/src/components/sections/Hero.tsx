@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { ArrowRight } from "lucide-react";
 
 export function Hero() {
   const { hero } = siteConfig;
@@ -28,10 +27,9 @@ export function Hero() {
         <div className="mt-1 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href={hero.primaryCta.href}
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[#006533] hover:bg-[#007844] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] border border-[#00D085]/35 shadow-xs transition-colors duration-150"
+            className="group w-full sm:w-auto inline-flex items-center justify-center h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[#006533] hover:bg-[#007844] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] border border-[#00D085]/35 shadow-xs transition-colors duration-150"
           >
             <span>{hero.primaryCta.label}</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
 
           <a
