@@ -212,21 +212,40 @@ export function Pricing() {
             </div>
           </div>
 
-          {/* Founder Signature Note from Kai */}
-          <div className="mt-10 pt-6 border-t border-slate-200/60 dark:border-white/[0.06] flex flex-col items-center text-center max-w-md mx-auto">
-            <Image
-              src="/kai.jpg"
-              alt="Kai"
-              width={44}
-              height={44}
-              className="w-11 h-11 rounded-full object-cover mb-3 ring-1 ring-slate-200 dark:ring-white/10 shadow-sm"
-            />
-            <p className="text-[13.5px] sm:text-[14px] leading-relaxed text-slate-600 dark:text-slate-300 italic mb-2">
-              &ldquo;Need a specific device frame or have feedback? Just reply to your receipt email &mdash; I answer every email personally.&rdquo;
-            </p>
-            <span className="text-xs font-semibold text-slate-900 dark:text-white tracking-tight">
-              Kai <span className="text-slate-400 dark:text-slate-500 font-normal">&middot; Kai DevLabs</span>
-            </span>
+          {/* Founder Note from Kai */}
+          <div className="mt-8 max-w-lg mx-auto w-full">
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] shadow-[0_4px_20px_-4px_rgba(15,23,42,0.05)] dark:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.4)] flex items-start gap-3.5 sm:gap-4 transition-all">
+              {/* Avatar with Live Indicator */}
+              <div className="relative shrink-0">
+                <Image
+                  src="/kai.jpg"
+                  alt="Kai"
+                  width={44}
+                  height={44}
+                  className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-200/90 dark:ring-white/15"
+                />
+                <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 ring-2 ring-white dark:ring-[#0c1222]" />
+                </span>
+              </div>
+
+              {/* Message Details */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <span className="text-[13px] font-bold text-slate-900 dark:text-white">Kai</span>
+                  <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300">
+                    Kai DevLabs
+                  </span>
+                  <span className="ml-auto text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                    Direct 1-on-1 Support
+                  </span>
+                </div>
+                <p className="text-[12.5px] sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300">
+                  &ldquo;Need a custom device frame or have a question? Just reply to your receipt email &mdash; I answer every message personally.&rdquo;
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
