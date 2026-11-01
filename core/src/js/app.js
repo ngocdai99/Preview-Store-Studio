@@ -10532,19 +10532,29 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             if(scr){
               scr.style.backgroundColor = solidBg;
               scr.style.background = solidBg;
-              scr.style.overflow = 'visible';
-              scr.style.overflowY = 'visible';
-              scr.style.overflowX = 'visible';
+              scr.style.overflow = 'hidden';
+              scr.style.overflowY = 'hidden';
+              scr.style.overflowX = 'hidden';
               scr.scrollTop = 0;
               scr.scrollLeft = 0;
             }
             const gnav = phone.querySelector('.gnav');
             if(gnav){
               gnav.style.backgroundColor = isDark ? '#2b2c2e' : '#f1f3f4';
+              gnav.style.position = 'absolute';
+              gnav.style.bottom = '0px';
+              gnav.style.left = '0px';
+              gnav.style.right = '0px';
+              gnav.style.zIndex = '10';
+              if(isDark) gnav.style.borderTopColor = 'rgba(255,255,255,.08)';
             }
             const tab = phone.querySelector('.tab');
             if(tab){
               tab.style.backgroundColor = isDark ? 'rgba(22, 22, 24, 0.95)' : 'rgba(249, 249, 249, 0.95)';
+            }
+            const hi = phone.querySelector('.hi');
+            if(hi){
+              hi.style.zIndex = '12';
             }
           }
         });
