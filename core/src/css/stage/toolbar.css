@@ -84,10 +84,20 @@
 .stage-view-dropdown:has(.menu.show) .stage-view-btn,
 .stage-device-dropdown:has(.menu.show) .stage-view-btn,
 .stage-view-btn.active {
-  border-color: rgba(99, 102, 241, 0.45);
+  border-color: rgba(255, 255, 255, 0.28);
   color: #ffffff;
   background: rgba(30, 41, 59, .98);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+#dt:has(.menu.show) .stage-view-btn {
+  border-color: rgba(0, 113, 227, 0.45);
+  box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.25);
+}
+
+#gdt:has(.menu.show) .stage-view-btn {
+  border-color: rgba(5, 150, 105, 0.45);
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.25);
 }
 
 .stage-view-ico {
@@ -96,11 +106,11 @@
   justify-content: center;
   width: 15px;
   height: 15px;
-  color: #818cf8;
+  color: #ffffff;
   flex-shrink: 0;
 }
 
-#btnStageView .stage-view-ico { color: #818cf8; }
+#btnStageView .stage-view-ico { color: #ffffff; }
 #btnAppleDevice .stage-view-ico { color: #60a5fa; }
 #btnGoogleDevice .stage-view-ico { color: #34d399; }
 
@@ -136,9 +146,14 @@
   font-weight: 750;
   letter-spacing: .02em;
   border-radius: 5px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  background: #334155;
   color: #ffffff;
   line-height: 1.2;
+}
+
+:root[data-ui=light] .stage-view-badge {
+  background: #0f172a;
+  color: #ffffff;
 }
 
 /* Stage View Menu Flyout */
@@ -221,9 +236,10 @@
   color: #ffffff;
 }
 
+/* Base default for .stage-view-menu (Neutral Black & White) */
 .stage-view-menu .menu-item.on,
 .stage-view-menu .menu-item.active {
-  background: rgba(79, 70, 229, 0.14);
+  background: rgba(255, 255, 255, 0.09);
   border: none !important;
   color: #ffffff;
 }
@@ -237,12 +253,12 @@
   bottom: 6px;
   width: 3px;
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(180deg, #818cf8, #4f46e5);
+  background: #ffffff;
 }
 
 .stage-view-menu .menu-item.on .mi-ico,
 .stage-view-menu .menu-item.active .mi-ico {
-  color: #818cf8;
+  color: #ffffff;
 }
 
 /* Apple Menu Adaptive Accents (Apple Blue) */
@@ -329,7 +345,7 @@
   display: none !important;
 }
 
-/* Premium circular badge tick for selected option */
+/* Premium circular badge tick for selected option (Neutral Black/White base for Stage View) */
 .stage-view-menu .mi-check {
   display: none;
   align-items: center;
@@ -337,9 +353,9 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.45);
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.25);
   margin-left: auto;
   flex-shrink: 0;
 }
@@ -347,6 +363,11 @@
 .stage-view-menu .mi-check svg {
   width: 11px;
   height: 11px;
+  stroke: #0f172a;
+}
+
+#menuAppleDevice .mi-check svg,
+#menuGoogleDevice .mi-check svg {
   stroke: #ffffff;
 }
 
@@ -382,12 +403,13 @@
 
 .stage-view-menu #btnDualPhone.on .mi-switch,
 body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch {
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  background: #ffffff;
 }
 
 .stage-view-menu #btnDualPhone.on .mi-switch::after,
 body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
   transform: translateX(13px);
+  background: #0f172a;
 }
 
 /* Light Mode Overrides for Stage View Dropdown */
@@ -405,15 +427,15 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
   box-shadow: 0 6px 20px -2px rgba(15, 23, 42, 0.14), 0 3px 8px -1px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff !important;
 }
 
-:root[data-ui=light] #btnStageView .stage-view-ico { color: #4f46e5; }
+:root[data-ui=light] #btnStageView .stage-view-ico { color: #0f172a; }
 :root[data-ui=light] #btnAppleDevice .stage-view-ico { color: #0071e3; }
 :root[data-ui=light] #btnGoogleDevice .stage-view-ico { color: #059669; }
 
 :root[data-ui=light] #stageViewDropdown:has(.menu.show) .stage-view-btn {
   background: #ffffff !important;
-  border-color: rgba(99, 102, 241, 0.5) !important;
+  border-color: rgba(15, 23, 42, 0.28) !important;
   color: #0f172a !important;
-  box-shadow: 0 6px 20px -2px rgba(99, 102, 241, 0.18), 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 6px 20px -2px rgba(15, 23, 42, 0.12), 0 0 0 2px rgba(15, 23, 42, 0.08) !important;
 }
 
 :root[data-ui=light] #dt:has(.menu.show) .stage-view-btn {
@@ -463,19 +485,19 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 
 :root[data-ui=light] .stage-view-menu .menu-item.on,
 :root[data-ui=light] .stage-view-menu .menu-item.active {
-  background: rgba(79, 70, 229, 0.08);
+  background: rgba(15, 23, 42, 0.06);
   border: none !important;
   color: #0f172a;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item.on::before,
 :root[data-ui=light] .stage-view-menu .menu-item.active::before {
-  background: #4f46e5;
+  background: #0f172a;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item.on .mi-ico,
 :root[data-ui=light] .stage-view-menu .menu-item.active .mi-ico {
-  color: #4f46e5;
+  color: #0f172a;
 }
 
 :root[data-ui=light] .stage-view-menu .menu-item.on .mi-name,
@@ -484,9 +506,9 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 }
 
 :root[data-ui=light] .stage-view-menu .mi-check {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: #0f172a;
   color: #ffffff;
-  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
 }
 
 :root[data-ui=light] .stage-view-menu .mi-check svg {
@@ -535,7 +557,11 @@ body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
 
 :root[data-ui=light] .stage-view-menu #btnDualPhone.on .mi-switch,
 :root[data-ui=light] body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch {
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  background: #0f172a;
+}
+:root[data-ui=light] .stage-view-menu #btnDualPhone.on .mi-switch::after,
+:root[data-ui=light] body[data-dual="true"] .stage-view-menu #btnDualPhone .mi-switch::after {
+  background: #ffffff;
 }
 
 /* Tablet hiding for comparison section in stage view menu */
