@@ -270,8 +270,7 @@ export const en = {
   },
 
   aboutMaker: {
-    badge: "A Letter from the Maker",
-    roleBadge: "Solo Creator & Engineer",
+    badge: "About the Creator",
     title: "Crafted by an indie developer, not a faceless SaaS conglomerate.",
     story: [
       "Hi, I'm the creator behind Store Preview Studio.",
@@ -280,23 +279,6 @@ export const en = {
       "When you buy a license, you're directly supporting an independent craftsperson. If you ever have a question or need a new device frame, you won't get a robot ticket — you'll talk directly to the person who wrote the code.",
     ],
     signature: "Built with craftsmanship for mobile developers worldwide.",
-    pledges: [
-      {
-        id: "no-rent",
-        title: "Pay Once, Own Forever",
-        description: "Zero monthly rent or recurring fees. Your license never expires.",
-      },
-      {
-        id: "local-privacy",
-        title: "100% Local Privacy",
-        description: "Zero servers or telemetry. Unreleased assets stay in local RAM.",
-      },
-      {
-        id: "direct-support",
-        title: "Direct Human Support",
-        description: "Talk straight to the engineer who wrote the code, not an AI bot.",
-      },
-    ],
   },
 
   faq: {
