@@ -74,13 +74,7 @@ export function Pricing() {
               <div>
                 {/* Header row: Title */}
                 <div className="mb-3">
-                  <h3
-                    className={`text-[22px] font-bold tracking-tight ${
-                      tier.isPopular
-                        ? "bg-[linear-gradient(135deg,#c084fc_0%,#60a5fa_100%)] bg-clip-text text-transparent inline-block"
-                        : "text-slate-900 dark:text-white"
-                    }`}
-                  >
+                  <h3 className="text-[22px] font-bold tracking-tight text-slate-900 dark:text-white">
                     {tier.name}
                   </h3>
                 </div>
