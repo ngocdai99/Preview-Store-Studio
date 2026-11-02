@@ -24,19 +24,23 @@ export default function BannerStudioPage() {
   const [title, setTitle] = useState("Store Preview Studio");
   const [subtitle, setSubtitle] = useState("Dual-Store App Mockup & Metadata Studio");
   const [badgeText, setBadgeText] = useState("100% Client-Side");
+  const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
   
   // Feature bullet points
   const [feature1Title, setFeature1Title] = useState("Instant Dual Previews");
   const [feature1Desc, setFeature1Desc] = useState("Side-by-side iOS & Android listings as you type");
   
-  const [feature2Title, setFeature2Title] = useState("Zero-Rejection Audit");
-  const [feature2Desc, setFeature2Desc] = useState("Auto-check text limits & icon alpha compliance");
+  const [feature2Title, setFeature2Title] = useState("1-Click App Cloner");
+  const [feature2Desc, setFeature2Desc] = useState("Instant competitor metadata & screenshot importing");
   
-  const [feature3Title, setFeature3Title] = useState("Ready-to-Publish Export");
-  const [feature3Desc, setFeature3Desc] = useState("Download crisp 3x Retina mockups & developer docs");
+  const [feature3Title, setFeature3Title] = useState("Zero-Rejection Audit");
+  const [feature3Desc, setFeature3Desc] = useState("Auto-check text limits & icon alpha channel compliance");
   
-  const [feature4Title, setFeature4Title] = useState("Pay Once, Own Forever");
-  const [feature4Desc, setFeature4Desc] = useState("100% offline in browser · No monthly subscriptions");
+  const [feature4Title, setFeature4Title] = useState("4K Ultra HD Export");
+  const [feature4Desc, setFeature4Desc] = useState("Crisp 3x Retina mockups & LISTING_METADATA.md handoff");
+
+  const [feature5Title, setFeature5Title] = useState("100% Offline & Private");
+  const [feature5Desc, setFeature5Desc] = useState("Single-file browser studio · Pay once, own forever with zero subs");
 
   // Pricing configuration
   const [showPricing, setShowPricing] = useState(true);
@@ -57,13 +61,21 @@ export default function BannerStudioPage() {
   const [isExporting, setIsExporting] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
 
-  // Helper to load html2canvas on demand
+  // Helper to load html2canvas on demand (using local patched version to support modern CSS colors)
   const loadHtml2Canvas = async () => {
-    if ((window as any).html2canvas) return (window as any).html2canvas;
+    if ((window as any).__patchedHtml2Canvas) return (window as any).__patchedHtml2Canvas;
     return new Promise((resolve, reject) => {
+      const oldScript = document.getElementById("html2canvas-script");
+      if (oldScript) oldScript.remove();
+      delete (window as any).html2canvas;
+
       const script = document.createElement("script");
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
-      script.onload = () => resolve((window as any).html2canvas);
+      script.id = "html2canvas-script";
+      script.src = "/html2canvas.min.js?v=" + Date.now();
+      script.onload = () => {
+        (window as any).__patchedHtml2Canvas = (window as any).html2canvas;
+        resolve((window as any).html2canvas);
+      };
       script.onerror = reject;
       document.body.appendChild(script);
     });
@@ -81,7 +93,52 @@ export default function BannerStudioPage() {
         allowTaint: true,
         backgroundColor: null,
         logging: false,
+        onclone: (clonedDoc: Document) => {
+          const iframeWin = (clonedDoc.defaultView || window) as any;
+          const origGetComputedStyle = iframeWin.getComputedStyle;
+          const helperCanvas = document.createElement("canvas");
+          const ctx = helperCanvas.getContext("2d");
+
+          if (ctx && origGetComputedStyle) {
+            iframeWin.getComputedStyle = function(el: Element, pseudo?: string | null) {
+              const style = origGetComputedStyle.call(iframeWin, el, pseudo);
+              return new Proxy(style, {
+                get(target: any, prop: string) {
+                  const val = target[prop];
+                  if (typeof val === "string" && (val.includes("lab(") || val.includes("oklch("))) {
+                    try {
+                      ctx.fillStyle = "#000000";
+                      ctx.fillStyle = val;
+                      return ctx.fillStyle;
+                    } catch {
+                      return "#ffffff";
+                    }
+                  }
+                  return typeof val === "function" ? val.bind(target) : val;
+                }
+              });
+            };
+          }
+        },
       });
+
+      // Directly composite the high-resolution source image onto the export canvas
+      // This bypasses html2canvas's internal 1x intermediate downsampling so 3x Retina images stay crystal-sharp
+      const imgEl = bannerRef.current.querySelector("img");
+      if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
+        const bannerRect = bannerRef.current.getBoundingClientRect();
+        const imgRect = imgEl.getBoundingClientRect();
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
+          const dx = (imgRect.left - bannerRect.left) * scaleMultiplier;
+          const dy = (imgRect.top - bannerRect.top) * scaleMultiplier;
+          const dw = imgRect.width * scaleMultiplier;
+          const dh = imgRect.height * scaleMultiplier;
+          ctx.drawImage(imgEl, dx, dy, dw, dh);
+        }
+      }
 
       const dataUrl = canvas.toDataURL("image/png");
       const a = document.createElement("a");
@@ -118,14 +175,17 @@ export default function BannerStudioPage() {
     setTitle("Store Preview Studio");
     setSubtitle("Dual-Store App Mockup & Metadata Studio");
     setBadgeText("100% Client-Side");
+    setBadgeStyle("pills");
     setFeature1Title("Instant Dual Previews");
     setFeature1Desc("Side-by-side iOS & Android listings as you type");
-    setFeature2Title("Zero-Rejection Audit");
-    setFeature2Desc("Auto-check text limits & icon alpha compliance");
-    setFeature3Title("Ready-to-Publish Export");
-    setFeature3Desc("Download crisp 3x Retina mockups & developer docs");
-    setFeature4Title("Pay Once, Own Forever");
-    setFeature4Desc("100% offline in browser · No monthly subscriptions");
+    setFeature2Title("1-Click App Cloner");
+    setFeature2Desc("Instant competitor metadata & screenshot importing");
+    setFeature3Title("Zero-Rejection Audit");
+    setFeature3Desc("Auto-check text limits & icon alpha channel compliance");
+    setFeature4Title("4K Ultra HD Export");
+    setFeature4Desc("Crisp 3x Retina mockups & LISTING_METADATA.md handoff");
+    setFeature5Title("100% Offline & Private");
+    setFeature5Desc("Single-file browser studio · Pay once, own forever with zero subs");
     setPlusOriginalPrice("$39");
     setPlusPrice("$29");
     setPlusDesc("For indie developers and creators who need a fast, standalone offline preview studio.");
@@ -288,6 +348,34 @@ export default function BannerStudioPage() {
               />
             </div>
 
+            <div>
+              <span className="text-[11px] text-[#989A99] mb-1 block">Badge Style</span>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBadgeStyle("pills")}
+                  className={`text-[11px] py-1.5 rounded-md font-semibold border transition-all ${
+                    badgeStyle === "pills"
+                      ? "bg-white/15 border-white/30 text-white shadow-xs"
+                      : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
+                  }`}
+                >
+                  3 Glass Pills
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBadgeStyle("dock")}
+                  className={`text-[11px] py-1.5 rounded-md font-semibold border transition-all ${
+                    badgeStyle === "dock"
+                      ? "bg-white/15 border-white/30 text-white shadow-xs"
+                      : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
+                  }`}
+                >
+                  Dock Island
+                </button>
+              </div>
+            </div>
+
             {/* Feature 1 */}
             <div>
               <span className="text-[11px] text-[#989A99] mb-1 block">Feature 1 (Title + Desc)</span>
@@ -352,6 +440,23 @@ export default function BannerStudioPage() {
                 type="text"
                 value={feature4Desc}
                 onChange={(e) => setFeature4Desc(e.target.value)}
+                className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-[#989A99] focus:outline-none focus:border-[#00D085]"
+              />
+            </div>
+
+            {/* Feature 5 */}
+            <div>
+              <span className="text-[11px] text-[#989A99] mb-1 block">Feature 5 (Title + Desc)</span>
+              <input
+                type="text"
+                value={feature5Title}
+                onChange={(e) => setFeature5Title(e.target.value)}
+                className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white mb-1 focus:outline-none focus:border-[#00D085]"
+              />
+              <input
+                type="text"
+                value={feature5Desc}
+                onChange={(e) => setFeature5Desc(e.target.value)}
                 className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-[#989A99] focus:outline-none focus:border-[#00D085]"
               />
             </div>
@@ -472,49 +577,117 @@ export default function BannerStudioPage() {
                 {/* Left Column Content (610px - extra breathing room for pricing cards) */}
                 <div className="w-[610px] flex flex-col z-10 shrink-0">
                   {/* Store Badges Row */}
-                  <div className="flex items-center gap-2.5 mb-5">
-                    {/* Apple Store Pill */}
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#0071e3]/15 border border-[#0071e3]/45 text-[#38bdf8]">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.77 1.06-1.84.94-2.91-.91.04-2.02.61-2.67 1.37-.58.67-.99 1.76-.85 2.8.97.08 2.01-.52 2.58-1.26z"/>
-                      </svg>
-                      <span>App Store</span>
-                    </div>
+                  <div className="flex items-center gap-2.5 mb-3.5">
+                    {badgeStyle === "dock" ? (
+                      /* Segmented Dock Island Style (100% Trademark-Safe Custom Vectors) */
+                      <div 
+                        className="inline-flex items-center p-1 rounded-full"
+                        style={{
+                          backgroundColor: "rgba(24, 25, 24, 0.95)",
+                          border: "1px solid rgba(255, 255, 255, 0.14)",
+                          boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.3)"
+                        }}
+                      >
+                        {/* Apple Store */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 -mt-0.5">
+                            <path d="M15.5 2.8c-.3 1.8-1.5 3-3 3.2-.3-1.6.9-3 3-3.2z" />
+                            <path d="M12 7.5c-1.2 0-2.1.8-3.2.8s-2-.8-3.3-.8C3.8 7.5 2 9.6 2 13.2c0 4.1 2.8 7.8 5.2 7.8 1.2 0 1.9-.6 3.1-.6s1.9.6 3.1.6c2.4 0 5.2-3.7 5.2-7.8 0-3.6-1.8-5.7-3.5-5.7-1.3 0-2.1.8-3.2.8s-2-.8-3.3-.8z" />
+                          </svg>
+                          <span>App Store</span>
+                        </div>
+                        <div className="w-px h-3.5 bg-white/15 mx-0.5" />
+                        {/* Google Play */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0">
+                            <path d="M5.5 3.8C5.5 2.6 6.8 1.8 7.8 2.5L19.2 10.4C20.1 11 20.1 12.4 19.2 13L7.8 20.9C6.8 21.6 5.5 20.8 5.5 19.6V3.8Z" fill="#ffffff" />
+                            <path d="M5.5 3.8L13.8 11.7L5.5 19.6V3.8Z" fill="#000000" fillOpacity="0.25" />
+                          </svg>
+                          <span>Google Play</span>
+                        </div>
+                        <div className="w-px h-3.5 bg-white/15 mx-0.5" />
+                        {/* Client-side */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#00D085] shadow-[0_0_8px_#00D085] shrink-0" />
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#00D085] shrink-0" />
+                          <span>{badgeText}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Distinct Elevated Dark Glass Pills (100% Trademark-Safe Custom Vectors) */
+                      <>
+                        {/* Apple Store Pill */}
+                        <div 
+                          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white transition-all"
+                          style={{
+                            backgroundColor: "rgba(25, 26, 25, 0.95)",
+                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.4)"
+                          }}
+                        >
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 -mt-0.5">
+                            <path d="M15.5 2.8c-.3 1.8-1.5 3-3 3.2-.3-1.6.9-3 3-3.2z" />
+                            <path d="M12 7.5c-1.2 0-2.1.8-3.2.8s-2-.8-3.3-.8C3.8 7.5 2 9.6 2 13.2c0 4.1 2.8 7.8 5.2 7.8 1.2 0 1.9-.6 3.1-.6s1.9.6 3.1.6c2.4 0 5.2-3.7 5.2-7.8 0-3.6-1.8-5.7-3.5-5.7-1.3 0-2.1.8-3.2.8s-2-.8-3.3-.8z" />
+                          </svg>
+                          <span className="tracking-wide">App Store</span>
+                        </div>
 
-                    {/* Google Play Pill */}
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#01875f]/15 border border-[#01875f]/45 text-[#34d399]">
-                      <svg width="13" height="13" viewBox="0 0 24 24">
-                        <path fill="#4285f4" d="M1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924z"/>
-                        <path fill="#ea4335" d="M13.544 10.989l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973z"/>
-                        <path fill="#34a853" d="M13.544 13.056l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/>
-                        <path fill="#fbbc04" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594z"/>
-                      </svg>
-                      <span>Google Play</span>
-                    </div>
+                        {/* Google Play Pill */}
+                        <div 
+                          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white transition-all"
+                          style={{
+                            backgroundColor: "rgba(25, 26, 25, 0.95)",
+                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.4)"
+                          }}
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0">
+                            <path d="M5.5 3.8C5.5 2.6 6.8 1.8 7.8 2.5L19.2 10.4C20.1 11 20.1 12.4 19.2 13L7.8 20.9C6.8 21.6 5.5 20.8 5.5 19.6V3.8Z" fill="#ffffff" />
+                            <path d="M5.5 3.8L13.8 11.7L5.5 19.6V3.8Z" fill="#000000" fillOpacity="0.25" />
+                          </svg>
+                          <span className="tracking-wide">Google Play</span>
+                        </div>
 
-                    {/* Client Side Pill */}
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#00D085]/12 border border-[#00D085]/35 text-[#00D085]">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      <span>{badgeText}</span>
-                    </div>
+                        {/* Client Side Pill */}
+                        <div 
+                          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white transition-all"
+                          style={{
+                            backgroundColor: "rgba(25, 26, 25, 0.95)",
+                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.4)"
+                          }}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#00D085] shadow-[0_0_8px_#00D085] shrink-0" />
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#00D085] shrink-0" />
+                          <span className="tracking-wide">{badgeText}</span>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {/* Title & Subtitle */}
-                  <h1 className="text-[44px] font-black text-white tracking-tight leading-[1.12] mb-2 drop-shadow-md">
+                  <h1 className="text-[40px] font-black text-white tracking-tight leading-[1.12] mb-1.5 drop-shadow-md">
                     {title}
                   </h1>
-                  <p className="text-[18px] font-medium text-[#989A99] mb-7 leading-snug">
+                  <p className="text-[16px] font-medium text-[#989A99] mb-4 leading-snug">
                     {subtitle}
                   </p>
 
-                  {/* 4 Feature Items */}
-                  <div className="space-y-3 mb-6">
+                  {/* 5 Feature Items */}
+                  <div className="space-y-3 mb-4">
                     {/* Item 1 */}
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#38bdf8]/15 border border-[#38bdf8]/40 text-[#38bdf8] flex items-center justify-center shrink-0">
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{
+                          backgroundColor: "rgba(56, 189, 248, 0.16)",
+                          border: "1px solid rgba(56, 189, 248, 0.45)",
+                          color: "#38bdf8"
+                        }}
+                      >
                         <Smartphone className="w-4 h-4" />
                       </div>
-                      <div className="text-[14px]">
+                      <div className="text-[13.5px] leading-tight">
                         <strong className="text-white font-bold">{feature1Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature1Desc}</span>
                       </div>
@@ -522,10 +695,17 @@ export default function BannerStudioPage() {
 
                     {/* Item 2 */}
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#00D085]/15 border border-[#00D085]/40 text-[#00D085] flex items-center justify-center shrink-0">
-                        <ShieldCheck className="w-4 h-4" />
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{
+                          backgroundColor: "rgba(168, 85, 247, 0.16)",
+                          border: "1px solid rgba(168, 85, 247, 0.45)",
+                          color: "#a855f7"
+                        }}
+                      >
+                        <Sparkles className="w-4 h-4" />
                       </div>
-                      <div className="text-[14px]">
+                      <div className="text-[13.5px] leading-tight">
                         <strong className="text-white font-bold">{feature2Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature2Desc}</span>
                       </div>
@@ -533,10 +713,17 @@ export default function BannerStudioPage() {
 
                     {/* Item 3 */}
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#f59e0b]/15 border border-[#f59e0b]/40 text-[#f59e0b] flex items-center justify-center shrink-0">
-                        <Zap className="w-4 h-4" />
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{
+                          backgroundColor: "rgba(0, 208, 133, 0.16)",
+                          border: "1px solid rgba(0, 208, 133, 0.45)",
+                          color: "#00D085"
+                        }}
+                      >
+                        <ShieldCheck className="w-4 h-4" />
                       </div>
-                      <div className="text-[14px]">
+                      <div className="text-[13.5px] leading-tight">
                         <strong className="text-white font-bold">{feature3Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature3Desc}</span>
                       </div>
@@ -544,12 +731,37 @@ export default function BannerStudioPage() {
 
                     {/* Item 4 */}
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#f43f5e]/15 border border-[#f43f5e]/40 text-[#f43f5e] flex items-center justify-center shrink-0">
-                        <Lock className="w-4 h-4" />
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{
+                          backgroundColor: "rgba(245, 158, 11, 0.16)",
+                          border: "1px solid rgba(245, 158, 11, 0.45)",
+                          color: "#f59e0b"
+                        }}
+                      >
+                        <Zap className="w-4 h-4" />
                       </div>
-                      <div className="text-[14px]">
+                      <div className="text-[13.5px] leading-tight">
                         <strong className="text-white font-bold">{feature4Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature4Desc}</span>
+                      </div>
+                    </div>
+
+                    {/* Item 5 */}
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{
+                          backgroundColor: "rgba(244, 63, 94, 0.16)",
+                          border: "1px solid rgba(244, 63, 94, 0.45)",
+                          color: "#f43f5e"
+                        }}
+                      >
+                        <Lock className="w-4 h-4" />
+                      </div>
+                      <div className="text-[13.5px] leading-tight">
+                        <strong className="text-white font-bold">{feature5Title}</strong>
+                        <span className="text-[#989A99] font-normal"> — {feature5Desc}</span>
                       </div>
                     </div>
                   </div>
@@ -558,7 +770,14 @@ export default function BannerStudioPage() {
                   {showPricing && (
                     <div className="grid grid-cols-2 gap-3.5 mt-auto pt-1">
                       {/* Plus Tier Card */}
-                      <div className="relative rounded-[20px] px-4 py-3.5 flex flex-col justify-between bg-[#1D1E1D] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.25)] overflow-hidden">
+                      <div 
+                        className="relative rounded-[20px] px-4 py-3 flex flex-col justify-between overflow-hidden"
+                        style={{
+                          backgroundColor: "#1D1E1D",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.25)"
+                        }}
+                      >
                         {/* Top hairline accent line */}
                         <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[20px] bg-gradient-to-r from-white/30 via-white/10 to-transparent" />
 
@@ -568,24 +787,33 @@ export default function BannerStudioPage() {
                             <h3 className="text-[17.5px] font-bold tracking-tight text-white shrink-0">
                               Plus Edition
                             </h3>
-                            <span className="inline-flex items-center text-[10px] font-medium tracking-normal text-slate-400 bg-white/[0.05] px-2.5 py-0.5 rounded-md border border-white/[0.08] shrink-0">
+                            <span 
+                              className="inline-flex items-center text-[10px] font-medium tracking-normal text-[#94a3b8] px-2.5 py-0.5 rounded-md shrink-0"
+                              style={{
+                                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                                border: "1px solid rgba(255, 255, 255, 0.12)"
+                              }}
+                            >
                               {plusLicenseBadge}
                             </span>
                           </div>
 
-                          <p className="text-[11.5px] text-slate-400 mb-3 leading-[1.4] line-clamp-2 min-h-[32px]">
+                          <p className="text-[11.5px] text-[#94a3b8] mb-2 leading-[1.45]">
                             {plusDesc}
                           </p>
 
                           {/* Price Display */}
-                          <div className="flex items-baseline gap-2 pb-2.5 border-b border-white/[0.08]">
-                            <span className="text-[19px] font-bold text-slate-500 line-through tracking-tight">
+                          <div 
+                            className="flex items-baseline gap-2 pb-2"
+                            style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}
+                          >
+                            <span className="text-[19px] font-bold text-[#64748b] line-through tracking-tight">
                               {plusOriginalPrice}
                             </span>
                             <span className="text-[36px] font-black text-white leading-none tracking-[-0.03em]">
                               {plusPrice}
                             </span>
-                            <span className="text-[11.5px] font-medium text-slate-400 ml-0.5 whitespace-nowrap">
+                            <span className="text-[11.5px] font-medium text-[#94a3b8] ml-0.5 whitespace-nowrap">
                               one-time payment
                             </span>
                           </div>
@@ -593,9 +821,16 @@ export default function BannerStudioPage() {
                       </div>
 
                       {/* Pro Studio Tier Card (Supabase Emerald Top Hairline) */}
-                      <div className="relative rounded-[20px] px-4 py-3.5 flex flex-col justify-between bg-[#1D1E1D] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.25)] overflow-hidden">
+                      <div 
+                        className="relative rounded-[20px] px-4 py-3 flex flex-col justify-between overflow-hidden"
+                        style={{
+                          backgroundColor: "#1D1E1D",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.25)"
+                        }}
+                      >
                         {/* Top hairline accent line with Supabase emerald gradient */}
-                        <div className="absolute top-0 inset-x-0 h-[2.5px] rounded-t-[20px] bg-gradient-to-r from-[#00D085] via-emerald-400 to-transparent" />
+                        <div className="absolute top-0 inset-x-0 h-[2.5px] rounded-t-[20px] bg-gradient-to-r from-[#00D085] via-[#34d399] to-transparent" />
 
                         <div>
                           {/* Header row: Title on left, License Scope on right */}
@@ -603,25 +838,34 @@ export default function BannerStudioPage() {
                             <h3 className="text-[17.5px] font-bold tracking-tight text-white shrink-0">
                               Pro Studio
                             </h3>
-                            <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-normal text-slate-200 bg-white/[0.08] px-2.5 py-0.5 rounded-md border border-white/15 shrink-0">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)] shrink-0" />
+                            <span 
+                              className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-normal text-[#e2e8f0] px-2.5 py-0.5 rounded-md shrink-0"
+                              style={{
+                                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                                border: "1px solid rgba(255, 255, 255, 0.15)"
+                              }}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.6)] shrink-0" />
                               {proLicenseBadge}
                             </span>
                           </div>
 
-                          <p className="text-[11.5px] text-slate-400 mb-3 leading-[1.4] line-clamp-2 min-h-[32px]">
+                          <p className="text-[11.5px] text-[#94a3b8] mb-2 leading-[1.45]">
                             {proDesc}
                           </p>
 
                           {/* Price Display */}
-                          <div className="flex items-baseline gap-2 pb-2.5 border-b border-white/[0.08]">
-                            <span className="text-[19px] font-bold text-slate-500 line-through tracking-tight">
+                          <div 
+                            className="flex items-baseline gap-2 pb-2"
+                            style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}
+                          >
+                            <span className="text-[19px] font-bold text-[#64748b] line-through tracking-tight">
                               {proOriginalPrice}
                             </span>
                             <span className="text-[36px] font-black text-white leading-none tracking-[-0.03em]">
                               {proPrice}
                             </span>
-                            <span className="text-[11.5px] font-medium text-slate-400 ml-0.5 whitespace-nowrap">
+                            <span className="text-[11.5px] font-medium text-[#94a3b8] ml-0.5 whitespace-nowrap">
                               one-time payment
                             </span>
                           </div>
