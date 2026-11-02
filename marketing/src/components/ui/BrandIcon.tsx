@@ -13,10 +13,10 @@ export function BrandIcon({
 }: BrandIconProps) {
   const content = (
     <g>
-      {/* Dải 1: Thân trên Phone uốn thành Chân Hình Chữ Nhật Bo Góc iPad (#006553) */}
+      {/* Dải 1: Thân trên Phone uốn thành Chân Hình Chữ Nhật Bo Góc iPad (Primary Brand #006636) */}
       <path
         d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-        fill="#006553"
+        fill="#006636"
       />
       {/* Dải 2: Thân dưới Phone đi lên thành tay iPhone (#00D085, đè lên tại tâm với đổ bóng) */}
       <g filter="url(#brand-k-shadow)">

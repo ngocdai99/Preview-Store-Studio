@@ -1,6 +1,17 @@
 import React from "react";
 import Link from "next/link";
 
+/**
+ * Standard Brand Color Tokens
+ */
+export const BRAND_COLORS = {
+  primary: "#006636", // Base Primary Emerald (Supabase oklch(0.43627 0.11 157.5))
+  primaryBorder: "#1B845E", // Primary Button crisp border
+  primaryHover: "#007a41", // Primary Button hover background
+  primaryHoverBorder: "#209d70", // Primary Button hover border
+  secondary: "#00D085", // Secondary Brand Emerald / Accent
+} as const;
+
 export interface PrimaryButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
   href?: string;
@@ -14,8 +25,14 @@ export interface PrimaryButtonProps
 }
 
 /**
- * Reusable Primary Button component with customizable fontSize and fontWeight.
- * Matches brand identity: Supabase emerald tone (#006553) with vibrant green border (#00D085).
+ * Reusable Primary Button Component
+ *
+ * Implements Supabase's signature button:
+ * - Base color: #006636
+ * - Subtle vertical light gradient (linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 100%))
+ * - Border: #1B845E
+ * - Top edge specular highlight (inset 0 1px 0 0 rgba(255,255,255,0.2))
+ * - Customizable fontSize and fontWeight
  */
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   href,
@@ -28,6 +45,11 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   ...rest
 }) => {
   const customStyle: React.CSSProperties = {
+    background:
+      "linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #006636",
+    borderColor: "#1B845E",
+    boxShadow:
+      "inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.12)",
     ...style,
     ...(fontSize !== undefined && {
       fontSize: typeof fontSize === "number" ? `${fontSize}px` : fontSize,
@@ -38,7 +60,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   };
 
   const baseClasses =
-    "inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-white bg-[#006553] hover:bg-[#007a64] active:bg-[#005445] border border-[#00D085] shadow-xs transition-colors duration-150 cursor-pointer select-none text-center font-sans";
+    "inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-white border transition-all duration-150 cursor-pointer select-none text-center font-sans hover:brightness-105 active:translate-y-[1px]";
 
   if (href) {
     const isExternal =
