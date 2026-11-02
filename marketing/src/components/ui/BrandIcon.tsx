@@ -13,15 +13,15 @@ export function BrandIcon({
 }: BrandIconProps) {
   const content = (
     <g>
-      {/* Dải 1: Đỉnh Phone đi xuống rồi gập thành chân K (Xanh Đậm #006553) */}
+      {/* Dải 1: Thân trên Phone đi xuống rồi gập thành chân dưới K (#006553) */}
       <path
-        d="M 18,22 C 18,15 24,11 32,11 C 40,11 44,15 44,22 L 44,42 L 67,65 C 72,70 72,78 67,83 L 61,89 C 56,94 48,94 43,89 L 26,72 C 22,68 18,63 18,57 Z"
+        d="M 18,24 C 18,17 22,14 28,14 C 34,14 38,17 38,24 L 38,44 L 72,74 C 77,78 77,86 72,90 C 67,94 59,94 55,90 L 26,64 C 21,60 18,56 18,50 Z"
         fill="#006553"
       />
-      {/* Dải 2: Đáy Phone đi lên rồi gập thành tay trên K (Xanh Sáng #00D085, đè lên tại tâm với đổ bóng) */}
+      {/* Dải 2: Thân dưới Phone đi lên rồi gập thành tay trên K (#00D085, đè lên tại tâm với đổ bóng) */}
       <g filter="url(#brand-k-shadow)">
         <path
-          d="M 18,78 C 18,85 24,89 32,89 C 40,89 44,85 44,78 L 44,58 L 67,35 C 72,30 72,22 67,17 L 61,11 C 56,6 48,6 43,11 L 26,28 C 22,32 18,37 18,43 Z"
+          d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
           fill="#00D085"
         />
       </g>
@@ -39,7 +39,7 @@ export function BrandIcon({
     >
       <defs>
         <filter id="brand-k-shadow" x="-30%" y="-30%" width="160%" height="160%">
-          <feDropShadow dx="-2" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.8" />
+          <feDropShadow dx="-2.5" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.8" />
         </filter>
         <linearGradient id="brand-sq-bg" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#1F211F" />
