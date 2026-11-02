@@ -59,7 +59,7 @@ export default function LogoPreviewPage() {
                       </filter>
                     </defs>
                     <path
-                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                       fill="#006553"
                     />
                     <g filter="url(#p21-sh)">
@@ -74,7 +74,7 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
                     <path
-                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                       fill="#006553"
                     />
                     <g filter="url(#p21-sh)">
@@ -89,7 +89,7 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
                     <path
-                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                       fill="#006553"
                     />
                     <g filter="url(#p21-sh)">
@@ -107,7 +107,7 @@ export default function LogoPreviewPage() {
               <div className="bg-white/[0.03] border border-white/5 rounded-lg px-3.5 py-2.5 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
                   <path
-                    d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                    d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                     fill="#006553"
                   />
                   <g filter="url(#p21-sh)">
@@ -348,7 +348,7 @@ export default function LogoPreviewPage() {
                     <rect width="100" height="100" rx="24" fill="url(#p24-bg)" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
                     <g transform="scale(0.72) translate(19, 19)">
                       <path
-                        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                         fill="#006553"
                       />
                       <g filter="url(#p21-sh)">
@@ -366,7 +366,7 @@ export default function LogoPreviewPage() {
                     <rect width="100" height="100" rx="24" fill="url(#p24-bg)" stroke="rgba(255,255,255,0.12)" strokeWidth="2" />
                     <g transform="scale(0.72) translate(19, 19)">
                       <path
-                        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                         fill="#006553"
                       />
                       <g filter="url(#p21-sh)">
@@ -384,7 +384,7 @@ export default function LogoPreviewPage() {
                     <rect width="100" height="100" rx="24" fill="url(#p24-bg)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
                     <g transform="scale(0.72) translate(19, 19)">
                       <path
-                        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                         fill="#006553"
                       />
                       <g filter="url(#p21-sh)">
@@ -405,7 +405,7 @@ export default function LogoPreviewPage() {
                   <rect width="100" height="100" rx="24" fill="url(#p24-bg)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
                   <g transform="scale(0.72) translate(19, 19)">
                     <path
-                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+                      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
                       fill="#006553"
                     />
                     <g filter="url(#p21-sh)">

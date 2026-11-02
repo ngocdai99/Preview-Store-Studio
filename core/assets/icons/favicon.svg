@@ -14,7 +14,7 @@
   <!-- Pure Interlocking K: Phone Stem + iPad Parallel Rounded Rectangle Leg (Model 2.1) -->
   <g transform="scale(0.72) translate(19, 19)">
     <path
-      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
+      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
       fill="#006553"
     />
     <g filter="url(#fav-shadow)">
