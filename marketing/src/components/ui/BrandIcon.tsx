@@ -11,44 +11,17 @@ export function BrandIcon({
 }: BrandIconProps) {
   const content = (
     <g>
-      {/* Left Limb: Tablet (Deep Forest Emerald #006533 -> #004824) */}
-      <g transform="rotate(-23 35 49)">
-        <rect
-          x="21"
-          y="15"
-          width="28"
-          height="67"
-          rx="6.5"
-          fill="url(#brand-tablet-grad)"
-          stroke="rgba(255,255,255,0.18)"
-          strokeWidth="1.2"
+      {/* Dải 1: Đỉnh Phone đi xuống rồi gập thành chân K (Xanh Đậm #007844 -> #00381a) */}
+      <path
+        d="M 18,22 C 18,15 24,11 32,11 C 40,11 44,15 44,22 L 44,42 L 67,65 C 72,70 72,78 67,83 L 61,89 C 56,94 48,94 43,89 L 26,72 C 22,68 18,63 18,57 Z"
+        fill="url(#brand-k-dark)"
+      />
+      {/* Dải 2: Đáy Phone đi lên rồi gập thành tay trên K (Xanh Sáng #34F5A6 -> #00D085, đè lên tại tâm) */}
+      <g filter="url(#brand-k-shadow)">
+        <path
+          d="M 18,78 C 18,85 24,89 32,89 C 40,89 44,85 44,78 L 44,58 L 67,35 C 72,30 72,22 67,17 L 61,11 C 56,6 48,6 43,11 L 26,28 C 22,32 18,37 18,43 Z"
+          fill="url(#brand-k-light)"
         />
-        {/* Tablet Camera */}
-        <circle cx="35" cy="19.5" r="1.2" fill="rgba(255,255,255,0.4)" />
-        {/* Screen Preview Cards */}
-        <rect x="25" y="24" width="20" height="22" rx="2" fill="rgba(255,255,255,0.12)" />
-        <rect x="25" y="49" width="20" height="14" rx="2" fill="rgba(255,255,255,0.12)" />
-        <rect x="25" y="66" width="20" height="8" rx="2" fill="rgba(255,255,255,0.18)" />
-      </g>
-
-      {/* Right Limb: Phone (Electric Emerald #34F5A6 -> #00D085) - Overlapping with drop shadow */}
-      <g transform="rotate(23 65 49)" filter="url(#brand-phone-shadow)">
-        <rect
-          x="55"
-          y="13"
-          width="20"
-          height="71"
-          rx="6"
-          fill="url(#brand-phone-grad)"
-          stroke="rgba(255,255,255,0.38)"
-          strokeWidth="1.2"
-        />
-        {/* Dynamic Island */}
-        <rect x="61.5" y="16.5" width="7" height="2" rx="1" fill="#00381a" />
-        {/* Screen Preview Cards */}
-        <rect x="58.5" y="22" width="13" height="20" rx="2" fill="rgba(255,255,255,0.25)" />
-        <rect x="58.5" y="45" width="13" height="18" rx="2" fill="rgba(255,255,255,0.25)" />
-        <rect x="58.5" y="66" width="13" height="10" rx="2" fill="rgba(255,255,255,0.35)" />
       </g>
     </g>
   );
@@ -62,18 +35,18 @@ export function BrandIcon({
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="brand-tablet-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#008746" />
-          <stop offset="100%" stopColor="#004824" />
+        <linearGradient id="brand-k-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#007844" />
+          <stop offset="100%" stopColor="#00381a" />
         </linearGradient>
-        <linearGradient id="brand-phone-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="brand-k-light" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#34F5A6" />
           <stop offset="100%" stopColor="#00D085" />
         </linearGradient>
-        <filter id="brand-phone-shadow" x="-30%" y="-30%" width="160%" height="160%">
-          <feDropShadow dx="-2" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.75" />
+        <filter id="brand-k-shadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="-2" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.8" />
         </filter>
-        <linearGradient id="brand-squircle-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="brand-sq-bg" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#1F211F" />
           <stop offset="100%" stopColor="#121312" />
         </linearGradient>
@@ -85,7 +58,7 @@ export function BrandIcon({
             width="100"
             height="100"
             rx="24"
-            fill="url(#brand-squircle-bg)"
+            fill="url(#brand-sq-bg)"
             stroke="rgba(255,255,255,0.12)"
             strokeWidth="1.5"
           />
