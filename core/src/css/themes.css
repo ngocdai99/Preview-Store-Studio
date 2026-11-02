@@ -290,30 +290,45 @@
   border-bottom:1px solid rgba(0,0,0,0.06);
 }
 :root[data-ui=light] .lr{font-weight:700}
-/* Modern Soft Shadow Styling for Inputs & Textareas (No harsh borders) */
+/* Modern Clean Flat Styling for Inputs & Textareas (No harsh shadows) */
 :root[data-ui=light] input[type=text],
+:root[data-ui=light] input[type=email],
+:root[data-ui=light] input[type=tel],
+:root[data-ui=light] input[type=url],
+:root[data-ui=light] input[type=number],
+:root[data-ui=light] input[type=search],
 :root[data-ui=light] textarea,
 :root[data-ui=light] select.fsel{
   background:#f8f9fb;
-  border:1px solid rgba(0,0,0,.04);
-  box-shadow:inset 0 1px 2px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.02);
+  border:1px solid rgba(0,0,0,.1);
+  box-shadow:none !important;
   color:#1d1d1f;
   border-radius:10px;
   transition:all .2s cubic-bezier(.4,0,.2,1);
 }
 :root[data-ui=light] input[type=text]:hover,
+:root[data-ui=light] input[type=email]:hover,
+:root[data-ui=light] input[type=tel]:hover,
+:root[data-ui=light] input[type=url]:hover,
+:root[data-ui=light] input[type=number]:hover,
+:root[data-ui=light] input[type=search]:hover,
 :root[data-ui=light] textarea:hover,
 :root[data-ui=light] select.fsel:hover{
   background:#ffffff;
-  border-color:rgba(0,0,0,.08);
-  box-shadow:inset 0 1px 2px rgba(0,0,0,.03),0 2px 6px rgba(0,0,0,.04);
+  border-color:rgba(0,0,0,.18);
+  box-shadow:none !important;
 }
 :root[data-ui=light] input[type=text]:focus,
+:root[data-ui=light] input[type=email]:focus,
+:root[data-ui=light] input[type=tel]:focus,
+:root[data-ui=light] input[type=url]:focus,
+:root[data-ui=light] input[type=number]:focus,
+:root[data-ui=light] input[type=search]:focus,
 :root[data-ui=light] textarea:focus,
 :root[data-ui=light] select.fsel:focus{
   background:#ffffff;
   border-color:var(--ac);
-  box-shadow:0 0 0 3.5px rgba(0,113,227,.16),0 2px 8px rgba(0,113,227,.08);
+  box-shadow:none !important;
   outline:none;
 }
 :root[data-ui=light] input::placeholder,
@@ -528,13 +543,13 @@ select.fsel{
   width:100%;min-width:0;box-sizing:border-box;text-overflow:ellipsis;background:#090b10;border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:9px 32px 9px 12px;color:#f8fafc;
   font-family:inherit;font-size:13px;line-height:1.55;cursor:pointer;appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238593b2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-  background-repeat:no-repeat;background-position:right 12px center;transition:border-color .25s,box-shadow .25s,background .25s;
-  box-shadow:inset 0 1px 2px rgba(0,0,0,0.3);
+  background-repeat:no-repeat;background-position:right 12px center;transition:border-color .25s,background .25s;
+  box-shadow:none !important;
 }
 select.fsel:focus{
   outline:0;
-  border-color:rgba(139,92,246,0.55);
-  box-shadow:0 0 0 3px rgba(139,92,246,0.18), inset 0 1px 2px rgba(0,0,0,0.2);
+  border-color:var(--ac);
+  box-shadow:none !important;
   background:#0d1017;
 }
 select.fsel option,select.fsel optgroup{background:#fff;color:#111}
