@@ -374,12 +374,13 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(139, 92, 246, 0.14);
-  border: 1px solid rgba(139, 92, 246, 0.28);
-  color: #c084fc;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #EDEDED;
   box-shadow: none;
   margin-top: 1px;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: none !important;
 }
 .mi-ico svg {
   width: 14.5px;
@@ -389,24 +390,18 @@
 }
 
 #menuExport .menu-item:hover .mi-ico {
-  background: rgba(139, 92, 246, 0.24);
-  border-color: rgba(139, 92, 246, 0.45);
-  color: #e9d5ff;
-  transform: scale(1.05);
+  transform: none !important;
 }
 
 :root[data-ui=light] .mi-ico {
-  background: rgba(124, 58, 237, 0.08);
-  border: 1px solid rgba(124, 58, 237, 0.2);
-  color: #7c3aed;
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  color: #0f172a;
   box-shadow: none;
 }
 
 :root[data-ui=light] #menuExport .menu-item:hover .mi-ico {
-  background: rgba(124, 58, 237, 0.15);
-  border-color: rgba(124, 58, 237, 0.32);
-  color: #6d28d9;
-  transform: scale(1.05);
+  transform: none !important;
 }
 
 /* Tinted Vibrant Icon Chips per Menu Action */
@@ -520,7 +515,29 @@
   color: #4338ca;
 }
 
-/* 6. Sample Templates: Golden Sparkle */
+/* 6. Clone App: App Store Blue */
+#btnOpenStoreImport .mi-ico {
+  background: rgba(59, 130, 246, 0.14);
+  border-color: rgba(59, 130, 246, 0.28);
+  color: #60a5fa;
+}
+#btnOpenStoreImport:hover .mi-ico {
+  background: rgba(59, 130, 246, 0.24);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #93c5fd;
+}
+:root[data-ui=light] #btnOpenStoreImport .mi-ico {
+  background: rgba(0, 113, 227, 0.1);
+  border-color: rgba(0, 113, 227, 0.24);
+  color: #0071e3;
+}
+:root[data-ui=light] #btnOpenStoreImport:hover .mi-ico {
+  background: rgba(0, 113, 227, 0.18);
+  border-color: rgba(0, 113, 227, 0.38);
+  color: #005bb5;
+}
+
+/* 7. Sample Templates: Golden Sparkle */
 #optOpenTemplatesModal .mi-ico {
   background: rgba(234, 179, 8, 0.14);
   border-color: rgba(234, 179, 8, 0.28);
