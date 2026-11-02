@@ -27,6 +27,7 @@ export default function BannerStudioPage() {
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
   
   // Feature bullet points
+  const [featureCount, setFeatureCount] = useState<4 | 5>(4);
   const [feature1Title, setFeature1Title] = useState("Instant Dual Previews");
   const [feature1Desc, setFeature1Desc] = useState("Side-by-side iOS & Android listings as you type");
   
@@ -34,13 +35,13 @@ export default function BannerStudioPage() {
   const [feature2Desc, setFeature2Desc] = useState("Instant competitor metadata & screenshot importing");
   
   const [feature3Title, setFeature3Title] = useState("Zero-Rejection Audit");
-  const [feature3Desc, setFeature3Desc] = useState("Auto-check text limits & icon alpha channel compliance");
+  const [feature3Desc, setFeature3Desc] = useState("Auto-check text limits & icon alpha compliance");
   
-  const [feature4Title, setFeature4Title] = useState("4K Ultra HD Export");
-  const [feature4Desc, setFeature4Desc] = useState("Crisp 3x Retina mockups & LISTING_METADATA.md handoff");
+  const [feature4Title, setFeature4Title] = useState("Ready-to-Publish Export");
+  const [feature4Desc, setFeature4Desc] = useState("Download crisp 3x Retina mockups & developer docs");
 
-  const [feature5Title, setFeature5Title] = useState("100% Offline & Private");
-  const [feature5Desc, setFeature5Desc] = useState("Single-file browser studio · Pay once, own forever with zero subs");
+  const [feature5Title, setFeature5Title] = useState("Pay Once, Own Forever");
+  const [feature5Desc, setFeature5Desc] = useState("100% offline in browser · No monthly subscriptions");
 
   // Pricing configuration
   const [showPricing, setShowPricing] = useState(true);
@@ -51,7 +52,7 @@ export default function BannerStudioPage() {
 
   const [proOriginalPrice, setProOriginalPrice] = useState("$59");
   const [proPrice, setProPrice] = useState("$39");
-  const [proDesc, setProDesc] = useState("For agencies, studios, and developers requiring commercial client licensing and full source code.");
+  const [proDesc, setProDesc] = useState("For agencies, studios, and devs requiring commercial client licensing & full source code.");
   const [proLicenseBadge, setProLicenseBadge] = useState("Commercial License");
 
   // Mockup Asset
@@ -63,11 +64,12 @@ export default function BannerStudioPage() {
 
   // Helper to load html2canvas on demand (using local patched version to support modern CSS colors)
   const loadHtml2Canvas = async () => {
-    if ((window as any).__patchedHtml2Canvas) return (window as any).__patchedHtml2Canvas;
+    // Always reload fresh - never use cached version (stale cache causes lab/oklch errors)
     return new Promise((resolve, reject) => {
       const oldScript = document.getElementById("html2canvas-script");
       if (oldScript) oldScript.remove();
       delete (window as any).html2canvas;
+      delete (window as any).__patchedHtml2Canvas;
 
       const script = document.createElement("script");
       script.id = "html2canvas-script";
@@ -85,65 +87,127 @@ export default function BannerStudioPage() {
     if (!bannerRef.current) return;
     try {
       setIsExporting(true);
-      const html2canvas = await loadHtml2Canvas();
-      
+
+      // Snapshot the img element BEFORE html2canvas (getBoundingClientRect only valid while mounted)
+      const imgEl = bannerRef.current.querySelector("img");
+      let imgSnapshot: { el: HTMLImageElement; dx: number; dy: number; dw: number; dh: number } | null = null;
+      if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
+        const bannerRect = bannerRef.current.getBoundingClientRect();
+        const imgRect = imgEl.getBoundingClientRect();
+        imgSnapshot = {
+          el: imgEl,
+          dx: Math.round((imgRect.left - bannerRect.left) * scaleMultiplier),
+          dy: Math.round((imgRect.top - bannerRect.top) * scaleMultiplier),
+          dw: Math.round(imgRect.width * scaleMultiplier),
+          dh: Math.round(imgRect.height * scaleMultiplier),
+        };
+      }
+
+      const html2canvas = (await loadHtml2Canvas()) as any;
+
+      // Inline-replace all CSS variables and modern color functions in the cloned DOM
+      // so html2canvas never encounters lab/oklch/color-mix which it cannot parse
       const canvas = await html2canvas(bannerRef.current, {
         scale: scaleMultiplier,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: null,
+        backgroundColor: "#131413",
         logging: false,
         onclone: (clonedDoc: Document) => {
           const iframeWin = (clonedDoc.defaultView || window) as any;
-          const origGetComputedStyle = iframeWin.getComputedStyle;
           const helperCanvas = document.createElement("canvas");
-          const ctx = helperCanvas.getContext("2d");
+          helperCanvas.width = 1;
+          helperCanvas.height = 1;
+          const ctx2d = helperCanvas.getContext("2d");
 
-          if (ctx && origGetComputedStyle) {
-            iframeWin.getComputedStyle = function(el: Element, pseudo?: string | null) {
-              const style = origGetComputedStyle.call(iframeWin, el, pseudo);
-              return new Proxy(style, {
-                get(target: any, prop: string) {
-                  const val = target[prop];
-                  if (typeof val === "string" && (val.includes("lab(") || val.includes("oklch("))) {
-                    try {
-                      ctx.fillStyle = "#000000";
-                      ctx.fillStyle = val;
-                      return ctx.fillStyle;
-                    } catch {
-                      return "#ffffff";
-                    }
+          // Convert any modern color to a canvas-safe rgba string
+          const toSafeColor = (val: string): string => {
+            if (!val || typeof val !== "string") return val;
+            const isModern = val.includes("lab(") || val.includes("oklch(") || val.includes("color-mix(") || val.includes("oklab(");
+            if (!isModern) return val;
+            if (!ctx2d) return "rgba(255,255,255,0.9)";
+            try {
+              ctx2d.clearRect(0, 0, 1, 1);
+              ctx2d.fillStyle = val;
+              ctx2d.fillRect(0, 0, 1, 1);
+              const [r, g, b, a] = ctx2d.getImageData(0, 0, 1, 1).data;
+              return `rgba(${r},${g},${b},${(a / 255).toFixed(3)})`;
+            } catch {
+              return "rgba(255,255,255,0.9)";
+            }
+          };
+
+          // CRITICAL FIX: resolve "currentColor" inside SVG elements before html2canvas
+          // serializes them — otherwise SVG icons lose all color in the exported PNG
+          const resolveSvgCurrentColors = (svgEl: SVGElement) => {
+            const parentColor = window.getComputedStyle(svgEl).color || "#ffffff";
+            svgEl.querySelectorAll<SVGElement>("*").forEach((child) => {
+              const fill = child.getAttribute("fill");
+              const stroke = child.getAttribute("stroke");
+              if (fill === "currentColor" || fill === null) {
+                child.setAttribute("fill", parentColor);
+              }
+              if (stroke === "currentColor") {
+                child.setAttribute("stroke", parentColor);
+              }
+            });
+            // Also fix the root SVG fill
+            const rootFill = svgEl.getAttribute("fill");
+            if (rootFill === "currentColor") {
+              svgEl.setAttribute("fill", parentColor);
+            }
+          };
+
+          // Apply SVG fix to all SVGs in the original document BEFORE cloning side-effects
+          // (We apply to cloned doc since onclone already got the clone)
+          clonedDoc.querySelectorAll<SVGElement>("svg").forEach(resolveSvgCurrentColors);
+
+          // Walk all elements and sanitize inline styles (modern color values)
+          clonedDoc.querySelectorAll<HTMLElement>("*").forEach((el) => {
+            if (!el.style || el.style.length === 0) return;
+            const props: string[] = [];
+            for (let i = 0; i < el.style.length; i++) props.push(el.style[i]);
+            props.forEach((prop) => {
+              const raw = el.style.getPropertyValue(prop);
+              const safe = toSafeColor(raw);
+              if (safe !== raw) el.style.setProperty(prop, safe, el.style.getPropertyPriority(prop));
+            });
+          });
+
+          // Patch getComputedStyle so html2canvas never reads back modern color values
+          const origGCS = iframeWin.getComputedStyle;
+          if (origGCS) {
+            iframeWin.getComputedStyle = function (el: Element, pseudo?: string | null) {
+              const cs = origGCS.call(iframeWin, el, pseudo);
+              return new Proxy(cs, {
+                get(target: any, prop: string | symbol) {
+                  if (prop === "getPropertyValue") {
+                    return (key: string) => toSafeColor(target.getPropertyValue(key));
                   }
-                  return typeof val === "function" ? val.bind(target) : val;
-                }
+                  const v = target[prop as string];
+                  if (typeof v === "string") return toSafeColor(v);
+                  return typeof v === "function" ? v.bind(target) : v;
+                },
               });
             };
           }
         },
       });
 
-      // Directly composite the high-resolution source image onto the export canvas
-      // This bypasses html2canvas's internal 1x intermediate downsampling so 3x Retina images stay crystal-sharp
-      const imgEl = bannerRef.current.querySelector("img");
-      if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
-        const bannerRect = bannerRef.current.getBoundingClientRect();
-        const imgRect = imgEl.getBoundingClientRect();
+      // Overdraw the mockup image at full native resolution (bypasses html2canvas downsampling)
+      if (imgSnapshot) {
         const ctx = canvas.getContext("2d");
         if (ctx) {
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = "high";
-          const dx = (imgRect.left - bannerRect.left) * scaleMultiplier;
-          const dy = (imgRect.top - bannerRect.top) * scaleMultiplier;
-          const dw = imgRect.width * scaleMultiplier;
-          const dh = imgRect.height * scaleMultiplier;
-          ctx.drawImage(imgEl, dx, dy, dw, dh);
+          ctx.drawImage(imgSnapshot.el, imgSnapshot.dx, imgSnapshot.dy, imgSnapshot.dw, imgSnapshot.dh);
         }
       }
 
       const dataUrl = canvas.toDataURL("image/png");
       const a = document.createElement("a");
-      const filename = aspectMode === "cover" 
-        ? `store-preview-studio-gumroad-cover-${scaleMultiplier > 2 ? '4k' : '1280x720'}.png`
+      const filename = aspectMode === "cover"
+        ? `store-preview-studio-gumroad-cover-${scaleMultiplier > 2 ? "4k" : "1280x720"}.png`
         : `store-preview-studio-gumroad-thumb-600x600.png`;
       a.href = dataUrl;
       a.download = filename;
@@ -376,6 +440,35 @@ export default function BannerStudioPage() {
               </div>
             </div>
 
+            {/* Feature Layout Selector */}
+            <div className="flex items-center justify-between pb-1">
+              <span className="text-[11px] text-[#989A99] font-medium">Bố cục tính năng</span>
+              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setFeatureCount(4)}
+                  className={`text-[10px] px-2.5 py-1 rounded-md font-bold transition-all ${
+                    featureCount === 4
+                      ? "bg-[#00D085] text-black shadow-xs"
+                      : "bg-white/5 text-[#989A99] hover:text-white"
+                  }`}
+                >
+                  4 Mục (Dãn thoáng)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFeatureCount(5)}
+                  className={`text-[10px] px-2.5 py-1 rounded-md font-bold transition-all ${
+                    featureCount === 5
+                      ? "bg-[#00D085] text-black shadow-xs"
+                      : "bg-white/5 text-[#989A99] hover:text-white"
+                  }`}
+                >
+                  5 Mục (Đầy đủ)
+                </button>
+              </div>
+            </div>
+
             {/* Feature 1 */}
             <div>
               <span className="text-[11px] text-[#989A99] mb-1 block">Feature 1 (Title + Desc)</span>
@@ -590,76 +683,72 @@ export default function BannerStudioPage() {
                       >
                         {/* Apple Store */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 -mt-0.5">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
                             <path d="M15.5 2.8c-.3 1.8-1.5 3-3 3.2-.3-1.6.9-3 3-3.2z" />
                             <path d="M12 7.5c-1.2 0-2.1.8-3.2.8s-2-.8-3.3-.8C3.8 7.5 2 9.6 2 13.2c0 4.1 2.8 7.8 5.2 7.8 1.2 0 1.9-.6 3.1-.6s1.9.6 3.1.6c2.4 0 5.2-3.7 5.2-7.8 0-3.6-1.8-5.7-3.5-5.7-1.3 0-2.1.8-3.2.8s-2-.8-3.3-.8z" />
                           </svg>
-                          <span>App Store</span>
+                          <span className="leading-none">App Store</span>
                         </div>
-                        <div className="w-px h-3.5 bg-white/15 mx-0.5" />
+                        <div className="w-px h-3.5 mx-0.5" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }} />
                         {/* Google Play */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0">
-                            <path d="M5.5 3.8C5.5 2.6 6.8 1.8 7.8 2.5L19.2 10.4C20.1 11 20.1 12.4 19.2 13L7.8 20.9C6.8 21.6 5.5 20.8 5.5 19.6V3.8Z" fill="#ffffff" />
-                            <path d="M5.5 3.8L13.8 11.7L5.5 19.6V3.8Z" fill="#000000" fillOpacity="0.25" />
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
                           </svg>
-                          <span>Google Play</span>
+                          <span className="leading-none">Google Play</span>
                         </div>
-                        <div className="w-px h-3.5 bg-white/15 mx-0.5" />
+                        <div className="w-px h-3.5 mx-0.5" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }} />
                         {/* Client-side */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#00D085] shadow-[0_0_8px_#00D085] shrink-0" />
-                          <ShieldCheck className="w-3.5 h-3.5 text-[#00D085] shrink-0" />
-                          <span>{badgeText}</span>
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#00D085] shrink-0 block" />
+                          <span className="leading-none">{badgeText}</span>
                         </div>
                       </div>
                     ) : (
-                      /* Distinct Elevated Dark Glass Pills (100% Trademark-Safe Custom Vectors) */
+                      /* Distinct Elevated Glowing Pills (Exact Match to Image 2 Reference) */
                       <>
-                        {/* Apple Store Pill */}
+                        {/* Apple Store Pill (Glowing Royal Blue) */}
                         <div 
-                          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white transition-all"
+                          className="h-[34px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(25, 26, 25, 0.95)",
-                            border: "1px solid rgba(255, 255, 255, 0.14)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.4)"
+                            backgroundColor: "rgba(13, 30, 60, 0.95)",
+                            border: "1.5px solid #2563eb",
+                            boxShadow: "0 0 14px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)"
                           }}
                         >
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 -mt-0.5">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
                             <path d="M15.5 2.8c-.3 1.8-1.5 3-3 3.2-.3-1.6.9-3 3-3.2z" />
                             <path d="M12 7.5c-1.2 0-2.1.8-3.2.8s-2-.8-3.3-.8C3.8 7.5 2 9.6 2 13.2c0 4.1 2.8 7.8 5.2 7.8 1.2 0 1.9-.6 3.1-.6s1.9.6 3.1.6c2.4 0 5.2-3.7 5.2-7.8 0-3.6-1.8-5.7-3.5-5.7-1.3 0-2.1.8-3.2.8s-2-.8-3.3-.8z" />
                           </svg>
-                          <span className="tracking-wide">App Store</span>
+                          <span className="leading-none">App Store</span>
                         </div>
 
-                        {/* Google Play Pill */}
+                        {/* Google Play Pill (Glowing Emerald Green) */}
                         <div 
-                          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white transition-all"
+                          className="h-[34px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(25, 26, 25, 0.95)",
-                            border: "1px solid rgba(255, 255, 255, 0.14)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.4)"
+                            backgroundColor: "rgba(6, 40, 26, 0.95)",
+                            border: "1.5px solid #10b981",
+                            boxShadow: "0 0 14px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)"
                           }}
                         >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0">
-                            <path d="M5.5 3.8C5.5 2.6 6.8 1.8 7.8 2.5L19.2 10.4C20.1 11 20.1 12.4 19.2 13L7.8 20.9C6.8 21.6 5.5 20.8 5.5 19.6V3.8Z" fill="#ffffff" />
-                            <path d="M5.5 3.8L13.8 11.7L5.5 19.6V3.8Z" fill="#000000" fillOpacity="0.25" />
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
                           </svg>
-                          <span className="tracking-wide">Google Play</span>
+                          <span className="leading-none">Google Play</span>
                         </div>
 
-                        {/* Client Side Pill */}
+                        {/* Client Side Pill (Clean Neutral Slate) */}
                         <div 
-                          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white transition-all"
+                          className="h-[34px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(25, 26, 25, 0.95)",
-                            border: "1px solid rgba(255, 255, 255, 0.14)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.4)"
+                            backgroundColor: "rgba(32, 34, 38, 0.95)",
+                            border: "1.5px solid rgba(255, 255, 255, 0.22)",
+                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)"
                           }}
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#00D085] shadow-[0_0_8px_#00D085] shrink-0" />
-                          <ShieldCheck className="w-3.5 h-3.5 text-[#00D085] shrink-0" />
-                          <span className="tracking-wide">{badgeText}</span>
+                          <ShieldCheck className="w-[14px] h-[14px] text-white shrink-0 block" />
+                          <span className="leading-none">{badgeText}</span>
                         </div>
                       </>
                     )}
@@ -673,105 +762,107 @@ export default function BannerStudioPage() {
                     {subtitle}
                   </p>
 
-                  {/* 5 Feature Items */}
-                  <div className="space-y-3 mb-4">
+                  {/* Feature Items (Spacious & Optically Centered) */}
+                  <div className={`${featureCount === 4 ? "space-y-4" : "space-y-3.5"} mb-4`}>
                     {/* Item 1 */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3.5">
                       <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                         style={{
-                          backgroundColor: "rgba(56, 189, 248, 0.16)",
-                          border: "1px solid rgba(56, 189, 248, 0.45)",
+                          backgroundColor: "rgba(56, 189, 248, 0.14)",
+                          border: "1.5px solid rgba(56, 189, 248, 0.45)",
                           color: "#38bdf8"
                         }}
                       >
-                        <Smartphone className="w-4 h-4" />
+                        <Smartphone className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight">
-                        <strong className="text-white font-bold">{feature1Title}</strong>
+                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                        <strong className="text-white font-bold tracking-tight">{feature1Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature1Desc}</span>
                       </div>
                     </div>
 
-                    {/* Item 2 */}
-                    <div className="flex items-center gap-3">
-                      <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{
-                          backgroundColor: "rgba(168, 85, 247, 0.16)",
-                          border: "1px solid rgba(168, 85, 247, 0.45)",
-                          color: "#a855f7"
-                        }}
-                      >
-                        <Sparkles className="w-4 h-4" />
+                    {/* Item 2 (Shown if 5 items) */}
+                    {featureCount === 5 && (
+                      <div className="flex items-center gap-3.5">
+                        <div 
+                          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                          style={{
+                            backgroundColor: "rgba(168, 85, 247, 0.14)",
+                            border: "1.5px solid rgba(168, 85, 247, 0.45)",
+                            color: "#a855f7"
+                          }}
+                        >
+                          <Sparkles className="w-[18px] h-[18px] shrink-0 block" />
+                        </div>
+                        <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                          <strong className="text-white font-bold tracking-tight">{feature2Title}</strong>
+                          <span className="text-[#989A99] font-normal"> — {feature2Desc}</span>
+                        </div>
                       </div>
-                      <div className="text-[13.5px] leading-tight">
-                        <strong className="text-white font-bold">{feature2Title}</strong>
-                        <span className="text-[#989A99] font-normal"> — {feature2Desc}</span>
-                      </div>
-                    </div>
+                    )}
 
                     {/* Item 3 */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3.5">
                       <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                         style={{
-                          backgroundColor: "rgba(0, 208, 133, 0.16)",
-                          border: "1px solid rgba(0, 208, 133, 0.45)",
+                          backgroundColor: "rgba(0, 208, 133, 0.14)",
+                          border: "1.5px solid rgba(0, 208, 133, 0.45)",
                           color: "#00D085"
                         }}
                       >
-                        <ShieldCheck className="w-4 h-4" />
+                        <ShieldCheck className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight">
-                        <strong className="text-white font-bold">{feature3Title}</strong>
+                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                        <strong className="text-white font-bold tracking-tight">{feature3Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature3Desc}</span>
                       </div>
                     </div>
 
                     {/* Item 4 */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3.5">
                       <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                         style={{
-                          backgroundColor: "rgba(245, 158, 11, 0.16)",
-                          border: "1px solid rgba(245, 158, 11, 0.45)",
+                          backgroundColor: "rgba(245, 158, 11, 0.14)",
+                          border: "1.5px solid rgba(245, 158, 11, 0.45)",
                           color: "#f59e0b"
                         }}
                       >
-                        <Zap className="w-4 h-4" />
+                        <Zap className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight">
-                        <strong className="text-white font-bold">{feature4Title}</strong>
+                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                        <strong className="text-white font-bold tracking-tight">{feature4Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature4Desc}</span>
                       </div>
                     </div>
 
                     {/* Item 5 */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3.5">
                       <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                         style={{
-                          backgroundColor: "rgba(244, 63, 94, 0.16)",
-                          border: "1px solid rgba(244, 63, 94, 0.45)",
+                          backgroundColor: "rgba(244, 63, 94, 0.14)",
+                          border: "1.5px solid rgba(244, 63, 94, 0.45)",
                           color: "#f43f5e"
                         }}
                       >
-                        <Lock className="w-4 h-4" />
+                        <Lock className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight">
-                        <strong className="text-white font-bold">{feature5Title}</strong>
+                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                        <strong className="text-white font-bold tracking-tight">{feature5Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature5Desc}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Pricing Cards Footer (Exact match to Landing Page & User Design) */}
+                  {/* Pricing Cards Footer (Strict Mathematical Alignment Across Cards) */}
                   {showPricing && (
                     <div className="grid grid-cols-2 gap-3.5 mt-auto pt-1">
                       {/* Plus Tier Card */}
                       <div 
-                        className="relative rounded-[20px] px-4 py-3 flex flex-col justify-between overflow-hidden"
+                        className="relative rounded-[20px] p-4 flex flex-col justify-between overflow-hidden h-[148px]"
                         style={{
                           backgroundColor: "#1D1E1D",
                           border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -779,16 +870,22 @@ export default function BannerStudioPage() {
                         }}
                       >
                         {/* Top hairline accent line */}
-                        <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[20px] bg-gradient-to-r from-white/30 via-white/10 to-transparent" />
+                        <div 
+                          className="absolute top-0 inset-x-0 h-[2px] rounded-t-[20px]" 
+                          style={{
+                            background: "linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), transparent)"
+                          }}
+                        />
 
+                        {/* Top info section */}
                         <div>
                           {/* Header row: Title on left, License Scope on right */}
-                          <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                            <h3 className="text-[17.5px] font-bold tracking-tight text-white shrink-0">
+                          <div className="h-[26px] flex items-center justify-between gap-1.5 mb-1.5">
+                            <h3 className="text-[17.5px] font-bold tracking-tight text-white shrink-0 leading-none">
                               Plus Edition
                             </h3>
                             <span 
-                              className="inline-flex items-center text-[10px] font-medium tracking-normal text-[#94a3b8] px-2.5 py-0.5 rounded-md shrink-0"
+                              className="h-[22px] inline-flex items-center text-[10px] font-medium tracking-normal text-[#94a3b8] px-2.5 rounded-md shrink-0 leading-none"
                               style={{
                                 backgroundColor: "rgba(255, 255, 255, 0.08)",
                                 border: "1px solid rgba(255, 255, 255, 0.12)"
@@ -798,31 +895,32 @@ export default function BannerStudioPage() {
                             </span>
                           </div>
 
-                          <p className="text-[11.5px] text-[#94a3b8] mb-2 leading-[1.45]">
+                          {/* Fixed height description container so both cards align horizontally */}
+                          <p className="h-[34px] text-[11.5px] text-[#94a3b8] leading-[1.4] overflow-hidden flex items-start">
                             {plusDesc}
                           </p>
+                        </div>
 
-                          {/* Price Display */}
-                          <div 
-                            className="flex items-baseline gap-2 pb-2"
-                            style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}
-                          >
-                            <span className="text-[19px] font-bold text-[#64748b] line-through tracking-tight">
-                              {plusOriginalPrice}
-                            </span>
-                            <span className="text-[36px] font-black text-white leading-none tracking-[-0.03em]">
-                              {plusPrice}
-                            </span>
-                            <span className="text-[11.5px] font-medium text-[#94a3b8] ml-0.5 whitespace-nowrap">
-                              one-time payment
-                            </span>
-                          </div>
+                        {/* Price Display: Pinned to bottom baseline */}
+                        <div 
+                          className="flex items-baseline gap-2 pt-2.5 leading-none"
+                          style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}
+                        >
+                          <span className="text-[18px] font-bold text-[#64748b] line-through tracking-tight leading-none">
+                            {plusOriginalPrice}
+                          </span>
+                          <span className="text-[34px] font-black text-white leading-none tracking-[-0.03em]">
+                            {plusPrice}
+                          </span>
+                          <span className="text-[11px] font-medium text-[#94a3b8] ml-0.5 whitespace-nowrap leading-none">
+                            one-time payment
+                          </span>
                         </div>
                       </div>
 
-                      {/* Pro Studio Tier Card (Supabase Emerald Top Hairline) */}
+                      {/* Pro Studio Tier Card */}
                       <div 
-                        className="relative rounded-[20px] px-4 py-3 flex flex-col justify-between overflow-hidden"
+                        className="relative rounded-[20px] p-4 flex flex-col justify-between overflow-hidden h-[148px]"
                         style={{
                           backgroundColor: "#1D1E1D",
                           border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -830,16 +928,22 @@ export default function BannerStudioPage() {
                         }}
                       >
                         {/* Top hairline accent line with Supabase emerald gradient */}
-                        <div className="absolute top-0 inset-x-0 h-[2.5px] rounded-t-[20px] bg-gradient-to-r from-[#00D085] via-[#34d399] to-transparent" />
+                        <div 
+                          className="absolute top-0 inset-x-0 h-[2.5px] rounded-t-[20px]" 
+                          style={{
+                            background: "linear-gradient(to right, #00D085, #34d399, transparent)"
+                          }}
+                        />
 
+                        {/* Top info section */}
                         <div>
                           {/* Header row: Title on left, License Scope on right */}
-                          <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                            <h3 className="text-[17.5px] font-bold tracking-tight text-white shrink-0">
+                          <div className="h-[26px] flex items-center justify-between gap-1.5 mb-1.5">
+                            <h3 className="text-[17.5px] font-bold tracking-tight text-white shrink-0 leading-none">
                               Pro Studio
                             </h3>
                             <span 
-                              className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-normal text-[#e2e8f0] px-2.5 py-0.5 rounded-md shrink-0"
+                              className="h-[22px] inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-normal text-[#e2e8f0] px-2.5 rounded-md shrink-0 leading-none"
                               style={{
                                 backgroundColor: "rgba(255, 255, 255, 0.08)",
                                 border: "1px solid rgba(255, 255, 255, 0.15)"
@@ -850,25 +954,26 @@ export default function BannerStudioPage() {
                             </span>
                           </div>
 
-                          <p className="text-[11.5px] text-[#94a3b8] mb-2 leading-[1.45]">
+                          {/* Fixed height description container so both cards align horizontally */}
+                          <p className="h-[34px] text-[11.5px] text-[#94a3b8] leading-[1.4] overflow-hidden flex items-start">
                             {proDesc}
                           </p>
+                        </div>
 
-                          {/* Price Display */}
-                          <div 
-                            className="flex items-baseline gap-2 pb-2"
-                            style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}
-                          >
-                            <span className="text-[19px] font-bold text-[#64748b] line-through tracking-tight">
-                              {proOriginalPrice}
-                            </span>
-                            <span className="text-[36px] font-black text-white leading-none tracking-[-0.03em]">
-                              {proPrice}
-                            </span>
-                            <span className="text-[11.5px] font-medium text-[#94a3b8] ml-0.5 whitespace-nowrap">
-                              one-time payment
-                            </span>
-                          </div>
+                        {/* Price Display: Pinned to bottom baseline */}
+                        <div 
+                          className="flex items-baseline gap-2 pt-2.5 leading-none"
+                          style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}
+                        >
+                          <span className="text-[18px] font-bold text-[#64748b] line-through tracking-tight leading-none">
+                            {proOriginalPrice}
+                          </span>
+                          <span className="text-[34px] font-black text-white leading-none tracking-[-0.03em]">
+                            {proPrice}
+                          </span>
+                          <span className="text-[11px] font-medium text-[#94a3b8] ml-0.5 whitespace-nowrap leading-none">
+                            one-time payment
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -911,7 +1016,13 @@ export default function BannerStudioPage() {
 
                 {/* Header info */}
                 <div className="z-10 text-center">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#00D085]/15 border border-[#00D085]/40 text-[#00D085] mb-2">
+                  <div 
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-[#00D085] mb-2"
+                    style={{
+                      backgroundColor: "rgba(0, 208, 133, 0.15)",
+                      border: "1px solid rgba(0, 208, 133, 0.4)"
+                    }}
+                  >
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>App Store & Google Play Mockup Studio</span>
                   </div>
@@ -933,11 +1044,20 @@ export default function BannerStudioPage() {
                 </div>
 
                 {/* Footer Badges */}
-                <div className="z-10 flex items-center justify-between pt-3 border-t border-white/10 text-xs">
+                <div 
+                  className="z-10 flex items-center justify-between pt-3 text-xs"
+                  style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
+                >
                   <span className="font-bold text-white flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-[#00D085]" /> 100% Offline in Browser
                   </span>
-                  <span className="font-extrabold text-[#00D085] px-2.5 py-1 rounded-lg bg-[#006636]/60 border border-[#00D085]/40">
+                  <span 
+                    className="font-extrabold text-[#00D085] px-2.5 py-1 rounded-lg"
+                    style={{
+                      backgroundColor: "rgba(0, 102, 54, 0.6)",
+                      border: "1px solid rgba(0, 208, 133, 0.4)"
+                    }}
+                  >
                     PAY ONCE · OWN FOREVER
                   </span>
                 </div>
