@@ -315,7 +315,6 @@ export const en = {
       { label: "Reviews", href: "#testimonials" },
       { label: "Pricing", href: "#pricing" },
       { label: "FAQ", href: "#faq" },
-      { label: "Gumroad Store", href: "https://gumroad.com/l/store-preview-studio" },
     ],
   },
 };
