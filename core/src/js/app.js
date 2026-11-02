@@ -10498,7 +10498,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
             const isDark = phone.dataset.theme === 'dark';
             const isGoogle = d.classList.contains('google');
-            const solidBg = isDark ? (isGoogle ? '#1b1b1d' : '#000000') : '#ffffff';
+            const solidBg = isDark ? (isGoogle ? '#131313' : '#000000') : '#ffffff';
             phone.style.backgroundColor = solidBg;
             phone.style.background = solidBg;
             phone.style.overflow = 'hidden';
@@ -10520,7 +10520,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             }
             const gnav = phone.querySelector('.gnav');
             if(gnav){
-              gnav.style.backgroundColor = isDark ? '#2b2c2e' : '#f1f3f4';
+              gnav.style.backgroundColor = isDark ? '#1C2023' : '#f1f3f4';
               gnav.style.position = 'absolute';
               gnav.style.bottom = '0px';
               gnav.style.left = '0px';
@@ -10618,6 +10618,14 @@ function parseStoreInput(input) {
   const appleUrlMatch = raw.match(/(?:apps|itunes)\.apple\.com\/(?:([a-z]{2}(?:-[a-z]{2})?)\/)?(?:app\/[^\/]+\/)?id(\d{7,12})/i);
   if (appleUrlMatch) {
     return { platform: 'apple', id: appleUrlMatch[2], country: appleUrlMatch[1] || '' };
+  }
+
+  // 1b. iTunes lookup query URL:
+  // e.g. https://itunes.apple.com/lookup?id=324684580&country=us
+  const lookupMatch = raw.match(/[?&]id=(\d{7,12})/i);
+  if (lookupMatch) {
+    const countryMatch = raw.match(/[?&]country=([a-z]{2}(?:-[a-z]{2})?)/i);
+    return { platform: 'apple', id: lookupMatch[1], country: countryMatch ? countryMatch[1] : '' };
   }
 
   // 2. Apple App ID format: "id324684580" or pure numbers "324684580" (7-12 digits)
@@ -11205,8 +11213,8 @@ function checkAndLoadStoreParams() {
   if (typeof window === 'undefined' || !window.location || !window.location.search) return;
   try {
     const sp = new URLSearchParams(window.location.search);
-    const appid = sp.get('appid') || sp.get('apple') || sp.get('app_id') || sp.get('apple_id');
-    const url = sp.get('url') || sp.get('store_url') || sp.get('link');
+    const appid = sp.get('appid') || sp.get('apple') || sp.get('app_id') || sp.get('apple_id') || sp.get('id') || sp.get('app');
+    const url = sp.get('url') || sp.get('store_url') || sp.get('link') || sp.get('itunes');
 
     let target = null;
     if (appid) {

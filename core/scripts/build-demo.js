@@ -58,6 +58,9 @@ function buildDemo() {
 
   fs.writeFileSync(DOCS_DEMO_FILE, minified, 'utf8');
   fs.writeFileSync(PUBLIC_DEMO_FILE, minified, 'utf8');
+  const publicDemoDir = path.join(ROOT_DIR, '..', 'marketing', 'public', 'demo');
+  if (!fs.existsSync(publicDemoDir)) fs.mkdirSync(publicDemoDir, { recursive: true });
+  fs.writeFileSync(path.join(publicDemoDir, 'index.html'), minified, 'utf8');
 
   const duration = Date.now() - t0;
   const sizeKb = (Buffer.byteLength(bundled, 'utf8') / 1024).toFixed(1);

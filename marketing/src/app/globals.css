@@ -23,6 +23,18 @@
   --nav-pill-bg: #ffffff;
   --nav-pill-hover-bg: #f1f5f9;
   --nav-pill-color: #0f172a;
+  --btn-white-bg: #EFF1F0;
+  --btn-white-text: #252625;
+  --btn-white-hover-bg: #E1E3E2;
+  --btn-white-hover-text: #252625;
+  --btn-white-active-bg: #D5D8D6;
+  --btn-white-border: rgba(0, 0, 0, 0.08);
+  --btn-dark-bg: #1D1E1D;
+  --btn-dark-border: #282928;
+  --btn-dark-text: #EDEDED;
+  --btn-dark-hover-bg: #222322;
+  --btn-dark-hover-border: #282928;
+  --btn-dark-hover-text: #EDEDED;
   --purple-brand: #00D085;
   --purple-brand-hover: #26e099;
   --purple-brand-light: rgba(0, 208, 133, 0.15);
@@ -79,6 +91,72 @@ body {
 .nav-pill-active {
   background-color: var(--nav-pill-bg) !important;
   color: var(--nav-pill-color) !important;
+}
+
+/* Supabase Standard Button Styles: White Button & Black Button */
+.btn-white {
+  background-color: var(--btn-white-bg);
+  color: var(--btn-white-text);
+  border: 1px solid var(--btn-white-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  border-radius: 9px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-white:hover {
+  background-color: var(--btn-white-hover-bg);
+  color: var(--btn-white-hover-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.btn-white:active {
+  background-color: var(--btn-white-active-bg);
+  transform: scale(0.98);
+}
+
+.btn-black,
+.btn-dark {
+  background-color: var(--btn-dark-bg);
+  color: var(--btn-dark-text);
+  border: 1px solid var(--btn-dark-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  border-radius: 9px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-black:hover:not(:disabled),
+.btn-dark:hover:not(:disabled) {
+  background-color: var(--btn-dark-hover-bg, #222322);
+  border-color: var(--btn-dark-hover-border, #282928);
+  color: var(--btn-dark-hover-text, #EDEDED);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-black:active:not(:disabled),
+.btn-dark:active:not(:disabled) {
+  background-color: #171817;
+  transform: scale(0.98);
+}
+
+.btn-black:disabled,
+.btn-dark:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .nav-pill-active:hover {

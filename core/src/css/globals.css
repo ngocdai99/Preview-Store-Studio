@@ -1,0 +1,385 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root, [data-theme="dark"], html.dark {
+  --bg: #131413; /* Đen nền Supabase (Pure Dark Only) */
+  --card: #1D1E1D; /* Đen xám card/surface */
+  --card-muted: #171817;
+  --border: #282928;
+  --border-subtle: #212221;
+  --foreground: #f8fafc;
+  --muted: #989A99; /* Text xám */
+  --accent: #00D085; /* Xanh sáng */
+  --accent-hover: #26e099;
+  --accent-light: rgba(0, 208, 133, 0.15);
+  --accent-glow: rgba(0, 208, 133, 0.30);
+  --brand-primary: #006636;
+  --brand-primary-border: #1B845E;
+  --brand-primary-hover: #007a41;
+  --brand-primary-hover-border: #209d70;
+  --brand-secondary: #00D085;
+  --brand-gradient: linear-gradient(135deg, #00D085 0%, #006636 100%);
+  --nav-pill-bg: #ffffff;
+  --nav-pill-hover-bg: #f1f5f9;
+  --nav-pill-color: #0f172a;
+  --btn-white-bg: #EFF1F0;
+  --btn-white-text: #252625;
+  --btn-white-hover-bg: #E1E3E2;
+  --btn-white-hover-text: #252625;
+  --btn-white-active-bg: #D5D8D6;
+  --btn-white-border: rgba(0, 0, 0, 0.08);
+  --btn-dark-bg: #1D1E1D;
+  --btn-dark-border: #282928;
+  --btn-dark-text: #EDEDED;
+  --btn-dark-hover-bg: #222322;
+  --btn-dark-hover-border: #282928;
+  --btn-dark-hover-text: #EDEDED;
+  --purple-brand: #00D085;
+  --purple-brand-hover: #26e099;
+  --purple-brand-light: rgba(0, 208, 133, 0.15);
+  --purple-brand-border: rgba(0, 208, 133, 0.35);
+  --icon-unselected: #C4C5C4; /* Màu icon unselected Supabase */
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-muted: var(--card-muted);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-muted: var(--muted);
+  --color-icon-unselected: var(--icon-unselected);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-light: var(--accent-light);
+  --color-purple-brand: var(--purple-brand);
+  --color-purple-brand-hover: var(--purple-brand-hover);
+  --color-purple-brand-light: var(--purple-brand-light);
+  --color-purple-brand-border: var(--purple-brand-border);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, sans-serif;
+  transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 100%;
+}
+
+/* Default Interactive Button & CTA Hover (Subtle & Restrained Micro-interactions) */
+.btn-scale {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-scale:hover {
+  transform: translateY(-0.5px);
+}
+
+.btn-scale:active {
+  transform: translateY(0);
+}
+
+/* Nav Active Pill (Adaptive Light/Dark Selected Indicator) */
+.nav-pill-active {
+  background-color: var(--nav-pill-bg) !important;
+  color: var(--nav-pill-color) !important;
+}
+
+/* Supabase Standard Button Styles: White Button & Black Button */
+.btn-white {
+  background-color: var(--btn-white-bg);
+  color: var(--btn-white-text);
+  border: 1px solid var(--btn-white-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  border-radius: 9px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-white:hover {
+  background-color: var(--btn-white-hover-bg);
+  color: var(--btn-white-hover-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.btn-white:active {
+  background-color: var(--btn-white-active-bg);
+  transform: scale(0.98);
+}
+
+.btn-black,
+.btn-dark {
+  background-color: var(--btn-dark-bg);
+  color: var(--btn-dark-text);
+  border: 1px solid var(--btn-dark-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  border-radius: 9px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-black:hover:not(:disabled),
+.btn-dark:hover:not(:disabled) {
+  background-color: var(--btn-dark-hover-bg, #222322);
+  border-color: var(--btn-dark-hover-border, #282928);
+  color: var(--btn-dark-hover-text, #EDEDED);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-black:active:not(:disabled),
+.btn-dark:active:not(:disabled) {
+  background-color: #171817;
+  transform: scale(0.98);
+}
+
+.btn-black:disabled,
+.btn-dark:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.nav-pill-active:hover {
+  background-color: var(--nav-pill-hover-bg) !important;
+  color: var(--nav-pill-color) !important;
+}
+
+/* Global Brand Purple Helpers */
+.text-purple-brand {
+  color: var(--purple-brand);
+}
+
+.bg-purple-brand-light {
+  background-color: var(--purple-brand-light);
+}
+
+.border-purple-brand {
+  border-color: var(--purple-brand-border);
+}
+
+/* Butter-Smooth FAQ Accordion Expansion (Zero Shake / Motionless Header) */
+.faq-accordion-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.faq-accordion-grid.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.faq-accordion-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Pricing Announcement Slogan Banner */
+.pricing-announcement-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 18px 6px 14px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.14) 0%, rgba(59, 130, 246, 0.10) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.38);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px -2px rgba(139, 92, 246, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  margin-bottom: 22px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pricing-announcement-banner:hover {
+  transform: scale(1.008);
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 8px 28px -4px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+}
+
+.pricing-announcement-banner:active {
+  transform: scale(0.995);
+}
+
+.announcement-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.announcement-pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(16, 185, 129, 0.7);
+  animation: announcementPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes announcementPing {
+  70%, 100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.announcement-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #c084fc 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.announcement-sep {
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.announcement-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.announcement-arrow {
+  color: #c084fc;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.pricing-announcement-banner:hover .announcement-arrow {
+  transform: translateX(3px);
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .pricing-announcement-banner,
+html.light .pricing-announcement-banner,
+html:not(.dark) .pricing-announcement-banner {
+  background: #ffffff;
+  border-color: rgba(124, 58, 237, 0.26);
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .pricing-announcement-banner:hover,
+html.light .pricing-announcement-banner:hover,
+html:not(.dark) .pricing-announcement-banner:hover {
+  transform: scale(1.008);
+  border-color: rgba(124, 58, 237, 0.5);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.14);
+}
+
+[data-theme="light"] .announcement-tag,
+html.light .announcement-tag,
+html:not(.dark) .announcement-tag {
+  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .announcement-sep,
+html.light .announcement-sep,
+html:not(.dark) .announcement-sep {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .announcement-text,
+html.light .announcement-text,
+html:not(.dark) .announcement-text {
+  color: #0f172a;
+}
+
+[data-theme="light"] .announcement-arrow,
+html.light .announcement-arrow,
+html:not(.dark) .announcement-arrow {
+  color: #7c3aed;
+}
+
+/* Dark Theme Overrides for explicit data-theme */
+[data-theme="dark"] .pricing-announcement-banner,
+html.dark .pricing-announcement-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.14) 0%, rgba(59, 130, 246, 0.10) 100%);
+  border-color: rgba(139, 92, 246, 0.38);
+  box-shadow: 0 4px 20px -2px rgba(139, 92, 246, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .pricing-announcement-banner:hover,
+html.dark .pricing-announcement-banner:hover {
+  transform: scale(1.008);
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 8px 28px -4px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .announcement-tag,
+html.dark .announcement-tag {
+  background: linear-gradient(135deg, #c084fc 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="dark"] .announcement-sep,
+html.dark .announcement-sep {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="dark"] .announcement-text,
+html.dark .announcement-text {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .announcement-arrow,
+html.dark .announcement-arrow {
+  color: #c084fc;
+}
+
+@media (max-width: 640px) {
+  .pricing-announcement-banner {
+    padding: 8px 14px;
+    gap: 6px;
+    border-radius: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  .announcement-text {
+    font-size: 12px;
+  }
+  .announcement-arrow {
+    display: none;
+  }
+}

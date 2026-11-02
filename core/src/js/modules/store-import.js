@@ -18,6 +18,14 @@ function parseStoreInput(input) {
     return { platform: 'apple', id: appleUrlMatch[2], country: appleUrlMatch[1] || '' };
   }
 
+  // 1b. iTunes lookup query URL:
+  // e.g. https://itunes.apple.com/lookup?id=324684580&country=us
+  const lookupMatch = raw.match(/[?&]id=(\d{7,12})/i);
+  if (lookupMatch) {
+    const countryMatch = raw.match(/[?&]country=([a-z]{2}(?:-[a-z]{2})?)/i);
+    return { platform: 'apple', id: lookupMatch[1], country: countryMatch ? countryMatch[1] : '' };
+  }
+
   // 2. Apple App ID format: "id324684580" or pure numbers "324684580" (7-12 digits)
   if (/^id\d{7,12}$/i.test(raw)) {
     return { platform: 'apple', id: raw.replace(/^id/i, ''), country: '' };
@@ -603,8 +611,8 @@ function checkAndLoadStoreParams() {
   if (typeof window === 'undefined' || !window.location || !window.location.search) return;
   try {
     const sp = new URLSearchParams(window.location.search);
-    const appid = sp.get('appid') || sp.get('apple') || sp.get('app_id') || sp.get('apple_id');
-    const url = sp.get('url') || sp.get('store_url') || sp.get('link');
+    const appid = sp.get('appid') || sp.get('apple') || sp.get('app_id') || sp.get('apple_id') || sp.get('id') || sp.get('app');
+    const url = sp.get('url') || sp.get('store_url') || sp.get('link') || sp.get('itunes');
 
     let target = null;
     if (appid) {

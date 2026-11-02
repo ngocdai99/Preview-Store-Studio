@@ -3,8 +3,8 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 
 .editor{
   width:var(--editor-w, 500px);min-width:400px;max-width:850px;flex-shrink:0;
-  background:rgba(10,12,18,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border-right:1px solid rgba(255,255,255,0.07);
+  background:rgba(23,24,23,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-right:1px solid #282928;
   overflow-y:auto;
   scrollbar-gutter:stable;
   padding:18px 12px 18px 18px;display:flex;flex-direction:column;gap:14px;
@@ -73,8 +73,8 @@ body.sidebar-collapsed .editor-resizer{
 
 /* Card base */
 .card{
-  background:linear-gradient(180deg,#131722 0%,#0d1017 100%);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:0;
-  display:flex;flex-direction:column;gap:0;box-shadow:0 4px 20px -2px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,0.08);transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
+  background:#1D1E1D;border:1px solid #282928;border-radius:18px;padding:0;
+  display:flex;flex-direction:column;gap:0;box-shadow:0 4px 20px -2px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,0.06);transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
 }
 .card:hover{border-color:rgba(255,255,255,0.15)}
 .card h2{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:800;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0}

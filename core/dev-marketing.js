@@ -49,13 +49,6 @@ try {
  */
 function rebuildAllMarketing() {
   const b = buildMarketing();
-  if (typeof buildMarketingVi === 'function') {
-    try {
-      buildMarketingVi();
-    } catch (e) {
-      console.error('[!] buildMarketingVi error:', e.message);
-    }
-  }
   if (typeof buildDemo === 'function') {
     try {
       buildDemo();

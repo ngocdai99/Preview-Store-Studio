@@ -55,10 +55,10 @@
   gap: 7px;
   height: 34px;
   padding: 0 12px;
-  background: rgba(15, 23, 42, .92);
+  background: #1D1E1D;
   backdrop-filter: blur(16px);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, .14);
+  border: 1px solid #282928;
   box-shadow: 0 4px 14px -2px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .08);
   color: #cbd5e1;
   font-family: inherit;
@@ -73,8 +73,8 @@
 
 .stage-view-btn:hover {
   color: #ffffff;
-  border-color: rgba(255, 255, 255, .26);
-  background: rgba(30, 41, 59, .96);
+  border-color: #383A38;
+  background: #222322;
 }
 
 .stage-view-btn:active {
@@ -169,9 +169,9 @@
   left: 0;
   right: auto;
   width: 196px;
-  background: rgba(15, 23, 42, 0.96);
+  background: rgba(29, 30, 29, 0.96);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid #282928;
   border-radius: 12px;
   padding: 0 !important;
   gap: 0 !important;
@@ -272,9 +272,9 @@
   padding: 0 !important;
   gap: 0 !important;
   border-radius: 12px !important;
-  background: rgba(15, 23, 42, 0.96) !important;
+  background: rgba(29, 30, 29, 0.96) !important;
   backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid #282928 !important;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3) !important;
   overflow: hidden !important;
 }
@@ -346,7 +346,7 @@
 
 #vt .menu-item .mi-name {
   font-size: 13px !important;
-  font-weight: 550 !important;
+  font-weight: 500 !important;
   letter-spacing: -0.01em !important;
   color: #cbd5e1 !important;
 }
@@ -396,7 +396,7 @@
 }
 #vt .menu-item.on .mi-name {
   color: #ffffff !important;
-  font-weight: 650 !important;
+  font-weight: 500 !important;
 }
 #vt .menu-item.on .mi-ico {
   background: transparent !important;
@@ -468,13 +468,13 @@
 
 .stage-view-menu .mi-name {
   font-size: 13px;
-  font-weight: 550;
+  font-weight: 500;
   letter-spacing: -0.01em;
 }
 
 .stage-view-menu .menu-item.on .mi-name,
 .stage-view-menu .menu-item.active .mi-name {
-  font-weight: 650;
+  font-weight: 500;
   color: #ffffff;
 }
 
@@ -636,12 +636,12 @@
 :root[data-ui=light] #vt .menu-item .mi-name {
   color: #334155 !important;
   font-size: 13px !important;
-  font-weight: 550 !important;
+  font-weight: 500 !important;
 }
 
 :root[data-ui=light] #vt .menu-item.on .mi-name {
   color: #0f172a !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
 }
 
 :root[data-ui=light] #vt .menu-item:hover:not(.on) .mi-name {
@@ -660,7 +660,7 @@
 }
 :root[data-ui=light] #vt .menu-item.on .mi-name {
   color: #0f172a !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
 }
 :root[data-ui=light] #vt .menu-item.on .mi-ico {
   background: transparent !important;
@@ -765,13 +765,13 @@ body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-fl
   animation: stage-menu-center-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 .vt{
-  position:relative;display:flex;background:rgba(15,23,42,.88);backdrop-filter:blur(16px);border-radius:14px;padding:4px;gap:4px;
+  position:relative;display:flex;background:rgba(15,23,42,.88);backdrop-filter:blur(16px);border-radius:12px;padding:2.5px 4px;gap:4px;
   border:1px solid rgba(255,255,255,.13);
   box-shadow:0 8px 24px -4px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.07);
   align-items:center;
 }
 .vt-pill{
-  position:absolute;top:4px;bottom:4px;left:0;border-radius:10px;pointer-events:none;
+  position:absolute;top:2.5px;bottom:2.5px;left:0;border-radius:8px;pointer-events:none;
   background:#0071e3;
   box-shadow:0 3px 14px rgba(0,113,227,.48),inset 0 1px 0 rgba(255,255,255,.35);
   border:1px solid rgba(255,255,255,.3);
@@ -811,25 +811,27 @@ body[data-store=google] .vt-pill,
 /* Device Theme Segment Switch inside Stage Toolbar */
 .vt.theme-seg,
 #theme.vt {
-  padding: 4px;
+  padding: 2.5px 4px;
   gap: 4px;
   position: relative;
   box-sizing: border-box;
-  background: rgba(15, 23, 42, .92);
-  border-color: rgba(255, 255, 255, .14);
+  background: #171817;
+  border: 1px solid #282928;
+  border-radius: 12px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .vt.theme-seg .vt-pill {
   position: absolute;
-  top: 4px;
-  bottom: 4px;
+  top: 2.5px;
+  bottom: 2.5px;
   left: 0;
-  height: 32px !important;
-  border-radius: 10px !important;
+  height: 27px !important;
+  border-radius: 8px !important;
   pointer-events: none;
-  background: #334155 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .2) !important;
-  border: 1px solid rgba(255, 255, 255, .22) !important;
+  background: #1D1E1D !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   transition: transform .28s cubic-bezier(.2, .9, .3, 1.15), width .28s cubic-bezier(.2, .9, .3, 1.15), opacity .2s ease !important;
   z-index: 1;
 }
@@ -837,19 +839,19 @@ body[data-store=google] .vt-pill,
 .vt.theme-seg button {
   position: relative;
   z-index: 2;
-  width: 38px !important;
-  height: 32px !important;
-  min-width: 38px !important;
-  max-width: 38px !important;
-  flex: 0 0 38px !important;
+  width: 36px !important;
+  height: 27px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  flex: 0 0 36px !important;
   padding: 0 !important;
   justify-content: center;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
   font-weight: 600 !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
-  color: #94a3b8 !important;
+  color: #989A99 !important;
   transition: color .2s ease, transform .15s ease !important;
   box-sizing: border-box !important;
 }

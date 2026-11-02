@@ -2,10 +2,10 @@
 .seg {
   position: relative;
   display: flex;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 14px;
-  padding: 4px;
+  background: #171817;
+  border: 1px solid #282928;
+  border-radius: 12px;
+  padding: 2.5px 4px;
   width: 340px;
   min-width: 290px;
   max-width: 100%;
@@ -17,10 +17,10 @@
 
 .pill {
   position: absolute;
-  top: 4px;
-  bottom: 4px;
+  top: 2.5px;
+  bottom: 2.5px;
   left: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #0071e3;
   box-shadow: 0 3px 14px rgba(0, 113, 227, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -96,7 +96,7 @@ body:not([data-ui-store])[data-dual=true] .pill {
   color: #94a3b8;
   font-weight: 700;
   font-size: 12.5px;
-  padding: 6px 4px;
+  padding: 4.5px 4px;
   flex: 1 1 0;
   min-width: 0;
   width: 0;
@@ -104,7 +104,7 @@ body:not([data-ui-store])[data-dual=true] .pill {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: color 0.2s ease;
   white-space: nowrap;

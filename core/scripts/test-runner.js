@@ -2017,12 +2017,12 @@ assert(bundledHtml.includes('.mini:disabled') && bundledHtml.includes('cursor:no
 assert(!iconJsCode.includes("dimTag.className = 'shot-dim-tag ok';"), 'runIconPixelAudit does not render green dim tag when icon is compliant');
 
 // ---------------------------------------------------------------------
-// SUITE 28: Interactive Preview (Lite) Positioning Verification
+// SUITE 28: Live Demo (Lite) Positioning Verification
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 28]: Interactive Preview (Lite) Positioning Verification');
+console.log('\n[SUITE 28]: Live Demo (Lite) Positioning Verification');
 
 const miniStudioHtml = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'components', 'mini-studio.html'), 'utf8');
-assert(miniStudioHtml.includes('<span class="ms-live">INTERACTIVE PREVIEW (LITE)</span>'), 'mini-studio.html toolbar badge displays INTERACTIVE PREVIEW (LITE)');
+assert(miniStudioHtml.includes('<span class="ms-live">Live Demo (Lite)</span>'), 'mini-studio.html toolbar badge displays Live Demo (Lite)');
 assert(!miniStudioHtml.includes('<span class="ms-live">LIVE DEMO</span>'), 'mini-studio.html no longer displays old LIVE DEMO badge');
 assert(!miniStudioHtml.includes('ms-sandbox-banner'), 'mini-studio.html does not render ms-sandbox-banner');
 

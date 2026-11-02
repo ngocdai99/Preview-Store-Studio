@@ -375,7 +375,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
             const isDark = phone.dataset.theme === 'dark';
             const isGoogle = d.classList.contains('google');
-            const solidBg = isDark ? (isGoogle ? '#1b1b1d' : '#000000') : '#ffffff';
+            const solidBg = isDark ? (isGoogle ? '#131313' : '#000000') : '#ffffff';
             phone.style.backgroundColor = solidBg;
             phone.style.background = solidBg;
             phone.style.overflow = 'hidden';
@@ -397,7 +397,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             }
             const gnav = phone.querySelector('.gnav');
             if(gnav){
-              gnav.style.backgroundColor = isDark ? '#2b2c2e' : '#f1f3f4';
+              gnav.style.backgroundColor = isDark ? '#1C2023' : '#f1f3f4';
               gnav.style.position = 'absolute';
               gnav.style.bottom = '0px';
               gnav.style.left = '0px';

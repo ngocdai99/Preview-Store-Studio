@@ -81,10 +81,10 @@
   body[data-panel=edit] .stage{display:none}
   body[data-panel=view] .editor{display:none}
   input[type=text],textarea{font-size:15px}
-  .dev{width:390px;height:844px;padding:0;background:none;border-radius:40px;box-shadow:0 0 0 6px #1b1c20,0 20px 50px -10px rgba(0,0,0,.8),0 0 60px -10px var(--glow)}
+  .dev{width:390px;height:844px;padding:0;background:none;border-radius:40px;box-shadow:0 0 0 6px #1b1c20,0 20px 50px -10px rgba(0,0,0,.8)}
   .dev::before,.dev::after{display:none}
   .dev .phone,.dev.google .phone,.dev.google{border-radius:34px}
-  .mtabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(12,18,32,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+  .mtabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(19,20,19,.95);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
   .mtabs button{background:none;border:0;color:var(--mut);font-weight:700;font-size:13px;padding:10px 0;border-radius:10px;transition:.25s;display:flex;align-items:center;justify-content:center;gap:7px}
   .mtabs button svg{width:15px;height:15px;stroke:currentColor;flex-shrink:0}
   .mtabs button.on{color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 6px 18px var(--glow)}

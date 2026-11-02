@@ -4,7 +4,7 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 10px 18px;
-  background: rgba(12, 18, 32, 0.78);
+  background: rgba(19, 20, 19, 0.85);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--line);
@@ -41,8 +41,8 @@ header {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #1D1E1D;
+  border: 1px solid #282928;
   color: #94a3b8;
   display: inline-flex;
   align-items: center;
@@ -104,7 +104,7 @@ body.sidebar-collapsed .sidebar-toggle-btn .ico-sidebar-collapsed,
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 208, 133, 0.28);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
   cursor: pointer;

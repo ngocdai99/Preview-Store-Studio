@@ -4,7 +4,7 @@
   align-items: center;
   flex-wrap: nowrap;
   padding: 7px 18px;
-  background: rgba(13, 19, 34, 0.78);
+  background: rgba(19, 20, 19, 0.85);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--line);
@@ -21,8 +21,8 @@
 }
 
 @media (min-width: 823px) {
-  #btnPresetPill { order: 1; }
-  #btnDraft { order: 2; }
+  #btnDraft { order: 1; }
+  #btnPresetPill { order: 2; }
   .preset-banner { order: 3; margin-left: 8px; }
   .workspace-export-dropdown { order: 4; margin-left: auto; }
 }

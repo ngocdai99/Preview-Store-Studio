@@ -35,6 +35,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full scroll-smooth dark" data-theme="dark">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (window.location.search) {
+                  var p = new URLSearchParams(window.location.search);
+                  if (p.get('id') || p.get('appid') || p.get('app') || p.get('url') || p.get('itunes') || p.get('link') || p.get('bundle')) {
+                    window.location.replace('/demo' + window.location.search);
+                  }
+                }
+              } catch(_) {}
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased">
         {children}
       </body>
