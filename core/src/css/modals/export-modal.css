@@ -1,6 +1,8 @@
 /* ─── Export Mockup Image Options Modal (Visual Studio) ─── */
 .export-modal-card {
-  max-width: 380px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
   padding: 18px 20px 16px;
   background: #1D1E1D;
   border: 1px solid #282928;
@@ -243,9 +245,10 @@
 
 /* ─── Modern Radio Controls (Clean & Borderless) ─── */
 .export-radio-group {
-  display: flex;
+  display: grid;
+  grid-template-columns: 140px 1fr;
   align-items: center;
-  gap: 22px;
+  gap: 14px;
   padding: 2px 0;
 }
 
@@ -260,6 +263,7 @@
   cursor: pointer;
   user-select: none;
   transition: opacity 0.15s ease;
+  width: auto;
 }
 
 .export-radio-item:hover {
@@ -290,8 +294,9 @@
   border: 1.5px solid rgba(255, 255, 255, 0.32);
   background: transparent;
   flex-shrink: 0;
+  box-sizing: border-box;
   position: relative;
-  transition: all 0.16s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,7 +320,7 @@
   background: #1D1E1D;
 }
 
-/* Label text & badge */
+/* Label text & badge - fixed font-weight to prevent layout shift */
 .export-radio-label {
   display: flex;
   align-items: center;
@@ -333,7 +338,7 @@
 
 .export-radio-item.active .export-radio-label {
   color: #f8fafc;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .export-tag-best {
@@ -359,6 +364,8 @@
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.07);
   margin-top: 4px;
+  min-height: 28px;
+  box-sizing: border-box;
 }
 
 .export-summary-dot {
@@ -599,6 +606,7 @@
 
 :root[data-ui=light] .export-radio-label {
   color: #64748b;
+  font-weight: 500;
 }
 
 :root[data-ui=light] .export-radio-item:hover .export-radio-label {
@@ -607,6 +615,7 @@
 
 :root[data-ui=light] .export-radio-item.active .export-radio-label {
   color: #0f172a;
+  font-weight: 500;
 }
 
 :root[data-ui=light] .export-tag-best {
