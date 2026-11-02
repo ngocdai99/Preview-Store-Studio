@@ -118,3 +118,76 @@
   color: #1d4ed8;
   border: 1px solid rgba(37, 99, 235, 0.2);
 }
+
+/* ---------- App Identity Action Buttons (Upload Icon & Inspect) ---------- */
+/* Dark Mode: White Button for Upload Icon & Dark Button for Inspect */
+:root:not([data-ui=light]) #icoUp {
+  background-color: var(--btn-white-bg, #EFF1F0);
+  border: 1px solid var(--btn-white-border, rgba(0, 0, 0, 0.08));
+  color: var(--btn-white-text, #252625);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  font-weight: 600;
+  transform: none !important;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+:root:not([data-ui=light]) #icoUp .btn-mini-ico svg {
+  color: var(--btn-white-text, #252625);
+  stroke: currentColor;
+}
+
+:root:not([data-ui=light]) #icoUp:hover {
+  background-color: var(--btn-white-hover-bg, #E1E3E2);
+  border-color: var(--btn-white-border, rgba(0, 0, 0, 0.08)) !important;
+  color: var(--btn-white-hover-text, #252625) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transform: none !important;
+}
+
+:root:not([data-ui=light]) #icoUp:active {
+  background-color: var(--btn-white-active-bg, #D5D8D6);
+  border-color: var(--btn-white-border, rgba(0, 0, 0, 0.08)) !important;
+  transform: none !important;
+}
+
+:root:not([data-ui=light]) #icoInspect {
+  background-color: var(--btn-dark-bg, #1D1E1D);
+  border: 1px solid var(--btn-dark-border, #282928);
+  color: var(--btn-dark-text, #EDEDED);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  font-weight: 600;
+  transform: none !important;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+:root:not([data-ui=light]) #icoInspect .btn-mini-ico svg {
+  color: var(--btn-dark-text, #EDEDED);
+  stroke: currentColor;
+}
+
+:root:not([data-ui=light]) #icoInspect:hover:not(:disabled):not(.disabled) {
+  background-color: #242524;
+  border-color: var(--btn-dark-border, #282928) !important;
+  color: var(--btn-dark-text, #EDEDED) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transform: none !important;
+}
+
+:root:not([data-ui=light]) #icoInspect:active:not(:disabled):not(.disabled) {
+  background-color: #171817;
+  border-color: var(--btn-dark-border, #282928) !important;
+  transform: none !important;
+}
+
+:root:not([data-ui=light]) #icoInspect:disabled,
+:root:not([data-ui=light]) #icoInspect.disabled {
+  background-color: var(--btn-dark-bg, #1D1E1D) !important;
+  border-color: var(--btn-dark-border, #282928) !important;
+  color: var(--btn-dark-text, #EDEDED) !important;
+  opacity: 0.38 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
