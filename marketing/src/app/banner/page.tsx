@@ -90,16 +90,32 @@ export default function BannerStudioPage() {
 
       // Snapshot the img element BEFORE html2canvas (getBoundingClientRect only valid while mounted)
       const imgEl = bannerRef.current.querySelector("img");
-      let imgSnapshot: { el: HTMLImageElement; dx: number; dy: number; dw: number; dh: number } | null = null;
+      const bannerRect = bannerRef.current.getBoundingClientRect();
+      let imgSnapshot: {
+        el: HTMLImageElement;
+        dx: number;
+        dy: number;
+        dw: number;
+        dh: number;
+        clipX: number;
+        clipY: number;
+        clipW: number;
+        clipH: number;
+      } | null = null;
       if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
-        const bannerRect = bannerRef.current.getBoundingClientRect();
         const imgRect = imgEl.getBoundingClientRect();
+        const clipParent = (imgEl.parentElement?.parentElement as HTMLElement) || bannerRef.current;
+        const clipRect = clipParent.getBoundingClientRect();
         imgSnapshot = {
           el: imgEl,
-          dx: Math.round((imgRect.left - bannerRect.left) * scaleMultiplier),
-          dy: Math.round((imgRect.top - bannerRect.top) * scaleMultiplier),
-          dw: Math.round(imgRect.width * scaleMultiplier),
-          dh: Math.round(imgRect.height * scaleMultiplier),
+          dx: (imgRect.left - bannerRect.left) * scaleMultiplier,
+          dy: (imgRect.top - bannerRect.top) * scaleMultiplier,
+          dw: imgRect.width * scaleMultiplier,
+          dh: imgRect.height * scaleMultiplier,
+          clipX: Math.max(0, (clipRect.left - bannerRect.left) * scaleMultiplier),
+          clipY: Math.max(0, (clipRect.top - bannerRect.top) * scaleMultiplier),
+          clipW: clipRect.width * scaleMultiplier,
+          clipH: clipRect.height * scaleMultiplier,
         };
       }
 
@@ -162,23 +178,33 @@ export default function BannerStudioPage() {
             svgEl.querySelectorAll<SVGElement>("*").forEach((child) => {
               const fill = child.getAttribute("fill");
               const stroke = child.getAttribute("stroke");
-              if (fill === "currentColor" || fill === null) {
+              if (fill === "currentColor") {
                 child.setAttribute("fill", parentColor);
               }
               if (stroke === "currentColor") {
                 child.setAttribute("stroke", parentColor);
               }
             });
-            // Also fix the root SVG fill
+            // Also fix the root SVG fill/stroke
             const rootFill = svgEl.getAttribute("fill");
             if (rootFill === "currentColor") {
               svgEl.setAttribute("fill", parentColor);
             }
+            const rootStroke = svgEl.getAttribute("stroke");
+            if (rootStroke === "currentColor") {
+              svgEl.setAttribute("stroke", parentColor);
+            }
           };
 
-          // Apply SVG fix to all SVGs in the original document BEFORE cloning side-effects
-          // (We apply to cloned doc since onclone already got the clone)
+          // Apply SVG fix to all SVGs in the cloned document
           clonedDoc.querySelectorAll<SVGElement>("svg").forEach(resolveSvgCurrentColors);
+
+          // Hide cloned mockup img during html2canvas pass so we can draw it once at full native resolution
+          if (imgSnapshot) {
+            clonedDoc.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
+              img.style.opacity = "0";
+            });
+          }
 
           // Walk all elements and sanitize inline styles (modern color values)
           clonedDoc.querySelectorAll<HTMLElement>("*").forEach((el) => {
@@ -222,9 +248,27 @@ export default function BannerStudioPage() {
       if (imgSnapshot) {
         const ctx = canvas.getContext("2d");
         if (ctx) {
+          ctx.save();
+          // CRITICAL: html2canvas leaves ctx.scale(scale, scale) and ctx.translate(-x, -y) active on ctx!
+          // Reset transform to identity matrix so coordinates are in physical canvas pixels.
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.beginPath();
+          ctx.rect(imgSnapshot.clipX, imgSnapshot.clipY, imgSnapshot.clipW, imgSnapshot.clipH);
+          ctx.clip();
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = "high";
-          ctx.drawImage(imgSnapshot.el, imgSnapshot.dx, imgSnapshot.dy, imgSnapshot.dw, imgSnapshot.dh);
+          ctx.drawImage(
+            imgSnapshot.el,
+            0,
+            0,
+            imgSnapshot.el.naturalWidth,
+            imgSnapshot.el.naturalHeight,
+            imgSnapshot.dx,
+            imgSnapshot.dy,
+            imgSnapshot.dw,
+            imgSnapshot.dh
+          );
+          ctx.restore();
         }
       }
 
@@ -787,7 +831,7 @@ export default function BannerStudioPage() {
                   </p>
 
                   {/* Feature Items (Spacious & Optically Centered) */}
-                  <div className={`${featureCount === 4 ? "space-y-4" : "space-y-3.5"} mb-4`}>
+                  <div className={`${featureCount === 4 ? "space-y-4" : "space-y-3"} mb-3.5`}>
                     {/* Item 1 */}
                     <div className="flex items-center gap-3.5">
                       <div 
@@ -800,7 +844,7 @@ export default function BannerStudioPage() {
                       >
                         <Smartphone className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                      <div className="text-[13.5px] leading-snug">
                         <strong className="text-white font-bold tracking-tight">{feature1Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature1Desc}</span>
                       </div>
@@ -819,7 +863,7 @@ export default function BannerStudioPage() {
                         >
                           <Sparkles className="w-[18px] h-[18px] shrink-0 block" />
                         </div>
-                        <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                        <div className="text-[13.5px] leading-snug">
                           <strong className="text-white font-bold tracking-tight">{feature2Title}</strong>
                           <span className="text-[#989A99] font-normal"> — {feature2Desc}</span>
                         </div>
@@ -838,7 +882,7 @@ export default function BannerStudioPage() {
                       >
                         <ShieldCheck className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                      <div className="text-[13.5px] leading-snug">
                         <strong className="text-white font-bold tracking-tight">{feature3Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature3Desc}</span>
                       </div>
@@ -856,7 +900,7 @@ export default function BannerStudioPage() {
                       >
                         <Zap className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                      <div className="text-[13.5px] leading-snug">
                         <strong className="text-white font-bold tracking-tight">{feature4Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature4Desc}</span>
                       </div>
@@ -874,7 +918,7 @@ export default function BannerStudioPage() {
                       >
                         <Lock className="w-[18px] h-[18px] shrink-0 block" />
                       </div>
-                      <div className="text-[13.5px] leading-tight flex items-center flex-wrap gap-1">
+                      <div className="text-[13.5px] leading-snug">
                         <strong className="text-white font-bold tracking-tight">{feature5Title}</strong>
                         <span className="text-[#989A99] font-normal"> — {feature5Desc}</span>
                       </div>
@@ -886,7 +930,7 @@ export default function BannerStudioPage() {
                     <div className="grid grid-cols-2 gap-3.5 mt-auto pt-1">
                       {/* Plus Tier Card */}
                       <div 
-                        className="relative rounded-[20px] p-4 flex flex-col justify-between overflow-hidden h-[148px]"
+                        className="relative rounded-[20px] p-4 flex flex-col justify-between overflow-hidden h-[154px]"
                         style={{
                           backgroundColor: "#1D1E1D",
                           border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -909,18 +953,18 @@ export default function BannerStudioPage() {
                               Plus Edition
                             </h3>
                             <span 
-                              className="h-[22px] inline-flex items-center text-[10px] font-medium tracking-normal text-[#94a3b8] px-2.5 rounded-md shrink-0 leading-none"
+                              className="h-[22px] inline-flex items-center justify-center text-[10px] font-medium tracking-normal text-[#94a3b8] px-2.5 rounded-md shrink-0 leading-none"
                               style={{
                                 backgroundColor: "rgba(255, 255, 255, 0.08)",
                                 border: "1px solid rgba(255, 255, 255, 0.12)"
                               }}
                             >
-                              {plusLicenseBadge}
+                              <span className="leading-none">{plusLicenseBadge}</span>
                             </span>
                           </div>
 
                           {/* Fixed height description container so both cards align horizontally */}
-                          <p className="h-[34px] text-[11.5px] text-[#94a3b8] leading-[1.4] overflow-hidden flex items-start">
+                          <p className="h-[34px] text-[11.5px] text-[#94a3b8] leading-[1.4] overflow-hidden">
                             {plusDesc}
                           </p>
                         </div>
@@ -944,7 +988,7 @@ export default function BannerStudioPage() {
 
                       {/* Pro Studio Tier Card */}
                       <div 
-                        className="relative rounded-[20px] p-4 flex flex-col justify-between overflow-hidden h-[148px]"
+                        className="relative rounded-[20px] p-4 flex flex-col justify-between overflow-hidden h-[154px]"
                         style={{
                           backgroundColor: "#1D1E1D",
                           border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -967,19 +1011,19 @@ export default function BannerStudioPage() {
                               Pro Studio
                             </h3>
                             <span 
-                              className="h-[22px] inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-normal text-[#e2e8f0] px-2.5 rounded-md shrink-0 leading-none"
+                              className="h-[22px] inline-flex items-center justify-center gap-1.5 text-[10px] font-semibold tracking-normal text-[#e2e8f0] px-2.5 rounded-md shrink-0 leading-none"
                               style={{
                                 backgroundColor: "rgba(255, 255, 255, 0.08)",
                                 border: "1px solid rgba(255, 255, 255, 0.15)"
                               }}
                             >
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.6)] shrink-0" />
-                              {proLicenseBadge}
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.6)] shrink-0 block" />
+                              <span className="leading-none">{proLicenseBadge}</span>
                             </span>
                           </div>
 
                           {/* Fixed height description container so both cards align horizontally */}
-                          <p className="h-[34px] text-[11.5px] text-[#94a3b8] leading-[1.4] overflow-hidden flex items-start">
+                          <p className="h-[34px] text-[11.5px] text-[#94a3b8] leading-[1.4] overflow-hidden">
                             {proDesc}
                           </p>
                         </div>

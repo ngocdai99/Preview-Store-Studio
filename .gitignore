@@ -28,7 +28,8 @@ core/store_preview_studio.html
 core/store_preview_studio.min.html
 core/store-preview-studio-*.zip
 core/store-preview-studio-*/
-core/docs/
+core/docs/*
+!core/docs/src/
 core/cloudflare/
 core/package/
 core/.agents/

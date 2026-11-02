@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Preview Studio · Live Interactive Demo</title>
+  <meta name="description" content="Try Store Preview Studio live in your browser: dual-phone viewports, real device bezels, and instant store presets.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://store-preview-studio.pages.dev/demo">
+  <meta property="og:title" content="Store Preview Studio · Live Interactive Demo">
+  <meta property="og:description" content="The zero-server, 100% offline studio to design, preview, and validate Apple App Store & Google Play listings with realistic device mockups.">
+  <meta property="og:image" content="https://store-preview-studio.pages.dev/og-image.png?v=20261026-4k">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <script>
+    try {
+      var isEmbed = (window.self !== window.top) || window.location.search.indexOf("embed=true") !== -1 || window.location.hash === "#embed";
+      if (isEmbed) {
+        document.documentElement.classList.add("is-embedded");
+      }
+      // Default strictly to dark mode for demo page (like main landing page)
+      var t = "dark";
+      var params = new URLSearchParams(window.location.search);
+      if (params.get("theme")) { 
+        t = params.get("theme"); 
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch(e) { document.documentElement.setAttribute("data-theme", "dark"); }
+
+    window.addEventListener("message", function(e) {
+      if (e.data && e.data.type === "THEME_CHANGE" && e.data.theme) {
+        document.documentElement.setAttribute("data-theme", e.data.theme);
+        try { localStorage.setItem("sps_theme", e.data.theme); } catch(err){}
+      }
+    });
+  </script>
+  <style>
+    /* @include "css/variables.css" */
+    /* @include "css/mini-studio.css" */
+
+    /* ═══════════ Dedicated Standalone Demo Header & Styles ═══════════ */
+    body {
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* Embedded mode overrides (when embedded in Landing Page - 100% borderless) */
+    html.is-embedded,
+    html.is-embedded body {
+      background: transparent !important;
+      background-color: transparent !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      min-height: auto !important;
+      overflow-x: hidden !important;
+    }
+    html.is-embedded .ambient-glow-top,
+    html.is-embedded .demo-navbar-wrapper {
+      display: none !important;
+    }
+    html.is-embedded .container-wide {
+      max-width: 100% !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+    html.is-embedded .hero-mockup-wrapper {
+      margin: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      border-radius: 20px !important;
+    }
+
+    /* ═══════════ Site Header (Matching Landing Page Navbar.tsx) ═══════════ */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    [data-theme="dark"] .site-header {
+      border-bottom-color: #282928;
+      background: rgba(19, 20, 19, 0.85);
+    }
+
+    .site-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .site-header-inner {
+        padding: 0 24px;
+        height: 64px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .site-header-inner {
+        padding: 0 32px;
+      }
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .brand-link:hover { opacity: 0.85; }
+
+    .brand-icon-svg {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    [data-theme="dark"] .brand-name { color: #ffffff; }
+
+    .header-nav {
+      display: none;
+      align-items: center;
+      gap: 22px;
+    }
+
+    @media (min-width: 768px) {
+      .header-nav { display: flex; }
+    }
+
+    .nav-item {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #475569;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .nav-item:hover { color: #0f172a; }
+
+    [data-theme="dark"] .nav-item { color: #989A99; }
+    [data-theme="dark"] .nav-item:hover { color: #ffffff; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════ Brand Color Tokens & Usable Primary Button ═══════════ */
+    :root {
+      --brand-primary: #006636;
+      --brand-secondary: #00D085;
+      --btn-primary-border: #1B845E;
+      --btn-primary-bg: #006636;
+      --btn-primary-hover-border: #209d70;
+      --btn-primary-hover-bg: #007a41;
+    }
+
+    .btn-primary,
+    .btn-usable-primary,
+    .btn-get-access {
+      --btn-fs: 13.5px;
+      --btn-fw: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: var(--btn-fs);
+      font-weight: var(--btn-fw);
+      color: #ffffff !important;
+      text-decoration: none;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), var(--btn-primary-bg);
+      border: 1px solid var(--btn-primary-border);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      line-height: 1.25;
+      font-family: inherit;
+    }
+
+    .btn-primary:hover,
+    .btn-usable-primary:hover,
+    .btn-get-access:hover {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 100%), var(--btn-primary-hover-bg);
+      border-color: var(--btn-primary-hover-border);
+      color: #ffffff !important;
+    }
+
+    .btn-primary:active,
+    .btn-usable-primary:active,
+    .btn-get-access:active {
+      background: #00542c;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+      transform: translateY(1px);
+    }
+
+    /* Isolated showcase margins */
+    .hero-mockup-wrapper {
+      margin: 28px auto 40px !important;
+    }
+
+    /* ═══════════ Site Footer (Matching Landing Page Footer.tsx) ═══════════ */
+    .site-footer {
+      border-top: 1px solid rgba(226, 232, 240, 0.8);
+      background: #ffffff;
+      padding: 32px 0 40px;
+      margin-top: 56px;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    [data-theme="dark"] .site-footer {
+      border-top-color: rgba(255, 255, 255, 0.08);
+      background: #131413;
+    }
+
+    .site-footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    [data-theme="dark"] .site-footer-inner {
+      color: #94a3b8;
+    }
+
+    @media (min-width: 640px) {
+      .site-footer-inner {
+        flex-direction: row;
+        padding: 0 24px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .site-footer-inner {
+        padding: 0 32px;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .footer-brand-name {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    [data-theme="dark"] .footer-brand-name {
+      color: #ffffff;
+    }
+
+    .footer-dot {
+      color: #cbd5e1;
+    }
+
+    [data-theme="dark"] .footer-dot {
+      color: #334155;
+    }
+
+    .footer-copy {
+      color: inherit;
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 24px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .footer-link {
+      color: #64748b;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+      transition: color 0.15s ease;
+      user-select: none;
+    }
+
+    [data-theme="dark"] .footer-link {
+      color: #94a3b8;
+    }
+
+    .footer-link:hover {
+      color: #0f172a;
+    }
+
+    [data-theme="dark"] .footer-link:hover {
+      color: #ffffff;
+    }
+
+    .footer-ext-ico {
+      opacity: 0.6;
+    }
+
+    html.is-embedded .site-footer {
+      display: none !important;
+    }
+  </style>
+
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "z3c2oaazvl");
+  </script>
+</head>
+<body>
+  <!-- Exact Landing Page Style Sticky Navbar -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="header-left">
+        <a href="/" class="brand-link" title="Store Preview Studio">
+          <svg class="brand-icon-svg" width="24" height="24" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <filter id="demo-nav-k-sh" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="-2.5" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.8" />
+              </filter>
+            </defs>
+            <path
+              d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
+              fill="#006636"
+            />
+            <g filter="url(#demo-nav-k-sh)">
+              <path
+                d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
+                fill="#00D085"
+              />
+            </g>
+          </svg>
+          <span class="brand-name">Store Preview Studio</span>
+        </a>
+
+        <nav class="header-nav">
+          <a href="/#hero" class="nav-item">Studio</a>
+          <a href="/#features" class="nav-item">Features</a>
+          <a href="/#comparison" class="nav-item">Why Us</a>
+          <a href="/#pricing" class="nav-item">Pricing</a>
+          <a href="/#faq" class="nav-item">FAQ</a>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <!-- Usable Primary Button (customizable fontSize & fontWeight via style or CSS vars) -->
+        <a href="/#pricing" class="btn-primary" style="--btn-fs: 13.5px; --btn-fw: 600;">
+          <span>Get Access</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- The Standalone Interactive Mini Studio -->
+  <div class="container-wide">
+    <!-- @include "components/mini-studio.html" -->
+  </div>
+
+  <!-- Exact Landing Page Style Footer -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <!-- Brand & Copyright -->
+      <div class="footer-brand">
+        <svg class="brand-icon-svg" width="20" height="20" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <filter id="demo-footer-k-sh" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="-2.5" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.8" />
+            </filter>
+          </defs>
+          <path
+            d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
+            fill="#006636"
+          />
+          <g filter="url(#demo-footer-k-sh)">
+            <path
+              d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
+              fill="#00D085"
+            />
+          </g>
+        </svg>
+        <span class="footer-brand-name">Store Preview Studio</span>
+        <span class="footer-dot">·</span>
+        <span class="footer-copy">© 2026 Store Preview Studio by Kai DevLabs</span>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="footer-nav" aria-label="Footer Navigation">
+        <a href="/demo.html" class="footer-link">Live Demo</a>
+        <a href="/#comparison" class="footer-link">Why Us</a>
+        <a href="/#features" class="footer-link">Features</a>
+        <a href="/#testimonials" class="footer-link">Reviews</a>
+        <a href="/#pricing" class="footer-link">Pricing</a>
+        <a href="/#faq" class="footer-link">FAQ</a>
+        <a href="https://gumroad.com/l/store-preview-studio" target="_blank" rel="noopener noreferrer" class="footer-link">
+          <span>Gumroad Store</span>
+          <svg class="footer-ext-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- App Icon Inspector Modal -->
+  <!-- @include "components/modals/icon-modal.html" -->
+
+  <script>
+/* @include "../../showcase-data.js" */
+/* @include "js/modules/modal.js" */
+/* @include "js/mini-studio.js" */
+  </script>
+</body>
+</html>
+

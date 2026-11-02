@@ -6,7 +6,7 @@
     "dev": "next dev",
     "dev:marketing": "next dev",
     "build": "next build --webpack",
-    "build:marketing": "next build",
+    "build:marketing": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
