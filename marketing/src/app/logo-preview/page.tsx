@@ -16,36 +16,36 @@ export default function LogoPreviewPage() {
                 ← Back to Landing Page
               </Link>
               <span className="text-xs font-bold uppercase tracking-wider text-[#00D085] bg-[#00D085]/10 border border-[#00D085]/30 px-2.5 py-1 rounded-md">
-                Chữ K Liên Tục (Supabase Style)
+                Tích hợp DNA Apple Hardware
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Logo Chữ K: Dạng Liên Tục Gấp Khúc (Faceted Ribbon Fold)
+              Logo Chữ K: Dáng Uốn Lượn + Chi Tiết iPhone & iPad
             </h1>
             <p className="mt-2 text-sm text-[#989A99] max-w-2xl leading-relaxed">
-              Khắc phục tình trạng các khối chữ nhật xếp chồng rời rạc. Áp dụng{" "}
-              <strong className="text-white">ngôn ngữ dải băng / khối đa giác uốn gập liên tục (Origami Ribbon)</strong>{" "}
-              với đường gập chéo 45°, ăn khớp nhau như dải lụa không gian 3D vô cực của Supabase.
+              Giữ nguyên <strong className="text-white">dáng gập liên tục mềm mại, uyển chuyển của Option 3</strong>{" "}
+              nhưng cấy thêm đầy đủ đặc trưng phần cứng của Apple:{" "}
+              <strong className="text-[#00D085]">Dynamic Island, viền bezel màn hình kính, camera trước iPad, vạch Home Bar và thẻ layout App Store</strong>.
             </p>
           </div>
         </div>
 
         {/* 4 Concepts Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-          {/* K-OPTION 1: 2-RIBBON INTERLOCKING FOLD */}
+          {/* K-OPTION 3.1: DUAL RIBBON + DYNAMIC ISLAND & IPAD BEZEL */}
           <div className="bg-[#1D1E1D] border border-white/10 hover:border-[#00D085]/40 rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all">
             <div>
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    K-Option 1: Hai Dải Gập Vô Cực (2-Ribbon Loop)
+                    K-Option 3.1: Dual Ribbon + Dynamic Island & iPad Bezel
                   </h2>
                   <p className="text-xs text-[#989A99] mt-1">
-                    2 dải uốn khúc lồng ghép nhau: Dải 1 (Đỉnh trái → Đáy phải) lồng vào Dải 2 (Đáy trái → Đỉnh phải).
+                    Dáng uốn lượn liên tục của Option 3, tích hợp Dynamic Island rõ nét trên iPhone + viền màn hình iPad với camera trước.
                   </p>
                 </div>
                 <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-[#00D085]/15 text-[#00D085] border border-[#00D085]/30">
-                  Khuyên dùng ⭐
+                  Khuyên dùng số 1 ⭐
                 </span>
               </div>
 
@@ -54,34 +54,74 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-24 h-24">
                     <defs>
-                      <linearGradient id="k1-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="k31-dark" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#007844" />
                         <stop offset="100%" stopColor="#00381a" />
                       </linearGradient>
-                      <linearGradient id="k1-light" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="k31-light" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#34F5A6" />
                         <stop offset="100%" stopColor="#00D085" />
                       </linearGradient>
-                      <filter id="k1-sh" x="-30%" y="-30%" width="160%" height="160%">
-                        <feDropShadow dx="-3" dy="3" stdDeviation="4" floodColor="#000000" floodOpacity="0.8" />
+                      <filter id="k31-sh" x="-30%" y="-30%" width="160%" height="160%">
+                        <feDropShadow dx="-3" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.75" />
                       </filter>
                     </defs>
-                    <path
-                      d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z"
-                      fill="url(#k1-dark)"
-                      stroke="rgba(255,255,255,0.15)"
-                      strokeWidth="1.2"
-                    />
-                    <rect x="27" y="16" width="9" height="2.2" rx="1.1" fill="#00220f" />
-                    <g filter="url(#k1-sh)">
+                    <g>
                       <path
-                        d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z"
-                        fill="url(#k1-light)"
-                        stroke="rgba(255,255,255,0.35)"
+                        d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                        fill="url(#k31-dark)"
+                        stroke="rgba(255,255,255,0.22)"
                         strokeWidth="1.2"
                       />
-                      <line x1="45" y1="54" x2="24" y2="34" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5" />
-                      <circle cx="58" cy="18" r="1.4" fill="#00381a" />
+                      <rect x="26" y="15" width="10" height="2.8" rx="1.4" fill="#00180a" />
+                      <circle cx="33.5" cy="16.4" r="0.6" fill="#00d085" opacity="0.8" />
+                      <rect
+                        x="19.5"
+                        y="21"
+                        width="17"
+                        height="20"
+                        rx="2.5"
+                        fill="rgba(255,255,255,0.1)"
+                        stroke="rgba(255,255,255,0.12)"
+                        strokeWidth="0.8"
+                      />
+                      <rect x="22" y="24" width="12" height="4" rx="1" fill="rgba(255,255,255,0.25)" />
+                      <rect x="22" y="30" width="8" height="2" rx="0.6" fill="rgba(255,255,255,0.2)" />
+                      <rect
+                        x="48"
+                        y="68"
+                        width="16"
+                        height="14"
+                        rx="2.5"
+                        transform="rotate(45 56 75)"
+                        fill="rgba(255,255,255,0.12)"
+                      />
+                    </g>
+                    <g filter="url(#k31-sh)">
+                      <path
+                        d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                        fill="url(#k31-light)"
+                        stroke="rgba(255,255,255,0.4)"
+                        strokeWidth="1.2"
+                      />
+                      <circle
+                        cx="66"
+                        cy="15"
+                        r="1.3"
+                        fill="#00381a"
+                        stroke="rgba(255,255,255,0.4)"
+                        strokeWidth="0.5"
+                      />
+                      <rect
+                        x="48"
+                        y="25"
+                        width="16"
+                        height="14"
+                        rx="2.5"
+                        transform="rotate(-45 56 32)"
+                        fill="rgba(255,255,255,0.28)"
+                      />
+                      <rect x="27" y="84" width="8" height="1.2" rx="0.6" fill="rgba(255,255,255,0.5)" />
                     </g>
                   </svg>
                   <span className="text-[11px] font-mono text-neutral-500">96px</span>
@@ -89,14 +129,17 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
                     <path
-                      d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z"
-                      fill="url(#k1-dark)"
+                      d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                      fill="url(#k31-dark)"
                     />
-                    <g filter="url(#k1-sh)">
+                    <rect x="26" y="15" width="10" height="2.8" rx="1.4" fill="#00180a" />
+                    <g filter="url(#k31-sh)">
                       <path
-                        d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z"
-                        fill="url(#k1-light)"
+                        d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                        fill="url(#k31-light)"
                       />
+                      <circle cx="66" cy="15" r="1.4" fill="#00381a" />
+                      <rect x="27" y="84" width="8" height="1.2" rx="0.6" fill="rgba(255,255,255,0.6)" />
                     </g>
                   </svg>
                   <span className="text-[11px] font-mono text-neutral-500">48px</span>
@@ -104,13 +147,14 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
                     <path
-                      d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z"
-                      fill="url(#k1-dark)"
+                      d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                      fill="url(#k31-dark)"
                     />
-                    <g filter="url(#k1-sh)">
+                    <rect x="26" y="15" width="10" height="3" rx="1.5" fill="#00180a" />
+                    <g filter="url(#k31-sh)">
                       <path
-                        d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z"
-                        fill="url(#k1-light)"
+                        d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                        fill="url(#k31-light)"
                       />
                     </g>
                   </svg>
@@ -122,13 +166,14 @@ export default function LogoPreviewPage() {
               <div className="bg-white/[0.03] border border-white/5 rounded-lg px-3.5 py-2.5 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
                   <path
-                    d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z"
-                    fill="url(#k1-dark)"
+                    d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                    fill="url(#k31-dark)"
                   />
-                  <g filter="url(#k1-sh)">
+                  <rect x="26" y="15" width="10" height="3" rx="1.5" fill="#00180a" />
+                  <g filter="url(#k31-sh)">
                     <path
-                      d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z"
-                      fill="url(#k1-light)"
+                      d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                      fill="url(#k31-light)"
                     />
                   </g>
                 </svg>
@@ -141,28 +186,28 @@ export default function LogoPreviewPage() {
 
             <div className="mt-5 pt-4 border-t border-white/5 text-[12px] text-[#989A99] space-y-1">
               <div>
-                🌿 <strong>Dải 1</strong>: Đi từ đỉnh phone xuống và bẻ góc tạo thành chân phải chữ K.
+                📱 <strong>iPhone rõ rệt</strong>: Dynamic Island viên thuốc + Camera selfie + Home Indicator bar ở chân.
               </div>
               <div>
-                ✨ <strong>Dải 2</strong>: Đi từ đáy phone lên và bẻ góc tạo thành tay phải chữ K, đè chéo ở tâm.
+                💻 <strong>iPad rõ rệt</strong>: Tỉ lệ màn hình rộng + Camera trước + Thẻ giao diện tabletOS.
               </div>
             </div>
           </div>
 
-          {/* K-OPTION 2: 3-FACET ORIGAMI FOLD */}
+          {/* K-OPTION 3.2: MULTI-DEVICE SCREEN CONTIGUOUS */}
           <div className="bg-[#1D1E1D] border border-white/10 hover:border-[#00D085]/40 rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all">
             <div>
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    K-Option 2: Khối Màn Hình Gập 3 Mảnh (Faceted Origami)
+                    K-Option 3.2: Phone + Unfolded Tablet Screen
                   </h2>
                   <p className="text-xs text-[#989A99] mt-1">
-                    Thân Phone có ngàm đón + 2 cánh gập trên/dưới tiếp giáp khít rãnh hairline 1.5px.
+                    Thân Phone đứng thẳng nguyên vẹn (100% dáng iPhone) + Màn hình Tablet mở góc tiếp giáp khít rãnh gập.
                   </p>
                 </div>
                 <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">
-                  Origami 3D
+                  Rõ Dáng Thiết Bị Nhất
                 </span>
               </div>
 
@@ -171,53 +216,92 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-24 h-24">
                     <defs>
-                      <linearGradient id="k2-stem" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="k32-phone" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#007844" />
-                        <stop offset="100%" stopColor="#004824" />
+                        <stop offset="100%" stopColor="#00381a" />
                       </linearGradient>
-                      <linearGradient id="k2-top" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="k32-ipad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#34F5A6" />
                         <stop offset="100%" stopColor="#00D085" />
                       </linearGradient>
-                      <linearGradient id="k2-bot" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#00B371" />
-                        <stop offset="100%" stopColor="#006533" />
-                      </linearGradient>
+                      <filter id="k32-sh" x="-25%" y="-25%" width="150%" height="150%">
+                        <feDropShadow dx="-2" dy="3" stdDeviation="3" floodColor="#000000" floodOpacity="0.75" />
+                      </filter>
                     </defs>
-                    <path
-                      d="M 16,20 C 16,14 21,11 27,11 L 38,11 L 38,36 L 46,50 L 38,64 L 38,89 L 27,89 C 21,89 16,86 16,80 Z"
-                      fill="url(#k2-stem)"
-                      stroke="rgba(255,255,255,0.18)"
-                      strokeWidth="1.2"
-                    />
-                    <path
-                      d="M 48,47 L 40,33 L 64,11 C 69,7 77,7 82,12 L 85,15 C 90,20 90,28 85,33 L 53,52 Z"
-                      fill="url(#k2-top)"
-                      stroke="rgba(255,255,255,0.35)"
-                      strokeWidth="1.2"
-                    />
-                    <path
-                      d="M 53,56 L 85,73 C 90,78 90,86 85,91 L 82,94 C 77,99 69,99 64,95 L 40,73 L 48,59 Z"
-                      fill="url(#k2-bot)"
-                      stroke="rgba(255,255,255,0.22)"
-                      strokeWidth="1.2"
-                    />
+                    <g>
+                      <rect
+                        x="16"
+                        y="11"
+                        width="24"
+                        height="78"
+                        rx="7.5"
+                        fill="url(#k32-phone)"
+                        stroke="rgba(255,255,255,0.22)"
+                        strokeWidth="1.2"
+                      />
+                      <rect x="23.5" y="15" width="9" height="2.6" rx="1.3" fill="#00180a" />
+                      <circle cx="30" cy="16.3" r="0.55" fill="#00d085" />
+                      <rect x="19" y="20" width="18" height="62" rx="4" fill="rgba(255,255,255,0.08)" />
+                      <rect x="21.5" y="24" width="13" height="16" rx="2" fill="rgba(255,255,255,0.18)" />
+                      <rect x="21.5" y="43" width="13" height="14" rx="2" fill="rgba(255,255,255,0.18)" />
+                      <rect x="25" y="78" width="6" height="1.2" rx="0.6" fill="rgba(255,255,255,0.4)" />
+                    </g>
+                    <g transform="rotate(38 46 50)" filter="url(#k32-sh)">
+                      <rect
+                        x="42"
+                        y="12"
+                        width="24"
+                        height="46"
+                        rx="6"
+                        fill="url(#k32-ipad)"
+                        stroke="rgba(255,255,255,0.38)"
+                        strokeWidth="1.2"
+                      />
+                      <circle cx="54" cy="16" r="1.3" fill="#00381a" />
+                      <rect x="45.5" y="20" width="17" height="32" rx="3" fill="rgba(255,255,255,0.25)" />
+                      <rect x="48" y="24" width="12" height="10" rx="1.5" fill="rgba(255,255,255,0.3)" />
+                      <rect x="48" y="37" width="12" height="10" rx="1.5" fill="rgba(255,255,255,0.3)" />
+                    </g>
+                    <g transform="rotate(-38 46 50)" filter="url(#k32-sh)">
+                      <rect
+                        x="42"
+                        y="42"
+                        width="24"
+                        height="46"
+                        rx="6"
+                        fill="url(#k32-ipad)"
+                        stroke="rgba(255,255,255,0.38)"
+                        strokeWidth="1.2"
+                      />
+                      <rect x="45.5" y="48" width="17" height="32" rx="3" fill="rgba(255,255,255,0.25)" />
+                      <rect x="48" y="52" width="12" height="10" rx="1.5" fill="rgba(255,255,255,0.3)" />
+                    </g>
                   </svg>
                   <span className="text-[11px] font-mono text-neutral-500">96px</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
-                    <path d="M 16,20 C 16,14 21,11 27,11 L 38,11 L 38,36 L 46,50 L 38,64 L 38,89 L 27,89 C 21,89 16,86 16,80 Z" fill="url(#k2-stem)" />
-                    <path d="M 48,47 L 40,33 L 64,11 C 69,7 77,7 82,12 L 85,15 C 90,20 90,28 85,33 L 53,52 Z" fill="url(#k2-top)" />
-                    <path d="M 53,56 L 85,73 C 90,78 90,86 85,91 L 82,94 C 77,99 69,99 64,95 L 40,73 L 48,59 Z" fill="url(#k2-bot)" />
+                    <rect x="16" y="11" width="24" height="78" rx="7.5" fill="url(#k32-phone)" />
+                    <rect x="23.5" y="15" width="9" height="2.6" rx="1.3" fill="#00180a" />
+                    <g transform="rotate(38 46 50)" filter="url(#k32-sh)">
+                      <rect x="42" y="12" width="24" height="46" rx="6" fill="url(#k32-ipad)" />
+                    </g>
+                    <g transform="rotate(-38 46 50)" filter="url(#k32-sh)">
+                      <rect x="42" y="42" width="24" height="46" rx="6" fill="url(#k32-ipad)" />
+                    </g>
                   </svg>
                   <span className="text-[11px] font-mono text-neutral-500">48px</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
-                    <path d="M 16,20 C 16,14 21,11 27,11 L 38,11 L 38,36 L 46,50 L 38,64 L 38,89 L 27,89 C 21,89 16,86 16,80 Z" fill="url(#k2-stem)" />
-                    <path d="M 48,47 L 40,33 L 64,11 C 69,7 77,7 82,12 L 85,15 C 90,20 90,28 85,33 L 53,52 Z" fill="url(#k2-top)" />
-                    <path d="M 53,56 L 85,73 C 90,78 90,86 85,91 L 82,94 C 77,99 69,99 64,95 L 40,73 L 48,59 Z" fill="url(#k2-bot)" />
+                    <rect x="16" y="11" width="24" height="78" rx="7.5" fill="url(#k32-phone)" />
+                    <rect x="23.5" y="15" width="9" height="2.8" rx="1.4" fill="#00180a" />
+                    <g transform="rotate(38 46 50)" filter="url(#k32-sh)">
+                      <rect x="42" y="12" width="24" height="46" rx="6" fill="url(#k32-ipad)" />
+                    </g>
+                    <g transform="rotate(-38 46 50)" filter="url(#k32-sh)">
+                      <rect x="42" y="42" width="24" height="46" rx="6" fill="url(#k32-ipad)" />
+                    </g>
                   </svg>
                   <span className="text-[11px] font-mono text-neutral-500">24px (Navbar)</span>
                 </div>
@@ -226,9 +310,14 @@ export default function LogoPreviewPage() {
               {/* Live Navbar Mockup */}
               <div className="bg-white/[0.03] border border-white/5 rounded-lg px-3.5 py-2.5 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
-                  <path d="M 16,20 C 16,14 21,11 27,11 L 38,11 L 38,36 L 46,50 L 38,64 L 38,89 L 27,89 C 21,89 16,86 16,80 Z" fill="url(#k2-stem)" />
-                  <path d="M 48,47 L 40,33 L 64,11 C 69,7 77,7 82,12 L 85,15 C 90,20 90,28 85,33 L 53,52 Z" fill="url(#k2-top)" />
-                  <path d="M 53,56 L 85,73 C 90,78 90,86 85,91 L 82,94 C 77,99 69,99 64,95 L 40,73 L 48,59 Z" fill="url(#k2-bot)" />
+                  <rect x="16" y="11" width="24" height="78" rx="7.5" fill="url(#k32-phone)" />
+                  <rect x="23.5" y="15" width="9" height="2.8" rx="1.4" fill="#00180a" />
+                  <g transform="rotate(38 46 50)" filter="url(#k32-sh)">
+                    <rect x="42" y="12" width="24" height="46" rx="6" fill="url(#k32-ipad)" />
+                  </g>
+                  <g transform="rotate(-38 46 50)" filter="url(#k32-sh)">
+                    <rect x="42" y="42" width="24" height="46" rx="6" fill="url(#k32-ipad)" />
+                  </g>
                 </svg>
                 <span className="text-xs font-bold text-white">Store Preview Studio</span>
                 <span className="ml-auto text-[10.5px] font-semibold bg-[#006533] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
@@ -238,25 +327,25 @@ export default function LogoPreviewPage() {
             </div>
 
             <div className="mt-5 pt-4 border-t border-white/5 text-[12px] text-[#989A99] space-y-1">
-              <div>📐 <strong>Khối gập 3 module</strong>: Liên kết chuẩn xác qua ngàm vát, liền lạc một khối.</div>
-              <div>⚡ <strong>Phối 3 dải màu</strong>: Xanh rừng tối → Xanh ngọc trung → Xanh ngọc sáng rực.</div>
+              <div>📱 Chiếc Phone đứng thẳng nguyên vẹn, tỷ lệ khung viền hoàn hảo.</div>
+              <div>💻 Cánh Tablet mở góc chevron tiếp xúc khít cạnh phải tạo chữ K vững chãi.</div>
             </div>
           </div>
 
-          {/* K-OPTION 3: FLUID MÖBIUS K */}
+          {/* K-OPTION 3.3: SEAMLESS ORIGAMI SCREEN RIBBON */}
           <div className="bg-[#1D1E1D] border border-white/10 hover:border-[#00D085]/40 rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all">
             <div>
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    K-Option 3: Dải Lụa Khí Động Học (Möbius K)
+                    K-Option 3.3: Seamless Origami Screen Ribbon
                   </h2>
                   <p className="text-xs text-[#989A99] mt-1">
-                    Đường nét uốn cong mượt mà như chữ S vô cực của Supabase, tạo thành chữ K liền mạch.
+                    Dải lụa không gian tích hợp đường viền màn hình bezel siêu mảnh + camera selfie, cực kỳ hiện đại.
                   </p>
                 </div>
                 <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                  Mượt Mà Khí Động Học
+                  Tối Giản Hiện Đại
                 </span>
               </div>
 
@@ -265,30 +354,41 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-24 h-24">
                     <defs>
-                      <linearGradient id="k3-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="k33-d" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#007844" />
-                        <stop offset="100%" stopColor="#004824" />
+                        <stop offset="100%" stopColor="#00381a" />
                       </linearGradient>
-                      <linearGradient id="k3-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="k33-l" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#34F5A6" />
                         <stop offset="100%" stopColor="#00D085" />
                       </linearGradient>
-                      <filter id="k3-sh" x="-30%" y="-30%" width="160%" height="160%">
-                        <feDropShadow dx="-3" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.75" />
-                      </filter>
                     </defs>
                     <path
                       d="M 18,22 C 18,15 24,12 30,12 L 36,12 C 42,12 47,15 47,22 L 47,44 C 47,47 50,49 53,52 L 72,71 C 77,76 77,84 72,89 C 67,94 59,94 54,89 L 36,71 C 32,67 28,65 24,65 L 18,65 Z"
-                      fill="url(#k3-left)"
+                      fill="url(#k33-d)"
                       stroke="rgba(255,255,255,0.18)"
                       strokeWidth="1.2"
                     />
-                    <g filter="url(#k3-sh)">
+                    <rect x="26" y="15" width="9" height="2.5" rx="1.25" fill="#00180a" />
+                    <path
+                      d="M 22,22 L 22,58 L 34,58 L 56,80 C 58,82 62,82 64,80 L 66,78 C 68,76 68,72 66,70 L 43,47 L 43,22 Z"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.15)"
+                      strokeWidth="1"
+                    />
+                    <g filter="url(#k31-sh)">
                       <path
                         d="M 18,78 C 18,85 24,88 30,88 L 36,88 C 42,88 47,85 47,78 L 47,56 C 47,53 50,51 53,48 L 72,29 C 77,24 77,16 72,11 C 67,6 59,6 54,11 L 36,29 C 32,33 28,35 24,35 L 18,35 Z"
-                        fill="url(#k3-right)"
+                        fill="url(#k33-l)"
                         stroke="rgba(255,255,255,0.35)"
                         strokeWidth="1.2"
+                      />
+                      <circle cx="64" cy="17" r="1.3" fill="#00381a" />
+                      <path
+                        d="M 22,78 L 22,42 L 34,42 L 56,20 C 58,18 62,18 64,20 L 66,22 C 68,24 68,28 66,30 L 43,53 L 43,78 Z"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.25)"
+                        strokeWidth="1"
                       />
                     </g>
                   </svg>
@@ -296,18 +396,32 @@ export default function LogoPreviewPage() {
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
-                    <path d="M 18,22 C 18,15 24,12 30,12 L 36,12 C 42,12 47,15 47,22 L 47,44 C 47,47 50,49 53,52 L 72,71 C 77,76 77,84 72,89 C 67,94 59,94 54,89 L 36,71 C 32,67 28,65 24,65 L 18,65 Z" fill="url(#k3-left)" />
-                    <g filter="url(#k3-sh)">
-                      <path d="M 18,78 C 18,85 24,88 30,88 L 36,88 C 42,88 47,85 47,78 L 47,56 C 47,53 50,51 53,48 L 72,29 C 77,24 77,16 72,11 C 67,6 59,6 54,11 L 36,29 C 32,33 28,35 24,35 L 18,35 Z" fill="url(#k3-right)" />
+                    <path
+                      d="M 18,22 C 18,15 24,12 30,12 L 36,12 C 42,12 47,15 47,22 L 47,44 C 47,47 50,49 53,52 L 72,71 C 77,76 77,84 72,89 C 67,94 59,94 54,89 L 36,71 C 32,67 28,65 24,65 L 18,65 Z"
+                      fill="url(#k33-d)"
+                    />
+                    <rect x="26" y="15" width="9" height="2.5" rx="1.25" fill="#00180a" />
+                    <g filter="url(#k31-sh)">
+                      <path
+                        d="M 18,78 C 18,85 24,88 30,88 L 36,88 C 42,88 47,85 47,78 L 47,56 C 47,53 50,51 53,48 L 72,29 C 77,24 77,16 72,11 C 67,6 59,6 54,11 L 36,29 C 32,33 28,35 24,35 L 18,35 Z"
+                        fill="url(#k33-l)"
+                      />
                     </g>
                   </svg>
                   <span className="text-[11px] font-mono text-neutral-500">48px</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
-                    <path d="M 18,22 C 18,15 24,12 30,12 L 36,12 C 42,12 47,15 47,22 L 47,44 C 47,47 50,49 53,52 L 72,71 C 77,76 77,84 72,89 C 67,94 59,94 54,89 L 36,71 C 32,67 28,65 24,65 L 18,65 Z" fill="url(#k3-left)" />
-                    <g filter="url(#k3-sh)">
-                      <path d="M 18,78 C 18,85 24,88 30,88 L 36,88 C 42,88 47,85 47,78 L 47,56 C 47,53 50,51 53,48 L 72,29 C 77,24 77,16 72,11 C 67,6 59,6 54,11 L 36,29 C 32,33 28,35 24,35 L 18,35 Z" fill="url(#k3-right)" />
+                    <path
+                      d="M 18,22 C 18,15 24,12 30,12 L 36,12 C 42,12 47,15 47,22 L 47,44 C 47,47 50,49 53,52 L 72,71 C 77,76 77,84 72,89 C 67,94 59,94 54,89 L 36,71 C 32,67 28,65 24,65 L 18,65 Z"
+                      fill="url(#k33-d)"
+                    />
+                    <rect x="26" y="15" width="9" height="2.5" rx="1.25" fill="#00180a" />
+                    <g filter="url(#k31-sh)">
+                      <path
+                        d="M 18,78 C 18,85 24,88 30,88 L 36,88 C 42,88 47,85 47,78 L 47,56 C 47,53 50,51 53,48 L 72,29 C 77,24 77,16 72,11 C 67,6 59,6 54,11 L 36,29 C 32,33 28,35 24,35 L 18,35 Z"
+                        fill="url(#k33-l)"
+                      />
                     </g>
                   </svg>
                   <span className="text-[11px] font-mono text-neutral-500">24px (Navbar)</span>
@@ -317,9 +431,16 @@ export default function LogoPreviewPage() {
               {/* Live Navbar Mockup */}
               <div className="bg-white/[0.03] border border-white/5 rounded-lg px-3.5 py-2.5 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
-                  <path d="M 18,22 C 18,15 24,12 30,12 L 36,12 C 42,12 47,15 47,22 L 47,44 C 47,47 50,49 53,52 L 72,71 C 77,76 77,84 72,89 C 67,94 59,94 54,89 L 36,71 C 32,67 28,65 24,65 L 18,65 Z" fill="url(#k3-left)" />
-                  <g filter="url(#k3-sh)">
-                    <path d="M 18,78 C 18,85 24,88 30,88 L 36,88 C 42,88 47,85 47,78 L 47,56 C 47,53 50,51 53,48 L 72,29 C 77,24 77,16 72,11 C 67,6 59,6 54,11 L 36,29 C 32,33 28,35 24,35 L 18,35 Z" fill="url(#k3-right)" />
+                  <path
+                    d="M 18,22 C 18,15 24,12 30,12 L 36,12 C 42,12 47,15 47,22 L 47,44 C 47,47 50,49 53,52 L 72,71 C 77,76 77,84 72,89 C 67,94 59,94 54,89 L 36,71 C 32,67 28,65 24,65 L 18,65 Z"
+                    fill="url(#k33-d)"
+                  />
+                  <rect x="26" y="15" width="9" height="2.5" rx="1.25" fill="#00180a" />
+                  <g filter="url(#k31-sh)">
+                    <path
+                      d="M 18,78 C 18,85 24,88 30,88 L 36,88 C 42,88 47,85 47,78 L 47,56 C 47,53 50,51 53,48 L 72,29 C 77,24 77,16 72,11 C 67,6 59,6 54,11 L 36,29 C 32,33 28,35 24,35 L 18,35 Z"
+                      fill="url(#k33-l)"
+                    />
                   </g>
                 </svg>
                 <span className="text-xs font-bold text-white">Store Preview Studio</span>
@@ -330,21 +451,21 @@ export default function LogoPreviewPage() {
             </div>
 
             <div className="mt-5 pt-4 border-t border-white/5 text-[12px] text-[#989A99] space-y-1">
-              <div>🌊 <strong>Dáng mềm</strong>: Các góc bo chuyển tiếp mượt mà như 2 dải uốn lượn Supabase.</div>
-              <div>⚡ <strong>Năng động</strong>: Độc đáo, hiện đại và không bị cứng nhắc.</div>
+              <div>✨ Khắc laser đường viền bezel siêu mảnh bên trong dải lụa.</div>
+              <div>🎯 Dynamic Island sắc nét giúp nhận diện thiết bị Apple từ xa.</div>
             </div>
           </div>
 
-          {/* K-OPTION 4: SQUIRCLE APP ICON BADGE */}
+          {/* K-OPTION 3.4: SQUIRCLE APP ICON BADGE */}
           <div className="bg-[#1D1E1D] border border-white/10 hover:border-[#00D085]/40 rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all">
             <div>
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    K-Option 4: App Store Squircle Badge (K1 Edition)
+                    K-Option 3.4: App Store Squircle Badge (K3.1 Edition)
                   </h2>
                   <p className="text-xs text-[#989A99] mt-1">
-                    Bản K-Option 1 đặt trong khung Squircle đen bóng chuẩn macOS/iOS với viền hairline.
+                    Bản K-Option 3.1 đặt trong khung Squircle đen bóng chuẩn macOS / iOS với viền phát sáng hairline.
                   </p>
                 </div>
                 <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">
@@ -357,22 +478,29 @@ export default function LogoPreviewPage() {
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-24 h-24">
                     <defs>
-                      <linearGradient id="k4-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="k34-bg" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#1F211F" />
                         <stop offset="100%" stopColor="#121312" />
                       </linearGradient>
                     </defs>
-                    <rect width="100" height="100" rx="24" fill="url(#k4-bg)" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
+                    <rect width="100" height="100" rx="24" fill="url(#k34-bg)" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
                     <g transform="scale(0.72) translate(19, 19)">
                       <path
-                        d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z"
-                        fill="url(#k1-dark)"
+                        d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                        fill="url(#k31-dark)"
+                        stroke="rgba(255,255,255,0.2)"
+                        strokeWidth="1.2"
                       />
-                      <g filter="url(#k1-sh)">
+                      <rect x="26" y="15" width="10" height="2.8" rx="1.4" fill="#00180a" />
+                      <g filter="url(#k31-sh)">
                         <path
-                          d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z"
-                          fill="url(#k1-light)"
+                          d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                          fill="url(#k31-light)"
+                          stroke="rgba(255,255,255,0.35)"
+                          strokeWidth="1.2"
                         />
+                        <circle cx="66" cy="15" r="1.3" fill="#00381a" />
+                        <rect x="27" y="84" width="8" height="1.2" rx="0.6" fill="rgba(255,255,255,0.5)" />
                       </g>
                     </g>
                   </svg>
@@ -380,11 +508,18 @@ export default function LogoPreviewPage() {
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
-                    <rect width="100" height="100" rx="24" fill="url(#k4-bg)" stroke="rgba(255,255,255,0.12)" strokeWidth="2" />
+                    <rect width="100" height="100" rx="24" fill="url(#k34-bg)" stroke="rgba(255,255,255,0.12)" strokeWidth="2" />
                     <g transform="scale(0.72) translate(19, 19)">
-                      <path d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z" fill="url(#k1-dark)" />
-                      <g filter="url(#k1-sh)">
-                        <path d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z" fill="url(#k1-light)" />
+                      <path
+                        d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                        fill="url(#k31-dark)"
+                      />
+                      <rect x="26" y="15" width="10" height="2.8" rx="1.4" fill="#00180a" />
+                      <g filter="url(#k31-sh)">
+                        <path
+                          d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                          fill="url(#k31-light)"
+                        />
                       </g>
                     </g>
                   </svg>
@@ -392,11 +527,18 @@ export default function LogoPreviewPage() {
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
-                    <rect width="100" height="100" rx="24" fill="url(#k4-bg)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
+                    <rect width="100" height="100" rx="24" fill="url(#k34-bg)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
                     <g transform="scale(0.72) translate(19, 19)">
-                      <path d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z" fill="url(#k1-dark)" />
-                      <g filter="url(#k1-sh)">
-                        <path d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z" fill="url(#k1-light)" />
+                      <path
+                        d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                        fill="url(#k31-dark)"
+                      />
+                      <rect x="26" y="15" width="10" height="3" rx="1.5" fill="#00180a" />
+                      <g filter="url(#k31-sh)">
+                        <path
+                          d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                          fill="url(#k31-light)"
+                        />
                       </g>
                     </g>
                   </svg>
@@ -407,11 +549,18 @@ export default function LogoPreviewPage() {
               {/* Live Navbar Mockup */}
               <div className="bg-white/[0.03] border border-white/5 rounded-lg px-3.5 py-2.5 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
-                  <rect width="100" height="100" rx="24" fill="url(#k4-bg)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
+                  <rect width="100" height="100" rx="24" fill="url(#k34-bg)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
                   <g transform="scale(0.72) translate(19, 19)">
-                    <path d="M 18,22 C 18,16 23,12 29,12 L 35,12 C 41,12 45,16 45,22 L 45,40 L 71,66 C 76,71 76,79 71,84 L 66,89 C 61,94 53,94 48,89 L 29,70 C 27,68 25,65 24,62 L 24,52 C 24,46 20,43 18,43 Z" fill="url(#k1-dark)" />
-                    <g filter="url(#k1-shadow)">
-                      <path d="M 18,78 C 18,84 23,88 29,88 L 35,88 C 41,88 45,84 45,78 L 45,54 L 70,29 C 75,24 75,16 70,11 L 65,6 C 60,1 52,1 47,6 L 27,26 C 25,28 24,31 24,34 L 24,46 C 24,50 20,54 18,54 Z" fill="url(#k1-light)" />
+                    <path
+                      d="M 16,22 C 16,14 22,11 30,11 L 36,11 C 44,11 48,15 48,23 L 48,44 C 48,47 51,50 54,53 L 73,72 C 78,77 78,85 73,90 C 68,95 60,95 55,90 L 37,72 C 32,67 27,65 22,65 L 16,65 Z"
+                      fill="url(#k31-dark)"
+                    />
+                    <rect x="26" y="15" width="10" height="3" rx="1.5" fill="#00180a" />
+                    <g filter="url(#k31-sh)">
+                      <path
+                        d="M 16,78 C 16,86 22,89 30,89 L 36,89 C 44,89 48,85 48,77 L 48,56 C 48,53 51,50 54,47 L 73,28 C 78,23 78,15 73,10 C 68,5 60,5 55,10 L 37,28 C 32,33 27,35 22,35 L 16,35 Z"
+                        fill="url(#k31-light)"
+                      />
                     </g>
                   </g>
                 </svg>
@@ -423,8 +572,8 @@ export default function LogoPreviewPage() {
             </div>
 
             <div className="mt-5 pt-4 border-t border-white/5 text-[12px] text-[#989A99] space-y-1">
-              <div>📦 <strong>Ứng dụng</strong>: Sẵn sàng dùng làm App Icon macOS/iOS, file build desktop (.dmg/.exe).</div>
-              <div>🌌 <strong>Độ hoàn thiện</strong>: Đồng nhất hoàn toàn với bảng màu dark theme Supabase.</div>
+              <div>📦 Biểu tượng chữ K vô cực được đóng gói hoàn hảo trong icon bo góc.</div>
+              <div>🌌 Đầy đủ tỉ lệ tương phản và độ nhận diện cao để xuất file app desktop và mobile.</div>
             </div>
           </div>
         </div>
