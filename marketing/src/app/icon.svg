@@ -12,10 +12,10 @@
   <!-- Dark Squircle Frame -->
   <rect width="100" height="100" rx="24" fill="url(#sq-bg)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
 
-  <!-- Pure Interlocking K Monogram (Refined K Proportion) -->
+  <!-- Pure Interlocking K Monogram: Phone + iPad Tablet Duo -->
   <g transform="scale(0.72) translate(19, 19)">
     <path
-      d="M 18,24 C 18,17 22,14 28,14 C 34,14 38,17 38,24 L 38,44 L 72,74 C 77,78 77,86 72,90 C 67,94 59,94 55,90 L 26,64 C 21,60 18,56 18,50 Z"
+      d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,36 L 73,66 C 77,70 78,77 74,81 L 55,97 C 51,100 44,99 40,95 L 19,69 C 18,65 18,58 18,50 Z"
       fill="#006553"
     />
     <g filter="url(#icon-k-shadow)">
