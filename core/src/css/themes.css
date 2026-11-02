@@ -487,10 +487,10 @@
     border-color:rgba(0,113,227,.25);
     box-shadow:0 3px 10px rgba(0,0,0,.08),0 1px 3px rgba(0,113,227,.1);
     color:var(--ac);
-    transform:scale(1.04);
+    transform:none;
   }
   :root[data-ui=light] .mini:active{
-    transform:scale(0.98);
+    transform:none;
   }
   :root[data-ui=light] .mini:not(.dl-btn):not(.fit-btn) .btn-mini-ico svg{color:var(--ac)}
   :root[data-ui=light] .mini.fit-btn .btn-mini-ico svg{color:currentColor}

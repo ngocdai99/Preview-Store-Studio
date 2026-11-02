@@ -120,6 +120,22 @@
 }
 
 /* ---------- App Identity Action Buttons (Upload Icon & Inspect) ---------- */
+/* Strictly NO hover scale and NO translateY across all themes */
+#icoUp,
+#icoInspect,
+#icoUp:hover,
+#icoInspect:hover,
+#icoUp:active,
+#icoInspect:active,
+:root[data-ui=light] #icoUp,
+:root[data-ui=light] #icoInspect,
+:root[data-ui=light] #icoUp:hover,
+:root[data-ui=light] #icoInspect:hover,
+:root[data-ui=light] #icoUp:active,
+:root[data-ui=light] #icoInspect:active {
+  transform: none !important;
+}
+
 /* Dark Mode: White Button for Upload Icon & Dark Button for Inspect */
 :root:not([data-ui=light]) #icoUp {
   background-color: var(--btn-white-bg, #EFF1F0);
