@@ -26,21 +26,26 @@ const SRC_DIR = path.join(ROOT_DIR, 'src');
 const SHOWCASE_DATA = path.join(ROOT_DIR, 'docs', 'showcase-data.js');
 const OUTPUT_FILE = path.join(ROOT_DIR, 'docs', 'marketing.html');
 const OUTPUT_VI_FILE = path.join(ROOT_DIR, 'docs', 'marketing_vi.html');
+const OUTPUT_DEMO_FILE = path.join(ROOT_DIR, 'docs', 'demo.html');
 
 let DEFAULT_PORT = parseInt(process.argv[2], 10) || 4000;
 
 // Set of active SSE client connections
 const sseClients = new Set();
 
-// Import buildMarketing and buildMarketingVi
+// Import buildMarketing, buildMarketingVi, and buildDemo
 const { buildMarketing } = require('./scripts/build-marketing.js');
 let buildMarketingVi = null;
 try {
   buildMarketingVi = require('./scripts/build-marketing-vi.js').buildMarketingVi;
 } catch (_) {}
+let buildDemo = null;
+try {
+  buildDemo = require('./scripts/build-demo.js').buildDemo;
+} catch (_) {}
 
 /**
- * Rebuilds both marketing and marketing_vi bundles
+ * Rebuilds marketing, marketing_vi, and demo bundles
  */
 function rebuildAllMarketing() {
   const b = buildMarketing();
@@ -49,6 +54,13 @@ function rebuildAllMarketing() {
       buildMarketingVi();
     } catch (e) {
       console.error('[!] buildMarketingVi error:', e.message);
+    }
+  }
+  if (typeof buildDemo === 'function') {
+    try {
+      buildDemo();
+    } catch (e) {
+      console.error('[!] buildDemo error:', e.message);
     }
   }
   return b;
@@ -163,6 +175,24 @@ function startServer(port) {
       return;
     }
 
+    // 2a. Serve demo.html at /demo or /demo.html with Live Reload
+    if (pathname === '/demo' || pathname === '/demo.html') {
+      if (!fs.existsSync(OUTPUT_DEMO_FILE) && typeof buildDemo === 'function') {
+        buildDemo();
+      }
+      if (fs.existsSync(OUTPUT_DEMO_FILE)) {
+        let content = fs.readFileSync(OUTPUT_DEMO_FILE, 'utf8');
+        content = content.replace('</body>', liveReloadScript);
+
+        res.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
+        });
+        res.end(content);
+        return;
+      }
+    }
+
     // 2b. Serve marketing_vi.html (/marketing_vi, /marketing_vi.html)
     if (pathname === '/marketing_vi' || pathname === '/marketing_vi.html') {
       if (!fs.existsSync(OUTPUT_VI_FILE) && typeof buildMarketingVi === 'function') {
@@ -236,19 +266,22 @@ function startServer(port) {
 
   server.listen(port, () => {
     const url = `http://localhost:${port}`;
+    const targetPath = process.argv[3] ? `/${process.argv[3].replace(/^\//, '')}` : '';
+    const openUrl = `${url}${targetPath}`;
+
     console.log('\n======================================================');
-    console.log('Preview Studio · Landing Page Live Dev Server');
+    console.log('Preview Studio · Live Dev Server (Auto-Reload)');
     console.log('======================================================');
-    console.log(`Local URL:     ${url}`);
+    console.log(`Live URL:      ${openUrl}`);
     console.log(`Watching:      docs/src/marketing/, src/, docs/showcase-data.js`);
-    console.log(`Live Reload:   ACTIVE (Auto-reload on code change)`);
+    console.log(`Live Reload:   ACTIVE (Instant auto-reload on code change)`);
     console.log('------------------------------------------------------');
     console.log('Press Ctrl + C to stop server.\n');
 
     // Auto open in browser
-    const openCmd = process.platform === 'darwin' ? `open "${url}"`
-      : process.platform === 'win32' ? `start "${url}"`
-      : `xdg-open "${url}"`;
+    const openCmd = process.platform === 'darwin' ? `open "${openUrl}"`
+      : process.platform === 'win32' ? `start "${openUrl}"`
+      : `xdg-open "${openUrl}"`;
     exec(openCmd, () => {});
 
     // Initial build

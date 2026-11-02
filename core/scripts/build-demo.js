@@ -72,6 +72,34 @@ function buildDemo() {
 
 if (require.main === module) {
   buildDemo();
+
+  if (process.argv.includes('--watch') || process.argv.includes('-w')) {
+    console.log('\n[WATCH] 👀 Watching for changes in docs/src/marketing/ and src/ ...');
+    console.log('        Edit components/mini-studio.html, js/mini-studio.js, or CSS to auto-rebuild.');
+    console.log('        Press Ctrl + C to stop.\n');
+
+    let debounceTimer = null;
+    const triggerRebuild = (file) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        console.log(`\n[⚡] Change detected in ${file || 'files'}, rebuilding demo in ~15ms...`);
+        buildDemo();
+      }, 50);
+    };
+
+    if (fs.existsSync(SRC_DIR)) {
+      fs.watch(SRC_DIR, { recursive: true }, (evt, filename) => {
+        triggerRebuild(`[marketing/${filename}]`);
+      });
+    }
+
+    const CORE_SRC = path.join(ROOT_DIR, 'src');
+    if (fs.existsSync(CORE_SRC)) {
+      fs.watch(CORE_SRC, { recursive: true }, (evt, filename) => {
+        triggerRebuild(`[src/${filename}]`);
+      });
+    }
+  }
 }
 
 module.exports = { buildDemo };

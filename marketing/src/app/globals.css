@@ -27,6 +27,7 @@
   --purple-brand-hover: #26e099;
   --purple-brand-light: rgba(0, 208, 133, 0.15);
   --purple-brand-border: rgba(0, 208, 133, 0.35);
+  --icon-unselected: #C4C5C4; /* Màu icon unselected Supabase */
   color-scheme: dark;
 }
 
@@ -38,6 +39,7 @@
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
   --color-muted: var(--muted);
+  --color-icon-unselected: var(--icon-unselected);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-light: var(--accent-light);
