@@ -13,12 +13,12 @@ export function BrandIcon({
 }: BrandIconProps) {
   const content = (
     <g>
-      {/* Dải 1: Thân trên Phone uốn thành Chân iPad Tablet To Rõ 28px (#006553) */}
+      {/* Dải 1: Thân trên Phone uốn thành Chân Hình Chữ Nhật Bo Góc iPad (Song song, không loe cánh quạt, #006553) */}
       <path
-        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,36 L 73,66 C 77,70 78,77 74,81 L 55,97 C 51,100 44,99 40,95 L 19,69 C 18,65 18,58 18,50 Z"
+        d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,42 L 67,71 C 71,75 71,81 67,85 L 56,96 C 52,100 46,100 42,96 L 18,72 Z"
         fill="#006553"
       />
-      {/* Dải 2: Thân dưới Phone đi lên thành tay iPhone thon gọn (#00D085, đè lên tại tâm với đổ bóng) */}
+      {/* Dải 2: Thân dưới Phone đi lên thành tay iPhone (#00D085, đè lên tại tâm với đổ bóng) */}
       <g filter="url(#brand-k-shadow)">
         <path
           d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
