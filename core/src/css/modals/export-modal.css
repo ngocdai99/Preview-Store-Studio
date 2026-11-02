@@ -595,9 +595,9 @@
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator {
-  border-color: var(--brand-primary, #006636);
-  background: var(--brand-primary, #006636);
-  box-shadow: 0 0 6px rgba(0, 102, 54, 0.3);
+  border-color: var(--brand-secondary, #00D085);
+  background: var(--brand-secondary, #00D085);
+  box-shadow: 0 0 6px rgba(0, 208, 133, 0.35);
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator::after {
@@ -619,9 +619,9 @@
 }
 
 :root[data-ui=light] .export-tag-best {
-  background: rgba(0, 208, 133, 0.12);
-  color: var(--brand-primary, #006636);
-  border-color: rgba(0, 208, 133, 0.3);
+  background: rgba(0, 208, 133, 0.16);
+  color: var(--brand-secondary, #00D085);
+  border-color: rgba(0, 208, 133, 0.35);
 }
 
 :root[data-ui=light] .export-modal-footer {
