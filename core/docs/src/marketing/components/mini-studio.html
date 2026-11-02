@@ -1,0 +1,1105 @@
+<!-- Hero Mockup Interactive Mini-Studio (powered by the real /presets data) -->
+<div class="hero-mockup-wrapper" id="showcase">
+  <div class="ms-toolbar">
+    <div class="ms-toolbar-left">
+      <div class="window-dots">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <span class="ms-live">Live Demo (Lite)</span>
+    </div>
+    <div class="ms-seg" id="msStoreSeg" role="group" aria-label="Store view">
+      <span class="ms-seg-indicator" id="msStoreIndicator"></span>
+      <button id="msModeApple" data-mode="apple"><svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z"/>
+          <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z"/>
+        </svg>App Store</button>
+      <button id="msModeGoogle" data-mode="google"><svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 4.2c0-.9 1-1.5 1.8-1l12.4 7.8c.8.5.8 1.6 0 2.1L8.8 20.8c-.8.5-1.8-.1-1.8-1V4.2z" />
+        </svg>Google Play</button>
+    </div>
+    <div class="ms-toolbar-right">
+      <!-- Stage View & Comparison Dropdown (Matches Core Studio) -->
+      <div class="dropdown stage-view-dropdown" id="stageViewDropdown">
+        <button type="button" class="stage-view-btn" id="btnStageView" title="Preview screen &amp; comparison layout" aria-haspopup="true" aria-expanded="false">
+          <span class="stage-view-ico" id="stageViewIco" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+              <rect x="7" y="7" width="4" height="4" rx="1"></rect>
+              <line x1="14" y1="7.5" x2="17" y2="7.5"></line>
+              <line x1="14" y1="10.5" x2="16" y2="10.5"></line>
+              <line x1="7" y1="15" x2="17" y2="15"></line>
+              <line x1="7" y1="18" x2="13" y2="18"></line>
+            </svg>
+          </span>
+          <span class="stage-view-label" id="stageViewLabel">Detail View</span>
+          <span class="stage-view-badge" id="stageDualBadge">Dual</span>
+          <span class="stage-view-arr" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
+        </button>
+
+        <div class="menu stage-view-menu" id="stageViewMenu" role="menu">
+          <div class="menu-label">
+            <span>Preview Screen</span>
+          </div>
+
+          <!-- Detail View Option -->
+          <button type="button" class="menu-item on" id="optViewDetail" data-v="detail" role="menuitem">
+            <span class="mi-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                <rect x="7" y="7" width="4" height="4" rx="1"></rect>
+                <line x1="14" y1="7.5" x2="17" y2="7.5"></line>
+                <line x1="14" y1="10.5" x2="16" y2="10.5"></line>
+                <line x1="7" y1="15" x2="17" y2="15"></line>
+                <line x1="7" y1="18" x2="13" y2="18"></line>
+              </svg>
+            </span>
+            <span class="mi-t">
+              <span class="mi-name">Detail View</span>
+            </span>
+          </button>
+
+          <!-- Search Result Option -->
+          <button type="button" class="menu-item" id="optViewSearch" data-v="search" role="menuitem">
+            <span class="mi-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="10.5" cy="10.5" r="6.5"></circle>
+                <line x1="15.5" y1="15.5" x2="21" y2="21"></line>
+              </svg>
+            </span>
+            <span class="mi-t">
+              <span class="mi-name">Search Result</span>
+            </span>
+          </button>
+
+          <div class="menu-div"></div>
+
+          <div class="menu-label">
+            <span>Comparison</span>
+          </div>
+
+          <!-- Dual Phone Comparison Toggle -->
+          <button type="button" class="menu-item toggle-item on" id="optDualPhone" role="menuitemcheckbox" aria-checked="true">
+            <span class="mi-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="8" height="16" rx="2"></rect>
+                <rect x="14" y="4" width="8" height="16" rx="2"></rect>
+              </svg>
+            </span>
+            <span class="mi-t">
+              <span class="mi-name">Dual Phone</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="dropdown ms-export-dropdown" id="msExportDropdown">
+        <button class="btn-export-main" id="btnExport" type="button" title="Menu">
+          <span class="lbl">Menu</span>
+          <span class="arr" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
+        </button>
+        <div class="menu ms-supabase-menu" id="menuExport">
+          <div class="ms-menu-main-cols">
+            <!-- Col 1: Features / Export Assets -->
+            <div class="ms-menu-col">
+              <div class="ms-menu-section-title">Features</div>
+              
+              <button type="button" class="menu-item active-export" id="btnExportMockup4K" title="Export current live device stage in 2x Retina HD">
+                <span class="mi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </span>
+                <span class="mi-t">
+                  <span class="mi-name-row">
+                    <span class="mi-title-wrap">
+                      <span class="mi-name">Download Mockup</span>
+                      <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </span>
+                    <span class="mi-supa-tag" id="msMockupBadgeGroup">Retina</span>
+                  </span>
+                  <small>With watermark</small>
+                </span>
+                <svg class="btn-icon-loading" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+              </button>
+
+              <button type="button" class="menu-item is-locked" id="btnExportClean4K" tabindex="-1">
+                <span class="mi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </span>
+                <span class="mi-t">
+                  <span class="mi-name-row">
+                    <span class="mi-name">Clean Mockup</span>
+                    <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </span>
+                  <small>No watermark · Studio print-ready</small>
+                </span>
+                <span class="mi-lock-ico" aria-hidden="true" title="Included in Plus Edition">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </button>
+
+              <button type="button" class="menu-item is-locked" tabindex="-1">
+                <span class="mi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                </span>
+                <span class="mi-t">
+                  <span class="mi-name-row">
+                    <span class="mi-name">Screen Only</span>
+                    <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </span>
+                  <small>Store UI without device bezel</small>
+                </span>
+                <span class="mi-lock-ico" aria-hidden="true" title="Included in Plus Edition">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </button>
+            </div>
+
+            <!-- Col 2: Modules / Metadata & Project -->
+            <div class="ms-menu-col">
+              <div class="ms-menu-section-title">Modules</div>
+
+              <button type="button" class="menu-item menu-item-copy is-locked" id="btnCopyText" tabindex="-1">
+                <span class="mi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </span>
+                <span class="mi-t">
+                  <span class="mi-name-row">
+                    <span class="mi-name">Copy Metadata</span>
+                    <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </span>
+                  <small>Title, subtitle &amp; descriptions</small>
+                </span>
+                <span class="mi-lock-ico" aria-hidden="true" title="Included in Plus Edition">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </button>
+
+              <button type="button" class="menu-item is-locked" tabindex="-1">
+                <span class="mi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </span>
+                <span class="mi-t">
+                  <span class="mi-name-row">
+                    <span class="mi-name">Export Metadata</span>
+                    <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </span>
+                  <small>Full store listing document</small>
+                </span>
+                <span class="mi-lock-ico" aria-hidden="true" title="Included in Plus Edition">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </button>
+
+              <button type="button" class="menu-item is-locked" tabindex="-1">
+                <span class="mi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </span>
+                <span class="mi-t">
+                  <span class="mi-name-row">
+                    <span class="mi-name">Export Project</span>
+                    <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </span>
+                  <small>Full backup of text &amp; images</small>
+                </span>
+                <span class="mi-lock-ico" aria-hidden="true" title="Included in Plus Edition">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </button>
+
+              <button type="button" class="menu-item is-locked" tabindex="-1">
+                <span class="mi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                </span>
+                <span class="mi-t">
+                  <span class="mi-name-row">
+                    <span class="mi-name">Import Project</span>
+                    <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </span>
+                  <small>Restore workspace from backup</small>
+                </span>
+                <span class="mi-lock-ico" aria-hidden="true" title="Included in Plus Edition">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Col 3: Side Panel (Supabase customer stories / promo style) -->
+          <div class="ms-menu-side-col">
+            <div class="ms-menu-section-title">Plus Edition &rsaquo;</div>
+            
+            <a href="#pricing" class="ms-menu-side-card">
+              <div class="ms-side-card-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>Unlock Full Studio</span>
+              </div>
+              <p class="ms-side-card-desc">Export pristine 4K print-ready mockups, iPad 13" previews &amp; instant store submission bundles.</p>
+            </a>
+
+            <div class="ms-side-highlights">
+              <div class="ms-menu-section-title" style="padding:0; margin-bottom:6px;">Highlights</div>
+              <a href="#pricing" class="ms-side-link">
+                <span>4K Ultra HD Export</span>
+                <svg class="ms-side-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+              <a href="#pricing" class="ms-side-link">
+                <span>iPad Pro &amp; Tablet Layouts</span>
+                <svg class="ms-side-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+              <a href="#pricing" class="ms-side-link">
+                <span>Store Listing Markdown</span>
+                <svg class="ms-side-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="ms-presets-bar">
+    <span class="ms-presets-label">Presets</span>
+    <div class="ms-presets-nav-wrap">
+      <button type="button" class="ms-presets-arrow prev" id="msPresetsPrev" aria-label="Previous preset" title="Previous preset">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <div class="ms-seg ms-presets-seg" id="msPresets" role="group" aria-label="Presets">
+        <span class="ms-seg-indicator ms-presets-indicator" id="msPresetsIndicator"></span>
+        <!-- Pills are generated from showcase-data.js -->
+      </div>
+      <button type="button" class="ms-presets-arrow next" id="msPresetsNext" aria-label="Next preset" title="Next preset">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Non-destructive Preset Preview Banner -->
+  <div class="ms-preset-banner" id="msPresetBanner" style="display: none;">
+    <div class="ms-preset-banner-info">
+      <span class="ms-preset-banner-dot"></span>
+      <span class="ms-preset-banner-text" id="msPresetBannerText">
+        Viewing preset: <strong id="msPresetBannerName">TaskFlow</strong> · Your draft is saved safely.
+      </span>
+    </div>
+    <button type="button" class="ms-preset-banner-btn" id="msPresetBannerBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 14 4 9 9 4"></polyline>
+        <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+      </svg>
+      <span>Return to My App</span>
+    </button>
+  </div>
+
+  <div class="ms-layout">
+    <!-- LEFT: Listing Editor Column -->
+    <!-- @include "components/mini-studio-form.html" -->
+
+    <!-- RIGHT: Device stage -->
+    <div class="ms-stage" id="msStage">
+      <div class="ms-stage-theme-bar">
+        <!-- @include "components/common/device-theme-seg.html" -->
+      </div>
+      <!-- Apple · iPhone -->
+      <div class="ms-device" id="msDevApple">
+        <div class="ms-dev-label a">
+          <div class="ms-dev-title">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z"/>
+              <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z"/>
+            </svg>
+            <span>APP STORE &middot; iPhone</span>
+          </div>
+        </div>
+        <div class="ms-phone a" id="msPhoneApple">
+          <div class="ms-phone-btn ms-btn-action" aria-hidden="true"></div>
+          <div class="ms-phone-btn ms-btn-vol-up" aria-hidden="true"></div>
+          <div class="ms-phone-btn ms-btn-vol-down" aria-hidden="true"></div>
+          <div class="ms-phone-btn ms-btn-power" aria-hidden="true"></div>
+          <div class="ms-screen">
+            <div class="ms-island"></div>
+            <div class="ms-sb"><span class="ms-clock-apple">9:41</span></div>
+            <div class="ms-body">
+              <div class="ms-view-detail" data-v="detail">
+                <div class="ms-a-nav">
+                <span class="ms-a-nav-btn ms-a-nav-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg></span>
+                <div class="ms-a-nav-center">
+                  <img class="ms-a-nav-ico" data-img="icon" data-f="icon" alt="">
+                </div>
+                <div class="ms-a-nav-right">
+                  <span class="ms-a-nav-btn ms-a-nav-share" aria-label="Share"><svg viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M8.5 10H6A2 2 0 0 0 4 12V18A2 2 0 0 0 6 20H18A2 2 0 0 0 20 18V12A2 2 0 0 0 18 10H15.5">
+                      </path>
+                      <polyline points="8 6 12 2 16 6"></polyline>
+                      <line x1="12" y1="2" x2="12" y2="15"></line>
+                    </svg></span>
+                  <button type="button" class="ms-a-nav-get" aria-label="Get App">GET</button>
+                </div>
+              </div>
+              <div class="ms-a-head">
+                <img class="ms-a-ico" data-img="icon" data-f="icon" alt="">
+                <div class="ms-a-info">
+                  <div>
+                    <div class="ms-a-name" data-bind="name" data-f="name"></div>
+                    <div class="ms-a-sub" data-bind="sub" data-f="sub"></div>
+                  </div>
+                  <div class="ms-a-act">
+                    <button class="ms-get" tabindex="-1">GET</button>
+                  </div>
+                </div>
+              </div>
+              <div class="ms-a-met">
+                <div><small>RATINGS</small><b><span data-bind="rating"></span> &#9733;</b><i><span
+                      data-bind="count"></span> Ratings</i></div>
+                <div><small>AGE</small><b data-bind="age"></b><i>Years Old</i></div>
+                <div><small>CHART</small><b>#<span data-bind="rank"></span></b><i data-bind="catApple"></i></div>
+                <div><small>DEVELOPER</small><b data-bind="dev"
+                    style="font-size:10px;margin:2px 0 1px;"></b><i>Studio</i></div>
+                <div><small>LANGUAGE</small><b>EN</b><i>+4 More</i></div>
+              </div>
+
+              <!-- 3. Preview (Screenshots) -->
+              <div class="ms-sec">
+                <div class="ms-sec-h">Preview</div>
+                <div class="ms-gal" data-gal data-f="shots"></div>
+                <!-- Device Support Badge -->
+                <div class="ms-a-platforms">
+                  <span class="ms-a-plat-icon ms-a-plat-icon-iphone">
+                    <svg width="10" height="14" viewBox="0 0 62.771 103.335" fill="none">
+                      <path fill="currentColor"
+                        d="M13.275 103.335h36.169c7.963 0 13.326-5.053 13.326-12.665V12.665C62.771 5.053 57.407 0 49.444 0H13.275C5.301 0 0 5.053 0 12.665V90.67c0 7.612 5.301 12.665 13.275 12.665m1.005-7.842c-4.09 0-6.427-2.183-6.427-6.116V13.959c0-3.933 2.338-6.106 6.427-6.106h6.27c.766 0 1.181.405 1.181 1.173v1.109c.001 2.002 1.35 3.413 3.352 3.413h12.605c2.054 0 3.34-1.411 3.34-3.413v-1.11c0-.766.415-1.171 1.183-1.171h6.228c4.141-.001 6.427 2.172 6.427 6.106v75.417c0 3.933-2.286 6.116-6.427 6.116Zm6.775-3.581h20.712c1.296 0 2.27-.924 2.27-2.282s-.973-2.27-2.269-2.27H21.055c-1.358 0-2.27.912-2.27 2.27s.912 2.282 2.27 2.282">
+                      </path>
+                    </svg>
+                  </span>
+                  <span class="ms-a-plat-icon ms-a-plat-icon-ipad">
+                    <svg width="11" height="14" viewBox="0 0 16.68 22.021" fill="none">
+                      <path fill="currentColor"
+                        d="M5.39 19.688h5.538a.436.436 0 0 0 .459-.46c0-.273-.186-.449-.46-.449H5.392c-.264 0-.45.176-.45.45 0 .273.186.459.45.459M0 19.424c0 1.543 1.084 2.578 2.705 2.578h10.908c1.621 0 2.705-1.035 2.705-2.578V2.588C16.318 1.045 15.234 0 13.613 0H2.705C1.084 0 0 1.045 0 2.588Zm1.572-.264V2.852c0-.801.489-1.28 1.328-1.28h10.518c.83 0 1.328.479 1.328 1.28V19.16c0 .8-.498 1.27-1.328 1.27H2.9c-.84 0-1.328-.47-1.328-1.27">
+                      </path>
+                    </svg>
+                  </span>
+                  <span class="ms-a-plat-text">iPhone, iPad</span>
+                </div>
+              </div>
+
+              <!-- 4. Promotional Text & Description -->
+              <div class="ms-promo" data-bind="promo"></div>
+              <div class="ms-sec">
+                <div class="ms-sec-h">Description</div>
+                <div class="ms-desc" data-bind="desc"></div>
+              </div>
+
+              <!-- 5. Ratings & Reviews -->
+              <div class="ms-sec">
+                <div class="ms-sec-h">Ratings &amp; Reviews <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="var(--s)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg></div>
+                <div class="ms-a-ratings-row">
+                  <span style="font-size:30px;font-weight:800;letter-spacing:-0.5px;" data-bind="rating">4.9</span>
+                  <div style="font-size:10px;color:var(--s);line-height:1.3;">
+                    <div style="color:#ff9500;letter-spacing:1px;font-size:11px;">★★★★★</div>
+                    <div><span data-bind="count">1.8K</span> Ratings</div>
+                  </div>
+                </div>
+                <div class="ms-a-reviews-list">
+                  <div class="ms-a-rev-card">
+                    <div class="ms-a-rev-top">
+                      <span class="ms-a-rev-title">Clean UI &amp; effective daily tracking</span>
+                      <span class="ms-a-rev-date">Oct 15</span>
+                    </div>
+                    <div class="ms-a-rev-meta">
+                      <span class="ms-a-rev-stars">★★★★★</span>
+                      <span class="ms-a-rev-author">Marcus Vance</span>
+                    </div>
+                    <div class="ms-a-rev-body">Clean UI, smooth animations, and very effective for daily tracking. The
+                      widget integration on iOS is top-notch!</div>
+                  </div>
+                  <div class="ms-a-rev-card">
+                    <div class="ms-a-rev-top">
+                      <span class="ms-a-rev-title">Transformed my deep work</span>
+                      <span class="ms-a-rev-date">Oct 8</span>
+                    </div>
+                    <div class="ms-a-rev-meta">
+                      <span class="ms-a-rev-stars">★★★★★</span>
+                      <span class="ms-a-rev-author">Sarah Jenkins</span>
+                    </div>
+                    <div class="ms-a-rev-body">The Pomodoro timer coupled with habit streaks completely transformed my
+                      workday focus. Cloud sync across iPhone and iPad is seamless.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 6. What's New -->
+              <div class="ms-sec">
+                <div class="ms-sec-h">What's New <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="var(--s)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg></div>
+                <div class="ms-wn-row">
+                  <div class="ms-wn-text" data-bind="whatsNew">Release notes...</div>
+                  <div class="ms-vm"><span>Version <span data-bind="ver">1.0.0</span></span><span data-bind="rdate">Oct
+                      18, 2026</span></div>
+                </div>
+              </div>
+
+              <!-- App Privacy -->
+              <div class="ms-sec">
+                <div class="ms-sec-h">App Privacy <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="var(--s)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg></div>
+                <div class="ms-priv-txt">The developer, <b data-bind="dev">Developer Name</b>, indicated that the app's
+                  privacy practices may include handling of data as described below. For more information, see the <span
+                    style="color:var(--ac)">developer's privacy policy</span>.</div>
+                <div class="ms-pg">
+                  <div class="ms-pc">
+                    <div class="ms-pc-ico">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9.5"></circle>
+                        <circle cx="12" cy="9.5" r="3" fill="currentColor" stroke="none"></circle>
+                        <path d="M6.8 18.2c1.2-2.1 3.1-3.2 5.2-3.2s4 1.1 5.2 3.2" fill="currentColor" stroke="none">
+                        </path>
+                      </svg>
+                    </div>
+                    <h4>Data Linked to You</h4>
+                    <small>The following data may be collected and linked to your identity:</small>
+                  </div>
+                  <div class="ms-pc">
+                    <div class="ms-pc-ico">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9.5"></circle>
+                        <circle cx="12" cy="9.5" r="3" fill="currentColor" stroke="none"></circle>
+                        <path d="M6.8 18.2c1.2-2.1 3.1-3.2 5.2-3.2s4 1.1 5.2 3.2" fill="currentColor" stroke="none">
+                        </path>
+                        <line x1="5.2" y1="5.2" x2="18.8" y2="18.8" stroke-width="2"></line>
+                      </svg>
+                    </div>
+                    <h4>Data Not Linked to You</h4>
+                    <small>The following data may be collected but is not linked to your identity:</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Information -->
+              <div class="ms-sec">
+                <div class="ms-sec-h">Information</div>
+                <div class="ms-inf">
+                  <div><span>Provider</span><b data-bind="dev">Developer Name</b></div>
+                  <div><span>Size</span><b>86 MB</b></div>
+                  <div><span>Category</span><b style="color:var(--ac)" data-bind="catApple">Category</b></div>
+                  <div><span>Compatibility</span><b>Works on this iPhone (iOS 16.0+)</b></div>
+                  <div><span>Languages</span><b>English, French, German, Japanese</b></div>
+                  <div><span>Age Rating</span><b data-bind="age">4+</b></div>
+                  <div><span>In-App Purchases</span><b>Yes</b></div>
+                </div>
+              </div>
+            </div><!-- /.ms-view-detail -->
+
+            <!-- Apple Search View (Modern iOS 18 Style) -->
+            <div class="ms-view-search apple-search-view" data-v="search" style="display:none">
+              <!-- Search Header with Frosted Glass -->
+              <div class="sr-search-header">
+                <div class="sr-search-input">
+                  <svg class="sr-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <span class="sr-search-query" data-bind="name">Search</span>
+                </div>
+                <button class="sr-search-clear" type="button" aria-label="Clear search">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Primary Target App Card -->
+              <div class="sr-app-card">
+                <div class="sr-header">
+                  <div class="sr-icon-wrap">
+                    <img data-img="icon" data-f="icon" alt="App Icon" class="sr-app-icon">
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-title" data-bind="name">App Name</div>
+                    <div class="sr-subtitle" data-bind="sub">App Subtitle</div>
+                    <div class="sr-stars-row">
+                      <span class="sr-stars">★★★★★</span>
+                      <span class="sr-rating-val" data-bind="rating">4.9</span>
+                      <span class="sr-rating-cnt">(<span data-bind="count">1.8K</span>)</span>
+                    </div>
+                  </div>
+                  <button type="button" class="sr-get-btn">GET</button>
+                </div>
+
+                <!-- Metadata Line: Category | Developer Name -->
+                <div class="sr-meta-line">
+                  <span class="sr-category" data-bind="catApple">Category</span>
+                  <span class="sr-divider">|</span>
+                  <span class="sr-dev">
+                    <svg class="sr-dev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                      <circle cx="9" cy="10" r="2"></circle>
+                      <path d="M15 8h2"></path>
+                      <path d="M15 12h2"></path>
+                      <path d="M7 16h10"></path>
+                    </svg>
+                    <span data-bind="dev">Developer Name</span>
+                  </span>
+                </div>
+
+                <!-- 3 Screenshots Gallery -->
+                <div class="shots sr-shots" data-shots="apple-search">
+                  <div class="sr-skel-shot"></div>
+                  <div class="sr-skel-shot"></div>
+                  <div class="sr-skel-shot"></div>
+                </div>
+              </div>
+
+              <!-- Secondary Search Results (Skeleton Feed) -->
+              <div class="sr-skeleton-card" aria-hidden="true">
+                <div class="sr-header">
+                  <div class="sr-skel-icon"></div>
+                  <div class="sr-info">
+                    <div class="sr-skel-line w-45"></div>
+                    <div class="sr-skel-line w-75"></div>
+                    <div class="sr-skel-stars">★★★★★</div>
+                  </div>
+                  <div class="sr-skel-btn"></div>
+                </div>
+                <div class="sr-meta-line">
+                  <div class="sr-skel-line w-25"></div>
+                  <span class="sr-divider">|</span>
+                  <div class="sr-skel-line w-35"></div>
+                </div>
+                <div class="sr-skel-shots">
+                  <div class="sr-skel-shot"></div>
+                  <div class="sr-skel-shot"></div>
+                  <div class="sr-skel-shot"></div>
+                </div>
+              </div>
+
+              <div class="sr-skeleton-card" aria-hidden="true">
+                <div class="sr-header">
+                  <div class="sr-skel-icon"></div>
+                  <div class="sr-info">
+                    <div class="sr-skel-line w-55"></div>
+                    <div class="sr-skel-line w-60"></div>
+                    <div class="sr-skel-stars">★★★★★</div>
+                  </div>
+                  <div class="sr-skel-btn"></div>
+                </div>
+                <div class="sr-meta-line">
+                  <div class="sr-skel-line w-30"></div>
+                  <span class="sr-divider">|</span>
+                  <div class="sr-skel-line w-40"></div>
+                </div>
+                <div class="sr-skel-shots">
+                  <div class="sr-skel-shot"></div>
+                  <div class="sr-skel-shot"></div>
+                  <div class="sr-skel-shot"></div>
+                </div>
+              </div>
+            </div><!-- /.apple-search-view -->
+            </div>
+            <!-- @include "components/common/apple-tab-bar.html" -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Google · Android -->
+      <div class="ms-device" id="msDevGoogle">
+        <div class="ms-dev-label g">
+          <div class="ms-dev-title">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 4.2c0-.9 1-1.5 1.8-1l12.4 7.8c.8.5.8 1.6 0 2.1L8.8 20.8c-.8.5-1.8-.1-1.8-1V4.2z" />
+            </svg>
+            <span>GOOGLE PLAY &middot; Android</span>
+          </div>
+        </div>
+        <div class="ms-phone g" id="msPhoneGoogle">
+          <div class="ms-phone-btn ms-btn-power" aria-hidden="true"></div>
+          <div class="ms-phone-btn ms-btn-vol" aria-hidden="true"></div>
+          <div class="ms-screen">
+            <div class="ms-hole"></div>
+            <div class="ms-sb"><span class="ms-clock-google">09:41</span></div>
+            <div class="ms-body">
+              <div class="ms-view-detail" data-v="detail">
+                <div class="ms-g-top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span class="ms-g-top-act">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M17 3H7a2 2 0 0 0-2 2v16l7-3 7 3V5a2 2 0 0 0-2-2z" />
+                    <line x1="12" y1="7.5" x2="12" y2="12.5" />
+                    <line x1="9.5" y1="10" x2="14.5" y2="10" />
+                  </svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="5" r="1.6" />
+                    <circle cx="12" cy="12" r="1.6" />
+                    <circle cx="12" cy="19" r="1.6" />
+                  </svg>
+                </span>
+              </div>
+              <div class="ms-g-head">
+                <img class="ms-g-ico" data-img="iconGoogle" data-f="iconGoogle" alt="">
+                <div style="flex:1;min-width:0">
+                  <div class="ms-g-name" data-bind="name" data-f="name">App Name</div>
+                  <div class="ms-g-dev" data-bind="dev">Developer Name</div>
+                </div>
+              </div>
+              <div class="ms-g-met">
+                <div><b><span data-bind="rating">4.9</span> &#9733;</b><small><span data-bind="count">1.8K</span>
+                    reviews</small></div>
+                <div><b data-bind="dl">50K+</b><small>Downloads</small></div>
+                <div><b><span class="esrb" data-bind="esrb">E</span></b><small data-bind="esrbLabel">Everyone</small>
+                </div>
+              </div>
+              <button class="ms-inst" tabindex="-1">Install</button>
+              <div class="ms-gal" data-gal data-f="shots"></div>
+
+              <!-- 1. About this app -->
+              <div class="ms-g-blk">
+                <div class="ms-g-h">
+                  <span>About this app</span>
+                  <span class="ms-g-arrow">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
+                </div>
+                <div class="ms-g-sd" data-bind="short" data-f="short">Short description...</div>
+                <span data-bind="desc" hidden></span>
+                <span data-bind="whatsNew" hidden></span>
+                <span data-bind="rdate" hidden></span>
+
+                <div class="ms-chips">
+                  <span data-bind="catGoogle">Productivity</span>
+                  <span>#<span data-bind="rank">1</span> Top Free</span>
+                  <span>Habit Tracker</span>
+                  <span>Focus</span>
+                </div>
+              </div>
+
+              <!-- 2. Data safety -->
+              <div class="ms-g-blk">
+                <div class="ms-g-h">
+                  <span>Data safety</span>
+                  <span class="ms-g-arrow">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
+                </div>
+                <div class="ms-safe-intro">Safety starts with understanding how developers collect and share your data.
+                  Data privacy and security practices may vary based on your use, region, and age.</div>
+                <div class="ms-safe">
+                  <div class="ms-safe-row">
+                    <div class="ms-safe-head">
+                      <span class="ms-safe-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="18" cy="5" r="2.8"></circle>
+                          <circle cx="6" cy="12" r="2.8"></circle>
+                          <circle cx="18" cy="19" r="2.8"></circle>
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg></span>
+                      <b>No data shared with third parties</b>
+                    </div>
+                    <p class="ms-safe-sub"><u>Learn more</u> about how developers declare sharing</p>
+                  </div>
+                  <div class="ms-safe-row">
+                    <div class="ms-safe-head">
+                      <span class="ms-safe-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3.5" y="11" width="17" height="11" rx="2"></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                          <circle cx="12" cy="16" r="1.2" fill="currentColor"></circle>
+                          <line x1="12" y1="17.2" x2="12" y2="19"></line>
+                        </svg></span>
+                      <b>Data is encrypted in transit</b>
+                    </div>
+                  </div>
+                  <div class="ms-safe-row">
+                    <div class="ms-safe-head">
+                      <span class="ms-safe-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M9 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"></path>
+                          <line x1="4" y1="6" x2="20" y2="6"></line>
+                          <path d="M5.5 6l.9 13a2 2 0 0 0 2 2h7.2a2 2 0 0 0 2-2l.9-13"></path>
+                          <line x1="10" y1="10" x2="10" y2="17"></line>
+                          <line x1="14" y1="10" x2="14" y2="17"></line>
+                        </svg></span>
+                      <b>You can request data deletion</b>
+                    </div>
+                  </div>
+                  <span class="ms-safe-more">See details</span>
+                </div>
+              </div>
+
+              <!-- 3. Ratings and reviews -->
+              <div class="ms-g-blk">
+                <div class="ms-g-h">
+                  <span>Ratings and reviews</span>
+                  <span class="ms-g-arrow">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
+                </div>
+                <div class="ms-safe-intro" style="margin-bottom:10px">Ratings and reviews are verified and are from
+                  people who use the same type of device that you use <span style="font-size:10px">ⓘ</span></div>
+                <div class="ms-g-rating-breakdown">
+                  <div class="ms-g-rb-left">
+                    <div class="ms-g-rb-num"><span data-bind="rating">4.9</span></div>
+                    <div class="ms-g-rb-stars">★★★★★</div>
+                    <div class="ms-g-rb-cnt"><span data-bind="count">1.8K</span> reviews</div>
+                  </div>
+                  <div class="ms-g-rb-bars">
+                    <div class="ms-g-bar-row"><span>5</span>
+                      <div class="ms-g-bar-track">
+                        <div class="ms-g-bar-fill" style="width:82%"></div>
+                      </div>
+                    </div>
+                    <div class="ms-g-bar-row"><span>4</span>
+                      <div class="ms-g-bar-track">
+                        <div class="ms-g-bar-fill" style="width:11%"></div>
+                      </div>
+                    </div>
+                    <div class="ms-g-bar-row"><span>3</span>
+                      <div class="ms-g-bar-track">
+                        <div class="ms-g-bar-fill" style="width:4%"></div>
+                      </div>
+                    </div>
+                    <div class="ms-g-bar-row"><span>2</span>
+                      <div class="ms-g-bar-track">
+                        <div class="ms-g-bar-fill" style="width:1.5%"></div>
+                      </div>
+                    </div>
+                    <div class="ms-g-bar-row"><span>1</span>
+                      <div class="ms-g-bar-track">
+                        <div class="ms-g-bar-fill" style="width:1.5%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ms-g-reviews-list">
+                  <div class="ms-g-rev-card">
+                    <div class="ms-g-rev-head">
+                      <span class="ms-g-rev-avatar" style="background:#0b57d0">M</span>
+                      <span class="ms-g-rev-author">Marcus Vance</span>
+                      <span class="ms-g-rev-more"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                          <circle cx="12" cy="5" r="2"></circle>
+                          <circle cx="12" cy="12" r="2"></circle>
+                          <circle cx="12" cy="19" r="2"></circle>
+                        </svg></span>
+                    </div>
+                    <div class="ms-g-rev-stars">★★★★★ <span class="ms-g-rev-date">Oct 15, 2026</span></div>
+                    <div class="ms-g-rev-body">Clean UI, smooth animations, and very effective for daily tracking. The
+                      widget integration on Android 15 is top-notch!</div>
+                    <div class="ms-g-rev-helpful">108 people found this review helpful</div>
+                    <div class="ms-g-rev-actions">Did you find this helpful? <button type="button"
+                        class="ms-g-chip-btn">Yes</button> <button type="button" class="ms-g-chip-btn">No</button></div>
+                  </div>
+                  <div class="ms-g-rev-card">
+                    <div class="ms-g-rev-head">
+                      <span class="ms-g-rev-avatar" style="background:#7c3aed">S</span>
+                      <span class="ms-g-rev-author">Sarah Jenkins</span>
+                      <span class="ms-g-rev-more"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                          <circle cx="12" cy="5" r="2"></circle>
+                          <circle cx="12" cy="12" r="2"></circle>
+                          <circle cx="12" cy="19" r="2"></circle>
+                        </svg></span>
+                    </div>
+                    <div class="ms-g-rev-stars">★★★★★ <span class="ms-g-rev-date">Oct 8, 2026</span></div>
+                    <div class="ms-g-rev-body">The Pomodoro timer coupled with habit streaks completely transformed my
+                      workday focus. Cloud sync across phone and tablet is seamless.</div>
+                    <div class="ms-g-rev-helpful">64 people found this review helpful</div>
+                    <div class="ms-g-rev-actions">Did you find this helpful? <button type="button"
+                        class="ms-g-chip-btn">Yes</button> <button type="button" class="ms-g-chip-btn">No</button></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. App support -->
+              <div class="ms-g-blk">
+                <div class="ms-g-h">
+                  <span>App support</span>
+                  <span class="ms-g-arrow">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </div>
+                <div class="ms-g-sup">
+                  <div class="ms-g-sup-row">
+                    <div class="ms-g-sup-head">
+                      <span class="ms-g-sup-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="9"></circle>
+                          <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 0 0 0 18M12 3a14.5 14.5 0 0 1 0 18"></path>
+                        </svg></span>
+                      <b>Website</b>
+                    </div>
+                  </div>
+                  <div class="ms-g-sup-row">
+                    <div class="ms-g-sup-head">
+                      <span class="ms-g-sup-ico"><svg viewBox="0 0 24 24" fill="currentColor">
+                          <path
+                            d="M6.54 5c.06.89.21 1.76.45 2.59l-1.2 1.2c-.41-1.2-.67-2.47-.76-3.79zm9.86 12.02c.85.24 1.72.39 2.6.45v1.49c-1.32-.09-2.59-.35-3.8-.75zM7.5 3H4c-.55 0-1 .45-1 1c0 9.39 7.61 17 17 17c.55 0 1-.45 1-1v-3.49c0-.55-.45-1-1-1c-1.24 0-2.45-.2-3.57-.57a.8.8 0 0 0-.31-.05c-.26 0-.51.1-.71.29l-2.2 2.2a15.15 15.15 0 0 1-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02A11.4 11.4 0 0 1 8.5 4c0-.55-.45-1-1-1" />
+                        </svg></span>
+                      <b>Phone number</b>
+                    </div>
+                    <small class="ms-g-sup-sub" data-bind="phone">+1 800-555-0199</small>
+                  </div>
+                  <div class="ms-g-sup-row">
+                    <div class="ms-g-sup-head">
+                      <span class="ms-g-sup-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                          <polyline points="3 7 12 13 21 7"></polyline>
+                        </svg></span>
+                      <b>Email</b>
+                    </div>
+                    <small class="ms-g-sup-sub" data-bind="email">support@domain.com</small>
+                  </div>
+                  <div class="ms-g-sup-row">
+                    <div class="ms-g-sup-head">
+                      <span class="ms-g-sup-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg></span>
+                      <b>Privacy policy</b>
+                    </div>
+                  </div>
+                  <div class="ms-g-sup-dev">
+                    <b>About the developer</b>
+                    <div data-bind="dev">Developer Name</div>
+                    <div data-bind="email">support@domain.com</div>
+                    <div>Vietnam</div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.ms-view-detail -->
+
+            <!-- Google Play Search Result View (Modern Material You Style) -->
+            <div class="ms-view-search gp-search-view" data-v="search" style="display:none">
+              <!-- Sticky Search Header (Search Bar + Filter Chips) -->
+              <div class="gp-search-header">
+                <div class="gp-search-bar">
+                  <button type="button" class="gp-search-back-btn" aria-label="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="19" y1="12" x2="5" y2="12"></line>
+                      <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                  </button>
+                  <div class="gp-search-input-box">
+                    <span class="gp-search-query-text" data-bind="name">App Name</span>
+                  </div>
+                  <div class="gp-search-bar-actions">
+                    <button type="button" class="gp-search-act-btn" aria-label="Search">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                    </button>
+                    <button type="button" class="gp-search-act-btn" aria-label="Voice Search">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="22"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Horizontal Filter Chips Carousel -->
+                <div class="gp-search-chips-wrap">
+                  <div class="gp-search-chip gp-chip-dropdown">
+                    <span>Rating</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="gp-search-chip"><span>Family</span></div>
+                  <div class="gp-search-chip"><span>New</span></div>
+                  <div class="gp-search-chip"><span>Widgets</span></div>
+                  <div class="gp-search-chip"><span>Top charts</span></div>
+                </div>
+              </div>
+
+              <!-- Search Results Feed -->
+              <div class="gp-search-list">
+                <!-- Primary Target App Card -->
+                <div class="gp-search-card primary is-expanded">
+                  <div class="gp-search-card-main">
+                    <img data-img="icon" data-f="icon" alt="App Icon" class="gp-search-card-icon">
+                    <div class="gp-search-card-info">
+                      <div class="gp-search-card-name" data-bind="name">App Name</div>
+                      <div class="gp-search-card-meta">
+                        <span data-bind="dev">Developer Name</span> &bull; <span data-bind="catGoogle">Category</span>
+                      </div>
+                      <div class="gp-search-card-stats">
+                        <span class="gp-stat-rating">
+                          <span data-bind="rating">4.8</span>
+                          <svg class="gp-star-ico" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                          </svg>
+                        </span>
+                        <span class="gp-stat-size"><span>45 MB</span></span>
+                        <span class="gp-stat-dl">
+                          <svg class="gp-dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                          </svg>
+                          <span>100K+</span>
+                        </span>
+                      </div>
+                    </div>
+                    <button type="button" class="gp-search-action-btn" title="Toggle screenshots" aria-label="Toggle screenshots">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- 3 Screenshots Gallery -->
+                  <div class="gp-search-shots" data-shots="gp-search">
+                    <div class="gp-skel-shot"></div>
+                    <div class="gp-skel-shot"></div>
+                    <div class="gp-skel-shot"></div>
+                  </div>
+                </div>
+
+                <!-- Secondary Skeleton Cards -->
+                <div class="gp-search-card gp-skel-card" aria-hidden="true">
+                  <div class="gp-search-card-main">
+                    <div class="gp-skel-icon"></div>
+                    <div class="gp-search-card-info">
+                      <div class="gp-skel-line w-50"></div>
+                      <div class="gp-skel-line w-70"></div>
+                      <div class="gp-skel-line w-35"></div>
+                    </div>
+                    <div class="gp-skel-btn"></div>
+                  </div>
+                </div>
+
+                <div class="gp-search-card gp-skel-card" aria-hidden="true">
+                  <div class="gp-search-card-main">
+                    <div class="gp-skel-icon"></div>
+                    <div class="gp-search-card-info">
+                      <div class="gp-skel-line w-60"></div>
+                      <div class="gp-skel-line w-65"></div>
+                      <div class="gp-skel-line w-40"></div>
+                    </div>
+                    <div class="gp-skel-btn"></div>
+                  </div>
+                </div>
+
+                <div class="gp-search-card gp-skel-card" aria-hidden="true">
+                  <div class="gp-search-card-main">
+                    <div class="gp-skel-icon"></div>
+                    <div class="gp-search-card-info">
+                      <div class="gp-skel-line w-40"></div>
+                      <div class="gp-skel-line w-75"></div>
+                      <div class="gp-skel-line w-30"></div>
+                    </div>
+                    <div class="gp-skel-btn"></div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.gp-search-view -->
+            </div>
+            <div class="ms-gnav">
+              <div><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M6.2 6h11.6c1.7 0 3.1 1.2 3.4 2.9l.8 5.1c.2 1.5-.9 2.8-2.4 2.8-.7 0-1.4-.3-1.8-.9L15.6 14H8.4l-2.2 1.9c-.4.6-1.1.9-1.8.9-1.5 0-2.6-1.3-2.4-2.8l.8-5.1C3.1 7.2 4.5 6 6.2 6z" />
+                    <line x1="7.5" y1="9" x2="7.5" y2="12" />
+                    <line x1="6" y1="10.5" x2="9" y2="10.5" />
+                    <circle cx="15.2" cy="11.2" r="1" fill="currentColor" stroke="none" />
+                    <circle cx="17" cy="9.6" r="1" fill="currentColor" stroke="none" />
+                  </svg></span>Games</div>
+              <div class="on"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="4" width="6.5" height="6.5" rx="1.2" />
+                    <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2" />
+                    <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2" />
+                    <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2" />
+                  </svg></span>Apps</div>
+              <div><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="6.5" />
+                    <line x1="20" y1="20" x2="15.8" y2="15.8" />
+                  </svg></span>Search</div>
+              <div><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="3" width="14" height="18" rx="2" />
+                    <path d="M11 3v7l2.5-1.5L16 10V3" fill="currentColor" />
+                  </svg></span>Books</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Floating Lock Toast for Plus Features Unlock -->
+  <div class="ms-toast" id="msToast" hidden>
+    <div class="ms-toast-body">
+      <div class="ms-toast-header-row">
+        <span class="ms-tag plus buy" id="msToastTag">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          BUY
+        </span>
+        <b id="msToastTitle">Exclusive Device</b>
+      </div>
+      <span id="msToastDesc">Available in Plus Edition &amp; Pro Studio</span>
+    </div>
+    <a href="#pricing" class="ms-toast-cta" id="msToastCta">
+      <span>Buy Now</span>
+    </a>
+    <button type="button" class="ms-toast-close" id="msToastClose" aria-label="Close notification">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</div>

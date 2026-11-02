@@ -1,0 +1,312 @@
+    /* Sticky Floating Glass Capsule Navigation */
+    .navbar-wrapper {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 14px 20px 8px;
+      pointer-events: none;
+      transition: padding 0.25s ease;
+    }
+
+    .navbar {
+      pointer-events: auto;
+      width: calc(100% - 32px);
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 8px 10px 8px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 29, 0.72);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    [data-theme="light"] .navbar {
+      background: rgba(255, 255, 255, 0.82);
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 14px 36px -10px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    /* Brand Logo & Micro-badge */
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-theme="light"] .brand-icon {
+      box-shadow: 0 2px 6px -1px rgba(59, 130, 246, 0.22), 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+    .nav-brand:hover .brand-icon {
+      transform: scale(1.06) rotate(-2deg);
+    }
+    .nav-brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.015em;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+    [data-theme="light"] .nav-brand-title {
+      color: #0f172a;
+    }
+
+    .nav-brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      color: #60a5fa;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+    }
+    [data-theme="light"] .nav-brand-badge {
+      background: rgba(37, 99, 235, 0.08);
+      border-color: rgba(37, 99, 235, 0.2);
+      color: #2563eb;
+    }
+
+    /* Navigation Links & Action Buttons */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .nav-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Sliding Capsule Active Pill with smooth spring-like transition */
+    .nav-pill-indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: 1;
+      background: #ffffff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 14px rgba(255, 255, 255, 0.22);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      opacity: 0;
+      transform: translate3d(0, 0, 0);
+      will-change: transform, width;
+    }
+    [data-theme="light"] .nav-pill-indicator {
+      background: #334155;
+      box-shadow: 0 3px 12px rgba(51, 65, 85, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .nav-link-item {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 16px;
+      border-radius: 9999px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      background: transparent;
+      transition: color 0.24s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .nav-link-item:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .nav-link-item.active {
+      color: #070a14;
+      font-weight: 600;
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+    }
+    .nav-link-item.active:hover {
+      color: #070a14;
+      background: transparent !important;
+    }
+
+    [data-theme="light"] .nav-link-item {
+      color: #64748b;
+    }
+    [data-theme="light"] .nav-link-item:hover {
+      color: #0f172a;
+      background: rgba(0, 0, 0, 0.05);
+    }
+    [data-theme="light"] .nav-link-item.active {
+      color: #ffffff;
+      font-weight: 600;
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+    }
+    [data-theme="light"] .nav-link-item.active:hover {
+      color: #ffffff;
+      background: transparent !important;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.14);
+      margin: 0 14px;
+    }
+    [data-theme="light"] .nav-divider {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Nav CTA Button */
+    .btn-nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: linear-gradient(135deg, #3b82f6 0%, #6366f1 55%, #8b5cf6 100%);
+      color: #ffffff !important;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 13.5px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 4px 16px rgba(99, 102, 241, 0.38);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-nav-cta:hover {
+      transform: scale(1.04);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 8px 24px rgba(99, 102, 241, 0.55);
+    }
+    [data-theme="light"] .btn-nav-cta {
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 3px 10px -2px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+    [data-theme="light"] .btn-nav-cta:hover {
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), 0 6px 16px -2px rgba(99, 102, 241, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+    .btn-nav-cta:active {
+      transform: scale(0.98);
+    }
+    .cta-arrow {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-nav-cta:hover .cta-arrow {
+      transform: translateX(3px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1080px) {
+      .navbar {
+        width: calc(100% - 20px);
+        padding: 7px 10px 7px 14px;
+      }
+      .nav-brand-badge {
+        display: none;
+      }
+      .nav-menu {
+        gap: 4px;
+      }
+      .nav-link-item {
+        padding: 6px 11px;
+        font-size: 13px;
+      }
+      .nav-divider {
+        margin: 0 8px;
+      }
+      .nav-actions {
+        gap: 10px;
+      }
+      .btn-nav-cta {
+        padding: 7px 14px;
+        font-size: 13px;
+      }
+    }
+    @media (max-width: 960px) {
+      .navbar-wrapper {
+        padding: 10px 14px 6px;
+      }
+      .navbar {
+        width: 100%;
+        max-width: 100%;
+        padding: 6px 8px 6px 14px;
+      }
+      .nav-brand-badge {
+        display: none;
+      }
+      .nav-menu,
+      .nav-divider {
+        display: none;
+      }
+      .nav-actions {
+        gap: 8px;
+      }
+    }
+    @media (max-width: 480px) {
+      .navbar-wrapper {
+        padding: 8px 10px 4px;
+      }
+      .nav-brand {
+        gap: 8px;
+      }
+      .brand-icon {
+        width: 30px;
+        height: 30px;
+      }
+      .nav-brand-title {
+        font-size: 14.5px;
+      }
+      .btn-nav-cta {
+        padding: 7px 13px;
+        font-size: 12.5px;
+      }
+      .btn-nav-cta .cta-arrow {
+        display: none;
+      }
+    }

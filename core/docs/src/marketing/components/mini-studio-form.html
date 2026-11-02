@@ -1,0 +1,181 @@
+    <!-- LEFT: Listing Editor Column -->
+    <div class="ms-editor-col">
+      <!-- Card: Core Listing Information & Fields -->
+      <div class="ms-editor" id="msEditor">
+        <div class="ms-ed-head">
+          <div class="ms-ed-title">
+            <span class="ms-ed-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+              </svg>
+            </span>
+            <h3 id="msEdTitle">App Identity</h3>
+          </div>
+        </div>
+
+        <!-- Icon Slot: Apple / Single -->
+        <div class="ms-icon-row" id="msIconRowApple">
+          <div class="ms-icon-drop" id="msIconDropApple" data-f="icon" title="View icon in high resolution"
+            tabindex="0">
+            <img id="msIconImgApple" alt="Apple App icon" hidden>
+            <div class="ms-ov">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+            </div>
+          </div>
+          <div class="ms-icon-meta">
+            <div class="ms-icon-meta-head">
+              <div class="ms-icon-title">
+                <span>App Icon (1024×1024 px)</span>
+                <span class="ms-tag a" id="msIconTagApple">APPLE</span>
+              </div>
+            </div>
+            <div class="ms-icon-sub">PNG &middot; <strong>1:1 Square</strong> &middot; 100% Opaque</div>
+            <div class="ms-icon-actions">
+              <button type="button" class="btn-white btn-upload-icon" id="msIconUploadBtnApple">
+                <span class="btn-mini-ico">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                </span>
+                <span>Upload Icon</span>
+              </button>
+              <button type="button" class="btn-black btn-upload-icon btn-inspect-icon" id="msIconInspectBtnApple"
+                title="Inspect Icon Details &amp; Store Compliance">
+                <span class="btn-mini-ico">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </span>
+                <span>Inspect</span>
+              </button>
+            </div>
+            <div id="msIconBadgeApple" class="ms-icon-status" style="display:none;" title="Click to inspect icon details"></div>
+          </div>
+          <input type="file" id="msIconInputApple" accept="image/*" hidden>
+        </div>
+
+        <!-- Icon Slot: Google (Dual View & Google Only) -->
+        <div class="ms-icon-row" id="msIconRowGoogle">
+          <div class="ms-icon-drop" id="msIconDropGoogle" data-f="iconGoogle" title="View icon in high resolution"
+            tabindex="0">
+            <img id="msIconImgGoogle" alt="Google Play icon" hidden>
+            <div class="ms-ov">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+            </div>
+          </div>
+          <div class="ms-icon-meta">
+            <div class="ms-icon-meta-head">
+              <div class="ms-icon-title">
+                <span>App Icon (512×512 px)</span>
+                <span class="ms-tag g">GOOGLE</span>
+              </div>
+            </div>
+            <div class="ms-icon-sub">32-bit PNG &middot; <strong>1:1 Square</strong> &middot; Max 1024 KB</div>
+            <div class="ms-icon-actions">
+              <button type="button" class="btn-white btn-upload-icon" id="msIconUploadBtnGoogle">
+                <span class="btn-mini-ico">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                </span>
+                <span>Upload Icon</span>
+              </button>
+              <button type="button" class="btn-black btn-upload-icon btn-inspect-icon" id="msIconInspectBtnGoogle"
+                title="Inspect Icon Details &amp; Store Compliance">
+                <span class="btn-mini-ico">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </span>
+                <span>Inspect</span>
+              </button>
+            </div>
+            <div id="msIconBadgeGoogle" class="ms-icon-status" style="display:none;" title="Click to inspect icon details"></div>
+          </div>
+          <input type="file" id="msIconInputGoogle" accept="image/*" hidden>
+        </div>
+
+        <div class="ms-field">
+          <div class="ms-field-h">
+            <label for="msName" id="msNameLabel">
+              <span>App Name</span>
+              <span class="ms-tag a" id="msNameTagApple">APPLE</span>
+              <span class="ms-tag g" id="msNameTagGoogle">GOOGLE</span>
+            </label>
+            <span class="ms-count" id="msNameCount">0 / 30</span>
+          </div>
+          <input class="ms-input" id="msName" data-f="name" data-max="30" type="text"
+            placeholder="e.g. TaskFlow: Daily Habit Planner" autocomplete="off">
+          <div class="ms-bar"><i id="msNameBar"></i></div>
+        </div>
+
+        <div class="ms-field" data-only="apple">
+          <div class="ms-field-h">
+            <label for="msSub"><span>Subtitle</span> <span class="ms-tag a">APPLE</span></label>
+            <span class="ms-count" id="msSubCount">0 / 30</span>
+          </div>
+          <input class="ms-input" id="msSub" data-f="sub" data-max="30" type="text"
+            placeholder="Short hook under your name" autocomplete="off">
+          <div class="ms-bar"><i id="msSubBar"></i></div>
+        </div>
+
+        <div class="ms-field" data-only="google">
+          <div class="ms-field-h">
+            <label for="msShort"><span>Short Description</span> <span class="ms-tag g">GOOGLE</span></label>
+            <span class="ms-count" id="msShortCount">0 / 80</span>
+          </div>
+          <textarea class="ms-input" id="msShort" data-f="short" data-max="80" rows="2"
+            placeholder="What your app does, in 80 characters"></textarea>
+          <div class="ms-bar"><i id="msShortBar"></i></div>
+        </div>
+
+        <div class="ms-field">
+          <div class="ms-field-h">
+            <label id="msShotsLabel"><span>Phone Screenshots</span> <span class="ms-tag plus buy">BUY</span></label>
+          </div>
+          <div class="ms-shots-container" id="msShotsContainer">
+            <div class="ms-shots-grid" id="msShotsGrid"></div>
+            <a href="#pricing" class="ms-shots-lock-overlay" id="msShotsLock">
+              <span class="ms-lock-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <span>Buy Now</span>
+              </span>
+            </a>
+          </div>
+          <div class="ms-form-plus-note">
+            <svg class="ms-note-lock" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Unlock <span class="ms-plus-green">Plus Edition</span> to preview iPad &amp; Android tablet formats, customize store listings, import presets, and export asset packages.</span>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,187 @@
+/* ─── Mini Studio: Responsive Breakpoints (1200px, 720px, 480px, 360px) ─── */
+
+    @media (max-width: 1200px) {
+      .ms-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .ms-shots-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .ms-shots-grid {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        justify-content: flex-start;
+      }
+
+      .ms-shot {
+        flex: 0 0 135px;
+        width: 135px;
+        height: 292px;
+      }
+
+      .ms-stage {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 24px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 24px 16px 28px;
+      }
+
+      .ms-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .ms-toolbar-left {
+        width: auto;
+      }
+
+      #msStoreSeg {
+        width: auto;
+        justify-self: auto;
+      }
+
+      #msStoreSeg button {
+        flex: 0 0 auto;
+        width: auto;
+        padding: 6px 12px;
+      }
+
+      .ms-dev-seg {
+        justify-self: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero-mockup-wrapper {
+        padding: 14px 10px;
+        border-radius: 18px;
+      }
+
+      .ms-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .ms-toolbar-left {
+        width: 100%;
+      }
+
+      .ms-toolbar-right {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+
+      .ms-export-dropdown .menu {
+        left: 0;
+        right: auto;
+        width: min(320px, calc(100vw - 28px));
+        max-width: calc(100vw - 28px);
+      }
+
+      #msStoreSeg,
+      .ms-dev-seg {
+        width: auto;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+
+      .ms-stage {
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        padding: 16px 8px;
+      }
+
+      .ms-stage-theme-bar {
+        position: static;
+        width: 100%;
+        max-width: 290px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: -12px;
+      }
+
+      .ms-device {
+        width: 100%;
+        max-width: 290px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ms-toolbar-right {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .ms-export-dropdown .menu {
+        left: 0;
+        right: auto;
+        width: min(310px, calc(100vw - 24px));
+        max-width: calc(100vw - 24px);
+      }
+
+      .ms-seg button,
+      .ms-seg a {
+        padding: 5px 8px;
+        font-size: 11px;
+        gap: 4px;
+      }
+
+      .ms-seg button svg,
+      .ms-seg a svg {
+        width: 11px;
+        height: 11px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hero-mockup-wrapper {
+        padding: 10px 6px;
+        border-radius: 14px;
+      }
+
+      .ms-stage {
+        padding: 12px 4px;
+      }
+
+      .ms-phone {
+        width: 100%;
+        max-width: 275px;
+        height: 560px;
+      }
+
+      .ms-dev-label {
+        max-width: 275px;
+      }
+
+      .ms-stage-theme-bar {
+        max-width: 275px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .ms-form-plus-note {
+        font-size: 11px;
+        line-height: 1.45;
+        gap: 6px;
+        margin-top: 8px;
+      }
+    }

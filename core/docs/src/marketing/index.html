@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Preview Studio</title>
+  <meta name="description" content="The zero-server, 100% offline studio to design, preview, and validate Apple App Store & Google Play listings with realistic device mockups.">
+
+  <!-- Open Graph / Facebook / Zalo / Telegram / iMessage -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://store-preview-studio.pages.dev/">
+  <meta property="og:title" content="Store Preview Studio">
+  <meta property="og:description" content="The zero-server, 100% offline studio to design, preview, and validate Apple App Store & Google Play listings with realistic device mockups.">
+  <meta property="og:image" content="https://store-preview-studio.pages.dev/og-image.png?v=20261026-4k">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Store Preview Studio">
+  <meta name="twitter:description" content="The zero-server, 100% offline studio to design, preview, and validate Apple App Store & Google Play listings with realistic device mockups.">
+  <meta name="twitter:image" content="https://store-preview-studio.pages.dev/og-image.png?v=20261026-4k">
+  <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <script>
+    try {
+      var t = localStorage.getItem("store_preview_mkt_theme_v2");
+      if (!t) {
+        t = "light";
+        localStorage.setItem("store_preview_mkt_theme_v2", "light");
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    } catch(e) { document.documentElement.setAttribute("data-theme", "light"); }
+  </script>
+  <style>
+    /* @include "css/variables.css" */
+    /* @include "css/navbar.css" */
+    /* @include "css/hero.css" */
+    /* @include "css/mini-studio.css" */
+    /* @include "css/comparison.css" */
+    /* @include "css/pricing.css" */
+    /* @include "css/faq.css" */
+    /* @include "css/footer.css" */
+    /* @include "css/launch-modal.css" */
+  </style>
+  <!-- Microsoft Clarity Tracking -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "z3c2oaazvl");
+  </script>
+</head>
+<body>
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- @include "components/navbar.html" -->
+
+  <div class="container">
+    <!-- @include "components/hero.html" -->
+  </div>
+
+  <div class="container-wide">
+    <!-- @include "components/mini-studio.html" -->
+  </div>
+
+  <div class="container">
+    <!-- @include "components/comparison.html" -->
+    <!-- @include "components/pricing.html" -->
+    <!-- @include "components/faq.html" -->
+    <!-- @include "components/footer.html" -->
+  </div>
+
+  <!-- @include "components/launch-modal.html" -->
+  <!-- @include "components/modals/icon-modal.html" -->
+
+  <script>
+/* @include "../../showcase-data.js" */
+/* @include "js/modules/modal.js" */
+/* @include "js/mini-studio.js" */
+/* @include "js/page.js" */
+/* @include "js/launch-modal.js" */
+  </script>
+</body>
+</html>

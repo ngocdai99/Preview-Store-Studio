@@ -1,0 +1,26 @@
+    /* ═══════════ Hero Showcase · Interactive Mini-Studio (ms-*) ═══════════ */
+    .hero-mockup-wrapper {
+      margin: 10px auto 100px;
+      background: linear-gradient(180deg, #171817 0%, #131413 100%);
+      border: 1px solid #282928;
+      border-radius: 24px;
+      padding: 22px 24px 20px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .8), 0 0 0 1px rgba(255, 255, 255, .03) inset;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .ms-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ─── Modular Styles ─── */
+    /* @include "mini-studio-toolbar.css" */
+    /* @include "mini-studio-form.css" */
+    /* @include "mini-studio-stage.css" */
+    /* @include "icon-modal.css" */
+    /* @include "mini-studio-responsive.css" */
