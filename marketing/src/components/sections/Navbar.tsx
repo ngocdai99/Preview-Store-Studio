@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { BrandIcon } from "@/components/ui/BrandIcon";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { Menu, X } from "lucide-react";
 
 export function Navbar() {
@@ -55,7 +56,7 @@ export function Navbar() {
   }, []);
 
   const handleNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
+    e: React.MouseEvent<HTMLElement>,
     label: string,
     href: string
   ) => {
@@ -131,13 +132,15 @@ export function Navbar() {
             Live Demo
           </a>
 
-          <Link
+          <PrimaryButton
             href="#pricing"
             onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[13px] font-semibold text-white bg-[#006553] hover:bg-[#007a64] border border-[#00D085]/35 shadow-xs transition-colors duration-150 shrink-0"
+            fontSize="13px"
+            fontWeight={600}
+            className="px-3.5 py-1.5 sm:px-4 sm:py-2 shrink-0"
           >
             <span>Get Access</span>
-          </Link>
+          </PrimaryButton>
 
           {/* Mobile Hamburger Button */}
           <button
