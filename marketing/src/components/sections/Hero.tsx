@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
 export function Hero() {
   const { hero } = siteConfig;
@@ -7,7 +8,7 @@ export function Hero() {
   return (
     <section id="hero" className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden">
       {/* Background Soft Supabase Emerald Aurora Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-emerald-500/18 via-[#00D085]/14 to-[#006553]/22 blur-[130px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-emerald-500/18 via-[#00D085]/14 to-[#006636]/22 blur-[130px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
         {/* Main H1 */}
@@ -25,12 +26,14 @@ export function Hero() {
 
         {/* CTAs */}
         <div className="mt-1 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
-          <Link
+          <PrimaryButton
             href={hero.primaryCta.href}
-            className="group w-full sm:w-auto inline-flex items-center justify-center h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px] bg-[#006553] hover:bg-[#007a64] text-white font-bold text-[14.5px] sm:text-[15.5px] tracking-[-0.01em] border border-[#00D085]/35 shadow-xs transition-colors duration-150"
+            fontSize="15px"
+            fontWeight={700}
+            className="w-full sm:w-auto h-[46px] sm:h-[48px] px-6 sm:px-7 rounded-xl sm:rounded-[14px]"
           >
             <span>{hero.primaryCta.label}</span>
-          </Link>
+          </PrimaryButton>
 
           <a
             href={hero.secondaryCta.href}

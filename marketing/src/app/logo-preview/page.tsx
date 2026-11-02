@@ -16,7 +16,7 @@ export default function LogoPreviewPage() {
                 ← Back to Landing Page
               </Link>
               <span className="text-xs font-bold uppercase tracking-wider text-[#00D085] bg-[#00D085]/10 border border-[#00D085]/30 px-2.5 py-1 rounded-md">
-                Chân Chữ Nhật Bo Góc iPad (#006553 & #00D085)
+                Chân Chữ Nhật Bo Góc iPad (#006636 & #00D085)
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
@@ -60,7 +60,7 @@ export default function LogoPreviewPage() {
                     </defs>
                     <path
                       d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                      fill="#006553"
+                      fill="#006636"
                     />
                     <g filter="url(#p21-sh)">
                       <path
@@ -75,7 +75,7 @@ export default function LogoPreviewPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
                     <path
                       d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                      fill="#006553"
+                      fill="#006636"
                     />
                     <g filter="url(#p21-sh)">
                       <path
@@ -90,7 +90,7 @@ export default function LogoPreviewPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
                     <path
                       d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                      fill="#006553"
+                      fill="#006636"
                     />
                     <g filter="url(#p21-sh)">
                       <path
@@ -108,7 +108,7 @@ export default function LogoPreviewPage() {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
                   <path
                     d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                    fill="#006553"
+                    fill="#006636"
                   />
                   <g filter="url(#p21-sh)">
                     <path
@@ -118,7 +118,7 @@ export default function LogoPreviewPage() {
                   </g>
                 </svg>
                 <span className="text-xs font-bold text-white">Store Preview Studio</span>
-                <span className="ml-auto text-[10.5px] font-semibold bg-[#006553] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
+                <span className="ml-auto text-[10.5px] font-semibold bg-[#006636] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
                   Get Access
                 </span>
               </div>
@@ -156,8 +156,8 @@ export default function LogoPreviewPage() {
                         <feDropShadow dx="-2.5" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.8" />
                       </filter>
                     </defs>
-                    <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006553" />
-                    <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006553" />
+                    <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006636" />
+                    <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006636" />
                     <g filter="url(#p22-sh)">
                       <path
                         d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
@@ -169,8 +169,8 @@ export default function LogoPreviewPage() {
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
-                    <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006553" />
-                    <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006553" />
+                    <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006636" />
+                    <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006636" />
                     <g filter="url(#p22-sh)">
                       <path
                         d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
@@ -182,8 +182,8 @@ export default function LogoPreviewPage() {
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
-                    <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006553" />
-                    <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006553" />
+                    <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006636" />
+                    <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006636" />
                     <g filter="url(#p22-sh)">
                       <path
                         d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
@@ -198,8 +198,8 @@ export default function LogoPreviewPage() {
               {/* Live Navbar Mockup */}
               <div className="bg-white/[0.03] border border-white/5 rounded-lg px-3.5 py-2.5 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
-                  <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006553" />
-                  <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006553" />
+                  <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,50 L 18,50 Z" fill="#006636" />
+                  <rect x="36" y="44" width="22" height="48" rx="6" transform="rotate(-45 36 44)" fill="#006636" />
                   <g filter="url(#p22-sh)">
                     <path
                       d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
@@ -208,7 +208,7 @@ export default function LogoPreviewPage() {
                   </g>
                 </svg>
                 <span className="text-xs font-bold text-white">Store Preview Studio</span>
-                <span className="ml-auto text-[10.5px] font-semibold bg-[#006553] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
+                <span className="ml-auto text-[10.5px] font-semibold bg-[#006636] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
                   Get Access
                 </span>
               </div>
@@ -248,7 +248,7 @@ export default function LogoPreviewPage() {
                     </defs>
                     <path
                       d="M 18,24 C 18,17 22,14 28,14 C 34,14 38,17 38,24 L 38,44 L 72,74 C 77,78 77,86 72,90 C 67,94 59,94 55,90 L 26,64 C 21,60 18,56 18,50 Z"
-                      fill="#006553"
+                      fill="#006636"
                     />
                     <g filter="url(#p10-sh)">
                       <path
@@ -263,7 +263,7 @@ export default function LogoPreviewPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-12 h-12">
                     <path
                       d="M 18,24 C 18,17 22,14 28,14 C 34,14 38,17 38,24 L 38,44 L 72,74 C 77,78 77,86 72,90 C 67,94 59,94 55,90 L 26,64 C 21,60 18,56 18,50 Z"
-                      fill="#006553"
+                      fill="#006636"
                     />
                     <g filter="url(#p10-sh)">
                       <path
@@ -278,7 +278,7 @@ export default function LogoPreviewPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
                     <path
                       d="M 18,24 C 18,17 22,14 28,14 C 34,14 38,17 38,24 L 38,44 L 72,74 C 77,78 77,86 72,90 C 67,94 59,94 55,90 L 26,64 C 21,60 18,56 18,50 Z"
-                      fill="#006553"
+                      fill="#006636"
                     />
                     <g filter="url(#p10-sh)">
                       <path
@@ -296,7 +296,7 @@ export default function LogoPreviewPage() {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
                   <path
                     d="M 18,24 C 18,17 22,14 28,14 C 34,14 38,17 38,24 L 38,44 L 72,74 C 77,78 77,86 72,90 C 67,94 59,94 55,90 L 26,64 C 21,60 18,56 18,50 Z"
-                    fill="#006553"
+                    fill="#006636"
                   />
                   <g filter="url(#p10-sh)">
                     <path
@@ -306,7 +306,7 @@ export default function LogoPreviewPage() {
                   </g>
                 </svg>
                 <span className="text-xs font-bold text-white">Store Preview Studio</span>
-                <span className="ml-auto text-[10.5px] font-semibold bg-[#006553] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
+                <span className="ml-auto text-[10.5px] font-semibold bg-[#006636] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
                   Get Access
                 </span>
               </div>
@@ -314,7 +314,7 @@ export default function LogoPreviewPage() {
 
             <div className="mt-5 pt-4 border-t border-white/5 text-[12px] text-[#989A99] space-y-1">
               <div>⚖️ Hai dải kích thước đồng đều 20px, đối xứng typography.</div>
-              <div>🌿 Chuẩn 2 màu độc quyền #006553 và #00D085.</div>
+              <div>🌿 Chuẩn 2 màu độc quyền #006636 và #00D085.</div>
             </div>
           </div>
 
@@ -349,7 +349,7 @@ export default function LogoPreviewPage() {
                     <g transform="scale(0.72) translate(19, 19)">
                       <path
                         d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                        fill="#006553"
+                        fill="#006636"
                       />
                       <g filter="url(#p21-sh)">
                         <path
@@ -367,7 +367,7 @@ export default function LogoPreviewPage() {
                     <g transform="scale(0.72) translate(19, 19)">
                       <path
                         d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                        fill="#006553"
+                        fill="#006636"
                       />
                       <g filter="url(#p21-sh)">
                         <path
@@ -385,7 +385,7 @@ export default function LogoPreviewPage() {
                     <g transform="scale(0.72) translate(19, 19)">
                       <path
                         d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                        fill="#006553"
+                        fill="#006636"
                       />
                       <g filter="url(#p21-sh)">
                         <path
@@ -406,7 +406,7 @@ export default function LogoPreviewPage() {
                   <g transform="scale(0.72) translate(19, 19)">
                     <path
                       d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
-                      fill="#006553"
+                      fill="#006636"
                     />
                     <g filter="url(#p21-sh)">
                       <path
@@ -417,7 +417,7 @@ export default function LogoPreviewPage() {
                   </g>
                 </svg>
                 <span className="text-xs font-bold text-white">Store Preview Studio</span>
-                <span className="ml-auto text-[10.5px] font-semibold bg-[#006553] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
+                <span className="ml-auto text-[10.5px] font-semibold bg-[#006636] text-white px-2.5 py-1 rounded border border-[#00D085]/35">
                   Get Access
                 </span>
               </div>

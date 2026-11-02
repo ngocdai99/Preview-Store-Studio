@@ -23,7 +23,7 @@ const cardAccents = [
     borderHover: "hover:border-[#00D085]/40 dark:hover:border-[#00D085]/40",
     topLine: "from-[#00D085] via-emerald-400/60 to-transparent",
     glow: "bg-[#00D085]/10 dark:bg-[#00D085]/15",
-    quoteColor: "text-[#006553] dark:text-[#00D085]",
+    quoteColor: "text-[#006636] dark:text-[#00D085]",
     pill: "bg-emerald-50 text-emerald-800 dark:bg-[#00D085]/10 dark:text-[#00D085] border-emerald-200/80 dark:border-[#00D085]/25",
   },
   {

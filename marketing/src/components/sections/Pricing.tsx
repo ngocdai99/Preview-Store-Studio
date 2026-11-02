@@ -138,9 +138,9 @@ export function Pricing() {
               <button
                 type="button"
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                className={`w-full inline-flex items-center justify-center h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-colors duration-150 cursor-pointer shadow-xs ${
+                className={`w-full inline-flex items-center justify-center h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-150 cursor-pointer ${
                   tier.isPopular
-                    ? "bg-[#006553] hover:bg-[#007a64] text-white border border-[#00D085]/35"
+                    ? "bg-[linear-gradient(180deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0)_100%),#006636] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.04)_100%),#007a41] text-white border border-[#1B845E] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_1px_2px_0_rgba(0,0,0,0.12)]"
                     : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#1D1E1D] dark:hover:bg-[#282a28] dark:text-white dark:border dark:border-white/15"
                 }`}
               >
@@ -177,7 +177,7 @@ export function Pricing() {
                   height={44}
                   className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-200/90 dark:ring-white/15"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#006553] ring-2 ring-white dark:ring-[#1D1E1D]" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#006636] ring-2 ring-white dark:ring-[#1D1E1D]" />
               </div>
 
               {/* Message Details */}
