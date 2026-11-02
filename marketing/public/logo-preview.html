@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store Preview Studio — Khám Phá Logo Concept</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background: #131413; color: #ededed; padding: 48px 24px; line-height: 1.6; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 24px; }
+    h1 { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: -0.02em; display: flex; align-items: center; gap: 12px; }
+    .subtitle { color: #989A99; font-size: 15px; margin-top: 8px; max-width: 760px; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 28px; }
+    .card { background: #1D1E1D; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 28px; position: relative; overflow: hidden; transition: all 0.2s ease; }
+    .card:hover { border-color: rgba(0, 208, 133, 0.4); transform: translateY(-2px); }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+    .card-title { font-size: 19px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .card-desc { font-size: 13.5px; color: #989A99; margin-top: 4px; }
+    .pill { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }
+    .pill-green { background: rgba(0, 208, 133, 0.12); color: #00D085; border: 1px solid rgba(0, 208, 133, 0.3); }
+    .pill-blue { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+    .showcase-box { background: #131413; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 28px 20px; display: flex; align-items: center; justify-content: space-around; margin-bottom: 20px; }
+    .scale-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .scale-label { font-size: 11px; font-family: ui-monospace, monospace; color: #666; font-weight: 600; }
+    
+    .navbar-preview { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; }
+    .nav-brand { font-size: 14.5px; font-weight: 700; color: #fff; }
+    .nav-links { display: flex; gap: 16px; margin-left: 20px; }
+    .nav-link { font-size: 13px; color: #989A99; }
+    .nav-btn { margin-left: auto; font-size: 12px; font-weight: 600; background: #006533; color: #fff; border: 1px solid rgba(0,208,133,0.35); padding: 5px 12px; border-radius: 6px; }
+
+    .specs-list { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: #989A99; }
+    .specs-item { display: flex; align-items: center; gap: 8px; }
+    .specs-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .dot-dark { background: #006533; }
+    .dot-light { background: #00D085; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Logo Concept: Phone + Tablet Interlocking</h1>
+      <p class="subtitle">Thử nghiệm thiết kế logo theo phong cách <strong>Supabase Geometric Fold</strong>: chắp ghép từ 2 thiết bị (Tablet rộng & Phone thon) bằng màu xanh đậm (<code>#006533</code>) và xanh sáng (<code>#00D085</code>) tạo thành chữ <strong>V</strong> (PreView Studio) hoặc <strong>K</strong> (Kai DevLabs).</p>
+    </div>
+
+    <div class="grid">
+      <!-- CONCEPT V1: THE INTERLOCKING V (DETAILED) -->
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Concept 1: Chữ V - Dual Devices</div>
+            <div class="card-desc">Tablet (xanh đậm bên trái) + Phone (xanh sáng bên phải) chéo góc đè lên nhau, có đổ bóng 3D.</div>
+          </div>
+          <span class="pill pill-green">Đề xuất số 1</span>
+        </div>
+
+        <div class="showcase-box">
+          <!-- 128px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+              <defs>
+                <linearGradient id="v1-tablet" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#008746" />
+                  <stop offset="100%" stop-color="#004824" />
+                </linearGradient>
+                <linearGradient id="v1-phone" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#34F5A6" />
+                  <stop offset="100%" stop-color="#00D085" />
+                </linearGradient>
+                <filter id="v1-shadow" x="-25%" y="-25%" width="150%" height="150%">
+                  <feDropShadow dx="-2" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.75" />
+                </filter>
+              </defs>
+              <!-- Left: Tablet (Xanh đậm) -->
+              <g transform="rotate(-23 35 49)">
+                <rect x="21" y="15" width="28" height="67" rx="6.5" fill="url(#v1-tablet)" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" />
+                <circle cx="35" cy="19.5" r="1.2" fill="rgba(255,255,255,0.4)" />
+                <rect x="25" y="24" width="20" height="22" rx="2" fill="rgba(255,255,255,0.12)" />
+                <rect x="25" y="49" width="20" height="14" rx="2" fill="rgba(255,255,255,0.12)" />
+                <rect x="25" y="66" width="20" height="8" rx="2" fill="rgba(255,255,255,0.18)" />
+              </g>
+              <!-- Right: Phone (Xanh sáng) -->
+              <g transform="rotate(23 65 49)" filter="url(#v1-shadow)">
+                <rect x="55" y="13" width="20" height="71" rx="6" fill="url(#v1-phone)" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" />
+                <rect x="61.5" y="16.5" width="7" height="2" rx="1" fill="#00381a" />
+                <rect x="58.5" y="22" width="13" height="20" rx="2" fill="rgba(255,255,255,0.25)" />
+                <rect x="58.5" y="45" width="13" height="18" rx="2" fill="rgba(255,255,255,0.25)" />
+                <rect x="58.5" y="66" width="13" height="10" rx="2" fill="rgba(255,255,255,0.35)" />
+              </g>
+            </svg>
+            <span class="scale-label">100px</span>
+          </div>
+
+          <!-- 48px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="48" height="48">
+              <use href="#v1-tablet" />
+              <!-- Left: Tablet -->
+              <g transform="rotate(-23 35 49)">
+                <rect x="21" y="15" width="28" height="67" rx="6.5" fill="url(#v1-tablet)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" />
+                <circle cx="35" cy="19.5" r="1.4" fill="rgba(255,255,255,0.4)" />
+                <rect x="25" y="24" width="20" height="22" rx="2" fill="rgba(255,255,255,0.15)" />
+                <rect x="25" y="49" width="20" height="14" rx="2" fill="rgba(255,255,255,0.15)" />
+              </g>
+              <!-- Right: Phone -->
+              <g transform="rotate(23 65 49)" filter="url(#v1-shadow)">
+                <rect x="55" y="13" width="20" height="71" rx="6" fill="url(#v1-phone)" stroke="rgba(255,255,255,0.38)" stroke-width="1.5" />
+                <rect x="61.5" y="16.5" width="7" height="2" rx="1" fill="#00381a" />
+                <rect x="58.5" y="22" width="13" height="20" rx="2" fill="rgba(255,255,255,0.3)" />
+                <rect x="58.5" y="45" width="13" height="18" rx="2" fill="rgba(255,255,255,0.3)" />
+              </g>
+            </svg>
+            <span class="scale-label">48px</span>
+          </div>
+
+          <!-- 24px (Navbar) -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+              <g transform="rotate(-23 35 49)">
+                <rect x="21" y="15" width="28" height="67" rx="8" fill="url(#v1-tablet)" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+              </g>
+              <g transform="rotate(23 65 49)" filter="url(#v1-shadow)">
+                <rect x="55" y="13" width="20" height="71" rx="7" fill="url(#v1-phone)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+                <rect x="61.5" y="16.5" width="7" height="2.5" rx="1" fill="#00381a" />
+              </g>
+            </svg>
+            <span class="scale-label">24px (Nav)</span>
+          </div>
+        </div>
+
+        <div class="navbar-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22">
+            <g transform="rotate(-23 35 49)"><rect x="21" y="15" width="28" height="67" rx="8" fill="url(#v1-tablet)" /></g>
+            <g transform="rotate(23 65 49)" filter="url(#v1-shadow)"><rect x="55" y="13" width="20" height="71" rx="7" fill="url(#v1-phone)" /></g>
+          </svg>
+          <span class="nav-brand">Store Preview Studio</span>
+          <div class="nav-links"><span class="nav-link">Studio</span><span class="nav-link">Features</span><span class="nav-link">Pricing</span></div>
+          <button class="nav-btn">Get Access</button>
+        </div>
+
+        <div class="specs-list">
+          <div class="specs-item"><span class="specs-dot dot-dark"></span> Nhánh trái: <strong>Tablet</strong> (Màu xanh rừng #006533, góc bo chuẩn iPad, camera dot)</div>
+          <div class="specs-item"><span class="specs-dot dot-light"></span> Nhánh phải: <strong>Phone</strong> (Màu xanh ngọc #00D085, Dynamic Island, đè lên đỉnh chữ V)</div>
+        </div>
+      </div>
+
+      <!-- CONCEPT V2: SUPABASE PURE MINIMALIST V -->
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Concept 2: Chữ V - Supabase Minimalist</div>
+            <div class="card-desc">Thiết kế tối giản phẳng như Supabase, hình học siêu gọn, nhận diện cực mạnh ở kích thước siêu nhỏ (favicon 16px).</div>
+          </div>
+          <span class="pill pill-green">Clean & Bold</span>
+        </div>
+
+        <div class="showcase-box">
+          <!-- 100px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+              <defs>
+                <linearGradient id="v2-tab" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#008746" /><stop offset="100%" stop-color="#004824" />
+                </linearGradient>
+                <linearGradient id="v2-pho" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#34F5A6" /><stop offset="100%" stop-color="#00D085" />
+                </linearGradient>
+                <filter id="v2-sh" x="-25%" y="-25%" width="150%" height="150%">
+                  <feDropShadow dx="-3" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.8" />
+                </filter>
+              </defs>
+              <!-- Tablet (Left) -->
+              <g transform="rotate(-24 34 50)">
+                <rect x="18" y="14" width="32" height="70" rx="9" fill="url(#v2-tab)" />
+                <rect x="23" y="20" width="22" height="58" rx="5" fill="rgba(255,255,255,0.08)" />
+                <circle cx="34" cy="17" r="1.5" fill="rgba(255,255,255,0.3)" />
+              </g>
+              <!-- Phone (Right) -->
+              <g transform="rotate(24 66 50)" filter="url(#v2-sh)">
+                <rect x="54" y="12" width="24" height="74" rx="8" fill="url(#v2-pho)" />
+                <rect x="58" y="18" width="16" height="62" rx="4.5" fill="rgba(255,255,255,0.22)" />
+                <rect x="62" y="14.5" width="8" height="2.2" rx="1.1" fill="#00381a" />
+              </g>
+            </svg>
+            <span class="scale-label">100px</span>
+          </div>
+
+          <!-- 48px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="48" height="48">
+              <g transform="rotate(-24 34 50)"><rect x="18" y="14" width="32" height="70" rx="9" fill="url(#v2-tab)" /></g>
+              <g transform="rotate(24 66 50)" filter="url(#v2-sh)">
+                <rect x="54" y="12" width="24" height="74" rx="8" fill="url(#v2-pho)" />
+                <rect x="62" y="14.5" width="8" height="2.5" rx="1.2" fill="#00381a" />
+              </g>
+            </svg>
+            <span class="scale-label">48px</span>
+          </div>
+
+          <!-- 24px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+              <g transform="rotate(-24 34 50)"><rect x="18" y="14" width="32" height="70" rx="10" fill="url(#v2-tab)" /></g>
+              <g transform="rotate(24 66 50)" filter="url(#v2-sh)"><rect x="54" y="12" width="24" height="74" rx="9" fill="url(#v2-pho)" /></g>
+            </svg>
+            <span class="scale-label">24px (Nav)</span>
+          </div>
+        </div>
+
+        <div class="navbar-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22">
+            <g transform="rotate(-24 34 50)"><rect x="18" y="14" width="32" height="70" rx="10" fill="url(#v2-tab)" /></g>
+            <g transform="rotate(24 66 50)" filter="url(#v2-sh)"><rect x="54" y="12" width="24" height="74" rx="9" fill="url(#v2-pho)" /></g>
+          </svg>
+          <span class="nav-brand">Store Preview Studio</span>
+          <div class="nav-links"><span class="nav-link">Studio</span><span class="nav-link">Features</span><span class="nav-link">Pricing</span></div>
+          <button class="nav-btn">Get Access</button>
+        </div>
+
+        <div class="specs-list">
+          <div class="specs-item"><span class="specs-dot dot-dark"></span> Khối hình học táo bạo, bo tròn thanh thoát tương đồng với ngôn ngữ thiết kế của Supabase.</div>
+          <div class="specs-item"><span class="specs-dot dot-light"></span> Tỷ lệ tương phản cao, hiển thị rõ mồn một ngay cả khi thu nhỏ xuống 16px ở Favicon tab trình duyệt.</div>
+        </div>
+      </div>
+
+      <!-- CONCEPT K1: DUAL-DEVICE K (PHONE STEM + TABLET CHEVRON) -->
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Concept 3: Chữ K - Phone Spine + Folded Tablet</div>
+            <div class="card-desc">Thân Phone thẳng đứng (xanh đậm) + Tablet gập chữ V (xanh sáng) gắn vào cạnh phải tạo thành chữ K (Kai DevLabs).</div>
+          </div>
+          <span class="pill pill-blue">Chữ K Độc Đáo</span>
+        </div>
+
+        <div class="showcase-box">
+          <!-- 100px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+              <defs>
+                <linearGradient id="k1-phone" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#008746" /><stop offset="100%" stop-color="#004824" />
+                </linearGradient>
+                <linearGradient id="k1-tab1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#34F5A6" /><stop offset="100%" stop-color="#00D085" />
+                </linearGradient>
+                <filter id="k1-sh" x="-25%" y="-25%" width="150%" height="150%">
+                  <feDropShadow dx="-2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.75" />
+                </filter>
+              </defs>
+              <!-- Left: Phone Spine (Xanh đậm) -->
+              <rect x="16" y="12" width="22" height="76" rx="7" fill="url(#k1-phone)" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" />
+              <rect x="22.5" y="15.5" width="9" height="2" rx="1" fill="#002b14" />
+              <rect x="19.5" y="21" width="15" height="58" rx="3.5" fill="rgba(255,255,255,0.1)" />
+
+              <!-- Right Top Arm (Tablet screen 1 - tilted up) -->
+              <g transform="rotate(38 52 50)" filter="url(#k1-sh)">
+                <rect x="46" y="10" width="24" height="48" rx="6" fill="url(#k1-tab1)" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" />
+                <rect x="50" y="15" width="16" height="38" rx="3.5" fill="rgba(255,255,255,0.22)" />
+              </g>
+
+              <!-- Right Bottom Arm (Tablet screen 2 - tilted down) -->
+              <g transform="rotate(-38 52 50)" filter="url(#k1-sh)">
+                <rect x="46" y="42" width="24" height="48" rx="6" fill="url(#k1-tab1)" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" />
+                <rect x="50" y="47" width="16" height="38" rx="3.5" fill="rgba(255,255,255,0.22)" />
+              </g>
+            </svg>
+            <span class="scale-label">100px</span>
+          </div>
+
+          <!-- 48px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="48" height="48">
+              <rect x="16" y="12" width="22" height="76" rx="7" fill="url(#k1-phone)" />
+              <g transform="rotate(38 52 50)" filter="url(#k1-sh)"><rect x="46" y="10" width="24" height="48" rx="6" fill="url(#k1-tab1)" /></g>
+              <g transform="rotate(-38 52 50)" filter="url(#k1-sh)"><rect x="46" y="42" width="24" height="48" rx="6" fill="url(#k1-tab1)" /></g>
+            </svg>
+            <span class="scale-label">48px</span>
+          </div>
+
+          <!-- 24px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+              <rect x="16" y="12" width="22" height="76" rx="7" fill="url(#k1-phone)" />
+              <g transform="rotate(38 52 50)" filter="url(#k1-sh)"><rect x="46" y="10" width="24" height="48" rx="6" fill="url(#k1-tab1)" /></g>
+              <g transform="rotate(-38 52 50)" filter="url(#k1-sh)"><rect x="46" y="42" width="24" height="48" rx="6" fill="url(#k1-tab1)" /></g>
+            </svg>
+            <span class="scale-label">24px (Nav)</span>
+          </div>
+        </div>
+
+        <div class="navbar-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22">
+            <rect x="16" y="12" width="22" height="76" rx="7" fill="url(#k1-phone)" />
+            <g transform="rotate(38 52 50)" filter="url(#k1-sh)"><rect x="46" y="10" width="24" height="48" rx="6" fill="url(#k1-tab1)" /></g>
+            <g transform="rotate(-38 52 50)" filter="url(#k1-sh)"><rect x="46" y="42" width="24" height="48" rx="6" fill="url(#k1-tab1)" /></g>
+          </svg>
+          <span class="nav-brand">Store Preview Studio</span>
+          <div class="nav-links"><span class="nav-link">Studio</span><span class="nav-link">Features</span><span class="nav-link">Pricing</span></div>
+          <button class="nav-btn">Get Access</button>
+        </div>
+
+        <div class="specs-list">
+          <div class="specs-item"><span class="specs-dot dot-dark"></span> Thân thẳng: Chiếc Phone đại diện cho cột sống trục dọc chữ K.</div>
+          <div class="specs-item"><span class="specs-dot dot-light"></span> 2 cánh tay: Chiếc Tablet gập góc mở (foldable screen) đại diện cho góc nghiêng chữ K.</div>
+        </div>
+      </div>
+
+      <!-- CONCEPT V3: THE APP ICON SQUIRCLE -->
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Concept 4: App Store Icon Squircle (App Icon Badge)</div>
+            <div class="card-desc">Phiên bản chữ V lồng ghép đặt trong khối Squircle nền đen mờ (#161716) với viền hairline Supabase, sẵn sàng xuất app icon.</div>
+          </div>
+          <span class="pill pill-green">App Icon Sẵn Sàng</span>
+        </div>
+
+        <div class="showcase-box">
+          <!-- 100px Squircle -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+              <defs>
+                <linearGradient id="sq-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1F211F" /><stop offset="100%" stop-color="#121312" />
+                </linearGradient>
+              </defs>
+              <rect width="100" height="100" rx="24" fill="url(#sq-bg)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+              <!-- Inner V logo centered -->
+              <g transform="scale(0.72) translate(19, 19)">
+                <g transform="rotate(-23 35 49)">
+                  <rect x="21" y="15" width="28" height="67" rx="6.5" fill="url(#v1-tablet)" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" />
+                  <circle cx="35" cy="19.5" r="1.2" fill="rgba(255,255,255,0.4)" />
+                  <rect x="25" y="24" width="20" height="22" rx="2" fill="rgba(255,255,255,0.12)" />
+                </g>
+                <g transform="rotate(23 65 49)" filter="url(#v1-shadow)">
+                  <rect x="55" y="13" width="20" height="71" rx="6" fill="url(#v1-phone)" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" />
+                  <rect x="61.5" y="16.5" width="7" height="2" rx="1" fill="#00381a" />
+                  <rect x="58.5" y="22" width="13" height="20" rx="2" fill="rgba(255,255,255,0.25)" />
+                </g>
+              </g>
+            </svg>
+            <span class="scale-label">100px Squircle</span>
+          </div>
+
+          <!-- 48px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="48" height="48">
+              <rect width="100" height="100" rx="24" fill="url(#sq-bg)" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+              <g transform="scale(0.72) translate(19, 19)">
+                <g transform="rotate(-23 35 49)"><rect x="21" y="15" width="28" height="67" rx="8" fill="url(#v1-tablet)" /></g>
+                <g transform="rotate(23 65 49)" filter="url(#v1-shadow)"><rect x="55" y="13" width="20" height="71" rx="7" fill="url(#v1-phone)" /></g>
+              </g>
+            </svg>
+            <span class="scale-label">48px</span>
+          </div>
+
+          <!-- 24px -->
+          <div class="scale-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+              <rect width="100" height="100" rx="24" fill="url(#sq-bg)" stroke="rgba(255,255,255,0.15)" stroke-width="3" />
+              <g transform="scale(0.72) translate(19, 19)">
+                <g transform="rotate(-23 35 49)"><rect x="21" y="15" width="28" height="67" rx="8" fill="url(#v1-tablet)" /></g>
+                <g transform="rotate(23 65 49)" filter="url(#v1-shadow)"><rect x="55" y="13" width="20" height="71" rx="7" fill="url(#v1-phone)" /></g>
+              </g>
+            </svg>
+            <span class="scale-label">24px (Favicon)</span>
+          </div>
+        </div>
+
+        <div class="navbar-preview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+            <rect width="100" height="100" rx="24" fill="url(#sq-bg)" stroke="rgba(255,255,255,0.15)" stroke-width="3" />
+            <g transform="scale(0.72) translate(19, 19)">
+              <g transform="rotate(-23 35 49)"><rect x="21" y="15" width="28" height="67" rx="8" fill="url(#v1-tablet)" /></g>
+              <g transform="rotate(23 65 49)" filter="url(#v1-shadow)"><rect x="55" y="13" width="20" height="71" rx="7" fill="url(#v1-phone)" /></g>
+            </g>
+          </svg>
+          <span class="nav-brand">Store Preview Studio</span>
+          <div class="nav-links"><span class="nav-link">Studio</span><span class="nav-link">Features</span><span class="nav-link">Pricing</span></div>
+          <button class="nav-btn">Get Access</button>
+        </div>
+
+        <div class="specs-list">
+          <div class="specs-item"><span class="specs-dot dot-dark"></span> Nền Squircle cao cấp như icon macOS / iOS, có viền phát sáng siêu mảnh.</div>
+          <div class="specs-item"><span class="specs-dot dot-light"></span> Thích hợp dùng làm app icon desktop, app launcher hoặc favicon chuyên nghiệp.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

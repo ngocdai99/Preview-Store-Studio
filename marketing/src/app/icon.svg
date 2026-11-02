@@ -1,29 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
   <defs>
-    <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00D085"/>
-      <stop offset="100%" stop-color="#006533"/>
+    <linearGradient id="sq-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1F211F" />
+      <stop offset="100%" stop-color="#121312" />
     </linearGradient>
-    <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34f5a6"/>
-      <stop offset="100%" stop-color="#00A865"/>
+    <linearGradient id="icon-tablet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#008746" />
+      <stop offset="100%" stop-color="#004824" />
     </linearGradient>
+    <linearGradient id="icon-phone" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34F5A6" />
+      <stop offset="100%" stop-color="#00D085" />
+    </linearGradient>
+    <filter id="icon-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-2" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.8" />
+    </filter>
   </defs>
-  <!-- Supabase Emerald Gradient Background -->
-  <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
-  
-  <!-- Back Layer Device: iPad Tablet -->
-  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
-  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
-  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
 
-  <!-- Front Layer Device: Phone (Matching iPad style, zero black) -->
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
-  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
-  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
+  <!-- Dark Squircle Frame -->
+  <rect width="100" height="100" rx="24" fill="url(#sq-bg)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+
+  <!-- Interlocking V: Tablet + Phone -->
+  <g transform="scale(0.72) translate(19, 19)">
+    <!-- Left: Tablet (Deep Forest Emerald) -->
+    <g transform="rotate(-23 35 49)">
+      <rect x="21" y="15" width="28" height="67" rx="6.5" fill="url(#icon-tablet)" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" />
+      <circle cx="35" cy="19.5" r="1.2" fill="rgba(255,255,255,0.4)" />
+      <rect x="25" y="24" width="20" height="22" rx="2" fill="rgba(255,255,255,0.12)" />
+      <rect x="25" y="49" width="20" height="14" rx="2" fill="rgba(255,255,255,0.12)" />
+    </g>
+
+    <!-- Right: Phone (Electric Emerald) - Overlapping with shadow -->
+    <g transform="rotate(23 65 49)" filter="url(#icon-shadow)">
+      <rect x="55" y="13" width="20" height="71" rx="6" fill="url(#icon-phone)" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" />
+      <rect x="61.5" y="16.5" width="7" height="2" rx="1" fill="#00381a" />
+      <rect x="58.5" y="22" width="13" height="20" rx="2" fill="rgba(255,255,255,0.25)" />
+      <rect x="58.5" y="45" width="13" height="18" rx="2" fill="rgba(255,255,255,0.25)" />
+    </g>
+  </g>
 </svg>
-
