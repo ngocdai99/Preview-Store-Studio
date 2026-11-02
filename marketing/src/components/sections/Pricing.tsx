@@ -5,6 +5,7 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { Sparkles, Info } from "lucide-react";
 import { LaunchModal } from "@/components/ui/LaunchModal";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
 export function Pricing() {
   const { pricing } = siteConfig;
@@ -135,17 +136,14 @@ export function Pricing() {
               </div>
 
               {/* Buy CTA */}
-              <button
-                type="button"
+              <PrimaryButton
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                className={`w-full inline-flex items-center justify-center h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-all duration-150 cursor-pointer ${
-                  tier.isPopular
-                    ? "bg-[linear-gradient(180deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0)_100%),#006636] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.04)_100%),#007a41] text-white border border-[#1B845E] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_1px_2px_0_rgba(0,0,0,0.12)]"
-                    : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#1D1E1D] dark:hover:bg-[#282a28] dark:text-white dark:border dark:border-white/15"
-                }`}
+                fontSize="15px"
+                fontWeight={700}
+                className="w-full h-12 rounded-xl sm:rounded-2xl tracking-[-0.01em]"
               >
                 <span>{tier.cta.label}</span>
-              </button>
+              </PrimaryButton>
             </div>
           ))}
         </div>
