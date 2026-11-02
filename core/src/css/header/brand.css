@@ -104,7 +104,7 @@ body.sidebar-collapsed .sidebar-toggle-btn .ico-sidebar-collapsed,
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 208, 133, 0.28);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
   cursor: pointer;
