@@ -165,13 +165,13 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
             <div className="flex items-center gap-2.5 flex-wrap mb-3.5">
               {/* Dynamic Tier Badge */}
               <div
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold border border-white/40 ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold ${
                   isPro
-                    ? "bg-[linear-gradient(135deg,#00D085_0%,#006636_100%)] text-white shadow-sm"
-                    : "bg-[#0f172a] text-white dark:bg-white/[0.12] dark:text-slate-100 shadow-sm"
+                    ? "bg-[linear-gradient(180deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0)_100%),#006636] border border-[#1B845E] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_1px_2px_0_rgba(0,0,0,0.12)] text-white"
+                    : "bg-[#1D1E1D] border border-[#282928] text-white shadow-xs"
                 }`}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] shadow-[0_0_8px_rgba(52,211,153,0.95)] shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00D085] shadow-[0_0_8px_rgba(0,208,133,0.95)] shrink-0" />
                 <svg
                   className="w-3.5 h-3.5 fill-none stroke-white stroke-[2.4] shrink-0"
                   viewBox="0 0 24 24"
