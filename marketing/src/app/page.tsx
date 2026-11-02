@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
-import { MiniStudioSection } from "@/components/sections/MiniStudioSection";
 import { Features } from "@/components/sections/Features";
 import { Comparison } from "@/components/sections/Comparison";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -14,7 +13,6 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-1">
         <Hero />
-        <MiniStudioSection />
         <Features />
         <Comparison />
         <Testimonials />

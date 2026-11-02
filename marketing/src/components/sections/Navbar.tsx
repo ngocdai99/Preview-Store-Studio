@@ -13,7 +13,7 @@ export function Navbar() {
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navItems = [
-    { label: "Studio", href: "#showcase" },
+    { label: "Studio", href: "#hero" },
     { label: "Features", href: "#features" },
     { label: "Why Us", href: "#comparison" },
     { label: "Pricing", href: "#pricing" },

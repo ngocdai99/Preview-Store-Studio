@@ -30,7 +30,7 @@ export const en = {
     },
     secondaryCta: {
       label: "Try Live Demo",
-      href: "#showcase",
+      href: "/demo.html",
     },
     trustBadges: [
       "100% Offline & Private",
