@@ -29,8 +29,8 @@ export const en = {
       href: "#pricing",
     },
     secondaryCta: {
-      label: "See Demo",
-      href: "/demo",
+      label: "Try Live Demo",
+      href: "#showcase",
     },
     trustBadges: [
       "100% Offline & Private",
