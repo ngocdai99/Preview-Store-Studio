@@ -612,9 +612,14 @@
 }
 
 :root[data-ui=light] .menu .mi-t small {
-  color: #475569;
+  color: #64748b;
   opacity: 1;
   font-weight: 450;
+}
+
+:root[data-ui=light] #menuExport .menu-item:hover .mi-t small,
+:root[data-ui=light] .menu .menu-item:hover .mi-t small {
+  color: #334155 !important;
 }
 
 #menuExport .menu-item:hover {

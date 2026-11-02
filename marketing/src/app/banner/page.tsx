@@ -638,6 +638,11 @@ export default function BannerStudioPage() {
                       src={imageSrc}
                       alt="Store Preview Studio Dual Mockup"
                       className="max-h-[610px] w-auto object-contain"
+                      style={{
+                        imageRendering: "-webkit-optimize-contrast",
+                        transform: "translateZ(0)",
+                        backfaceVisibility: "hidden",
+                      }}
                     />
                   </div>
                 </div>
@@ -675,6 +680,11 @@ export default function BannerStudioPage() {
                     src={imageSrc}
                     alt="Mockup"
                     className="max-h-[380px] w-auto object-contain"
+                    style={{
+                      imageRendering: "-webkit-optimize-contrast",
+                      transform: "translateZ(0)",
+                      backfaceVisibility: "hidden",
+                    }}
                   />
                 </div>
 
