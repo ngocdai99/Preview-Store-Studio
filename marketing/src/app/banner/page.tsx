@@ -103,6 +103,24 @@ export default function BannerStudioPage() {
         };
       }
 
+      // PRE-PROCESS: Resolve "currentColor" on all SVG elements in the LIVE DOM
+      // html2canvas serializes SVGs as <img src="data:image/svg+xml"> which loses CSS
+      // inheritance — so we must bake in the actual color before capture
+      const svgRestores: Array<{ el: SVGElement; attr: string; oldVal: string | null; newVal: string }> = [];
+      bannerRef.current.querySelectorAll<SVGElement>("svg").forEach((svgEl) => {
+        const computedColor = window.getComputedStyle(svgEl).color || "#ffffff";
+        const allSvgEls: SVGElement[] = [svgEl, ...Array.from(svgEl.querySelectorAll<SVGElement>("*"))];
+        allSvgEls.forEach((el) => {
+          (["fill", "stroke"] as const).forEach((attr) => {
+            const val = el.getAttribute(attr);
+            if (val === "currentColor") {
+              svgRestores.push({ el, attr, oldVal: val, newVal: computedColor });
+              el.setAttribute(attr, computedColor);
+            }
+          });
+        });
+      });
+
       const html2canvas = (await loadHtml2Canvas()) as any;
 
       // Inline-replace all CSS variables and modern color functions in the cloned DOM
