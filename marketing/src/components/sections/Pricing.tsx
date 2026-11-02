@@ -136,14 +136,24 @@ export function Pricing() {
               </div>
 
               {/* Buy CTA */}
-              <PrimaryButton
-                onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
-                fontSize="15px"
-                fontWeight={700}
-                className="w-full h-12 rounded-xl sm:rounded-2xl tracking-[-0.01em]"
-              >
-                <span>{tier.cta.label}</span>
-              </PrimaryButton>
+              {tier.isPopular ? (
+                <PrimaryButton
+                  onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
+                  fontSize="15px"
+                  fontWeight={700}
+                  className="w-full h-12 rounded-xl sm:rounded-2xl tracking-[-0.01em]"
+                >
+                  <span>{tier.cta.label}</span>
+                </PrimaryButton>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
+                  className="w-full inline-flex items-center justify-center h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#121312] dark:hover:bg-[#1e1f1e] dark:text-white border border-slate-700/80 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.15)] transition-all duration-150 cursor-pointer"
+                >
+                  <span>{tier.cta.label}</span>
+                </button>
+              )}
             </div>
           ))}
         </div>
