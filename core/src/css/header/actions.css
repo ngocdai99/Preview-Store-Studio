@@ -103,23 +103,24 @@
 }
 
 #btnExport {
-  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  color: #ffffff;
+  background: #1D1E1D;
+  border: 1px solid #282928;
+  color: #989A99;
   height: 32px;
   padding: 0 12px;
   font-weight: 500 !important;
   font-size: 12.5px;
   border-radius: 10px;
-  box-shadow: 0 3px 12px rgba(234, 88, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  transition: all .2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
   user-select: none;
   box-sizing: border-box;
+  transform: none;
 }
 
 #btnExport .btn-ico {
@@ -147,7 +148,7 @@
   justify-content: center;
   width: 12px;
   height: 12px;
-  opacity: 0.8;
+  opacity: 0.85;
   transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
 }
 
@@ -157,26 +158,43 @@
   stroke: currentColor;
 }
 
-#btnExport:hover {
-  opacity: 0.96;
-  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.45);
-  transform: scale(1.03);
+#btnExport:hover,
+#btnExport[aria-expanded="true"],
+#workspaceExportDropdown:has(#menuExport.show) #btnExport {
+  background: #242624;
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: none !important;
 }
 
 #btnExport:active {
-  transform: scale(0.98);
+  background: #171817;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  transform: none !important;
 }
 
 :root[data-ui=light] #btnExport {
-  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  color: #ffffff;
-  box-shadow: 0 3px 12px rgba(234, 88, 12, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #64748b;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-:root[data-ui=light] #btnExport:hover {
-  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.45);
-  color: #ffffff;
+:root[data-ui=light] #btnExport:hover,
+:root[data-ui=light] #btnExport[aria-expanded="true"],
+:root[data-ui=light] #workspaceExportDropdown:has(#menuExport.show) #btnExport {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform: none !important;
+}
+
+:root[data-ui=light] #btnExport:active {
+  background: #f1f5f9;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: none !important;
 }
 
 /* Exact Marketing Mini-Studio Draft Pill UI: Selected White vs Unselected Dark */
@@ -184,15 +202,20 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  box-sizing: border-box;
   background: #1D1E1D;
   border: 1px solid #282928;
   color: #EDEDED;
-  padding: 4px 12px 4px 4px;
+  padding: 4px 10px 4px 4px;
   border-radius: 999px;
   font-weight: 600;
   font-size: 12.5px;
+  line-height: 1;
   cursor: pointer;
-  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
   user-select: none;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -207,7 +230,12 @@
   border-color: #282928;
   background: #1D1E1D;
   color: #EDEDED;
-  padding: 5px 12px 5px 5px;
+  padding: 4px 10px 4px 4px;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  box-sizing: border-box;
+  line-height: 1;
   font-weight: 600;
 }
 
@@ -223,6 +251,11 @@
   background: #1D1E1D;
   color: #EDEDED;
   padding: 4px 10px 4px 4px;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+  box-sizing: border-box;
+  line-height: 1;
   min-width: 0;
   flex-shrink: 1;
 }
@@ -235,6 +268,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 1.2;
 }
 
 .ms-pill.custom.has-draft:hover {
@@ -250,6 +284,11 @@
   background: #EFF1F0 !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   color: #252625 !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
@@ -322,14 +361,13 @@
   padding: 0 1px;
   opacity: 0.75;
   box-shadow: none !important;
-  transition: opacity .15s ease, color .15s ease, transform .15s ease;
+  transition: opacity .15s ease, color .15s ease;
 }
 
 .ms-pill-reset-btn:hover {
   background: transparent !important;
   color: #ffffff;
   opacity: 1;
-  transform: scale(1.15);
 }
 
 /* Close button on selected white pill */
@@ -347,7 +385,6 @@
   background: transparent !important;
   color: #0f172a !important;
   opacity: 1;
-  transform: scale(1.15);
 }
 
 .ms-pill-import {
@@ -394,50 +431,84 @@
 
 :root[data-ui=light] .ms-pill.custom,
 :root[data-ui=light] .ms-pill.custom.has-draft {
-  background: #f1f5f9;
-  border-color: #e2e8f0;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
   color: #475569;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
 }
 
 :root[data-ui=light] .ms-pill.custom:hover,
 :root[data-ui=light] .ms-pill.custom.has-draft:hover {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
-  color: #1e293b;
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.16);
+  color: #0f172a;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 :root[data-ui=light] .ms-pill.custom.on,
 :root[data-ui=light] .ms-pill.custom.has-draft.on,
 :root[data-ui=light] .ms-pill.on {
   background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(0, 208, 133, 0.5) !important;
   color: #0f172a !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  font-weight: 700 !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  box-shadow: 0 2px 8px rgba(0, 208, 133, 0.16), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+}
+
+:root[data-ui=light] .ms-pill.custom.on:hover,
+:root[data-ui=light] .ms-pill.custom.has-draft.on:hover,
+:root[data-ui=light] .ms-pill.on:hover {
+  background: #ffffff !important;
+  border-color: rgba(0, 208, 133, 0.75) !important;
+  color: #000000 !important;
+  box-shadow: 0 3px 12px rgba(0, 208, 133, 0.22), 0 1px 3px rgba(15, 23, 42, 0.08) !important;
 }
 
 :root[data-ui=light] .ms-pill.custom small,
 :root[data-ui=light] .ms-pill.custom.has-draft small {
   color: #64748b;
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
 }
 
 :root[data-ui=light] .ms-pill.custom.on small,
 :root[data-ui=light] .ms-pill.custom.has-draft.on small,
 :root[data-ui=light] .ms-pill.on small {
-  color: #0f172a !important;
-  background: rgba(0, 0, 0, 0.08) !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #006636 !important;
+  background: rgba(0, 208, 133, 0.12) !important;
+  border: 1px solid rgba(0, 208, 133, 0.28) !important;
 }
 
 :root[data-ui=light] .ms-pill-reset-btn {
   background: transparent !important;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 :root[data-ui=light] .ms-pill-reset-btn:hover {
   background: transparent !important;
-  color: #0f172a;
+  color: #334155;
+}
+
+:root[data-ui=light] .ms-pill.custom.on .ms-pill-reset-btn,
+:root[data-ui=light] .ms-pill.custom.has-draft.on .ms-pill-reset-btn,
+:root[data-ui=light] .ms-pill.on .ms-pill-reset-btn {
+  color: #64748b !important;
+}
+
+:root[data-ui=light] .ms-pill.custom.on .ms-pill-reset-btn:hover,
+:root[data-ui=light] .ms-pill.custom.has-draft.on .ms-pill-reset-btn:hover,
+:root[data-ui=light] .ms-pill.on .ms-pill-reset-btn:hover {
+  color: #0f172a !important;
 }
 
 #btnPresets {

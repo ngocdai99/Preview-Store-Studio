@@ -162,7 +162,7 @@ function getFieldMockupTargets(key) {
     case 'rank':
     case 'st-rank': {
       const raw = $$('.stage [data-stat="rank"]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .g-about .st, .gt10-rank-chip') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .chips .st, .g-about .st, .gt10-rank-chip, .st') || el)));
     }
     case 'dl':
     case 'st-dl': {

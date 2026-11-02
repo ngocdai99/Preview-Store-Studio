@@ -828,16 +828,53 @@ function toggleDualPhone(forceState) {
   }
 }
 
+function setupHoverDropdown(containerId, btnId, menuId) {
+  const container = $(containerId);
+  const btn = $(btnId);
+  const menu = $(menuId);
+  if (!container || !menu) return;
+
+  let closeTimer = null;
+
+  container.addEventListener('mouseenter', () => {
+    clearTimeout(closeTimer);
+    $$('.menu').forEach(m => { if (m !== menu) m.classList.remove('show'); });
+    menu.classList.add('show');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+  });
+
+  container.addEventListener('mouseleave', () => {
+    closeTimer = setTimeout(() => {
+      menu.classList.remove('show');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }, 150);
+  });
+
+  menu.querySelectorAll('.menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      menu.classList.remove('show');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
 if ($('btnStageView')) {
   setupDropdown('btnStageView', 'vt');
+  setupHoverDropdown('stageViewDropdown', 'btnStageView', 'vt');
 }
 
 if ($('btnAppleDevice')) {
   setupDropdown('btnAppleDevice', 'menuAppleDevice');
+  setupHoverDropdown('dt', 'btnAppleDevice', 'menuAppleDevice');
 }
 
 if ($('btnGoogleDevice')) {
   setupDropdown('btnGoogleDevice', 'menuGoogleDevice');
+  setupHoverDropdown('gdt', 'btnGoogleDevice', 'menuGoogleDevice');
+}
+
+if ($('btnExport')) {
+  setupHoverDropdown('workspaceExportDropdown', 'btnExport', 'menuExport');
 }
 
 if ($('btnDualPhone')) {

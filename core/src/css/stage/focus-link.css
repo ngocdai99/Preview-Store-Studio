@@ -128,13 +128,28 @@ img.hl-target {
 .ipad-info-val.hl-target,
 .iap[data-iap-apple].hl-target,
 .g-meta[data-iap-google].hl-target,
+.chips .st.hl-target,
+.chips span.st.hl-target,
 .g-about .st.hl-target,
 .gt10-rank-chip.hl-target {
   background-color: rgba(245, 158, 11, 0.28) !important;
   outline: 2px solid #f59e0b !important;
   outline-offset: 1px !important;
-  border-radius: 4px !important;
+  border-radius: 9px !important;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+.chips .st.hl-target .sv,
+.chips .st .sv.hl-target,
+.chips [data-stat="rank"].hl-target,
+.gt10-rank-chip .sv.hl-target {
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  display: inline !important;
 }
 
 .iap[data-iap-apple].hl-target,

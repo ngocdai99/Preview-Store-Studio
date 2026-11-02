@@ -226,7 +226,7 @@ assert(PRESETS.studio.shots.length === 4, 'Store Preview Studio has exactly 4 sc
 ].forEach(p => {
   const decoded = decodeURIComponent(p.icon);
   assert(decoded.includes('width="1024"') && decoded.includes('height="1024"'), `${p.name} icon specifies 1024x1024 dimensions`);
-  assert(decoded.includes('<rect width="512" height="512" fill="url(#') || decoded.includes('<rect width="512" height="512" fill="#') || decoded.includes('<rect width="32" height="32" fill="url(#') || decoded.includes('<rect width="1024" height="1024" fill="url(#'), `${p.name} icon has opaque non-transparent background rect`);
+  assert(decoded.includes('<rect width="512" height="512" fill="url(#') || decoded.includes('<rect width="512" height="512" fill="#') || decoded.includes('<rect width="32" height="32" fill="url(#') || decoded.includes('<rect width="1024" height="1024" fill="url(#') || decoded.includes('<rect width="100" height="100" fill="url(#'), `${p.name} icon has opaque non-transparent background rect`);
 });
 
 // Verify template files in presets/
@@ -2120,11 +2120,11 @@ const headerJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules',
 assert(headerJsCode.includes("card.classList.toggle('collapsed')"), 'header.js provides click delegation on .card-header to toggle collapsed class');
 assert(headerJsCode.includes("card.classList.add('selected')"), 'header.js manages selected state when expanding cards');
 
-// 5. Collapsed card hover state: harmonic subtle tint without shadow elevation
-assert(bundledHtml.includes(':root[data-ui=light] .card.collapsed:hover') && bundledHtml.includes('#f4f8fe'), 'Light theme styles generic collapsed card hover with clean ice blue tint #f4f8fe');
-assert(bundledHtml.includes(':root[data-ui=light] #identityCard.collapsed:hover') && bundledHtml.includes('#fffdf5'), 'Light theme provides warm golden tint #fffdf5 on identity card hover');
-assert(bundledHtml.includes(':root[data-ui=light] #shotsCard.collapsed:hover') && bundledHtml.includes('#fff8f9'), 'Light theme provides soft rose tint #fff8f9 on shots card hover');
-assert(bundledHtml.includes(':root[data-ui=light] #statsCard.collapsed:hover') && bundledHtml.includes('#f6fdf9'), 'Light theme provides soft mint tint #f6fdf9 on stats card hover');
+// 5. Collapsed card hover state: subtle neutral brightening without colored chromatic tints
+assert(bundledHtml.includes('.card.collapsed:hover') && bundledHtml.includes('#242524'), 'Dark theme styles card hover with subtle neutral lightening #242524');
+assert(bundledHtml.includes(':root[data-ui=light] .card.collapsed:hover') && bundledHtml.includes('#f8fafc'), 'Light theme styles card hover with clean neutral brightening #f8fafc');
+assert(!bundledHtml.includes('#shotsCard.collapsed:hover{background:'), 'Chromatic rose tint removed from shots card hover');
+assert(!bundledHtml.includes('#identityCard.collapsed:hover{background:'), 'Chromatic amber tint removed from identity card hover');
 assert(bundledHtml.includes('.card.collapsed:hover') && !bundledHtml.includes('.card.collapsed:hover{background:#ffffff!important;border-color:rgba(0,0,0,0.16)!important;box-shadow:0 3px 8px'), 'Collapsed card hover does not inflate excessive box shadow');
 
 // ---------------------------------------------------------------------

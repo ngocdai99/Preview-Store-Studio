@@ -6,7 +6,23 @@
 .phone.google[data-theme=light] .g-sd{color:#1f1f1f}
 .chips{display:flex;gap:8px;margin:10px 0 18px;padding:4px 2px;overflow:visible;flex-wrap:wrap}
 .chips > span{border:1px solid var(--sp);border-radius:9px;padding:6px 14px;font-size:13px;font-weight:500;color:var(--t);white-space:nowrap;transition:all .2s ease}
-.chips .sv{border:none !important;border-radius:0 !important;padding:0 !important;font-size:inherit !important;font-weight:inherit !important;color:inherit !important;background:none !important;box-shadow:none !important}
+.chips .st .sv,
+.chips [data-stat="rank"],
+.chips span .sv,
+.chips .sv {
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  display: inline !important;
+}
 .g-blk{border-bottom:1px solid var(--sp);padding-bottom:18px;margin-bottom:18px;font-size:13.5px;line-height:1.6;color:var(--t)}
 .safe-intro{font-size:12.5px;color:var(--s);line-height:1.45;margin-bottom:12px}
 .safe{border:1px solid var(--sp);border-radius:14px;padding:16px 14px;display:flex;flex-direction:column;gap:14px}

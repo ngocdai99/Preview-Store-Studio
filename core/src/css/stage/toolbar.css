@@ -59,16 +59,20 @@
   backdrop-filter: blur(16px);
   border-radius: 10px;
   border: 1px solid #282928;
-  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .08);
-  color: #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: #EDEDED;
   font-family: inherit;
   font-size: 12.5px;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
   box-sizing: border-box;
   transition: all .2s ease;
+}
+
+.stage-view-label {
+  font-weight: 500;
 }
 
 .stage-view-btn:hover {
@@ -83,24 +87,29 @@
 
 .stage-view-dropdown:has(.menu.show) .stage-view-btn,
 .stage-device-dropdown:has(.menu.show) .stage-view-btn,
+.stage-view-dropdown:hover .stage-view-btn,
+.stage-device-dropdown:hover .stage-view-btn,
 .stage-view-btn.active {
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: #383A38;
   color: #ffffff;
-  background: rgba(30, 41, 59, .98);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+  background: #222322;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
 }
 
-#stageViewDropdown:has(.menu.show) .stage-view-btn {
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+#stageViewDropdown:has(.menu.show) .stage-view-btn,
+#stageViewDropdown:hover .stage-view-btn {
+  border-color: #383A38;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
 }
 
-#dt:has(.menu.show) .stage-view-btn {
+#dt:has(.menu.show) .stage-view-btn,
+#dt:hover .stage-view-btn {
   border-color: rgba(0, 113, 227, 0.45);
   box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.25);
 }
 
-#gdt:has(.menu.show) .stage-view-btn {
+#gdt:has(.menu.show) .stage-view-btn,
+#gdt:hover .stage-view-btn {
   border-color: rgba(5, 150, 105, 0.45);
   box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.25);
 }
@@ -138,7 +147,9 @@
 }
 
 .stage-view-dropdown:has(.menu.show) .stage-view-arr,
-.stage-device-dropdown:has(.menu.show) .stage-view-arr {
+.stage-view-dropdown:hover .stage-view-arr,
+.stage-device-dropdown:has(.menu.show) .stage-view-arr,
+.stage-device-dropdown:hover .stage-view-arr {
   transform: rotate(180deg);
   color: #ffffff;
 }
@@ -169,16 +180,29 @@
   left: 0;
   right: auto;
   width: 196px;
-  background: rgba(29, 30, 29, 0.96);
-  backdrop-filter: blur(20px);
+  background: #141514;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid #282928;
   border-radius: 12px;
-  padding: 0 !important;
-  gap: 0 !important;
+  padding: 4px 0;
+  gap: 0;
   overflow: hidden;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
   z-index: 250;
   display: none !important;
+}
+
+/* Invisible hover bridge */
+.stage-view-menu::before,
+#vt.stage-view-menu::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -12px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 14px !important;
+  pointer-events: auto !important;
 }
 
 @keyframes stage-menu-left-in {
@@ -269,31 +293,32 @@
 /* Card-Inspired UI for Detail View / Search Result Menu (#vt) */
 #vt.stage-view-menu {
   width: 196px !important;
-  padding: 0 !important;
+  padding: 4px 0 !important;
   gap: 0 !important;
   border-radius: 12px !important;
-  background: rgba(29, 30, 29, 0.96) !important;
-  backdrop-filter: blur(20px) !important;
+  background: #141514 !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
   border: 1px solid #282928 !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
   overflow: hidden !important;
 }
 
 #vt .menu-label {
-  padding: 8px 14px 4px !important;
+  padding: 6px 14px 4px !important;
 }
 #vt .menu-label span {
   font-size: 10px !important;
   font-weight: 700 !important;
   letter-spacing: .06em !important;
   text-transform: uppercase !important;
-  color: #64748b !important;
+  color: #707270 !important;
 }
 
 #vt .menu-div {
   height: 1px !important;
-  margin: 0 !important;
-  background: rgba(255, 255, 255, 0.08) !important;
+  margin: 4px 0 !important;
+  background: #282928 !important;
 }
 
 #vt .menu-item {
@@ -307,7 +332,7 @@
   border: none !important;
   margin: 0 !important;
   background: transparent !important;
-  color: #94a3b8 !important;
+  color: #b0b3b0 !important;
   box-shadow: none !important;
   cursor: pointer !important;
   width: 100% !important;
@@ -325,10 +350,11 @@
   bottom: 6px !important;
   width: 3.5px !important;
   border-radius: 0 3px 3px 0 !important;
+  background: #ffffff !important;
 }
 
 #vt .menu-item:hover:not(.on) {
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
   color: #ffffff !important;
   border: none !important;
 }
@@ -348,7 +374,7 @@
   font-size: 13px !important;
   font-weight: 500 !important;
   letter-spacing: -0.01em !important;
-  color: #cbd5e1 !important;
+  color: #b0b3b0 !important;
 }
 
 /* Standalone Bare Icon (No container box) */
@@ -369,7 +395,7 @@
   transition: color .18s ease !important;
   margin: 0 !important;
   padding: 0 !important;
-  color: #94a3b8;
+  color: #989a99;
 }
 #vt .mi-ico svg,
 :root[data-ui=light] #vt .mi-ico svg {
@@ -392,7 +418,7 @@
   box-shadow: none !important;
 }
 #vt .menu-item.on::before {
-  background: linear-gradient(180deg, #ffffff, #cbd5e1) !important;
+  background: #ffffff !important;
 }
 #vt .menu-item.on .mi-name {
   color: #ffffff !important;
@@ -498,7 +524,12 @@
   background: #ffffff !important;
   border: 1px solid rgba(15, 23, 42, 0.1) !important;
   color: #1e293b !important;
+  font-weight: 500 !important;
   box-shadow: 0 1px 4px -1px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04), inset 0 1px 0 #ffffff !important;
+}
+
+:root[data-ui=light] .stage-view-label {
+  font-weight: 500 !important;
 }
 
 :root[data-ui=light] .stage-view-btn:hover {
@@ -541,72 +572,45 @@
   color: #0f172a;
 }
 
-/* Light Mode Device Menus (#menuAppleDevice, #menuGoogleDevice) */
+/* Light Mode Device Menus (#menuAppleDevice, #menuGoogleDevice) & Stage View Menu (#vt) */
+:root[data-ui=light] .stage-view-menu,
+:root[data-ui=light] #vt.stage-view-menu,
 :root[data-ui=light] #menuAppleDevice,
 :root[data-ui=light] #menuGoogleDevice {
-  background: rgba(255, 255, 255, 0.98);
-  border-color: rgba(15, 23, 42, 0.12);
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16), 0 2px 6px rgba(15, 23, 42, 0.06);
-}
-
-:root[data-ui=light] #menuAppleDevice .menu-div,
-:root[data-ui=light] #menuGoogleDevice .menu-div {
-  background: rgba(15, 23, 42, 0.08);
-}
-
-:root[data-ui=light] #menuAppleDevice .menu-item,
-:root[data-ui=light] #menuGoogleDevice .menu-item {
-  color: #334155;
-  border-radius: 0 !important;
-  border: none !important;
-  margin: 0 !important;
-}
-
-:root[data-ui=light] #menuAppleDevice .menu-item:hover,
-:root[data-ui=light] #menuGoogleDevice .menu-item:hover {
-  background: rgba(15, 23, 42, 0.05);
-  color: #0f172a;
-}
-
-:root[data-ui=light] #menuAppleDevice .menu-item.on,
-:root[data-ui=light] #menuAppleDevice .menu-item.active,
-:root[data-ui=light] #menuGoogleDevice .menu-item.on,
-:root[data-ui=light] #menuGoogleDevice .menu-item.active {
-  background: rgba(15, 23, 42, 0.05);
-  border: none !important;
-  color: #0f172a;
-}
-
-:root[data-ui=light] #menuAppleDevice .menu-item.on .mi-name,
-:root[data-ui=light] #menuAppleDevice .menu-item.active .mi-name,
-:root[data-ui=light] #menuGoogleDevice .menu-item.on .mi-name,
-:root[data-ui=light] #menuGoogleDevice .menu-item.active .mi-name {
-  color: #0f172a;
-}
-
-/* Card-Inspired UI for Detail View / Search Result Menu (#vt) - Light Mode */
-:root[data-ui=light] #vt.stage-view-menu {
   background: #ffffff !important;
-  border: 1px solid rgba(15, 23, 42, 0.12) !important;
-  box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.14), 0 4px 12px -2px rgba(15, 23, 42, 0.06) !important;
-  padding: 0 !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+  padding: 4px 0 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
 }
 
+:root[data-ui=light] #menuAppleDevice .menu-label,
+:root[data-ui=light] #menuGoogleDevice .menu-label,
 :root[data-ui=light] #vt .menu-label {
-  padding: 8px 14px 4px !important;
+  padding: 6px 14px 4px !important;
 }
 
+:root[data-ui=light] #menuAppleDevice .menu-label span,
+:root[data-ui=light] #menuGoogleDevice .menu-label span,
 :root[data-ui=light] #vt .menu-label span {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .06em !important;
+  text-transform: uppercase !important;
   color: #64748b !important;
 }
 
+:root[data-ui=light] #menuAppleDevice .menu-div,
+:root[data-ui=light] #menuGoogleDevice .menu-div,
 :root[data-ui=light] #vt .menu-div {
-  background: rgba(15, 23, 42, 0.08) !important;
-  margin: 0 !important;
+  background: #e2e8f0 !important;
+  margin: 4px 0 !important;
+  height: 1px !important;
 }
 
+:root[data-ui=light] #menuAppleDevice .menu-item,
+:root[data-ui=light] #menuGoogleDevice .menu-item,
 :root[data-ui=light] #vt .menu-item {
   background: transparent !important;
   border: none !important;
@@ -614,8 +618,104 @@
   margin: 0 !important;
   padding: 0 14px !important;
   height: 38px !important;
-  color: #334155 !important;
+  color: #475569 !important;
   box-shadow: none !important;
+}
+
+:root[data-ui=light] #menuAppleDevice .menu-item .mi-name,
+:root[data-ui=light] #menuGoogleDevice .menu-item .mi-name,
+:root[data-ui=light] #vt .menu-item .mi-name {
+  color: #475569 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+:root[data-ui=light] #menuAppleDevice .menu-item .mi-ico,
+:root[data-ui=light] #menuGoogleDevice .menu-item .mi-ico,
+:root[data-ui=light] #vt .menu-item:not(.on) .mi-ico {
+  color: #64748b !important;
+}
+
+:root[data-ui=light] #menuAppleDevice .menu-item:hover:not(.on),
+:root[data-ui=light] #menuGoogleDevice .menu-item:hover:not(.on),
+:root[data-ui=light] #vt .menu-item:hover:not(.on) {
+  background: rgba(15, 23, 42, 0.05) !important;
+  color: #0f172a !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+:root[data-ui=light] #menuAppleDevice .menu-item:hover:not(.on) .mi-name,
+:root[data-ui=light] #menuGoogleDevice .menu-item:hover:not(.on) .mi-name,
+:root[data-ui=light] #vt .menu-item:hover:not(.on) .mi-name {
+  color: #0f172a !important;
+  font-weight: 500 !important;
+}
+
+:root[data-ui=light] #menuAppleDevice .menu-item:hover:not(.on) .mi-ico,
+:root[data-ui=light] #menuGoogleDevice .menu-item:hover:not(.on) .mi-ico,
+:root[data-ui=light] #vt .menu-item:hover:not(.on) .mi-ico {
+  color: #0f172a !important;
+}
+
+/* Apple Light Mode Device Menu Active Item */
+:root[data-ui=light] #menuAppleDevice .menu-item.on,
+:root[data-ui=light] #menuAppleDevice .menu-item.active {
+  background: rgba(0, 113, 227, 0.08) !important;
+  color: #0071e3 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+:root[data-ui=light] #menuAppleDevice .menu-item.on::before,
+:root[data-ui=light] #menuAppleDevice .menu-item.active::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 6px !important;
+  bottom: 6px !important;
+  width: 3.5px !important;
+  border-radius: 0 3px 3px 0 !important;
+  background: #0071e3 !important;
+}
+:root[data-ui=light] #menuAppleDevice .menu-item.on .mi-name,
+:root[data-ui=light] #menuAppleDevice .menu-item.active .mi-name {
+  color: #0071e3 !important;
+  font-weight: 500 !important;
+}
+:root[data-ui=light] #menuAppleDevice .menu-item.on .mi-ico,
+:root[data-ui=light] #menuAppleDevice .menu-item.active .mi-ico {
+  color: #0071e3 !important;
+}
+
+/* Google Light Mode Device Menu Active Item */
+:root[data-ui=light] #menuGoogleDevice .menu-item.on,
+:root[data-ui=light] #menuGoogleDevice .menu-item.active {
+  background: rgba(5, 150, 105, 0.08) !important;
+  color: #059669 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+:root[data-ui=light] #menuGoogleDevice .menu-item.on::before,
+:root[data-ui=light] #menuGoogleDevice .menu-item.active::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 6px !important;
+  bottom: 6px !important;
+  width: 3.5px !important;
+  border-radius: 0 3px 3px 0 !important;
+  background: #059669 !important;
+}
+:root[data-ui=light] #menuGoogleDevice .menu-item.on .mi-name,
+:root[data-ui=light] #menuGoogleDevice .menu-item.active .mi-name {
+  color: #059669 !important;
+  font-weight: 500 !important;
+}
+:root[data-ui=light] #menuGoogleDevice .menu-item.on .mi-ico,
+:root[data-ui=light] #menuGoogleDevice .menu-item.active .mi-ico {
+  color: #059669 !important;
 }
 
 :root[data-ui=light] #vt .menu-item:hover:not(.on) {
@@ -682,33 +782,6 @@
   box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.08), 0 0 0 2px rgba(15, 23, 42, 0.06) !important;
 }
 
-/* Apple Light Mode Device Menu */
-:root[data-ui=light] #menuAppleDevice .menu-item.on,
-:root[data-ui=light] #menuAppleDevice .menu-item.active {
-  background: rgba(0, 113, 227, 0.08);
-}
-:root[data-ui=light] #menuAppleDevice .menu-item.on::before,
-:root[data-ui=light] #menuAppleDevice .menu-item.active::before {
-  background: #0071e3;
-}
-:root[data-ui=light] #menuAppleDevice .menu-item.on .mi-ico,
-:root[data-ui=light] #menuAppleDevice .menu-item.active .mi-ico {
-  color: #0071e3;
-}
-/* Google Light Mode Device Menu */
-:root[data-ui=light] #menuGoogleDevice .menu-item.on,
-:root[data-ui=light] #menuGoogleDevice .menu-item.active {
-  background: rgba(5, 150, 105, 0.08);
-}
-:root[data-ui=light] #menuGoogleDevice .menu-item.on::before,
-:root[data-ui=light] #menuGoogleDevice .menu-item.active::before {
-  background: #059669;
-}
-:root[data-ui=light] #menuGoogleDevice .menu-item.on .mi-ico,
-:root[data-ui=light] #menuGoogleDevice .menu-item.active .mi-ico {
-  color: #059669;
-}
-
 /* Tablet hiding for comparison section in stage view menu */
 body[data-store="apple"][data-apple-device="ipad"] #dualPhoneWrap,
 body[data-store="apple"][data-apple-device="ipad"] #dualPhoneDiv,
@@ -756,7 +829,29 @@ body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-fl
   transform: translateX(-50%);
   transform-origin: top center;
   width: 176px;
+  background: #141514;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid #282928;
+  border-radius: 12px;
+  padding: 4px 0;
+  gap: 0;
+  overflow: hidden;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  z-index: 250;
   display: none !important;
+}
+
+/* Invisible hover bridge */
+#menuAppleDevice::before,
+#menuGoogleDevice::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -12px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 14px !important;
+  pointer-events: auto !important;
 }
 
 #menuAppleDevice.show,
@@ -869,7 +964,7 @@ body[data-store=google] .vt-pill,
 }
 
 .vt.theme-seg button:hover .vt-ico {
-  transform: scale(1.08);
+  transform: none;
 }
 
 .vt.theme-seg button:active {

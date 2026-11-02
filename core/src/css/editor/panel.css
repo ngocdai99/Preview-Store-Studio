@@ -76,7 +76,7 @@ body.sidebar-collapsed .editor-resizer{
   background:#1D1E1D;border:1px solid #282928;border-radius:18px;padding:0;
   display:flex;flex-direction:column;gap:0;box-shadow:0 4px 20px -2px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,0.06);transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
 }
-.card:hover{border-color:rgba(255,255,255,0.15)}
+.card:hover{background:#242524;border-color:#383a38}
 .card h2{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:800;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0}
 
 /* Card Header & Collapsible Accordion Behavior */
@@ -190,8 +190,8 @@ body.sidebar-collapsed .editor-resizer{
 }
 
 .card.collapsed:hover {
-  background: linear-gradient(180deg, #182030 0%, #121724 100%);
-  border-color: rgba(255, 255, 255, 0.14);
+  background: #242524;
+  border-color: #383a38;
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .card h2 i{

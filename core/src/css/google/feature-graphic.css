@@ -133,19 +133,26 @@
 }
 .info-pop-link{
   display:inline-flex;align-items:center;gap:6px;
-  padding:5px 12px;border-radius:7px;
+  padding:5px 12px;border-radius:8px;
   font-size:11.5px;font-weight:600;
-  color:#c084fc;background:rgba(168,85,247,.12);
-  border:1px solid rgba(168,85,247,.22);
-  text-decoration:none;transition:all .18s cubic-bezier(.4,0,.2,1);
+  color:#0f172a;background:#ffffff;
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 1px 3px rgba(0,0,0,.3),0 2px 6px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,1);
+  text-decoration:none;transition:all .16s cubic-bezier(.4,0,.2,1);
   cursor:pointer;line-height:1.4;
 }
 .info-pop-link:hover{
-  background:rgba(168,85,247,.22);border-color:rgba(168,85,247,.4);
-  color:#f3e8ff;transform:translateY(-1px);
+  background:#f1f5f9;border-color:#ffffff;
+  color:#000000;box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 #ffffff;
+  transform:none!important;
+}
+.info-pop-link:active{
+  background:#e2e8f0;
+  transform:none!important;
 }
 .info-pop-link svg{
   width:11px;height:11px;stroke-width:2.3;flex-shrink:0;
+  color:inherit;
 }
 
 /* Safety: Automatically hide popover when sidebar is collapsed or on opposing store tab */
@@ -183,10 +190,21 @@ body[data-store=google] #iosIconInfoPop{
 }
 :root[data-ui=light] .info-pop-footer{border-top-color:rgba(0,0,0,.07)}
 :root[data-ui=light] .info-pop-link{
-  color:#7e22ce;background:#f5f3ff;border-color:rgba(147,51,234,.2);
+  color: var(--btn-dark-text, #EDEDED);
+  background: var(--card, #1D1E1D);
+  border: 1px solid var(--border, #282928);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 :root[data-ui=light] .info-pop-link:hover{
-  color:#6b21a8;background:#ede9fe;border-color:rgba(147,51,234,.35);
+  color: #ffffff;
+  background: #242524;
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transform: none !important;
+}
+:root[data-ui=light] .info-pop-link:active{
+  background: #171817;
+  transform: none !important;
 }
 :root[data-ui=light] .info-pop-body{color:#334155}
 :root[data-ui=light] .info-pop-body b{color:#0f172a}
