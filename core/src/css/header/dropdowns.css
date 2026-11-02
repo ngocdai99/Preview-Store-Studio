@@ -410,26 +410,26 @@
 }
 
 /* Tinted Vibrant Icon Chips per Menu Action */
-/* 1. Export Mockup Image: Ocean Blue */
+/* 1. Export Mockup Image: Primary Emerald */
 #optOpenExportModal .mi-ico {
-  background: rgba(56, 189, 248, 0.14);
-  border-color: rgba(56, 189, 248, 0.28);
-  color: #38bdf8;
+  background: rgba(0, 208, 133, 0.14);
+  border-color: rgba(0, 208, 133, 0.28);
+  color: #00D085;
 }
 #optOpenExportModal:hover .mi-ico {
-  background: rgba(56, 189, 248, 0.24);
-  border-color: rgba(56, 189, 248, 0.5);
-  color: #7dd3fc;
+  background: rgba(0, 208, 133, 0.24);
+  border-color: rgba(0, 208, 133, 0.5);
+  color: #26e099;
 }
 :root[data-ui=light] #optOpenExportModal .mi-ico {
-  background: rgba(2, 132, 199, 0.1);
-  border-color: rgba(2, 132, 199, 0.24);
-  color: #0284c7;
+  background: rgba(0, 208, 133, 0.12);
+  border-color: rgba(0, 208, 133, 0.28);
+  color: #006636;
 }
 :root[data-ui=light] #optOpenExportModal:hover .mi-ico {
-  background: rgba(2, 132, 199, 0.18);
-  border-color: rgba(2, 132, 199, 0.38);
-  color: #0369a1;
+  background: rgba(0, 208, 133, 0.2);
+  border-color: rgba(0, 208, 133, 0.42);
+  color: #004d28;
 }
 
 /* 2. Copy Text: Radiant Purple */

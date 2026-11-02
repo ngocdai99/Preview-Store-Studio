@@ -26,14 +26,14 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.22) 0%, rgba(56, 189, 248, 0.12) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: #38bdf8;
+  background: rgba(0, 208, 133, 0.14);
+  border: 1px solid rgba(0, 208, 133, 0.28);
+  color: #00D085;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 208, 133, 0.15);
 }
 
 .export-modal-title {
@@ -467,6 +467,13 @@
   background: #ffffff;
   border-color: #e2e8f0;
   box-shadow: 0 20px 48px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-ui=light] .export-modal-icon-wrap {
+  background: rgba(0, 208, 133, 0.12);
+  border: 1px solid rgba(0, 208, 133, 0.28);
+  color: #006636;
+  box-shadow: 0 2px 8px rgba(0, 102, 54, 0.08);
 }
 
 :root[data-ui=light] .export-modal-title {
