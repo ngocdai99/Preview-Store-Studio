@@ -179,22 +179,23 @@
   color: #ffffff;
 }
 
-/* Exact Marketing Mini-Studio Draft Pill UI */
+/* Exact Marketing Mini-Studio Draft Pill UI: Selected White vs Unselected Dark */
 .ms-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, .05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e2e8f0;
+  background: #1D1E1D;
+  border: 1px solid #282928;
+  color: #EDEDED;
   padding: 4px 12px 4px 4px;
   border-radius: 999px;
   font-weight: 600;
   font-size: 12.5px;
   cursor: pointer;
-  transition: all .2s;
+  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .ms-pill span {
@@ -202,31 +203,25 @@
 }
 
 .ms-pill.custom {
-  border-style: dashed;
-  border-color: rgba(59, 130, 246, 0.55);
-  color: #93c5fd;
-  padding: 6px 14px;
+  border-style: solid;
+  border-color: #282928;
+  background: #1D1E1D;
+  color: #EDEDED;
+  padding: 5px 12px 5px 5px;
   font-weight: 600;
 }
 
 .ms-pill.custom:hover {
-  border-color: #60a5fa;
-  color: #bfdbfe;
-  background: rgba(59, 130, 246, 0.1);
-}
-
-.ms-pill.custom.on {
-  background: rgba(59, 130, 246, .18);
-  border-color: #3b82f6;
-  color: #fff;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, .18);
+  background: #222322;
+  border-color: #383A38;
+  color: #ffffff;
 }
 
 .ms-pill.custom.has-draft {
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.05);
-  color: #e2e8f0;
+  border-color: #282928;
+  background: #1D1E1D;
+  color: #EDEDED;
   padding: 4px 10px 4px 4px;
   min-width: 0;
   flex-shrink: 1;
@@ -243,59 +238,116 @@
 }
 
 .ms-pill.custom.has-draft:hover {
-  background: rgba(255, 255, 255, .09);
-  border-color: rgba(255, 255, 255, 0.28);
-  color: #fff;
+  background: #222322;
+  border-color: #383A38;
+  color: #ffffff;
 }
 
-.ms-pill.custom.has-draft.on {
-  background: rgba(59, 130, 246, .18);
-  border-color: #3b82f6;
-  color: #fff;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
+/* Selected State: White Button (Matches Marketing White Button Tokens) */
+.ms-pill.custom.on,
+.ms-pill.custom.has-draft.on,
+.ms-pill.on {
+  background: #EFF1F0 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #252625 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-.ms-pill.custom.has-draft img {
+.ms-pill.custom.on:hover,
+.ms-pill.custom.has-draft.on:hover,
+.ms-pill.on:hover {
+  background: #E1E3E2 !important;
+  color: #252625 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.ms-pill.custom.on:active,
+.ms-pill.custom.has-draft.on:active,
+.ms-pill.on:active {
+  background: #D5D8D6 !important;
+}
+
+.ms-pill.custom.has-draft img,
+.ms-pill img {
   width: 24px;
   height: 24px;
   border-radius: 7px;
   display: block;
   object-fit: cover;
   background: #1e293b;
+  flex-shrink: 0;
 }
 
-.ms-pill.custom.has-draft small {
-  color: #93c5fd;
-  background: rgba(59, 130, 246, 0.2);
-  padding: 1px 6px;
-  border-radius: 4px;
+/* Badge for unselected pill: subtle dark rounded badge */
+.ms-pill.custom.has-draft small,
+.ms-pill small {
+  color: #989A99;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1.5px 6px;
+  border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  transition: all .2s ease;
 }
 
+/* Badge for selected pill: subtle light rounded badge */
+.ms-pill.custom.on small,
+.ms-pill.custom.has-draft.on small,
+.ms-pill.on small {
+  color: #475569 !important;
+  background: rgba(0, 0, 0, 0.07) !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+}
+
+/* Close button for unselected pill (bare X icon, no background container) */
 .ms-pill-reset-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  margin-left: 2px;
-  border-radius: 50%;
+  width: auto;
+  height: auto;
+  margin-left: 3px;
+  margin-right: 2px;
+  border-radius: 0;
   border: none;
-  background: rgba(255, 255, 255, 0.12);
-  color: #94a3b8;
-  font-size: 10px;
+  background: transparent !important;
+  color: #989A99;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1;
   cursor: pointer;
-  padding: 0;
-  transition: all .15s;
+  padding: 0 1px;
+  opacity: 0.75;
+  box-shadow: none !important;
+  transition: opacity .15s ease, color .15s ease, transform .15s ease;
 }
 
 .ms-pill-reset-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
-  color: #f8fafc;
+  background: transparent !important;
+  color: #ffffff;
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Close button on selected white pill */
+.ms-pill.custom.on .ms-pill-reset-btn,
+.ms-pill.custom.has-draft.on .ms-pill-reset-btn,
+.ms-pill.on .ms-pill-reset-btn {
+  background: transparent !important;
+  color: #475569 !important;
+  opacity: 0.7;
+}
+
+.ms-pill.custom.on .ms-pill-reset-btn:hover,
+.ms-pill.custom.has-draft.on .ms-pill-reset-btn:hover,
+.ms-pill.on .ms-pill-reset-btn:hover {
+  background: transparent !important;
+  color: #0f172a !important;
+  opacity: 1;
+  transform: scale(1.15);
 }
 
 .ms-pill-import {
@@ -340,61 +392,70 @@
   color: #1d4ed8;
 }
 
-:root[data-ui=light] .ms-pill.custom {
-  background: #ffffff;
-  border-color: #3b82f6;
-  color: #2563eb;
-}
-
+:root[data-ui=light] .ms-pill.custom,
 :root[data-ui=light] .ms-pill.custom.has-draft {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  color: #334155;
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #475569;
 }
 
+:root[data-ui=light] .ms-pill.custom:hover,
 :root[data-ui=light] .ms-pill.custom.has-draft:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #1e293b;
 }
 
-:root[data-ui=light] .ms-pill.custom.has-draft.on {
-  background: rgba(59, 130, 246, 0.12);
-  border-color: #3b82f6;
-  color: #1d4ed8;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+:root[data-ui=light] .ms-pill.custom.on,
+:root[data-ui=light] .ms-pill.custom.has-draft.on,
+:root[data-ui=light] .ms-pill.on {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
+:root[data-ui=light] .ms-pill.custom small,
 :root[data-ui=light] .ms-pill.custom.has-draft small {
-  color: #2563eb;
-  background: #dbeafe;
+  color: #64748b;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+:root[data-ui=light] .ms-pill.custom.on small,
+:root[data-ui=light] .ms-pill.custom.has-draft.on small,
+:root[data-ui=light] .ms-pill.on small {
+  color: #0f172a !important;
+  background: rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
 }
 
 :root[data-ui=light] .ms-pill-reset-btn {
-  background: rgba(0, 0, 0, 0.07);
+  background: transparent !important;
   color: #64748b;
 }
 
 :root[data-ui=light] .ms-pill-reset-btn:hover {
-  background: rgba(0, 0, 0, 0.12);
+  background: transparent !important;
   color: #0f172a;
 }
 
 #btnPresets {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #1D1E1D;
+  border: 1px solid #282928;
   color: #f1f5f9;
   padding: 7px 13px;
   font-weight: 650;
   border-radius: 11px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #btnPresets:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 100%);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: #222322;
+  border-color: #383A38;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transform: scale(1.04);
 }
 
@@ -439,46 +500,40 @@
   box-shadow: 0 4px 14px rgba(139, 92, 246, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Page Theme Toggle Button (Neutral Utility Style) */
+/* Page Theme Toggle Button (Card Surface Style) */
 .theme-toggle-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #e2e8f0;
+  background: #1D1E1D;
+  border: 1px solid #282928;
+  color: #989A99;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.2s ease, border-color 0.2s ease;
   padding: 0;
   flex-shrink: 0;
   user-select: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .theme-toggle-btn:hover {
-  transform: scale(1.08);
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: none;
   color: #ffffff;
 }
 
 :root[data-ui=light] .theme-toggle-btn {
   background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  color: #334155;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #64748b;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 :root[data-ui=light] .theme-toggle-btn:hover {
-  transform: scale(1.08);
-  background: #f8fafc;
-  border-color: rgba(15, 23, 42, 0.2);
+  transform: none;
   color: #0f172a;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
 }
 
 .theme-toggle-btn .sun-icon {

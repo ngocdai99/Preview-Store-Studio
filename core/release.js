@@ -3,8 +3,8 @@
  * Store Preview Studio · Commercial Release Packager
  * 
  * Generates delivery ZIP packages:
- *   - Plus Edition ($29): Full 5 Presets, Minified HTML, Docs
- *   - Pro Edition ($39): Full 5 Presets, Full src/, build.js, dev.js, Agency QA Toolkit
+ *   - Plus Edition ($29): Full 6 Presets, Minified HTML, Docs
+ *   - Pro Edition ($39): Full 6 Presets, Full src/, build.js, dev.js, Agency QA Toolkit
  * 
  * Usage:
  *   npm run release
