@@ -212,6 +212,12 @@ export default function BannerStudioPage() {
         },
       });
 
+      // RESTORE: Put "currentColor" back so live UI looks correct
+      svgRestores.forEach(({ el, attr, oldVal }) => {
+        if (oldVal !== null) el.setAttribute(attr, oldVal);
+        else el.removeAttribute(attr);
+      });
+
       // Overdraw the mockup image at full native resolution (bypasses html2canvas downsampling)
       if (imgSnapshot) {
         const ctx = canvas.getContext("2d");
