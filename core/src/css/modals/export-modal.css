@@ -157,7 +157,7 @@
   width: 13px;
   height: 13px;
   border-radius: 3px;
-  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  background: var(--brand-gradient, linear-gradient(135deg, #00D085 0%, #006636 100%));
   margin-bottom: 2px;
 }
 
@@ -302,9 +302,9 @@
 }
 
 .export-radio-item.active .export-radio-indicator {
-  border-color: #38bdf8;
-  background: #38bdf8;
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+  border-color: var(--brand-secondary, #00D085);
+  background: var(--brand-secondary, #00D085);
+  box-shadow: 0 0 8px rgba(0, 208, 133, 0.4);
 }
 
 .export-radio-item.active .export-radio-indicator::after {
@@ -343,9 +343,9 @@
   letter-spacing: 0.5px;
   padding: 1px 4.5px;
   border-radius: 4px;
-  background: rgba(56, 189, 248, 0.18);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(0, 208, 133, 0.16);
+  color: var(--brand-secondary, #00D085);
+  border: 1px solid rgba(0, 208, 133, 0.35);
   line-height: 1.2;
 }
 
@@ -588,9 +588,9 @@
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator {
-  border-color: #2563eb;
-  background: #2563eb;
-  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+  border-color: var(--brand-primary, #006636);
+  background: var(--brand-primary, #006636);
+  box-shadow: 0 0 6px rgba(0, 102, 54, 0.3);
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator::after {
@@ -610,9 +610,9 @@
 }
 
 :root[data-ui=light] .export-tag-best {
-  background: rgba(37, 99, 235, 0.1);
-  color: #2563eb;
-  border-color: rgba(37, 99, 235, 0.25);
+  background: rgba(0, 208, 133, 0.12);
+  color: var(--brand-primary, #006636);
+  border-color: rgba(0, 208, 133, 0.3);
 }
 
 :root[data-ui=light] .export-modal-footer {
