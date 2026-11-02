@@ -140,7 +140,7 @@ export function Pricing() {
                 onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
                 className={`w-full inline-flex items-center justify-center h-12 rounded-xl sm:rounded-2xl font-bold text-[15px] tracking-[-0.01em] transition-colors duration-150 cursor-pointer shadow-xs ${
                   tier.isPopular
-                    ? "bg-[#006533] hover:bg-[#007844] text-white border border-[#00D085]/35"
+                    ? "bg-[#006553] hover:bg-[#007a64] text-white border border-[#00D085]/35"
                     : "bg-slate-900 hover:bg-slate-800 text-white dark:bg-[#1D1E1D] dark:hover:bg-[#282a28] dark:text-white dark:border dark:border-white/15"
                 }`}
               >
@@ -177,7 +177,7 @@ export function Pricing() {
                   height={44}
                   className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-200/90 dark:ring-white/15"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#006533] ring-2 ring-white dark:ring-[#1D1E1D]" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#006553] ring-2 ring-white dark:ring-[#1D1E1D]" />
               </div>
 
               {/* Message Details */}

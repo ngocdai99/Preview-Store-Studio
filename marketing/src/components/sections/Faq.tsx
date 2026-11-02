@@ -34,7 +34,7 @@ export function Faq() {
                   Reach out to Kai and{" "}
                   <Link
                     href="#pricing"
-                    className="font-medium text-[#006533] dark:text-[#00D085] hover:underline inline-flex items-center"
+                    className="font-medium text-[#006553] dark:text-[#00D085] hover:underline inline-flex items-center"
                   >
                     ask
                   </Link>

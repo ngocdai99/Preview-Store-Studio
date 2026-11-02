@@ -134,7 +134,7 @@ export function Navbar() {
           <Link
             href="#pricing"
             onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[13px] font-semibold text-white bg-[#006533] hover:bg-[#007844] border border-[#00D085]/35 shadow-xs transition-colors duration-150 shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[13px] font-semibold text-white bg-[#006553] hover:bg-[#007a64] border border-[#00D085]/35 shadow-xs transition-colors duration-150 shrink-0"
           >
             <span>Get Access</span>
           </Link>
