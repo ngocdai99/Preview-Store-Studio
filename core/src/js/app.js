@@ -9609,30 +9609,20 @@ function updatePresetBanner(){
   const copyBtn = $('btnCopyPresetToDraft');
   const returnBtn = $('btnReturnToDraft');
 
-  if(CURRENT_PRESET_KEY !== 'draft'){
+  // Only show warning banner when user actually modifies/edits a preset template
+  if(CURRENT_PRESET_KEY !== 'draft' && isPresetModified){
+    banner.style.display = 'inline-flex';
+    banner.classList.add('is-modified');
+    const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
+    if(textEl){
+      textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
+    }
     if(!hasDraft){
-      // No draft exists yet: show banner with "Copy this preset as your draft" suggestion
-      banner.style.display = 'inline-flex';
-      banner.classList.toggle('is-modified', !!isPresetModified);
+      // No draft exists yet: suggest copying this preset as custom editable draft
       if(copyBtn) copyBtn.style.display = 'inline-flex';
       if(returnBtn) returnBtn.style.display = 'none';
-      const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
-      if(textEl){
-        textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
-      }
-    } else if(isPresetModified){
-      // Draft exists and user modified preset: show warning banner text only (no Return to My Draft button needed)
-      banner.style.display = 'inline-flex';
-      banner.classList.add('is-modified');
-      if(copyBtn) copyBtn.style.display = 'none';
-      if(returnBtn) returnBtn.style.display = 'none';
-      const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
-      if(textEl){
-        textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
-      }
     } else {
-      banner.style.display = 'none';
-      banner.classList.remove('is-modified');
+      // Draft exists: only show warning text without return button
       if(copyBtn) copyBtn.style.display = 'none';
       if(returnBtn) returnBtn.style.display = 'none';
     }
