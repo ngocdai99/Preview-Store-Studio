@@ -3301,18 +3301,305 @@ assert(blankRes.isCustomIcon === false, 'Blank blueprint icon is identified as n
 assert(blankRes.isPlaceholder === true, 'Blank blueprint icon is correctly treated as placeholder');
 
 // ---------------------------------------------------------------------
+// [SUITE 47-49]: Storage Reliability Audit & Replace-Draft Guard (runs REAL source code in a vm sandbox)
+// ---------------------------------------------------------------------
+const asyncSuites = [];
+
+function extractFunctionSource(src, name) {
+  const start = src.indexOf('function ' + name + '(');
+  if (start === -1) return '';
+  let i = src.indexOf('{', start);
+  let depth = 0;
+  for (; i < src.length; i++) {
+    const ch = src[i];
+    if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) return src.slice(start, i + 1);
+    }
+  }
+  return '';
+}
+
+// Minimal IndexedDB double. In 'quota' mode it reproduces real browser behaviour:
+// the put() request reports success first, then the transaction aborts at commit time.
+function makeFakeIndexedDB(behavior) {
+  const data = new Map();
+  return {
+    data,
+    open() {
+      const req = {};
+      setTimeout(() => {
+        req.result = {
+          objectStoreNames: { contains: () => true },
+          transaction() {
+            const tx = { error: null };
+            const finish = (r, mutate) => {
+              setTimeout(() => {
+                if (behavior.mode === 'quota') {
+                  if (r.onsuccess) r.onsuccess();
+                  tx.error = { name: 'QuotaExceededError' };
+                  setTimeout(() => { if (tx.onabort) tx.onabort(); }, 0);
+                } else {
+                  mutate();
+                  if (r.onsuccess) r.onsuccess();
+                  setTimeout(() => { if (tx.oncomplete) tx.oncomplete(); }, 0);
+                }
+              }, 0);
+            };
+            tx.objectStore = () => ({
+              put(val, key) { const r = {}; finish(r, () => data.set(key, val)); return r; },
+              delete(key) { const r = {}; finish(r, () => data.delete(key)); return r; },
+              get(key) {
+                const r = {};
+                setTimeout(() => { r.result = data.get(key); if (r.onsuccess) r.onsuccess(); }, 0);
+                return r;
+              }
+            });
+            return tx;
+          }
+        };
+        if (req.onsuccess) req.onsuccess();
+      }, 0);
+      return req;
+    }
+  };
+}
+
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+asyncSuites.push((async () => {
+  const utilsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/core/utils.js'), 'utf8');
+  const storageSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/storage.js'), 'utf8');
+
+  // ---- SUITE 47: IndexedDB engine commit semantics ----
+  console.log('\n[SUITE 47]: IndexedDB Commit Semantics (QuotaExceededError at commit time)');
+
+  const idbStart = utilsSrc.indexOf('// --- IndexedDB High-Capacity Storage Engine');
+  const idbEnd = utilsSrc.indexOf('// --- SVG to Store-Compliant PNG Rasterizer ---');
+  assert(idbStart !== -1 && idbEnd > idbStart, 'IndexedDB engine block located in utils.js');
+  const idbSrc = utilsSrc.slice(idbStart, idbEnd);
+  const idbExports = '\n;({ idbSave, idbGet, idbDelete, lastError: () => idbLastErrorName })';
+
+  const behavior = { mode: 'ok' };
+  const fakeIdb = makeFakeIndexedDB(behavior);
+  const engine = vm.runInNewContext(idbSrc + idbExports, { indexedDB: fakeIdb, setTimeout, Promise });
+
+  const okSave = await engine.idbSave('draft', { name: 'Duolingo' });
+  assert(okSave === true, 'idbSave resolves true after a successful commit');
+  const readBack = await engine.idbGet('draft');
+  assert(readBack && readBack.name === 'Duolingo', 'idbGet returns the committed value');
+
+  behavior.mode = 'quota';
+  const quotaSave = await engine.idbSave('draft2', { big: 'x'.repeat(1000) });
+  assert(quotaSave === false, 'idbSave resolves FALSE when the commit aborts with QuotaExceededError (old code reported true)');
+  assert(engine.lastError() === 'QuotaExceededError', 'idbSave records QuotaExceededError for diagnostics');
+  const quotaDelete = await engine.idbDelete('draft');
+  assert(quotaDelete === false, 'idbDelete resolves false when the commit aborts');
+
+  behavior.mode = 'ok';
+  assert(await engine.idbDelete('draft') === true, 'idbDelete resolves true after a successful commit');
+
+  const noIdb = vm.runInNewContext(idbSrc + idbExports, { setTimeout, Promise });
+  assert(await noIdb.idbSave('k', 1) === false, 'idbSave resolves false (no throw) when IndexedDB is unavailable');
+  assert(await noIdb.idbGet('k') === null, 'idbGet resolves null (no throw) when IndexedDB is unavailable');
+
+  // ---- SUITE 48: storage failure reporting ----
+  console.log('\n[SUITE 48]: Draft Storage Failure Reporting (no silent data loss, no false alarms)');
+
+  const fnNames = ['sanitizeStateForLocalStorage', 'stateHasUserContent', 'notifyStorageNotPersisted', 'saveDraftToStorage', 'saveState'];
+  const fnSrc = fnNames.map(n => extractFunctionSource(storageSrc, n)).join('\n');
+  assert(fnNames.every(n => extractFunctionSource(storageSrc, n).length > 0), 'Real storage functions extracted from storage.js for sandbox execution');
+
+  const heavyState = () => ({
+    form: { name: 'Duolingo' },
+    shots: ['x'.repeat(60000)],
+    isCustomIcon: false,
+    icon: ''
+  });
+
+  function makeFakeLs(limit) {
+    const store = {};
+    return {
+      store,
+      setItem(k, v) {
+        if (limit !== null && String(v).length > limit) throw new Error('QuotaExceededError');
+        store[k] = String(v);
+      },
+      getItem: k => (k in store ? store[k] : null),
+      removeItem: k => { delete store[k]; }
+    };
+  }
+
+  async function runSave(opts) {
+    const toasts = [];
+    const sandbox = {
+      localStorage: makeFakeLs(opts.lsLimit),
+      idbSave: () => Promise.resolve(opts.idbOk),
+      showToast: (msg) => toasts.push(msg),
+      getCurrentStateObject: heavyState,
+      updateDraftPill: () => {},
+      updatePresetBanner: () => {},
+      console: { warn() {}, log() {} },
+      Promise, Date, JSON
+    };
+    vm.runInNewContext(
+      'var STORAGE_KEY="s"; var DRAFT_STORAGE_KEY="d"; var DRAFT_FEATURE_THUMB_KEY="t"; var userDraft=null;' +
+      'var restoring=false; var CURRENT_PRESET_KEY="draft"; var isPresetModified=false; var lastStorageWarnAt=0;\n' + fnSrc +
+      '\nthis.__saveState = saveState; this.__saveDraft = saveDraftToStorage;',
+      sandbox
+    );
+    sandbox.__saveState();
+    await wait(30);
+    if (opts.twice) { sandbox.__saveState(); await wait(30); }
+    return toasts;
+  }
+
+  let t = await runSave({ lsLimit: null, idbOk: true });
+  assert(t.length === 0, 'LocalStorage + IndexedDB both OK: no warning');
+
+  t = await runSave({ lsLimit: 20000, idbOk: true });
+  assert(t.length === 0, 'LocalStorage quota hit but IndexedDB holds full copy: no false alarm');
+
+  t = await runSave({ lsLimit: null, idbOk: false });
+  assert(t.length === 0, 'IndexedDB failed but LocalStorage holds full copy: no false alarm');
+
+  t = await runSave({ lsLimit: 20000, idbOk: false });
+  assert(t.length === 1 && /Export JSON/.test(t[0]), 'IndexedDB failed + LocalStorage only sanitized (screenshots stripped): user IS warned (old code stayed silent)');
+
+  t = await runSave({ lsLimit: 0, idbOk: false });
+  assert(t.length === 1, 'Both stores completely failed: user is warned');
+
+  t = await runSave({ lsLimit: 20000, idbOk: false, twice: true });
+  assert(t.length === 1, 'Repeated failing saves show the warning only once (30s throttle, no toast spam)');
+
+  // saveDraftToStorage result contract
+  const draftSandbox = {
+    localStorage: makeFakeLs(20000),
+    idbSave: () => Promise.resolve(false),
+    console: { warn() {} }, Promise, Date, JSON
+  };
+  vm.runInNewContext(
+    'var DRAFT_STORAGE_KEY="d"; var DRAFT_FEATURE_THUMB_KEY="t"; var userDraft=null;\n' + fnSrc + '\nthis.__saveDraft = saveDraftToStorage;',
+    draftSandbox
+  );
+  draftSandbox.userDraft = heavyState();
+  const draftFull = await draftSandbox.__saveDraft();
+  assert(draftFull === false, 'saveDraftToStorage resolves false when only a sanitized copy could be stored');
+  assert(typeof draftSandbox.userDraft._savedAt === 'number', 'saveDraftToStorage stamps _savedAt so the newest copy can be recovered');
+
+  assert(storageSrc.includes('lsFullTs') && storageSrc.includes('heal IndexedDB'), 'loadDraftFromStorage keeps a newer complete localStorage copy instead of rolling back to a stale IndexedDB copy');
+
+  // ---- SUITE 49: replace-draft guard on import ----
+  console.log('\n[SUITE 49]: Replace-Draft Confirmation Dialog on Import (Cancel keeps the draft)');
+
+  const guardFns = ['stateHasUserContent', 'hasUserDraft', 'hasLiveUserContent', 'getDraftDisplayName', 'confirmReplaceDraft']
+    .map(n => extractFunctionSource(storageSrc, n)).join('\n');
+
+  function makeGuardEnv(env) {
+    const calls = { modal: null, proceed: 0 };
+    const sandbox = {
+      getCurrentStateObject: () => env.live,
+      showResetConfirmModal: (onConfirm, title, desc, ok) => { calls.modal = { onConfirm, title, desc, ok }; },
+      JSON
+    };
+    vm.runInNewContext(
+      'var userDraft=null; var CURRENT_PRESET_KEY="studio";\n' + guardFns +
+      '\nthis.__confirm = confirmReplaceDraft; this.__has = hasLiveUserContent;',
+      sandbox
+    );
+    sandbox.userDraft = env.userDraft || null;
+    sandbox.CURRENT_PRESET_KEY = env.key || 'studio';
+    return { sandbox, calls };
+  }
+
+  // Nothing to lose -> import proceeds immediately, no dialog
+  let g = makeGuardEnv({ userDraft: null, key: 'studio' });
+  let proceeded = 0;
+  let asked = g.sandbox.__confirm('Telegram', () => { proceeded++; });
+  assert(asked === false && proceeded === 1 && g.calls.modal === null, 'No draft content: import proceeds without a dialog');
+
+  g = makeGuardEnv({ userDraft: { form: { name: '   ' }, shots: [] }, key: 'studio' });
+  proceeded = 0;
+  g.sandbox.__confirm('Telegram', () => { proceeded++; });
+  assert(proceeded === 1 && g.calls.modal === null, 'Blank draft (whitespace name, no shots): no dialog');
+
+  // Draft holds work -> dialog, nothing applied until confirmed
+  g = makeGuardEnv({ userDraft: { form: { name: 'Duolingo' }, shots: [] }, key: 'studio' });
+  proceeded = 0;
+  asked = g.sandbox.__confirm('Telegram', () => { proceeded++; });
+  assert(asked === true && g.calls.modal !== null, 'Draft with real content: dialog is shown');
+  assert(proceeded === 0, 'Import is NOT applied while the dialog is open (Cancel/Esc keeps the draft intact)');
+  assert(g.calls.modal.title === 'Replace current draft?' && g.calls.modal.ok === 'Replace Draft', 'Dialog uses clear title and "Replace Draft" confirm label');
+  assert(g.calls.modal.desc.includes('"Duolingo"') && g.calls.modal.desc.includes('"Telegram"'), 'Dialog names both the current draft and the incoming app');
+  assert(g.sandbox.userDraft.form.name === 'Duolingo', 'Draft is unchanged after the dialog is dismissed without confirming');
+  g.calls.modal.onConfirm();
+  assert(proceeded === 1, 'Confirming runs the import exactly once');
+
+  // Editing the draft right now (still inside the 300ms debounce window)
+  g = makeGuardEnv({ userDraft: null, key: 'draft', live: { form: { name: 'Duolingo' }, shots: [] } });
+  proceeded = 0;
+  g.sandbox.__confirm('', () => { proceeded++; });
+  assert(g.calls.modal !== null && proceeded === 0, 'Unsaved live edits count as draft content (debounce window is covered)');
+  assert(g.calls.modal.desc.includes('"Duolingo"') && g.calls.modal.desc.includes('"Untitled"'), 'Missing incoming name falls back to "Untitled"');
+
+  // Wiring: both import paths are guarded BEFORE they touch the UI/state
+  const jsonSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/json.js'), 'utf8');
+  const guardIdx = jsonSrc.indexOf('confirmReplaceDraft(mapped.name');
+  const applyIdx = jsonSrc.indexOf("$('f-name').value = mapped.name");
+  const lastValidationIdx = jsonSrc.indexOf('File does not contain valid App Listing metadata', jsonSrc.indexOf('const hasFields'));
+  assert(guardIdx !== -1 && lastValidationIdx !== -1 && lastValidationIdx < guardIdx && guardIdx < applyIdx, 'JSON import: dialog runs after validation and before any field/state is written');
+  assert(jsonSrc.includes('skipDraftGuard: true'), 'JSON import: confirmed re-entry skips the guard (no dialog loop)');
+  const storeImportSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/store-import.js'), 'utf8');
+  assert(storeImportSrc.includes('confirmReplaceDraft(importedName, applyAndClose)'), 'App Store clone import is guarded by the same dialog');
+})());
+
+// ---------------------------------------------------------------------
+// [SUITE 50]: Mockup Title Word-Spacing & html2canvas Whitespace Preservation Verification
+// ---------------------------------------------------------------------
+asyncSuites.push((async () => {
+  console.log('\n[SUITE 50]: Mockup Title Word-Spacing & html2canvas Whitespace Preservation Verification');
+
+  // 1. Google Play and Apple headers specify white-space: pre-wrap to prevent whitespace collapse
+  const googleHeaderCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/google/header.css'), 'utf8');
+  assert(googleHeaderCss.includes('.g-name{') && googleHeaderCss.includes('white-space:pre-wrap;'), '.g-name specifies white-space:pre-wrap to preserve word boundaries');
+  assert(googleHeaderCss.includes('.g-dev{') && googleHeaderCss.includes('white-space:pre-wrap;'), '.g-dev specifies white-space:pre-wrap to preserve word boundaries');
+
+  const appleHeroCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/apple/hero.css'), 'utf8');
+  assert(appleHeroCss.includes('.a-name{') && appleHeroCss.includes('white-space:pre-wrap;'), '.a-name specifies white-space:pre-wrap to preserve word boundaries');
+
+  // 2. exportPNG in onclone injects style rules that override -webkit-box multi-line clamp layouts during capture
+  const exportPngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
+  assert(exportPngSrc.includes('.g-name, .a-name, .g-dev, .a-sub') && exportPngSrc.includes('display: block !important'), 'exportPNG overrides -webkit-box with display: block in clonedDoc');
+  assert(exportPngSrc.includes('white-space: pre-wrap !important'), 'exportPNG enforces white-space: pre-wrap in clonedDoc style');
+  assert(exportPngSrc.includes('word-spacing: normal !important'), 'exportPNG enforces word-spacing: normal in clonedDoc style');
+
+  // 3. exportPNG sets inline style overrides on cloned element nodes for guaranteed precedence
+  assert(exportPngSrc.includes("el.style.display = 'block'") && exportPngSrc.includes("el.style.whiteSpace = 'pre-wrap'"), 'exportPNG sets inline style display: block and whiteSpace: pre-wrap on cloned text nodes');
+
+  // 4. Bundled core.html contains both CSS and JS fixes
+  assert(bundledHtml.includes('white-space:pre-wrap') && bundledHtml.includes('.g-name{'), 'Bundled application has white-space:pre-wrap on .g-name');
+  assert(bundledHtml.includes('display: block !important') && bundledHtml.includes('white-space: pre-wrap !important'), 'Bundled application has exportPNG whitespace and -webkit-box override rules');
+})());
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
-console.log('\n======================================================');
-console.log(`TEST EXECUTION SUMMARY:`);
-console.log(`   Total Tests Run: ${passedTests + failedTests}`);
-console.log(`   Passed: ${passedTests}`);
-console.log(`   Failed: ${failedTests}`);
-console.log(`   Success Rate: ${((passedTests / (passedTests + failedTests)) * 100).toFixed(1)}%`);
-console.log('======================================================\n');
+Promise.all(asyncSuites).then(() => {
+  console.log('\n======================================================');
+  console.log(`TEST EXECUTION SUMMARY:`);
+  console.log(`   Total Tests Run: ${passedTests + failedTests}`);
+  console.log(`   Passed: ${passedTests}`);
+  console.log(`   Failed: ${failedTests}`);
+  console.log(`   Success Rate: ${((passedTests / (passedTests + failedTests)) * 100).toFixed(1)}%`);
+  console.log('======================================================\n');
 
-if (failedTests > 0) {
+  if (failedTests > 0) {
+    process.exit(1);
+  } else {
+    console.log('ALL AUTOMATED TESTS PASSED SUCCESSFULLY!\n');
+  }
+}).catch(err => {
+  console.error('[FATAL] Async suite crashed:', err);
   process.exit(1);
-} else {
-  console.log('ALL AUTOMATED TESTS PASSED SUCCESSFULLY!\n');
-}
+});

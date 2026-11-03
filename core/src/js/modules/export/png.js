@@ -304,8 +304,22 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         }
 
         // Hide CSS pseudo-element buttons so html2canvas renders explicit hardware button nodes cleanly
+        // and override -webkit-box multi-line clamp layouts. In WebKit/Blink (macOS), html2canvas range client rect
+        // calculation inside display: -webkit-box collapses whitespace between words, squishing words together.
         const btnStyle = clonedDoc.createElement('style');
-        btnStyle.textContent = '.dev::before, .dev::after { display: none !important; }';
+        btnStyle.textContent = `
+          .dev::before, .dev::after { display: none !important; }
+          .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title,
+          [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"] {
+            display: block !important;
+            -webkit-line-clamp: unset !important;
+            -webkit-box-orient: unset !important;
+            white-space: pre-wrap !important;
+            word-break: normal !important;
+            word-spacing: normal !important;
+            letter-spacing: 0px !important;
+          }
+        `;
         clonedDoc.head.appendChild(btnStyle);
 
         clonedEl.style.zoom = '1';
@@ -417,6 +431,16 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
+          el.style.letterSpacing = '0px';
+        });
+        // Ensure mockup text containers don't collapse whitespace between words
+        clonedEl.querySelectorAll('.g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"]').forEach(el => {
+          el.style.display = 'block';
+          el.style.webkitLineClamp = 'unset';
+          el.style.webkitBoxOrient = 'unset';
+          el.style.whiteSpace = 'pre-wrap';
+          el.style.wordBreak = 'normal';
+          el.style.wordSpacing = 'normal';
           el.style.letterSpacing = '0px';
         });
         // Strip focus highlight from export capture

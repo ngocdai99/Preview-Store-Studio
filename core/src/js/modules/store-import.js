@@ -547,8 +547,19 @@ async function handleStoreImportSubmit(confirmed = false) {
 
   try {
     const importedState = await fetchStoreAppData(target);
-    applyImportedStoreApp(importedState);
-    closeStoreImportModal();
+    const applyAndClose = () => {
+      applyImportedStoreApp(importedState);
+      closeStoreImportModal();
+    };
+    // Cloning replaces the draft: ask first when it holds real work (Cancel keeps it untouched).
+    if (typeof confirmReplaceDraft === 'function') {
+      const importedName = (importedState && importedState.form && importedState.form.name) || '';
+      if (confirmReplaceDraft(importedName, applyAndClose)) {
+        setStoreImportStatus('info', 'App data is ready. Your current draft has not been changed yet.');
+      }
+    } else {
+      applyAndClose();
+    }
   } catch (err) {
     if (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError')))) {
       setStoreImportStatus('error', 'Network error: Unable to reach Apple App Store. Please check your internet connection and try again.');

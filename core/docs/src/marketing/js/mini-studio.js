@@ -3373,6 +3373,17 @@
                       }
                     }
                   });
+
+                  // Ensure text elements do not collapse whitespace between words due to -webkit-box in html2canvas
+                  clonedStage.querySelectorAll('.ms-g-name, .ms-a-name, .ms-g-dev, .ms-a-sub, [data-bind="name"]').forEach(function (el) {
+                    el.style.display = 'block';
+                    el.style.webkitLineClamp = 'unset';
+                    el.style.webkitBoxOrient = 'unset';
+                    el.style.whiteSpace = 'pre-wrap';
+                    el.style.wordBreak = 'normal';
+                    el.style.wordSpacing = 'normal';
+                    el.style.letterSpacing = '0px';
+                  });
                 }
               }
             });

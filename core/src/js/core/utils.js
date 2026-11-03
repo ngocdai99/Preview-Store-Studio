@@ -780,6 +780,12 @@ function openAppDB() {
   return _appDbPromise;
 }
 
+// Name of the last IndexedDB write failure (e.g. 'QuotaExceededError'), for diagnostics.
+let idbLastErrorName = '';
+
+// Resolves true ONLY after the transaction has fully committed. IndexedDB reports
+// QuotaExceededError at commit time (tx.onabort), AFTER req.onsuccess has already fired,
+// so resolving on req.onsuccess would report a failed write as a success.
 function idbSave(key, val) {
   if (typeof indexedDB === 'undefined') return Promise.resolve(false);
   return openAppDB().then(db => {
@@ -789,10 +795,15 @@ function idbSave(key, val) {
         const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
         const store = tx.objectStore(IDB_STORE_NAME);
         const req = store.put(val, key);
-        req.onsuccess = () => resolve(true);
         req.onerror = () => resolve(false);
-        tx.onabort = () => resolve(false);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+        tx.onabort = () => {
+          idbLastErrorName = (tx.error && tx.error.name) || 'AbortError';
+          resolve(false);
+        };
       } catch (e) {
+        idbLastErrorName = (e && e.name) || 'Error';
         resolve(false);
       }
     });
@@ -826,8 +837,9 @@ function idbDelete(key) {
         const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
         const store = tx.objectStore(IDB_STORE_NAME);
         const req = store.delete(key);
-        req.onsuccess = () => resolve(true);
         req.onerror = () => resolve(false);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
         tx.onabort = () => resolve(false);
       } catch (e) {
         resolve(false);

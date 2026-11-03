@@ -215,14 +215,57 @@ function getCurrentStateObject(){
   };
 }
 
-function hasUserDraft(){
-  if(userDraft && typeof userDraft === 'object'){
-    const f = userDraft.form || {};
+// True when a state object holds real user content (text, screenshots or a custom icon).
+function stateHasUserContent(d){
+  if(d && typeof d === 'object'){
+    const f = d.form || {};
     const hasText = !!((f.name && f.name.trim()) || (f.sub && f.sub.trim()) || (f.short && f.short.trim()) || (f.desc && f.desc.trim()));
-    const hasShots = Array.isArray(userDraft.shots) && userDraft.shots.length > 0;
-    const hasCustomIcon = !!(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('c6-bg') && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc') && !userDraft.icon.includes('f59e0b') && !userDraft.icon.includes('ea580c'));
+    const hasShots = Array.isArray(d.shots) && d.shots.length > 0;
+    const hasCustomIcon = !!(d.isCustomIcon && d.icon && !d.icon.includes('c6-bg') && !d.icon.includes('bfd1fd') && !d.icon.includes('d2c7fc') && !d.icon.includes('f59e0b') && !d.icon.includes('ea580c'));
     return hasText || hasShots || hasCustomIcon;
   }
+  return false;
+}
+
+function hasUserDraft(){
+  return stateHasUserContent(userDraft);
+}
+
+// Like hasUserDraft(), but also inspects the live form while editing the draft,
+// so edits still inside the debounce window are never considered "empty".
+function hasLiveUserContent(){
+  if(CURRENT_PRESET_KEY === 'draft'){
+    try{
+      if(stateHasUserContent(getCurrentStateObject())) return true;
+    }catch(_){}
+  }
+  return hasUserDraft();
+}
+
+// Display name of the draft that an import would replace (live form while editing the draft).
+function getDraftDisplayName(){
+  let src = userDraft;
+  if(CURRENT_PRESET_KEY === 'draft'){
+    try{ src = getCurrentStateObject(); }catch(_){}
+  }
+  const name = (src && src.form && src.form.name) ? String(src.form.name).trim() : '';
+  return name || 'Untitled';
+}
+
+// Asks before an import replaces a draft that holds real work.
+// Calls onProceed immediately when there is nothing to lose; Cancel simply never calls it,
+// so the draft stays untouched.
+function confirmReplaceDraft(incomingName, onProceed){
+  if(typeof hasLiveUserContent === 'function' && hasLiveUserContent() && typeof showResetConfirmModal === 'function'){
+    showResetConfirmModal(
+      onProceed,
+      'Replace current draft?',
+      'Importing "' + ((incomingName || '').trim() || 'Untitled') + '" will replace your current draft "' + getDraftDisplayName() + '". This cannot be undone. Export a JSON backup first if you want to keep it.',
+      'Replace Draft'
+    );
+    return true;
+  }
+  onProceed();
   return false;
 }
 
@@ -233,11 +276,21 @@ function ensureDraft(){
   return userDraft;
 }
 
+// Throttled so a failing storage layer does not spam a toast on every debounced save.
+let lastStorageWarnAt = 0;
+function notifyStorageNotPersisted(){
+  const now = Date.now();
+  if(now - lastStorageWarnAt < 30000) return;
+  lastStorageWarnAt = now;
+  showToast('Storage quota exceeded! Export JSON to save your work.', 'warn', 6000);
+}
+
+// Resolves true when a FULL (non-sanitized) copy of the draft was persisted somewhere.
 function saveDraftToStorage(){
-  if(!userDraft) return;
-  if(typeof idbSave === 'function'){
-    idbSave(DRAFT_STORAGE_KEY, userDraft);
-  }
+  if(!userDraft) return Promise.resolve(true);
+  // Timestamp lets loadDraftFromStorage() pick the newest copy if one store missed a write.
+  userDraft._savedAt = Date.now();
+  const idbPromise = (typeof idbSave === 'function') ? idbSave(DRAFT_STORAGE_KEY, userDraft) : Promise.resolve(false);
   if(userDraft.isCustomFeature && userDraft.featureGraphic && userDraft.featureGraphic !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
     if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE.has(userDraft.featureGraphic)){
       try{ localStorage.setItem(DRAFT_FEATURE_THUMB_KEY, THUMB_CACHE.get(userDraft.featureGraphic)); }catch(_){}
@@ -249,14 +302,17 @@ function saveDraftToStorage(){
   } else {
     try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(_){}
   }
+  let lsFull = false;
   try{
     localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(userDraft));
+    lsFull = true;
   }catch(e){
     try{
       const sanitized = sanitizeStateForLocalStorage(userDraft);
       localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(sanitized));
     }catch(err2){}
   }
+  return idbPromise.then(ok => ok || lsFull).catch(() => lsFull);
 }
 
 function loadDraftFromStorage(){
@@ -283,6 +339,13 @@ function loadDraftFromStorage(){
   if(typeof idbGet === 'function'){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
+        // A complete localStorage copy newer than IndexedDB means the last IDB write failed:
+        // keep the newer copy and heal IndexedDB instead of rolling back to stale data.
+        const lsFullTs = (userDraft && !userDraft._partial) ? (userDraft._savedAt || 0) : 0;
+        if(lsFullTs && (idbDraft._savedAt || 0) < lsFullTs){
+          if(typeof idbSave === 'function') idbSave(DRAFT_STORAGE_KEY, userDraft);
+          return;
+        }
         userDraft = idbDraft;
         if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (!userDraft.isCustomIcon && typeof STUDIO_ICON !== 'undefined' && (userDraft.icon === STUDIO_ICON || userDraft.icon.includes('std-sq-bg'))) || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
           userDraft.icon = BLANK_ICON;
@@ -521,9 +584,10 @@ function saveState(isContentEdit = true){
   if(restoring) return;
   const state = getCurrentStateObject();
 
+  let draftPersist = Promise.resolve(false);
   if(CURRENT_PRESET_KEY === 'draft'){
     userDraft = JSON.parse(JSON.stringify(state));
-    saveDraftToStorage();
+    draftPersist = saveDraftToStorage();
     updateDraftPill();
   } else {
     // Ephemeral mode on preset: do not overwrite draft
@@ -535,43 +599,30 @@ function saveState(isContentEdit = true){
   }
 
   // 1. Asynchronously persist complete state to IndexedDB (virtually unlimited quota for high-res images)
-  let idbPromise = null;
-  if(typeof idbSave === 'function'){
-    idbPromise = idbSave(STORAGE_KEY, state);
-  }
+  const idbPromise = (typeof idbSave === 'function') ? idbSave(STORAGE_KEY, state) : Promise.resolve(false);
 
-  // 2. Try saving to localStorage
-  let lsOk = false;
+  // 2. Try saving to localStorage. Only a FULL copy counts as persisted: the sanitized
+  // fallback strips screenshots, so it must not silence the warning on its own.
+  let lsFull = false;
   try{
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    lsOk = true;
+    lsFull = true;
   }catch(e){
     // Quota exceeded (typically caused by 2048x2732 base64 screenshots)
     try{
       const sanitized = sanitizeStateForLocalStorage(state);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
-      lsOk = true;
-    }catch(err2){
-      lsOk = false;
-    }
+    }catch(err2){}
   }
 
-  // If localStorage succeeded with sanitized or full state, no toast is needed because IndexedDB holds full state.
-  // Only show warning if BOTH stores failed.
-  if(!lsOk){
-    if(idbPromise){
-      idbPromise.then(ok => {
-        if(!ok){
-          console.warn('Storage limit reached on both LocalStorage and IndexedDB');
-          showToast('Storage quota exceeded! Export JSON to save your work.', 'warn', 4000);
-        }
-      }).catch(() => {
-        showToast('Storage quota exceeded! Export JSON to save your work.', 'warn', 4000);
-      });
-    } else {
-      showToast('Storage quota exceeded! Export JSON to save your work.', 'warn', 4000);
+  // 3. Warn only when NO store holds a complete copy of the work (draft copy and state copy both failed).
+  const statePersist = idbPromise.then(ok => ok || lsFull).catch(() => lsFull);
+  Promise.all([draftPersist, statePersist]).then(results => {
+    if(!results[0] && !results[1]){
+      console.warn('Storage limit reached on both LocalStorage and IndexedDB', typeof idbLastErrorName !== 'undefined' ? idbLastErrorName : '');
+      notifyStorageNotPersisted();
     }
-  }
+  }).catch(() => notifyStorageNotPersisted());
 }
 
 function loadState(){

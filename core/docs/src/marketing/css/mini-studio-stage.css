@@ -930,6 +930,7 @@
       letter-spacing: -.25px;
       line-height: 1.22;
       word-break: normal;
+      white-space: pre-wrap;
       color: var(--t);
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -1506,6 +1507,7 @@
       line-height: 1.25;
       letter-spacing: -.2px;
       word-break: normal;
+      white-space: pre-wrap;
       color: #000;
       display: -webkit-box;
       -webkit-line-clamp: 2;

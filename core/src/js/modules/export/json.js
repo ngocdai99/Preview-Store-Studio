@@ -52,7 +52,7 @@ function exportJSON(){
 }
 
 // Smart & Fault-Tolerant JSON Import Parser
-function parseAndApplyJSON(jsonString){
+function parseAndApplyJSON(jsonString, opts = {}){
   if(typeof jsonString === 'string'){
     // Strip UTF-8 BOM if present
     if(jsonString.charCodeAt(0) === 0xFEFF){
@@ -126,6 +126,16 @@ function parseAndApplyJSON(jsonString){
   if(!hasFields && !data.icon && !Array.isArray(data.shots)){
     showToast('File does not contain valid App Listing metadata', 'warn');
     return false;
+  }
+
+  // Draft guard: importing replaces the single draft slot. If it holds real work, ask first.
+  // Nothing has been written to the UI or storage yet, so Cancel leaves the draft untouched.
+  if(!opts.skipDraftGuard && typeof confirmReplaceDraft === 'function'){
+    let applied = false;
+    const asked = confirmReplaceDraft(mapped.name, () => {
+      applied = parseAndApplyJSON(data, { skipDraftGuard: true });
+    });
+    return asked ? false : applied;
   }
 
   // Safely populate available fields without erasing existing ones if absent
