@@ -924,15 +924,15 @@ export default function BannerStudioPage() {
                         </div>
                       </div>
                     ) : (
-                      /* Distinct Elevated Glowing Pills (Exact Match to Image 2 Reference) */
+                      /* Distinct Elevated Glass Pills */
                       <>
-                        {/* Apple Store Pill (Glowing Royal Blue) */}
+                        {/* Apple Store Pill */}
                         <div 
-                          className="h-[34px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
+                          className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-semibold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(13, 30, 60, 0.95)",
-                            border: "1.5px solid #2563eb",
-                            boxShadow: "0 0 14px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)"
+                            backgroundColor: "rgba(30, 58, 138, 0.22)",
+                            border: "1px solid rgba(96, 165, 250, 0.28)",
+                            boxShadow: "0 1px 4px rgba(0, 0, 0, 0.3)"
                           }}
                         >
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
@@ -942,13 +942,13 @@ export default function BannerStudioPage() {
                           <span className="leading-none">App Store</span>
                         </div>
 
-                        {/* Google Play Pill (Glowing Emerald Green) */}
+                        {/* Google Play Pill */}
                         <div 
-                          className="h-[34px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
+                          className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-semibold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(6, 40, 26, 0.95)",
-                            border: "1.5px solid #10b981",
-                            boxShadow: "0 0 14px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)"
+                            backgroundColor: "rgba(6, 78, 59, 0.22)",
+                            border: "1px solid rgba(52, 211, 153, 0.28)",
+                            boxShadow: "0 1px 4px rgba(0, 0, 0, 0.3)"
                           }}
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
@@ -957,16 +957,16 @@ export default function BannerStudioPage() {
                           <span className="leading-none">Google Play</span>
                         </div>
 
-                        {/* Client Side Pill (Clean Neutral Slate) */}
+                        {/* Client Side Pill */}
                         <div 
-                          className="h-[34px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
+                          className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-semibold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(32, 34, 38, 0.95)",
-                            border: "1.5px solid rgba(255, 255, 255, 0.22)",
-                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)"
+                            backgroundColor: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                            boxShadow: "0 1px 4px rgba(0, 0, 0, 0.3)"
                           }}
                         >
-                          <ShieldCheck className="w-[14px] h-[14px] text-white shrink-0 block" />
+                          <ShieldCheck className="w-[14px] h-[14px] text-[#00D085] shrink-0 block" />
                           <span className="leading-none">{badgeText}</span>
                         </div>
                       </>
@@ -1287,15 +1287,15 @@ export default function BannerStudioPage() {
                         </div>
                       </div>
                     ) : (
-                      /* Distinct Elevated Glowing Pills */
+                      /* Distinct Elevated Glass Pills */
                       <>
-                        {/* Apple Store Pill (Glowing Royal Blue) */}
+                        {/* Apple Store Pill */}
                         <div 
-                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-semibold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(13, 30, 60, 0.95)",
-                            border: "1.5px solid #2563eb",
-                            boxShadow: "0 0 10px rgba(37, 99, 235, 0.35)"
+                            backgroundColor: "rgba(30, 58, 138, 0.22)",
+                            border: "1px solid rgba(96, 165, 250, 0.28)",
+                            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)"
                           }}
                         >
                           <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
@@ -1305,13 +1305,13 @@ export default function BannerStudioPage() {
                           <span className="leading-none">App Store</span>
                         </div>
 
-                        {/* Google Play Pill (Glowing Emerald Green) */}
+                        {/* Google Play Pill */}
                         <div 
-                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-semibold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(6, 40, 26, 0.95)",
-                            border: "1.5px solid #10b981",
-                            boxShadow: "0 0 10px rgba(16, 185, 129, 0.35)"
+                            backgroundColor: "rgba(6, 78, 59, 0.22)",
+                            border: "1px solid rgba(52, 211, 153, 0.28)",
+                            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)"
                           }}
                         >
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
@@ -1322,10 +1322,11 @@ export default function BannerStudioPage() {
 
                         {/* Client Side Pill */}
                         <div 
-                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-semibold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            backgroundColor: "rgba(32, 34, 38, 0.95)",
-                            border: "1.5px solid rgba(255, 255, 255, 0.22)"
+                            backgroundColor: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)"
                           }}
                         >
                           <ShieldCheck className="w-3 h-3 text-[#00D085] shrink-0 block" />
