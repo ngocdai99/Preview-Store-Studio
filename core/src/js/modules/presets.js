@@ -98,6 +98,8 @@ function loadPreset(key){
       isPresetModified = false;
       userDraft = getCurrentStateObject();
       userDraft.isCustomized = true;
+      userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+      userDraft.isCustomIcon = false;
       if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
       if(typeof updatePresetBanner === 'function') updatePresetBanner();
       if(typeof updateDraftPill === 'function') updateDraftPill();

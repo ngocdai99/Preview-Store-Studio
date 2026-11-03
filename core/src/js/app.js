@@ -8826,6 +8826,8 @@ function loadPreset(key){
       isPresetModified = false;
       userDraft = getCurrentStateObject();
       userDraft.isCustomized = true;
+      userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+      userDraft.isCustomIcon = false;
       if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
       if(typeof updatePresetBanner === 'function') updatePresetBanner();
       if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -9576,18 +9578,12 @@ function updateDraftPill(){
       });
     }
   } else {
-    // No draft exists
-    if(isViewingPreset){
-      // When viewing preset and there is no draft, hide draft pill
-      draftPill.style.display = 'none';
-      draftPill.classList.remove('has-draft', 'on');
-    } else {
-      draftPill.style.display = 'inline-flex';
-      draftPill.classList.remove('has-draft');
-      draftPill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
-      draftPill.textContent = '+ Your App';
-      draftPill.setAttribute('title', 'Start your custom app draft');
-    }
+    // No draft exists: show "+ Your App" pill on the left of preset pill
+    draftPill.style.display = 'inline-flex';
+    draftPill.classList.remove('has-draft');
+    draftPill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
+    draftPill.innerHTML = '<span id="draftBtnTitle">+ Your App</span>';
+    draftPill.setAttribute('title', 'Start your custom app draft');
   }
 
   updatePresetMenuSelection();
@@ -9604,8 +9600,7 @@ function updatePresetBanner(){
   const banner = $('presetBanner');
   if(!banner) return;
   
-  const hasDraft = hasUserDraft();
-  if(CURRENT_PRESET_KEY !== 'draft' && hasDraft && userDraft && isPresetModified){
+  if(CURRENT_PRESET_KEY !== 'draft' && isPresetModified){
     banner.style.display = 'inline-flex';
     banner.classList.add('is-modified');
     const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
@@ -9619,12 +9614,7 @@ function updatePresetBanner(){
 }
 
 function handleUserFormEdit(){
-  if(!hasUserDraft()){
-    if(CURRENT_PRESET_KEY !== 'draft'){
-      initDraftFromCurrentPreset();
-      return;
-    }
-  } else if(CURRENT_PRESET_KEY !== 'draft'){
+  if(CURRENT_PRESET_KEY !== 'draft'){
     isPresetModified = true;
     updatePresetBanner();
     return;
@@ -9640,9 +9630,6 @@ function saveState(){
     userDraft = JSON.parse(JSON.stringify(state));
     saveDraftToStorage();
     updateDraftPill();
-  } else if(!hasUserDraft()){
-    initDraftFromCurrentPreset();
-    return;
   } else {
     // Ephemeral mode on preset: do not overwrite draft
     isPresetModified = true;
@@ -11531,11 +11518,6 @@ if(typeof hasUserDraft === 'function' && hasUserDraft()){
   restoring = true;
   try{
     loadPreset('studio');
-    if(typeof getCurrentStateObject === 'function'){
-      userDraft = getCurrentStateObject();
-      userDraft.isCustomized = true;
-      if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
-    }
   }finally{
     restoring = false;
   }

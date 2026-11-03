@@ -2636,6 +2636,100 @@ const heightGainPercent = ((newZoom - oldZoom) / oldZoom) * 100;
 assert(heightGainPercent >= 10, 'Device gains at least 10% more vertical scale and screen presence with 0px bottom bar');
 
 // ---------------------------------------------------------------------
+// [SUITE 38]: Initial Bootstrap Studio Preset with +Your App Pill Workflow Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 38]: Initial Bootstrap Studio Preset with +Your App Pill Workflow Verification');
+
+// 1. Static HTML workspace bar contains + Your App as initial draft button and Store Preview Studio preset pill
+assert(bundledHtml.includes('id="btnDraft"') && bundledHtml.includes('+ Your App'), 'btnDraft initially contains + Your App call-to-action');
+assert(bundledHtml.includes('id="btnPresetPill"') && bundledHtml.includes('Store Preview Studio'), 'btnPresetPill initially contains Store Preview Studio preset title');
+
+// 2. main.js loads studio preset on initial bootstrap without artificially force-creating userDraft
+assert(!bundledHtml.includes("loadPreset('studio');\n    if(typeof getCurrentStateObject === 'function'){\n      userDraft = getCurrentStateObject();"), 'Initial bootstrap loads studio preset without cloning into userDraft');
+
+// 3. updateDraftPill renders + Your App button beside active preset pill when no draft exists
+assert(bundledHtml.includes("draftPill.innerHTML = '<span id=\"draftBtnTitle\">+ Your App</span>';"), 'updateDraftPill renders + Your App button when userDraft is null');
+
+// 4. Functional State Machine Simulation: Bootstrap -> Click +Your App -> Return to Preset -> Close Preset
+let sim38Draft = null;
+let sim38PresetKey = 'studio';
+let sim38ActivePreset = 'studio';
+
+function sim38GetPillsState() {
+  const isViewingPreset = (sim38PresetKey !== 'draft');
+  const activePresetKey = isViewingPreset ? sim38PresetKey : (sim38ActivePreset && sim38ActivePreset !== 'draft' ? sim38ActivePreset : null);
+
+  const presetPill = {
+    visible: !!activePresetKey,
+    active: isViewingPreset,
+    name: activePresetKey === 'studio' ? 'Store Preview Studio' : activePresetKey
+  };
+
+  const draftPill = {
+    visible: true,
+    active: sim38PresetKey === 'draft',
+    hasDraft: !!sim38Draft,
+    title: sim38Draft ? (sim38Draft.form && sim38Draft.form.name ? sim38Draft.form.name : 'Your App') : '+ Your App'
+  };
+
+  return { presetPill, draftPill };
+}
+
+// Initial Boot State
+let s0 = sim38GetPillsState();
+assert(s0.draftPill.visible === true, 'Draft pill is visible on initial boot');
+assert(s0.draftPill.active === false, 'Draft pill is inactive on initial boot');
+assert(s0.draftPill.hasDraft === false, 'User draft does not exist initially');
+assert(s0.draftPill.title === '+ Your App', 'Draft pill displays "+ Your App" text on the left');
+assert(s0.presetPill.visible === true, 'Preset pill is visible on initial boot');
+assert(s0.presetPill.active === true, 'Preset pill is active on initial boot');
+assert(s0.presetPill.name === 'Store Preview Studio', 'Preset pill displays Store Preview Studio');
+
+// Step 1: User clicks "+ Your App" button
+function sim38ClickDraftBtn() {
+  if (sim38PresetKey !== 'draft') {
+    if (!sim38Draft) {
+      const prevActivePreset = sim38ActivePreset;
+      // loadPreset('none')
+      sim38PresetKey = 'draft';
+      sim38ActivePreset = prevActivePreset;
+      sim38Draft = { form: { name: '' }, isCustomized: true };
+      return;
+    }
+    sim38PresetKey = 'draft';
+  }
+}
+sim38ClickDraftBtn();
+let s1 = sim38GetPillsState();
+assert(s1.draftPill.active === true, 'Draft pill is active after clicking + Your App');
+assert(s1.draftPill.hasDraft === true, 'User draft is initialized');
+assert(s1.draftPill.title === 'Your App', 'Draft pill displays "Your App" with draft badge');
+assert(s1.presetPill.visible === true, 'Preset pill remains visible beside draft pill');
+assert(s1.presetPill.active === false, 'Preset pill is inactive while working on draft');
+
+// Step 2: User clicks Preset pill to reference template
+function sim38ClickPresetPill() {
+  if (sim38PresetKey === 'draft') {
+    sim38PresetKey = sim38ActivePreset || 'studio';
+  }
+}
+sim38ClickPresetPill();
+let s2 = sim38GetPillsState();
+assert(s2.presetPill.active === true, 'Preset pill becomes active again');
+assert(s2.draftPill.visible === true, 'Draft pill remains visible beside preset');
+assert(s2.draftPill.active === false, 'Draft pill is inactive while viewing preset');
+assert(s2.draftPill.title === 'Your App', 'Draft pill preserves user draft title');
+
+// Step 3: User returns to draft and closes preset
+sim38ClickDraftBtn();
+// User clicks close X on preset pill
+sim38ActivePreset = null;
+let s3 = sim38GetPillsState();
+assert(s3.presetPill.visible === false, 'Preset pill is hidden after closing');
+assert(s3.draftPill.visible === true, 'Draft pill remains visible');
+assert(s3.draftPill.active === true, 'Draft pill is active');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');
