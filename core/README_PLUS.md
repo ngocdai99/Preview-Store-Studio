@@ -37,12 +37,6 @@ store-preview-studio-plus-v1.0/
 
 ---
 
-## 🛠 Fastlane Metadata Paths
-* `fastlane/metadata/ios/en-US/{name, subtitle, promotional_text, description, keywords}.txt`
-* `fastlane/metadata/android/en-US/{title, short_description, full_description}.txt`
-
----
-
 ## 🔒 License & Support
 * **License**: Commercial End-User License (`LICENSE.txt`) for personal and client projects.
 * **Support**: Reply directly to your Gumroad receipt email.

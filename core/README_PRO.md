@@ -50,12 +50,6 @@ store-preview-studio-pro-v1.0/
 
 ---
 
-## 🛠 Fastlane Metadata Paths
-* `fastlane/metadata/ios/en-US/{name, subtitle, promotional_text, description, keywords}.txt`
-* `fastlane/metadata/android/en-US/{title, short_description, full_description}.txt`
-
----
-
 ## 🔒 License & Support
 * **License**: Team & Agency Commercial License (`LICENSE.txt`) for unlimited client work.
 * **Support**: Reply directly to your Gumroad receipt email.
