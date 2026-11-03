@@ -2123,6 +2123,7 @@ assert(bundledHtml.includes('.card-header') && bundledHtml.includes('.card-toggl
 const headerJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'header.js'), 'utf8');
 assert(headerJsCode.includes("card.classList.toggle('collapsed')"), 'header.js provides click delegation on .card-header to toggle collapsed class');
 assert(headerJsCode.includes("card.classList.add('selected')"), 'header.js manages selected state when expanding cards');
+assert(!headerJsCode.includes("if (typeof saveState === 'function') saveState();"), 'Accordion card toggle does not invoke saveState to avoid triggering preset modified warning');
 
 // 5. Collapsed card hover state: subtle neutral brightening without colored chromatic tints
 assert(bundledHtml.includes('.card.collapsed:hover') && bundledHtml.includes('#242524'), 'Dark theme styles card hover with subtle neutral lightening #242524');

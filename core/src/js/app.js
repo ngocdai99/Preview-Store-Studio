@@ -8676,7 +8676,6 @@ function initHeader() {
         if (wasCollapsed) {
           card.classList.add('selected');
         }
-        if (typeof saveState === 'function') saveState();
       }
       return;
     }
