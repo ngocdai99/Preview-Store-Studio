@@ -58,4 +58,4 @@ store-preview-studio-pro-v1.0/
 
 ## 🔒 License & Support
 * **License**: Team & Agency Commercial License (`LICENSE.txt`) for unlimited client work.
-* **Support**: support@previewstudio.app · [store-preview-studio.pages.dev](https://store-preview-studio.pages.dev)
+* **Support**: Reply directly to your Gumroad receipt email.

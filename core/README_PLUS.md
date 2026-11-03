@@ -45,4 +45,4 @@ store-preview-studio-plus-v1.0/
 
 ## 🔒 License & Support
 * **License**: Commercial End-User License (`LICENSE.txt`) for personal and client projects.
-* **Support**: support@previewstudio.app · [store-preview-studio.pages.dev](https://store-preview-studio.pages.dev)
+* **Support**: Reply directly to your Gumroad receipt email.
