@@ -690,11 +690,22 @@ function setView(v, force = false){
   const stageMenu = $('vt');
   if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
 
-  const activeBtn = document.querySelector('#vt button.on');
+  const activeBtn = document.querySelector('#vt button[data-v].on') || document.querySelector('#vt button.on');
   const activeView = activeBtn ? activeBtn.dataset.v : null;
   if (!force && activeView === v) return;
 
-  $$('#vt button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $$('#vt button[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+
+  // Maintain Dual Phone selected state in comparison section
+  const isDual = document.body.dataset.dual === 'true';
+  const btnDual = $('btnDualPhone');
+  if (btnDual) {
+    btnDual.classList.toggle('on', isDual);
+    btnDual.setAttribute('aria-checked', isDual ? 'true' : 'false');
+  }
+  const badge = $('stageDualBadge');
+  if (badge) badge.style.display = isDual ? 'inline-flex' : 'none';
+
   syncAllVtPills();
 
   // Sync stage view dropdown label and icon
@@ -746,7 +757,7 @@ function setView(v, force = false){
 }
 
 $$('.seg button').forEach(b => b.onclick = () => setStore(b.dataset.s));
-$$('#vt button').forEach(b => b.onclick = () => setView(b.dataset.v));
+$$('#vt button[data-v]').forEach(b => b.onclick = () => setView(b.dataset.v));
 
 // Dual Phone Comparison Toggle on Stage Bottom Bar
 function toggleDualPhone(forceState) {

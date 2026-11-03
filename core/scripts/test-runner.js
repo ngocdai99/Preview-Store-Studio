@@ -2520,7 +2520,7 @@ const viewSandbox = {
     querySelectorAll: () => []
   },
   $$: (sel) => {
-    if (sel === '#vt button') return [vtDetailBtn, vtSearchBtn];
+    if (sel === '#vt button' || sel === '#vt button[data-v]') return [vtDetailBtn, vtSearchBtn];
     if (sel === '.phone [data-v]') return [viewDetailEl, viewSearchEl];
     return [];
   },
@@ -2530,11 +2530,11 @@ const viewSandbox = {
 
 const setViewCode = `
 function setView(v, force = false){
-  const activeBtn = document.querySelector('#vt button.on');
+  const activeBtn = document.querySelector('#vt button[data-v].on') || document.querySelector('#vt button.on');
   const activeView = activeBtn ? activeBtn.dataset.v : null;
   if (!force && activeView === v) return;
 
-  $$('#vt button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $$('#vt button[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   syncAllVtPills();
   $$('.phone [data-v]').forEach(e => {
     if(e.dataset.v === v){
@@ -2578,6 +2578,11 @@ assert(viewSandbox.reflowCount === 1, 'Spam clicking search does not trigger ref
 // Tap 4: force = true allows forced re-render if needed
 viewSandbox.setView('search', true);
 assert(viewSandbox.reflowCount === 2, 'Forced view update re-renders when force=true');
+
+// Tap 5: Dual Phone selection state preservation across view changes
+assert(bundledHtml.includes("$$('#vt button[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === v))"), 'setView targets only data-v buttons to preserve Dual Phone selected state');
+assert(bundledHtml.includes("btnDual.classList.toggle('on', isDual)"), 'setView maintains Dual Phone selected state in comparison section');
+assert(bundledHtml.includes("$$('#vt button[data-v]').forEach(b => b.onclick = () => setView(b.dataset.v))"), 'vt click handlers only bind setView to data-v buttons');
 
 // ---------------------------------------------------------------------
 // [SUITE 35]: Apple Privacy Layout (iPhone 100% Stacked vs iPad Single Card <50%)
