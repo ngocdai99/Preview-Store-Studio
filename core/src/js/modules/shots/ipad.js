@@ -25,7 +25,7 @@ function setSupportsIpad(val){
   }
 
   const ipadCard = $('ipadCard');
-  if(ipadCard) ipadCard.style.display = (SUPPORTS_IPAD && store === 'apple') ? '' : 'none';
+  if(ipadCard) ipadCard.style.display = (store === 'apple') ? '' : 'none';
 
   $$('.a-platforms-badge').forEach(b => {
     const ipadIco = b.querySelector('.a-plat-ico-ipad');
@@ -392,6 +392,7 @@ if(fDestIpad){
 const addIpadShot = $('addIpadShot');
 if(addIpadShot){
   addIpadShot.onclick = () => {
+    if(!SUPPORTS_IPAD) setSupportsIpad(true);
     IPAD_SHOTS.push('');
     renderIpadShots();
     saveState();
@@ -410,6 +411,7 @@ if(ipadShotFile){
       return;
     }
     readFile(f, d => {
+      if(!SUPPORTS_IPAD) setSupportsIpad(true);
       ipadPick < 0 ? IPAD_SHOTS.push(d) : IPAD_SHOTS[ipadPick] = d;
       ipadPick = -1;
       renderIpadShots();

@@ -574,7 +574,7 @@ function setStore(s, animate = true){
   // Immediately update editor fields visibility and title for instant feedback
   $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
   if (s === 'apple') {
-    if ($('ipadCard')) $('ipadCard').style.display = (typeof SUPPORTS_IPAD !== 'undefined' && SUPPORTS_IPAD) ? '' : 'none';
+    if ($('ipadCard')) $('ipadCard').style.display = '';
   } else {
     if ($('ipadCard')) $('ipadCard').style.display = 'none';
   }
@@ -676,7 +676,7 @@ function setStore(s, animate = true){
       }
 
       if(s === 'apple'){
-        if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
+        if($('ipadCard')) $('ipadCard').style.display = '';
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }

@@ -4299,7 +4299,7 @@ function setSupportsIpad(val){
   }
 
   const ipadCard = $('ipadCard');
-  if(ipadCard) ipadCard.style.display = (SUPPORTS_IPAD && store === 'apple') ? '' : 'none';
+  if(ipadCard) ipadCard.style.display = (store === 'apple') ? '' : 'none';
 
   $$('.a-platforms-badge').forEach(b => {
     const ipadIco = b.querySelector('.a-plat-ico-ipad');
@@ -4666,6 +4666,7 @@ if(fDestIpad){
 const addIpadShot = $('addIpadShot');
 if(addIpadShot){
   addIpadShot.onclick = () => {
+    if(!SUPPORTS_IPAD) setSupportsIpad(true);
     IPAD_SHOTS.push('');
     renderIpadShots();
     saveState();
@@ -4684,6 +4685,7 @@ if(ipadShotFile){
       return;
     }
     readFile(f, d => {
+      if(!SUPPORTS_IPAD) setSupportsIpad(true);
       ipadPick < 0 ? IPAD_SHOTS.push(d) : IPAD_SHOTS[ipadPick] = d;
       ipadPick = -1;
       renderIpadShots();
@@ -8019,7 +8021,7 @@ function setStore(s, animate = true){
   // Immediately update editor fields visibility and title for instant feedback
   $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== s));
   if (s === 'apple') {
-    if ($('ipadCard')) $('ipadCard').style.display = (typeof SUPPORTS_IPAD !== 'undefined' && SUPPORTS_IPAD) ? '' : 'none';
+    if ($('ipadCard')) $('ipadCard').style.display = '';
   } else {
     if ($('ipadCard')) $('ipadCard').style.display = 'none';
   }
@@ -8121,7 +8123,7 @@ function setStore(s, animate = true){
       }
 
       if(s === 'apple'){
-        if($('ipadCard')) $('ipadCard').style.display = SUPPORTS_IPAD ? '' : 'none';
+        if($('ipadCard')) $('ipadCard').style.display = '';
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
@@ -9337,7 +9339,7 @@ function applyStateObject(s){
   else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
 
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || (!s.isCustomIcon && (typeof STUDIO_ICON !== 'undefined' && s.icon === STUDIO_ICON))){
+    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg')){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
       CUSTOM_ICON_1024 = '';

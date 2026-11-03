@@ -91,7 +91,7 @@ function applyStateObject(s){
   else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
 
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || (!s.isCustomIcon && (typeof STUDIO_ICON !== 'undefined' && s.icon === STUDIO_ICON))){
+    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg')){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
       CUSTOM_ICON_1024 = '';
