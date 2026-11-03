@@ -547,18 +547,18 @@ async function handleStoreImportSubmit(confirmed = false) {
 
   try {
     const importedState = await fetchStoreAppData(target);
-    const applyAndClose = () => {
+    closeStoreImportModal();
+
+    const apply = () => {
       applyImportedStoreApp(importedState);
-      closeStoreImportModal();
     };
+
     // Cloning replaces the draft: ask first when it holds real work (Cancel keeps it untouched).
     if (typeof confirmReplaceDraft === 'function') {
       const importedName = (importedState && importedState.form && importedState.form.name) || '';
-      if (confirmReplaceDraft(importedName, applyAndClose)) {
-        setStoreImportStatus('info', 'App data is ready. Your current draft has not been changed yet.');
-      }
+      confirmReplaceDraft(importedName, apply);
     } else {
-      applyAndClose();
+      apply();
     }
   } catch (err) {
     if (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError')))) {

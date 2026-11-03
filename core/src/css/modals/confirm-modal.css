@@ -20,6 +20,10 @@
   pointer-events: auto;
 }
 
+#resetConfirmModal {
+  z-index: 1000020 !important;
+}
+
 .confirm-modal-card {
   position: relative;
   width: 100%;

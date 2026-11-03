@@ -257,10 +257,17 @@ function getDraftDisplayName(){
 // so the draft stays untouched.
 function confirmReplaceDraft(incomingName, onProceed){
   if(typeof hasLiveUserContent === 'function' && hasLiveUserContent() && typeof showResetConfirmModal === 'function'){
+    const currentName = getDraftDisplayName();
+    const incName = ((incomingName || '').trim() || 'Untitled');
+    const isSameName = incName.toLowerCase() === currentName.toLowerCase();
+    const desc = isSameName
+      ? 'Importing "' + incName + '" will overwrite your current draft with fresh data. This cannot be undone. Export a JSON backup first if you want to keep your edits.'
+      : 'Importing "' + incName + '" will replace your current draft "' + currentName + '". This cannot be undone. Export a JSON backup first if you want to keep it.';
+
     showResetConfirmModal(
       onProceed,
       'Replace current draft?',
-      'Importing "' + ((incomingName || '').trim() || 'Untitled') + '" will replace your current draft "' + getDraftDisplayName() + '". This cannot be undone. Export a JSON backup first if you want to keep it.',
+      desc,
       'Replace Draft'
     );
     return true;

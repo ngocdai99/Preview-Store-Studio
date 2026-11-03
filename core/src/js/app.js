@@ -10056,10 +10056,17 @@ function getDraftDisplayName(){
 // so the draft stays untouched.
 function confirmReplaceDraft(incomingName, onProceed){
   if(typeof hasLiveUserContent === 'function' && hasLiveUserContent() && typeof showResetConfirmModal === 'function'){
+    const currentName = getDraftDisplayName();
+    const incName = ((incomingName || '').trim() || 'Untitled');
+    const isSameName = incName.toLowerCase() === currentName.toLowerCase();
+    const desc = isSameName
+      ? 'Importing "' + incName + '" will overwrite your current draft with fresh data. This cannot be undone. Export a JSON backup first if you want to keep your edits.'
+      : 'Importing "' + incName + '" will replace your current draft "' + currentName + '". This cannot be undone. Export a JSON backup first if you want to keep it.';
+
     showResetConfirmModal(
       onProceed,
       'Replace current draft?',
-      'Importing "' + ((incomingName || '').trim() || 'Untitled') + '" will replace your current draft "' + getDraftDisplayName() + '". This cannot be undone. Export a JSON backup first if you want to keep it.',
+      desc,
       'Replace Draft'
     );
     return true;
@@ -12128,18 +12135,18 @@ async function handleStoreImportSubmit(confirmed = false) {
 
   try {
     const importedState = await fetchStoreAppData(target);
-    const applyAndClose = () => {
+    closeStoreImportModal();
+
+    const apply = () => {
       applyImportedStoreApp(importedState);
-      closeStoreImportModal();
     };
+
     // Cloning replaces the draft: ask first when it holds real work (Cancel keeps it untouched).
     if (typeof confirmReplaceDraft === 'function') {
       const importedName = (importedState && importedState.form && importedState.form.name) || '';
-      if (confirmReplaceDraft(importedName, applyAndClose)) {
-        setStoreImportStatus('info', 'App data is ready. Your current draft has not been changed yet.');
-      }
+      confirmReplaceDraft(importedName, apply);
     } else {
-      applyAndClose();
+      apply();
     }
   } catch (err) {
     if (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError')))) {

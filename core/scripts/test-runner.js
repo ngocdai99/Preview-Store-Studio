@@ -3553,7 +3553,10 @@ asyncSuites.push((async () => {
   assert(guardIdx !== -1 && lastValidationIdx !== -1 && lastValidationIdx < guardIdx && guardIdx < applyIdx, 'JSON import: dialog runs after validation and before any field/state is written');
   assert(jsonSrc.includes('skipDraftGuard: true'), 'JSON import: confirmed re-entry skips the guard (no dialog loop)');
   const storeImportSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/store-import.js'), 'utf8');
-  assert(storeImportSrc.includes('confirmReplaceDraft(importedName, applyAndClose)'), 'App Store clone import is guarded by the same dialog');
+  assert(storeImportSrc.includes('confirmReplaceDraft(importedName, apply)'), 'App Store clone import is guarded by the same dialog');
+  assert(storeImportSrc.indexOf('closeStoreImportModal()') < storeImportSrc.indexOf('confirmReplaceDraft(importedName'), 'Store import modal closes before showing replace confirmation dialog');
+  const confirmCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/modals/confirm-modal.css'), 'utf8');
+  assert(confirmCss.includes('#resetConfirmModal') && confirmCss.includes('z-index: 1000020 !important'), '#resetConfirmModal z-index is elevated above all other modal backdrops');
 })());
 
 // ---------------------------------------------------------------------
