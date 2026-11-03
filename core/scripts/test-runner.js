@@ -3209,11 +3209,12 @@ assert(!bundledHtml.includes('Exported via Store Preview Studio'), 'Watermark sl
 assert(!bundledHtml.includes('DATA SAFETY PRACTICES:'), 'Unconfigurable data safety survey practices removed from clipboard copy');
 assert(!bundledHtml.includes('VERSION & RELEASE DATE:'), 'Mockup release date removed from clipboard copy');
 
-// Test 3: Essential console fields present
-assert(bundledHtml.includes('App Title (30 chars max):') && bundledHtml.includes('Subtitle (30 chars max):'), 'Apple Title and Subtitle included with 30 char limits');
-assert(bundledHtml.includes('Promotional Text (170 chars max):'), 'Apple Promotional text included with 170 char limit');
-assert(bundledHtml.includes('Short description (80 chars max):'), 'Google Play Short description included with 80 char limit');
-assert(bundledHtml.includes('Primary Category:') && bundledHtml.includes('App Category:'), 'Categories included as dropdown guide');
+// Test 3: Essential console fields present in clear bracket tag format
+assert(bundledHtml.includes('[ App Title ]') && bundledHtml.includes('[ Subtitle ]'), 'Apple Title and Subtitle included with bracket tag format');
+assert(bundledHtml.includes('[ Promotional Text ]'), 'Apple Promotional text included with bracket tag format');
+assert(bundledHtml.includes('[ Short Description ]'), 'Google Play Short description included with bracket tag format');
+assert(bundledHtml.includes('[ Primary Category ]') && bundledHtml.includes('[ App Category ]'), 'Categories included as dropdown guide');
+assert(bundledHtml.includes("[ What's New ]"), "Apple uses short [ What's New ] tag without Version suffix");
 
 // ---------------------------------------------------------------------
 // [SUITE 46]: Imported JSON App Icon State & Placeholder Suppression Verification

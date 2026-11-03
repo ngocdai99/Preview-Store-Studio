@@ -15,41 +15,45 @@ function copyAllText(){
   const text = `=====================================================
 APPLE APP STORE (iOS)
 =====================================================
-App Title (30 chars max):
-${name} [${safeCount(name)}/30]
 
-Subtitle (30 chars max):
-${sub} [${safeCount(sub)}/30]
+[ App Title ] (${safeCount(name)}/30 chars)
+${name}
 
-Promotional Text (170 chars max):
-${promo} [${safeCount(promo)}/170]
+[ Subtitle ] (${safeCount(sub)}/30 chars)
+${sub}
 
-Primary Category:
+[ Promotional Text ] (${safeCount(promo)}/170 chars)
+${promo}
+
+[ Primary Category ]
 ${catApple}
 
-Description (4,000 chars max):
+[ Description ] (${safeCount(desc)}/4,000 chars)
 ${desc}
 
-What's New in This Version:
+[ What's New ]
 ${wn}
+
 
 =====================================================
 GOOGLE PLAY STORE (Android)
 =====================================================
-App name (30 chars max):
-${name} [${safeCount(name)}/30]
 
-Short description (80 chars max):
-${short} [${safeCount(short)}/80]
+[ App Name ] (${safeCount(name)}/30 chars)
+${name}
 
-App Category:
+[ Short Description ] (${safeCount(short)}/80 chars)
+${short}
+
+[ App Category ]
 ${catGoogle}
 
-Full description (4,000 chars max):
+[ Full Description ] (${safeCount(desc)}/4,000 chars)
 ${desc}
 
-Release notes:
+[ What's New / Release Notes ]
 ${wn}
+
 =====================================================`;
 
   navigator.clipboard.writeText(text).then(()=>{
