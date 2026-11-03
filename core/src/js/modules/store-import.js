@@ -600,6 +600,11 @@ function initStoreImportEvents() {
     cancelBtn.onclick = () => closeStoreImportModal();
   }
 
+  const closeBtn = $('storeImportClose');
+  if (closeBtn) {
+    closeBtn.onclick = () => closeStoreImportModal();
+  }
+
   const submitBtn = $('storeImportSubmit');
   if (submitBtn) {
     submitBtn.onclick = () => handleStoreImportSubmit();

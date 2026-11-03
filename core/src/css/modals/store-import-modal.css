@@ -35,6 +35,35 @@
   border-color: rgba(37, 99, 235, 0.22);
 }
 
+.store-import-close-btn {
+  background: none;
+  border: 0;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.store-import-close-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:root[data-ui=light] .store-import-close-btn {
+  color: #64748b;
+}
+
+:root[data-ui=light] .store-import-close-btn:hover {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.08);
+}
+
 .store-import-body {
   display: flex;
   flex-direction: column;

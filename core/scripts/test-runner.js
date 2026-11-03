@@ -1416,6 +1416,8 @@ assert(!bundledHtml.includes('.iphone-header { position: sticky; top: 0; z-index
 console.log('\n[SUITE 16]: Official Apple App Store Import & Public API Disclaimer');
 
 assert(bundledHtml.includes('id="storeImportModal"'), 'Store import modal #storeImportModal exists in bundled HTML');
+assert(bundledHtml.includes('id="storeImportClose"'), 'Store import modal includes top-right close button #storeImportClose');
+assert(bundledHtml.includes('.store-import-close-btn'), 'Store import modal defines .store-import-close-btn styles');
 assert(bundledHtml.includes('id="storeImportInput"'), 'Store import input #storeImportInput exists in modal');
 assert(bundledHtml.includes('id="btnOpenStoreImport"'), 'Workspace bar includes #btnOpenStoreImport button');
 assert(/\.ms-pill-import\s*\{\s*margin-left:\s*auto;/.test(bundledHtml), 'Import App button is right-aligned adjacent to Menu dropdown');
