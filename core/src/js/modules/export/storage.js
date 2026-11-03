@@ -629,9 +629,9 @@ if(optResetAll){
     $$('.menu').forEach(m => m.classList.remove('show'));
     showResetConfirmModal(
       resetFactoryStorage,
-      'Reset All Storage (Factory State)?',
-      'This will permanently delete all saved drafts, custom uploaded screenshots, icons, and settings from LocalStorage and IndexedDB. The app will reload to the clean installation state.',
-      'Reset All'
+      'Reset All Data?',
+      'Clear all stored data and reload to clean state.',
+      'Reset'
     );
   };
 }

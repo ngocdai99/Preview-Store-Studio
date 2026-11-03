@@ -2736,7 +2736,7 @@ console.log('\n[SUITE 39]: Factory Storage Reset Verification (LocalStorage & In
 
 // 1. Menu Export dropdown contains dedicated Factory Reset button
 assert(bundledHtml.includes('id="optResetAllData"'), 'Menu contains dedicated #optResetAllData button');
-assert(bundledHtml.includes('Reset Factory Storage'), 'Factory reset button has readable "Reset Factory Storage" label');
+assert(bundledHtml.includes('id="optResetAllData"') && bundledHtml.includes('>Reset</span>'), 'Factory reset button has clean "Reset" label');
 assert(bundledHtml.includes('class="menu-item menu-item-danger"'), 'Factory reset button uses menu-item-danger accent styling');
 
 // 2. Storage engine defines resetFactoryStorage function with full storage wipe & reload
