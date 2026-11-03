@@ -3216,6 +3216,90 @@ assert(bundledHtml.includes('Short description (80 chars max):'), 'Google Play S
 assert(bundledHtml.includes('Primary Category:') && bundledHtml.includes('App Category:'), 'Categories included as dropdown guide');
 
 // ---------------------------------------------------------------------
+// [SUITE 46]: Imported JSON App Icon State & Placeholder Suppression Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 46]: Imported JSON App Icon State & Placeholder Suppression Verification');
+
+// 1. exportJSON exports isCustomIcon, icon1024, icon512, and isCustomFeature
+assert(bundledHtml.includes('isCustomIcon: typeof IS_CUSTOM_ICON !== \'undefined\' ? IS_CUSTOM_ICON : true'), 'exportJSON explicitly exports isCustomIcon flag');
+assert(bundledHtml.includes('isCustomFeature: typeof IS_CUSTOM_FEATURE !== \'undefined\' ? IS_CUSTOM_FEATURE : false'), 'exportJSON explicitly exports isCustomFeature flag');
+assert(bundledHtml.includes('icon1024: (typeof CUSTOM_ICON_1024 !== \'undefined\' && CUSTOM_ICON_1024)'), 'exportJSON explicitly exports icon1024');
+
+// 2. parseAndApplyJSON evaluates custom icon presence and sets IS_CUSTOM_ICON = true
+assert(bundledHtml.includes('const hasRealIcon = !isBlankIconUri(importedRawIcon)'), 'parseAndApplyJSON detects real non-blank icon on import');
+assert(bundledHtml.includes('userDraft.isCustomIcon = IS_CUSTOM_ICON'), 'parseAndApplyJSON persists isCustomIcon to userDraft');
+
+// 3. Functional Simulation of Telegram Messenger JSON Import
+function simulateImportJsonIcon(jsonPayload) {
+  let simCurrentPresetKey = 'studio';
+  let simIsCustomIcon = false;
+  let simIcon = '';
+  let simCustom1024 = '';
+  let simCustom512 = '';
+
+  const simIsBlankIconUri = uri => !uri || (uri.includes && (uri.includes('c6-bg') || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('bp-bg') || uri.includes('blueprint')));
+
+  simCurrentPresetKey = 'draft';
+  const importedRawIcon = jsonPayload.icon1024 || jsonPayload.iconApple || jsonPayload.icon512 || jsonPayload.iconGoogle || jsonPayload.icon || '';
+  const hasRealIcon = !simIsBlankIconUri(importedRawIcon);
+
+  if (jsonPayload.isCustomIcon !== undefined) {
+    simIsCustomIcon = !!jsonPayload.isCustomIcon;
+  } else {
+    simIsCustomIcon = hasRealIcon;
+  }
+
+  simIcon = importedRawIcon;
+  if (jsonPayload.icon1024 || jsonPayload.iconApple || jsonPayload.icon) {
+    simCustom1024 = jsonPayload.icon1024 || jsonPayload.iconApple || jsonPayload.icon;
+  }
+  if (jsonPayload.icon512 || jsonPayload.iconGoogle || jsonPayload.icon) {
+    simCustom512 = jsonPayload.icon512 || jsonPayload.iconGoogle || jsonPayload.icon;
+  }
+
+  function simIsPlaceholderIcon() {
+    if (simIsCustomIcon) return false;
+    if (!simIcon) return true;
+    if (simIsBlankIconUri(simIcon)) return true;
+    if (simCurrentPresetKey === 'none') return true;
+    if (simCurrentPresetKey === 'draft') {
+      if (simIcon && !simIsBlankIconUri(simIcon)) {
+        simIsCustomIcon = true;
+        return false;
+      }
+      return !simIsCustomIcon;
+    }
+    return false;
+  }
+
+  return {
+    isCustomIcon: simIsCustomIcon,
+    isPlaceholder: simIsPlaceholderIcon(),
+    icon: simIcon,
+    custom1024: simCustom1024,
+    custom512: simCustom512
+  };
+}
+
+// Case A: Telegram Messenger JSON (with icon URL from Apple mzstatic, no isCustomIcon field)
+const telegramRes = simulateImportJsonIcon({
+  name: "Telegram Messenger",
+  icon: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/ce/41/d8/ce41d807-350e-69f1-f31e-16be42b6ebfb/Telegram-0-0-1x_U007epad-0-1-0-85-220.png/1024x1024bb.png"
+});
+assert(telegramRes.isCustomIcon === true, 'Telegram imported icon accurately sets isCustomIcon to true');
+assert(telegramRes.isPlaceholder === false, 'Telegram imported icon is never treated as placeholder (no dashed orange border)');
+assert(telegramRes.custom1024.includes('Telegram'), 'Telegram icon is synchronized to 1024x1024 slot');
+assert(telegramRes.custom512.includes('Telegram'), 'Telegram icon is synchronized to 512x512 slot');
+
+// Case B: Blank/Blueprint JSON (with placeholder icon)
+const blankRes = simulateImportJsonIcon({
+  name: "Blank App",
+  icon: "data:image/svg+xml;utf8,<svg blueprint grid bp-bg></svg>"
+});
+assert(blankRes.isCustomIcon === false, 'Blank blueprint icon is identified as not custom');
+assert(blankRes.isPlaceholder === true, 'Blank blueprint icon is correctly treated as placeholder');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

@@ -29,7 +29,13 @@ function exportJSON(){
       desc: $('f-desc') ? $('f-desc').value : ''
     },
     icon: ICON,
+    icon1024: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    icon512: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
+    iconApple: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    iconGoogle: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
+    isCustomIcon: typeof IS_CUSTOM_ICON !== 'undefined' ? IS_CUSTOM_ICON : true,
     featureGraphic: FEATURE_GRAPHIC,
+    isCustomFeature: typeof IS_CUSTOM_FEATURE !== 'undefined' ? IS_CUSTOM_FEATURE : false,
     shots: SHOTS,
     supportsIpad: SUPPORTS_IPAD,
     ipadShots: IPAD_SHOTS,
@@ -150,10 +156,30 @@ function parseAndApplyJSON(jsonString){
   if(mapped.new && $('f-new')) $('f-new').value = mapped.new;
   if(mapped.desc && $('f-desc')) $('f-desc').value = mapped.desc;
 
-  IS_CUSTOM_ICON = false;
-  if(data.icon1024 || data.icon512) {
-    if(store === 'apple' && data.icon1024) ICON = data.icon1024;
-    else if(store === 'google' && data.icon512) ICON = data.icon512;
+  CURRENT_PRESET_KEY = 'draft';
+  isPresetModified = false;
+
+  const isBlankIconUri = uri => !uri || (typeof BLANK_ICON !== 'undefined' && uri === BLANK_ICON) || (typeof uri === 'string' && (uri.includes('c6-bg') || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('bp-bg') || uri.includes('blueprint')));
+  const importedRawIcon = data.icon1024 || data.iconApple || data.icon512 || data.iconGoogle || data.icon || '';
+  const hasRealIcon = !isBlankIconUri(importedRawIcon);
+
+  if(data.isCustomIcon !== undefined){
+    IS_CUSTOM_ICON = !!data.isCustomIcon;
+  } else {
+    IS_CUSTOM_ICON = hasRealIcon;
+  }
+
+  if(data.icon1024) CUSTOM_ICON_1024 = data.icon1024;
+  else if(data.iconApple) CUSTOM_ICON_1024 = data.iconApple;
+  else if(data.icon) CUSTOM_ICON_1024 = data.icon;
+
+  if(data.icon512) CUSTOM_ICON_512 = data.icon512;
+  else if(data.iconGoogle) CUSTOM_ICON_512 = data.iconGoogle;
+  else if(data.icon) CUSTOM_ICON_512 = data.icon;
+
+  if(data.icon1024 || data.icon512 || data.iconApple || data.iconGoogle) {
+    if(store === 'apple' && (data.icon1024 || data.iconApple)) ICON = data.icon1024 || data.iconApple;
+    else if(store === 'google' && (data.icon512 || data.iconGoogle)) ICON = data.icon512 || data.iconGoogle;
     else if(data.icon) ICON = data.icon;
   } else if(data.icon && typeof data.icon === 'string') {
     ICON = data.icon;
@@ -177,6 +203,12 @@ function parseAndApplyJSON(jsonString){
   }
   if(data.featureGraphic && typeof data.featureGraphic === 'string') FEATURE_GRAPHIC = data.featureGraphic;
   else if(data.feature && typeof data.feature === 'string') FEATURE_GRAPHIC = data.feature;
+
+  if(data.isCustomFeature !== undefined){
+    IS_CUSTOM_FEATURE = !!data.isCustomFeature;
+  } else {
+    IS_CUSTOM_FEATURE = !!(FEATURE_GRAPHIC && FEATURE_GRAPHIC !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '') && FEATURE_GRAPHIC !== (typeof DEFAULT_FEATURE !== 'undefined' ? DEFAULT_FEATURE : ''));
+  }
 
   if(Array.isArray(data.shots)){
     const cleanShots = data.shots.filter(x => typeof x === 'string' && x.trim().length > 0);
@@ -206,12 +238,13 @@ function parseAndApplyJSON(jsonString){
   if(typeof renderIpadShots === 'function') renderIpadShots();
   if(typeof renderTablets === 'function') renderTablets();
   if(typeof update === 'function') update();
+  if(typeof validateAppIcon === 'function') validateAppIcon();
+  if(typeof updateIconDropZoneUi === 'function') updateIconDropZoneUi();
 
-  CURRENT_PRESET_KEY = 'draft';
-  isPresetModified = false;
   if(typeof getCurrentStateObject === 'function'){
     userDraft = getCurrentStateObject();
     userDraft.isCustomized = true;
+    userDraft.isCustomIcon = IS_CUSTOM_ICON;
   }
   if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
   if(typeof updatePresetBanner === 'function') updatePresetBanner();

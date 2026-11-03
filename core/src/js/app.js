@@ -3849,13 +3849,18 @@ let ICON_FILE_NAME = '';
 
 function isPlaceholderIcon(){
   if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) return false;
+  if(!ICON) return true;
+  if(typeof BLANK_ICON !== 'undefined' && ICON === BLANK_ICON) return true;
+  if(typeof BLUEPRINT_ICON !== 'undefined' && ICON === BLUEPRINT_ICON) return true;
+  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('f59e0b') || ICON.includes('ea580c') || ICON.includes('bp-bg') || ICON.includes('blueprint') || ICON.includes('BLUEPRINT GRID'))) return true;
   if(typeof CURRENT_PRESET_KEY !== 'undefined'){
     if(CURRENT_PRESET_KEY === 'none') return true;
-    if(CURRENT_PRESET_KEY === 'draft') return !IS_CUSTOM_ICON;
     if(CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none' && CURRENT_PRESET_KEY !== 'draft') return false;
+    if(CURRENT_PRESET_KEY === 'draft'){
+      if(typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
+      return false;
+    }
   }
-  if(!ICON) return true;
-  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('f59e0b') || ICON.includes('ea580c') || ICON.includes('bp-bg') || (typeof BLANK_ICON !== 'undefined' && ICON === BLANK_ICON))) return true;
   return !IS_CUSTOM_ICON;
 }
 
@@ -9868,18 +9873,20 @@ function applyStateObject(s){
   }
   if(s.icon1024) CUSTOM_ICON_1024 = s.icon1024;
   else if(s.iconApple) CUSTOM_ICON_1024 = s.iconApple;
+  else if(s.icon && store === 'apple') CUSTOM_ICON_1024 = s.icon;
 
   if(s.icon512) CUSTOM_ICON_512 = s.icon512;
   else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
+  else if(s.icon && store === 'google') CUSTOM_ICON_512 = s.icon;
 
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg')){
+    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || s.icon.includes('blueprint')){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
       CUSTOM_ICON_1024 = '';
       CUSTOM_ICON_512 = '';
     } else {
-      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : false;
+      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
       if(store === 'google' && (CUSTOM_ICON_512 || s.icon512 || s.iconGoogle)){
         ICON = CUSTOM_ICON_512 || s.icon512 || s.iconGoogle;
       } else if(store === 'apple' && (CUSTOM_ICON_1024 || s.icon1024 || s.iconApple)){
@@ -10695,7 +10702,13 @@ function exportJSON(){
       desc: $('f-desc') ? $('f-desc').value : ''
     },
     icon: ICON,
+    icon1024: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    icon512: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
+    iconApple: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
+    iconGoogle: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
+    isCustomIcon: typeof IS_CUSTOM_ICON !== 'undefined' ? IS_CUSTOM_ICON : true,
     featureGraphic: FEATURE_GRAPHIC,
+    isCustomFeature: typeof IS_CUSTOM_FEATURE !== 'undefined' ? IS_CUSTOM_FEATURE : false,
     shots: SHOTS,
     supportsIpad: SUPPORTS_IPAD,
     ipadShots: IPAD_SHOTS,
@@ -10816,10 +10829,30 @@ function parseAndApplyJSON(jsonString){
   if(mapped.new && $('f-new')) $('f-new').value = mapped.new;
   if(mapped.desc && $('f-desc')) $('f-desc').value = mapped.desc;
 
-  IS_CUSTOM_ICON = false;
-  if(data.icon1024 || data.icon512) {
-    if(store === 'apple' && data.icon1024) ICON = data.icon1024;
-    else if(store === 'google' && data.icon512) ICON = data.icon512;
+  CURRENT_PRESET_KEY = 'draft';
+  isPresetModified = false;
+
+  const isBlankIconUri = uri => !uri || (typeof BLANK_ICON !== 'undefined' && uri === BLANK_ICON) || (typeof uri === 'string' && (uri.includes('c6-bg') || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('bp-bg') || uri.includes('blueprint')));
+  const importedRawIcon = data.icon1024 || data.iconApple || data.icon512 || data.iconGoogle || data.icon || '';
+  const hasRealIcon = !isBlankIconUri(importedRawIcon);
+
+  if(data.isCustomIcon !== undefined){
+    IS_CUSTOM_ICON = !!data.isCustomIcon;
+  } else {
+    IS_CUSTOM_ICON = hasRealIcon;
+  }
+
+  if(data.icon1024) CUSTOM_ICON_1024 = data.icon1024;
+  else if(data.iconApple) CUSTOM_ICON_1024 = data.iconApple;
+  else if(data.icon) CUSTOM_ICON_1024 = data.icon;
+
+  if(data.icon512) CUSTOM_ICON_512 = data.icon512;
+  else if(data.iconGoogle) CUSTOM_ICON_512 = data.iconGoogle;
+  else if(data.icon) CUSTOM_ICON_512 = data.icon;
+
+  if(data.icon1024 || data.icon512 || data.iconApple || data.iconGoogle) {
+    if(store === 'apple' && (data.icon1024 || data.iconApple)) ICON = data.icon1024 || data.iconApple;
+    else if(store === 'google' && (data.icon512 || data.iconGoogle)) ICON = data.icon512 || data.iconGoogle;
     else if(data.icon) ICON = data.icon;
   } else if(data.icon && typeof data.icon === 'string') {
     ICON = data.icon;
@@ -10843,6 +10876,12 @@ function parseAndApplyJSON(jsonString){
   }
   if(data.featureGraphic && typeof data.featureGraphic === 'string') FEATURE_GRAPHIC = data.featureGraphic;
   else if(data.feature && typeof data.feature === 'string') FEATURE_GRAPHIC = data.feature;
+
+  if(data.isCustomFeature !== undefined){
+    IS_CUSTOM_FEATURE = !!data.isCustomFeature;
+  } else {
+    IS_CUSTOM_FEATURE = !!(FEATURE_GRAPHIC && FEATURE_GRAPHIC !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '') && FEATURE_GRAPHIC !== (typeof DEFAULT_FEATURE !== 'undefined' ? DEFAULT_FEATURE : ''));
+  }
 
   if(Array.isArray(data.shots)){
     const cleanShots = data.shots.filter(x => typeof x === 'string' && x.trim().length > 0);
@@ -10872,12 +10911,13 @@ function parseAndApplyJSON(jsonString){
   if(typeof renderIpadShots === 'function') renderIpadShots();
   if(typeof renderTablets === 'function') renderTablets();
   if(typeof update === 'function') update();
+  if(typeof validateAppIcon === 'function') validateAppIcon();
+  if(typeof updateIconDropZoneUi === 'function') updateIconDropZoneUi();
 
-  CURRENT_PRESET_KEY = 'draft';
-  isPresetModified = false;
   if(typeof getCurrentStateObject === 'function'){
     userDraft = getCurrentStateObject();
     userDraft.isCustomized = true;
+    userDraft.isCustomIcon = IS_CUSTOM_ICON;
   }
   if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
   if(typeof updatePresetBanner === 'function') updatePresetBanner();

@@ -86,18 +86,20 @@ function applyStateObject(s){
   }
   if(s.icon1024) CUSTOM_ICON_1024 = s.icon1024;
   else if(s.iconApple) CUSTOM_ICON_1024 = s.iconApple;
+  else if(s.icon && store === 'apple') CUSTOM_ICON_1024 = s.icon;
 
   if(s.icon512) CUSTOM_ICON_512 = s.icon512;
   else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
+  else if(s.icon && store === 'google') CUSTOM_ICON_512 = s.icon;
 
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg')){
+    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || s.icon.includes('blueprint')){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
       CUSTOM_ICON_1024 = '';
       CUSTOM_ICON_512 = '';
     } else {
-      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : false;
+      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
       if(store === 'google' && (CUSTOM_ICON_512 || s.icon512 || s.iconGoogle)){
         ICON = CUSTOM_ICON_512 || s.icon512 || s.iconGoogle;
       } else if(store === 'apple' && (CUSTOM_ICON_1024 || s.icon1024 || s.iconApple)){
