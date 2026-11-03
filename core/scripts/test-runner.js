@@ -3198,6 +3198,23 @@ assert(bundledHtml.includes('padW=m?24:48') || bundledHtml.includes('padW = m ? 
 // Test 5: onStageResize uses requestAnimationFrame throttling
 assert(bundledHtml.includes('cancelAnimationFrame(resizeRaf)') && bundledHtml.includes('requestAnimationFrame('), 'onStageResize throttles resize events with requestAnimationFrame');
 
+console.log('\n[SUITE 45]: Store-Ready Dual Clipboard Metadata Copy Verification');
+
+// Test 1: copyAllText groups strictly into Apple App Store and Google Play Store sections
+assert(bundledHtml.includes('APPLE APP STORE (iOS)') && bundledHtml.includes('GOOGLE PLAY STORE (Android)'), 'copyAllText structures clean dual-store sections');
+
+// Test 2: Unconfigurable mockup fields (release date, survey badges, developer legal entity) removed
+assert(!bundledHtml.includes('AGE RATING & MONETIZATION:'), 'Unconfigurable age rating survey badge removed from clipboard copy');
+assert(!bundledHtml.includes('Exported via Store Preview Studio'), 'Watermark slogan removed from clipboard copy');
+assert(!bundledHtml.includes('DATA SAFETY PRACTICES:'), 'Unconfigurable data safety survey practices removed from clipboard copy');
+assert(!bundledHtml.includes('VERSION & RELEASE DATE:'), 'Mockup release date removed from clipboard copy');
+
+// Test 3: Essential console fields present
+assert(bundledHtml.includes('App Title (30 chars max):') && bundledHtml.includes('Subtitle (30 chars max):'), 'Apple Title and Subtitle included with 30 char limits');
+assert(bundledHtml.includes('Promotional Text (170 chars max):'), 'Apple Promotional text included with 170 char limit');
+assert(bundledHtml.includes('Short description (80 chars max):'), 'Google Play Short description included with 80 char limit');
+assert(bundledHtml.includes('Primary Category:') && bundledHtml.includes('App Category:'), 'Categories included as dropdown guide');
+
 // ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
