@@ -9648,11 +9648,11 @@ function updatePresetBanner(){
         textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
       }
     } else if(isPresetModified){
-      // Draft exists and user modified preset: show "Return to My Draft"
+      // Draft exists and user modified preset: show warning banner text only (no Return to My Draft button needed)
       banner.style.display = 'inline-flex';
       banner.classList.add('is-modified');
       if(copyBtn) copyBtn.style.display = 'none';
-      if(returnBtn) returnBtn.style.display = 'inline-flex';
+      if(returnBtn) returnBtn.style.display = 'none';
       const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
       if(textEl){
         textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';

@@ -2657,6 +2657,7 @@ assert(bundledHtml.includes('btnCopyPresetToDraft.onclick = () =>'), 'btnCopyPre
 assert(bundledHtml.includes('btn-preset-copy'), 'btnCopyPresetToDraft has refined .btn-preset-copy styling');
 assert(bundledHtml.includes('.preset-banner-btn.btn-preset-copy'), 'CSS defines adaptive white/dark button styling for .btn-preset-copy');
 assert(bundledHtml.includes(':root[data-ui=light] .preset-banner-btn.btn-preset-copy'), 'CSS defines dark button inversion for light mode');
+assert(!bundledHtml.includes("returnBtn.style.display = 'inline-flex'"), 'Return to My Draft button is omitted when editing preset with existing draft');
 
 // 4. Functional State Machine Simulation: Bootstrap -> Click +Your App -> Return to Preset -> Close Preset
 let sim38Draft = null;
