@@ -13,11 +13,11 @@
 }
 .ico-wrap.has img{border:0}
 .ico-wrap.is-placeholder{
-  border:1.5px dashed #3b82f6;box-shadow:none;
+  border:1.5px dashed #f59e0b;box-shadow:none;
 }
 .ico-wrap.is-placeholder img{border:0}
 .ico-wrap.is-placeholder:hover{
-  border-color:#60a5fa;box-shadow:0 0 18px rgba(59,130,246,.35);
+  border-color:#fbbf24;box-shadow:0 0 18px rgba(245,158,11,.35);
 }
 .ico-wrap.has:hover{
   box-shadow:0 10px 24px rgba(0,0,0,.55);
@@ -28,17 +28,20 @@
   opacity:0;transition:opacity .2s,background .2s;pointer-events:none;border-radius:15px;
 }
 .ico-wrap.is-placeholder .ico-ov{
-  opacity:1;background:rgba(8,12,24,0.65);color:#38bdf8;
+  opacity:1;background:rgba(15,16,15,0.65);color:#fbbf24;
+}
+.ico-wrap.is-placeholder .ico-ov svg{
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.8));
 }
 .ico-wrap:hover .ico-ov,
 .ico-wrap.drag-over .ico-ov{
   opacity:1;
 }
 .ico-wrap.is-placeholder:hover .ico-ov{
-  background:rgba(8,12,24,0.5);color:#7dd3fc;
+  background:rgba(15,16,15,0.5);color:#fef08a;
 }
 .ico-wrap.drag-over{
-  outline:2px solid #3b82f6;outline-offset:2px;
+  outline:2px solid #f59e0b;outline-offset:2px;
 }
 
 /* Floating X Remove Button */
