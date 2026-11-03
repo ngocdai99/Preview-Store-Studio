@@ -25,7 +25,8 @@ export default function BannerStudioPage() {
   const [subtitle, setSubtitle] = useState("Dual-Store App Mockup & Metadata Studio");
   const [badgeText, setBadgeText] = useState("100% Client-Side");
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
-  const [footerTagline, setFooterTagline] = useState("Zero Cloud · Total Privacy");
+  const [footerLeft, setFooterLeft] = useState("Pixel-Perfect 4K Export");
+  const [footerRight, setFooterRight] = useState("PAY ONCE · OWN FOREVER");
   
   // Brand Logo configuration
   const [showLogo, setShowLogo] = useState(true);
@@ -319,7 +320,8 @@ export default function BannerStudioPage() {
     setSubtitle("Dual-Store App Mockup & Metadata Studio");
     setBadgeText("100% Client-Side");
     setBadgeStyle("pills");
-    setFooterTagline("Zero Cloud · Total Privacy");
+    setFooterLeft("Pixel-Perfect 4K Export");
+    setFooterRight("PAY ONCE · OWN FOREVER");
     setShowLogo(true);
     setLogoPosition("inline");
     setShowDeviceHeaders(true);
@@ -632,35 +634,28 @@ export default function BannerStudioPage() {
               </div>
             </div>
 
-            <div>
-              <span className="text-[11px] text-[#989A99] mb-1 block">Footer Tagline (Thumbnail)</span>
-              <input
-                type="text"
-                value={footerTagline}
-                onChange={(e) => setFooterTagline(e.target.value)}
-                className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
-              />
-              <div className="flex flex-wrap gap-1 mt-1.5">
-                {[
-                  "Zero Cloud · Total Privacy",
-                  "No Account Required",
-                  "Runs Locally · Zero Setup",
-                  "Private & Self-Contained",
-                  "Ready-to-Publish 4K"
-                ].map((preset) => (
-                  <button
-                    key={preset}
-                    type="button"
-                    onClick={() => setFooterTagline(preset)}
-                    className={`text-[10px] px-2 py-0.5 rounded transition-all ${
-                      footerTagline === preset
-                        ? "bg-[#00D085]/20 text-[#00D085] border border-[#00D085]/40"
-                        : "bg-white/[0.04] text-[#989A99] hover:text-white border border-white/5"
-                    }`}
-                  >
-                    {preset}
-                  </button>
-                ))}
+            {/* Thumbnail Footer Inputs */}
+            <div className="space-y-2.5 pt-1 border-t border-white/5">
+              <div>
+                <span className="text-[11px] text-[#989A99] mb-1 block">Footer Trái (Thumbnail)</span>
+                <input
+                  type="text"
+                  value={footerLeft}
+                  onChange={(e) => setFooterLeft(e.target.value)}
+                  placeholder="VD: Pixel-Perfect 4K Export"
+                  className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
+                />
+              </div>
+
+              <div>
+                <span className="text-[11px] text-[#989A99] mb-1 block">Footer Phải (Thumbnail)</span>
+                <input
+                  type="text"
+                  value={footerRight}
+                  onChange={(e) => setFooterRight(e.target.value)}
+                  placeholder="VD: PAY ONCE · OWN FOREVER"
+                  className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
+                />
               </div>
             </div>
 
@@ -1376,7 +1371,7 @@ export default function BannerStudioPage() {
                   style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
                 >
                   <span className="font-bold text-white flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-[#00D085]" /> {footerTagline}
+                    <Sparkles className="w-4 h-4 text-[#00D085]" /> {footerLeft}
                   </span>
                   <span 
                     className="font-extrabold text-[#00D085] px-2.5 py-1 rounded-lg"
@@ -1385,7 +1380,7 @@ export default function BannerStudioPage() {
                       border: "1px solid rgba(0, 208, 133, 0.4)"
                     }}
                   >
-                    PAY ONCE · OWN FOREVER
+                    {footerRight}
                   </span>
                 </div>
               </div>
