@@ -10,11 +10,9 @@ function isPlaceholderIcon(){
     if(CURRENT_PRESET_KEY === 'draft') return !IS_CUSTOM_ICON;
     if(CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none' && CURRENT_PRESET_KEY !== 'draft') return false;
   }
-  if(!ICON || ICON === BLANK_ICON) return true;
-  if(typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024 && ICON === BLANK_ICON_1024) return true;
-  if(typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512 && ICON === BLANK_ICON_512) return true;
+  if(!ICON) return true;
   if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('f59e0b') || ICON.includes('ea580c'))) return true;
-  return false;
+  return !IS_CUSTOM_ICON;
 }
 
 function updateIconDropZoneUi(){

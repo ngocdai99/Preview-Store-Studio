@@ -138,20 +138,7 @@ const STUDIO_ICON = makeSvgDataUri(`
 </svg>
 `);
 
-const BLANK_ICON = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <defs>
-    <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#1d4ed8"/>
-    </linearGradient>
-  </defs>
-  <!-- Pure Neutral Blank Squircle with subtle translucent dashed border (Zero inner graphics) -->
-  <rect width="1024" height="1024" fill="#181a1b"/>
-  <rect x="36" y="36" width="952" height="952" rx="200" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="14" stroke-dasharray="28 18"/>
-</svg>
-`);
-
+const BLANK_ICON = STUDIO_ICON;
 const LEGACY_BLANK_ICON = BLANK_ICON;
 
 const SHOT_1 = makeSvgDataUri(`
