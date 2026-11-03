@@ -27,6 +27,21 @@ input:focus,textarea:focus{
   box-shadow:none !important;
   background:#131413;
 }
+/* Neutralize Browser Autofill Styles (Chrome / Safari WebKit user-agent override) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active {
+  -webkit-text-fill-color: #f8fafc !important;
+  -webkit-box-shadow: 0 0 0 1000px #171817 inset !important;
+  box-shadow: 0 0 0 1000px #171817 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #f8fafc;
+}
 .fg.overlimit input,.fg.overlimit textarea{border-color:var(--err)!important;box-shadow:none!important}
 .fg.warning input,.fg.warning textarea{border-color:var(--warn)!important;box-shadow:none!important}
 

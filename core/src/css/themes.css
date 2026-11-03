@@ -334,6 +334,21 @@
 :root[data-ui=light] input::placeholder,
 :root[data-ui=light] textarea::placeholder{color:#8a8a93}
 
+/* Neutralize Browser Autofill for Light Mode */
+:root[data-ui=light] input:-webkit-autofill,
+:root[data-ui=light] input:-webkit-autofill:hover, 
+:root[data-ui=light] input:-webkit-autofill:focus, 
+:root[data-ui=light] input:-webkit-autofill:active,
+:root[data-ui=light] textarea:-webkit-autofill,
+:root[data-ui=light] textarea:-webkit-autofill:hover,
+:root[data-ui=light] textarea:-webkit-autofill:focus,
+:root[data-ui=light] textarea:-webkit-autofill:active {
+  -webkit-text-fill-color: #1d1d1f !important;
+  -webkit-box-shadow: 0 0 0 1000px #f8f9fb inset !important;
+  box-shadow: 0 0 0 1000px #f8f9fb inset !important;
+  caret-color: #1d1d1f;
+}
+
 /* Soft Elevation Shadows for Screenshots List */
 :root[data-ui=light] .srow{
   background:#ffffff;

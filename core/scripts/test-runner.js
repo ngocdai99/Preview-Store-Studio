@@ -2133,6 +2133,8 @@ assert(bundledHtml.includes(':root[data-ui=light] .card.collapsed:hover') && bun
 assert(!bundledHtml.includes('#shotsCard.collapsed:hover{background:'), 'Chromatic rose tint removed from shots card hover');
 assert(!bundledHtml.includes('#identityCard.collapsed:hover{background:'), 'Chromatic amber tint removed from identity card hover');
 assert(bundledHtml.includes('.card.collapsed:hover') && !bundledHtml.includes('.card.collapsed:hover{background:#ffffff!important;border-color:rgba(0,0,0,0.16)!important;box-shadow:0 3px 8px'), 'Collapsed card hover does not inflate excessive box shadow');
+assert(bundledHtml.includes('input:-webkit-autofill') && bundledHtml.includes('-webkit-box-shadow: 0 0 0 1000px #171817 inset !important'), 'CSS neutralizes browser autofill background for dark mode');
+assert(bundledHtml.includes(':root[data-ui=light] input:-webkit-autofill') && bundledHtml.includes('-webkit-box-shadow: 0 0 0 1000px #f8f9fb inset !important'), 'CSS neutralizes browser autofill background for light mode');
 
 // ---------------------------------------------------------------------
 // SUITE 31: Custom Age Rating Dropdown UI & Search Filter Verification
