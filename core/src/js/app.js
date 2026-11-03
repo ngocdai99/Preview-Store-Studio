@@ -1094,22 +1094,13 @@ const BLANK_ICON = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
-    </linearGradient>
-    <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8"/>
-      <stop offset="100%" stop-color="#3b82f6"/>
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
     </linearGradient>
   </defs>
-  <rect width="1024" height="1024" fill="url(#c6-bg)"/>
-  <rect x="40" y="40" width="944" height="944" rx="200" fill="none" stroke="#334155" stroke-width="14" stroke-dasharray="28 16"/>
-  <g transform="translate(347, 347)" stroke="url(#c6-front)" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="0" y="0" width="330" height="330" rx="66"/>
-    <circle cx="105" cy="105" r="30" fill="#38bdf8" fill-opacity="0.3"/>
-    <path d="M330 230 L240 140 L70 310"/>
-    <path d="M200 230 L245 185 L330 270"/>
-  </g>
+  <!-- Pure Neutral Blank Squircle with subtle translucent dashed border (Zero inner graphics) -->
+  <rect width="1024" height="1024" fill="#181a1b"/>
+  <rect x="36" y="36" width="952" height="952" rx="200" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="14" stroke-dasharray="28 18"/>
 </svg>
 `);
 
