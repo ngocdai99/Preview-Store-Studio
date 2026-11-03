@@ -1367,17 +1367,20 @@ export default function BannerStudioPage() {
 
                 {/* Footer Badges */}
                 <div 
-                  className="z-10 flex items-center justify-between pt-3 text-xs"
-                  style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
+                  className="z-10 flex items-center justify-between pt-3.5 text-xs"
+                  style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}
                 >
-                  <span className="font-bold text-white flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-[#00D085]" /> {footerLeft}
+                  <span className="font-semibold text-white/90 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#00D085]" />
+                    <span className="tracking-tight">{footerLeft}</span>
                   </span>
                   <span 
-                    className="font-extrabold text-[#00D085] px-2.5 py-1 rounded-lg"
+                    className="btn-white text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-[9px] shadow-sm leading-none"
                     style={{
-                      backgroundColor: "rgba(0, 102, 54, 0.6)",
-                      border: "1px solid rgba(0, 208, 133, 0.4)"
+                      backgroundColor: "#EFF1F0",
+                      color: "#252625",
+                      border: "1px solid rgba(0, 0, 0, 0.12)",
+                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)"
                     }}
                   >
                     {footerRight}
