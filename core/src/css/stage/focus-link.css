@@ -115,9 +115,12 @@ img.hl-target {
 .a-met b.hl-target,
 .ipad-metrics b.hl-target,
 .g-met b.hl-target,
+.gt10-met-item b.hl-target,
 .a-met i.hl-target,
 .ipad-metrics i.hl-target,
 .g-met small.hl-target,
+.gt10-met-item small.hl-target,
+.gt10-age-badge.hl-target,
 .a-rating-num.hl-target,
 .g-rb-num.hl-target,
 .ipad-rating-num.hl-target,
@@ -139,6 +142,20 @@ img.hl-target {
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
 }
 
+.gt10-met-item b.hl-target,
+.gt10-met-item small.hl-target {
+  padding: 1px 4px !important;
+  border-radius: 6px !important;
+}
+
+.gt10-age-badge.hl-target {
+  border-radius: 4px !important;
+}
+
+.gt10-met-item b.hl-target .sv,
+.gt10-met-item b .sv.hl-target,
+.gt10-met-item small.hl-target .sv,
+.gt10-met-item small .sv.hl-target,
 .chips .st.hl-target .sv,
 .chips .st .sv.hl-target,
 .chips [data-stat="rank"].hl-target,
@@ -161,9 +178,12 @@ img.hl-target {
 .a-met b.hl-flash,
 .ipad-metrics b.hl-flash,
 .g-met b.hl-flash,
+.gt10-met-item b.hl-flash,
 .a-met i.hl-flash,
 .ipad-metrics i.hl-flash,
 .g-met small.hl-flash,
+.gt10-met-item small.hl-flash,
+.gt10-age-badge.hl-flash,
 .a-rating-num.hl-flash,
 .g-rb-num.hl-flash,
 .ipad-rating-num.hl-flash,

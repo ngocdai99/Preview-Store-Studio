@@ -233,7 +233,8 @@ body:not([data-ui-store])[data-store=apple] .card[data-only=google]{display:none
 }
 
 /* Results feed */
-.dev.gtab10 .gt10-results-list {
+.dev.gtab10 .gt10-results-list,
+.dev.gtab10 .gt10-results-list.scr {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -388,7 +389,8 @@ body:not([data-ui-store])[data-store=apple] .card[data-only=google]{display:none
 }
 
 /* 4. Detail Column (Matching Phone DOM) */
-.dev.gtab10 .gt10-detail-col {
+.dev.gtab10 .gt10-detail-col,
+.dev.gtab10 .gt10-detail-col.scr {
   flex: 1;
   min-width: 0;
   height: 100%;

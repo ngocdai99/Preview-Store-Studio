@@ -7077,12 +7077,12 @@ function getFieldMockupTargets(key) {
     case 'rating':
     case 'st-rating': {
       const raw = $$('.stage [data-stat="rating"]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, [data-gmet-rating] b, .g-rb-num, .a-rating-num, .ipad-rating-num, .sr-rating-val') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, [data-gmet-rating] b, .gt10-met-item b, .g-rb-num, .a-rating-num, .ipad-rating-num, .sr-rating-val') || el)));
     }
     case 'count':
     case 'st-count': {
       const raw = $$('.stage [data-stat="count"]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met i, .a-rating-sub, .ipad-rating-caption, [data-gmet-rating] small, .g-rb-cnt, .sr-rating-cnt') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.a-met i, .a-rating-sub, .ipad-rating-caption, [data-gmet-rating] small, .gt10-met-item small, .g-rb-cnt, .sr-rating-cnt') || el)));
     }
     case 'rank':
     case 'st-rank': {
@@ -7092,17 +7092,17 @@ function getFieldMockupTargets(key) {
     case 'dl':
     case 'st-dl': {
       const raw = $$('.stage [data-stat="dl"]');
-      return Array.from(new Set(raw.map(el => el.closest('.g-met b, .gt10-met b, .gp-stat-dl, .g-met .st') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.g-met b, .gt10-met-item b, .gt10-met b, .gp-stat-dl, .g-met .st') || el)));
     }
     case 'size':
     case 'st-size': {
       const raw = $$('.stage [data-stat="size"]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .ipad-info-val, .a-info b') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .gt10-met-item small, .gt10-met-dl-size, .ipad-info-val, .a-info b') || el)));
     }
     case 'age':
     case 'st-age': {
       const raw = $$('.stage [data-age-apple], .stage [data-age-google-badge]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .g-met b, .gt10-met b, .a-info b, .ipad-info-val') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .g-met b, .gt10-met-item b, .gt10-age-badge, .gt10-met b, .a-info b, .ipad-info-val') || el)));
     }
     case 'iap':
     case 'st-iap': {
@@ -7161,8 +7161,8 @@ function setFieldFocus(key, shouldScroll = true) {
       return;
     }
 
-    // Scroll the device's inner screen (.scr)
-    const scr = target.closest('.scr');
+    // Scroll the device's inner screen (.scr or 10" tablet panes)
+    const scr = target.closest('.scr, .gt10-detail-col, .gt10-results-list');
     if (scr && !scrolledContainers.has(scr)) {
       scrolledContainers.add(scr);
       const scrRect = scr.getBoundingClientRect();
@@ -7175,10 +7175,14 @@ function setFieldFocus(key, shouldScroll = true) {
       const targetCenter = relativeTop - (scr.clientHeight / 2) + (targetRect.height / 2);
       const scrollToY = Math.max(0, targetCenter);
 
-      scr.scrollTo({
-        top: scrollToY,
-        behavior: 'smooth'
-      });
+      if (typeof scr.scrollTo === 'function') {
+        scr.scrollTo({
+          top: scrollToY,
+          behavior: 'smooth'
+        });
+      } else {
+        scr.scrollTop = scrollToY;
+      }
     }
 
     // Scroll horizontally if target is inside horizontal ribbon (.a-met, .ipad-metrics)

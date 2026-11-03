@@ -1975,8 +1975,12 @@ assert(syncJsCode.includes("case 'st-rank':") && syncJsCode.includes("case 'st-d
 assert(syncJsCode.includes("case 'st-size':") && syncJsCode.includes("case 'st-age':") && syncJsCode.includes("case 'st-iap':"), 'sync.js defines mockup target mapping for size, age rating, and monetization badge');
 
 assert(bundledHtml.includes('.a-met b.hl-target') && bundledHtml.includes('.g-met b.hl-target'), 'Bundled CSS provides focus highlight styles for metrics ribbon numbers');
+assert(bundledHtml.includes('.gt10-met-item b.hl-target') && bundledHtml.includes('.gt10-rank-chip.hl-target'), 'Bundled CSS provides focus highlight styles for Google Play 10" tablet metrics & rank chips');
+assert(bundledHtml.includes('gt10-results-list scr') && bundledHtml.includes('gt10-detail-col scr'), 'Google Play 10" tablet markup includes scr class on both scroll containers');
 assert(bundledHtml.includes('.iap[data-iap-apple].hl-target') && bundledHtml.includes('.g-meta[data-iap-google].hl-target'), 'Bundled CSS provides focus highlight styles for monetization badges');
 assert(bundledHtml.includes('.a-info b.hl-target') && bundledHtml.includes('.ipad-info-val.hl-target'), 'Bundled CSS provides focus highlight styles for Information table metrics');
+assert(syncJsCode.includes('.gt10-met-item b') && syncJsCode.includes('.gt10-rank-chip'), 'sync.js handles Google Play 10" tablet target selection');
+assert(syncJsCode.includes("target.closest('.scr, .gt10-detail-col, .gt10-results-list')"), 'sync.js setFieldFocus recognizes Google Play 10" tablet scroll panes');
 
 // Functional testing for getFieldMockupTargets with metric fields
 const syncSandbox = {
