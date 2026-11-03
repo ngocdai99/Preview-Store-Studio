@@ -27,6 +27,7 @@ export default function BannerStudioPage() {
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
   const [footerLeft, setFooterLeft] = useState("Ultra HD 4K Export");
   const [footerRight, setFooterRight] = useState("PAY ONCE · OWN FOREVER");
+  const [footerButtonStyle, setFooterButtonStyle] = useState<"primary" | "white">("primary");
   
   // Brand Logo configuration
   const [showLogo, setShowLogo] = useState(true);
@@ -322,6 +323,7 @@ export default function BannerStudioPage() {
     setBadgeStyle("pills");
     setFooterLeft("Ultra HD 4K Export");
     setFooterRight("PAY ONCE · OWN FOREVER");
+    setFooterButtonStyle("primary");
     setShowLogo(true);
     setLogoPosition("inline");
     setShowDeviceHeaders(true);
@@ -656,6 +658,34 @@ export default function BannerStudioPage() {
                   placeholder="VD: PAY ONCE · OWN FOREVER"
                   className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
                 />
+              </div>
+
+              <div>
+                <span className="text-[11px] text-[#989A99] mb-1 block">Style nút Footer Phải</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFooterButtonStyle("primary")}
+                    className={`text-[11px] py-1.5 rounded-md font-semibold border transition-all ${
+                      footerButtonStyle === "primary"
+                        ? "bg-[#006636] border-[#1B845E] text-white shadow-xs"
+                        : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
+                    }`}
+                  >
+                    Primary Emerald
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFooterButtonStyle("white")}
+                    className={`text-[11px] py-1.5 rounded-md font-semibold border transition-all ${
+                      footerButtonStyle === "white"
+                        ? "bg-[#EFF1F0] border-black/20 text-[#252625] shadow-xs"
+                        : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
+                    }`}
+                  >
+                    White Button
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1375,17 +1405,31 @@ export default function BannerStudioPage() {
                     <Sparkles className="w-4 h-4 text-[#00D085]" />
                     <span className="tracking-tight">{footerLeft}</span>
                   </span>
-                  <span 
-                    className="btn-white text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-[9px] shadow-sm leading-none"
-                    style={{
-                      backgroundColor: "#EFF1F0",
-                      color: "#252625",
-                      border: "1px solid rgba(0, 0, 0, 0.12)",
-                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)"
-                    }}
-                  >
-                    {footerRight}
-                  </span>
+                  {footerButtonStyle === "primary" ? (
+                    <span 
+                      className="text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-[9px] text-white leading-none inline-flex items-center justify-center shadow-md transition-all select-none"
+                      style={{
+                        background: "linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%), #006636",
+                        border: "1px solid #1B845E",
+                        boxShadow: "inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 2px 8px rgba(0, 0, 0, 0.35)",
+                        color: "#ffffff"
+                      }}
+                    >
+                      {footerRight}
+                    </span>
+                  ) : (
+                    <span 
+                      className="btn-white text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-[9px] shadow-sm leading-none"
+                      style={{
+                        backgroundColor: "#EFF1F0",
+                        color: "#252625",
+                        border: "1px solid rgba(0, 0, 0, 0.12)",
+                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)"
+                      }}
+                    >
+                      {footerRight}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
