@@ -358,6 +358,25 @@ function loadPreset(key){
   if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
 }
 
+const btnCopyPresetToDraft = $('btnCopyPresetToDraft');
+if(btnCopyPresetToDraft){
+  btnCopyPresetToDraft.onclick = () => {
+    userDraft = getCurrentStateObject();
+    userDraft.isCustomized = true;
+    const activeKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : CURRENT_ACTIVE_PRESET;
+    if(activeKey && typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activeKey]){
+      if(!IS_CUSTOM_ICON) userDraft.icon = PRESET_ICONS[activeKey];
+    }
+    if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+    CURRENT_PRESET_KEY = 'draft';
+    isPresetModified = false;
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof updatePresetBanner === 'function') updatePresetBanner();
+    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+    if(typeof showToast === 'function') showToast('Preset copied as your draft!', 'ok');
+  };
+}
+
 const btnReturn = $('btnReturnToDraft');
 if(btnReturn){
   btnReturn.onclick = () => {

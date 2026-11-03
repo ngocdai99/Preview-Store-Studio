@@ -461,16 +461,42 @@ function updatePresetBanner(){
   const banner = $('presetBanner');
   if(!banner) return;
   
-  if(CURRENT_PRESET_KEY !== 'draft' && isPresetModified){
-    banner.style.display = 'inline-flex';
-    banner.classList.add('is-modified');
-    const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
-    if(textEl){
-      textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
+  const hasDraft = hasUserDraft();
+  const copyBtn = $('btnCopyPresetToDraft');
+  const returnBtn = $('btnReturnToDraft');
+
+  if(CURRENT_PRESET_KEY !== 'draft'){
+    if(!hasDraft){
+      // No draft exists yet: show banner with "Copy this preset as your draft" suggestion
+      banner.style.display = 'inline-flex';
+      banner.classList.toggle('is-modified', !!isPresetModified);
+      if(copyBtn) copyBtn.style.display = 'inline-flex';
+      if(returnBtn) returnBtn.style.display = 'none';
+      const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
+      if(textEl){
+        textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
+      }
+    } else if(isPresetModified){
+      // Draft exists and user modified preset: show "Return to My Draft"
+      banner.style.display = 'inline-flex';
+      banner.classList.add('is-modified');
+      if(copyBtn) copyBtn.style.display = 'none';
+      if(returnBtn) returnBtn.style.display = 'inline-flex';
+      const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
+      if(textEl){
+        textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
+      }
+    } else {
+      banner.style.display = 'none';
+      banner.classList.remove('is-modified');
+      if(copyBtn) copyBtn.style.display = 'none';
+      if(returnBtn) returnBtn.style.display = 'none';
     }
   } else {
     banner.style.display = 'none';
     banner.classList.remove('is-modified');
+    if(copyBtn) copyBtn.style.display = 'none';
+    if(returnBtn) returnBtn.style.display = 'none';
   }
 }
 

@@ -9099,6 +9099,25 @@ function loadPreset(key){
   if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
 }
 
+const btnCopyPresetToDraft = $('btnCopyPresetToDraft');
+if(btnCopyPresetToDraft){
+  btnCopyPresetToDraft.onclick = () => {
+    userDraft = getCurrentStateObject();
+    userDraft.isCustomized = true;
+    const activeKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : CURRENT_ACTIVE_PRESET;
+    if(activeKey && typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activeKey]){
+      if(!IS_CUSTOM_ICON) userDraft.icon = PRESET_ICONS[activeKey];
+    }
+    if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+    CURRENT_PRESET_KEY = 'draft';
+    isPresetModified = false;
+    if(typeof updateDraftPill === 'function') updateDraftPill();
+    if(typeof updatePresetBanner === 'function') updatePresetBanner();
+    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+    if(typeof showToast === 'function') showToast('Preset copied as your draft!', 'ok');
+  };
+}
+
 const btnReturn = $('btnReturnToDraft');
 if(btnReturn){
   btnReturn.onclick = () => {
@@ -9613,16 +9632,42 @@ function updatePresetBanner(){
   const banner = $('presetBanner');
   if(!banner) return;
   
-  if(CURRENT_PRESET_KEY !== 'draft' && isPresetModified){
-    banner.style.display = 'inline-flex';
-    banner.classList.add('is-modified');
-    const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
-    if(textEl){
-      textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
+  const hasDraft = hasUserDraft();
+  const copyBtn = $('btnCopyPresetToDraft');
+  const returnBtn = $('btnReturnToDraft');
+
+  if(CURRENT_PRESET_KEY !== 'draft'){
+    if(!hasDraft){
+      // No draft exists yet: show banner with "Copy this preset as your draft" suggestion
+      banner.style.display = 'inline-flex';
+      banner.classList.toggle('is-modified', !!isPresetModified);
+      if(copyBtn) copyBtn.style.display = 'inline-flex';
+      if(returnBtn) returnBtn.style.display = 'none';
+      const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
+      if(textEl){
+        textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
+      }
+    } else if(isPresetModified){
+      // Draft exists and user modified preset: show "Return to My Draft"
+      banner.style.display = 'inline-flex';
+      banner.classList.add('is-modified');
+      if(copyBtn) copyBtn.style.display = 'none';
+      if(returnBtn) returnBtn.style.display = 'inline-flex';
+      const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
+      if(textEl){
+        textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
+      }
+    } else {
+      banner.style.display = 'none';
+      banner.classList.remove('is-modified');
+      if(copyBtn) copyBtn.style.display = 'none';
+      if(returnBtn) returnBtn.style.display = 'none';
     }
   } else {
     banner.style.display = 'none';
     banner.classList.remove('is-modified');
+    if(copyBtn) copyBtn.style.display = 'none';
+    if(returnBtn) returnBtn.style.display = 'none';
   }
 }
 

@@ -225,6 +225,35 @@
   color: #92400e;
 }
 
+/* Preset Banner Action Buttons (Copy Preset to Draft / Return to Draft) */
+.preset-banner-btn {
+  margin-left: 10px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  line-height: 1.2;
+  height: 24px;
+}
+
+.preset-banner-btn .btn-lbl-short {
+  display: none;
+}
+
+@media (max-width: 680px) {
+  .preset-banner-btn .btn-lbl-full {
+    display: none;
+  }
+  .preset-banner-btn .btn-lbl-short {
+    display: inline;
+  }
+}
+
 @media (max-width: 822px) {
   .preset-banner {
     order: 10;

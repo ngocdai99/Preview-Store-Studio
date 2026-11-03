@@ -2650,6 +2650,11 @@ assert(!bundledHtml.includes("loadPreset('studio');\n    if(typeof getCurrentSta
 // 3. updateDraftPill renders + Your App button beside active preset pill when no draft exists
 assert(bundledHtml.includes("draftPill.innerHTML = '<span id=\"draftBtnTitle\">+ Your App</span>';"), 'updateDraftPill renders + Your App button when userDraft is null');
 
+// 3b. Preset banner includes "Copy this preset as your draft" suggestion button when no draft exists
+assert(bundledHtml.includes('id="btnCopyPresetToDraft"'), 'Preset banner contains #btnCopyPresetToDraft suggestion button');
+assert(bundledHtml.includes('Copy this preset as your draft'), 'Suggestion button has "Copy this preset as your draft" label');
+assert(bundledHtml.includes('btnCopyPresetToDraft.onclick = () =>'), 'btnCopyPresetToDraft binds click handler to clone preset into active draft');
+
 // 4. Functional State Machine Simulation: Bootstrap -> Click +Your App -> Return to Preset -> Close Preset
 let sim38Draft = null;
 let sim38PresetKey = 'studio';

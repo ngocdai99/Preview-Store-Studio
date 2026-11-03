@@ -26,8 +26,17 @@
         <strong>Presets only for preview</strong>: edits won't be saved
       </span>
     </div>
+    <!-- Suggestion button to copy preset into editable draft when user has no draft -->
+    <button type="button" class="preset-banner-btn btn-white" id="btnCopyPresetToDraft" title="Copy this preset as your custom editable draft">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right:2px;">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+      <span class="btn-lbl-full">Copy this preset as your draft</span>
+      <span class="btn-lbl-short">Copy as draft</span>
+    </button>
     <!-- Hidden fallback for programmatic trigger & test compatibility -->
-    <button type="button" class="preset-banner-btn" id="btnReturnToDraft" style="display:none;" aria-hidden="true" tabindex="-1" title="Return to your saved draft">
+    <button type="button" class="preset-banner-btn btn-white" id="btnReturnToDraft" style="display:none;" aria-hidden="true" tabindex="-1" title="Return to your saved draft">
       <span class="btn-lbl-full">Return to My Draft</span>
       <span class="btn-lbl-short">Return</span>
     </button>
