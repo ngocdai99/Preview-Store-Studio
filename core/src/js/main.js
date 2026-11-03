@@ -96,7 +96,7 @@ if(typeof hasUserDraft === 'function' && hasUserDraft()){
 } else if(!loadState()){
   restoring = true;
   try{
-    loadPreset('taskflow');
+    loadPreset('studio');
     if(typeof getCurrentStateObject === 'function'){
       userDraft = getCurrentStateObject();
       userDraft.isCustomized = true;

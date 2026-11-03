@@ -202,7 +202,8 @@ function hasUserDraft(){
     const f = userDraft.form || {};
     const hasText = !!((f.name && f.name.trim()) || (f.sub && f.sub.trim()) || (f.short && f.short.trim()) || (f.desc && f.desc.trim()));
     const hasShots = Array.isArray(userDraft.shots) && userDraft.shots.length > 0;
-    return hasText || hasShots || !!userDraft.isCustomized;
+    const hasCustomIcon = !!(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('c6-bg') && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc'));
+    return hasText || hasShots || hasCustomIcon;
   }
   return false;
 }
@@ -248,7 +249,7 @@ function loadDraftFromStorage(){
         const parsed = JSON.parse(raw);
         if(parsed && typeof parsed === 'object'){
           userDraft = parsed;
-          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc')){
+          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
             userDraft.icon = BLANK_ICON;
             userDraft.isCustomIcon = false;
           }
@@ -265,7 +266,7 @@ function loadDraftFromStorage(){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
         userDraft = idbDraft;
-        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc')){
+        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
           userDraft.icon = BLANK_ICON;
           userDraft.isCustomIcon = false;
         }
@@ -398,22 +399,25 @@ function updateDraftPill(){
 
     // Resolve icon for draft: custom uploaded icon takes top precedence, then draft icon, fallback to BLANK_ICON
     let iconSrc = BLANK_ICON;
-    if(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc')){
+    const isLegacyIcon = (uri) => !uri || uri === BLANK_ICON || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && uri === LEGACY_BLANK_ICON);
+
+    if(userDraft.isCustomIcon && userDraft.icon && !isLegacyIcon(userDraft.icon)){
       iconSrc = userDraft.icon;
-    } else if(CURRENT_PRESET_KEY === 'draft' && IS_CUSTOM_ICON && ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc')){
+    } else if(CURRENT_PRESET_KEY === 'draft' && IS_CUSTOM_ICON && ICON && !isLegacyIcon(ICON)){
       iconSrc = ICON;
       userDraft.isCustomIcon = true;
       userDraft.icon = ICON;
     } else if(CURRENT_PRESET_KEY === 'draft' && typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY] && CURRENT_PRESET_KEY !== 'none'){
       iconSrc = PRESET_ICONS[CURRENT_PRESET_KEY];
       if(!userDraft.isCustomIcon) userDraft.icon = iconSrc;
-    } else if(userDraft.icon && userDraft.icon !== BLANK_ICON && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc')){
+    } else if(userDraft.icon && !isLegacyIcon(userDraft.icon)){
       iconSrc = userDraft.icon;
-    } else if(ICON && ICON !== BLANK_ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc') && CURRENT_PRESET_KEY === 'draft'){
+    } else if(ICON && !isLegacyIcon(ICON) && CURRENT_PRESET_KEY === 'draft'){
       iconSrc = ICON;
     } else {
       iconSrc = BLANK_ICON;
       userDraft.icon = BLANK_ICON;
+      userDraft.isCustomIcon = false;
     }
 
     const f = userDraft.form || {};

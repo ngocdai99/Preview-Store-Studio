@@ -1077,31 +1077,19 @@ const STUDIO_ICON = makeSvgDataUri(`
 </svg>
 `);
 
-const BLANK_ICON = makeSvgDataUri(`
+const LEGACY_BLANK_ICON = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f59e0b"/>
       <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
-    <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#d97706"/>
-    </linearGradient>
   </defs>
   <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
-  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
-  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
-  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
-  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
-  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
 </svg>
 `);
+
+const BLANK_ICON = STUDIO_ICON;
 
 const SHOT_1 = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996">
@@ -2701,17 +2689,17 @@ const LINGUA_SHOT_4 = SKILL_SHOT_4;
 /* @pro-only-end */
 
 // --- Active State Model ---
-let ICON = BLANK_ICON;
+let ICON = STUDIO_ICON;
 let BLANK_ICON_1024 = '';
 let BLANK_ICON_512 = '';
 let CUSTOM_ICON_1024 = '';
 let CUSTOM_ICON_512 = '';
-let CURRENT_PRESET_KEY = 'draft';
-let CURRENT_ACTIVE_PRESET = 'taskflow';
+let CURRENT_PRESET_KEY = 'studio';
+let CURRENT_ACTIVE_PRESET = 'studio';
 let IS_CUSTOM_ICON = false;
 let IS_CUSTOM_FEATURE = false;
-let FEATURE_GRAPHIC = BLANK_FEATURE;
-let SHOTS = [SHOT_1, SHOT_2, SHOT_3, SHOT_4];
+let FEATURE_GRAPHIC = STUDIO_FEATURE;
+let SHOTS = [STUDIO_SHOT_1, STUDIO_SHOT_2, STUDIO_SHOT_3, STUDIO_SHOT_4];
 let IPAD_SHOTS = [];
 let SUPPORTS_IPAD = false;
 let IPAD_FIT_MODE = 'cover';
@@ -9336,7 +9324,8 @@ function hasUserDraft(){
     const f = userDraft.form || {};
     const hasText = !!((f.name && f.name.trim()) || (f.sub && f.sub.trim()) || (f.short && f.short.trim()) || (f.desc && f.desc.trim()));
     const hasShots = Array.isArray(userDraft.shots) && userDraft.shots.length > 0;
-    return hasText || hasShots || !!userDraft.isCustomized;
+    const hasCustomIcon = !!(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('c6-bg') && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc'));
+    return hasText || hasShots || hasCustomIcon;
   }
   return false;
 }
@@ -9382,7 +9371,7 @@ function loadDraftFromStorage(){
         const parsed = JSON.parse(raw);
         if(parsed && typeof parsed === 'object'){
           userDraft = parsed;
-          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc')){
+          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
             userDraft.icon = BLANK_ICON;
             userDraft.isCustomIcon = false;
           }
@@ -9399,7 +9388,7 @@ function loadDraftFromStorage(){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
         userDraft = idbDraft;
-        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc')){
+        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
           userDraft.icon = BLANK_ICON;
           userDraft.isCustomIcon = false;
         }
@@ -9532,22 +9521,25 @@ function updateDraftPill(){
 
     // Resolve icon for draft: custom uploaded icon takes top precedence, then draft icon, fallback to BLANK_ICON
     let iconSrc = BLANK_ICON;
-    if(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc')){
+    const isLegacyIcon = (uri) => !uri || uri === BLANK_ICON || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && uri === LEGACY_BLANK_ICON);
+
+    if(userDraft.isCustomIcon && userDraft.icon && !isLegacyIcon(userDraft.icon)){
       iconSrc = userDraft.icon;
-    } else if(CURRENT_PRESET_KEY === 'draft' && IS_CUSTOM_ICON && ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc')){
+    } else if(CURRENT_PRESET_KEY === 'draft' && IS_CUSTOM_ICON && ICON && !isLegacyIcon(ICON)){
       iconSrc = ICON;
       userDraft.isCustomIcon = true;
       userDraft.icon = ICON;
     } else if(CURRENT_PRESET_KEY === 'draft' && typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY] && CURRENT_PRESET_KEY !== 'none'){
       iconSrc = PRESET_ICONS[CURRENT_PRESET_KEY];
       if(!userDraft.isCustomIcon) userDraft.icon = iconSrc;
-    } else if(userDraft.icon && userDraft.icon !== BLANK_ICON && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc')){
+    } else if(userDraft.icon && !isLegacyIcon(userDraft.icon)){
       iconSrc = userDraft.icon;
-    } else if(ICON && ICON !== BLANK_ICON && !ICON.includes('bfd1fd') && !ICON.includes('d2c7fc') && CURRENT_PRESET_KEY === 'draft'){
+    } else if(ICON && !isLegacyIcon(ICON) && CURRENT_PRESET_KEY === 'draft'){
       iconSrc = ICON;
     } else {
       iconSrc = BLANK_ICON;
       userDraft.icon = BLANK_ICON;
+      userDraft.isCustomIcon = false;
     }
 
     const f = userDraft.form || {};
@@ -11523,7 +11515,7 @@ if(typeof hasUserDraft === 'function' && hasUserDraft()){
 } else if(!loadState()){
   restoring = true;
   try{
-    loadPreset('taskflow');
+    loadPreset('studio');
     if(typeof getCurrentStateObject === 'function'){
       userDraft = getCurrentStateObject();
       userDraft.isCustomized = true;

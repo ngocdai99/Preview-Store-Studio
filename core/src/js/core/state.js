@@ -138,31 +138,19 @@ const STUDIO_ICON = makeSvgDataUri(`
 </svg>
 `);
 
-const BLANK_ICON = makeSvgDataUri(`
+const LEGACY_BLANK_ICON = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f59e0b"/>
       <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
-    <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#d97706"/>
-    </linearGradient>
   </defs>
   <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
-  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
-  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
-  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
-  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
-  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
 </svg>
 `);
+
+const BLANK_ICON = STUDIO_ICON;
 
 const SHOT_1 = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996">
@@ -1762,17 +1750,17 @@ const LINGUA_SHOT_4 = SKILL_SHOT_4;
 /* @pro-only-end */
 
 // --- Active State Model ---
-let ICON = BLANK_ICON;
+let ICON = STUDIO_ICON;
 let BLANK_ICON_1024 = '';
 let BLANK_ICON_512 = '';
 let CUSTOM_ICON_1024 = '';
 let CUSTOM_ICON_512 = '';
-let CURRENT_PRESET_KEY = 'draft';
-let CURRENT_ACTIVE_PRESET = 'taskflow';
+let CURRENT_PRESET_KEY = 'studio';
+let CURRENT_ACTIVE_PRESET = 'studio';
 let IS_CUSTOM_ICON = false;
 let IS_CUSTOM_FEATURE = false;
-let FEATURE_GRAPHIC = BLANK_FEATURE;
-let SHOTS = [SHOT_1, SHOT_2, SHOT_3, SHOT_4];
+let FEATURE_GRAPHIC = STUDIO_FEATURE;
+let SHOTS = [STUDIO_SHOT_1, STUDIO_SHOT_2, STUDIO_SHOT_3, STUDIO_SHOT_4];
 let IPAD_SHOTS = [];
 let SUPPORTS_IPAD = false;
 let IPAD_FIT_MODE = 'cover';
