@@ -1091,28 +1091,25 @@ const STUDIO_ICON = makeSvgDataUri(`
 `);
 
 const BLANK_ICON = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#ea580c"/>
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
     <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#d97706"/>
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
-  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
-  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
-  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
-  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
-  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
+  <rect width="1024" height="1024" fill="url(#c6-bg)"/>
+  <rect x="40" y="40" width="944" height="944" rx="200" fill="none" stroke="#334155" stroke-width="14" stroke-dasharray="28 16"/>
+  <g transform="translate(347, 347)" stroke="url(#c6-front)" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="0" width="330" height="330" rx="66"/>
+    <circle cx="105" cy="105" r="30" fill="#38bdf8" fill-opacity="0.3"/>
+    <path d="M330 230 L240 140 L70 310"/>
+    <path d="M200 230 L245 185 L330 270"/>
+  </g>
 </svg>
 `);
 
@@ -3290,7 +3287,7 @@ function isPlaceholderIcon(){
   if(!ICON || ICON === BLANK_ICON) return true;
   if(typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024 && ICON === BLANK_ICON_1024) return true;
   if(typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512 && ICON === BLANK_ICON_512) return true;
-  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc'))) return true;
+  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('f59e0b') || ICON.includes('ea580c'))) return true;
   return false;
 }
 
@@ -9351,7 +9348,7 @@ function getCurrentStateObject(){
     icon512: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
     iconApple: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
     iconGoogle: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
-    isCustomIcon: !!(IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg')),
+    isCustomIcon: !!(IS_CUSTOM_ICON && ICON && !ICON.includes('c6-bg') && !ICON.includes('f59e0b') && !ICON.includes('ea580c')),
     featureGraphic: FEATURE_GRAPHIC,
     isCustomFeature: !!(typeof IS_CUSTOM_FEATURE !== 'undefined' && IS_CUSTOM_FEATURE && FEATURE_GRAPHIC && FEATURE_GRAPHIC !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')),
     shots: SHOTS,
@@ -9373,7 +9370,7 @@ function hasUserDraft(){
     const f = userDraft.form || {};
     const hasText = !!((f.name && f.name.trim()) || (f.sub && f.sub.trim()) || (f.short && f.short.trim()) || (f.desc && f.desc.trim()));
     const hasShots = Array.isArray(userDraft.shots) && userDraft.shots.length > 0;
-    const hasCustomIcon = !!(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('c6-bg') && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc'));
+    const hasCustomIcon = !!(userDraft.isCustomIcon && userDraft.icon && !userDraft.icon.includes('c6-bg') && !userDraft.icon.includes('bfd1fd') && !userDraft.icon.includes('d2c7fc') && !userDraft.icon.includes('f59e0b') && !userDraft.icon.includes('ea580c'));
     return hasText || hasShots || hasCustomIcon;
   }
   return false;
@@ -9420,7 +9417,7 @@ function loadDraftFromStorage(){
         const parsed = JSON.parse(raw);
         if(parsed && typeof parsed === 'object'){
           userDraft = parsed;
-          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
+          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
             userDraft.icon = BLANK_ICON;
             userDraft.isCustomIcon = false;
           }
@@ -9437,7 +9434,7 @@ function loadDraftFromStorage(){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
         userDraft = idbDraft;
-        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
+        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
           userDraft.icon = BLANK_ICON;
           userDraft.isCustomIcon = false;
         }
@@ -9570,7 +9567,7 @@ function updateDraftPill(){
 
     // Resolve icon for draft: custom uploaded icon takes top precedence, then draft icon, fallback to BLANK_ICON
     let iconSrc = BLANK_ICON;
-    const isLegacyIcon = (uri) => !uri || uri === BLANK_ICON || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('c6-bg') || (typeof LEGACY_BLANK_ICON !== 'undefined' && uri === LEGACY_BLANK_ICON);
+    const isLegacyIcon = (uri) => !uri || uri === BLANK_ICON || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('f59e0b') || uri.includes('ea580c') || (typeof LEGACY_BLANK_ICON !== 'undefined' && uri === LEGACY_BLANK_ICON);
 
     if(userDraft.isCustomIcon && userDraft.icon && !isLegacyIcon(userDraft.icon)){
       iconSrc = userDraft.icon;

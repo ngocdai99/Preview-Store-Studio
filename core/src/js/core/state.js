@@ -139,28 +139,25 @@ const STUDIO_ICON = makeSvgDataUri(`
 `);
 
 const BLANK_ICON = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#ea580c"/>
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
     <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#d97706"/>
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
-  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
-  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
-  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
-  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
-  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
-  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
-  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
+  <rect width="1024" height="1024" fill="url(#c6-bg)"/>
+  <rect x="40" y="40" width="944" height="944" rx="200" fill="none" stroke="#334155" stroke-width="14" stroke-dasharray="28 16"/>
+  <g transform="translate(347, 347)" stroke="url(#c6-front)" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="0" width="330" height="330" rx="66"/>
+    <circle cx="105" cy="105" r="30" fill="#38bdf8" fill-opacity="0.3"/>
+    <path d="M330 230 L240 140 L70 310"/>
+    <path d="M200 230 L245 185 L330 270"/>
+  </g>
 </svg>
 `);
 

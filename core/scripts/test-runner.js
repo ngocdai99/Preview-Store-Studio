@@ -1384,7 +1384,8 @@ assert(bundledHtml.includes('id="edTitle">App Identity</span>'), 'Card 1 header 
 assert(bundledHtml.includes("$('edTitle').textContent = 'App Identity'"), 'setStore maintains unified "App Identity" title');
 assert(bundledHtml.includes('class="ico-wrap is-placeholder"') && bundledHtml.includes('id="icoDropZone"'), 'App icon drop container in App Identity starts with .is-placeholder class');
 assert(bundledHtml.includes('<div class="ico-ov">') && bundledHtml.includes('circle cx="11" cy="11" r="8"'), 'App icon drop container contains .ico-ov overlay with blue zoom/lens icon');
-assert(bundledHtml.includes('linearGradient id="c6-bg"') && (bundledHtml.includes('stop-color="#f59e0b"') || bundledHtml.includes('stop-color="#3b82f6"')), 'BLANK_ICON matches vibrant dual-device vector gradient (#f59e0b -> #ea580c)');
+assert(bundledHtml.includes('linearGradient id="c6-bg"') && (bundledHtml.includes('stop-color="#f59e0b"') || bundledHtml.includes('stop-color="#3b82f6"')), 'BLANK_ICON matches vibrant vector gradient');
+assert(!bundledHtml.includes('stop-color="#f59e0b" rx="7"') && !bundledHtml.includes('stop-color="#ea580c"'), 'Old legacy orange app icon is completely purged from BLANK_ICON');
 assert(bundledHtml.includes('function isPlaceholderIcon'), 'Core studio includes isPlaceholderIcon helper function to silence validation badge on unedited drafts');
 assert(bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed #3b82f6') || bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed'), 'CSS defines dashed border for .ico-wrap.is-placeholder');
 assert(bundledHtml.includes('.ico-wrap.is-placeholder .ico-ov') && bundledHtml.includes('background:rgba(8,12,24,0.65);color:#38bdf8'), 'CSS defines subtle dark overlay and blue zoom icon for placeholder state');
