@@ -29,14 +29,6 @@ const sseClients = new Set();
 
 // Import unified build function from build.js
 const { build } = require('./build.js');
-let buildMarketing = null;
-try {
-  buildMarketing = require('./scripts/build-marketing.js').buildMarketing;
-} catch (_) {}
-let buildMarketingVi = null;
-try {
-  buildMarketingVi = require('./scripts/build-marketing-vi.js').buildMarketingVi;
-} catch (_) {}
 
 /**
  * Broadcasts reload event to all open browser tabs
@@ -219,10 +211,6 @@ function startServer(port) {
     if (res.success) {
       console.log(`[OK] Initial build completed (${res.duration}ms)`);
     }
-    const MARKETING_SRC_DIR = path.join(ROOT_DIR, 'docs', 'src', 'marketing');
-    if (typeof buildMarketing === 'function' && fs.existsSync(MARKETING_SRC_DIR)) {
-      buildMarketing();
-    }
 
     // Start watching src/
     let debounceTimer = null;
@@ -233,34 +221,12 @@ function startServer(port) {
         const fileInfo = filename ? `[${filename}]` : 'files';
         console.log(`\n[i] Change detected in ${fileInfo}, rebuilding...`);
         const b = build();
-        if (typeof buildMarketing === 'function') {
-          try { buildMarketing(); } catch (_) {}
-        }
-        if (typeof buildMarketingVi === 'function') {
-          try { buildMarketingVi(); } catch (_) {}
-        }
         if (b.success) {
           console.log(`[OK] Bundled store_preview_studio.html (${b.duration}ms)`);
           triggerReload();
         }
       }, 150);
     });
-
-    // Start watching docs/src/marketing/
-    if (typeof buildMarketing === 'function' && fs.existsSync(MARKETING_SRC_DIR)) {
-      let mktDebounce = null;
-      fs.watch(MARKETING_SRC_DIR, { recursive: true }, (eventType, filename) => {
-        if (mktDebounce) clearTimeout(mktDebounce);
-        mktDebounce = setTimeout(() => {
-          const fileInfo = filename ? `[${filename}]` : 'marketing files';
-          console.log(`\n[i] Change detected in ${fileInfo}, rebuilding docs/marketing.html...`);
-          const b = buildMarketing();
-          if (b && b.success) {
-            triggerReload();
-          }
-        }, 150);
-      });
-    }
   });
 }
 

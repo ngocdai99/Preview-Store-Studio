@@ -29,7 +29,6 @@ store-preview-studio-pro-v1.0/
 │   ├── components/                          # Mockups (iPhone, iPad, Android, Tablets), editor cards
 │   ├── css/                                 # Platform & editor stylesheets
 │   └── lib/                                 # Local canvas engine (html2canvas)
-├── scripts/                                 # Build automation utilities
 ├── presets/                                 # 6 JSON starter templates
 ├── Store_Preview_Studio_Test_Checklist.xlsx # Excel pre-flight client sign-off sheet
 ├── AGENCY_MARKETING_FAQ.html                # 16-topic ASO & store rules guide

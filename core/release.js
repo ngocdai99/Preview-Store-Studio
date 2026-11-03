@@ -137,9 +137,18 @@ function runRelease() {
     if (fs.existsSync(src)) fs.copyFileSync(src, path.join(proDir, f));
   });
 
-  // Generate Agency package.json (exclusive build scripts, without release packager)
-  const proPkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf8'));
-  delete proPkg.scripts.release;
+  // Generate clean customer package.json with ONLY customer commands: dev and build
+  const proPkg = {
+    name: "store-preview-studio",
+    version: "2.1.0",
+    description: "Zero-server offline app store preview & ASO mockup studio for Apple App Store and Google Play",
+    main: "build.js",
+    scripts: {
+      "dev": "node dev.js",
+      "build": "node build.js"
+    },
+    license: "Commercial"
+  };
   fs.writeFileSync(path.join(proDir, 'package.json'), JSON.stringify(proPkg, null, 2) + '\n', 'utf8');
 
   // Copy all 5 JSON presets to Pro Edition
@@ -149,9 +158,8 @@ function runRelease() {
     });
   }
 
-  // Copy full modular source code (src/) and automation scripts (scripts/)
+  // Copy full modular source code (src/) ONLY - zero internal maintainer scripts
   copyDirRecursive(path.join(ROOT_DIR, 'src'), path.join(proDir, 'src'));
-  copyDirRecursive(path.join(ROOT_DIR, 'scripts'), path.join(proDir, 'scripts'));
 
   const proZipPath = path.join(ROOT_DIR, `${proName}.zip`);
   const legacyZipPath = path.join(ROOT_DIR, 'store-preview-studio-v1.0.zip');
