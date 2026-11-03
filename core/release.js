@@ -83,12 +83,14 @@ function runRelease() {
   // Copy full 5-preset minified build as store_preview_studio.html for instant use
   fs.copyFileSync(minFile, path.join(plusDir, 'store_preview_studio.html'));
 
-  ['README.md', 'LICENSE.txt'].forEach(f => {
-    const src = fs.existsSync(path.join(ROOT_DIR, f))
-      ? path.join(ROOT_DIR, f)
-      : path.join(ROOT_DIR, 'package', f);
-    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(plusDir, f));
-  });
+  // Copy specialized Plus Edition documentation
+  const plusReadme = fs.existsSync(path.join(ROOT_DIR, 'README_PLUS.md'))
+    ? path.join(ROOT_DIR, 'README_PLUS.md')
+    : path.join(ROOT_DIR, 'README.md');
+  fs.copyFileSync(plusReadme, path.join(plusDir, 'README.md'));
+  if (fs.existsSync(path.join(ROOT_DIR, 'LICENSE.txt'))) {
+    fs.copyFileSync(path.join(ROOT_DIR, 'LICENSE.txt'), path.join(plusDir, 'LICENSE.txt'));
+  }
 
   // Copy all 5 JSON presets to Plus Edition
   if (fs.existsSync(srcPresets)) {
@@ -113,9 +115,14 @@ function runRelease() {
   // Copy full 5-preset minified build as store_preview_studio.html for instant use
   fs.copyFileSync(minFile, path.join(proDir, 'store_preview_studio.html'));
 
+  // Copy specialized Pro / Agency Edition documentation
+  const proReadme = fs.existsSync(path.join(ROOT_DIR, 'README_PRO.md'))
+    ? path.join(ROOT_DIR, 'README_PRO.md')
+    : path.join(ROOT_DIR, 'README.md');
+  fs.copyFileSync(proReadme, path.join(proDir, 'README.md'));
+
   // Copy documentation, Agency FAQ HTML, QA Test Cases HTML, Excel Checklist, and clean build/dev scripts
   [
-    'README.md',
     'LICENSE.txt',
     'AGENCY_MARKETING_FAQ.html',
     'Store_Preview_Studio_Test_Checklist.xlsx',
