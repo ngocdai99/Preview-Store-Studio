@@ -309,14 +309,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         const btnStyle = clonedDoc.createElement('style');
         btnStyle.textContent = `
           .dev::before, .dev::after { display: none !important; }
-          .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title,
+          .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
+          .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name,
           [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"] {
             display: block !important;
             -webkit-line-clamp: unset !important;
             -webkit-box-orient: unset !important;
             white-space: pre-wrap !important;
             word-break: normal !important;
-            word-spacing: normal !important;
+            word-spacing: 0.22em !important;
             letter-spacing: 0px !important;
           }
         `;
@@ -434,13 +435,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.letterSpacing = '0px';
         });
         // Ensure mockup text containers don't collapse whitespace between words
-        clonedEl.querySelectorAll('.g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"]').forEach(el => {
+        clonedEl.querySelectorAll('.g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title, .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name, [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"]').forEach(el => {
           el.style.display = 'block';
           el.style.webkitLineClamp = 'unset';
           el.style.webkitBoxOrient = 'unset';
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordBreak = 'normal';
-          el.style.wordSpacing = 'normal';
+          el.style.wordSpacing = '0.22em';
           el.style.letterSpacing = '0px';
         });
         // Strip focus highlight from export capture

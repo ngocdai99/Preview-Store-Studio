@@ -931,8 +931,12 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
  * Replaces native browser confirm dialog with custom modal popup.
  *
  * @param {Function} onConfirm - Callback executed when user confirms reset
+ * @param {string} [customTitle] - Custom title
+ * @param {string} [customDesc] - Custom description
+ * @param {string} [customOkLabel] - Custom confirm button label
+ * @param {Function} [onBackup] - Optional callback to export backup without closing dialog
  */
-function showResetConfirmModal(onConfirm, customTitle, customDesc, customOkLabel) {
+function showResetConfirmModal(onConfirm, customTitle, customDesc, customOkLabel, onBackup) {
   const modal = $('resetConfirmModal');
   if (!modal) {
     if (typeof onConfirm === 'function') onConfirm();
@@ -942,6 +946,10 @@ function showResetConfirmModal(onConfirm, customTitle, customDesc, customOkLabel
   const titleEl = modal.querySelector('#resetConfirmTitle');
   const descEl = modal.querySelector('.confirm-modal-desc');
   const okBtn = modal.querySelector('#resetConfirmOk');
+  const cancelBtn = modal.querySelector('#resetConfirmCancel');
+  const closeBtn = modal.querySelector('#resetConfirmClose');
+  const backupBtn = modal.querySelector('#resetConfirmBackup');
+
   const defaultTitle = 'Reset App Draft?';
   const defaultDesc = 'This will clear your customized app icon, name, and descriptions. Your current draft cannot be recovered.';
   const defaultOkLabel = 'Reset';
@@ -957,14 +965,21 @@ function showResetConfirmModal(onConfirm, customTitle, customDesc, customOkLabel
     if (titleEl) titleEl.textContent = defaultTitle;
     if (descEl) descEl.textContent = defaultDesc;
     if (okBtn) okBtn.textContent = defaultOkLabel;
+    if (backupBtn) {
+      backupBtn.style.display = 'none';
+      backupBtn.classList.remove('backed-up');
+      const labelEl = backupBtn.querySelector('.confirm-btn-backup-label');
+      if (labelEl) labelEl.textContent = 'Backup JSON';
+      backupBtn.onclick = null;
+    }
   }
 
   function handleKey(e) {
     if (e.key === 'Escape') closeModal();
   }
 
-  const cancelBtn = modal.querySelector('#resetConfirmCancel');
   if (cancelBtn) cancelBtn.onclick = closeModal;
+  if (closeBtn) closeBtn.onclick = closeModal;
 
   modal.onclick = e => {
     if (e.target === modal) closeModal();
@@ -975,6 +990,32 @@ function showResetConfirmModal(onConfirm, customTitle, customDesc, customOkLabel
       closeModal();
       if (typeof onConfirm === 'function') onConfirm();
     };
+  }
+
+  if (backupBtn) {
+    if (typeof onBackup === 'function') {
+      backupBtn.style.display = 'inline-flex';
+      const labelEl = backupBtn.querySelector('.confirm-btn-backup-label');
+      const origText = labelEl ? labelEl.textContent : 'Backup JSON';
+      backupBtn.onclick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+          onBackup();
+        } catch (err) {
+          console.error('[Backup Modal] Export error:', err);
+        }
+        backupBtn.classList.add('backed-up');
+        if (labelEl) labelEl.textContent = 'Backed Up!';
+        setTimeout(() => {
+          backupBtn.classList.remove('backed-up');
+          if (labelEl) labelEl.textContent = origText;
+        }, 2200);
+      };
+    } else {
+      backupBtn.style.display = 'none';
+      backupBtn.onclick = null;
+    }
   }
 
   document.addEventListener('keydown', handleKey);
@@ -10067,7 +10108,28 @@ function confirmReplaceDraft(incomingName, onProceed){
       onProceed,
       'Replace current draft?',
       desc,
-      'Replace Draft'
+      'Replace Draft',
+      function(){
+        if(CURRENT_PRESET_KEY !== 'draft' && typeof userDraft === 'object' && userDraft){
+          try{
+            const rawName = (userDraft.form && userDraft.form.name ? userDraft.form.name : '').trim();
+            const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'draft');
+            const backupObj = Object.assign({
+              generator: "Store Preview Studio",
+              version: "2.1.0",
+              timestamp: new Date().toISOString()
+            }, userDraft);
+            if(typeof downloadFile === 'function'){
+              downloadFile(slug + '-store-config.json', JSON.stringify(backupObj, null, 2), 'application/json');
+              if(typeof showToast === 'function') showToast('Exported draft backup JSON!', 'ok');
+              return;
+            }
+          }catch(_){}
+        }
+        if(typeof exportJSON === 'function'){
+          exportJSON();
+        }
+      }
     );
     return true;
   }
@@ -11076,6 +11138,8 @@ if($('optResetDefault')){
         if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
         showToast('Draft cleared and reset.', 'ok');
       }
+    }, 'Reset App Draft?', 'This will clear your customized app icon, name, and descriptions. Your current draft cannot be recovered.', 'Reset', () => {
+      if(typeof exportJSON === 'function') exportJSON();
     });
   };
 }
@@ -11395,14 +11459,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         const btnStyle = clonedDoc.createElement('style');
         btnStyle.textContent = `
           .dev::before, .dev::after { display: none !important; }
-          .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title,
+          .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
+          .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name,
           [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"] {
             display: block !important;
             -webkit-line-clamp: unset !important;
             -webkit-box-orient: unset !important;
             white-space: pre-wrap !important;
             word-break: normal !important;
-            word-spacing: normal !important;
+            word-spacing: 0.22em !important;
             letter-spacing: 0px !important;
           }
         `;
@@ -11520,13 +11585,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.letterSpacing = '0px';
         });
         // Ensure mockup text containers don't collapse whitespace between words
-        clonedEl.querySelectorAll('.g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"]').forEach(el => {
+        clonedEl.querySelectorAll('.g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title, .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name, [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"]').forEach(el => {
           el.style.display = 'block';
           el.style.webkitLineClamp = 'unset';
           el.style.webkitBoxOrient = 'unset';
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordBreak = 'normal';
-          el.style.wordSpacing = 'normal';
+          el.style.wordSpacing = '0.22em';
           el.style.letterSpacing = '0px';
         });
         // Strip focus highlight from export capture

@@ -329,6 +329,8 @@ if($('optResetDefault')){
         if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
         showToast('Draft cleared and reset.', 'ok');
       }
+    }, 'Reset App Draft?', 'This will clear your customized app icon, name, and descriptions. Your current draft cannot be recovered.', 'Reset', () => {
+      if(typeof exportJSON === 'function') exportJSON();
     });
   };
 }

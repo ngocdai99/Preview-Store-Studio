@@ -1351,6 +1351,8 @@ console.log('\n[SUITE 15]: Modern Reset Draft Confirmation Modal');
 
 assert(bundledHtml.includes('id="resetConfirmModal"'), 'Confirmation modal #resetConfirmModal exists in DOM');
 assert(bundledHtml.includes('id="resetConfirmCancel"'), 'Cancel button #resetConfirmCancel exists in confirmation modal');
+assert(bundledHtml.includes('id="resetConfirmClose"'), 'Close button #resetConfirmClose exists in confirmation modal');
+assert(bundledHtml.includes('id="resetConfirmBackup"'), 'Backup button #resetConfirmBackup exists in confirmation modal');
 assert(bundledHtml.includes('id="resetConfirmOk"') && /<button[^>]*id="resetConfirmOk"[^>]*>Reset<\/button>/.test(bundledHtml), 'Action button #resetConfirmOk exists with exact button text "Reset"');
 assert(bundledHtml.includes('Reset App Draft?'), 'Modal title "Reset App Draft?" exists in DOM');
 assert(bundledHtml.includes('function showResetConfirmModal'), 'Helper function showResetConfirmModal is defined in bundled script');
@@ -1358,6 +1360,7 @@ assert(bundledHtml.includes('function resetDraftWorkspace'), 'Helper function re
 assert(bundledHtml.includes('resetDraftWorkspace();'), 'Reset confirmation triggers resetDraftWorkspace');
 assert(!bundledHtml.includes("loadPreset('taskflow');\n          updateDraftPill();"), 'Resetting draft does not inappropriately reload TaskFlow preset');
 assert(bundledHtml.includes('.confirm-modal-backdrop') && bundledHtml.includes('.confirm-modal-card'), 'Modal backdrop and card styles are present in bundled CSS');
+assert(bundledHtml.includes('.confirm-modal-close-btn') && bundledHtml.includes('.confirm-btn-backup'), 'Modal close button and backup button styles are present in bundled CSS');
 assert(!/if\s*\(\s*confirm\s*\(/.test(bundledHtml), 'Native browser confirm() dialog is replaced across all reset triggers');
 
 // 9. Clean Destination & Single-binding Sidebar Toggle
@@ -3502,8 +3505,9 @@ asyncSuites.push((async () => {
     const calls = { modal: null, proceed: 0 };
     const sandbox = {
       getCurrentStateObject: () => env.live,
-      showResetConfirmModal: (onConfirm, title, desc, ok) => { calls.modal = { onConfirm, title, desc, ok }; },
-      JSON
+      showResetConfirmModal: (onConfirm, title, desc, ok, onBackup) => { calls.modal = { onConfirm, title, desc, ok, onBackup }; },
+      JSON,
+      Object
     };
     vm.runInNewContext(
       'var userDraft=null; var CURRENT_PRESET_KEY="studio";\n' + guardFns +
@@ -3535,6 +3539,12 @@ asyncSuites.push((async () => {
   assert(g.calls.modal.title === 'Replace current draft?' && g.calls.modal.ok === 'Replace Draft', 'Dialog uses clear title and "Replace Draft" confirm label');
   assert(g.calls.modal.desc.includes('"Duolingo"') && g.calls.modal.desc.includes('"Telegram"'), 'Dialog names both the current draft and the incoming app');
   assert(g.sandbox.userDraft.form.name === 'Duolingo', 'Draft is unchanged after the dialog is dismissed without confirming');
+  assert(typeof g.calls.modal.onBackup === 'function', 'Dialog supplies onBackup callback to export JSON backup on the spot');
+  let downloadedBackup = null;
+  g.sandbox.downloadFile = (name, content) => { downloadedBackup = { name, content }; };
+  g.calls.modal.onBackup();
+  assert(downloadedBackup !== null && downloadedBackup.name.includes('duolingo') && downloadedBackup.name.endsWith('.json'), 'Calling onBackup exports JSON file for current draft');
+  assert(proceeded === 0, 'Exporting backup does NOT apply the import or dismiss the dialog');
   g.calls.modal.onConfirm();
   assert(proceeded === 1, 'Confirming runs the import exactly once');
 
@@ -3577,7 +3587,7 @@ asyncSuites.push((async () => {
   const exportPngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
   assert(exportPngSrc.includes('.g-name, .a-name, .g-dev, .a-sub') && exportPngSrc.includes('display: block !important'), 'exportPNG overrides -webkit-box with display: block in clonedDoc');
   assert(exportPngSrc.includes('white-space: pre-wrap !important'), 'exportPNG enforces white-space: pre-wrap in clonedDoc style');
-  assert(exportPngSrc.includes('word-spacing: normal !important'), 'exportPNG enforces word-spacing: normal in clonedDoc style');
+  assert(exportPngSrc.includes('word-spacing: 0.22em !important'), 'exportPNG enforces generous word-spacing: 0.22em in clonedDoc style');
 
   // 3. exportPNG sets inline style overrides on cloned element nodes for guaranteed precedence
   assert(exportPngSrc.includes("el.style.display = 'block'") && exportPngSrc.includes("el.style.whiteSpace = 'pre-wrap'"), 'exportPNG sets inline style display: block and whiteSpace: pre-wrap on cloned text nodes');

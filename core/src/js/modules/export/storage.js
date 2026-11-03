@@ -268,7 +268,28 @@ function confirmReplaceDraft(incomingName, onProceed){
       onProceed,
       'Replace current draft?',
       desc,
-      'Replace Draft'
+      'Replace Draft',
+      function(){
+        if(CURRENT_PRESET_KEY !== 'draft' && typeof userDraft === 'object' && userDraft){
+          try{
+            const rawName = (userDraft.form && userDraft.form.name ? userDraft.form.name : '').trim();
+            const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'draft');
+            const backupObj = Object.assign({
+              generator: "Store Preview Studio",
+              version: "2.1.0",
+              timestamp: new Date().toISOString()
+            }, userDraft);
+            if(typeof downloadFile === 'function'){
+              downloadFile(slug + '-store-config.json', JSON.stringify(backupObj, null, 2), 'application/json');
+              if(typeof showToast === 'function') showToast('Exported draft backup JSON!', 'ok');
+              return;
+            }
+          }catch(_){}
+        }
+        if(typeof exportJSON === 'function'){
+          exportJSON();
+        }
+      }
     );
     return true;
   }
