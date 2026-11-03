@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Store Preview Studio monorepo: Core standalone studio & React Next.js marketing landing page",
+  "author": "Kai DevLabs <kai.devlabs@gmail.com>",
   "scripts": {
     "dev": "npm --prefix marketing run dev",
     "dev:marketing": "npm --prefix marketing run dev",

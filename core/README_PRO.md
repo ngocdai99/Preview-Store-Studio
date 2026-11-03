@@ -6,7 +6,8 @@
 ## 🚀 Quick Start
 
 ### 1. Standalone Use
-* Double-click **`store_preview_studio.html`** to run the pre-compiled studio in any browser.
+* Double-click **`store_preview_studio.html`** to run the pre-compiled studio immediately in any modern browser (Chrome, Safari, Brave, Edge, Arc, Firefox).
+* Switch between 6 built-in templates from the top **Preset** menu, or import/export `.json` workspace files from the `presets/` folder for client reviews.
 
 ### 2. Developer & Customization Mode
 ```bash
@@ -26,10 +27,17 @@ store-preview-studio-pro-v1.0/
 ├── package.json                             # Build scripts
 ├── src/                                     # FULL MODULAR SOURCE CODE
 │   ├── index.html                           # App shell
-│   ├── components/                          # Mockups (iPhone, iPad, Android, Tablets), editor cards
+│   ├── components/                          # Mockups (iPhone, iPad, Android, Tablets) & editor UI
 │   ├── css/                                 # Platform & editor stylesheets
+│   ├── js/                                  # Core state, validators, exporters & store cloner
 │   └── lib/                                 # Local canvas engine (html2canvas)
-├── presets/                                 # 6 JSON starter templates
+├── presets/                                 # 6 ready-to-use JSON starter templates
+│   ├── store-preview-studio-template.json
+│   ├── saas-app-template.json
+│   ├── cyberstrike-rpg-game-template.json
+│   ├── zenmind-meditation-template.json
+│   ├── education-language-template.json
+│   └── fitness-tracker-template.json
 ├── Store_Preview_Studio_Test_Checklist.xlsx # Excel pre-flight client sign-off sheet
 ├── AGENCY_MARKETING_FAQ.html                # 16-topic ASO & store rules guide
 ├── TEST_CASES.html                          # QA test specifications
@@ -40,12 +48,14 @@ store-preview-studio-pro-v1.0/
 ---
 
 ## ⚡ Core Capabilities
-* **Full Source Code**: Modular HTML/CSS/JS components ready for custom frames, branding, or feature extensions.
+* **Full Source Code**: Modular HTML/CSS/JS architecture ready for custom frames, branding, or internal agency extensions.
 * **White-Label Ready**: Easily swap brand name and logo in `src/components/header/brand.html`.
-* **Dual-Store Simulation**: Apple App Store & Google Play with phone & tablet viewports.
-* **Compliance Checks**: Icon alpha transparency (ITMS-90717), dimension validators, character counters.
-* **Export Options**: Ultra HD 4K mockups (PNG), ZIP package, `LISTING_METADATA.md`.
-* **Agency Toolkit**: Excel pre-flight checklist and interactive FAQ guide for client handoff.
+* **Dual-Store Simulation**: Apple App Store (iOS 18 HIG) & Google Play Store (Material Design 3) across Phone & Tablet viewports.
+* **View Modes**: Dual-phone side-by-side comparison, search feed, portrait & landscape game mode.
+* **Compliance Checks**: Icon alpha transparency scanner (ITMS-90717) with 1-click auto-flatten, screenshot dimension validator, strict grapheme character counters (`Intl.Segmenter`).
+* **Export Options**: Ultra HD 4K mockups (PNG), complete ZIP package, `LISTING_METADATA.md` developer handoff report.
+* **Data Tools**: Import/export JSON workspace presets, 1-click Live App Store Cloner.
+* **Agency Toolkit**: Excel pre-flight checklist and interactive 16-topic ASO FAQ guide for client sign-off.
 
 ---
 
@@ -58,4 +68,4 @@ store-preview-studio-pro-v1.0/
 
 ## 🔒 License & Support
 * **License**: Team & Agency Commercial License (`LICENSE.txt`) for unlimited client work.
-* **Support**: Reply directly to your Gumroad receipt email.
+* **Support**: Reply directly to your Gumroad receipt email or contact `kai.devlabs@gmail.com`.

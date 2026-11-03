@@ -2279,6 +2279,76 @@ const descPopSnippet = bundledHtml.slice(descPopIdx, descPopIdx + 2500);
 assert(descPopSnippet.includes('<div class="info-pop-footer" data-only="apple">'), 'descInfoPop footer is restricted to Apple mode via data-only="apple"');
 assert(!descPopSnippet.includes('data-only="google"'), 'descInfoPop does not contain Google Learn more link');
 
+// Verify Learn More network confirmation behavior
+const storeImportJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'store-import.js'), 'utf8');
+assert(storeImportJs.includes("const link = e.target.closest('.info-pop-link');"), 'store-import.js intercepts .info-pop-link clicks');
+assert(storeImportJs.includes("showNetworkConfirmModal({\n      url,"), 'store-import.js delegates Learn more clicks to showNetworkConfirmModal');
+assert(storeImportJs.includes("Allow & Open Link"), 'showNetworkConfirmModal provides Allow & Open Link action for URLs');
+assert(storeImportJs.includes("targetDomain"), 'showNetworkConfirmModal extracts target domain for user transparency');
+
+// Functional testing for showNetworkConfirmModal with external Learn More URL
+const networkElements = {
+  networkConfirmModal: { classList: { add: () => {}, remove: () => {}, contains: () => false }, setAttribute: () => {} },
+  networkConfirmTitle: { textContent: '' },
+  networkConfirmDesc: { innerHTML: '' },
+  networkConfirmOk: { textContent: '', focus: () => {}, onclick: null },
+  networkConfirmCancel: { textContent: '', onclick: null },
+  networkConfirmIconWrap: { className: '', innerHTML: '' }
+};
+const networkSandbox = {
+  $: (id) => networkElements[id] || null,
+  $$: () => [],
+  document: {
+    addEventListener: () => {},
+    removeEventListener: () => {}
+  },
+  window: {
+    open: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {}
+  },
+  navigator: { onLine: true },
+  URL: globalThis.URL
+};
+vm.createContext(networkSandbox);
+vm.runInContext(storeImportJs + '\nglobalThis.showNetworkConfirmModal = showNetworkConfirmModal;', networkSandbox);
+
+let linkOpened = false;
+networkSandbox.window.open = (url) => { if (url === 'https://developer.apple.com/test') linkOpened = true; };
+
+const titleObj = networkElements.networkConfirmTitle;
+const descObj = networkElements.networkConfirmDesc;
+const okObj = networkElements.networkConfirmOk;
+
+networkSandbox.showNetworkConfirmModal({
+  url: 'https://developer.apple.com/test',
+  onConfirm: () => networkSandbox.window.open('https://developer.apple.com/test')
+});
+
+assert(titleObj.textContent === 'Allow Network Connection?', 'Online modal displays Allow Network Connection? title');
+assert(descObj.innerHTML.includes('developer.apple.com'), 'Online modal displays target domain developer.apple.com');
+assert(okObj.textContent === 'Allow & Open Link', 'Online modal ok button reads Allow & Open Link');
+
+okObj.onclick();
+assert(linkOpened === true, 'Clicking ok button opens the external link');
+
+// Test offline branch
+linkOpened = false;
+networkSandbox.navigator.onLine = false;
+
+networkSandbox.showNetworkConfirmModal({
+  url: 'https://support.google.com/test',
+  onConfirm: () => networkSandbox.window.open('https://support.google.com/test')
+});
+
+assert(titleObj.textContent === 'Turn On Network Connection', 'Offline modal displays Turn On Network Connection title');
+assert(descObj.innerHTML.includes('support.google.com'), 'Offline modal displays target domain support.google.com');
+assert(okObj.textContent === "I've Turned It On", 'Offline modal ok button reads I\'ve Turned It On');
+
+// Clicking ok when still offline does not open the link
+okObj.onclick();
+assert(linkOpened === false, 'Clicking ok button while still offline guards network access and does not open link');
+
 // ---------------------------------------------------------------------
 // SUITE 33: Google Play Tablet Screenshots Fallback Verification
 // ---------------------------------------------------------------------

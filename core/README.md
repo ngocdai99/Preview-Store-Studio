@@ -77,10 +77,11 @@ If you are customizing the modular source code in `src/`:
 ### 1. Plus Edition ($29) — `store-preview-studio-plus-v1.0.zip`
 ```
 store-preview-studio-plus-v1.0/
-├── store_preview_studio.html              # Main standalone offline application (Full 5 Presets)
+├── store_preview_studio.html              # Main standalone offline application (Full 6 Presets)
 ├── README.md                              # Documentation & user guide
 ├── LICENSE.txt                            # Commercial single-user license
 └── presets/                               # Ready-to-use JSON listing presets (v2.1.0)
+    ├── store-preview-studio-template.json
     ├── saas-app-template.json
     ├── fitness-tracker-template.json
     ├── zenmind-meditation-template.json
@@ -91,7 +92,7 @@ store-preview-studio-plus-v1.0/
 ### 2. Pro Studio Edition ($39) — `store-preview-studio-pro-v1.0.zip`
 ```
 store-preview-studio-pro-v1.0/
-├── store_preview_studio.html              # Main standalone offline application (Full 5 Presets)
+├── store_preview_studio.html              # Main standalone offline application (Full 6 Presets)
 ├── README.md                              # Documentation & user guide
 ├── AGENCY_MARKETING_FAQ.html              # Interactive 16-question ASO & store release guide
 ├── TEST_CASES.html                        # Comprehensive 19-module QA test specification
@@ -100,6 +101,7 @@ store-preview-studio-pro-v1.0/
 ├── build.js / dev.js                      # Asset compiler & live dev server
 ├── src/                                   # Full modular source code
 └── presets/                               # Ready-to-use JSON listing presets (v2.1.0)
+    ├── store-preview-studio-template.json
     ├── saas-app-template.json
     ├── fitness-tracker-template.json
     ├── zenmind-meditation-template.json

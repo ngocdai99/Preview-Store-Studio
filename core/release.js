@@ -147,6 +147,7 @@ function runRelease() {
       "dev": "node dev.js",
       "build": "node build.js"
     },
+    author: "Kai DevLabs <kai.devlabs@gmail.com>",
     license: "Commercial"
   };
   fs.writeFileSync(path.join(proDir, 'package.json'), JSON.stringify(proPkg, null, 2) + '\n', 'utf8');
@@ -178,7 +179,7 @@ function runRelease() {
     const plusKb = (fs.statSync(plusZipPath).size / 1024).toFixed(1);
     console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightYellow}Plus Edition ($29)${c.reset} ${c.dim}(${plusKb} KB)${c.reset}`);
     console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${plusZipPath}${c.reset}`);
-    console.log(`    ${c.gray}Package:${c.reset} All 5 Presets · Offline Standalone HTML\n`);
+    console.log(`    ${c.gray}Package:${c.reset} All 6 Presets · Offline Standalone HTML\n`);
 
     execSync(`zip -rq "${proZipPath}" "${proName}"`, { cwd: distDir });
     fs.copyFileSync(proZipPath, legacyZipPath);
@@ -188,7 +189,7 @@ function runRelease() {
     const proKb = (fs.statSync(proZipPath).size / 1024).toFixed(1);
     console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightCyan}Pro Edition ($39)${c.reset} ${c.dim}(${proKb} KB)${c.reset}`);
     console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${proZipPath}${c.reset}`);
-    console.log(`    ${c.gray}Package:${c.reset} All 5 Presets · Full Modular Source · Dev Server · QA Toolkit\n`);
+    console.log(`    ${c.gray}Package:${c.reset} All 6 Presets · Full Modular Source · Dev Server · QA Toolkit\n`);
 
     console.log(`${c.bold}${c.brightGreen}All release packages created successfully and ready to publish!${c.reset}\n`);
   } catch (e) {

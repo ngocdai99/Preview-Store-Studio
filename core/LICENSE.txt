@@ -1,20 +1,23 @@
 COMMERCIAL END-USER LICENSE AGREEMENT (EULA)
 Product: Store Preview Studio
-Author / Licensor: Store Preview Studio Team
+Author / Licensor: Kai DevLabs (kai.devlabs@gmail.com)
 
-Copyright (c) 2026 Store Preview Studio. All rights reserved.
+Copyright (c) 2026 Store Preview Studio by Kai DevLabs. All rights reserved.
 
 1. GRANT OF LICENSE
-By purchasing or downloading Store Preview Studio ("the Software"), you are granted a worldwide, non-exclusive, non-transferable, perpetual license to use the Software according to the terms of this Agreement.
+By purchasing Store Preview Studio ("the Software"), Kai DevLabs grants you a worldwide, non-exclusive, non-transferable, perpetual license to use the Software based on the edition purchased:
+
+- PLUS EDITION (Single-User License): Grants one (1) individual user the right to use the standalone compiled Software on their personal devices for personal, indie, or employer projects.
+- PRO STUDIO EDITION (Team & Agency License): Grants a team or agency the right to use the Software across multiple team members, customize/white-label the modular source code (src/), and share pre-configured preview files with unlimited clients for review and sign-off.
 
 2. PERMITTED USES
-- You may use the Software to design, preview, validate, format, and export app store listings and promotional graphics for your personal projects, employer projects, or client deliverables.
-- You may export mockups (PNG), metadata files (Markdown, JSON, Text), and copy generated content without attribution.
-- You may modify the styling, layout, or code for your own internal use or client sign-off workflows.
+- You may design, preview, validate, and export unlimited app store mockups (PNG), metadata files (Markdown, JSON, Text), and promotional graphics for commercial or personal apps without attribution.
+- (Pro Edition only) You may modify the source code, styling, or branding for internal workflows and client deliverables.
 
 3. RESTRICTIONS
-- You may NOT resell, redistribute, sub-license, bundle, rent, or lease the raw source code of Store Preview Studio (in whole or in part) as a standalone template or competitor product on Gumroad, Lemon Squeezy, GitHub, ThemeForest, or any digital marketplace.
-- You may NOT publicly share un-obfuscated copies of the tool source code.
+- NO RESALE OR REDISTRIBUTION: You may NOT resell, redistribute, sub-license, bundle, rent, or share the Software or its source code (in whole or in part) on Gumroad, Lemon Squeezy, GitHub, ThemeForest, or any public repository/marketplace.
+- NO PUBLIC WEB HOSTING / COMPETING SAAS: You may NOT deploy or host the Software on a public website, public URL, or cloud server to offer it as a free or paid online tool/service to the general public.
+- NO TRADEMARK CLAIM: Apple, App Store, iPhone, iPad, Google Play, and Android are trademarks of their respective owners. This Software is an independent design utility and is not affiliated with or endorsed by Apple Inc. or Google LLC.
 
-4. DISCLAIMER OF WARRANTIES
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY.
+4. DISCLAIMER OF WARRANTIES & LIMITATION OF LIABILITY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. THE SOFTWARE IS A VISUAL SIMULATION AND PRE-FLIGHT UTILITY AND DOES NOT GUARANTEE APP APPROVAL BY APPLE APP STORE OR GOOGLE PLAY REVIEW TEAMS. IN NO EVENT SHALL KAI DEVLABS BE LIABLE FOR ANY CLAIM, DAMAGES, APP REJECTION, OR OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.

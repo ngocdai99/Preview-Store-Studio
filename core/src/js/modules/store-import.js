@@ -322,7 +322,18 @@ function updateStoreImportNetworkStatus() {
 /**
  * Prompts user to confirm enabling network connection or turning on network
  * due to Studio's 100% offline commitment
- * @param {{onConfirm: Function, onCancel?: Function}} options 
+ * @param {{
+ *   onConfirm: Function,
+ *   onCancel?: Function,
+ *   url?: string,
+ *   title?: string,
+ *   desc?: string,
+ *   offlineTitle?: string,
+ *   offlineDesc?: string,
+ *   okText?: string,
+ *   offlineOkText?: string,
+ *   cancelText?: string
+ * }} options 
  */
 function showNetworkConfirmModal(options) {
   const modal = $('networkConfirmModal');
@@ -338,15 +349,32 @@ function showNetworkConfirmModal(options) {
   const okBtn = $('networkConfirmOk');
   const cancelBtn = $('networkConfirmCancel');
 
+  let targetDomain = '';
+  if (options && options.url) {
+    try {
+      targetDomain = new URL(options.url).hostname;
+    } catch (e) {
+      targetDomain = options.url;
+    }
+  }
+
   if (isOffline) {
     if (iconWrap) {
       iconWrap.className = 'confirm-modal-icon-wrap network-confirm-icon-wrap offline';
       iconWrap.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>';
     }
-    if (titleEl) titleEl.textContent = 'Turn On Network Connection';
-    if (descEl) descEl.innerHTML = 'Store Preview Studio operates <strong>100% offline</strong> with zero tracking. To import live app metadata from Apple, you must turn on your Wi-Fi or internet connection.<br><br>Please connect to the internet and try again.';
+    if (titleEl) titleEl.textContent = options?.offlineTitle || 'Turn On Network Connection';
+    if (descEl) {
+      if (options?.offlineDesc) {
+        descEl.innerHTML = options.offlineDesc;
+      } else if (targetDomain) {
+        descEl.innerHTML = `Store Preview Studio operates <strong>100% offline</strong> with zero tracking. To view external guidelines at <code>${targetDomain}</code>, you must turn on your Wi-Fi or internet connection.<br><br>Please connect to the internet and try again.`;
+      } else {
+        descEl.innerHTML = 'Store Preview Studio operates <strong>100% offline</strong> with zero tracking. To import live app metadata from Apple, you must turn on your Wi-Fi or internet connection.<br><br>Please connect to the internet and try again.';
+      }
+    }
     if (okBtn) {
-      okBtn.textContent = "I've Turned It On";
+      okBtn.textContent = options?.offlineOkText || "I've Turned It On";
       okBtn.className = 'confirm-btn-reset store-import-btn-submit';
     }
   } else {
@@ -354,12 +382,24 @@ function showNetworkConfirmModal(options) {
       iconWrap.className = 'confirm-modal-icon-wrap network-confirm-icon-wrap';
       iconWrap.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
     }
-    if (titleEl) titleEl.textContent = 'Allow Network Connection?';
-    if (descEl) descEl.innerHTML = 'Store Preview Studio operates <strong>100% offline</strong> with zero tracking. Importing live app metadata requires connecting to Apple\'s official API (<code>itunes.apple.com</code>).<br><br>Do you want to enable network access to fetch this app?';
+    if (titleEl) titleEl.textContent = options?.title || 'Allow Network Connection?';
+    if (descEl) {
+      if (options?.desc) {
+        descEl.innerHTML = options.desc;
+      } else if (targetDomain) {
+        descEl.innerHTML = `Store Preview Studio operates <strong>100% offline</strong> with zero tracking. Opening external guidelines requires connecting to <code>${targetDomain}</code>.<br><br>Do you want to enable network access to open this link in a new tab?`;
+      } else {
+        descEl.innerHTML = 'Store Preview Studio operates <strong>100% offline</strong> with zero tracking. Importing live app metadata requires connecting to Apple\'s official API (<code>itunes.apple.com</code>).<br><br>Do you want to enable network access to fetch this app?';
+      }
+    }
     if (okBtn) {
-      okBtn.textContent = 'Allow & Connect';
+      okBtn.textContent = options?.okText || (options?.url ? 'Allow & Open Link' : 'Allow & Connect');
       okBtn.className = 'confirm-btn-reset network-btn-confirm';
     }
+  }
+
+  if (cancelBtn) {
+    cancelBtn.textContent = options?.cancelText || 'Stay Offline';
   }
 
   function closeModal() {
@@ -393,8 +433,10 @@ function showNetworkConfirmModal(options) {
     okBtn.onclick = () => {
       closeModal();
       if (!isNetworkOnline()) {
-        if (typeof setStoreImportStatus === 'function') {
+        if (typeof setStoreImportStatus === 'function' && !options?.url) {
           setStoreImportStatus('error', 'Still offline. Please connect to the internet (Wi-Fi/Cellular) and try again.');
+        } else if (typeof showToast === 'function') {
+          showToast('Still offline. Please connect to the internet and try again.');
         }
         return;
       }
@@ -602,6 +644,33 @@ function initStoreImportEvents() {
       }
     });
   }
+
+  // Handle all "Learn more" guideline links with network permission confirmation
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('.info-pop-link');
+    if (!link) return;
+
+    const url = link.getAttribute('href');
+    if (!url || url === '#' || url.startsWith('javascript:')) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Close any open popovers so they don't linger behind the modal
+    if (typeof $$ === 'function') {
+      $$('.info-popover.open').forEach(p => {
+        p.classList.remove('open');
+        p.setAttribute('aria-hidden', 'true');
+      });
+    }
+
+    showNetworkConfirmModal({
+      url,
+      onConfirm: () => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
 }
 
 /**
