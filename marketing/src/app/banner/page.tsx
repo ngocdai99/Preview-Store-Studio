@@ -26,6 +26,11 @@ export default function BannerStudioPage() {
   const [badgeText, setBadgeText] = useState("100% Client-Side");
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
   
+  // Device Headers row above mockups
+  const [showDeviceHeaders, setShowDeviceHeaders] = useState(true);
+  const [appleHeaderLabel, setAppleHeaderLabel] = useState("APP STORE · iPhone");
+  const [googleHeaderLabel, setGoogleHeaderLabel] = useState("GOOGLE PLAY · Android");
+  
   // Feature bullet points
   const [featureCount, setFeatureCount] = useState<4 | 5>(4);
   const [feature1Title, setFeature1Title] = useState("Instant Dual Previews");
@@ -56,7 +61,7 @@ export default function BannerStudioPage() {
   const [proLicenseBadge, setProLicenseBadge] = useState("Commercial License");
 
   // Mockup Asset
-  const [imageSrc, setImageSrc] = useState("/banner-dual-mockup.png");
+  const [imageSrc, setImageSrc] = useState("/banner-dual-mockup.svg");
 
   // Export state
   const [isExporting, setIsExporting] = useState(false);
@@ -244,8 +249,13 @@ export default function BannerStudioPage() {
         else el.removeAttribute(attr);
       });
 
-      // Overdraw the mockup image at full native resolution (bypasses html2canvas downsampling)
+      // Overdraw the mockup image at full native/vector resolution (bypasses html2canvas downsampling)
       if (imgSnapshot) {
+        try {
+          await imgSnapshot.el.decode();
+        } catch {
+          // Ignore decode errors if already decoded
+        }
         const ctx = canvas.getContext("2d");
         if (ctx) {
           ctx.save();
@@ -259,10 +269,6 @@ export default function BannerStudioPage() {
           ctx.imageSmoothingQuality = "high";
           ctx.drawImage(
             imgSnapshot.el,
-            0,
-            0,
-            imgSnapshot.el.naturalWidth,
-            imgSnapshot.el.naturalHeight,
             imgSnapshot.dx,
             imgSnapshot.dy,
             imgSnapshot.dw,
@@ -308,6 +314,9 @@ export default function BannerStudioPage() {
     setSubtitle("Dual-Store App Mockup & Metadata Studio");
     setBadgeText("100% Client-Side");
     setBadgeStyle("pills");
+    setShowDeviceHeaders(true);
+    setAppleHeaderLabel("APP STORE · iPhone");
+    setGoogleHeaderLabel("GOOGLE PLAY · Android");
     setFeature1Title("Instant Dual Previews");
     setFeature1Desc("Side-by-side iOS & Android listings as you type");
     setFeature2Title("1-Click App Cloner");
@@ -326,7 +335,7 @@ export default function BannerStudioPage() {
     setProPrice("$39");
     setProDesc("For agencies, studios, and developers requiring commercial client licensing and full source code.");
     setProLicenseBadge("Commercial License");
-    setImageSrc("/banner-dual-mockup.png");
+    setImageSrc("/banner-dual-mockup.svg");
   };
 
   return (
@@ -429,19 +438,56 @@ export default function BannerStudioPage() {
               <div className="flex-1">
                 <label className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white cursor-pointer inline-flex items-center gap-1.5 transition-colors">
                   <ImageIcon className="w-3.5 h-3.5 text-[#00D085]" />
-                  <span>Upload Custom PNG...</span>
+                  <span>Upload Custom PNG/SVG...</span>
                   <input
                     type="file"
-                    accept="image/png,image/jpeg,image/webp"
+                    accept="image/svg+xml,image/png,image/jpeg,image/webp"
                     onChange={handleImageUpload}
                     className="hidden"
                   />
                 </label>
                 <p className="text-[11px] text-[#989A99] mt-1">
-                  File: <span className="text-white font-mono">banner-dual-mockup.png</span> (100% gốc)
+                  File: <span className="text-white font-mono">banner-dual-mockup.svg</span> (Vector 4K)
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Device Headers Control */}
+          <div className="space-y-3 pt-3 border-t border-white/5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold uppercase tracking-wider text-[#989A99] block flex items-center gap-1.5">
+                <Smartphone className="w-3.5 h-3.5 text-[#00D085]" /> Device Headers
+              </label>
+              <input
+                type="checkbox"
+                checked={showDeviceHeaders}
+                onChange={(e) => setShowDeviceHeaders(e.target.checked)}
+                className="accent-[#00D085] cursor-pointer"
+              />
+            </div>
+            {showDeviceHeaders && (
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span className="text-[11px] text-[#7dd3fc] mb-1 block font-semibold">iOS Header</span>
+                  <input
+                    type="text"
+                    value={appleHeaderLabel}
+                    onChange={(e) => setAppleHeaderLabel(e.target.value)}
+                    className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-[#7dd3fc]"
+                  />
+                </div>
+                <div>
+                  <span className="text-[11px] text-[#6ee7b7] mb-1 block font-semibold">Android Header</span>
+                  <input
+                    type="text"
+                    value={googleHeaderLabel}
+                    onChange={(e) => setGoogleHeaderLabel(e.target.value)}
+                    className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-[#6ee7b7]"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Typography Controls */}
@@ -752,8 +798,8 @@ export default function BannerStudioPage() {
                         {/* Apple Store */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
-                            <path d="M15.5 2.8c-.3 1.8-1.5 3-3 3.2-.3-1.6.9-3 3-3.2z" />
-                            <path d="M12 7.5c-1.2 0-2.1.8-3.2.8s-2-.8-3.3-.8C3.8 7.5 2 9.6 2 13.2c0 4.1 2.8 7.8 5.2 7.8 1.2 0 1.9-.6 3.1-.6s1.9.6 3.1.6c2.4 0 5.2-3.7 5.2-7.8 0-3.6-1.8-5.7-3.5-5.7-1.3 0-2.1.8-3.2.8s-2-.8-3.3-.8z" />
+                            <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                            <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
                           </svg>
                           <span className="leading-none">App Store</span>
                         </div>
@@ -785,8 +831,8 @@ export default function BannerStudioPage() {
                           }}
                         >
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
-                            <path d="M15.5 2.8c-.3 1.8-1.5 3-3 3.2-.3-1.6.9-3 3-3.2z" />
-                            <path d="M12 7.5c-1.2 0-2.1.8-3.2.8s-2-.8-3.3-.8C3.8 7.5 2 9.6 2 13.2c0 4.1 2.8 7.8 5.2 7.8 1.2 0 1.9-.6 3.1-.6s1.9.6 3.1.6c2.4 0 5.2-3.7 5.2-7.8 0-3.6-1.8-5.7-3.5-5.7-1.3 0-2.1.8-3.2.8s-2-.8-3.3-.8z" />
+                            <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                            <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
                           </svg>
                           <span className="leading-none">App Store</span>
                         </div>
@@ -1048,18 +1094,31 @@ export default function BannerStudioPage() {
                   )}
                 </div>
 
-                {/* Right Column (Visual Dual Mockup Frame - 100% natural scale, 0px offset, 0deg rotate, 0% ambient glow, no dark shadow) */}
-                <div className="flex-1 flex items-center justify-center relative z-10 overflow-hidden">
+                {/* Right Column (Visual Dual Mockup Frame with Store Device Labels) */}
+                <div className="flex-1 flex flex-col items-center justify-center relative z-10 overflow-hidden">
+                  {showDeviceHeaders && (
+                    <div className="w-full flex items-center justify-between mb-2 px-3 max-w-[580px]">
+                      <div className="w-1/2 flex items-center justify-center gap-1.5 text-[11.5px] font-semibold tracking-wider text-[#7dd3fc]">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#7dd3fc" className="shrink-0 block">
+                          <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                          <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
+                        </svg>
+                        <span className="leading-none">{appleHeaderLabel}</span>
+                      </div>
+                      <div className="w-1/2 flex items-center justify-center gap-1.5 text-[11.5px] font-semibold tracking-wider text-[#6ee7b7]">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#6ee7b7" className="shrink-0 block">
+                          <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
+                        </svg>
+                        <span className="leading-none">{googleHeaderLabel}</span>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="relative flex items-center justify-center">
                     <img
                       src={imageSrc}
                       alt="Store Preview Studio Dual Mockup"
-                      className="max-h-[610px] w-auto object-contain"
-                      style={{
-                        imageRendering: "-webkit-optimize-contrast",
-                        transform: "translateZ(0)",
-                        backfaceVisibility: "hidden",
-                      }}
+                      className="max-h-[580px] max-w-full w-auto object-contain"
                     />
                   </div>
                 </div>
@@ -1098,16 +1157,11 @@ export default function BannerStudioPage() {
                 </div>
 
                 {/* Center Mockup - 100% natural, 0px offset, 0deg rotate */}
-                <div className="flex-1 flex items-center justify-center z-10">
+                <div className="flex-1 flex items-center justify-center z-10 overflow-hidden">
                   <img
                     src={imageSrc}
                     alt="Mockup"
-                    className="max-h-[380px] w-auto object-contain"
-                    style={{
-                      imageRendering: "-webkit-optimize-contrast",
-                      transform: "translateZ(0)",
-                      backfaceVisibility: "hidden",
-                    }}
+                    className="max-h-[380px] max-w-full w-auto object-contain"
                   />
                 </div>
 
