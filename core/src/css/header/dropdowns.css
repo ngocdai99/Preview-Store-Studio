@@ -228,10 +228,10 @@
 /* Preset Banner Action Buttons (Copy Preset to Draft / Return to Draft) */
 .preset-banner-btn {
   margin-left: 10px;
-  padding: 0 12px;
+  padding: 0 10px;
   font-size: 11px;
   font-weight: 600;
-  border-radius: 999px;
+  border-radius: 7px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -250,48 +250,53 @@
   stroke: currentColor;
 }
 
-/* Premium Apple Blue Pill Style for Copy Preset to Draft */
+/* Dark Mode: White Button with moderate border-radius */
 .preset-banner-btn.btn-preset-copy {
-  background: linear-gradient(180deg, #0a84ff 0%, #0071e3 100%);
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  background-color: var(--btn-white-bg, #EFF1F0);
+  color: var(--btn-white-text, #252625) !important;
+  border: 1px solid var(--btn-white-border, rgba(0, 0, 0, 0.08));
+  border-radius: 7px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   letter-spacing: -0.01em;
 }
 
 .preset-banner-btn.btn-preset-copy:hover {
-  background: linear-gradient(180deg, #2b95ff 0%, #0077ed 100%);
-  border-color: rgba(255, 255, 255, 0.36);
-  box-shadow: 0 3px 10px rgba(0, 113, 227, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.38);
+  background-color: var(--btn-white-hover-bg, #E1E3E2);
+  color: var(--btn-white-hover-text, #252625) !important;
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
   transform: translateY(-0.5px);
 }
 
 .preset-banner-btn.btn-preset-copy:active {
-  background: linear-gradient(180deg, #0066cc 0%, #005bb5 100%);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 1px 2px rgba(0, 113, 227, 0.3), inset 0 1px 1px rgba(0, 0, 0, 0.15);
+  background-color: var(--btn-white-active-bg, #D5D8D6);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   transform: translateY(0.5px);
 }
 
-/* Light Mode Overrides */
-:root[data-ui=light] .preset-banner-btn.btn-preset-copy {
-  background: linear-gradient(180deg, #0077ed 0%, #0071e3 100%);
-  color: #ffffff !important;
-  border: 1px solid rgba(0, 85, 179, 0.32);
-  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+/* Light Mode: Inverted to Dark Button with moderate border-radius */
+:root[data-ui=light] .preset-banner-btn.btn-preset-copy,
+:root[data-ui=light] .preset-banner-btn.btn-white {
+  background-color: var(--btn-dark-bg, #1D1E1D);
+  color: var(--btn-dark-text, #EDEDED) !important;
+  border: 1px solid var(--btn-dark-border, #282928);
+  border-radius: 7px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-:root[data-ui=light] .preset-banner-btn.btn-preset-copy:hover {
-  background: linear-gradient(180deg, #1a82f7 0%, #0077ed 100%);
-  border-color: rgba(0, 85, 179, 0.45);
-  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+:root[data-ui=light] .preset-banner-btn.btn-preset-copy:hover,
+:root[data-ui=light] .preset-banner-btn.btn-white:hover {
+  background-color: var(--btn-dark-hover-bg, #282a28);
+  color: #ffffff !important;
+  border-color: #383a38;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
   transform: translateY(-0.5px);
 }
 
-:root[data-ui=light] .preset-banner-btn.btn-preset-copy:active {
-  background: linear-gradient(180deg, #0066cc 0%, #005bb5 100%);
+:root[data-ui=light] .preset-banner-btn.btn-preset-copy:active,
+:root[data-ui=light] .preset-banner-btn.btn-white:active {
+  background-color: #141514;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transform: translateY(0.5px);
 }
 

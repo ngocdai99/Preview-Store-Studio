@@ -2655,7 +2655,8 @@ assert(bundledHtml.includes('id="btnCopyPresetToDraft"'), 'Preset banner contain
 assert(bundledHtml.includes('Copy this preset as your draft'), 'Suggestion button has "Copy this preset as your draft" label');
 assert(bundledHtml.includes('btnCopyPresetToDraft.onclick = () =>'), 'btnCopyPresetToDraft binds click handler to clone preset into active draft');
 assert(bundledHtml.includes('btn-preset-copy'), 'btnCopyPresetToDraft has refined .btn-preset-copy styling');
-assert(bundledHtml.includes('.preset-banner-btn.btn-preset-copy'), 'CSS defines vibrant blue pill styling for .btn-preset-copy');
+assert(bundledHtml.includes('.preset-banner-btn.btn-preset-copy'), 'CSS defines adaptive white/dark button styling for .btn-preset-copy');
+assert(bundledHtml.includes(':root[data-ui=light] .preset-banner-btn.btn-preset-copy'), 'CSS defines dark button inversion for light mode');
 
 // 4. Functional State Machine Simulation: Bootstrap -> Click +Your App -> Return to Preset -> Close Preset
 let sim38Draft = null;
