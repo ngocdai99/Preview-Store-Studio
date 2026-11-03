@@ -70,7 +70,7 @@ const sandbox = {
 };
 
 vm.createContext(sandbox);
-vm.runInContext(stateCode + '\nglobalThis.PRESETS = PRESETS;\nglobalThis.GOOGLE_AGE_MAP = GOOGLE_AGE_MAP;\nglobalThis.DEFAULT_ICON = DEFAULT_ICON;\nglobalThis.PULSEFIT_ICON = PULSEFIT_ICON;\nglobalThis.ZENMIND_ICON = ZENMIND_ICON;\nglobalThis.CYBER_ICON = CYBER_ICON;\nglobalThis.LINGUA_ICON = LINGUA_ICON;', sandbox);
+vm.runInContext(stateCode + '\nglobalThis.PRESETS = PRESETS;\nglobalThis.GOOGLE_AGE_MAP = GOOGLE_AGE_MAP;\nglobalThis.DEFAULT_ICON = DEFAULT_ICON;\nglobalThis.PULSEFIT_ICON = PULSEFIT_ICON;\nglobalThis.ZENMIND_ICON = ZENMIND_ICON;\nglobalThis.CYBER_ICON = CYBER_ICON;\nglobalThis.LINGUA_ICON = LINGUA_ICON;\nglobalThis.BLANK_ICON = BLANK_ICON;\nglobalThis.STUDIO_ICON = STUDIO_ICON;', sandbox);
 
 const PRESETS = sandbox.PRESETS;
 const GOOGLE_AGE_MAP = sandbox.GOOGLE_AGE_MAP;
@@ -204,6 +204,7 @@ assert(PRESETS.pulsefit.icon !== PRESETS.zenmind.icon, 'PulseFit icon is distinc
 assert(PRESETS.cyberstrike.icon !== PRESETS.taskflow.icon, 'CyberStrike icon is distinct from TaskFlow icon');
 assert(PRESETS.edulearn.icon !== PRESETS.taskflow.icon, 'SkillSphere icon is distinct from TaskFlow icon');
 assert(PRESETS.studio.icon !== PRESETS.taskflow.icon, 'Store Preview Studio icon is distinct from TaskFlow icon');
+assert(PRESETS.studio.icon !== sandbox.BLANK_ICON, 'Store Preview Studio icon is distinct from placeholder BLANK_ICON');
 
 assert(PRESETS.pulsefit.shots[0] !== PRESETS.taskflow.shots[0], 'PulseFit screenshots are distinct from TaskFlow');
 assert(PRESETS.zenmind.shots[0] !== PRESETS.taskflow.shots[0], 'ZenMind screenshots are distinct from TaskFlow');
@@ -2015,6 +2016,7 @@ console.log('\n[SUITE 27]: Inspect Button Disabled State When No App Icon');
 const iconJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'icon.js'), 'utf8');
 assert(iconJsCode.includes('inspectBtn.disabled = disabled') || iconJsCode.includes('inspectBtn.disabled = placeholder'), 'updateIconDropZoneUi disables icoInspect when icon is missing or placeholder');
 assert(iconJsCode.includes("if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){\n      return;"), 'icoInspect click handler returns early when icon is missing');
+assert(iconJsCode.includes("if(CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none' && CURRENT_PRESET_KEY !== 'draft') return false;"), 'isPlaceholderIcon never treats curated presets as placeholder');
 
 const identityCardHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'identity-card.html'), 'utf8');
 assert(identityCardHtml.includes('id="icoInspect"') && identityCardHtml.includes('disabled'), 'icoInspect button initializes with disabled attribute in identity-card.html');

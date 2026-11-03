@@ -1077,19 +1077,33 @@ const STUDIO_ICON = makeSvgDataUri(`
 </svg>
 `);
 
-const LEGACY_BLANK_ICON = makeSvgDataUri(`
+const BLANK_ICON = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
   <defs>
     <linearGradient id="c6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f59e0b"/>
       <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
+    <linearGradient id="c6-front" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
   </defs>
   <rect width="32" height="32" rx="7" fill="url(#c6-bg)"/>
+  <rect x="10.5" y="4.5" width="16.5" height="18" rx="2.5" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.6"/>
+  <circle cx="18.75" cy="6.2" r="0.65" fill="#ffffff"/>
+  <rect x="12.5" y="8.5" width="6" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="19.5" y="8.5" width="5.5" height="7" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="12.5" y="17" width="12.5" height="3" rx="0.8" fill="#ffffff" opacity="0.5"/>
+  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="url(#c6-front)"/>
+  <rect x="5" y="8" width="11.5" height="19.5" rx="3" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="1.8"/>
+  <rect x="8.5" y="9.8" width="4.5" height="1.2" rx="0.6" fill="#ffffff"/>
+  <rect x="6.8" y="12.5" width="8" height="7.5" rx="1" fill="#ffffff" opacity="0.35"/>
+  <rect x="6.8" y="21.5" width="8" height="3.5" rx="0.8" fill="#ffffff" opacity="0.6"/>
 </svg>
 `);
 
-const BLANK_ICON = STUDIO_ICON;
+const LEGACY_BLANK_ICON = BLANK_ICON;
 
 const SHOT_1 = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996">
@@ -3258,6 +3272,7 @@ function isPlaceholderIcon(){
   if(typeof CURRENT_PRESET_KEY !== 'undefined'){
     if(CURRENT_PRESET_KEY === 'none') return true;
     if(CURRENT_PRESET_KEY === 'draft') return !IS_CUSTOM_ICON;
+    if(CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none' && CURRENT_PRESET_KEY !== 'draft') return false;
   }
   if(!ICON || ICON === BLANK_ICON) return true;
   if(typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024 && ICON === BLANK_ICON_1024) return true;
