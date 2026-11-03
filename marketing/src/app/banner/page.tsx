@@ -1401,10 +1401,21 @@ export default function BannerStudioPage() {
                   className="z-10 flex items-center justify-between pt-3.5 text-xs"
                   style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}
                 >
-                  <span className="font-semibold text-white/90 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#00D085]" />
-                    <span className="tracking-tight">{footerLeft}</span>
-                  </span>
+                  <div 
+                    className="inline-flex items-center text-xs font-bold text-white select-none"
+                    style={{ color: "#ffffff" }}
+                  >
+                    <Sparkles 
+                      className="w-4 h-4 text-[#00D085] shrink-0 block mr-2" 
+                      style={{ color: "#00D085", width: "16px", height: "16px" }} 
+                    />
+                    <span 
+                      style={{ color: "#ffffff", display: "inline-block", fontSize: "12px", lineHeight: "16px" }}
+                      className="font-bold text-white tracking-normal"
+                    >
+                      {footerLeft}
+                    </span>
+                  </div>
                   {footerButtonStyle === "primary" ? (
                     <span 
                       className="text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-[9px] text-white leading-none inline-flex items-center justify-center shadow-md transition-all select-none"
