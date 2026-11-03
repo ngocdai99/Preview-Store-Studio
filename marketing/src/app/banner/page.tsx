@@ -25,7 +25,7 @@ export default function BannerStudioPage() {
   const [subtitle, setSubtitle] = useState("Dual-Store App Mockup & Metadata Studio");
   const [badgeText, setBadgeText] = useState("100% Client-Side");
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
-  const [footerLeft, setFooterLeft] = useState("Pixel-Perfect 4K Export");
+  const [footerLeft, setFooterLeft] = useState("Ultra HD 4K Export");
   const [footerRight, setFooterRight] = useState("PAY ONCE · OWN FOREVER");
   
   // Brand Logo configuration
@@ -320,7 +320,7 @@ export default function BannerStudioPage() {
     setSubtitle("Dual-Store App Mockup & Metadata Studio");
     setBadgeText("100% Client-Side");
     setBadgeStyle("pills");
-    setFooterLeft("Pixel-Perfect 4K Export");
+    setFooterLeft("Ultra HD 4K Export");
     setFooterRight("PAY ONCE · OWN FOREVER");
     setShowLogo(true);
     setLogoPosition("inline");
@@ -642,7 +642,7 @@ export default function BannerStudioPage() {
                   type="text"
                   value={footerLeft}
                   onChange={(e) => setFooterLeft(e.target.value)}
-                  placeholder="VD: Pixel-Perfect 4K Export"
+                  placeholder="VD: Ultra HD 4K Export"
                   className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
                 />
               </div>
