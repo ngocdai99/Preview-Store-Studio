@@ -4292,9 +4292,9 @@ function setSupportsIpad(val){
   if(descBar && hint){
     descBar.classList.toggle('active-universal', SUPPORTS_IPAD);
     if(SUPPORTS_IPAD){
-      hint.innerHTML = '<strong>Universal App Active:</strong> Unlocked iPad Pro 13" screenshot gallery below.';
+      hint.innerHTML = '<strong>Universal App Active:</strong> Dedicated iPad Pro 13" screenshots in Card 5 below.';
     } else {
-      hint.innerHTML = '<strong>iPhone-only Mode:</strong> Apple does not require iPad screenshots. Enable <strong>iPad</strong> if your Xcode target supports iPad.';
+      hint.innerHTML = '<strong>iPhone-only Mode:</strong> Apple displays scaled iPhone fallback unless dedicated iPad screenshots are added in Card 5.';
     }
   }
 
@@ -5976,7 +5976,7 @@ function setGoogleDevice(d, animate = true){
     }
     applyGoogleDevice();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
-    saveState();
+    if(typeof saveState === 'function') saveState(false);
   };
   if(nextDual || wasDual){
     clearDevTransitions();
@@ -8127,7 +8127,7 @@ function setStore(s, animate = true){
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
-    if(typeof saveState === 'function') saveState();
+    if(typeof saveState === 'function') saveState(false);
   };
 
   transitionStoreMode(fromMode, toMode, applyStoreMode, animate);
@@ -8247,7 +8247,7 @@ function toggleDualPhone(forceState) {
     if (typeof update === 'function') update();
     if (typeof fit === 'function') fit();
     syncAllVtPills();
-    if (typeof saveState === 'function') saveState();
+    if (typeof saveState === 'function') saveState(false);
   };
 
   // Immediate device selector update (<1ms)
@@ -8364,7 +8364,7 @@ function setDeviceTheme(theme, save = true){
   if(btnL) btnL.classList.toggle('on', t === 'light');
   if(btnD) btnD.classList.toggle('on', t === 'dark');
   syncVtPill($('theme'));
-  if(save && typeof saveState === 'function') saveState();
+  if(save && typeof saveState === 'function') saveState(false);
 }
 
 if($('themeLight')) $('themeLight').onclick = () => setDeviceTheme('light');
@@ -8426,7 +8426,7 @@ function setAppleDevice(d, animate = true){
     update();
     syncAppleNavScroll();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
-    saveState();
+    if(typeof saveState === 'function') saveState(false);
   };
   if(nextDual || wasDual){
     clearDevTransitions();
@@ -9747,7 +9747,7 @@ function handleUserFormEdit(){
   debouncedSave();
 }
 
-function saveState(){
+function saveState(isContentEdit = true){
   if(restoring) return;
   const state = getCurrentStateObject();
 
@@ -9757,8 +9757,10 @@ function saveState(){
     updateDraftPill();
   } else {
     // Ephemeral mode on preset: do not overwrite draft
-    isPresetModified = true;
-    updatePresetBanner();
+    if(isContentEdit){
+      isPresetModified = true;
+      updatePresetBanner();
+    }
     return;
   }
 

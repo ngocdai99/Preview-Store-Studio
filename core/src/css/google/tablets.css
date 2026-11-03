@@ -6,6 +6,8 @@ body[data-store=google][data-google-device="tab10"] .dev.gtab10{display:block!im
 body[data-store=google][data-google-device="tab10"] #stageViewDropdown{display:none!important}
 body[data-ui-store=apple] .card[data-only=google],
 body:not([data-ui-store])[data-store=apple] .card[data-only=google]{display:none}
+body[data-ui-store=google] .card[data-only=apple],
+body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none}
 .card.hide{display:none}
 
 .dev.gtab{

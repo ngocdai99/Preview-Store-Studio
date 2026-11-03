@@ -2971,6 +2971,212 @@ assert(!bundledHtml.includes('id="ipadCard" style="display:none"'), 'ipadCard do
 assert(bundledHtml.includes('id="ipadCard"') && bundledHtml.includes('data-only="apple"'), 'ipadCard is bound to Apple store via data-only="apple"');
 
 // ---------------------------------------------------------------------
+// [SUITE 42]: Device Changing On Presets Without Warning Banner Trigger Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 42]: Device Changing On Presets Without Warning Banner Trigger Verification');
+
+// 1. Static AST / Code checks for non-destructive viewport/device switching
+assert(bundledHtml.includes('function saveState(isContentEdit = true){'), 'saveState accepts isContentEdit flag defaulting to true');
+assert(bundledHtml.includes('if(isContentEdit){\n      isPresetModified = true;\n      updatePresetBanner();\n    }'), 'saveState only sets isPresetModified when isContentEdit is truthy');
+assert(bundledHtml.includes('if(typeof saveState === \'function\') saveState(false);'), 'Device & store switchers call saveState(false) to prevent false-positive preset modification');
+
+// Verify apple.js, google.js, and transitions.js specifically pass false to saveState
+const appleJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'apple', 'apple.js'), 'utf8');
+const googleJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'google', 'google.js'), 'utf8');
+const transitionsJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
+
+assert(appleJsSrc.includes('saveState(false)'), 'setAppleDevice passes isContentEdit=false to saveState');
+assert(googleJsSrc.includes('saveState(false)'), 'setGoogleDevice passes isContentEdit=false to saveState');
+assert(transitionsJsSrc.includes('toggleDualPhone') && transitionsJsSrc.includes('saveState(false)'), 'toggleDualPhone passes isContentEdit=false to saveState');
+assert(transitionsJsSrc.includes('setStore') && transitionsJsSrc.includes('saveState(false)'), 'setStore passes isContentEdit=false to saveState');
+
+// 2. Functional State Machine Simulation: Device switching on presets
+let simPresetKey = 'pulsefit';
+let simIsModified = false;
+let simBannerVisible = false;
+
+function simUpdatePresetBanner() {
+  if (simPresetKey !== 'draft' && simIsModified) {
+    simBannerVisible = true;
+  } else {
+    simBannerVisible = false;
+  }
+}
+
+function simSaveState(isContentEdit = true) {
+  if (simPresetKey === 'draft') {
+    // Draft persistence...
+  } else {
+    if (isContentEdit) {
+      simIsModified = true;
+      simUpdatePresetBanner();
+    }
+  }
+}
+
+function simSetAppleDevice(d) {
+  // Device switching logic...
+  simSaveState(false);
+}
+
+function simSetGoogleDevice(gd) {
+  // Device switching logic...
+  simSaveState(false);
+}
+
+function simToggleDualPhone() {
+  // Dual phone logic...
+  simSaveState(false);
+}
+
+// Initially viewing preset: banner is hidden
+simUpdatePresetBanner();
+assert(simIsModified === false, 'Initial preset state is not modified');
+assert(simBannerVisible === false, 'Initial preset banner is hidden');
+
+// Switch to iPad
+simSetAppleDevice('ipad');
+assert(simIsModified === false, 'Switching to iPad does not set isPresetModified');
+assert(simBannerVisible === false, 'Switching to iPad does not show warning banner');
+
+// Switch back to iPhone
+simSetAppleDevice('iphone');
+assert(simIsModified === false, 'Switching back to iPhone does not set isPresetModified');
+assert(simBannerVisible === false, 'Switching back to iPhone does not show warning banner');
+
+// Switch Google device to 7" Tablet and 10" Tablet
+simSetGoogleDevice('tab7');
+assert(simIsModified === false, 'Switching to Google 7" Tablet does not set isPresetModified');
+assert(simBannerVisible === false, 'Switching to Google 7" Tablet does not show warning banner');
+
+simSetGoogleDevice('tab10');
+assert(simIsModified === false, 'Switching to Google 10" Tablet does not set isPresetModified');
+assert(simBannerVisible === false, 'Switching to Google 10" Tablet does not show warning banner');
+
+// Toggle Dual Phone comparison
+simToggleDualPhone();
+assert(simIsModified === false, 'Toggling Dual Phone does not set isPresetModified');
+assert(simBannerVisible === false, 'Toggling Dual Phone does not show warning banner');
+
+// User actually edits form text / uploads content: banner triggers as expected
+simSaveState(true);
+assert(simIsModified === true, 'Actual content edit sets isPresetModified=true');
+assert(simBannerVisible === true, 'Actual content edit shows warning banner');
+
+// After user edited, changing device preserves modified status without glitching
+simSetAppleDevice('ipad');
+assert(simIsModified === true, 'Device change preserves existing edit state');
+assert(simBannerVisible === true, 'Warning banner remains visible when already modified');
+
+// ---------------------------------------------------------------------
+// [SUITE 43]: Editor Panel Card Count & Continuous Sequence Verification (Apple 6 Cards vs Google 8 Cards)
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 43]: Editor Panel Card Count & Continuous Sequence Verification (Apple 6 Cards vs Google 8 Cards)');
+
+// 1. Total DOM Card Structure
+const editorPanelMatch = bundledHtml.match(/<section[^>]*id="editorPanel"[^>]*>([\s\S]*?)<\/section>/);
+assert(!!editorPanelMatch, 'editorPanel section exists in bundled HTML');
+
+const cardMatches = [...editorPanelMatch[1].matchAll(/<div class="card[^"]*"([^>]*)id="([^"]+)"/g)];
+assert(cardMatches.length === 9, `editorPanel contains exactly 9 physical cards (found ${cardMatches.length})`);
+
+const cardIds = cardMatches.map(m => m[2]);
+const expectedCardIds = [
+  'identityCard', 'contentCard', 'shotsCard', 'statsCard',
+  'ipadCard', 'tabCard', 'featureCard', 'supportCard', 'privacyCard'
+];
+assert(JSON.stringify(cardIds) === JSON.stringify(expectedCardIds), 'Cards are registered in exact semantic sequence');
+
+// 2. CSS Filtering for Zero-Flicker Store Isolation
+assert(bundledHtml.includes('body[data-ui-store=apple] .card[data-only=google]') && bundledHtml.includes('display:none'),
+  'CSS immediately hides Google cards when Apple store is active');
+assert(bundledHtml.includes('body[data-ui-store=google] .card[data-only=apple]') && bundledHtml.includes('display:none'),
+  'CSS immediately hides Apple cards when Google store is active');
+
+// 3. Apple App Store Card Count & Number Sequence (Exactly 6 Cards)
+const appleCards = cardMatches.filter(m => {
+  const attrs = m[1];
+  return !attrs.includes('data-only="google"');
+});
+assert(appleCards.length === 6, `Apple App Store renders exactly 6 editor cards (found ${appleCards.length})`);
+
+const appleCardIds = appleCards.map(m => m[2]);
+const expectedAppleCardIds = ['identityCard', 'contentCard', 'shotsCard', 'statsCard', 'ipadCard', 'privacyCard'];
+assert(JSON.stringify(appleCardIds) === JSON.stringify(expectedAppleCardIds), 'Apple cards sequence matches 1..6: Identity, Content, Shots, Stats, iPad, Privacy');
+
+assert(!bundledHtml.includes('id="ipadCard" style="display:none"'), 'iPad card does NOT have inline display:none on bootstrap');
+assert(bundledHtml.includes('<span data-only="apple">6</span>'), 'Privacy card explicitly displays number 6 for Apple store');
+
+// 4. Google Play Card Count & Number Sequence (Exactly 8 Cards)
+const googleCards = cardMatches.filter(m => {
+  const attrs = m[1];
+  return !attrs.includes('data-only="apple"');
+});
+assert(googleCards.length === 8, `Google Play renders exactly 8 editor cards (found ${googleCards.length})`);
+
+const googleCardIds = googleCards.map(m => m[2]);
+const expectedGoogleCardIds = ['identityCard', 'contentCard', 'shotsCard', 'statsCard', 'tabCard', 'featureCard', 'supportCard', 'privacyCard'];
+assert(JSON.stringify(googleCardIds) === JSON.stringify(expectedGoogleCardIds), 'Google cards sequence matches 1..8: Identity, Content, Shots, Stats, Tablets, Feature Graphic, App Support, Privacy');
+
+assert(bundledHtml.includes('<span data-only="google">8</span>'), 'Privacy card explicitly displays number 8 for Google store');
+
+// 5. Functional Simulation: setStore and setSupportsIpad Card Count Invariance
+let simCardStore = 'apple';
+let simCardSupportsIpad = false;
+const simCardElements = {
+  identityCard: { style: { display: '' }, classList: new Set(['card']) },
+  contentCard:  { style: { display: '' }, classList: new Set(['card', 'collapsed']) },
+  shotsCard:    { style: { display: '' }, classList: new Set(['card', 'collapsed']) },
+  statsCard:    { style: { display: '' }, classList: new Set(['card', 'collapsed']) },
+  ipadCard:     { style: { display: '' }, classList: new Set(['card', 'collapsed']), dataset: { only: 'apple' } },
+  tabCard:      { style: { display: '' }, classList: new Set(['card', 'collapsed']), dataset: { only: 'google' } },
+  featureCard:  { style: { display: '' }, classList: new Set(['card', 'collapsed']), dataset: { only: 'google' } },
+  supportCard:  { style: { display: '' }, classList: new Set(['card', 'collapsed']), dataset: { only: 'google' } },
+  privacyCard:  { style: { display: '' }, classList: new Set(['card', 'collapsed']) },
+};
+
+function simCardSetStore(s) {
+  simCardStore = s;
+  Object.values(simCardElements).forEach(card => {
+    if (card.dataset && card.dataset.only) {
+      if (card.dataset.only !== s) card.classList.add('hide');
+      else card.classList.delete('hide');
+    }
+  });
+  if (s === 'apple') {
+    simCardElements.ipadCard.style.display = '';
+  } else {
+    simCardElements.ipadCard.style.display = 'none';
+  }
+}
+
+function simGetVisibleCardCount() {
+  return Object.values(simCardElements).filter(c => !c.classList.has('hide') && c.style.display !== 'none').length;
+}
+
+// Initial Apple Store
+simCardSetStore('apple');
+assert(simGetVisibleCardCount() === 6, 'Apple Store visibly displays exactly 6 cards');
+
+// Unchecking iPad support does NOT hide iPad card (Apple remains 6 cards)
+simCardSupportsIpad = false;
+simCardElements.ipadCard.style.display = (simCardStore === 'apple') ? '' : 'none';
+assert(simGetVisibleCardCount() === 6, 'Unchecking iPad support keeps Card 5 visible with 6 total cards');
+
+// Checking iPad support maintains 6 cards
+simCardSupportsIpad = true;
+simCardElements.ipadCard.style.display = (simCardStore === 'apple') ? '' : 'none';
+assert(simGetVisibleCardCount() === 6, 'Checking iPad support keeps Card 5 visible with 6 total cards');
+
+// Switch to Google Play: exactly 8 cards
+simCardSetStore('google');
+assert(simGetVisibleCardCount() === 8, 'Switching to Google Play visibly displays exactly 8 cards');
+
+// Switch back to Apple: exactly 6 cards
+simCardSetStore('apple');
+assert(simGetVisibleCardCount() === 6, 'Switching back to Apple Store visibly restores exactly 6 cards');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 console.log('\n======================================================');

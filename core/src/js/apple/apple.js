@@ -38,7 +38,7 @@ function setAppleDevice(d, animate = true){
     update();
     syncAppleNavScroll();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
-    saveState();
+    if(typeof saveState === 'function') saveState(false);
   };
   if(nextDual || wasDual){
     clearDevTransitions();

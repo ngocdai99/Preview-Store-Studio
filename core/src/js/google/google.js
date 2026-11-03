@@ -349,7 +349,7 @@ function setGoogleDevice(d, animate = true){
     }
     applyGoogleDevice();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
-    saveState();
+    if(typeof saveState === 'function') saveState(false);
   };
   if(nextDual || wasDual){
     clearDevTransitions();

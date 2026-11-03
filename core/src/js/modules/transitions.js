@@ -680,7 +680,7 @@ function setStore(s, animate = true){
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
-    if(typeof saveState === 'function') saveState();
+    if(typeof saveState === 'function') saveState(false);
   };
 
   transitionStoreMode(fromMode, toMode, applyStoreMode, animate);
@@ -800,7 +800,7 @@ function toggleDualPhone(forceState) {
     if (typeof update === 'function') update();
     if (typeof fit === 'function') fit();
     syncAllVtPills();
-    if (typeof saveState === 'function') saveState();
+    if (typeof saveState === 'function') saveState(false);
   };
 
   // Immediate device selector update (<1ms)
@@ -917,7 +917,7 @@ function setDeviceTheme(theme, save = true){
   if(btnL) btnL.classList.toggle('on', t === 'light');
   if(btnD) btnD.classList.toggle('on', t === 'dark');
   syncVtPill($('theme'));
-  if(save && typeof saveState === 'function') saveState();
+  if(save && typeof saveState === 'function') saveState(false);
 }
 
 if($('themeLight')) $('themeLight').onclick = () => setDeviceTheme('light');

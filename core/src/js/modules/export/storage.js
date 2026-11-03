@@ -499,7 +499,7 @@ function handleUserFormEdit(){
   debouncedSave();
 }
 
-function saveState(){
+function saveState(isContentEdit = true){
   if(restoring) return;
   const state = getCurrentStateObject();
 
@@ -509,8 +509,10 @@ function saveState(){
     updateDraftPill();
   } else {
     // Ephemeral mode on preset: do not overwrite draft
-    isPresetModified = true;
-    updatePresetBanner();
+    if(isContentEdit){
+      isPresetModified = true;
+      updatePresetBanner();
+    }
     return;
   }
 
