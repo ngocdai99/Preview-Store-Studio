@@ -466,7 +466,7 @@ function updatePresetBanner(){
     banner.classList.add('is-modified');
     const textEl = $('presetBannerText') || banner.querySelector('.preset-banner-text');
     if(textEl){
-      textEl.innerHTML = '<strong>Preview only</strong>: edits won\'t be saved';
+      textEl.innerHTML = '<strong>Presets only for preview</strong>: edits won\'t be saved';
     }
   } else {
     banner.style.display = 'none';
