@@ -25,6 +25,7 @@ export default function BannerStudioPage() {
   const [subtitle, setSubtitle] = useState("Dual-Store App Mockup & Metadata Studio");
   const [badgeText, setBadgeText] = useState("100% Client-Side");
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
+  const [footerTagline, setFooterTagline] = useState("Zero Cloud · Total Privacy");
   
   // Brand Logo configuration
   const [showLogo, setShowLogo] = useState(true);
@@ -50,7 +51,7 @@ export default function BannerStudioPage() {
   const [feature4Desc, setFeature4Desc] = useState("Download crisp 3x Retina mockups & developer docs");
 
   const [feature5Title, setFeature5Title] = useState("Pay Once, Own Forever");
-  const [feature5Desc, setFeature5Desc] = useState("100% offline in browser · No monthly subscriptions");
+  const [feature5Desc, setFeature5Desc] = useState("Single-file browser studio · Zero recurring subscriptions");
 
   // Pricing configuration
   const [showPricing, setShowPricing] = useState(true);
@@ -318,6 +319,7 @@ export default function BannerStudioPage() {
     setSubtitle("Dual-Store App Mockup & Metadata Studio");
     setBadgeText("100% Client-Side");
     setBadgeStyle("pills");
+    setFooterTagline("Zero Cloud · Total Privacy");
     setShowLogo(true);
     setLogoPosition("inline");
     setShowDeviceHeaders(true);
@@ -331,7 +333,7 @@ export default function BannerStudioPage() {
     setFeature3Desc("Auto-check text limits & icon alpha channel compliance");
     setFeature4Title("4K Ultra HD Export");
     setFeature4Desc("Crisp 3x Retina mockups & LISTING_METADATA.md handoff");
-    setFeature5Title("100% Offline & Private");
+    setFeature5Title("Zero Cloud & Private");
     setFeature5Desc("Single-file browser studio · Pay once, own forever with zero subs");
     setPlusOriginalPrice("$39");
     setPlusPrice("$29");
@@ -627,6 +629,38 @@ export default function BannerStudioPage() {
                 >
                   Dock Island
                 </button>
+              </div>
+            </div>
+
+            <div>
+              <span className="text-[11px] text-[#989A99] mb-1 block">Footer Tagline (Thumbnail)</span>
+              <input
+                type="text"
+                value={footerTagline}
+                onChange={(e) => setFooterTagline(e.target.value)}
+                className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
+              />
+              <div className="flex flex-wrap gap-1 mt-1.5">
+                {[
+                  "Zero Cloud · Total Privacy",
+                  "No Account Required",
+                  "Runs Locally · Zero Setup",
+                  "Private & Self-Contained",
+                  "Ready-to-Publish 4K"
+                ].map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setFooterTagline(preset)}
+                    className={`text-[10px] px-2 py-0.5 rounded transition-all ${
+                      footerTagline === preset
+                        ? "bg-[#00D085]/20 text-[#00D085] border border-[#00D085]/40"
+                        : "bg-white/[0.04] text-[#989A99] hover:text-white border border-white/5"
+                    }`}
+                  >
+                    {preset}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -1342,7 +1376,7 @@ export default function BannerStudioPage() {
                   style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
                 >
                   <span className="font-bold text-white flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-[#00D085]" /> 100% Offline in Browser
+                    <ShieldCheck className="w-4 h-4 text-[#00D085]" /> {footerTagline}
                   </span>
                   <span 
                     className="font-extrabold text-[#00D085] px-2.5 py-1 rounded-lg"
