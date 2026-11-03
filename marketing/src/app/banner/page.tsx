@@ -487,7 +487,7 @@ export default function BannerStudioPage() {
           <div className="space-y-3 pt-3 border-t border-white/5">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold uppercase tracking-wider text-[#989A99] block flex items-center gap-1.5">
-                <Smartphone className="w-3.5 h-3.5 text-[#00D085]" /> Device Headers
+                <Smartphone className="w-3.5 h-3.5 text-[#00D085]" /> Device Headers (Cover)
               </label>
               <input
                 type="checkbox"
@@ -1327,31 +1327,12 @@ export default function BannerStudioPage() {
                   </p>
                 </div>
 
-                {/* Device Headers (iOS & Android) if enabled */}
-                {showDeviceHeaders && (
-                  <div className="w-full flex items-center justify-between px-8 max-w-[440px] mx-auto mt-2 mb-1 z-10">
-                    <div className="w-1/2 flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-wider text-[#7dd3fc]">
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="#7dd3fc" className="shrink-0 block">
-                        <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
-                        <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
-                      </svg>
-                      <span className="leading-none">{appleHeaderLabel}</span>
-                    </div>
-                    <div className="w-1/2 flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-wider text-[#6ee7b7]">
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="#6ee7b7" className="shrink-0 block">
-                        <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
-                      </svg>
-                      <span className="leading-none">{googleHeaderLabel}</span>
-                    </div>
-                  </div>
-                )}
-
                 {/* Center Mockup - 100% natural, 0px offset, 0deg rotate */}
-                <div className="flex-1 flex items-center justify-center z-10 overflow-hidden my-auto py-1">
+                <div className="flex-1 flex items-center justify-center z-10 overflow-hidden my-auto py-2">
                   <img
                     src={imageSrc}
                     alt="Store Preview Studio Dual Mockup"
-                    className="max-h-[305px] max-w-full w-auto object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
+                    className="max-h-[330px] max-w-full w-auto object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
                   />
                 </div>
 
