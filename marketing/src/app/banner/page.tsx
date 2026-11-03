@@ -26,6 +26,10 @@ export default function BannerStudioPage() {
   const [badgeText, setBadgeText] = useState("100% Client-Side");
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
   
+  // Brand Logo configuration
+  const [showLogo, setShowLogo] = useState(true);
+  const [logoPosition, setLogoPosition] = useState<"inline" | "above">("inline");
+  
   // Device Headers row above mockups
   const [showDeviceHeaders, setShowDeviceHeaders] = useState(true);
   const [appleHeaderLabel, setAppleHeaderLabel] = useState("APP STORE · iPhone");
@@ -314,6 +318,8 @@ export default function BannerStudioPage() {
     setSubtitle("Dual-Store App Mockup & Metadata Studio");
     setBadgeText("100% Client-Side");
     setBadgeStyle("pills");
+    setShowLogo(true);
+    setLogoPosition("inline");
     setShowDeviceHeaders(true);
     setAppleHeaderLabel("APP STORE · iPhone");
     setGoogleHeaderLabel("GOOGLE PLAY · Android");
@@ -337,6 +343,30 @@ export default function BannerStudioPage() {
     setProLicenseBadge("Commercial License");
     setImageSrc("/banner-dual-mockup.svg");
   };
+
+  const renderBrandLogo = (size: number = 32, iconSize: number = 22) => (
+    <div 
+      className="rounded-xl flex items-center justify-center shrink-0"
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        background: "linear-gradient(135deg, #1F211F 0%, #121312 100%)",
+        border: "1.5px solid rgba(255, 255, 255, 0.15)",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)"
+      }}
+    >
+      <svg viewBox="0 0 100 100" width={iconSize} height={iconSize} className="block">
+        <path
+          d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z"
+          fill="#006636"
+        />
+        <path
+          d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z"
+          fill="#00D085"
+        />
+      </svg>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-[#0E0F0E] text-[#EDEDED] font-sans antialiased">
@@ -495,6 +525,52 @@ export default function BannerStudioPage() {
             <label className="text-xs font-bold uppercase tracking-wider text-[#989A99] block flex items-center gap-1.5">
               <Type className="w-3.5 h-3.5 text-[#00D085]" /> Text & Copy Content
             </label>
+
+            {/* Brand Logo Settings */}
+            <div className="space-y-2 pb-1 border-b border-white/5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] text-[#989A99] font-medium">Brand Logo Squircle</span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="showLogoCheckbox"
+                    checked={showLogo}
+                    onChange={(e) => setShowLogo(e.target.checked)}
+                    className="accent-[#00D085] cursor-pointer"
+                  />
+                  <label htmlFor="showLogoCheckbox" className="text-xs text-white font-medium cursor-pointer">
+                    Hiển thị Logo
+                  </label>
+                </div>
+              </div>
+
+              {showLogo && (
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setLogoPosition("inline")}
+                    className={`text-[11px] py-1.5 rounded-md font-semibold border transition-all ${
+                      logoPosition === "inline"
+                        ? "bg-white/15 border-white/30 text-white shadow-xs"
+                        : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
+                    }`}
+                  >
+                    Cạnh tiêu đề
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLogoPosition("above")}
+                    className={`text-[11px] py-1.5 rounded-md font-semibold border transition-all ${
+                      logoPosition === "above"
+                        ? "bg-white/15 border-white/30 text-white shadow-xs"
+                        : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
+                    }`}
+                  >
+                    Nằm phía trên
+                  </button>
+                </div>
+              )}
+            </div>
 
             <div>
               <span className="text-[11px] text-[#989A99] mb-1 block">App Title</span>
@@ -869,9 +945,12 @@ export default function BannerStudioPage() {
                   </div>
 
                   {/* Title & Subtitle */}
-                  <h1 className="text-[40px] font-black text-white tracking-tight leading-[1.12] mb-1.5 drop-shadow-md">
-                    {title}
-                  </h1>
+                  <div className="flex items-center gap-3.5 mb-1.5">
+                    {showLogo && renderBrandLogo(38, 26)}
+                    <h1 className="text-[40px] font-black text-white tracking-tight leading-[1.12] drop-shadow-md">
+                      {title}
+                    </h1>
+                  </div>
                   <p className="text-[16px] font-medium text-[#989A99] mb-4 leading-snug">
                     {subtitle}
                   </p>
@@ -1130,7 +1209,7 @@ export default function BannerStudioPage() {
               <div
                 ref={bannerRef}
                 style={{ width: "600px", height: "600px", minWidth: "600px", minHeight: "600px" }}
-                className="relative bg-[#131413] rounded-2xl overflow-hidden p-8 flex flex-col justify-between select-none border border-[#282928] shadow-[0_30px_90px_rgba(0,0,0,0.9)]"
+                className="relative bg-[#131413] rounded-2xl overflow-hidden p-6 flex flex-col justify-between select-none border border-[#282928] shadow-[0_30px_90px_rgba(0,0,0,0.9)]"
               >
                 {/* Tech Grid */}
                 <div 
@@ -1143,25 +1222,136 @@ export default function BannerStudioPage() {
 
                 {/* Header info */}
                 <div className="z-10 text-center">
-                  <div 
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-[#00D085] mb-2"
-                    style={{
-                      backgroundColor: "rgba(0, 208, 133, 0.15)",
-                      border: "1px solid rgba(0, 208, 133, 0.4)"
-                    }}
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>App Store & Google Play Mockup Studio</span>
+                  {/* Store Badges / Pill */}
+                  <div className="flex items-center justify-center gap-2 mb-2.5">
+                    {badgeStyle === "dock" ? (
+                      /* Segmented Dock Island Style */
+                      <div 
+                        className="inline-flex items-center p-1 rounded-full"
+                        style={{
+                          backgroundColor: "rgba(24, 25, 24, 0.95)",
+                          border: "1px solid rgba(255, 255, 255, 0.14)",
+                          boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.3)"
+                        }}
+                      >
+                        {/* Apple Store */}
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold text-white">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                            <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
+                          </svg>
+                          <span className="leading-none">App Store</span>
+                        </div>
+                        <div className="w-px h-3 mx-0.5" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }} />
+                        {/* Google Play */}
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold text-white">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
+                          </svg>
+                          <span className="leading-none">Google Play</span>
+                        </div>
+                        <div className="w-px h-3 mx-0.5" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }} />
+                        {/* Client-side */}
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold text-white">
+                          <ShieldCheck className="w-3 h-3 text-[#00D085] shrink-0 block" />
+                          <span className="leading-none">{badgeText}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Distinct Elevated Glowing Pills */
+                      <>
+                        {/* Apple Store Pill (Glowing Royal Blue) */}
+                        <div 
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            backgroundColor: "rgba(13, 30, 60, 0.95)",
+                            border: "1.5px solid #2563eb",
+                            boxShadow: "0 0 10px rgba(37, 99, 235, 0.35)"
+                          }}
+                        >
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                            <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
+                          </svg>
+                          <span className="leading-none">App Store</span>
+                        </div>
+
+                        {/* Google Play Pill (Glowing Emerald Green) */}
+                        <div 
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            backgroundColor: "rgba(6, 40, 26, 0.95)",
+                            border: "1.5px solid #10b981",
+                            boxShadow: "0 0 10px rgba(16, 185, 129, 0.35)"
+                          }}
+                        >
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
+                          </svg>
+                          <span className="leading-none">Google Play</span>
+                        </div>
+
+                        {/* Client Side Pill */}
+                        <div 
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            backgroundColor: "rgba(32, 34, 38, 0.95)",
+                            border: "1.5px solid rgba(255, 255, 255, 0.22)"
+                          }}
+                        >
+                          <ShieldCheck className="w-3 h-3 text-[#00D085] shrink-0 block" />
+                          <span className="leading-none">{badgeText}</span>
+                        </div>
+                      </>
+                    )}
                   </div>
-                  <h2 className="text-2xl font-black text-white tracking-tight">{title}</h2>
+
+                  {/* Brand Logo Centered Above Title (if selected) */}
+                  {showLogo && logoPosition === "above" && (
+                    <div className="flex justify-center mb-2">
+                      {renderBrandLogo(36, 24)}
+                    </div>
+                  )}
+
+                  {/* Title row (with inline logo if selected) */}
+                  <div className="flex items-center justify-center gap-2.5">
+                    {showLogo && logoPosition === "inline" && renderBrandLogo(32, 22)}
+                    <h2 className="text-[25px] font-black text-white tracking-tight leading-none drop-shadow-md">
+                      {title}
+                    </h2>
+                  </div>
+
+                  {/* Subtitle */}
+                  <p className="text-[13px] font-medium text-[#989A99] mt-2 max-w-[480px] mx-auto leading-snug">
+                    {subtitle}
+                  </p>
                 </div>
 
+                {/* Device Headers (iOS & Android) if enabled */}
+                {showDeviceHeaders && (
+                  <div className="w-full flex items-center justify-between px-8 max-w-[440px] mx-auto mt-2 mb-1 z-10">
+                    <div className="w-1/2 flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-wider text-[#7dd3fc]">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="#7dd3fc" className="shrink-0 block">
+                        <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                        <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
+                      </svg>
+                      <span className="leading-none">{appleHeaderLabel}</span>
+                    </div>
+                    <div className="w-1/2 flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-wider text-[#6ee7b7]">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="#6ee7b7" className="shrink-0 block">
+                        <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
+                      </svg>
+                      <span className="leading-none">{googleHeaderLabel}</span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Center Mockup - 100% natural, 0px offset, 0deg rotate */}
-                <div className="flex-1 flex items-center justify-center z-10 overflow-hidden">
+                <div className="flex-1 flex items-center justify-center z-10 overflow-hidden my-auto py-1">
                   <img
                     src={imageSrc}
-                    alt="Mockup"
-                    className="max-h-[380px] max-w-full w-auto object-contain"
+                    alt="Store Preview Studio Dual Mockup"
+                    className="max-h-[305px] max-w-full w-auto object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
                   />
                 </div>
 
