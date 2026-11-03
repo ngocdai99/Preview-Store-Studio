@@ -705,26 +705,36 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* Danger Action in Dropdown (Factory Reset) */
-.menu-item-danger .mi-name {
-  color: #ef4444 !important;
-}
-.menu-item-danger .mi-ico {
-  color: #ef4444 !important;
-}
-#menuExport .menu-item-danger:hover {
-  background: rgba(239, 68, 68, 0.12) !important;
-}
-:root[data-ui=light] #menuExport .menu-item-danger:hover {
-  background: rgba(239, 68, 68, 0.08) !important;
-}
-.mi-pill-danger {
-  color: #ef4444 !important;
-  border-color: rgba(239, 68, 68, 0.35) !important;
-  background: rgba(239, 68, 68, 0.08) !important;
-}
-#menuExport .menu-item-danger:hover .mi-pill-danger {
+/* 8. Reset Action: Clean White Button & White Icon */
+#optResetAllData .mi-ico {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
-  border-color: #ef4444 !important;
-  background: #ef4444 !important;
+}
+#optResetAllData:hover .mi-ico {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+}
+:root[data-ui=light] #optResetAllData .mi-ico {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  color: #0f172a !important;
+}
+:root[data-ui=light] #optResetAllData:hover .mi-ico {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(0, 0, 0, 0.22) !important;
+  color: #020617 !important;
+}
+
+#optResetAllData .mi-pill.btn-white {
+  background-color: var(--btn-white-bg) !important;
+  color: var(--btn-white-text) !important;
+  border: 1px solid var(--btn-white-border) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) !important;
+  text-shadow: none !important;
+}
+#optResetAllData:hover .mi-pill.btn-white {
+  background-color: var(--btn-white-hover-bg) !important;
+  color: var(--btn-white-hover-text) !important;
 }
