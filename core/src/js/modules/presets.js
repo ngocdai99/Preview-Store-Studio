@@ -158,9 +158,9 @@ function loadPreset(key){
     if($('f-email')) $('f-email').value = '';
     if($('f-phone')) $('f-phone').value = '';
     if($('f-addr')) $('f-addr').value = '';
-    const defaultPrivLinked = 'Identifiers, Usage Data';
-    const defaultPrivNotLinked = 'Diagnostics, Performance Data';
-    const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion';
+    const defaultPrivLinked = '';
+    const defaultPrivNotLinked = '';
+    const defaultPrivGoogle = 'No data shared with third parties, No data collected, Data is encrypted in transit';
     if($('f-priv-linked')) $('f-priv-linked').value = defaultPrivLinked;
     if($('f-priv-notlinked')) $('f-priv-notlinked').value = defaultPrivNotLinked;
     if($('f-priv-google')) $('f-priv-google').value = defaultPrivGoogle;

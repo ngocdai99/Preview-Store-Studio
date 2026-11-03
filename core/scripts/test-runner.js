@@ -70,7 +70,7 @@ const sandbox = {
 };
 
 vm.createContext(sandbox);
-vm.runInContext(stateCode + '\nglobalThis.PRESETS = PRESETS;\nglobalThis.GOOGLE_AGE_MAP = GOOGLE_AGE_MAP;\nglobalThis.DEFAULT_ICON = DEFAULT_ICON;\nglobalThis.PULSEFIT_ICON = PULSEFIT_ICON;\nglobalThis.ZENMIND_ICON = ZENMIND_ICON;\nglobalThis.CYBER_ICON = CYBER_ICON;\nglobalThis.LINGUA_ICON = LINGUA_ICON;\nglobalThis.BLANK_ICON = BLANK_ICON;\nglobalThis.STUDIO_ICON = STUDIO_ICON;', sandbox);
+vm.runInContext(stateCode + '\nglobalThis.PRESETS = PRESETS;\nglobalThis.GOOGLE_AGE_MAP = GOOGLE_AGE_MAP;\nglobalThis.DEFAULT_ICON = DEFAULT_ICON;\nglobalThis.PULSEFIT_ICON = PULSEFIT_ICON;\nglobalThis.ZENMIND_ICON = ZENMIND_ICON;\nglobalThis.CYBER_ICON = CYBER_ICON;\nglobalThis.LINGUA_ICON = LINGUA_ICON;\nglobalThis.BLANK_ICON = BLANK_ICON;\nglobalThis.STUDIO_ICON = STUDIO_ICON;\nglobalThis.CURRENT_PRIVACY = CURRENT_PRIVACY;', sandbox);
 
 const PRESETS = sandbox.PRESETS;
 const GOOGLE_AGE_MAP = sandbox.GOOGLE_AGE_MAP;
@@ -206,6 +206,8 @@ assert(PRESETS.edulearn.icon !== PRESETS.taskflow.icon, 'SkillSphere icon is dis
 assert(PRESETS.studio.icon !== PRESETS.taskflow.icon, 'Store Preview Studio icon is distinct from TaskFlow icon');
 assert(PRESETS.studio.icon === sandbox.STUDIO_ICON, 'Store Preview Studio icon matches official STUDIO_ICON');
 assert(sandbox.BLANK_ICON === sandbox.STUDIO_ICON, 'Placeholder icon matches official Store Preview Studio app icon');
+assert(PRESETS.studio.privLinked === '' && PRESETS.studio.privNotLinked === '', 'Store Preview Studio defaults to Data Not Collected');
+assert(sandbox.CURRENT_PRIVACY.linked === '' && sandbox.CURRENT_PRIVACY.notLinked === '', 'CURRENT_PRIVACY defaults to Data Not Collected');
 
 assert(PRESETS.pulsefit.shots[0] !== PRESETS.taskflow.shots[0], 'PulseFit screenshots are distinct from TaskFlow');
 assert(PRESETS.zenmind.shots[0] !== PRESETS.taskflow.shots[0], 'ZenMind screenshots are distinct from TaskFlow');
@@ -1260,7 +1262,7 @@ assert(bundledHtml.includes("counterEl.className = 'cc' + (validCount > 0 && val
 assert(bundledHtml.includes('if(validCount === 0){\n    badgeEl.style.display = \'none\';') || bundledHtml.includes('if(validCount === 0)'), 'Phone screenshots validation suppresses warning notice banner when no screenshots are uploaded (0 screenshots)');
 assert(!bundledHtml.includes('id="tab7Url"') && !bundledHtml.includes('id="tab10Url"'), "By URL buttons (#tab7Url, #tab10Url) are removed from Tablet Screenshots card");
 assert(!bundledHtml.includes('let isFloating') && !bundledHtml.includes('btnFloat'), "Orphaned isFloating / btnFloat dead code is removed from bundle");
-assert(bundledHtml.includes("const defaultPrivLinked = 'Identifiers, Usage Data'") && bundledHtml.includes("const defaultPrivGoogle = 'No data shared with third parties, Data is encrypted in transit, You can request data deletion'"), "Custom blank draft initializes with standard App Privacy and Google Play Data Safety disclosures");
+assert(bundledHtml.includes("const defaultPrivLinked = ''") && bundledHtml.includes("const defaultPrivGoogle = 'No data shared with third parties, No data collected, Data is encrypted in transit'"), "Custom blank draft and reset default to Data Not Collected privacy disclosures");
 assert(bundledHtml.includes("loadPreset('studio')") || bundledHtml.includes("loadPreset('taskflow')"), "Fresh bootstrap preloads flagship preset to avoid an empty UI");
 assert(bundledHtml.includes("setStore('apple', false)"), "Fresh bootstrap defaults to selecting App Store mode");
 assert(bundledHtml.includes('function transitionStoreMode') && bundledHtml.includes('is-animating-store'), "Studio includes cinematic FLIP transitionStoreMode matching marketing showcase");

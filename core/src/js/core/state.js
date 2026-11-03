@@ -1757,7 +1757,7 @@ let REVIEWS = [];
 let CURRENT_PRIVACY = {
   linked: "",
   notLinked: "",
-  google: "No data shared with third parties, Data is encrypted in transit, You can request data deletion"
+  google: "No data shared with third parties, No data collected, Data is encrypted in transit"
 };
 
 // --- Templates / Presets Catalog ---
@@ -1774,9 +1774,9 @@ const PRESETS = {
     category: "Developer Tools",
     whatsNew: "Version 2.1.0 Update:\n- Live dual-store viewports (iPhone, iPad & Android layouts)\n- App Icon Inspector with ITMS-90717 alpha compliance audit\n- Ultra HD 3x PNG mockups & 1-click bulk ZIP export\n- Developer Markdown generator\n- 100% standalone offline operation with zero telemetry",
     desc: "Store Preview Studio is the professional listing designer and pre-flight audit studio for iOS and Android developers, indie creators, and digital agencies.\n\nCraft high-converting App Store Connect and Google Play Console product listings side-by-side with instantaneous real-time sync, automated store limit validation, and Retina-grade mockup generation — 100% offline in your browser.\n\nCORE CAPABILITIES:\n• Dual-Store Live Viewports: Simultaneously visualize how your app listing looks on both iOS and Android before publishing.\n• Pre-Flight Compliance Audit: Automated real-time checking of title lengths, character limits, and store dimension requirements.\n• App Icon Inspector: Audit master 1024x1024 icons, test transparency compliance against Apple ITMS-90717 guidelines, and preview adaptive squircle shapes.\n• Ultra HD 3x Multi-Format Export: Download pristine 3x Retina PNG device mockups, comprehensive client-side ZIP bundles, and developer Markdown specifications in 1 click.\n• 100% Client-Side Privacy: Operates completely offline with zero tracking, zero server dependencies, and zero monthly subscriptions.\n\nPRICING & LICENSING:\nPay once on Gumroad, own forever. No subscriptions, no cloud vendor lock-in.",
-    privLinked: "User Content, Identifiers",
-    privNotLinked: "Diagnostics",
-    privGoogle: "No data shared with third parties, Data is encrypted in transit, You can request data deletion",
+    privLinked: "",
+    privNotLinked: "",
+    privGoogle: "No data shared with third parties, No data collected, Data is encrypted in transit",
     stats: {
       "rating": "4.9",
       "count": "1.8K",
