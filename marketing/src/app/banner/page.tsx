@@ -24,7 +24,7 @@ export default function BannerStudioPage() {
   const [title, setTitle] = useState("Store Preview Studio");
   const [subtitle, setSubtitle] = useState("Dual-Store App Mockup & Metadata Studio");
   const [badgeText, setBadgeText] = useState("100% Client-Side");
-  const [badgeStyle, setBadgeStyle] = useState<"pills" | "dock">("pills");
+  const [badgeStyle, setBadgeStyle] = useState<"pills" | "neutral" | "dock">("pills");
   const [footerLeft, setFooterLeft] = useState("Ultra HD 4K Export");
   const [footerRight, setFooterRight] = useState("PAY ONCE · OWN FOREVER");
   const [footerButtonStyle, setFooterButtonStyle] = useState<"primary" | "white">("primary");
@@ -610,7 +610,7 @@ export default function BannerStudioPage() {
 
             <div>
               <span className="text-[11px] text-[#989A99] mb-1 block">Badge Style</span>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-1.5">
                 <button
                   type="button"
                   onClick={() => setBadgeStyle("pills")}
@@ -620,7 +620,18 @@ export default function BannerStudioPage() {
                       : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
                   }`}
                 >
-                  3 Glass Pills
+                  Rich Brand
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBadgeStyle("neutral")}
+                  className={`text-[11px] py-1.5 rounded-md font-semibold border transition-all ${
+                    badgeStyle === "neutral"
+                      ? "bg-white/15 border-white/30 text-white shadow-xs"
+                      : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
+                  }`}
+                >
+                  Dark Glass
                 </button>
                 <button
                   type="button"
@@ -953,19 +964,19 @@ export default function BannerStudioPage() {
                           <span className="leading-none">{badgeText}</span>
                         </div>
                       </div>
-                    ) : (
-                      /* Distinct Elevated Rich Pills */
+                    ) : badgeStyle === "neutral" ? (
+                      /* Minimal Neutral Dark Glass */
                       <>
                         {/* Apple Store Pill */}
                         <div 
                           className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            background: "linear-gradient(180deg, #132D54 0%, #0B1C36 100%)",
-                            border: "1px solid rgba(59, 130, 246, 0.65)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                            background: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.16)",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                           }}
                         >
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="#93C5FD" className="shrink-0 block">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
                             <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
                             <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
                           </svg>
@@ -976,12 +987,59 @@ export default function BannerStudioPage() {
                         <div 
                           className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            background: "linear-gradient(180deg, #093E28 0%, #052618 100%)",
-                            border: "1px solid rgba(16, 185, 129, 0.65)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                            background: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.16)",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                           }}
                         >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="#34D399" className="shrink-0 block">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
+                          </svg>
+                          <span className="leading-none">Google Play</span>
+                        </div>
+
+                        {/* Client Side Pill */}
+                        <div 
+                          className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            background: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.16)",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
+                          }}
+                        >
+                          <ShieldCheck className="w-[14px] h-[14px] text-[#00D085] shrink-0 block" />
+                          <span className="leading-none">{badgeText}</span>
+                        </div>
+                      </>
+                    ) : (
+                      /* Distinct Elevated Rich Pills */
+                      <>
+                        {/* Apple Store Pill */}
+                        <div 
+                          className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            background: "linear-gradient(180deg, #102A51 0%, #0A1931 100%)",
+                            border: "1px solid rgba(59, 130, 246, 0.48)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                          }}
+                        >
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                            <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
+                          </svg>
+                          <span className="leading-none">App Store</span>
+                        </div>
+
+                        {/* Google Play Pill */}
+                        <div 
+                          className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            background: "linear-gradient(180deg, #0C3623 0%, #071F14 100%)",
+                            border: "1px solid rgba(16, 185, 129, 0.48)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                          }}
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
                             <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
                           </svg>
                           <span className="leading-none">Google Play</span>
@@ -992,8 +1050,8 @@ export default function BannerStudioPage() {
                           className="h-[32px] px-3.5 rounded-full inline-flex items-center justify-center gap-2 text-xs font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
                             background: "linear-gradient(180deg, #242629 0%, #151618 100%)",
-                            border: "1px solid rgba(255, 255, 255, 0.2)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                            border: "1px solid rgba(255, 255, 255, 0.18)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 2px 6px rgba(0, 0, 0, 0.4)"
                           }}
                         >
                           <ShieldCheck className="w-[14px] h-[14px] text-[#00D085] shrink-0 block" />
@@ -1316,19 +1374,19 @@ export default function BannerStudioPage() {
                           <span className="leading-none">{badgeText}</span>
                         </div>
                       </div>
-                    ) : (
-                      /* Distinct Elevated Rich Pills */
+                    ) : badgeStyle === "neutral" ? (
+                      /* Minimal Neutral Dark Glass */
                       <>
                         {/* Apple Store Pill */}
                         <div 
                           className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            background: "linear-gradient(180deg, #132D54 0%, #0B1C36 100%)",
-                            border: "1px solid rgba(59, 130, 246, 0.65)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                            background: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.16)",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                           }}
                         >
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="#93C5FD" className="shrink-0 block">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
                             <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
                             <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
                           </svg>
@@ -1339,12 +1397,59 @@ export default function BannerStudioPage() {
                         <div 
                           className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
-                            background: "linear-gradient(180deg, #093E28 0%, #052618 100%)",
-                            border: "1px solid rgba(16, 185, 129, 0.65)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                            background: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.16)",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                           }}
                         >
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="#34D399" className="shrink-0 block">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
+                          </svg>
+                          <span className="leading-none">Google Play</span>
+                        </div>
+
+                        {/* Client Side Pill */}
+                        <div 
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            background: "rgba(255, 255, 255, 0.06)",
+                            border: "1px solid rgba(255, 255, 255, 0.16)",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
+                          }}
+                        >
+                          <ShieldCheck className="w-3 h-3 text-[#00D085] shrink-0 block" />
+                          <span className="leading-none">{badgeText}</span>
+                        </div>
+                      </>
+                    ) : (
+                      /* Distinct Elevated Rich Pills */
+                      <>
+                        {/* Apple Store Pill */}
+                        <div 
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            background: "linear-gradient(180deg, #102A51 0%, #0A1931 100%)",
+                            border: "1px solid rgba(59, 130, 246, 0.48)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                          }}
+                        >
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
+                            <path d="M12.5 2.5c-.3 1.8 1 3.2 2.5 3.5.3-1.6-.9-3.2-2.5-3.5z" />
+                            <path d="M12 7c-1.2 0-2.2.7-3.2.7s-2.1-.7-3.3-.7C3.6 7 2 8.7 2 12c0 3.7 2.3 8 4.7 8 1.2 0 1.9-.8 3.3-.8s2.1.8 3.3.8c2.4 0 4.7-4.3 4.7-8 0-3.3-1.6-5-3.5-5-1.2 0-2.3.7-3.3.7S13.2 7 12 7z" />
+                          </svg>
+                          <span className="leading-none">App Store</span>
+                        </div>
+
+                        {/* Google Play Pill */}
+                        <div 
+                          className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
+                          style={{
+                            background: "linear-gradient(180deg, #0C3623 0%, #071F14 100%)",
+                            border: "1px solid rgba(16, 185, 129, 0.48)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                          }}
+                        >
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-white shrink-0 block">
                             <path d="M6 3.5C6 2.4 7.2 1.7 8.2 2.3L20 10.8C20.9 11.4 20.9 12.6 20 13.2L8.2 21.7C7.2 22.3 6 21.6 6 20.5V3.5Z" />
                           </svg>
                           <span className="leading-none">Google Play</span>
@@ -1355,8 +1460,8 @@ export default function BannerStudioPage() {
                           className="h-[26px] px-2.5 rounded-full inline-flex items-center justify-center gap-1.5 text-[10.5px] font-bold text-white tracking-wide shrink-0 transition-all"
                           style={{
                             background: "linear-gradient(180deg, #242629 0%, #151618 100%)",
-                            border: "1px solid rgba(255, 255, 255, 0.2)",
-                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 6px rgba(0, 0, 0, 0.4)"
+                            border: "1px solid rgba(255, 255, 255, 0.18)",
+                            boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 2px 6px rgba(0, 0, 0, 0.4)"
                           }}
                         >
                           <ShieldCheck className="w-3 h-3 text-[#00D085] shrink-0 block" />
