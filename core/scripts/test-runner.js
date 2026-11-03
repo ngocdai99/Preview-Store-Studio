@@ -2664,6 +2664,7 @@ assert(bundledHtml.includes('.preset-banner-btn.btn-preset-copy'), 'CSS defines 
 assert(bundledHtml.includes(':root[data-ui=light] .preset-banner-btn.btn-preset-copy'), 'CSS defines dark button inversion for light mode');
 assert(!bundledHtml.includes("returnBtn.style.display = 'inline-flex'"), 'Return to My Draft button is omitted when editing preset with existing draft');
 assert(bundledHtml.includes("if(CURRENT_PRESET_KEY !== 'draft' && isPresetModified){"), 'Preset warning banner only displays when user actually edits preset, remaining hidden after reset');
+assert(bundledHtml.includes("card = $('identityCard')") && bundledHtml.includes("card.classList.remove('collapsed')"), 'Clicking +Your App button automatically opens Card 1 App Identity');
 
 // 4. Functional State Machine Simulation: Bootstrap -> Click +Your App -> Return to Preset -> Close Preset
 let sim38Draft = null;
