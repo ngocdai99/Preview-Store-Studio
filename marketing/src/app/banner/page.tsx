@@ -1280,9 +1280,9 @@ export default function BannerStudioPage() {
                 />
 
                 {/* Header info */}
-                <div className="z-10 text-center">
-                  {/* Store Badges / Pill */}
-                  <div className="flex items-center justify-center gap-2 mb-2.5">
+                <div className="z-10 text-center pt-1">
+                  {/* Store Badges / Pill (Row 1) */}
+                  <div className="flex items-center justify-center gap-2 mb-4">
                     {badgeStyle === "dock" ? (
                       /* Segmented Dock Island Style */
                       <div 
@@ -1368,31 +1368,31 @@ export default function BannerStudioPage() {
 
                   {/* Brand Logo Centered Above Title (if selected) */}
                   {showLogo && logoPosition === "above" && (
-                    <div className="flex justify-center mb-2">
+                    <div className="flex justify-center mb-3">
                       {renderBrandLogo(36, 24)}
                     </div>
                   )}
 
-                  {/* Title row (with inline logo if selected) */}
-                  <div className="flex items-center justify-center gap-2.5">
+                  {/* Title row (Row 2, with inline logo if selected) */}
+                  <div className="flex items-center justify-center gap-3 mb-2.5">
                     {showLogo && logoPosition === "inline" && renderBrandLogo(32, 22)}
                     <h2 className="text-[25px] font-black text-white tracking-tight leading-none drop-shadow-md">
                       {title}
                     </h2>
                   </div>
 
-                  {/* Subtitle */}
-                  <p className="text-[13px] font-medium text-[#989A99] mt-2 max-w-[480px] mx-auto leading-snug">
+                  {/* Subtitle (Row 3) */}
+                  <p className="text-[13.5px] font-medium text-[#989A99] max-w-[480px] mx-auto leading-relaxed mb-2">
                     {subtitle}
                   </p>
                 </div>
 
                 {/* Center Mockup - 100% natural, 0px offset, 0deg rotate */}
-                <div className="flex-1 flex items-center justify-center z-10 overflow-hidden my-auto py-2">
+                <div className="flex-1 flex items-center justify-center z-10 overflow-hidden my-auto py-1">
                   <img
                     src={imageSrc}
                     alt="Store Preview Studio Dual Mockup"
-                    className="max-h-[330px] max-w-full w-auto object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
+                    className="max-h-[315px] max-w-full w-auto object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
                   />
                 </div>
 
