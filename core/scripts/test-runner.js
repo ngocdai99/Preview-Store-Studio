@@ -205,7 +205,8 @@ assert(PRESETS.cyberstrike.icon !== PRESETS.taskflow.icon, 'CyberStrike icon is 
 assert(PRESETS.edulearn.icon !== PRESETS.taskflow.icon, 'SkillSphere icon is distinct from TaskFlow icon');
 assert(PRESETS.studio.icon !== PRESETS.taskflow.icon, 'Store Preview Studio icon is distinct from TaskFlow icon');
 assert(PRESETS.studio.icon === sandbox.STUDIO_ICON, 'Store Preview Studio icon matches official STUDIO_ICON');
-assert(sandbox.BLANK_ICON === sandbox.STUDIO_ICON, 'Placeholder icon matches official Store Preview Studio app icon');
+assert(sandbox.BLANK_ICON !== sandbox.STUDIO_ICON, 'Blank draft icon is distinct from Studio preset icon to avoid UX confusion');
+assert(sandbox.BLANK_ICON.includes('bp-bg'), 'Blank draft icon uses professional App Icon Blueprint Grid');
 assert(PRESETS.studio.privLinked === '' && PRESETS.studio.privNotLinked === '', 'Store Preview Studio defaults to Data Not Collected');
 assert(sandbox.CURRENT_PRIVACY.linked === '' && sandbox.CURRENT_PRIVACY.notLinked === '', 'CURRENT_PRIVACY defaults to Data Not Collected');
 
@@ -1387,7 +1388,7 @@ assert(bundledHtml.includes('id="edTitle">App Identity</span>'), 'Card 1 header 
 assert(bundledHtml.includes("$('edTitle').textContent = 'App Identity'"), 'setStore maintains unified "App Identity" title');
 assert(bundledHtml.includes('class="ico-wrap is-placeholder"') && bundledHtml.includes('id="icoDropZone"'), 'App icon drop container in App Identity starts with .is-placeholder class');
 assert(bundledHtml.includes('<div class="ico-ov">') && bundledHtml.includes('circle cx="11" cy="11" r="8"'), 'App icon drop container contains .ico-ov overlay with blue zoom/lens icon');
-assert(bundledHtml.includes('id="std-sq-bg"') || bundledHtml.includes('BLANK_ICON = STUDIO_ICON'), 'BLANK_ICON matches official Store Preview Studio app icon');
+assert(bundledHtml.includes('id="bp-bg"') || bundledHtml.includes('BLUEPRINT_ICON'), 'BLANK_ICON defines professional App Icon Blueprint Grid');
 assert(!bundledHtml.includes('stop-color="#f59e0b" rx="7"') && !bundledHtml.includes('stop-color="#ea580c"'), 'Old legacy orange app icon is completely purged from BLANK_ICON');
 assert(bundledHtml.includes('function isPlaceholderIcon'), 'Core studio includes isPlaceholderIcon helper function to silence validation badge on unedited drafts');
 assert(bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed #3b82f6') || bundledHtml.includes('.ico-wrap.is-placeholder{border:1.5px dashed'), 'CSS defines dashed border for .ico-wrap.is-placeholder');
@@ -2859,6 +2860,111 @@ sim39ResetFactoryStorage();
 assert(Object.keys(mockStorage39).length === 0, 'All localStorage items wiped during factory reset');
 assert(mockIdbDeleted39 === true, 'IndexedDB database deleted during factory reset');
 assert(mockReloadTriggered39 === true, 'Page reload triggered to bootstrap pristine initial state');
+
+// ---------------------------------------------------------------------
+// [SUITE 40]: File Naming & Vietnamese Slugify Engine
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 40]: File Naming & Vietnamese Slugify Engine');
+
+// 1. Verify utils.js, png.js, json.js and bundled core.html contain slugify
+const utilsSource = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'core', 'utils.js'), 'utf8');
+const pngExportSource = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
+const jsonExportSource = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'json.js'), 'utf8');
+const bundledHtmlCore = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
+
+assert(utilsSource.includes('function slugify(text, fallback = \'app\')'), 'utils.js exports core slugify function');
+assert(pngExportSource.includes('slugify(rawName'), 'png.js uses slugify for mockup image export filename');
+assert(jsonExportSource.includes('slugify(rawName'), 'json.js uses slugify for store config JSON export filename');
+assert(bundledHtmlCore.includes('function slugify'), 'bundled core.html contains slugify function');
+
+// 2. Evaluate slugify within sandbox VM
+const slugifySandbox = {
+  console,
+  document: {
+    getElementById: () => ({ style: {}, classList: { toggle: () => {} }, onclick: null, addEventListener: () => {}, setAttribute: () => {} }),
+    querySelectorAll: () => [],
+    addEventListener: () => {}
+  },
+  window: { addEventListener: () => {} },
+  navigator: {},
+  Intl,
+  Set,
+  Map
+};
+vm.createContext(slugifySandbox);
+vm.runInContext(utilsSource, slugifySandbox);
+
+const vmSlugify = slugifySandbox.slugify;
+assert(typeof vmSlugify === 'function', 'slugify is executable inside VM');
+
+// Test Case 1: Exact user case "AVN PMS-Sức khoẻ Gia Đình Việt"
+const userAppName = 'AVN PMS-Sức khoẻ Gia Đình Việt';
+const userSlug = vmSlugify(userAppName);
+assert(userSlug === 'avn-pms-suc-khoe-gia-dinh-viet', `User case "${userAppName}" => "avn-pms-suc-khoe-gia-dinh-viet", got "${userSlug}"`);
+
+// Verify that it no longer produces the buggy slug
+assert(userSlug !== 'avn-pms-s-c-kho-gia-nh-vi-t', 'Regression test: slug is NOT the corrupted "avn-pms-s-c-kho-gia-nh-vi-t"');
+
+// Test Case 2: Full exported PNG filenames
+const dualMockupTransparent3x = `${userSlug}-dual-store-phone-mockup-transparent-3x.png`;
+assert(dualMockupTransparent3x === 'avn-pms-suc-khoe-gia-dinh-viet-dual-store-phone-mockup-transparent-3x.png',
+  'Mockup export filename matches expected dual-store transparent 3x');
+assert(dualMockupTransparent3x !== 'avn-pms-s-c-kho-gia-nh-vi-t-dual-store-phone-mockup-transparent-3x.png',
+  'Mockup export filename is not corrupted');
+
+const screenOnlyMockup = `${userSlug}-dual-store-phone-screen-3x.png`;
+assert(screenOnlyMockup === 'avn-pms-suc-khoe-gia-dinh-viet-dual-store-phone-screen-3x.png',
+  'Screen-only export filename formatted accurately');
+
+// Test Case 3: JSON Config filename
+const jsonFilename = `${userSlug}-store-config.json`;
+assert(jsonFilename === 'avn-pms-suc-khoe-gia-dinh-viet-store-config.json',
+  'JSON configuration download filename formatted accurately');
+
+// Test Case 4: Comprehensive Vietnamese tonal & diacritic matrix
+const viCases = [
+  ['Ứng Dụng Đọc Báo & Tin Tức 24h', 'ung-dung-doc-bao-tin-tuc-24h'],
+  ['Cà Phê Sữa Đá - Đậm Đà Việt Nam', 'ca-phe-sua-da-dam-da-viet-nam'],
+  ['Đồng Hồ & Báo Thức Thông Minh', 'dong-ho-bao-thuc-thong-minh'],
+  ['Trợ lý AI: Lên Lịch & Quản Lý Công Việc', 'tro-ly-ai-len-lich-quan-ly-cong-viec'],
+  ['Đà Nẵng Discovery - Du Lịch Việt', 'da-nang-discovery-du-lich-viet'],
+  ['   ---  Khoẻ Đẹp Mỗi Ngày  ---   ', 'khoe-dep-moi-ngay'],
+  ['Game Đua Xe 3D Tốc Độ Cao (Bản Pro)', 'game-dua-xe-3d-toc-do-cao-ban-pro'],
+  ['🚀 Siêu Ứng Dụng ⭐ 2026', 'sieu-ung-dung-2026'],
+  ['', 'app'],
+  [null, 'app'],
+  [undefined, 'app'],
+  ['     ', 'app'],
+  ['!@#$%^&*()', 'app']
+];
+
+viCases.forEach(([input, expected]) => {
+  const actual = vmSlugify(input);
+  assert(actual === expected, `Slugify "${input}" expected "${expected}", got "${actual}"`);
+});
+
+// ---------------------------------------------------------------------
+// [SUITE 41]: App Icon Blueprint Grid & Draft Affordance Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 41]: App Icon Blueprint Grid & Draft Affordance Verification');
+
+const stateJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'core', 'state.js'), 'utf8');
+assert(stateJsSrc.includes('const BLUEPRINT_ICON = makeSvgDataUri'), 'state.js defines BLUEPRINT_ICON vector asset');
+assert(stateJsSrc.includes('const BLANK_ICON = BLUEPRINT_ICON'), 'BLANK_ICON is set to BLUEPRINT_ICON');
+assert(stateJsSrc.includes('id="bp-bg"') && stateJsSrc.includes('APP ICON 1024×1024'), 'BLUEPRINT_ICON includes golden ratio blueprint grid and technical dimensions label');
+assert(stateJsSrc.includes('r="420"') && stateJsSrc.includes('r="256"'), 'BLUEPRINT_ICON includes official Apple HIG keyline circles');
+
+// Verify Studio preset retains its official green K logo
+assert(PRESETS.studio.icon.includes('std-sq-bg'), 'Store Preview Studio preset retains official green K branding icon');
+assert(!PRESETS.studio.icon.includes('bp-bg'), 'Studio preset is NOT using the blueprint grid');
+
+// Verify Blank Draft uses the Blueprint Grid
+assert(PRESETS.studio.icon !== sandbox.BLANK_ICON, 'Blank draft icon is completely distinct from Studio preset icon');
+assert(sandbox.BLANK_ICON.includes('bp-bg'), 'Blank draft icon uses the blueprint grid vector');
+
+// Verify placeholder icon detection in shot/icon module
+const iconModuleSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'icon.js'), 'utf8');
+assert(iconModuleSrc.includes("ICON.includes('bp-bg')"), 'isPlaceholderIcon recognizes blueprint icon as placeholder');
 
 // ---------------------------------------------------------------------
 // Summary Report

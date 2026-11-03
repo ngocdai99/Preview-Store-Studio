@@ -4681,7 +4681,13 @@ var isDraft = (activeKey === 'custom');
 var isVi = (document.documentElement.lang || '').toLowerCase().indexOf('vi') === 0;
 drawWatermark(cv);
 var appName = (userDraft && userDraft.name) ? userDraft.name : (S.name || 'preview-studio');
-var slug = appName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'app';
+var slug = (function(text) {
+if (!text) return 'app';
+var s = String(text).replace(/[\u0110\u00D0\u0189]/g, 'd').replace(/[\u0111\u00F0\u0256\u0257]/g, 'd');
+var norm = s.normalize ? s.normalize('NFD') : s;
+var res = norm.replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+return res || 'app';
+})(appName);
 var fileName = isDraft ? (slug + '-preview-sample-2x.png') : ((activeKey || 'taskflow') + '-mockup-2x.png');
 function finish(url, blob) {
 var a = document.createElement('a');

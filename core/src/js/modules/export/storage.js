@@ -91,7 +91,7 @@ function applyStateObject(s){
   else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
 
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg')){
+    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || (!s.isCustomIcon && (typeof STUDIO_ICON !== 'undefined' && s.icon === STUDIO_ICON))){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
       CUSTOM_ICON_1024 = '';
@@ -249,7 +249,7 @@ function loadDraftFromStorage(){
         const parsed = JSON.parse(raw);
         if(parsed && typeof parsed === 'object'){
           userDraft = parsed;
-          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
+          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (!userDraft.isCustomIcon && typeof STUDIO_ICON !== 'undefined' && (userDraft.icon === STUDIO_ICON || userDraft.icon.includes('std-sq-bg'))) || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
             userDraft.icon = BLANK_ICON;
             userDraft.isCustomIcon = false;
           }
@@ -266,7 +266,7 @@ function loadDraftFromStorage(){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
         userDraft = idbDraft;
-        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
+        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (!userDraft.isCustomIcon && typeof STUDIO_ICON !== 'undefined' && (userDraft.icon === STUDIO_ICON || userDraft.icon.includes('std-sq-bg'))) || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
           userDraft.icon = BLANK_ICON;
           userDraft.isCustomIcon = false;
         }
@@ -399,7 +399,7 @@ function updateDraftPill(){
 
     // Resolve icon for draft: custom uploaded icon takes top precedence, then draft icon, fallback to BLANK_ICON
     let iconSrc = BLANK_ICON;
-    const isLegacyIcon = (uri) => !uri || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('f59e0b') || uri.includes('ea580c') || uri.includes('c6-bg');
+    const isLegacyIcon = (uri) => !uri || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('f59e0b') || uri.includes('ea580c') || uri.includes('c6-bg') || (!userDraft.isCustomIcon && typeof STUDIO_ICON !== 'undefined' && (uri === STUDIO_ICON || uri.includes('std-sq-bg')));
 
     if(userDraft.isCustomIcon && userDraft.icon && !isLegacyIcon(userDraft.icon)){
       iconSrc = userDraft.icon;

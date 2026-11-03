@@ -49,7 +49,7 @@ function normalizeAppleApp(item) {
   let sub = '';
 
   const devCompany = (item.artistName || item.sellerName || '').trim();
-  const cleanStr = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleanStr = s => (typeof slugify === 'function' ? slugify(s, '').replace(/-/g, '') : (s || '').replace(/[\u0110\u00D0\u0189]/g, 'd').replace(/[\u0111\u00F0\u0256\u0257]/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''));
   const cleanDev = cleanStr(devCompany);
 
   const splitMatch = rawName.split(/\s*[-–—:]\s*/);

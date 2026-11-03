@@ -349,6 +349,32 @@ function escapeHtml(str){
     .replace(/'/g, '&#39;');
 }
 
+// --- File & URL-Safe Slug Generator (Full Vietnamese & Accent Support) ---
+/**
+ * Normalizes app name or arbitrary text into a clean URL- and filesystem-safe slug.
+ * Fully supports Vietnamese diacritics (including đ/Đ), accents, and special symbols.
+ * 
+ * Example:
+ *   "AVN PMS-Sức khoẻ Gia Đình Việt" => "avn-pms-suc-khoe-gia-dinh-viet"
+ * 
+ * @param {string} text - Input text / App name
+ * @param {string} [fallback='app'] - Fallback slug if result is empty
+ * @returns {string} Sanitized slug
+ */
+function slugify(text, fallback = 'app') {
+  if (!text) return fallback;
+  const s = String(text)
+    .replace(/[\u0110\u00D0\u0189]/g, 'd')
+    .replace(/[\u0111\u00F0\u0256\u0257]/g, 'd');
+  const normalized = s.normalize ? s.normalize('NFD') : s;
+  const str = normalized
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return str || fallback;
+}
+
 // --- Toast System ---
 function showToast(msg, icon='', duration=3200){
   const c = $('toastContainer');
@@ -1090,8 +1116,64 @@ const STUDIO_ICON = makeSvgDataUri(`
 </svg>
 `);
 
-const BLANK_ICON = STUDIO_ICON;
-const LEGACY_BLANK_ICON = BLANK_ICON;
+// --- Professional ASO App Icon Blueprint Grid (Draft / Placeholder Icon) ---
+const BLUEPRINT_ICON = makeSvgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#172033"/>
+    </linearGradient>
+    <linearGradient id="bp-grid-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <pattern id="bp-dots" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="16" cy="16" r="1.2" fill="#38bdf8" opacity="0.12"/>
+    </pattern>
+  </defs>
+  <!-- Full-bleed Opaque Studio Blueprint Dark Surface (100% ITMS-90717 Zero Alpha Compliant) -->
+  <rect width="1024" height="1024" fill="url(#bp-bg)"/>
+  <rect width="1024" height="1024" fill="url(#bp-dots)"/>
+
+  <!-- Outer Safe Area Squircle Boundary (Apple HIG 1024px Squircle Keyline) -->
+  <rect x="102" y="102" width="820" height="820" rx="185" fill="rgba(56,189,248,0.03)" stroke="#38bdf8" stroke-width="2.5" opacity="0.4"/>
+
+  <!-- Keyline Rectangles: Landscape (740x480) & Portrait (480x740) -->
+  <rect x="142" y="272" width="740" height="480" rx="24" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="6 6" opacity="0.25"/>
+  <rect x="272" y="142" width="480" height="740" rx="24" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="6 6" opacity="0.25"/>
+
+  <!-- Central Keyline Square (512x512) -->
+  <rect x="256" y="256" width="512" height="512" rx="32" fill="none" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.3"/>
+
+  <!-- Golden Ratio & HIG Keyline Circles -->
+  <circle cx="512" cy="512" r="420" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.35"/>
+  <circle cx="512" cy="512" r="370" fill="none" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.25"/>
+  <circle cx="512" cy="512" r="256" fill="none" stroke="url(#bp-grid-glow)" stroke-width="2" opacity="0.45"/>
+  <circle cx="512" cy="512" r="145" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.35"/>
+
+  <!-- Center Crosshairs & 45-degree Diagonal Guide Axes -->
+  <line x1="512" y1="80" x2="512" y2="944" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.4"/>
+  <line x1="80" y1="512" x2="944" y2="512" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.4"/>
+  <line x1="140" y1="140" x2="884" y2="884" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="6 6" opacity="0.2"/>
+  <line x1="140" y1="884" x2="884" y2="140" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="6 6" opacity="0.2"/>
+
+  <!-- Center Upload Target Pill & Icon Glyph -->
+  <circle cx="512" cy="512" r="64" fill="#0f172a" stroke="url(#bp-grid-glow)" stroke-width="2.5" opacity="0.9"/>
+  <g transform="translate(512, 512)" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 -22 L0 22"/>
+    <path d="M-22 0 L22 0"/>
+  </g>
+
+  <!-- Technical Spec Blueprint Labels -->
+  <text x="512" y="805" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="28" font-weight="700" letter-spacing="3" fill="#7dd3fc" text-anchor="middle" opacity="0.85">APP ICON 1024×1024</text>
+  <text x="512" y="842" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="18" font-weight="600" letter-spacing="2" fill="#94a3b8" text-anchor="middle" opacity="0.75">BLUEPRINT GRID · UPLOAD ICON</text>
+</svg>
+`);
+
+const BLANK_ICON = BLUEPRINT_ICON;
+const LEGACY_BLANK_ICON = STUDIO_ICON;
 
 const SHOT_1 = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996">
@@ -3263,7 +3345,7 @@ function isPlaceholderIcon(){
     if(CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none' && CURRENT_PRESET_KEY !== 'draft') return false;
   }
   if(!ICON) return true;
-  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('f59e0b') || ICON.includes('ea580c'))) return true;
+  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('f59e0b') || ICON.includes('ea580c') || ICON.includes('bp-bg') || (typeof BLANK_ICON !== 'undefined' && ICON === BLANK_ICON))) return true;
   return !IS_CUSTOM_ICON;
 }
 
@@ -9255,7 +9337,7 @@ function applyStateObject(s){
   else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
 
   if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg')){
+    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || (!s.isCustomIcon && (typeof STUDIO_ICON !== 'undefined' && s.icon === STUDIO_ICON))){
       ICON = BLANK_ICON;
       IS_CUSTOM_ICON = false;
       CUSTOM_ICON_1024 = '';
@@ -9413,7 +9495,7 @@ function loadDraftFromStorage(){
         const parsed = JSON.parse(raw);
         if(parsed && typeof parsed === 'object'){
           userDraft = parsed;
-          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
+          if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (!userDraft.isCustomIcon && typeof STUDIO_ICON !== 'undefined' && (userDraft.icon === STUDIO_ICON || userDraft.icon.includes('std-sq-bg'))) || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
             userDraft.icon = BLANK_ICON;
             userDraft.isCustomIcon = false;
           }
@@ -9430,7 +9512,7 @@ function loadDraftFromStorage(){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
         userDraft = idbDraft;
-        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
+        if(!userDraft.icon || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || userDraft.icon.includes('f59e0b') || userDraft.icon.includes('ea580c') || (!userDraft.isCustomIcon && typeof STUDIO_ICON !== 'undefined' && (userDraft.icon === STUDIO_ICON || userDraft.icon.includes('std-sq-bg'))) || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)){
           userDraft.icon = BLANK_ICON;
           userDraft.isCustomIcon = false;
         }
@@ -9563,7 +9645,7 @@ function updateDraftPill(){
 
     // Resolve icon for draft: custom uploaded icon takes top precedence, then draft icon, fallback to BLANK_ICON
     let iconSrc = BLANK_ICON;
-    const isLegacyIcon = (uri) => !uri || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('f59e0b') || uri.includes('ea580c') || uri.includes('c6-bg');
+    const isLegacyIcon = (uri) => !uri || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('f59e0b') || uri.includes('ea580c') || uri.includes('c6-bg') || (!userDraft.isCustomIcon && typeof STUDIO_ICON !== 'undefined' && (uri === STUDIO_ICON || uri.includes('std-sq-bg')));
 
     if(userDraft.isCustomIcon && userDraft.icon && !isLegacyIcon(userDraft.icon)){
       iconSrc = userDraft.icon;
@@ -10100,8 +10182,7 @@ function exportJSON(){
   };
   const jsonStr = JSON.stringify(config, null, 2);
   const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
-  let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  if(!slug) slug = 'app';
+  const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
   downloadFile(`${slug}-store-config.json`, jsonStr, 'application/json');
   showToast('Exported store configuration JSON!', 'ok');
 }
@@ -10787,8 +10868,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     if(EXPORT_WM && !opts.transparent) canvas = addMockupNote(canvas, scaleFactor);
 
     const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
-    let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    if(!slug) slug = 'app';
+    const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
     const link = document.createElement('a');
     const typeLabel = opts.frameless ? 'screen' : (opts.transparent ? 'mockup-transparent' : 'preview');
     link.download = `${slug}-${devSlug}-${typeLabel}-${scaleFactor}x.png`;
@@ -10885,7 +10965,7 @@ function normalizeAppleApp(item) {
   let sub = '';
 
   const devCompany = (item.artistName || item.sellerName || '').trim();
-  const cleanStr = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleanStr = s => (typeof slugify === 'function' ? slugify(s, '').replace(/-/g, '') : (s || '').replace(/[\u0110\u00D0\u0189]/g, 'd').replace(/[\u0111\u00F0\u0256\u0257]/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''));
   const cleanDev = cleanStr(devCompany);
 
   const splitMatch = rawName.split(/\s*[-–—:]\s*/);

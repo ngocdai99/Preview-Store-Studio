@@ -346,6 +346,32 @@ function escapeHtml(str){
     .replace(/'/g, '&#39;');
 }
 
+// --- File & URL-Safe Slug Generator (Full Vietnamese & Accent Support) ---
+/**
+ * Normalizes app name or arbitrary text into a clean URL- and filesystem-safe slug.
+ * Fully supports Vietnamese diacritics (including đ/Đ), accents, and special symbols.
+ * 
+ * Example:
+ *   "AVN PMS-Sức khoẻ Gia Đình Việt" => "avn-pms-suc-khoe-gia-dinh-viet"
+ * 
+ * @param {string} text - Input text / App name
+ * @param {string} [fallback='app'] - Fallback slug if result is empty
+ * @returns {string} Sanitized slug
+ */
+function slugify(text, fallback = 'app') {
+  if (!text) return fallback;
+  const s = String(text)
+    .replace(/[\u0110\u00D0\u0189]/g, 'd')
+    .replace(/[\u0111\u00F0\u0256\u0257]/g, 'd');
+  const normalized = s.normalize ? s.normalize('NFD') : s;
+  const str = normalized
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return str || fallback;
+}
+
 // --- Toast System ---
 function showToast(msg, icon='', duration=3200){
   const c = $('toastContainer');

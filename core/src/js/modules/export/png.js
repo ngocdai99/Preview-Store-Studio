@@ -430,8 +430,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     if(EXPORT_WM && !opts.transparent) canvas = addMockupNote(canvas, scaleFactor);
 
     const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
-    let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    if(!slug) slug = 'app';
+    const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
     const link = document.createElement('a');
     const typeLabel = opts.frameless ? 'screen' : (opts.transparent ? 'mockup-transparent' : 'preview');
     link.download = `${slug}-${devSlug}-${typeLabel}-${scaleFactor}x.png`;

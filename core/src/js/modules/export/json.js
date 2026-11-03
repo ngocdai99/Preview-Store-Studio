@@ -40,8 +40,7 @@ function exportJSON(){
   };
   const jsonStr = JSON.stringify(config, null, 2);
   const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
-  let slug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  if(!slug) slug = 'app';
+  const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
   downloadFile(`${slug}-store-config.json`, jsonStr, 'application/json');
   showToast('Exported store configuration JSON!', 'ok');
 }
