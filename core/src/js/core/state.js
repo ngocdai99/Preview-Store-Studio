@@ -1749,14 +1749,14 @@ const SKILL_SHOT_4 = makeSvgDataUri(`
     <rect width="400" height="210" rx="22" fill="#0b1a36" stroke="#1c3a6b" stroke-width="1.5"/>
     <text x="25" y="38" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#fff">Mastered Technical Competencies</text>
     <g transform="translate(25, 60)">
-      <rect x="0" y="0" width="105" height="32" rx="16" fill="rgba(37,99,235,0.2)" stroke="#2563eb" stroke-width="1"/><text x="52" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#60a5fa" text-anchor="middle">⚡ Python 3.12</text>
-      <rect x="115" y="0" width="115" height="32" rx="16" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1"/><text x="172" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">🤖 PyTorch AI</text>
-      <rect x="240" y="0" width="105" height="32" rx="16" fill="rgba(251,191,36,0.2)" stroke="#fbbf24" stroke-width="1"/><text x="292" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#fbbf24" text-anchor="middle">⚛ React 19</text>
+      <rect x="0" y="0" width="105" height="32" rx="16" fill="rgba(37,99,235,0.2)" stroke="#2563eb" stroke-width="1"/><text x="52" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#60a5fa" text-anchor="middle">Python 3.12</text>
+      <rect x="115" y="0" width="115" height="32" rx="16" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1"/><text x="172" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">PyTorch AI</text>
+      <rect x="240" y="0" width="105" height="32" rx="16" fill="rgba(251,191,36,0.2)" stroke="#fbbf24" stroke-width="1"/><text x="292" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#fbbf24" text-anchor="middle">React 19</text>
     </g>
     <g transform="translate(25, 105)">
-      <rect x="0" y="0" width="115" height="32" rx="16" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1"/><text x="57" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#34d399" text-anchor="middle">📦 REST APIs</text>
-      <rect x="125" y="0" width="115" height="32" rx="16" fill="rgba(37,99,235,0.2)" stroke="#2563eb" stroke-width="1"/><text x="182" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#60a5fa" text-anchor="middle">🎨 UI/UX Figma</text>
-      <rect x="250" y="0" width="95" height="32" rx="16" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1"/><text x="297" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">☁️ AWS Cloud</text>
+      <rect x="0" y="0" width="115" height="32" rx="16" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1"/><text x="57" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#34d399" text-anchor="middle">REST APIs</text>
+      <rect x="125" y="0" width="115" height="32" rx="16" fill="rgba(37,99,235,0.2)" stroke="#2563eb" stroke-width="1"/><text x="182" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#60a5fa" text-anchor="middle">UI/UX Figma</text>
+      <rect x="250" y="0" width="95" height="32" rx="16" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1"/><text x="297" y="20" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#38bdf8" text-anchor="middle">AWS Cloud</text>
     </g>
     <text x="25" y="175" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">3 Capstone Projects verified by senior engineering mentors</text>
   </g>
@@ -1767,23 +1767,533 @@ const SKILL_SHOT_4 = makeSvgDataUri(`
 
 // Store Preview Studio Preset Assets
 const STUDIO_FEATURE = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500"> <defs> <linearGradient id="fbg" x1="0" y1="0" x2="1" y2="1"> <stop offset="0%" stop-color="#070d1c"/> <stop offset="50%" stop-color="#0d1527"/> <stop offset="100%" stop-color="#1e1845"/> </linearGradient> <linearGradient id="fglow" x1="0" y1="0" x2="1" y2="0"> <stop offset="0%" stop-color="#38bdf8"/> <stop offset="50%" stop-color="#818cf8"/> <stop offset="100%" stop-color="#c084fc"/> </linearGradient> <linearGradient id="sfeat-sq-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1F211F"/><stop offset="100%" stop-color="#121312"/></linearGradient> <filter id="sfeat-k-sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="-1.5" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.8"/></filter> <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"> <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/> </pattern> </defs> <rect width="1024" height="500" fill="url(#fbg)"/> <rect width="1024" height="500" fill="url(#grid)"/> <circle cx="850" cy="180" r="280" fill="#38bdf8" opacity="0.08"/> <circle cx="200" cy="400" r="240" fill="#8b5cf6" opacity="0.08"/> <g transform="translate(80, 75)"> <rect width="72" height="72" rx="18" fill="url(#sfeat-sq-bg)" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/> <g transform="scale(0.52) translate(19, 19)"> <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/> <g filter="url(#sfeat-k-sh)"> <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/> </g> </g> </g> <text x="175" y="115" font-family="-apple-system,system-ui,sans-serif" font-size="38" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Store Preview Studio</text> <text x="175" y="142" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="url(#fglow)" letter-spacing="1.5">DUAL-STORE PREVIEW &amp; METADATA STUDIO</text> <text x="80" y="215" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="700" fill="#ffffff">Design &amp; Validate Pixel-Perfect Store Mockups</text> <text x="80" y="250" font-family="-apple-system,system-ui,sans-serif" font-size="16" fill="#94a3b8">App Store &amp; Google Play live viewports, pre-flight audits, 100% offline in your browser.</text> <g transform="translate(80, 290)"> <rect width="200" height="44" rx="22" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="1.5"/> <text x="100" y="27" font-family="-apple-system,system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#38bdf8" text-anchor="middle">📱 Dual Live Viewports</text> </g> <g transform="translate(300, 290)"> <rect width="200" height="44" rx="22" fill="rgba(129,140,248,0.15)" stroke="#818cf8" stroke-width="1.5"/> <text x="100" y="27" font-family="-apple-system,system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#c084fc" text-anchor="middle">🛡️ Pre-Flight Audit</text> </g> <g transform="translate(520, 290)"> <rect width="200" height="44" rx="22" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5"/> <text x="100" y="27" font-family="-apple-system,system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#34d399" text-anchor="middle">🔒 100% Client-Side</text> </g> <g transform="translate(750, 70)"> <rect width="200" height="360" rx="28" fill="#0f172a" stroke="#334155" stroke-width="2"/> <rect x="20" y="24" width="160" height="42" rx="12" fill="#1e293b"/> <rect x="30" y="31" width="28" height="28" rx="7" fill="#1F211F" stroke="rgba(255,255,255,0.15)"/> <path d="M 37,35 L 37,49 M 50,37 L 41,44 L 50,51" fill="none" stroke="#00D085" stroke-width="2.5" stroke-linecap="round"/> <text x="65" y="44" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#fff">Preview Studio</text> <text x="65" y="56" font-family="-apple-system,system-ui,sans-serif" font-size="9" fill="#94a3b8">Store Mockup Pro</text> <rect x="20" y="80" width="160" height="100" rx="14" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.3)" stroke-width="1"/> <text x="100" y="125" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#38bdf8" text-anchor="middle">4.9 ★</text> <text x="100" y="150" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="600" fill="#fff" text-anchor="middle">#1 Developer Tools</text> <rect x="20" y="195" width="160" height="60" rx="12" fill="#1e293b"/> <text x="35" y="222" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="700" fill="#34d399">✓ ITMS-90717 Pass</text> <text x="35" y="240" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="700" fill="#38bdf8">✓ 3x PNG Mockup</text> <rect x="35" y="280" width="130" height="40" rx="20" fill="url(#fglow)"/> <text x="100" y="305" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="800" fill="#fff" text-anchor="middle">EXPORT MOCKUP</text> </g> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500">
+  <defs>
+    <linearGradient id="sfeat-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="50%" stop-color="#0D1322"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="sfeat-kicker" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#00D085"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="sfeat-btn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#00D085"/>
+    </linearGradient>
+    <linearGradient id="sfeat-sq-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="sfeat-border" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#00D085" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#818CF8" stop-opacity="0.6"/>
+    </linearGradient>
+    <filter id="sfeat-k-sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-1.5" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+    <pattern id="sfeat-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1024" height="500" fill="url(#sfeat-bg)"/>
+  <rect width="1024" height="500" fill="url(#sfeat-grid)"/>
+
+  <!-- Ambient Multi-Color Lights -->
+  <circle cx="860" cy="140" r="280" fill="#38BDF8" opacity="0.12"/>
+  <circle cx="160" cy="420" r="240" fill="#818CF8" opacity="0.10"/>
+  <circle cx="560" cy="480" r="220" fill="#00D085" opacity="0.08"/>
+
+  <!-- Left Header with App Icon -->
+  <g transform="translate(72, 65)">
+    <rect width="76" height="76" rx="20" fill="url(#sfeat-sq-bg)" stroke="url(#sfeat-border)" stroke-width="1.5"/>
+    <g transform="scale(0.55) translate(20, 20)">
+      <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
+      <g filter="url(#sfeat-k-sh)">
+        <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
+      </g>
+    </g>
+  </g>
+
+  <text x="172" y="105" font-family="-apple-system,system-ui,sans-serif" font-size="36" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Store Preview Studio</text>
+  <text x="172" y="132" font-family="-apple-system,system-ui,sans-serif" font-size="12.5" font-weight="700" fill="url(#sfeat-kicker)" letter-spacing="1.5">DUAL-STORE PREVIEW &amp; METADATA STUDIO</text>
+
+  <text x="72" y="200" font-family="-apple-system,system-ui,sans-serif" font-size="27" font-weight="700" fill="#ffffff">Design &amp; Validate Pixel-Perfect Store Mockups</text>
+  <text x="72" y="235" font-family="-apple-system,system-ui,sans-serif" font-size="15" fill="#94A3B8">App Store &amp; Google Play live viewports, pre-flight audits, 100% offline in your browser.</text>
+
+  <!-- 3 Colorful Feature Badges (Zero Emoji, Clean Vector Icons) -->
+  <!-- Badge 1: Cyan (Viewports) -->
+  <g transform="translate(72, 275)">
+    <rect width="190" height="42" rx="21" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.35)" stroke-width="1.2"/>
+    <rect x="20" y="12" width="10" height="18" rx="2" fill="none" stroke="#38BDF8" stroke-width="1.8"/>
+    <rect x="25" y="15" width="10" height="18" rx="2" fill="#0D1322" stroke="#38BDF8" stroke-width="1.8"/>
+    <text x="44" y="26" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#38BDF8">Dual Live Viewports</text>
+  </g>
+
+  <!-- Badge 2: Violet (Pre-Flight Audit) -->
+  <g transform="translate(276, 275)">
+    <rect width="180" height="42" rx="21" fill="rgba(192,132,252,0.12)" stroke="rgba(192,132,252,0.35)" stroke-width="1.2"/>
+    <path d="M 24 13 L 30 16 L 30 23 C 30 27 24 30 24 30 C 24 30 18 27 18 23 L 18 16 Z" fill="none" stroke="#C084FC" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M 21 21 L 23 23 L 27 19" fill="none" stroke="#C084FC" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="39" y="26" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#C084FC">Pre-Flight Audit</text>
+  </g>
+
+  <!-- Badge 3: Emerald (Client-Side) -->
+  <g transform="translate(470, 275)">
+    <rect width="180" height="42" rx="21" fill="rgba(0,208,133,0.12)" stroke="rgba(0,208,133,0.35)" stroke-width="1.2"/>
+    <rect x="18" y="18" width="14" height="11" rx="2" fill="none" stroke="#34D399" stroke-width="1.8"/>
+    <path d="M 21 18 L 21 15 C 21 12.8 29 12.8 29 15 L 29 18" fill="none" stroke="#34D399" stroke-width="1.8"/>
+    <text x="40" y="26" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#34D399">100% Client-Side</text>
+  </g>
+
+  <!-- Spec Highlights Pill Row -->
+  <g transform="translate(72, 345)">
+    <rect width="578" height="85" rx="16" fill="#0F172A" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+    <text x="24" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#94A3B8">STANDALONE POWER</text>
+    <text x="24" y="58" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">Zero Subscriptions · Zero Telemetry · Offline Ready</text>
+    <rect x="440" y="24" width="115" height="36" rx="10" fill="rgba(56,189,248,0.15)"/>
+    <text x="497" y="47" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="800" fill="#38BDF8" text-anchor="middle">v2.1 PRO</text>
+  </g>
+
+  <!-- Right Hero Card (Mockup Pro Window) -->
+  <g transform="translate(720, 50)">
+    <rect width="245" height="395" rx="26" fill="#0D1322" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" filter="drop-shadow(0 20px 40px rgba(0,0,0,0.6))"/>
+    
+    <!-- Window Bar -->
+    <circle cx="28" cy="24" r="5" fill="#EF4444"/>
+    <circle cx="44" cy="24" r="5" fill="#F59E0B"/>
+    <circle cx="60" cy="24" r="5" fill="#10B981"/>
+    <text x="140" y="28" font-family="-apple-system,system-ui,sans-serif" font-size="10" font-weight="700" fill="#64748B" text-anchor="middle">previewstudio.app</text>
+
+    <!-- Mini App Header inside window -->
+    <rect x="18" y="44" width="209" height="52" rx="14" fill="#161F33" stroke="rgba(255,255,255,0.06)"/>
+    <rect x="28" y="54" width="32" height="32" rx="8" fill="url(#sfeat-sq-bg)" stroke="rgba(0,208,133,0.3)"/>
+    <g transform="scale(0.23) translate(128, 240)">
+      <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
+      <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
+    </g>
+    <text x="68" y="68" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#fff">Preview Studio</text>
+    <text x="68" y="81" font-family="-apple-system,system-ui,sans-serif" font-size="9.5" fill="#94A3B8">Store Mockup Pro</text>
+
+    <!-- Rating Banner (Amber) -->
+    <rect x="18" y="106" width="209" height="70" rx="14" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.25)" stroke-width="1"/>
+    <text x="122" y="138" font-family="-apple-system,system-ui,sans-serif" font-size="24" font-weight="800" fill="#FBBF24" text-anchor="middle">4.9 ★</text>
+    <text x="122" y="160" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle">#1 Developer Tools</text>
+
+    <!-- Checklist Widget (Cyan & Emerald) -->
+    <rect x="18" y="186" width="209" height="120" rx="14" fill="#141B2D" stroke="rgba(255,255,255,0.06)"/>
+    <text x="32" y="214" font-family="-apple-system,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#38BDF8">✓ ITMS-90717 Zero Alpha</text>
+    <text x="32" y="244" font-family="-apple-system,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#34D399">✓ Dual-Store Live Sync</text>
+    <text x="32" y="274" font-family="-apple-system,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#C084FC">✓ 3x Retina PNG Mockup</text>
+
+    <!-- Action Button -->
+    <rect x="24" y="322" width="197" height="44" rx="22" fill="url(#sfeat-btn)"/>
+    <text x="122" y="349" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="800" fill="#080C14" text-anchor="middle" letter-spacing="0.5">EXPORT MOCKUP</text>
+  </g>
+</svg>
 `);
 
 const STUDIO_SHOT_1 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340"> <defs> <linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"> <stop offset="0%" stop-color="#070d1a"/> <stop offset="50%" stop-color="#0f172a"/> <stop offset="100%" stop-color="#1e1845"/> </linearGradient> <linearGradient id="acc1" x1="0" y1="0" x2="1" y2="0"> <stop offset="0%" stop-color="#38bdf8"/> <stop offset="100%" stop-color="#818cf8"/> </linearGradient> <linearGradient id="s1-icon" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1F211F"/><stop offset="100%" stop-color="#121312"/></linearGradient> </defs> <rect width="460" height="996" fill="url(#s1)"/> <text x="230" y="80" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#38bdf8" text-anchor="middle">DUAL-STORE VIEWPORTS</text> <text x="230" y="125" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">Live Side-by-Side</text> <text x="230" y="160" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#acc1)" text-anchor="middle">App Store &amp; Google Play</text> <text x="230" y="195" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Instant simultaneous preview across iPhone &amp; Android</text> <!-- Mini Duo Phones Container --> <g transform="translate(30, 240)"> <rect width="400" height="420" rx="24" fill="#0f1629" stroke="#1e293b" stroke-width="1.5"/> <!-- Left Phone (Apple) --> <g transform="translate(25, 30)"> <rect width="165" height="340" rx="24" fill="#000" stroke="#334155" stroke-width="3"/> <rect x="52" y="10" width="60" height="14" rx="7" fill="#1e293b"/> <text x="82" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="700" fill="#38bdf8" text-anchor="middle">App Store</text> <rect x="20" y="70" width="36" height="36" rx="9" fill="url(#s1-icon)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/> <path d="M 28,77 L 28,91 M 44,79 L 34,85 L 44,93" fill="none" stroke="#00D085" stroke-width="2" stroke-linecap="round"/> <rect x="62" y="75" width="80" height="8" rx="4" fill="#fff"/> <rect x="62" y="90" width="55" height="6" rx="3" fill="#64748b"/> <rect x="20" y="120" width="125" height="26" rx="13" fill="#0284c7"/> <text x="82" y="137" font-family="-apple-system,system-ui,sans-serif" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">GET</text> <!-- Mini Shots Row --> <rect x="20" y="165" width="58" height="120" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/> <rect x="86" y="165" width="58" height="120" rx="8" fill="#1e293b"/> <rect x="60" y="325" width="45" height="4" rx="2" fill="#fff"/> </g> <!-- Right Phone (Android) --> <g transform="translate(210, 30)"> <rect width="165" height="340" rx="20" fill="#000" stroke="#334155" stroke-width="3"/> <circle cx="82" cy="16" r="4" fill="#1e293b"/> <text x="82" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="700" fill="#34d399" text-anchor="middle">Google Play</text> <rect x="20" y="70" width="36" height="36" rx="9" fill="url(#s1-icon)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/> <path d="M 28,77 L 28,91 M 44,79 L 34,85 L 44,93" fill="none" stroke="#00D085" stroke-width="2" stroke-linecap="round"/> <rect x="62" y="75" width="80" height="8" rx="4" fill="#fff"/> <rect x="62" y="90" width="55" height="6" rx="3" fill="#64748b"/> <rect x="20" y="120" width="125" height="26" rx="8" fill="#047857"/> <text x="82" y="137" font-family="-apple-system,system-ui,sans-serif" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">Install</text> <rect x="20" y="165" width="58" height="120" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="1"/> <rect x="86" y="165" width="58" height="120" rx="8" fill="#1e293b"/> </g> </g> <!-- Bottom Feature Pill Banner --> <g transform="translate(30, 690)"> <rect width="400" height="100" rx="20" fill="#182238" stroke="#334155" stroke-width="1.5"/> <text x="40" y="44" font-size="28">⚡</text> <text x="85" y="40" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Simultaneous 1-Click Sync</text> <text x="85" y="65" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Edit metadata once · Instantly audits both platforms</text> </g> <g transform="translate(30, 810)"> <rect width="400" height="130" rx="20" fill="#111827" stroke="#1e293b" stroke-width="1.5"/> <text x="25" y="40" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#38bdf8">✓ iPhone, iPad &amp; Android Viewports</text> <text x="25" y="70" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#c084fc">✓ Real Device Aspect Ratios</text> <text x="25" y="100" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#34d399">✓ 100% Client-Side Privacy</text> </g> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
+  <defs>
+    <linearGradient id="ss1-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="50%" stop-color="#0E1424"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="ss1-acc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="ss1-sq" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="460" height="996" fill="url(#ss1-bg)"/>
+  <circle cx="230" cy="400" r="280" fill="#38BDF8" opacity="0.08"/>
+  <circle cx="100" cy="800" r="200" fill="#818CF8" opacity="0.06"/>
+
+  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#38BDF8" text-anchor="middle">DUAL-STORE VIEWPORTS</text>
+  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">Live Side-by-Side</text>
+  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss1-acc)" text-anchor="middle">App Store &amp; Google Play</text>
+  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Instant simultaneous preview across iPhone &amp; Android</text>
+
+  <!-- Mini Duo Phones Container -->
+  <g transform="translate(30, 220)">
+    <rect width="400" height="430" rx="24" fill="#0F172A" stroke="rgba(56,189,248,0.25)" stroke-width="1.5"/>
+
+    <!-- Left Phone (Apple App Store) -->
+    <g transform="translate(25, 25)">
+      <rect width="165" height="380" rx="24" fill="#090D16" stroke="#253248" stroke-width="2.5"/>
+      <!-- Dynamic Island -->
+      <rect x="52" y="10" width="60" height="13" rx="6.5" fill="#1E293B"/>
+      <text x="82" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#38BDF8" text-anchor="middle">App Store</text>
+
+      <!-- App Row -->
+      <rect x="18" y="65" width="38" height="38" rx="10" fill="url(#ss1-sq)" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
+      <g transform="scale(0.27) translate(72, 248)">
+        <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
+        <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
+      </g>
+      <rect x="64" y="70" width="82" height="8" rx="4" fill="#FFFFFF"/>
+      <rect x="64" y="85" width="56" height="6" rx="3" fill="#64748B"/>
+
+      <!-- Get Button -->
+      <rect x="18" y="115" width="129" height="26" rx="13" fill="#0284C7"/>
+      <text x="82" y="132" font-family="-apple-system,system-ui,sans-serif" font-size="10.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">GET</text>
+
+      <!-- Mini Screenshots -->
+      <rect x="18" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
+      <rect x="87" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <!-- Home bar -->
+      <rect x="60" y="365" width="45" height="4" rx="2" fill="#64748B"/>
+    </g>
+
+    <!-- Right Phone (Google Play) -->
+    <g transform="translate(210, 25)">
+      <rect width="165" height="380" rx="22" fill="#090D16" stroke="#253248" stroke-width="2.5"/>
+      <!-- Punch Hole -->
+      <circle cx="82" cy="16" r="3.5" fill="#1E293B"/>
+      <text x="82" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#00D085" text-anchor="middle">Google Play</text>
+
+      <!-- App Row -->
+      <rect x="18" y="65" width="38" height="38" rx="10" fill="url(#ss1-sq)" stroke="rgba(0,208,133,0.3)" stroke-width="1"/>
+      <g transform="scale(0.27) translate(72, 248)">
+        <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
+        <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
+      </g>
+      <rect x="64" y="70" width="82" height="8" rx="4" fill="#FFFFFF"/>
+      <rect x="64" y="85" width="56" height="6" rx="3" fill="#64748B"/>
+
+      <!-- Install Button -->
+      <rect x="18" y="115" width="129" height="26" rx="8" fill="#00D085"/>
+      <text x="82" y="132" font-family="-apple-system,system-ui,sans-serif" font-size="10.5" font-weight="800" fill="#080C14" text-anchor="middle">Install</text>
+
+      <!-- Mini Screenshots -->
+      <rect x="18" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(0,208,133,0.3)" stroke-width="1"/>
+      <rect x="87" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <!-- Nav gesture -->
+      <rect x="65" y="365" width="35" height="3" rx="1.5" fill="#64748B"/>
+    </g>
+  </g>
+
+  <!-- Bottom Feature Banner 1 (No Emoji, Clean Vector Sync Icon) -->
+  <g transform="translate(30, 680)">
+    <rect width="400" height="96" rx="20" fill="#131B2E" stroke="rgba(129,140,248,0.25)" stroke-width="1.5"/>
+    <g transform="translate(25, 28)">
+      <circle cx="18" cy="18" r="18" fill="rgba(129,140,248,0.15)"/>
+      <path d="M 12 18 A 6 6 0 1 1 24 21" fill="none" stroke="#818CF8" stroke-width="2" stroke-linecap="round"/>
+      <polyline points="23 15 25 21 19 21" fill="none" stroke="#818CF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="75" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Simultaneous 1-Click Sync</text>
+    <text x="75" y="66" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Edit metadata once · Instantly audits both platforms</text>
+  </g>
+
+  <!-- Bottom Feature Checklist (Multi-Colored Specs) -->
+  <g transform="translate(30, 796)">
+    <rect width="400" height="150" rx="20" fill="#0F172A" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+    <g transform="translate(25, 32)">
+      <circle cx="8" cy="8" r="8" fill="rgba(56,189,248,0.2)"/>
+      <path d="M 5 8 L 7 10 L 11 6" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+      <text x="25" y="12" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#38BDF8">iPhone, iPad &amp; Android Viewports</text>
+    </g>
+    <g transform="translate(25, 74)">
+      <circle cx="8" cy="8" r="8" fill="rgba(251,191,36,0.2)"/>
+      <path d="M 5 8 L 7 10 L 11 6" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"/>
+      <text x="25" y="12" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#FBBF24">Real Device Aspect Ratios</text>
+    </g>
+    <g transform="translate(25, 116)">
+      <circle cx="8" cy="8" r="8" fill="rgba(52,211,153,0.2)"/>
+      <path d="M 5 8 L 7 10 L 11 6" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round"/>
+      <text x="25" y="12" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#34D399">100% Client-Side Privacy</text>
+    </g>
+  </g>
+</svg>
 `);
 
 const STUDIO_SHOT_2 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340"> <defs> <linearGradient id="s2" x1="0" y1="0" x2="0" y2="1"> <stop offset="0%" stop-color="#070d1a"/> <stop offset="100%" stop-color="#181c3b"/> </linearGradient> <linearGradient id="acc2" x1="0" y1="0" x2="1" y2="0"> <stop offset="0%" stop-color="#38bdf8"/> <stop offset="100%" stop-color="#c084fc"/> </linearGradient> </defs> <rect width="460" height="996" fill="url(#s2)"/> <text x="230" y="80" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#818cf8" text-anchor="middle">METADATA COMPLIANCE</text> <text x="230" y="125" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">Store Limits &amp;</text> <text x="230" y="160" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#acc2)" text-anchor="middle">Pre-Flight Audit</text> <text x="230" y="195" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Catches formatting &amp; dimension issues before release</text> <!-- Card Checklist --> <g transform="translate(30, 240)"> <rect width="400" height="470" rx="24" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/> <text x="25" y="45" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Metadata Validation Checklist</text> <!-- Item 1 --> <g transform="translate(25, 75)"> <rect width="350" height="75" rx="14" fill="#182238" stroke="rgba(56,189,248,0.3)" stroke-width="1.2"/> <circle cx="28" cy="38" r="14" fill="#0284c7"/> <path d="M22 38 L26 42 L34 33" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/> <text x="52" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">App Title Length</text> <text x="52" y="54" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Store Preview Studio · 20 / 30 chars</text> <rect x="270" y="25" width="65" height="26" rx="8" fill="rgba(56,189,248,0.2)"/> <text x="302" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#38bdf8" text-anchor="middle">PASSED</text> </g> <!-- Item 2 --> <g transform="translate(25, 165)"> <rect width="350" height="75" rx="14" fill="#182238" stroke="rgba(192,132,252,0.3)" stroke-width="1.2"/> <circle cx="28" cy="38" r="14" fill="#7c3aed"/> <path d="M22 38 L26 42 L34 33" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/> <text x="52" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">Subtitle &amp; Short Description</text> <text x="52" y="54" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Store Mockup Pro · 16 / 30 chars</text> <rect x="270" y="25" width="65" height="26" rx="8" fill="rgba(192,132,252,0.2)"/> <text x="302" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#c084fc" text-anchor="middle">PASSED</text> </g> <!-- Item 3 --> <g transform="translate(25, 255)"> <rect width="350" height="75" rx="14" fill="#182238" stroke="rgba(16,185,129,0.3)" stroke-width="1.2"/> <circle cx="28" cy="38" r="14" fill="#059669"/> <path d="M22 38 L26 42 L34 33" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/> <text x="52" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">Icon Alpha Audit</text> <text x="52" y="54" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">ITMS-90717 Zero Alpha Compliance</text> <rect x="270" y="25" width="65" height="26" rx="8" fill="rgba(16,185,129,0.2)"/> <text x="302" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#34d399" text-anchor="middle">PASSED</text> </g> <!-- Item 4 --> <g transform="translate(25, 345)"> <rect width="350" height="75" rx="14" fill="#182238" stroke="rgba(245,158,11,0.3)" stroke-width="1.2"/> <circle cx="28" cy="38" r="14" fill="#d97706"/> <path d="M22 38 L26 42 L34 33" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/> <text x="52" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#fff">Age Rating Matrix</text> <text x="52" y="54" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Apple 4+ &amp; Google Play Everyone</text> <rect x="270" y="25" width="65" height="26" rx="8" fill="rgba(245,158,11,0.2)"/> <text x="302" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#fde047" text-anchor="middle">PASSED</text> </g> </g> <g transform="translate(30, 740)"> <rect width="400" height="180" rx="20" fill="#182238" stroke="#334155" stroke-width="1.5"/> <text x="30" y="45" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Ready For Submission</text> <text x="30" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Export verified metadata and mockups directly into your developer release pipeline.</text> <rect x="30" y="105" width="340" height="46" rx="23" fill="url(#acc2)"/> <text x="200" y="134" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">SPEC-VERIFIED METADATA</text> </g> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
+  <defs>
+    <linearGradient id="ss2-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="50%" stop-color="#0E1424"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="ss2-acc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#FB7185"/>
+    </linearGradient>
+    <linearGradient id="ss2-btn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#00D085"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="460" height="996" fill="url(#ss2-bg)"/>
+  <circle cx="230" cy="400" r="280" fill="#F59E0B" opacity="0.06"/>
+  <circle cx="360" cy="700" r="220" fill="#818CF8" opacity="0.06"/>
+
+  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#FBBF24" text-anchor="middle">METADATA COMPLIANCE</text>
+  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">Store Limits &amp;</text>
+  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss2-acc)" text-anchor="middle">Pre-Flight Audit</text>
+  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Catches formatting &amp; dimension issues before release</text>
+
+  <!-- Card Checklist -->
+  <g transform="translate(30, 220)">
+    <rect width="400" height="490" rx="24" fill="#0F172A" stroke="rgba(251,191,36,0.25)" stroke-width="1.5"/>
+    <text x="28" y="44" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Metadata Validation Checklist</text>
+
+    <!-- Item 1: Title Length (Cyan) -->
+    <g transform="translate(25, 68)">
+      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(56,189,248,0.25)" stroke-width="1.2"/>
+      <circle cx="30" cy="39" r="15" fill="rgba(56,189,248,0.15)"/>
+      <path d="M24 39 L28 43 L36 34" stroke="#38BDF8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">App Title Length</text>
+      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Store Preview Studio · 20 / 30 chars</text>
+      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(56,189,248,0.15)"/>
+      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#38BDF8" text-anchor="middle">PASSED</text>
+    </g>
+
+    <!-- Item 2: Subtitle (Violet) -->
+    <g transform="translate(25, 158)">
+      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(192,132,252,0.25)" stroke-width="1.2"/>
+      <circle cx="30" cy="39" r="15" fill="rgba(192,132,252,0.15)"/>
+      <path d="M24 39 L28 43 L36 34" stroke="#C084FC" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">Subtitle &amp; Short Description</text>
+      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Store Mockup Pro · 16 / 30 chars</text>
+      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(192,132,252,0.15)"/>
+      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#C084FC" text-anchor="middle">PASSED</text>
+    </g>
+
+    <!-- Item 3: Icon Alpha (Emerald) -->
+    <g transform="translate(25, 248)">
+      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(0,208,133,0.25)" stroke-width="1.2"/>
+      <circle cx="30" cy="39" r="15" fill="rgba(0,208,133,0.15)"/>
+      <path d="M24 39 L28 43 L36 34" stroke="#00D085" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">Icon Alpha Audit</text>
+      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">ITMS-90717 Zero Alpha Compliance</text>
+      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(0,208,133,0.15)"/>
+      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#00D085" text-anchor="middle">PASSED</text>
+    </g>
+
+    <!-- Item 4: Age Rating (Amber) -->
+    <g transform="translate(25, 338)">
+      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(251,191,36,0.25)" stroke-width="1.2"/>
+      <circle cx="30" cy="39" r="15" fill="rgba(251,191,36,0.15)"/>
+      <path d="M24 39 L28 43 L36 34" stroke="#FBBF24" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">Age Rating Matrix</text>
+      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Apple 4+ &amp; Google Play Everyone</text>
+      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(251,191,36,0.15)"/>
+      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#FBBF24" text-anchor="middle">PASSED</text>
+    </g>
+
+    <!-- Audit Summary Banner -->
+    <rect x="25" y="430" width="350" height="38" rx="10" fill="rgba(52,211,153,0.1)"/>
+    <text x="200" y="454" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#34D399" text-anchor="middle">✓ All 12 Automated Store Checks Passed</text>
+  </g>
+
+  <!-- Bottom CTA Card -->
+  <g transform="translate(30, 735)">
+    <rect width="400" height="195" rx="20" fill="#131B2E" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+    <text x="30" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Ready For Submission</text>
+    <text x="30" y="70" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Export verified metadata and mockups directly into your developer release pipeline.</text>
+    <rect x="30" y="105" width="340" height="48" rx="24" fill="url(#ss2-btn)"/>
+    <text x="200" y="135" font-family="-apple-system,system-ui,sans-serif" font-size="14.5" font-weight="800" fill="#080C14" text-anchor="middle" letter-spacing="0.5">SPEC-VERIFIED METADATA</text>
+    <text x="200" y="178" font-family="-apple-system,system-ui,sans-serif" font-size="11" fill="#64748B" text-anchor="middle">App Store Connect &amp; Google Play Console Ready</text>
+  </g>
+</svg>
 `);
 
 const STUDIO_SHOT_3 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340"> <defs> <linearGradient id="s3" x1="0" y1="0" x2="0" y2="1"> <stop offset="0%" stop-color="#070d1a"/> <stop offset="100%" stop-color="#141838"/> </linearGradient> <linearGradient id="std-sq-bg3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1F211F"/><stop offset="100%" stop-color="#121312"/></linearGradient> <filter id="std-k-sh3" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="-2.5" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.8"/></filter> <linearGradient id="acc3" x1="0" y1="0" x2="1" y2="0"> <stop offset="0%" stop-color="#38bdf8"/> <stop offset="100%" stop-color="#818cf8"/> </linearGradient> </defs> <rect width="460" height="996" fill="url(#s3)"/> <text x="230" y="80" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#38bdf8" text-anchor="middle">ASSET AUDIT</text> <text x="230" y="125" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">App Icon Inspector &amp;</text> <text x="230" y="160" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#acc3)" text-anchor="middle">ITMS-90717 Compliance</text> <text x="230" y="195" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Instant alpha channel detection &amp; specification checks</text> <!-- Hero Icon Box --> <g transform="translate(140, 240)"> <rect width="180" height="180" rx="42" fill="url(#std-sq-bg3)" stroke="rgba(255,255,255,0.15)" stroke-width="2" filter="drop-shadow(0 20px 35px rgba(0,208,133,0.35))"/> <g transform="scale(1.3) translate(19, 19)"> <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/> <g filter="url(#std-k-sh3)"> <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/> </g> </g> </g> <!-- Spec List Card --> <g transform="translate(30, 460)"> <rect width="400" height="340" rx="24" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/> <text x="30" y="45" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Master Icon Specifications</text> <g transform="translate(30, 75)"> <rect width="340" height="48" rx="10" fill="#182238"/> <text x="20" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Dimension</text> <text x="320" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff" text-anchor="end">1024 × 1024 px</text> </g> <g transform="translate(30, 135)"> <rect width="340" height="48" rx="10" fill="#182238"/> <text x="20" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Color Profile</text> <text x="320" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff" text-anchor="end">sRGB / 24-bit RGB</text> </g> <g transform="translate(30, 195)"> <rect width="340" height="48" rx="10" fill="#182238"/> <text x="20" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Alpha Channel</text> <text x="320" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#34d399" text-anchor="end">Zero Alpha (Passed ✓)</text> </g> <g transform="translate(30, 255)"> <rect width="340" height="48" rx="10" fill="#182238"/> <text x="20" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Corner Masking</text> <text x="320" y="30" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#38bdf8" text-anchor="end">Auto Apple Squircle</text> </g> </g> <g transform="translate(30, 830)"> <rect width="400" height="90" rx="20" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5"/> <text x="200" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#34d399" text-anchor="middle">🛡️ 100% ITMS-90717 COMPLIANT</text> <text x="200" y="65" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">Guards against transparent icon upload errors (ITMS-90717)</text> </g> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
+  <defs>
+    <linearGradient id="ss3-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="50%" stop-color="#0E1424"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="ss3-sq" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <filter id="ss3-k-sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-2.5" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+    <linearGradient id="ss3-acc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <linearGradient id="ss3-border" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C084FC" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#00D085" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="460" height="996" fill="url(#ss3-bg)"/>
+  <circle cx="230" cy="330" r="220" fill="#818CF8" opacity="0.10"/>
+  <circle cx="360" cy="800" r="180" fill="#00D085" opacity="0.06"/>
+
+  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#C084FC" text-anchor="middle">ASSET AUDIT</text>
+  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">App Icon Inspector &amp;</text>
+  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss3-acc)" text-anchor="middle">ITMS-90717 Compliance</text>
+  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Instant alpha channel detection &amp; specification checks</text>
+
+  <!-- Hero Icon Box with Authentic Interlocking K -->
+  <g transform="translate(140, 225)">
+    <!-- Squircle Container -->
+    <rect width="180" height="180" rx="42" fill="url(#ss3-sq)" stroke="url(#ss3-border)" stroke-width="2.5" filter="drop-shadow(0 20px 35px rgba(129,140,248,0.3))"/>
+    <g transform="scale(1.3) translate(19, 19)">
+      <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
+      <g filter="url(#ss3-k-sh)">
+        <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Spec List Card -->
+  <g transform="translate(30, 445)">
+    <rect width="400" height="345" rx="24" fill="#0F172A" stroke="rgba(192,132,252,0.25)" stroke-width="1.5"/>
+    <text x="30" y="44" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Master Icon Specifications</text>
+
+    <!-- Spec 1: Dimension (Cyan) -->
+    <g transform="translate(30, 70)">
+      <rect width="340" height="50" rx="12" fill="#141D30"/>
+      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Dimension</text>
+      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#38BDF8" text-anchor="end">1024 × 1024 px</text>
+    </g>
+
+    <!-- Spec 2: Color Profile (Violet) -->
+    <g transform="translate(30, 132)">
+      <rect width="340" height="50" rx="12" fill="#141D30"/>
+      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Color Profile</text>
+      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#C084FC" text-anchor="end">sRGB / 24-bit RGB</text>
+    </g>
+
+    <!-- Spec 3: Alpha Channel (Emerald) -->
+    <g transform="translate(30, 194)">
+      <rect width="340" height="50" rx="12" fill="#141D30"/>
+      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Alpha Channel</text>
+      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#34D399" text-anchor="end">Zero Alpha (Passed ✓)</text>
+    </g>
+
+    <!-- Spec 4: Corner Masking (Amber) -->
+    <g transform="translate(30, 256)">
+      <rect width="340" height="50" rx="12" fill="#141D30"/>
+      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Corner Masking</text>
+      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FBBF24" text-anchor="end">Auto Apple Squircle</text>
+    </g>
+  </g>
+
+  <!-- Bottom ITMS Shield Badge (Zero Emoji, Clean Vector Shield Icon) -->
+  <g transform="translate(30, 820)">
+    <rect width="400" height="110" rx="20" fill="rgba(0,208,133,0.12)" stroke="rgba(0,208,133,0.35)" stroke-width="1.5"/>
+    <g transform="translate(25, 30)">
+      <path d="M 18 10 L 26 14 L 26 22 C 26 27 18 31 18 31 C 18 31 10 27 10 22 L 10 14 Z" fill="none" stroke="#00D085" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M 14 20 L 17 23 L 22 17" fill="none" stroke="#00D085" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+    <text x="65" y="46" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#00D085">100% ITMS-90717 COMPLIANT</text>
+    <text x="65" y="72" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Guards against transparent icon upload errors (ITMS-90717)</text>
+  </g>
+</svg>
 `);
 
 const STUDIO_SHOT_4 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340"> <defs> <linearGradient id="s4" x1="0" y1="0" x2="0" y2="1"> <stop offset="0%" stop-color="#070d1a"/> <stop offset="100%" stop-color="#181535"/> </linearGradient> <linearGradient id="acc4" x1="0" y1="0" x2="1" y2="0"> <stop offset="0%" stop-color="#c084fc"/> <stop offset="100%" stop-color="#38bdf8"/> </linearGradient> </defs> <rect width="460" height="996" fill="url(#s4)"/> <text x="230" y="80" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#c084fc" text-anchor="middle">PRODUCTION READY</text> <text x="230" y="125" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">1-Click Ultra HD</text> <text x="230" y="160" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#acc4)" text-anchor="middle">Multi-Format Export</text> <text x="230" y="195" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">3x PNG mockups, bulk ZIP packages &amp; dev Markdown</text> <g transform="translate(30, 240)"> <!-- Format 1 --> <rect width="400" height="110" rx="20" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/> <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(56,189,248,0.2)"/> <text x="55" y="62" font-size="26" text-anchor="middle">🖼️</text> <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Ultra HD 3x PNG Mockups</text> <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Pixel-perfect Retina quality for promo</text> <rect x="300" y="38" width="75" height="30" rx="10" fill="#0284c7"/> <text x="337" y="58" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">PNG 3X</text> </g> <g transform="translate(30, 370)"> <!-- Format 2 --> <rect width="400" height="110" rx="20" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/> <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(192,132,252,0.2)"/> <text x="55" y="62" font-size="26" text-anchor="middle">📦</text> <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Client-Side Bulk ZIP</text> <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">All screenshots, icons &amp; assets in 1 file</text> <rect x="300" y="38" width="75" height="30" rx="10" fill="#7c3aed"/> <text x="337" y="58" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">ZIP FILE</text> </g> <g transform="translate(30, 500)"> <!-- Format 3 --> <rect width="400" height="110" rx="20" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/> <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(16,185,129,0.2)"/> <text x="55" y="62" font-size="26" text-anchor="middle">📄</text> <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#fff">Developer Markdown Spec</text> <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Clean structured copy for team docs</text> <rect x="300" y="38" width="75" height="30" rx="10" fill="#059669"/> <text x="337" y="58" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">DOC .MD</text> </g> <g transform="translate(30, 640)"> <rect width="400" height="130" rx="20" fill="#182238" stroke="#334155" stroke-width="1.5"/> <text x="40" y="44" font-size="28">🔒</text> <text x="85" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#fff">100% Client-Side Generation</text> <text x="85" y="65" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Generated entirely in your browser using JSZip</text> <text x="85" y="85" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">&amp; HTML5 Canvas. Zero bytes sent to servers.</text> </g> <g transform="translate(30, 800)"> <rect width="400" height="120" rx="24" fill="url(#acc4)"/> <text x="200" y="58" font-family="-apple-system,system-ui,sans-serif" font-size="18" font-weight="800" fill="#fff" text-anchor="middle">INSTANT 1-CLICK EXPORT</text> <text x="200" y="84" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="600" fill="#fff" opacity="0.9" text-anchor="middle">No login required · Completely private offline</text> </g> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
+  <defs>
+    <linearGradient id="ss4-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="50%" stop-color="#0E1424"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="ss4-acc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#00D085"/>
+      <stop offset="100%" stop-color="#C084FC"/>
+    </linearGradient>
+    <linearGradient id="ss4-btn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#00D085"/>
+      <stop offset="100%" stop-color="#818CF8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="460" height="996" fill="url(#ss4-bg)"/>
+  <circle cx="230" cy="380" r="280" fill="#38BDF8" opacity="0.08"/>
+  <circle cx="360" cy="750" r="220" fill="#00D085" opacity="0.06"/>
+
+  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#00D085" text-anchor="middle">PRODUCTION READY</text>
+  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">1-Click Ultra HD</text>
+  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss4-acc)" text-anchor="middle">Multi-Format Export</text>
+  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">3x PNG mockups, bulk ZIP packages &amp; dev Markdown</text>
+
+  <!-- Format 1: Ultra HD 3x PNG (Electric Cyan, Vector Image Icon) -->
+  <g transform="translate(30, 220)">
+    <rect width="400" height="110" rx="20" fill="#0F172A" stroke="rgba(56,189,248,0.25)" stroke-width="1.5"/>
+    <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(56,189,248,0.15)"/>
+    <rect x="41" y="41" width="28" height="22" rx="3" fill="none" stroke="#38BDF8" stroke-width="2"/>
+    <circle cx="49" cy="48" r="2.5" fill="#38BDF8"/>
+    <path d="M 44 60 L 52 52 L 58 58 L 64 50 L 68 56" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linejoin="round"/>
+    <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Ultra HD 3x PNG Mockups</text>
+    <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Pixel-perfect Retina quality for promo</text>
+    <rect x="300" y="38" width="75" height="32" rx="10" fill="#38BDF8"/>
+    <text x="337" y="59" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#080C14" text-anchor="middle">PNG 3X</text>
+  </g>
+
+  <!-- Format 2: Client-Side Bulk ZIP (Warm Amber, Vector Package Icon) -->
+  <g transform="translate(30, 350)">
+    <rect width="400" height="110" rx="20" fill="#0F172A" stroke="rgba(251,191,36,0.25)" stroke-width="1.5"/>
+    <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(251,191,36,0.15)"/>
+    <path d="M 40 44 L 55 37 L 70 44 L 55 51 Z" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 40 44 L 40 60 L 55 67 L 70 60 L 70 44" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 55 51 L 55 67" fill="none" stroke="#FBBF24" stroke-width="2"/>
+    <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Client-Side Bulk ZIP</text>
+    <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">All screenshots, icons &amp; assets in 1 file</text>
+    <rect x="300" y="38" width="75" height="32" rx="10" fill="#FBBF24"/>
+    <text x="337" y="59" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#080C14" text-anchor="middle">ZIP FILE</text>
+  </g>
+
+  <!-- Format 3: Developer Markdown Spec (Radiant Violet, Vector Doc Icon) -->
+  <g transform="translate(30, 480)">
+    <rect width="400" height="110" rx="20" fill="#0F172A" stroke="rgba(192,132,252,0.25)" stroke-width="1.5"/>
+    <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(192,132,252,0.15)"/>
+    <path d="M 44 38 L 60 38 L 66 44 L 66 66 L 44 66 Z" fill="none" stroke="#C084FC" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M 60 38 L 60 44 L 66 44" fill="none" stroke="#C084FC" stroke-width="2"/>
+    <line x1="49" y1="50" x2="61" y2="50" stroke="#C084FC" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="49" y1="56" x2="58" y2="56" stroke="#C084FC" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Developer Markdown Spec</text>
+    <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Clean structured copy for team docs</text>
+    <rect x="300" y="38" width="75" height="32" rx="10" fill="#C084FC"/>
+    <text x="337" y="59" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#080C14" text-anchor="middle">DOC .MD</text>
+  </g>
+
+  <!-- Card 4: 100% Client-Side Privacy (Vector Lock Icon) -->
+  <g transform="translate(30, 620)">
+    <rect width="400" height="120" rx="20" fill="#131B2E" stroke="rgba(52,211,153,0.25)" stroke-width="1.5"/>
+    <g transform="translate(30, 32)">
+      <rect x="6" y="16" width="20" height="16" rx="3" fill="none" stroke="#34D399" stroke-width="2.2"/>
+      <path d="M 10 16 L 10 10 C 10 6.5 22 6.5 22 10 L 22 16" fill="none" stroke="#34D399" stroke-width="2.2"/>
+      <circle cx="16" cy="24" r="2" fill="#34D399"/>
+    </g>
+    <text x="80" y="46" font-family="-apple-system,system-ui,sans-serif" font-size="15.5" font-weight="800" fill="#ffffff">100% Client-Side Generation</text>
+    <text x="80" y="70" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Generated entirely in your browser using JSZip</text>
+    <text x="80" y="90" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">&amp; HTML5 Canvas. Zero bytes sent to servers.</text>
+  </g>
+
+  <!-- Big CTA Button -->
+  <g transform="translate(30, 770)">
+    <rect width="400" height="120" rx="24" fill="url(#ss4-btn)"/>
+    <text x="200" y="56" font-family="-apple-system,system-ui,sans-serif" font-size="18" font-weight="800" fill="#080C14" text-anchor="middle" letter-spacing="0.5">INSTANT 1-CLICK EXPORT</text>
+    <text x="200" y="82" font-family="-apple-system,system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#080C14" opacity="0.85" text-anchor="middle">No login required · Completely private offline</text>
+  </g>
+</svg>
 `);
 
 const LINGUA_ICON = SKILL_ICON;
@@ -1821,7 +2331,7 @@ const PRESETS = {
   studio: {
     name: "Store Preview Studio",
     sub: "Store Mockup Pro",
-    promo: "🔥 Design, audit & export pixel-perfect App Store & Google Play metadata completely offline with zero recurring subscription fees.",
+    promo: "Design, audit & export pixel-perfect App Store & Google Play metadata completely offline with zero recurring subscription fees.",
     short: "Design, audit & export App Store & Google Play metadata offline.",
     dev: "Store Mockup Pro",
     email: "support@previewstudio.app",
@@ -1882,7 +2392,7 @@ const PRESETS = {
   taskflow: {
     name: "TaskFlow: Daily Habit Planner",
     sub: "Build habits & boost focus",
-    promo: "🔥 Spring Productivity Sale! Unlock TaskFlow Pro with smart recurring habits, Pomodoro focus timer, and seamless cloud sync.",
+    promo: "Spring Productivity Sale: Unlock TaskFlow Pro with smart recurring habits, Pomodoro focus timer, and seamless cloud sync.",
     short: "Organize daily tasks, build lasting habits, and track your focus effortlessly.",
     dev: "FlowCraft Studio Inc.",
     email: "support@flowcraft.studio",
@@ -2066,7 +2576,7 @@ WHAT YOU'LL EXPERIENCE:
   cyberstrike: {
     name: "CyberStrike: 2088 Cyber RPG",
     sub: "Open-world sci-fi action RPG",
-    promo: "🔥 Season 4: Neon Uprising is LIVE! Claim your free Legendary Cyber-Blade, pilot mech suits, and team up in 10-player co-op raids!",
+    promo: "Season 4: Neon Uprising is LIVE! Claim your free Legendary Cyber-Blade, pilot mech suits, and team up in 10-player co-op raids!",
     short: "Pilot combat mechs, fight in neon cyberpunk worlds, and conquer co-op raids.",
     dev: "OmniArcade Games Ltd.",
     email: "support@omniarcade.games",
@@ -2128,7 +2638,7 @@ Download CyberStrike today and forge your legend in the neon underworld!`,
   edulearn: {
     name: "SkillSphere: Online Courses",
     sub: "Learn coding, business & AI",
-    promo: "🔥 Flash Sale! Master in-demand skills with 250,000+ top video courses from $9.99. Learn Python, AI, Design & Business with offline downloads.",
+    promo: "Flash Sale: Master in-demand skills with 250,000+ top video courses from $9.99. Learn Python, AI, Design & Business with offline downloads.",
     short: "Stream 25,000+ video courses in coding, AI, and business with expert mentors.",
     dev: "SkillSphere Global Inc.",
     email: "support@skillsphere.edu",

@@ -3181,6 +3181,23 @@ assert(simGetVisibleCardCount() === 8, 'Switching to Google Play visibly display
 simCardSetStore('apple');
 assert(simGetVisibleCardCount() === 6, 'Switching back to Apple Store visibly restores exactly 6 cards');
 
+console.log('\n[SUITE 44]: Stage Zero-Shift Overflow & ResizeObserver Oscillation Guard');
+
+// Test 1: Stage has overflow: hidden to prevent scrollbars from altering clientWidth/clientHeight
+assert(bundledHtml.includes('.stage{') && bundledHtml.match(/\.stage\s*\{[^}]*overflow:\s*hidden/), '.stage has overflow: hidden to eliminate scrollbar flickering');
+
+// Test 2: Editor panel has overflow-x: hidden to prevent horizontal scrollbar layout shifts
+assert(bundledHtml.match(/\.editor\s*\{[^}]*overflow-x:\s*hidden/), '.editor has overflow-x: hidden');
+
+// Test 3: fit() implements hysteresis threshold guard against sub-pixel loops
+assert(bundledHtml.includes('st.dataset.fitZ') && bundledHtml.includes('Math.abs(z - lastZ) < 0.001'), 'fit() implements hysteresis threshold guard');
+
+// Test 4: fit() uses safe padW breathing margin
+assert(bundledHtml.includes('padW=m?24:48') || bundledHtml.includes('padW = m ? 24 : 48'), 'fit() uses safe padW breathing margin exceeding stage padding');
+
+// Test 5: onStageResize uses requestAnimationFrame throttling
+assert(bundledHtml.includes('cancelAnimationFrame(resizeRaf)') && bundledHtml.includes('requestAnimationFrame('), 'onStageResize throttles resize events with requestAnimationFrame');
+
 // ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------

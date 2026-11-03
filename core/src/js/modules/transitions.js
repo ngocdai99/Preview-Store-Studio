@@ -86,12 +86,16 @@ function getActiveDeviceEl(s = store, d = (s === 'apple' ? appleDevice : googleD
 }
 
 function computeDeviceZoom(s, d){
-  const st = document.querySelector('.stage'), m = isM(), pad = m ? 16 : 24;
+  const st = document.querySelector('.stage');
+  if(!st) return 1;
+  const m = isM();
+  const padW = m ? 24 : 48;
+  const padH = m ? 16 : 28;
   const tb = document.querySelector('.stage-toolbar');
   const bb = document.querySelector('.stage-bottom-bar');
   const isBbVis = bb && bb.offsetHeight > 0 && (!bb.style.display || bb.style.display !== 'none');
   const bbH = isBbVis ? bb.offsetHeight + 4 : 0;
-  const vt = (tb ? tb.offsetHeight : 38) + bbH + (m ? 8 : 10) + 36;
+  const vt = (tb ? tb.offsetHeight : 38) + bbH + (m ? 12 : 20) + 40;
   const isDual = d === 'dual' || document.body.dataset.dual === 'true';
   let baseW = 416, baseH = 870;
   if(isDual){
@@ -115,8 +119,8 @@ function computeDeviceZoom(s, d){
     baseW = 416;
     baseH = 870;
   }
-  const zw = (st.clientWidth - pad) / baseW;
-  const zh = m ? 9 : (st.clientHeight - pad - vt) / (baseH + 8);
+  const zw = (st.clientWidth - padW) / baseW;
+  const zh = m ? 9 : (st.clientHeight - padH - vt) / (baseH + 8);
   return Math.max(0.28, Math.min(1, zw, zh));
 }
 

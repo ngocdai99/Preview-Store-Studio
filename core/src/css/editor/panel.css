@@ -6,6 +6,7 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   background:rgba(23,24,23,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border-right:1px solid #282928;
   overflow-y:auto;
+  overflow-x:hidden;
   scrollbar-gutter:stable;
   padding:18px 12px 18px 18px;display:flex;flex-direction:column;gap:14px;
   scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent;
@@ -44,7 +45,7 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   background: rgba(0, 0, 0, 0.32);
 }
 body.sidebar-collapsed .editor{
-  margin-left:calc(-1 * var(--editor-w, 480px));
+  margin-left:calc(-1 * var(--editor-w, 500px));
   visibility:hidden;
   pointer-events:none;
 }

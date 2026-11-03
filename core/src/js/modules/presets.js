@@ -90,17 +90,13 @@ $$('[data-preset]').forEach(b=>{
 
 function loadPreset(key){
   if(key === 'draft'){
-    if(!userDraft){
+    if(!userDraft || (typeof hasUserDraft === 'function' && !hasUserDraft())){
       const prevActivePreset = CURRENT_ACTIVE_PRESET;
       loadPreset('none');
       CURRENT_PRESET_KEY = 'draft';
       CURRENT_ACTIVE_PRESET = prevActivePreset;
       isPresetModified = false;
-      userDraft = getCurrentStateObject();
-      userDraft.isCustomized = true;
-      userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
-      userDraft.isCustomIcon = false;
-      if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+      userDraft = null;
       if(typeof updatePresetBanner === 'function') updatePresetBanner();
       if(typeof updateDraftPill === 'function') updateDraftPill();
       if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
@@ -133,17 +129,26 @@ function loadPreset(key){
     return;
   }
 
-  // Before switching to a preset, if we were in draft mode, ensure draft is persisted
+  // Before switching to a preset, if we were in draft mode with real edits, ensure draft is persisted
   if(CURRENT_PRESET_KEY === 'draft' && key !== 'none'){
-    userDraft = getCurrentStateObject();
-    userDraft.isCustomized = true;
-    if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+    if(typeof hasUserDraft === 'function' && hasUserDraft()){
+      userDraft = getCurrentStateObject();
+      userDraft.isCustomized = true;
+      if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
+    }
   }
 
   CURRENT_ACTIVE_PRESET = key;
   CURRENT_PRESET_KEY = key;
   isPresetModified = false;
   if(key === 'none'){
+    ['icoFile', 'featureFile', 'shotFile', 'ipadShotFile', 'tab7File', 'tab10File'].forEach(id => {
+      const el = $(id);
+      if(el) el.value = '';
+    });
+    if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE && typeof THUMB_CACHE.clear === 'function'){
+      THUMB_CACHE.clear();
+    }
     if(typeof setSupportsIpad === 'function'){
       setSupportsIpad(false);
     }
@@ -387,7 +392,11 @@ if(btnReturn){
 function closePresetPill(){
   CURRENT_ACTIVE_PRESET = null;
   if(CURRENT_PRESET_KEY !== 'draft'){
-    loadPreset('draft');
+    if(typeof hasUserDraft === 'function' && hasUserDraft()){
+      loadPreset('draft');
+    } else {
+      loadPreset('none');
+    }
   } else {
     if(typeof updateDraftPill === 'function') updateDraftPill();
     if(typeof updatePresetBanner === 'function') updatePresetBanner();

@@ -7,7 +7,7 @@
   "form": {
     "name": "TaskFlow: Daily Habit Planner",
     "sub": "Build habits & boost focus",
-    "promo": "🔥 Spring Productivity Sale! Unlock TaskFlow Pro with smart recurring habits, Pomodoro focus timer, and seamless cloud sync.",
+    "promo": "Spring Productivity Sale: Unlock TaskFlow Pro with smart recurring habits, Pomodoro focus timer, and seamless cloud sync.",
     "short": "Organize daily tasks, build lasting habits, and track your focus effortlessly.",
     "dev": "FlowCraft Studio Inc.",
     "cat": "Productivity",
@@ -15,7 +15,7 @@
     "catGoogle": "Productivity",
     "keywords": "habit tracker,task planner,to do list,productivity,focus timer,pomodoro,daily routine,organizer",
     "ver": "2.4.0",
-    "rdate": "Oct 18, 2026",
+    "rdate": "Nov 2, 2026",
     "email": "support@flowcraft.studio",
     "phone": "+1 800-555-0199",
     "addr": "San Francisco, CA",
@@ -51,7 +51,7 @@
       "author": "Marcus Vance",
       "avatarBg": "#0b57d0",
       "stars": 5,
-      "date": "Oct 15, 2026",
+      "date": "Nov 1, 2026",
       "title": "Clean UI & effective daily tracking",
       "text": "Clean UI, smooth animations, and very effective for daily tracking. The widget integration on iOS and Android is top-notch!",
       "helpful": 108
@@ -60,7 +60,7 @@
       "author": "Sarah Jenkins",
       "avatarBg": "#7c3aed",
       "stars": 5,
-      "date": "Oct 8, 2026",
+      "date": "Nov 1, 2026",
       "title": "Transformed my deep work",
       "text": "The Pomodoro timer coupled with habit streaks completely transformed my workday focus. Cloud sync across phone and tablet is seamless.",
       "helpful": 64

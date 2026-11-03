@@ -124,12 +124,18 @@ function applyStateObject(s){
     FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
     IS_CUSTOM_FEATURE = false;
   }
-  if(Array.isArray(s.shots) && (s.shots.length || !s._partial)) SHOTS = s.shots;
+  if(Array.isArray(s.shots) && (s.shots.length || !s._partial)){
+    SHOTS = s.shots;
+  } else if(!s._partial && !Array.isArray(s.shots)){
+    SHOTS = [];
+  }
   if(typeof setSupportsIpad === 'function') setSupportsIpad(typeof s.supportsIpad === 'boolean' ? s.supportsIpad : false);
   if(Array.isArray(s.ipadShots)){
     IPAD_SHOTS = s.ipadShots.filter(x => typeof x === 'string');
-    if(typeof renderIpadShots === 'function') renderIpadShots();
+  } else if(!s._partial){
+    IPAD_SHOTS = [];
   }
+  if(typeof renderIpadShots === 'function') renderIpadShots();
   if(s.ipadFitMode === 'cover' || s.ipadFitMode === 'contain'){
     IPAD_FIT_MODE = s.ipadFitMode;
     if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
@@ -139,13 +145,23 @@ function applyStateObject(s){
     tabOrient.tab7 = 'landscape';
     tabOrient.tab10 = 'landscape';
   }
-  if(Array.isArray(s.tab7Shots) && typeof makeTabItem === 'function') TABS.tab7 = s.tab7Shots.slice(0, MAX_TAB).map(makeTabItem);
-  if(Array.isArray(s.tab10Shots) && typeof makeTabItem === 'function') TABS.tab10 = s.tab10Shots.slice(0, MAX_TAB).map(makeTabItem);
-  if(Array.isArray(s.reviews)) {
-    REVIEWS = s.reviews;
-    if(typeof renderReviews === 'function') renderReviews();
-    if(typeof syncReviewInputs === 'function') syncReviewInputs();
+  if(Array.isArray(s.tab7Shots) && typeof makeTabItem === 'function'){
+    TABS.tab7 = s.tab7Shots.slice(0, MAX_TAB).map(makeTabItem);
+  } else if(!s._partial){
+    TABS.tab7 = [];
   }
+  if(Array.isArray(s.tab10Shots) && typeof makeTabItem === 'function'){
+    TABS.tab10 = s.tab10Shots.slice(0, MAX_TAB).map(makeTabItem);
+  } else if(!s._partial){
+    TABS.tab10 = [];
+  }
+  if(Array.isArray(s.reviews)){
+    REVIEWS = s.reviews;
+  } else if(!s._partial){
+    REVIEWS = [];
+  }
+  if(typeof renderReviews === 'function') renderReviews();
+  if(typeof syncReviewInputs === 'function') syncReviewInputs();
   if(typeof applyStatsFromObject === 'function') applyStatsFromObject(s.stats);
   return true;
 }

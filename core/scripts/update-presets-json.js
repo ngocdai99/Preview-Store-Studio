@@ -68,6 +68,7 @@ function updatePresetJson(filename, presetKey) {
   console.log(`Updated ${filename} successfully with ${preset.shots.length} shots and custom icon.`);
 }
 
+updatePresetJson('store-preview-studio-template.json', 'studio');
 updatePresetJson('fitness-tracker-template.json', 'pulsefit');
 updatePresetJson('zenmind-meditation-template.json', 'zenmind');
 updatePresetJson('saas-app-template.json', 'taskflow');
