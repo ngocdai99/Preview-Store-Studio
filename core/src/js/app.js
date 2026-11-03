@@ -894,17 +894,31 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
  *
  * @param {Function} onConfirm - Callback executed when user confirms reset
  */
-function showResetConfirmModal(onConfirm) {
+function showResetConfirmModal(onConfirm, customTitle, customDesc, customOkLabel) {
   const modal = $('resetConfirmModal');
   if (!modal) {
     if (typeof onConfirm === 'function') onConfirm();
     return;
   }
 
+  const titleEl = modal.querySelector('#resetConfirmTitle');
+  const descEl = modal.querySelector('.confirm-modal-desc');
+  const okBtn = modal.querySelector('#resetConfirmOk');
+  const defaultTitle = 'Reset App Draft?';
+  const defaultDesc = 'This will clear your customized app icon, name, and descriptions. Your current draft cannot be recovered.';
+  const defaultOkLabel = 'Reset';
+
+  if (titleEl) titleEl.textContent = customTitle || defaultTitle;
+  if (descEl) descEl.textContent = customDesc || defaultDesc;
+  if (okBtn) okBtn.textContent = customOkLabel || defaultOkLabel;
+
   function closeModal() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.removeEventListener('keydown', handleKey);
+    if (titleEl) titleEl.textContent = defaultTitle;
+    if (descEl) descEl.textContent = defaultDesc;
+    if (okBtn) okBtn.textContent = defaultOkLabel;
   }
 
   function handleKey(e) {
@@ -918,7 +932,6 @@ function showResetConfirmModal(onConfirm) {
     if (e.target === modal) closeModal();
   };
 
-  const okBtn = modal.querySelector('#resetConfirmOk');
   if (okBtn) {
     okBtn.onclick = () => {
       closeModal();
@@ -9723,6 +9736,56 @@ function loadState(){
   }
 
   return loadedFromLs;
+}
+
+async function resetFactoryStorage(){
+  // 1. Close open IndexedDB connection if active
+  try{
+    if(typeof _appDbPromise !== 'undefined' && _appDbPromise){
+      const db = await _appDbPromise;
+      if(db && typeof db.close === 'function'){
+        db.close();
+      }
+      _appDbPromise = null;
+    }
+  }catch(_){}
+
+  // 2. Completely delete the IndexedDB database
+  if(typeof indexedDB !== 'undefined' && typeof indexedDB.deleteDatabase === 'function'){
+    await new Promise((resolve) => {
+      try{
+        const req = indexedDB.deleteDatabase(typeof IDB_DB_NAME !== 'undefined' ? IDB_DB_NAME : 'StorePreviewStudioDB');
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => resolve(false);
+        req.onblocked = () => resolve(false);
+        setTimeout(resolve, 300);
+      }catch(_){
+        resolve(false);
+      }
+    });
+  }
+
+  // 3. Wipe all LocalStorage & SessionStorage
+  try{ if(typeof localStorage !== 'undefined') localStorage.clear(); }catch(_){}
+  try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
+
+  // 4. Reload page cleanly to bootstrap pristine factory state
+  if(typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function'){
+    window.location.reload();
+  }
+}
+
+const optResetAll = $('optResetAllData');
+if(optResetAll){
+  optResetAll.onclick = () => {
+    $$('.menu').forEach(m => m.classList.remove('show'));
+    showResetConfirmModal(
+      resetFactoryStorage,
+      'Reset All Storage (Factory State)?',
+      'This will permanently delete all saved drafts, custom uploaded screenshots, icons, and settings from LocalStorage and IndexedDB. The app will reload to the clean installation state.',
+      'Reset All'
+    );
+  };
 }
 
 

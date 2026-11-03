@@ -704,3 +704,27 @@
 :root[data-ui=light] .menu-div {
   background: rgba(0, 0, 0, 0.06);
 }
+
+/* Danger Action in Dropdown (Factory Reset) */
+.menu-item-danger .mi-name {
+  color: #ef4444 !important;
+}
+.menu-item-danger .mi-ico {
+  color: #ef4444 !important;
+}
+#menuExport .menu-item-danger:hover {
+  background: rgba(239, 68, 68, 0.12) !important;
+}
+:root[data-ui=light] #menuExport .menu-item-danger:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+.mi-pill-danger {
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+#menuExport .menu-item-danger:hover .mi-pill-danger {
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+  background: #ef4444 !important;
+}

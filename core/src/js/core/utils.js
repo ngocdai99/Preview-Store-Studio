@@ -891,17 +891,31 @@ function rasterizeSvgToStorePng(svgSrc, targetSize, callback) {
  *
  * @param {Function} onConfirm - Callback executed when user confirms reset
  */
-function showResetConfirmModal(onConfirm) {
+function showResetConfirmModal(onConfirm, customTitle, customDesc, customOkLabel) {
   const modal = $('resetConfirmModal');
   if (!modal) {
     if (typeof onConfirm === 'function') onConfirm();
     return;
   }
 
+  const titleEl = modal.querySelector('#resetConfirmTitle');
+  const descEl = modal.querySelector('.confirm-modal-desc');
+  const okBtn = modal.querySelector('#resetConfirmOk');
+  const defaultTitle = 'Reset App Draft?';
+  const defaultDesc = 'This will clear your customized app icon, name, and descriptions. Your current draft cannot be recovered.';
+  const defaultOkLabel = 'Reset';
+
+  if (titleEl) titleEl.textContent = customTitle || defaultTitle;
+  if (descEl) descEl.textContent = customDesc || defaultDesc;
+  if (okBtn) okBtn.textContent = customOkLabel || defaultOkLabel;
+
   function closeModal() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.removeEventListener('keydown', handleKey);
+    if (titleEl) titleEl.textContent = defaultTitle;
+    if (descEl) descEl.textContent = defaultDesc;
+    if (okBtn) okBtn.textContent = defaultOkLabel;
   }
 
   function handleKey(e) {
@@ -915,7 +929,6 @@ function showResetConfirmModal(onConfirm) {
     if (e.target === modal) closeModal();
   };
 
-  const okBtn = modal.querySelector('#resetConfirmOk');
   if (okBtn) {
     okBtn.onclick = () => {
       closeModal();
