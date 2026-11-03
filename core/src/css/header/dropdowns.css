@@ -228,17 +228,71 @@
 /* Preset Banner Action Buttons (Copy Preset to Draft / Return to Draft) */
 .preset-banner-btn {
   margin-left: 10px;
-  padding: 3px 10px;
+  padding: 0 12px;
   font-size: 11px;
   font-weight: 600;
-  border-radius: 7px;
+  border-radius: 999px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
   white-space: nowrap;
-  line-height: 1.2;
-  height: 24px;
+  line-height: 1;
+  height: 25px;
+  outline: none;
+  user-select: none;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preset-banner-btn svg {
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+/* Premium Apple Blue Pill Style for Copy Preset to Draft */
+.preset-banner-btn.btn-preset-copy {
+  background: linear-gradient(180deg, #0a84ff 0%, #0071e3 100%);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.01em;
+}
+
+.preset-banner-btn.btn-preset-copy:hover {
+  background: linear-gradient(180deg, #2b95ff 0%, #0077ed 100%);
+  border-color: rgba(255, 255, 255, 0.36);
+  box-shadow: 0 3px 10px rgba(0, 113, 227, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.38);
+  transform: translateY(-0.5px);
+}
+
+.preset-banner-btn.btn-preset-copy:active {
+  background: linear-gradient(180deg, #0066cc 0%, #005bb5 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 113, 227, 0.3), inset 0 1px 1px rgba(0, 0, 0, 0.15);
+  transform: translateY(0.5px);
+}
+
+/* Light Mode Overrides */
+:root[data-ui=light] .preset-banner-btn.btn-preset-copy {
+  background: linear-gradient(180deg, #0077ed 0%, #0071e3 100%);
+  color: #ffffff !important;
+  border: 1px solid rgba(0, 85, 179, 0.32);
+  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-ui=light] .preset-banner-btn.btn-preset-copy:hover {
+  background: linear-gradient(180deg, #1a82f7 0%, #0077ed 100%);
+  border-color: rgba(0, 85, 179, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: translateY(-0.5px);
+}
+
+:root[data-ui=light] .preset-banner-btn.btn-preset-copy:active {
+  background: linear-gradient(180deg, #0066cc 0%, #005bb5 100%);
+  transform: translateY(0.5px);
 }
 
 .preset-banner-btn .btn-lbl-short {
