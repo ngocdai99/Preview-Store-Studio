@@ -133,14 +133,28 @@
           <div class="ms-bar"><i id="msNameBar"></i></div>
         </div>
 
-        <div class="ms-field" data-only="apple">
+        <div class="ms-field" id="msSubField">
           <div class="ms-field-h">
-            <label for="msSub"><span>Subtitle</span> <span class="ms-tag a">APPLE</span></label>
+            <label for="msSub" id="msSubLabel"><span>Subtitle</span> <span class="ms-tag a">APPLE</span></label>
             <span class="ms-count" id="msSubCount">0 / 30</span>
           </div>
           <input class="ms-input" id="msSub" data-f="sub" data-max="30" type="text"
             placeholder="Short hook under your name" autocomplete="off">
           <div class="ms-bar"><i id="msSubBar"></i></div>
+        </div>
+
+        <div class="ms-field" id="msDevField">
+          <div class="ms-field-h">
+            <label for="msDev" id="msDevLabel">
+              <span>Developer</span>
+              <span class="ms-tag a" id="msDevTagApple">APPLE</span>
+              <span class="ms-tag g" id="msDevTagGoogle">GOOGLE</span>
+            </label>
+            <span class="ms-count" id="msDevCount">0 / 50</span>
+          </div>
+          <input class="ms-input" id="msDev" data-f="dev" data-max="50" type="text"
+            placeholder="e.g. Studio or Company Name" autocomplete="off">
+          <div class="ms-bar"><i id="msDevBar"></i></div>
         </div>
 
         <div class="ms-field" data-only="google">

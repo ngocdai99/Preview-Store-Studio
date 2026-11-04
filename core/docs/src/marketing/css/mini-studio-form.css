@@ -745,12 +745,12 @@
     }
 
     /* Store-specific field visibility */
-    [data-store-mode="apple"] .ms-field[data-only="google"],
+    [data-store-mode="apple"]:not([data-dual="true"]) .ms-field[data-only="google"],
     [data-store-mode="apple"] #msIconRowGoogle {
       display: none !important;
     }
 
-    [data-store-mode="google"] .ms-field[data-only="apple"],
+    [data-store-mode="google"]:not([data-dual="true"]) .ms-field[data-only="apple"],
     [data-store-mode="google"] #msIconRowApple {
       display: none !important;
     }

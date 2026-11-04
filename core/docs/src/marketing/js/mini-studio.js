@@ -211,6 +211,7 @@
           userDraft.isCustomized ||
           (userDraft.name && userDraft.name.trim()) ||
           (userDraft.sub && userDraft.sub.trim()) ||
+          (userDraft.dev && userDraft.dev.trim() && userDraft.dev !== 'Developer Name') ||
           (userDraft.short && userDraft.short.trim()) ||
           (userDraft.iconApple && !isPlaceholderIcon(userDraft.iconApple)) ||
           (userDraft.iconGoogle && !isPlaceholderIcon(userDraft.iconGoogle)) ||
@@ -247,6 +248,7 @@
               userDraft = parsed;
               if (userDraft.name) userDraft.name = clampGraphemes(userDraft.name, 30);
               if (userDraft.sub) userDraft.sub = clampGraphemes(userDraft.sub, 30);
+              if (userDraft.dev) userDraft.dev = clampGraphemes(userDraft.dev, 50);
               if (userDraft.short) userDraft.short = clampGraphemes(userDraft.short, 80);
               if (userDraft) {
                 if (isPlaceholderIcon(userDraft.iconApple)) userDraft.iconApple = CUSTOM_ICON;
@@ -265,6 +267,7 @@
           if (idbDraft && typeof idbDraft === 'object') {
             if (idbDraft.name) idbDraft.name = clampGraphemes(idbDraft.name, 30);
             if (idbDraft.sub) idbDraft.sub = clampGraphemes(idbDraft.sub, 30);
+            if (idbDraft.dev) idbDraft.dev = clampGraphemes(idbDraft.dev, 50);
             if (idbDraft.short) idbDraft.short = clampGraphemes(idbDraft.short, 80);
             var hadMissingIcon = false;
             if (!userDraft) {
@@ -346,7 +349,7 @@
         return chars.slice(0, max).join('');
       }
 
-      var LIMITS = { name: 30, sub: 30, short: 80 };
+      var LIMITS = { name: 30, sub: 30, dev: 50, short: 80 };
       var ICO_OK = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
       var ICO_ERR = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
@@ -857,6 +860,7 @@
       function renderValidation() {
         var nameOver = renderField('msName', 'name');
         var subOver = renderField('msSub', 'sub');
+        var devOver = renderField('msDev', 'dev');
         var shortOver = renderField('msShort', 'short');
 
         root.querySelectorAll('[data-bind="name"]').forEach(function (el) {
@@ -867,6 +871,11 @@
         root.querySelectorAll('[data-bind="sub"]').forEach(function (el) {
           el.classList.toggle('ms-trunc', subOver);
           if (subOver) el.setAttribute('title', 'Clamped to 30 characters');
+          else el.removeAttribute('title');
+        });
+        root.querySelectorAll('[data-bind="dev"]').forEach(function (el) {
+          el.classList.toggle('ms-trunc', devOver);
+          if (devOver) el.setAttribute('title', 'Clamped to 50 characters');
           else el.removeAttribute('title');
         });
         root.querySelectorAll('[data-bind="short"]').forEach(function (el) {
@@ -1098,6 +1107,7 @@
           S.promo = '';
           $('msName').value = '';
           $('msSub').value = '';
+          if ($('msDev')) $('msDev').value = '';
           $('msShort').value = '';
           renderAll();
         }
@@ -1282,6 +1292,7 @@
           S.shots = (S.shots || []).slice(0, 4);
           $('msName').value = S.name || '';
           $('msSub').value = S.sub || '';
+          if ($('msDev')) $('msDev').value = S.dev || '';
           $('msShort').value = S.short || '';
 
           renderAll();
@@ -1668,9 +1679,10 @@
       window.handleIconUpload = handleIconUpload;
 
       // ── Text inputs ──
-      [['msName', 'name'], ['msSub', 'sub'], ['msShort', 'short']].forEach(function (pair) {
+      [['msName', 'name'], ['msSub', 'sub'], ['msDev', 'dev'], ['msShort', 'short']].forEach(function (pair) {
         var el = $(pair[0]), key = pair[1];
-        var fallbackText = key === 'name' ? 'App Name' : key === 'sub' ? 'App Subtitle' : 'Short description shown on Google Play';
+        if (!el) return;
+        var fallbackText = key === 'name' ? 'App Name' : key === 'sub' ? 'App Subtitle' : key === 'dev' ? 'Developer Name' : 'Short description shown on Google Play';
         el.addEventListener('input', function () {
           // Rule 1: Before draft is created, editing on a preset initializes draft
           if (!hasUserDraft()) {
@@ -1894,10 +1906,10 @@
         var nameTagApple = $('msNameTagApple');
         var nameTagGoogle = $('msNameTagGoogle');
         if (nameTagApple && nameTagGoogle) {
-          if (m === 'apple') {
+          if (m === 'apple' && !isDualPhone) {
             nameTagApple.style.display = '';
             nameTagGoogle.style.display = 'none';
-          } else if (m === 'google') {
+          } else if (m === 'google' && !isDualPhone) {
             nameTagApple.style.display = 'none';
             nameTagGoogle.style.display = '';
           } else {
@@ -1907,22 +1919,39 @@
           }
         }
 
+        // Update Developer tags based on store mode
+        var devTagApple = $('msDevTagApple');
+        var devTagGoogle = $('msDevTagGoogle');
+        if (devTagApple && devTagGoogle) {
+          if (m === 'apple' && !isDualPhone) {
+            devTagApple.style.display = '';
+            devTagGoogle.style.display = 'none';
+          } else if (m === 'google' && !isDualPhone) {
+            devTagApple.style.display = 'none';
+            devTagGoogle.style.display = '';
+          } else {
+            // Dual View: show BOTH tags
+            devTagApple.style.display = '';
+            devTagGoogle.style.display = '';
+          }
+        }
+
         // Update Screenshots label
         var shotsLabel = $('msShotsLabel');
         if (shotsLabel) {
-          if (m === 'apple') {
+          if (m === 'apple' && !isDualPhone) {
             shotsLabel.innerHTML = 'iPhone Screenshots <span class="ms-tag plus buy">BUY</span>';
-          } else if (m === 'google') {
+          } else if (m === 'google' && !isDualPhone) {
             shotsLabel.innerHTML = 'Android Screenshots <span class="ms-tag plus buy">BUY</span>';
           } else {
             shotsLabel.innerHTML = 'Phone Screenshots <span class="ms-tag plus buy">BUY</span>';
           }
         }
 
-        // Toggle store-specific fields (Apple Subtitle vs Google Short Description)
+        // Toggle store-specific fields (Google Short Description)
         root.querySelectorAll('.ms-field[data-only]').forEach(function (field) {
           var only = field.getAttribute('data-only');
-          if (only === m) {
+          if (isDualPhone || only === m) {
             field.style.display = '';
           } else {
             field.style.display = 'none';
@@ -2202,6 +2231,8 @@
         if (badge) {
           badge.style.display = isDualPhone ? 'inline-flex' : 'none';
         }
+        root.setAttribute('data-dual', isDualPhone ? 'true' : 'false');
+        updateEditorModeInfo(currentMode);
         var devApple = $('msDevApple');
         var devGoogle = $('msDevGoogle');
         if (isDualPhone) {
