@@ -383,3 +383,61 @@ html.dark .announcement-arrow {
     display: none;
   }
 }
+
+/* Live Beacon Dot (Slow, Clear Pulse) */
+.live-pulse-dot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+}
+
+.live-pulse-dot-core {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #00D085;
+  box-shadow: 0 0 8px rgba(0, 208, 133, 0.85);
+  position: relative;
+  z-index: 2;
+  animation: liveBeaconBreathe 2.4s ease-in-out infinite;
+}
+
+.live-pulse-dot-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background-color: rgba(0, 208, 133, 0.25);
+  border: 1.5px solid rgba(0, 208, 133, 0.75);
+  z-index: 1;
+  animation: liveBeaconPing 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes liveBeaconPing {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.95;
+  }
+  65% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes liveBeaconBreathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 6px rgba(0, 208, 133, 0.85);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 12px rgba(0, 208, 133, 1);
+  }
+}
