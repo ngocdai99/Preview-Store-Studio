@@ -13911,11 +13911,205 @@ restoreImages();
 isExporting = false;
 }
 }
-function parseStoreInput() { return null; }
-function normalizeAppleApp() { return null; }
-async function fetchAppleAppData() { throw new Error('Available in Full Version'); }
-async function fetchStoreAppData() { throw new Error('Available in Full Version'); }
-function applyImportedStoreApp() { return false; }
+function parseStoreInput(input) {
+if (!input || typeof input !== 'string') return null;
+const raw = input.trim();
+if (!raw) return null;
+const appleUrlMatch = raw.match(/(?:apps|itunes)\.apple\.com\/(?:([a-z]{2}(?:-[a-z]{2})?)\/)?(?:app\/[^\/]+\/)?id(\d{7,12})/i);
+if (appleUrlMatch) {
+return { platform: 'apple', id: appleUrlMatch[2], country: appleUrlMatch[1] || '' };
+}
+const lookupMatch = raw.match(/[?&]id=(\d{7,12})/i);
+if (lookupMatch) {
+const countryMatch = raw.match(/[?&]country=([a-z]{2}(?:-[a-z]{2})?)/i);
+return { platform: 'apple', id: lookupMatch[1], country: countryMatch ? countryMatch[1] : '' };
+}
+if (/^id\d{7,12}$/i.test(raw)) {
+return { platform: 'apple', id: raw.replace(/^id/i, ''), country: '' };
+}
+if (/^\d{7,12}$/.test(raw)) {
+return { platform: 'apple', id: raw, country: '' };
+}
+return null;
+}
+function normalizeAppleApp(item) {
+if (!item) return null;
+const rawName = (item.trackName || item.trackCensoredName || 'App Name').trim();
+let name = rawName;
+let sub = '';
+const devCompany = (item.artistName || item.sellerName || '').trim();
+const cleanStr = s => (typeof slugify === 'function' ? slugify(s, '').replace(/-/g, '') : (s || '').replace(/[\u0110\u00D0\u0189]/g, 'd').replace(/[\u0111\u00F0\u0256\u0257]/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''));
+const cleanDev = cleanStr(devCompany);
+const splitMatch = rawName.split(/\s*[-–—:]\s*/);
+if (splitMatch.length >= 2 && splitMatch[0].length >= 2) {
+const candidateName = splitMatch[0].trim();
+const candidateSub = splitMatch.slice(1).join(' · ').trim();
+const cleanSub = cleanStr(candidateSub);
+const isDevCompany = cleanSub.length >= 3 && cleanDev.includes(cleanSub);
+if (isDevCompany) {
+name = candidateName;
+sub = 'Official ' + (item.primaryGenreName || 'Mobile') + ' App';
+} else {
+name = candidateName;
+sub = candidateSub;
+}
+} else {
+sub = 'Official ' + (item.primaryGenreName || 'Mobile') + ' App';
+}
+const primaryGenre = item.primaryGenreName || (item.genres && item.genres[0]) || 'Productivity';
+const ratingNum = typeof item.averageUserRating === 'number' ? item.averageUserRating : 4.8;
+const ratingStr = ratingNum.toFixed(1);
+const ratingCount = item.userRatingCount || 1000;
+const rawIcon = item.artworkUrl512 || item.artworkUrl100 || '';
+const icon1024 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png') : '';
+const icon512 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png') : '';
+const iconUrl = icon1024;
+const shots = (item.screenshotUrls || []).map(u => {
+const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
+if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
+return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2688x1242bb.png');
+}
+return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png');
+}).slice(0, 8);
+const ipadShots = (item.ipadScreenshotUrls || []).map(u => {
+const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
+if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
+return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2732x2048bb.png');
+}
+return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png');
+}).slice(0, 8);
+const isUniversal = (Array.isArray(item.features) && item.features.includes('iosUniversal')) || (ipadShots.length > 0);
+const cleanDesc = (item.description || '').replace(/[\r\n]+/g, ' ').trim();
+const firstSentence = cleanDesc.split(/[.!?]\s+/)[0];
+const shortDesc = (firstSentence && firstSentence.length <= 80) ? firstSentence : cleanDesc.slice(0, 80);
+const bundleDomain = item.bundleId ? item.bundleId.split('.').slice(1, 3).reverse().join('.') : 'app.com';
+return {
+platform: 'apple',
+store: 'apple',
+appleDevice: 'iphone',
+form: {
+name: name,
+sub: sub,
+short: shortDesc || 'Download the latest version on iOS and Android.',
+promo: 'Experience ' + name + ' with seamless design and powerful features.',
+dev: item.artistName || item.sellerName || 'App Developer',
+cat: primaryGenre,
+catApple: primaryGenre,
+catGoogle: primaryGenre,
+ver: item.version || '2.4.0',
+rdate: (typeof getCurrentMonthDateStr === 'function') ? getCurrentMonthDateStr(2, true) : 'Oct 26, 2026',
+email: 'support@' + bundleDomain,
+phone: '+1 800-555-0199',
+addr: 'Global',
+privLinked: '',
+privNotLinked: '',
+privGoogle: 'No data shared with third parties, No data collected, Data is encrypted in transit',
+new: (item.releaseNotes || 'Performance improvements and bug fixes.').slice(0, 300),
+desc: (item.description || '').slice(0, 1000)
+},
+icon: iconUrl,
+icon1024: icon1024,
+icon512: icon512,
+iconApple: icon1024,
+iconGoogle: icon512,
+rawIcon: rawIcon,
+isCustomIcon: !!iconUrl,
+shots: shots,
+ipadShots: ipadShots,
+supportsIpad: isUniversal,
+isUniversal: isUniversal,
+featureGraphic: (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : ''),
+feature: (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : ''),
+stats: {
+rating: ratingStr,
+ratingsCount: ratingCount,
+age: item.contentAdvisoryRating || '4+',
+chartRank: '1',
+developer: item.artistName || item.sellerName || ''
+}
+};
+}
+async function fetchAppleAppData(appId, country) {
+const query = 'id=' + encodeURIComponent(appId) + (country ? '&country=' + encodeURIComponent(country) : '');
+const proxyUrl = '/api/lookup?' + query;
+const directUrl = 'https://itunes.apple.com/lookup?' + query;
+let res;
+const isWeb = typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:');
+if (isWeb) {
+try {
+res = await fetch(proxyUrl);
+if (!res.ok) throw new Error('Proxy returned ' + res.status);
+} catch (_) {
+res = await fetch(directUrl);
+}
+} else {
+res = await fetch(directUrl);
+}
+if (!res.ok) throw new Error('Apple App Store returned status ' + res.status);
+const data = await res.json();
+if (!data || !data.resultCount || !data.results || !data.results.length) {
+throw new Error('App not found on Apple App Store (ID: ' + appId + ')');
+}
+return normalizeAppleApp(data.results[0]);
+}
+async function fetchStoreAppData(target) {
+if (!target || !target.id) {
+throw new Error('Invalid Apple App Store target');
+}
+return await fetchAppleAppData(target.id, target.country);
+}
+function applyImportedStoreApp(state) {
+if (!state) return false;
+CURRENT_PRESET_KEY = 'draft';
+isPresetModified = false;
+if (state.icon1024) CUSTOM_ICON_1024 = state.icon1024;
+else if (state.iconApple) CUSTOM_ICON_1024 = state.iconApple;
+else if (state.icon) CUSTOM_ICON_1024 = state.icon;
+if (state.icon512) CUSTOM_ICON_512 = state.icon512;
+else if (state.iconGoogle) CUSTOM_ICON_512 = state.iconGoogle;
+if (typeof setStore === 'function') {
+setStore('apple', false);
+}
+if (typeof setAppleDevice === 'function') {
+setAppleDevice('iphone', false);
+}
+FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
+state.featureGraphic = FEATURE_GRAPHIC;
+state.feature = FEATURE_GRAPHIC;
+if (typeof applyStateObject === 'function') {
+applyStateObject(state);
+}
+FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
+if (typeof setStore === 'function') {
+setStore('apple', false);
+}
+if (typeof setAppleDevice === 'function') {
+setAppleDevice('iphone', false);
+}
+if (typeof renderIcons === 'function') renderIcons();
+if (typeof renderFeature === 'function') renderFeature();
+if (typeof validateFeatureGraphic === 'function') validateFeatureGraphic();
+if (typeof renderShots === 'function') renderShots();
+if (typeof renderIpadShots === 'function') renderIpadShots();
+if (typeof renderTablets === 'function') renderTablets();
+if (typeof renderStats === 'function') renderStats();
+if (typeof syncStatInputs === 'function') syncStatInputs();
+if (typeof update === 'function') update();
+if (typeof getCurrentStateObject === 'function') {
+userDraft = getCurrentStateObject();
+userDraft.isCustomized = true;
+}
+if (typeof saveDraftToStorage === 'function') saveDraftToStorage();
+if (typeof updatePresetBanner === 'function') updatePresetBanner();
+if (typeof updateDraftPill === 'function') updateDraftPill();
+if (typeof syncAllVtPills === 'function') syncAllVtPills();
+if (typeof fit === 'function') fit();
+const appName = state.form && state.form.name ? state.form.name : 'App';
+if (typeof showToast === 'function') {
+showToast('Imported ' + appName + ' from App Store successfully');
+}
+return true;
+}
 function isNetworkOnline() {
 if (typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean') {
 return navigator.onLine;
@@ -14092,8 +14286,74 @@ status.className = 'store-import-status ' + (type || 'info');
 status.textContent = message;
 status.style.display = 'block';
 }
-async function handleStoreImportSubmit() {
+async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false) {
+if (typeof isDemoMode === 'function' && isDemoMode() && !isAutoFromUrl) {
 if (typeof requireFullVersion === 'function') requireFullVersion('store-import');
+return;
+}
+const input = $('storeImportInput');
+if (!input) return;
+const val = input.value.trim();
+if (!val) {
+setStoreImportStatus('error', 'Please enter an App Store link or Apple App ID.');
+input.focus();
+return;
+}
+const target = parseStoreInput(val);
+if (!target) {
+if (val.includes('play.google.com') || /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]+)+$/.test(val)) {
+setStoreImportStatus('error', 'Google Play does not provide a public API. Please enter an Apple App Store link or numeric App ID (e.g. 324684580).');
+} else {
+setStoreImportStatus('error', 'Unrecognized App Store link or ID format. Try an Apple App Store URL or numeric App ID (e.g. 324684580).');
+}
+return;
+}
+if (!isNetworkOnline()) {
+updateStoreImportNetworkStatus();
+showNetworkConfirmModal({
+onConfirm: () => handleStoreImportSubmit(true),
+onCancel: () => setStoreImportStatus('info', 'Kept in 100% offline mode.')
+});
+setStoreImportStatus('error', 'No internet connection detected. Please turn on your Wi-Fi or internet connection to import from Apple App Store.');
+return;
+}
+if (!confirmed) {
+showNetworkConfirmModal({
+onConfirm: () => handleStoreImportSubmit(true),
+onCancel: () => setStoreImportStatus('info', 'Import cancelled. Kept in 100% offline mode.')
+});
+return;
+}
+const submitBtn = $('storeImportSubmit');
+if (submitBtn) {
+submitBtn.disabled = true;
+submitBtn.textContent = 'Cloning...';
+}
+setStoreImportStatus('info', 'Connecting to Apple App Store API...');
+try {
+const importedState = await fetchStoreAppData(target);
+closeStoreImportModal();
+const apply = () => {
+applyImportedStoreApp(importedState);
+};
+if (typeof confirmReplaceDraft === 'function') {
+const importedName = (importedState && importedState.form && importedState.form.name) || '';
+confirmReplaceDraft(importedName, apply);
+} else {
+apply();
+}
+} catch (err) {
+if (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError')))) {
+setStoreImportStatus('error', 'Network error: Unable to reach Apple App Store. Please check your internet connection and try again.');
+} else {
+setStoreImportStatus('error', err.message || 'Failed to import app data from App Store.');
+}
+} finally {
+if (submitBtn) {
+submitBtn.disabled = false;
+submitBtn.textContent = 'Clone App';
+}
+}
 }
 function initStoreImportEvents() {
 const openBtn = $('btnOpenStoreImport');
@@ -14207,7 +14467,7 @@ const input = $('storeImportInput');
 if (input) input.value = appid || url;
 showNetworkConfirmModal({
 onConfirm: () => {
-handleStoreImportSubmit(true);
+handleStoreImportSubmit(true, true);
 },
 onCancel: () => {
 setStoreImportStatus('info', 'Auto-import paused. Kept in 100% offline mode.');

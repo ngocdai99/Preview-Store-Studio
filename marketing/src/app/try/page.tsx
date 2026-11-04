@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { MiniStudioToast } from "@/components/MiniStudioToast";
+import { TryStudioIframe } from "@/components/TryStudioIframe";
 
 export const metadata: Metadata = {
   title: "Live Interactive Demo · Store Preview Studio",
@@ -41,15 +42,10 @@ export default function TryPage() {
           </p>
         </section>
 
-        {/* Embedded Interactive Core Studio */}
+        {/* Embedded Interactive Core Studio (/try-studio.html?embed=true with query params forwarding) */}
         <section className="w-full max-w-[1440px] mx-auto px-2 sm:px-4 lg:px-6 pb-16 flex-1 flex flex-col">
           <div className="relative w-full rounded-2xl sm:rounded-3xl border border-slate-200/90 dark:border-[#282928] bg-[#0c0d0c] shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden min-h-[1180px] h-[1180px] lg:h-[calc(100vh-70px)] lg:min-h-[830px] lg:max-h-[1030px]">
-            <iframe
-              src="/try-studio.html?embed=true"
-              title="Store Preview Studio Interactive Sandbox"
-              className="w-full h-full border-0 block"
-              allow="clipboard-read; clipboard-write"
-            />
+            <TryStudioIframe />
           </div>
         </section>
       </main>

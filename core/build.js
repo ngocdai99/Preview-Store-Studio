@@ -127,15 +127,6 @@ function transformModuleForDemo(relPath, content) {
     return `if($('optExportJSON')) $('optExportJSON').onclick = exportJSON;\nfunction exportJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-json');\n}\nfunction parseAndApplyJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('import-json');\n  return false;\n}\n` + tail;
   }
 
-  if (relPath === 'modules/store-import.js') {
-    const netIdx = content.indexOf('function isNetworkOnline()');
-    const middleAndTail = netIdx >= 0 ? content.slice(netIdx) : content;
-    const strippedSubmit = middleAndTail.replace(
-      /async function handleStoreImportSubmit[\s\S]*?(?=\/\*\*\s*\n\s*\*\s*Initializes modal event listeners)/,
-      `async function handleStoreImportSubmit() {\n  if (typeof requireFullVersion === 'function') requireFullVersion('store-import');\n}\n\n`
-    );
-    return `function parseStoreInput() { return null; }\nfunction normalizeAppleApp() { return null; }\nasync function fetchAppleAppData() { throw new Error('Available in Full Version'); }\nasync function fetchStoreAppData() { throw new Error('Available in Full Version'); }\nfunction applyImportedStoreApp() { return false; }\n\n` + strippedSubmit;
-  }
 
   if (relPath === 'modules/export/storage.js') {
     return content

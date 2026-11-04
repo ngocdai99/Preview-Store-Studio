@@ -12282,7 +12282,7 @@ function setStoreImportStatus(type, message) {
   status.style.display = 'block';
 }
 
-async function handleStoreImportSubmit(confirmed = false) {
+async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false) {
   const input = $('storeImportInput');
   if (!input) return;
   const val = input.value.trim();
@@ -12497,7 +12497,7 @@ function checkAndLoadStoreParams() {
       if (input) input.value = appid || url;
       showNetworkConfirmModal({
         onConfirm: () => {
-          handleStoreImportSubmit(true);
+          handleStoreImportSubmit(true, true);
         },
         onCancel: () => {
           setStoreImportStatus('info', 'Auto-import paused. Kept in 100% offline mode.');
