@@ -352,7 +352,34 @@
             dimOk = false;
           } else {
             dimErr = false;
-            const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+            const isStandardApple = _activeModalStore === 'apple' && (
+              // Dynamic Island (large display)
+              (w === 1320 && h === 2868) || // iPhone 6.9"
+              (w === 1290 && h === 2796) || // iPhone 6.7"
+              (w === 1260 && h === 2736) || // iPhone Air / 6.7"
+              // Dynamic Island (medium display)
+              (w === 1206 && h === 2622) || // iPhone 6.3"
+              (w === 1179 && h === 2556) || // iPhone 6.1"
+              // Face ID (large display)
+              (w === 1284 && h === 2778) || // iPhone 6.5"
+              (w === 1242 && h === 2688) || // iPhone 6.5"
+              // Face ID (medium display)
+              (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
+              (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
+              (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
+              // Home Button (large display)
+              (w === 1242 && h === 2208) || // iPhone 5.5"
+              // Home Button (medium display)
+              (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
+              // iPhone Duo
+              (w === 1398 && h === 2034) ||
+              (w === 2007 && h === 2853) ||
+              // Legacy 4" / 3.5"
+              (w === 640 && h === 1136) ||
+              (w === 640 && h === 1096) ||
+              (w === 640 && h === 960) ||
+              (w === 640 && h === 920)
+            );
             const isStandardGoogle = _activeModalStore === 'google' && (
               (w === 1080 && h === 1920) ||
               (w === 1080 && h === 2340) ||
@@ -370,8 +397,7 @@
               (w === 720 && h === 1600) ||
               (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
             );
-            const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
-            dimOk = isPreset || isStandardApple || isStandardGoogle;
+            dimOk = isStandardApple || isStandardGoogle;
           }
         }
         dimEl.className = 'icon-metric-val ' + (dimErr ? 'err' : (dimOk ? 'ok' : 'warn'));
@@ -634,7 +660,34 @@
           detailsHtml = '<p><strong>Google Play Dimension Notice:</strong> Recommended dimension range is 320–3,840 px. Please check Play Console requirements.</p><p class="icon-modal-warn-hint">Recommended standard: 1080×1920 px.</p>';
         } else {
           // Check standard dimensions
-          const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+          const isStandardApple = _activeModalStore === 'apple' && (
+            // Dynamic Island (large display)
+            (w === 1320 && h === 2868) || // iPhone 6.9"
+            (w === 1290 && h === 2796) || // iPhone 6.7"
+            (w === 1260 && h === 2736) || // iPhone Air / 6.7"
+            // Dynamic Island (medium display)
+            (w === 1206 && h === 2622) || // iPhone 6.3"
+            (w === 1179 && h === 2556) || // iPhone 6.1"
+            // Face ID (large display)
+            (w === 1284 && h === 2778) || // iPhone 6.5"
+            (w === 1242 && h === 2688) || // iPhone 6.5"
+            // Face ID (medium display)
+            (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
+            (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
+            (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
+            // Home Button (large display)
+            (w === 1242 && h === 2208) || // iPhone 5.5"
+            // Home Button (medium display)
+            (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
+            // iPhone Duo
+            (w === 1398 && h === 2034) ||
+            (w === 2007 && h === 2853) ||
+            // Legacy 4" / 3.5"
+            (w === 640 && h === 1136) ||
+            (w === 640 && h === 1096) ||
+            (w === 640 && h === 960) ||
+            (w === 640 && h === 920)
+          );
           const isStandardGoogle = _activeModalStore === 'google' && (
             (w === 1080 && h === 1920) ||
             (w === 1080 && h === 2340) ||
@@ -652,11 +705,11 @@
             (w === 720 && h === 1600) ||
             (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
           );
-          const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
-          if (!isPreset && ((_activeModalStore === 'apple' && !isStandardApple) || (_activeModalStore === 'google' && !isStandardGoogle))) {
+          if ((_activeModalStore === 'apple' && !isStandardApple) || (_activeModalStore === 'google' && !isStandardGoogle)) {
             level = 'warn';
             badgeText = `Dimension Notice: ${w}×${h} px · Scaled to Canvas`;
-            detailsHtml = '<p>Screenshot is portrait ratio but differs from target (' + (_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px') + '). It will be scaled to fit device frames.</p><p class="icon-modal-warn-hint">Export at standard target resolution for optimal crispness.</p>';
+            const reqDesc = _activeModalStore === 'apple' ? 'App Store requires standard dimensions (such as 1290×2796, 1179×2556, 1206×2622, or 1320×2868 px)' : 'Recommended standard: 1080×1920 px';
+            detailsHtml = `<p>Screenshot is portrait ratio but differs from target (${_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px'}). It will be scaled to fit device frames.</p><p class="icon-modal-warn-hint">${reqDesc}. Export at standard target resolution for optimal crispness.</p>`;
           } else {
             level = 'ok';
             badgeText = `${w}×${h} px · Active Screenshot`;

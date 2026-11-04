@@ -2279,6 +2279,10 @@ const expectedTipTitles = [
 
 assert(!bundledHtml.includes('data-tip-title="Developer Name Guidelines"'), 'Developer field does not contain guideline tooltip as requested');
 
+// Verify Phone Screenshots and iPad Screenshots link to official App Store Connect screenshot specifications
+assert(bundledHtml.includes('data-tip-title="Phone Screenshots Guidelines" data-tip-desc="Visual previews of your app experience. Up to 10 screenshots per display size. The first 3 appear directly in store search results." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications"'), 'Phone Screenshots tooltip links to screenshot-specifications');
+assert(bundledHtml.includes('data-tip-title="iPad Screenshots Guidelines" data-tip-desc="Required for Universal iOS apps. Upload 13&quot; iPad Pro (2048×2732 or 2064×2752 px) screenshots in 4:3 ratio without alpha. If empty, App Store listings and mockups automatically display scaled iPhone screenshots." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications"'), 'iPad Screenshots tooltip links to screenshot-specifications');
+
 expectedTipTitles.forEach(title => {
   assert(bundledHtml.includes(`data-tip-title="${title}"`), `Field/card tooltip with title "${title}" exists in bundled HTML`);
 });
@@ -3844,7 +3848,34 @@ function evaluatePhoneShot(w, h, sizeBytes, store) {
     bannerLevel = 'warn';
     bannerType = 'Dimension Warning';
   } else {
-    const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+    const isStandardApple = store === 'apple' && (
+      // Dynamic Island (large display)
+      (w === 1320 && h === 2868) || // iPhone 6.9"
+      (w === 1290 && h === 2796) || // iPhone 6.7"
+      (w === 1260 && h === 2736) || // iPhone Air / 6.7"
+      // Dynamic Island (medium display)
+      (w === 1206 && h === 2622) || // iPhone 6.3"
+      (w === 1179 && h === 2556) || // iPhone 6.1"
+      // Face ID (large display)
+      (w === 1284 && h === 2778) || // iPhone 6.5"
+      (w === 1242 && h === 2688) || // iPhone 6.5"
+      // Face ID (medium display)
+      (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
+      (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
+      (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
+      // Home Button (large display)
+      (w === 1242 && h === 2208) || // iPhone 5.5"
+      // Home Button (medium display)
+      (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
+      // iPhone Duo
+      (w === 1398 && h === 2034) ||
+      (w === 2007 && h === 2853) ||
+      // Legacy 4" / 3.5"
+      (w === 640 && h === 1136) ||
+      (w === 640 && h === 1096) ||
+      (w === 640 && h === 960) ||
+      (w === 640 && h === 920)
+    );
     const isStandardGoogle = store === 'google' && (
       (w === 1080 && h === 1920) ||
       (w === 1080 && h === 2340) ||
@@ -3862,8 +3893,7 @@ function evaluatePhoneShot(w, h, sizeBytes, store) {
       (w === 720 && h === 1600) ||
       (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
     );
-    const isPreset = (w === 1080 && h === 2340);
-    if (isPreset || (store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) {
+    if ((store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) {
       tagClass = 'ok';
       tagText = `Portrait (${w}×${h})`;
       bannerLevel = 'ok';
@@ -3895,7 +3925,34 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
     if (isWrongRatio) {
       dimClass = 'err';
     } else {
-      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+      const isStandardApple = store === 'apple' && (
+        // Dynamic Island (large display)
+        (w === 1320 && h === 2868) || // iPhone 6.9"
+        (w === 1290 && h === 2796) || // iPhone 6.7"
+        (w === 1260 && h === 2736) || // iPhone Air / 6.7"
+        // Dynamic Island (medium display)
+        (w === 1206 && h === 2622) || // iPhone 6.3"
+        (w === 1179 && h === 2556) || // iPhone 6.1"
+        // Face ID (large display)
+        (w === 1284 && h === 2778) || // iPhone 6.5"
+        (w === 1242 && h === 2688) || // iPhone 6.5"
+        // Face ID (medium display)
+        (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
+        (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
+        (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
+        // Home Button (large display)
+        (w === 1242 && h === 2208) || // iPhone 5.5"
+        // Home Button (medium display)
+        (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
+        // iPhone Duo
+        (w === 1398 && h === 2034) ||
+        (w === 2007 && h === 2853) ||
+        // Legacy 4" / 3.5"
+        (w === 640 && h === 1136) ||
+        (w === 640 && h === 1096) ||
+        (w === 640 && h === 960) ||
+        (w === 640 && h === 920)
+      );
       const isStandardGoogle = store === 'google' && (
         (w === 1080 && h === 1920) ||
         (w === 1080 && h === 2340) ||
@@ -3913,8 +3970,7 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
         (w === 720 && h === 1600) ||
         (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
       );
-      const isPreset = (w === 1080 && h === 2340);
-      dimClass = (isPreset || (store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) ? 'ok' : 'warn';
+      dimClass = ((store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) ? 'ok' : 'warn';
     }
   } else if (type === 'ipad') {
     const dimOk = (w === 2048 && h === 2732) || (w === 2732 && h === 2048) || isIpadPortrait || isIpadLandscape;
@@ -3968,7 +4024,34 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
       level = 'warn';
       badgeText = `Dimension Warning: Out of range (${w}×${h} px)`;
     } else {
-      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+      const isStandardApple = store === 'apple' && (
+        // Dynamic Island (large display)
+        (w === 1320 && h === 2868) || // iPhone 6.9"
+        (w === 1290 && h === 2796) || // iPhone 6.7"
+        (w === 1260 && h === 2736) || // iPhone Air / 6.7"
+        // Dynamic Island (medium display)
+        (w === 1206 && h === 2622) || // iPhone 6.3"
+        (w === 1179 && h === 2556) || // iPhone 6.1"
+        // Face ID (large display)
+        (w === 1284 && h === 2778) || // iPhone 6.5"
+        (w === 1242 && h === 2688) || // iPhone 6.5"
+        // Face ID (medium display)
+        (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
+        (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
+        (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
+        // Home Button (large display)
+        (w === 1242 && h === 2208) || // iPhone 5.5"
+        // Home Button (medium display)
+        (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
+        // iPhone Duo
+        (w === 1398 && h === 2034) ||
+        (w === 2007 && h === 2853) ||
+        // Legacy 4" / 3.5"
+        (w === 640 && h === 1136) ||
+        (w === 640 && h === 1096) ||
+        (w === 640 && h === 960) ||
+        (w === 640 && h === 920)
+      );
       const isStandardGoogle = store === 'google' && (
         (w === 1080 && h === 1920) ||
         (w === 1080 && h === 2340) ||
@@ -3986,8 +4069,7 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
         (w === 720 && h === 1600) ||
         (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
       );
-      const isPreset = (w === 1080 && h === 2340);
-      if (!isPreset && ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle))) {
+      if ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)) {
         level = 'warn';
         badgeText = `Dimension Notice: ${w}×${h} px · Scaled to Canvas`;
       } else {
@@ -4112,27 +4194,55 @@ assert(mAlphaApple.formatClass === 'err', 'Apple Alpha Screenshot Modal: formatC
 assert(mAlphaApple.level === 'err', 'Apple Alpha Screenshot Modal: level is err (RED)');
 assert(mAlphaApple.badgeText.includes('Alpha detected'), 'Apple Alpha Screenshot Modal: badge text mentions Alpha detected');
 
-// Test 11: Preset & Standard Modern Phone screenshot (1080x2340, Apple & Google)
-const rPresetApple = evaluatePhoneShot(1080, 2340, 800 * 1024, 'apple');
-assert(rPresetApple.tagClass === 'ok', 'Apple Preset 1080x2340: tagClass is ok (GREEN)');
-assert(rPresetApple.tagText === 'Portrait (1080×2340)', 'Apple Preset 1080x2340: tagText is Portrait (1080×2340), NOT Scaled');
-assert(rPresetApple.bannerLevel === 'ok', 'Apple Preset 1080x2340: bannerLevel is ok');
+// Test 11: 1080x2400 (Android FHD+ 20:9) on Apple is Scaled (warn notice) because App Store requires exact resolutions
+const r1080x2400Apple = evaluatePhoneShot(1080, 2400, 800 * 1024, 'apple');
+assert(r1080x2400Apple.tagClass === 'warn', 'Apple 1080x2400: tagClass is warn (AMBER) because 1080x2400 is not in Apple specifications');
+assert(r1080x2400Apple.tagText === 'Scaled (1080×2400)', 'Apple 1080x2400: tagText is Scaled (1080×2400)');
+assert(r1080x2400Apple.bannerLevel === 'ok', 'Apple 1080x2400: bannerLevel is ok (not rejected for ratio)');
 
-const mPresetApple = evaluateInspectorModal(1080, 2340, 800 * 1024, 'apple', 'screenshot', false);
-assert(mPresetApple.dimClass === 'ok', 'Apple Preset Modal: dimClass is ok (GREEN)');
-assert(mPresetApple.ratioClass === 'ok', 'Apple Preset Modal: ratioClass is ok (GREEN)');
-assert(mPresetApple.level === 'ok', 'Apple Preset Modal: level is ok (GREEN)');
-assert(mPresetApple.badgeText === '1080×2340 px · Active Screenshot', 'Apple Preset Modal: badge is Active Screenshot');
+const m1080x2400Apple = evaluateInspectorModal(1080, 2400, 800 * 1024, 'apple', 'screenshot', false);
+assert(m1080x2400Apple.dimClass === 'warn', 'Apple 1080x2400 Modal: dimClass is warn (AMBER)');
+assert(m1080x2400Apple.ratioClass === 'ok', 'Apple 1080x2400 Modal: ratioClass is ok (GREEN) because it is portrait');
+assert(m1080x2400Apple.level === 'warn', 'Apple 1080x2400 Modal: level is warn (AMBER)');
+assert(m1080x2400Apple.badgeText.includes('Scaled to Canvas'), 'Apple 1080x2400 Modal: badge is Scaled to Canvas notice');
 
-const rPresetGoogle = evaluatePhoneShot(1080, 2340, 800 * 1024, 'google');
-assert(rPresetGoogle.tagClass === 'ok', 'Google Preset 1080x2340: tagClass is ok (GREEN)');
-assert(rPresetGoogle.tagText === 'Portrait (1080×2340)', 'Google Preset 1080x2340: tagText is Portrait (1080×2340), NOT Scaled');
-assert(rPresetGoogle.bannerLevel === 'ok', 'Google Preset 1080x2340: bannerLevel is ok');
+// Test 11b: 1080x2400 on Google Play is standard Portrait (ok)
+const r1080x2400Google = evaluatePhoneShot(1080, 2400, 800 * 1024, 'google');
+assert(r1080x2400Google.tagClass === 'ok', 'Google 1080x2400: tagClass is ok (GREEN)');
+assert(r1080x2400Google.tagText === 'Portrait (1080×2400)', 'Google 1080x2400: tagText is Portrait (1080×2400)');
+assert(r1080x2400Google.bannerLevel === 'ok', 'Google 1080x2400: bannerLevel is ok');
 
-const mPresetGoogle = evaluateInspectorModal(1080, 2340, 800 * 1024, 'google', 'screenshot', false);
-assert(mPresetGoogle.dimClass === 'ok', 'Google Preset Modal: dimClass is ok (GREEN)');
-assert(mPresetGoogle.ratioClass === 'ok', 'Google Preset Modal: ratioClass is ok (GREEN)');
-assert(mPresetGoogle.level === 'ok', 'Google Preset Modal: level is ok (GREEN)');
+const m1080x2400Google = evaluateInspectorModal(1080, 2400, 800 * 1024, 'google', 'screenshot', false);
+assert(m1080x2400Google.dimClass === 'ok', 'Google 1080x2400 Modal: dimClass is ok (GREEN)');
+assert(m1080x2400Google.ratioClass === 'ok', 'Google 1080x2400 Modal: ratioClass is ok (GREEN)');
+assert(m1080x2400Google.level === 'ok', 'Google 1080x2400 Modal: level is ok (GREEN)');
+
+// Test 11c: 1080x2340 is officially supported on BOTH Apple (Face ID medium display - mini) AND Google Play
+const r1080x2340Apple = evaluatePhoneShot(1080, 2340, 800 * 1024, 'apple');
+assert(r1080x2340Apple.tagClass === 'ok', 'Apple 1080x2340: tagClass is ok (GREEN - Face ID medium display)');
+assert(r1080x2340Apple.tagText === 'Portrait (1080×2340)', 'Apple 1080x2340: tagText is Portrait (1080×2340)');
+assert(r1080x2340Apple.bannerLevel === 'ok', 'Apple 1080x2340: bannerLevel is ok');
+
+const m1080x2340Apple = evaluateInspectorModal(1080, 2340, 800 * 1024, 'apple', 'screenshot', false);
+assert(m1080x2340Apple.dimClass === 'ok', 'Apple 1080x2340 Modal: dimClass is ok (GREEN)');
+assert(m1080x2340Apple.ratioClass === 'ok', 'Apple 1080x2340 Modal: ratioClass is ok (GREEN)');
+assert(m1080x2340Apple.level === 'ok', 'Apple 1080x2340 Modal: level is ok (GREEN)');
+
+const r1080x2340Google = evaluatePhoneShot(1080, 2340, 800 * 1024, 'google');
+assert(r1080x2340Google.tagClass === 'ok', 'Google 1080x2340: tagClass is ok (GREEN)');
+assert(r1080x2340Google.tagText === 'Portrait (1080×2340)', 'Google 1080x2340: tagText is Portrait');
+
+// Test 11d: Apple official display classifications from SRS
+const rMediumApple = evaluatePhoneShot(1206, 2622, 1024 * 1024, 'apple');
+assert(rMediumApple.tagClass === 'ok', 'Apple 1206x2622 (6.3" Dynamic Island): tagClass is ok (GREEN)');
+const rAirApple = evaluatePhoneShot(1260, 2736, 1024 * 1024, 'apple');
+assert(rAirApple.tagClass === 'ok', 'Apple 1260x2736 (iPhone Air / Dynamic Island large): tagClass is ok (GREEN)');
+const rXApple = evaluatePhoneShot(1125, 2436, 1024 * 1024, 'apple');
+assert(rXApple.tagClass === 'ok', 'Apple 1125x2436 (iPhone X / XS / 11 Pro): tagClass is ok (GREEN)');
+const rSEApple = evaluatePhoneShot(750, 1334, 1024 * 1024, 'apple');
+assert(rSEApple.tagClass === 'ok', 'Apple 750x1334 (iPhone SE / 8): tagClass is ok (GREEN)');
+const rDuoApple = evaluatePhoneShot(1398, 2034, 1024 * 1024, 'apple');
+assert(rDuoApple.tagClass === 'ok', 'Apple 1398x2034 (iPhone Duo outer): tagClass is ok (GREEN)');
 
 // Test 12: Source code and dynamic sync for shotHint and transitions
 const transSrcSync = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');

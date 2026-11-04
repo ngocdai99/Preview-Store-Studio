@@ -220,7 +220,7 @@ function validateScreenshots(){
   const hintEl = $('shotHint');
   if(hintEl){
     if(store === 'apple'){
-      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
+      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9"/6.7" 1320×2868 / 1290×2796 px, 6.3"/6.1" 1206×2622 / 1179×2556 px, or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
     } else {
       hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
     }
@@ -312,7 +312,34 @@ function validateScreenshots(){
             tag.className = 'shot-dim-tag warn';
             tag.textContent = `Out of Range (${w}×${h})`;
           } else {
-            const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+            const isStandardApple = store === 'apple' && (
+              // Dynamic Island (large display)
+              (w === 1320 && h === 2868) || // iPhone 6.9"
+              (w === 1290 && h === 2796) || // iPhone 6.7"
+              (w === 1260 && h === 2736) || // iPhone Air / 6.7"
+              // Dynamic Island (medium display)
+              (w === 1206 && h === 2622) || // iPhone 6.3"
+              (w === 1179 && h === 2556) || // iPhone 6.1"
+              // Face ID (large display)
+              (w === 1284 && h === 2778) || // iPhone 6.5"
+              (w === 1242 && h === 2688) || // iPhone 6.5"
+              // Face ID (medium display)
+              (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
+              (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
+              (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
+              // Home Button (large display)
+              (w === 1242 && h === 2208) || // iPhone 5.5"
+              // Home Button (medium display)
+              (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
+              // iPhone Duo
+              (w === 1398 && h === 2034) ||
+              (w === 2007 && h === 2853) ||
+              // Legacy 4" / 3.5"
+              (w === 640 && h === 1136) ||
+              (w === 640 && h === 1096) ||
+              (w === 640 && h === 960) ||
+              (w === 640 && h === 920)
+            );
             const isStandardGoogle = store === 'google' && (
               (w === 1080 && h === 1920) ||
               (w === 1080 && h === 2340) ||
@@ -330,8 +357,7 @@ function validateScreenshots(){
               (w === 720 && h === 1600) ||
               (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
             );
-            const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
-            if(isPreset || (store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)){
+            if((store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)){
               tag.className = 'shot-dim-tag ok';
               tag.textContent = `Portrait (${w}×${h})`;
             } else {
