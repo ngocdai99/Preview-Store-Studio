@@ -305,6 +305,24 @@
       const isTabletPortrait = (w / h >= 0.55 && w / h <= 0.7);
       const isTabletLandscape = (w / h >= 1.4 && w / h <= 1.8);
 
+      // Standard Apple landscape resolutions (official App Store Connect dims)
+      const isStandardAppleLandscapeModal = isLandscape && _activeModalStore === 'apple' && (
+        (w === 2868 && h === 1320) || (w === 2796 && h === 1290) || (w === 2736 && h === 1260) ||
+        (w === 2622 && h === 1206) || (w === 2556 && h === 1179) ||
+        (w === 2778 && h === 1284) || (w === 2688 && h === 1242) ||
+        (w === 2532 && h === 1170) || (w === 2436 && h === 1125) || (w === 2340 && h === 1080) ||
+        (w === 2208 && h === 1242) || (w === 1334 && h === 750) ||
+        (w === 2034 && h === 1398) || (w === 2853 && h === 2007) ||
+        (w === 1136 && h === 640) || (w === 1096 && h === 640) || (w === 960 && h === 640) || (w === 920 && h === 640)
+      );
+      // Standard Google landscape: phone aspect ratio within range
+      const isStandardGoogleLandscapeModal = isLandscape && _activeModalStore === 'google' &&
+        !isSq && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
+      // Any standard landscape for the current store
+      const isStandardLandscape = isStandardAppleLandscapeModal || isStandardGoogleLandscapeModal;
+      // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) — always err
+      const isExtremeRatio = isLandscape && (w / h > 2.5);
+
       // Pixel audit (alpha channel & apex corners)
       let hasAlpha = false;
       let hasPreRoundedCorners = false;
@@ -346,9 +364,17 @@
           dimErr = isSq;
         } else {
           // Phone Screenshot
-          const isWrongRatio = isSq || isLandscape || !isPhonePortrait;
+          const isWrongRatio = isSq || isExtremeRatio || (!isLandscape && !isPhonePortrait);
           if (isWrongRatio) {
             dimErr = true;
+            dimOk = false;
+          } else if (isStandardLandscape) {
+            // Official landscape dimensions → ok
+            dimErr = false;
+            dimOk = true;
+          } else if (isLandscape) {
+            // Non-standard landscape but valid ratio → warn
+            dimErr = false;
             dimOk = false;
           } else {
             dimErr = false;
@@ -450,6 +476,10 @@
           if (isSq) {
             ratioEl.textContent = '1:1 Square';
             ratioEl.className = 'icon-metric-val err';
+          } else if (isExtremeRatio) {
+            const r = (w / (h || 1)).toFixed(2);
+            ratioEl.textContent = `${r}:1 Invalid`;
+            ratioEl.className = 'icon-metric-val err';
           } else if (isPhonePortrait) {
             let rLabel = 'Portrait';
             if (Math.abs(h / w - 19.5 / 9) < 0.15) rLabel = '9:19.5 Portrait';
@@ -462,7 +492,8 @@
             if (Math.abs(w / h - 16 / 9) < 0.15) rLabel = '16:9 Landscape';
             else rLabel = `${(w / h).toFixed(2)}:1 Landscape`;
             ratioEl.textContent = rLabel;
-            ratioEl.className = 'icon-metric-val err';
+            // Standard landscape dims are accepted by App Store Connect → ok; non-standard → warn
+            ratioEl.className = 'icon-metric-val ' + (isStandardLandscape ? 'ok' : 'warn');
           } else {
             const r = (h / (w || 1)).toFixed(2);
             ratioEl.textContent = `${r}:1 Non-portrait`;
@@ -639,10 +670,22 @@
           level = 'err';
           badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: 1:1 Square (${w}×${h} px)` : `Aspect Ratio Error: 1:1 Square (${w}×${h} px)`;
           detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Screenshot is square (1:1). ${_activeModalStore === 'apple' ? 'Apple requires standard supported dimensions (such as 1179×2556 px or 1206×2622 px, portrait or landscape)' : 'Google Play requires standard phone dimensions (such as 1080×1920 px)'}. Square screenshots are not supported by the store.</p><p class="icon-modal-warn-hint">Please re-export standard supported dimensions from your design tool.</p>`;
-        } else if (isLandscape) {
+        } else if (isExtremeRatio) {
+          // e.g. 730×172 banner — aspect ratio is not a phone screen at all
+          const ratio = (w / h).toFixed(2);
           level = 'err';
-          badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: Landscape (${w}×${h} px)` : `Aspect Ratio Error: Landscape (${w}×${h} px)`;
-          detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Phone screenshots must be portrait. Uploading landscape screenshots will fail phone store presentation.</p><p class="icon-modal-warn-hint">Re-export as portrait (e.g. 1290×2796 px or 1080×1920 px) to match phone display specifications.</p>`;
+          badgeText = `Invalid Aspect Ratio: Banner ${w}×${h} px (${ratio}:1)`;
+          detailsHtml = `<p><strong>Invalid Aspect Ratio:</strong> This image (${w}×${h} px, ${ratio}:1) has a banner-like ratio, not a phone screen aspect ratio. Phone screenshots must have a portrait or landscape phone ratio (e.g. 9:16 or 9:19.5).</p><p class="icon-modal-warn-hint">Re-export at a supported dimension such as ${_activeModalStore === 'apple' ? '1179×2556 px or 2556×1179 px' : '1080×1920 px or 1920×1080 px'}.</p>`;
+        } else if (isLandscape && isStandardLandscape) {
+          // Official landscape dimensions — accepted by App Store Connect
+          level = 'ok';
+          badgeText = `${w}×${h} px · Landscape · Store Compliant`;
+          detailsHtml = '';
+        } else if (isLandscape) {
+          // Landscape but non-standard ratio — warn, not err
+          level = 'warn';
+          badgeText = `Non-standard Landscape (${w}×${h} px)`;
+          detailsHtml = `<p><strong>Non-standard Landscape:</strong> This screenshot is landscape orientation but does not match a known ${_activeModalStore === 'apple' ? 'App Store Connect' : 'Google Play'} dimension. It may display letterboxed in the store.</p><p class="icon-modal-warn-hint">Verify this dimension is accepted before submission. Standard landscape: ${_activeModalStore === 'apple' ? '2556×1179 px or 2622×1206 px' : '1920×1080 px'}.</p>`;
         } else if (!isPhonePortrait) {
           level = 'err';
           badgeText = `Aspect Ratio Error: Non-portrait (${w}×${h} px)`;
