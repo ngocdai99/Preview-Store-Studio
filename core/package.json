@@ -12,6 +12,8 @@
     "showcase": "node scripts/build-showcase-data.js",
     "build:marketing": "node scripts/build-marketing.js",
     "build:marketing:vi": "node scripts/build-marketing-vi.js",
+    "generate:og": "python3 scripts/generate-og-image.py",
+    "check:og": "python3 scripts/generate-og-image.py --check-only",
     "build:demo": "node scripts/build-demo.js",
     "watch:demo": "node scripts/build-demo.js --watch",
     "deploy": "npx --yes surge docs preview-studio-app-vi.surge.sh",

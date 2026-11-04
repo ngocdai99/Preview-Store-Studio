@@ -14,6 +14,7 @@ Thumbs.db
 # Marketing, launch materials & documentation
 docs/*
 !docs/src/
+!docs/AGENT_OG_IMAGE_GUIDE.md
 cloudflare/
 package/
 *.xlsx
