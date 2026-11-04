@@ -39,11 +39,24 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "z3c2oaazvl");
+
               try {
-                if (window.location.search && !window.location.pathname.startsWith('/try')) {
+                if (window.location.search) {
                   var p = new URLSearchParams(window.location.search);
-                  if (p.get('id') || p.get('appid') || p.get('app') || p.get('url') || p.get('itunes') || p.get('link') || p.get('bundle')) {
-                    window.location.replace('/try' + window.location.search);
+                  var appid = p.get('appid') || p.get('id') || p.get('app_id') || p.get('apple_id');
+                  if (appid && typeof window.clarity === 'function') {
+                    window.clarity('set', 'appid', appid);
+                    window.clarity('identify', appid);
+                  }
+                  if (!window.location.pathname.startsWith('/try')) {
+                    if (p.get('id') || p.get('appid') || p.get('app') || p.get('url') || p.get('itunes') || p.get('link') || p.get('bundle')) {
+                      window.location.replace('/try' + window.location.search);
+                    }
                   }
                 }
               } catch(_) {}
