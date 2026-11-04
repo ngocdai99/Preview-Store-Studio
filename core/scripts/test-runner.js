@@ -3664,8 +3664,9 @@ asyncSuites.push((async () => {
 
   const nextTryPageSrc = fs.readFileSync(nextTryPagePath, 'utf8');
   assert(nextTryPageSrc.includes('/try-studio.html?embed=true'), 'Next.js /try page embeds /try-studio.html?embed=true via iframe');
-  assert(nextTryPageSrc.includes('<Navbar />') && nextTryPageSrc.includes('<Footer />'), 'Next.js /try page includes Navbar and Footer');
-  assert(nextTryPageSrc.includes('Stop guessing how your app listing') && !nextTryPageSrc.includes('Interactive Live Sandbox'), 'Next.js /try page includes clean hero section without badge');
+  assert(nextTryPageSrc.includes('<Navbar />'), 'Next.js /try page includes Navbar');
+  assert(!nextTryPageSrc.includes('<Footer />'), 'Next.js /try page removes Footer for full-viewport studio immersion');
+  assert(nextTryPageSrc.includes('<AgencySandboxBanner />'), 'Next.js /try page includes Compact Agency Sandbox Strip');
 
   const tryHtml = fs.readFileSync(tryHtmlPath, 'utf8');
   const coreHtml = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
@@ -4247,7 +4248,7 @@ assert(rDuoApple.tagClass === 'ok', 'Apple 1398x2034 (iPhone Duo outer): tagClas
 // Test 12: Source code and dynamic sync for shotHint and transitions
 const transSrcSync = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
 assert(transSrcSync.includes("hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots"), 'transitions.js immediately updates shotHint to Google Play on store switch');
-assert(transSrcSync.includes("hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots"), 'transitions.js immediately updates shotHint to Apple App Store on store switch');
+assert(transSrcSync.includes("Drag and drop to add assets or choose from your Asset Library for iPhone 6.1\" or 6.3\" displays"), 'transitions.js immediately updates shotHint to Apple App Store medium display specs on store switch');
 assert(transSrcSync.includes("validateScreenshots()"), 'transitions.js triggers validateScreenshots on store change');
 
 // ---------------------------------------------------------------------

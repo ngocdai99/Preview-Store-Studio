@@ -568,7 +568,7 @@ function setStore(s, animate = true, preserveDual = false){
   const hintEl = $('shotHint');
   if(hintEl){
     if(s === 'apple'){
-      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9"/6.7" 1320×2868 / 1290×2796 px, 6.3"/6.1" 1206×2622 / 1179×2556 px, or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
+      hintEl.innerHTML = 'Drag and drop to add assets or choose from your Asset Library for iPhone 6.1" or 6.3" displays. Supported sizes for app previews include 1920 × 886px and 886 × 1920px. For app screenshots, supported sizes include 2556 × 1179px, 1179 × 2556px, 2622 × 1206px and 1206 × 2622px.<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
     } else {
       hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
     }

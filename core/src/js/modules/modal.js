@@ -638,7 +638,7 @@
         } else if (isSq) {
           level = 'err';
           badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: 1:1 Square (${w}×${h} px)` : `Aspect Ratio Error: 1:1 Square (${w}×${h} px)`;
-          detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Screenshot is square (1:1). Phone screenshots must be portrait (e.g. 1290×2796 px or 1080×1920 px). Square screenshots will be rejected by store review.</p><p class="icon-modal-warn-hint">Please crop or re-export a portrait screenshot (9:19.5 or 9:16) from your design tool.</p>`;
+          detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Screenshot is square (1:1). ${_activeModalStore === 'apple' ? 'Apple requires standard supported dimensions (such as 1179×2556 px or 1206×2622 px, portrait or landscape)' : 'Google Play requires standard phone dimensions (such as 1080×1920 px)'}. Square screenshots are not supported by the store.</p><p class="icon-modal-warn-hint">Please re-export standard supported dimensions from your design tool.</p>`;
         } else if (isLandscape) {
           level = 'err';
           badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: Landscape (${w}×${h} px)` : `Aspect Ratio Error: Landscape (${w}×${h} px)`;

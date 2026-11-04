@@ -8175,7 +8175,7 @@ counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' war
 const hintEl = $('shotHint');
 if(hintEl){
 if(store === 'apple'){
-hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9"/6.7" 1320×2868 / 1290×2796 px, 6.3"/6.1" 1206×2622 / 1179×2556 px, or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
+hintEl.innerHTML = 'Drag and drop to add assets or choose from your Asset Library for iPhone 6.1" or 6.3" displays. Supported sizes for app previews include 1920 × 886px and 886 × 1920px. For app screenshots, supported sizes include 2556 × 1179px, 1179 × 2556px, 2622 × 1206px and 1206 × 2622px.<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
 } else {
 hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
 }
@@ -8335,8 +8335,14 @@ function finalizeBadge(){
 const maxAllowed = store === 'apple' ? 10 : 8;
 if(squareIndices.length > 0){
 const items = squareIndices.map(n => `#${n}`).join(', ');
+const noun = squareIndices.length > 1 ? 'Screenshots' : 'Screenshot';
+const verb = squareIndices.length > 1 ? 'are' : 'is';
 badgeEl.className = 'shot-status-badge err';
-badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>`;
+if(store === 'apple'){
+badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> ${noun} ${items} ${verb} square (1:1). Apple requires standard phone dimensions (such as 1179×2556 px or 1206×2622 px).</span>`;
+} else {
+badgeEl.innerHTML = `${SB_ERR}<span><strong>Aspect Ratio Error:</strong> ${noun} ${items} ${verb} square (1:1). Google Play requires standard dimensions (such as 1080×1920 px).</span>`;
+}
 badgeEl.style.display = 'flex';
 } else if(landscapeIndices.length > 0){
 const items = landscapeIndices.map(n => `#${n}`).join(', ');
@@ -9440,7 +9446,7 @@ detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Apple App Store Con
 } else if (isSq) {
 level = 'err';
 badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: 1:1 Square (${w}×${h} px)` : `Aspect Ratio Error: 1:1 Square (${w}×${h} px)`;
-detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Screenshot is square (1:1). Phone screenshots must be portrait (e.g. 1290×2796 px or 1080×1920 px). Square screenshots will be rejected by store review.</p><p class="icon-modal-warn-hint">Please crop or re-export a portrait screenshot (9:19.5 or 9:16) from your design tool.</p>`;
+detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Screenshot is square (1:1). ${_activeModalStore === 'apple' ? 'Apple requires standard supported dimensions (such as 1179×2556 px or 1206×2622 px, portrait or landscape)' : 'Google Play requires standard phone dimensions (such as 1080×1920 px)'}. Square screenshots are not supported by the store.</p><p class="icon-modal-warn-hint">Please re-export standard supported dimensions from your design tool.</p>`;
 } else if (isLandscape) {
 level = 'err';
 badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: Landscape (${w}×${h} px)` : `Aspect Ratio Error: Landscape (${w}×${h} px)`;
@@ -11987,7 +11993,7 @@ syncSegPill(s);
 const hintEl = $('shotHint');
 if(hintEl){
 if(s === 'apple'){
-hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9"/6.7" 1320×2868 / 1290×2796 px, 6.3"/6.1" 1206×2622 / 1179×2556 px, or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
+hintEl.innerHTML = 'Drag and drop to add assets or choose from your Asset Library for iPhone 6.1" or 6.3" displays. Supported sizes for app previews include 1920 × 886px and 886 × 1920px. For app screenshots, supported sizes include 2556 × 1179px, 1179 × 2556px, 2622 × 1206px and 1206 × 2622px.<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
 } else {
 hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
 }

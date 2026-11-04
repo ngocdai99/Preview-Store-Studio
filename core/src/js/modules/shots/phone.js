@@ -220,7 +220,7 @@ function validateScreenshots(){
   const hintEl = $('shotHint');
   if(hintEl){
     if(store === 'apple'){
-      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9"/6.7" 1320×2868 / 1290×2796 px, 6.3"/6.1" 1206×2622 / 1179×2556 px, or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
+      hintEl.innerHTML = 'Drag and drop to add assets or choose from your Asset Library for iPhone 6.1" or 6.3" displays. Supported sizes for app previews include 1920 × 886px and 886 × 1920px. For app screenshots, supported sizes include 2556 × 1179px, 1179 × 2556px, 2622 × 1206px and 1206 × 2622px.<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
     } else {
       hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
     }
@@ -405,8 +405,14 @@ function validateScreenshots(){
     // 1. SAI RATIO LÀ ERROR (RED)
     if(squareIndices.length > 0){
       const items = squareIndices.map(n => `#${n}`).join(', ');
+      const noun = squareIndices.length > 1 ? 'Screenshots' : 'Screenshot';
+      const verb = squareIndices.length > 1 ? 'are' : 'is';
       badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>`;
+      if(store === 'apple'){
+        badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> ${noun} ${items} ${verb} square (1:1). Apple requires standard phone dimensions (such as 1179×2556 px or 1206×2622 px).</span>`;
+      } else {
+        badgeEl.innerHTML = `${SB_ERR}<span><strong>Aspect Ratio Error:</strong> ${noun} ${items} ${verb} square (1:1). Google Play requires standard dimensions (such as 1080×1920 px).</span>`;
+      }
       badgeEl.style.display = 'flex';
     } else if(landscapeIndices.length > 0){
       const items = landscapeIndices.map(n => `#${n}`).join(', ');
