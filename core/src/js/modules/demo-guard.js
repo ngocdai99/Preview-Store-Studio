@@ -690,59 +690,6 @@ function initDemoGuard() {
   }
 }
 
-/**
- * Seamless Wheel Event Forwarding when embedded in an iframe (e.g. /try page)
- * Prevents "scroll trap" by forwarding wheel delta to parent window when:
- * 1. Scrolling over stage / canvas background (which has no native vertical scroll)
- * 2. Scrolling past the boundaries of the left editorPanel or phone preview
- */
-function initEmbeddedWheelPassthrough() {
-  if (typeof window === 'undefined' || window.self === window.top) return;
-
-  window.addEventListener('wheel', e => {
-    // 1. If mouse is over an open modal or dropdown, keep scroll within modal
-    const openModal = document.querySelector('.modal.open, [role="dialog"][aria-hidden="false"]');
-    if (openModal && openModal.contains(e.target)) return;
-
-    // 2. If mouse is over the left editor panel (form), allow local scroll
-    const panel = document.getElementById('editorPanel');
-    if (panel && panel.contains(e.target)) {
-      const isScrollUp = e.deltaY < 0;
-      const isScrollDown = e.deltaY > 0;
-      const atTop = panel.scrollTop <= 0;
-      const atBottom = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 2;
-
-      // Only forward if user has scrolled past boundaries
-      if ((isScrollUp && atTop) || (isScrollDown && atBottom)) {
-        try {
-          window.parent.postMessage({ type: 'sps-scroll-parent', deltaY: e.deltaY }, '*');
-        } catch (_) {}
-      }
-      return;
-    }
-
-    // 3. If mouse is inside a simulated phone screen with its own scroll (.scr)
-    const scr = e.target.closest && e.target.closest('.scr');
-    if (scr) {
-      const isScrollUp = e.deltaY < 0;
-      const isScrollDown = e.deltaY > 0;
-      const atTop = scr.scrollTop <= 0;
-      const atBottom = scr.scrollTop + scr.clientHeight >= scr.scrollHeight - 2;
-      if ((isScrollUp && atTop) || (isScrollDown && atBottom)) {
-        try {
-          window.parent.postMessage({ type: 'sps-scroll-parent', deltaY: e.deltaY }, '*');
-        } catch (_) {}
-      }
-      return;
-    }
-
-    // 4. Over canvas/stage/toolbar/empty areas: forward directly to parent page
-    try {
-      window.parent.postMessage({ type: 'sps-scroll-parent', deltaY: e.deltaY }, '*');
-    } catch (_) {}
-  }, { passive: true });
-}
-
 if (typeof document !== 'undefined') {
   // Ensure default Dark Mode in Demo Mode if user has not explicitly set a preference
   try {
@@ -753,8 +700,6 @@ if (typeof document !== 'undefined') {
       applyUiTheme(curUi);
     }
   } catch (_) {}
-
-  initEmbeddedWheelPassthrough();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDemoGuard);

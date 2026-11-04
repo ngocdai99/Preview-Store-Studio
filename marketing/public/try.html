@@ -7225,42 +7225,6 @@ requireFullVersion(paywallKey);
 });
 }
 }
-function initEmbeddedWheelPassthrough() {
-if (typeof window === 'undefined' || window.self === window.top) return;
-window.addEventListener('wheel', e => {
-const openModal = document.querySelector('.modal.open, [role="dialog"][aria-hidden="false"]');
-if (openModal && openModal.contains(e.target)) return;
-const panel = document.getElementById('editorPanel');
-if (panel && panel.contains(e.target)) {
-const isScrollUp = e.deltaY < 0;
-const isScrollDown = e.deltaY > 0;
-const atTop = panel.scrollTop <= 0;
-const atBottom = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 2;
-if ((isScrollUp && atTop) || (isScrollDown && atBottom)) {
-try {
-window.parent.postMessage({ type: 'sps-scroll-parent', deltaY: e.deltaY }, '*');
-} catch (_) {}
-}
-return;
-}
-const scr = e.target.closest && e.target.closest('.scr');
-if (scr) {
-const isScrollUp = e.deltaY < 0;
-const isScrollDown = e.deltaY > 0;
-const atTop = scr.scrollTop <= 0;
-const atBottom = scr.scrollTop + scr.clientHeight >= scr.scrollHeight - 2;
-if ((isScrollUp && atTop) || (isScrollDown && atBottom)) {
-try {
-window.parent.postMessage({ type: 'sps-scroll-parent', deltaY: e.deltaY }, '*');
-} catch (_) {}
-}
-return;
-}
-try {
-window.parent.postMessage({ type: 'sps-scroll-parent', deltaY: e.deltaY }, '*');
-} catch (_) {}
-}, { passive: true });
-}
 if (typeof document !== 'undefined') {
 try {
 const demoUiPref = localStorage.getItem('store_preview_studio_demo_ui');
@@ -7270,7 +7234,6 @@ if (typeof applyUiTheme === 'function') {
 applyUiTheme(curUi);
 }
 } catch (_) {}
-initEmbeddedWheelPassthrough();
 if (document.readyState === 'loading') {
 document.addEventListener('DOMContentLoaded', initDemoGuard);
 } else {
