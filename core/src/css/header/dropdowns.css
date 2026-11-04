@@ -8,7 +8,7 @@
   top: calc(100% + 8px);
   right: 0;
   width: 230px;
-  background: rgba(18, 26, 44, 0.95);
+  background: rgba(29, 30, 29, 0.96);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--line-hi);

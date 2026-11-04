@@ -312,14 +312,31 @@ function validateScreenshots(){
             tag.className = 'shot-dim-tag warn';
             tag.textContent = `Out of Range (${w}×${h})`;
           } else {
-            const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-            const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
-            if((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)){
-              tag.className = 'shot-dim-tag warn';
-              tag.textContent = `Scaled (${w}×${h})`;
-            } else {
+            const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+            const isStandardGoogle = store === 'google' && (
+              (w === 1080 && h === 1920) ||
+              (w === 1080 && h === 2340) ||
+              (w === 1080 && h === 2400) ||
+              (w === 1080 && h === 2160) ||
+              (w === 1080 && h === 2280) ||
+              (w === 1440 && h === 2560) ||
+              (w === 1440 && h === 3120) ||
+              (w === 1440 && h === 3200) ||
+              (w === 1440 && h === 2880) ||
+              (w === 1440 && h === 2960) ||
+              (w === 1440 && h === 3088) ||
+              (w === 720 && h === 1280) ||
+              (w === 720 && h === 1560) ||
+              (w === 720 && h === 1600) ||
+              (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+            );
+            const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
+            if(isPreset || (store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)){
               tag.className = 'shot-dim-tag ok';
               tag.textContent = `Portrait (${w}×${h})`;
+            } else {
+              tag.className = 'shot-dim-tag warn';
+              tag.textContent = `Scaled (${w}×${h})`;
             }
           }
         }

@@ -1,7 +1,7 @@
 /* Feature Graphic Picker in Editor */
 .feature-wrap{
   position:relative;width:100%;aspect-ratio:1024/500;border-radius:12px;overflow:hidden;
-  border:1px solid var(--line-hi);background:#0a101d;cursor:pointer;
+  border:1px solid var(--line-hi);background:var(--card, #1D1E1D);cursor:pointer;
   box-shadow:0 4px 14px rgba(0,0,0,.35);
 }
 .feature-wrap img{width:100%;height:100%;object-fit:cover;display:block}

@@ -352,9 +352,26 @@
             dimOk = false;
           } else {
             dimErr = false;
-            const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-            const isStandardGoogle = _activeModalStore === 'google' && (w === 1080 && h === 1920);
-            dimOk = isStandardApple || isStandardGoogle;
+            const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+            const isStandardGoogle = _activeModalStore === 'google' && (
+              (w === 1080 && h === 1920) ||
+              (w === 1080 && h === 2340) ||
+              (w === 1080 && h === 2400) ||
+              (w === 1080 && h === 2160) ||
+              (w === 1080 && h === 2280) ||
+              (w === 1440 && h === 2560) ||
+              (w === 1440 && h === 3120) ||
+              (w === 1440 && h === 3200) ||
+              (w === 1440 && h === 2880) ||
+              (w === 1440 && h === 2960) ||
+              (w === 1440 && h === 3088) ||
+              (w === 720 && h === 1280) ||
+              (w === 720 && h === 1560) ||
+              (w === 720 && h === 1600) ||
+              (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+            );
+            const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
+            dimOk = isPreset || isStandardApple || isStandardGoogle;
           }
         }
         dimEl.className = 'icon-metric-val ' + (dimErr ? 'err' : (dimOk ? 'ok' : 'warn'));
@@ -617,9 +634,26 @@
           detailsHtml = '<p><strong>Google Play Dimension Notice:</strong> Recommended dimension range is 320–3,840 px. Please check Play Console requirements.</p><p class="icon-modal-warn-hint">Recommended standard: 1080×1920 px.</p>';
         } else {
           // Check standard dimensions
-          const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-          const isStandardGoogle = _activeModalStore === 'google' && (w === 1080 && h === 1920);
-          if ((_activeModalStore === 'apple' && !isStandardApple) || (_activeModalStore === 'google' && !isStandardGoogle)) {
+          const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+          const isStandardGoogle = _activeModalStore === 'google' && (
+            (w === 1080 && h === 1920) ||
+            (w === 1080 && h === 2340) ||
+            (w === 1080 && h === 2400) ||
+            (w === 1080 && h === 2160) ||
+            (w === 1080 && h === 2280) ||
+            (w === 1440 && h === 2560) ||
+            (w === 1440 && h === 3120) ||
+            (w === 1440 && h === 3200) ||
+            (w === 1440 && h === 2880) ||
+            (w === 1440 && h === 2960) ||
+            (w === 1440 && h === 3088) ||
+            (w === 720 && h === 1280) ||
+            (w === 720 && h === 1560) ||
+            (w === 720 && h === 1600) ||
+            (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+          );
+          const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
+          if (!isPreset && ((_activeModalStore === 'apple' && !isStandardApple) || (_activeModalStore === 'google' && !isStandardGoogle))) {
             level = 'warn';
             badgeText = `Dimension Notice: ${w}×${h} px · Scaled to Canvas`;
             detailsHtml = '<p>Screenshot is portrait ratio but differs from target (' + (_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px') + '). It will be scaled to fit device frames.</p><p class="icon-modal-warn-hint">Export at standard target resolution for optimal crispness.</p>';

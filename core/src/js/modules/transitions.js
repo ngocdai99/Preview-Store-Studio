@@ -564,6 +564,24 @@ function setStore(s, animate = true, preserveDual = false){
   $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
   syncSegPill(s);
 
+  // Immediately update Phone Screenshots description and counter for the new store (<1ms)
+  const hintEl = $('shotHint');
+  if(hintEl){
+    if(s === 'apple'){
+      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
+    } else {
+      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
+    }
+  }
+  const counterEl = $('shotCounter');
+  if(counterEl && typeof SHOTS !== 'undefined'){
+    const validCount = SHOTS.filter(sh => sh && sh.trim()).length;
+    const maxAllowed = s === 'apple' ? 10 : 8;
+    const minRequired = s === 'apple' ? 1 : 2;
+    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
+    counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+  }
+
   if(fromMode === toMode){
     syncAllVtPills();
     return;
@@ -706,6 +724,8 @@ function setStore(s, animate = true, preserveDual = false){
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
+      if(typeof validateScreenshots === 'function') validateScreenshots();
+      if(typeof validateTabletShots === 'function') validateTabletShots();
     if(typeof saveState === 'function') saveState(false);
   };
 

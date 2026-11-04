@@ -3844,15 +3844,32 @@ function evaluatePhoneShot(w, h, sizeBytes, store) {
     bannerLevel = 'warn';
     bannerType = 'Dimension Warning';
   } else {
-    const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-    const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
-    if ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)) {
-      tagClass = 'warn';
-      tagText = `Scaled (${w}×${h})`;
-      bannerLevel = 'ok';
-    } else {
+    const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+    const isStandardGoogle = store === 'google' && (
+      (w === 1080 && h === 1920) ||
+      (w === 1080 && h === 2340) ||
+      (w === 1080 && h === 2400) ||
+      (w === 1080 && h === 2160) ||
+      (w === 1080 && h === 2280) ||
+      (w === 1440 && h === 2560) ||
+      (w === 1440 && h === 3120) ||
+      (w === 1440 && h === 3200) ||
+      (w === 1440 && h === 2880) ||
+      (w === 1440 && h === 2960) ||
+      (w === 1440 && h === 3088) ||
+      (w === 720 && h === 1280) ||
+      (w === 720 && h === 1560) ||
+      (w === 720 && h === 1600) ||
+      (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+    );
+    const isPreset = (w === 1080 && h === 2340);
+    if (isPreset || (store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) {
       tagClass = 'ok';
       tagText = `Portrait (${w}×${h})`;
+      bannerLevel = 'ok';
+    } else {
+      tagClass = 'warn';
+      tagText = `Scaled (${w}×${h})`;
       bannerLevel = 'ok';
     }
   }
@@ -3878,9 +3895,26 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
     if (isWrongRatio) {
       dimClass = 'err';
     } else {
-      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-      const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
-      dimClass = (isStandardApple || isStandardGoogle) ? 'ok' : 'warn';
+      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+      const isStandardGoogle = store === 'google' && (
+        (w === 1080 && h === 1920) ||
+        (w === 1080 && h === 2340) ||
+        (w === 1080 && h === 2400) ||
+        (w === 1080 && h === 2160) ||
+        (w === 1080 && h === 2280) ||
+        (w === 1440 && h === 2560) ||
+        (w === 1440 && h === 3120) ||
+        (w === 1440 && h === 3200) ||
+        (w === 1440 && h === 2880) ||
+        (w === 1440 && h === 2960) ||
+        (w === 1440 && h === 3088) ||
+        (w === 720 && h === 1280) ||
+        (w === 720 && h === 1560) ||
+        (w === 720 && h === 1600) ||
+        (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+      );
+      const isPreset = (w === 1080 && h === 2340);
+      dimClass = (isPreset || (store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) ? 'ok' : 'warn';
     }
   } else if (type === 'ipad') {
     const dimOk = (w === 2048 && h === 2732) || (w === 2732 && h === 2048) || isIpadPortrait || isIpadLandscape;
@@ -3934,9 +3968,26 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
       level = 'warn';
       badgeText = `Dimension Warning: Out of range (${w}×${h} px)`;
     } else {
-      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-      const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
-      if ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)) {
+      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+      const isStandardGoogle = store === 'google' && (
+        (w === 1080 && h === 1920) ||
+        (w === 1080 && h === 2340) ||
+        (w === 1080 && h === 2400) ||
+        (w === 1080 && h === 2160) ||
+        (w === 1080 && h === 2280) ||
+        (w === 1440 && h === 2560) ||
+        (w === 1440 && h === 3120) ||
+        (w === 1440 && h === 3200) ||
+        (w === 1440 && h === 2880) ||
+        (w === 1440 && h === 2960) ||
+        (w === 1440 && h === 3088) ||
+        (w === 720 && h === 1280) ||
+        (w === 720 && h === 1560) ||
+        (w === 720 && h === 1600) ||
+        (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+      );
+      const isPreset = (w === 1080 && h === 2340);
+      if (!isPreset && ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle))) {
         level = 'warn';
         badgeText = `Dimension Notice: ${w}×${h} px · Scaled to Canvas`;
       } else {
@@ -4060,6 +4111,34 @@ const mAlphaApple = evaluateInspectorModal(1290, 2796, 2 * 1024 * 1024, 'apple',
 assert(mAlphaApple.formatClass === 'err', 'Apple Alpha Screenshot Modal: formatClass is err (RED)');
 assert(mAlphaApple.level === 'err', 'Apple Alpha Screenshot Modal: level is err (RED)');
 assert(mAlphaApple.badgeText.includes('Alpha detected'), 'Apple Alpha Screenshot Modal: badge text mentions Alpha detected');
+
+// Test 11: Preset & Standard Modern Phone screenshot (1080x2340, Apple & Google)
+const rPresetApple = evaluatePhoneShot(1080, 2340, 800 * 1024, 'apple');
+assert(rPresetApple.tagClass === 'ok', 'Apple Preset 1080x2340: tagClass is ok (GREEN)');
+assert(rPresetApple.tagText === 'Portrait (1080×2340)', 'Apple Preset 1080x2340: tagText is Portrait (1080×2340), NOT Scaled');
+assert(rPresetApple.bannerLevel === 'ok', 'Apple Preset 1080x2340: bannerLevel is ok');
+
+const mPresetApple = evaluateInspectorModal(1080, 2340, 800 * 1024, 'apple', 'screenshot', false);
+assert(mPresetApple.dimClass === 'ok', 'Apple Preset Modal: dimClass is ok (GREEN)');
+assert(mPresetApple.ratioClass === 'ok', 'Apple Preset Modal: ratioClass is ok (GREEN)');
+assert(mPresetApple.level === 'ok', 'Apple Preset Modal: level is ok (GREEN)');
+assert(mPresetApple.badgeText === '1080×2340 px · Active Screenshot', 'Apple Preset Modal: badge is Active Screenshot');
+
+const rPresetGoogle = evaluatePhoneShot(1080, 2340, 800 * 1024, 'google');
+assert(rPresetGoogle.tagClass === 'ok', 'Google Preset 1080x2340: tagClass is ok (GREEN)');
+assert(rPresetGoogle.tagText === 'Portrait (1080×2340)', 'Google Preset 1080x2340: tagText is Portrait (1080×2340), NOT Scaled');
+assert(rPresetGoogle.bannerLevel === 'ok', 'Google Preset 1080x2340: bannerLevel is ok');
+
+const mPresetGoogle = evaluateInspectorModal(1080, 2340, 800 * 1024, 'google', 'screenshot', false);
+assert(mPresetGoogle.dimClass === 'ok', 'Google Preset Modal: dimClass is ok (GREEN)');
+assert(mPresetGoogle.ratioClass === 'ok', 'Google Preset Modal: ratioClass is ok (GREEN)');
+assert(mPresetGoogle.level === 'ok', 'Google Preset Modal: level is ok (GREEN)');
+
+// Test 12: Source code and dynamic sync for shotHint and transitions
+const transSrcSync = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
+assert(transSrcSync.includes("hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots"), 'transitions.js immediately updates shotHint to Google Play on store switch');
+assert(transSrcSync.includes("hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots"), 'transitions.js immediately updates shotHint to Apple App Store on store switch');
+assert(transSrcSync.includes("validateScreenshots()"), 'transitions.js triggers validateScreenshots on store change');
 
 // ---------------------------------------------------------------------
 // TEST MATRIX: SOURCE CODE & BUNDLE REGRESSION ENFORCEMENT

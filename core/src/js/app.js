@@ -4784,14 +4784,31 @@ function validateScreenshots(){
             tag.className = 'shot-dim-tag warn';
             tag.textContent = `Out of Range (${w}×${h})`;
           } else {
-            const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-            const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
-            if((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)){
-              tag.className = 'shot-dim-tag warn';
-              tag.textContent = `Scaled (${w}×${h})`;
-            } else {
+            const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+            const isStandardGoogle = store === 'google' && (
+              (w === 1080 && h === 1920) ||
+              (w === 1080 && h === 2340) ||
+              (w === 1080 && h === 2400) ||
+              (w === 1080 && h === 2160) ||
+              (w === 1080 && h === 2280) ||
+              (w === 1440 && h === 2560) ||
+              (w === 1440 && h === 3120) ||
+              (w === 1440 && h === 3200) ||
+              (w === 1440 && h === 2880) ||
+              (w === 1440 && h === 2960) ||
+              (w === 1440 && h === 3088) ||
+              (w === 720 && h === 1280) ||
+              (w === 720 && h === 1560) ||
+              (w === 720 && h === 1600) ||
+              (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+            );
+            const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
+            if(isPreset || (store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)){
               tag.className = 'shot-dim-tag ok';
               tag.textContent = `Portrait (${w}×${h})`;
+            } else {
+              tag.className = 'shot-dim-tag warn';
+              tag.textContent = `Scaled (${w}×${h})`;
             }
           }
         }
@@ -5738,9 +5755,26 @@ if(ipadShotFile){
             dimOk = false;
           } else {
             dimErr = false;
-            const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-            const isStandardGoogle = _activeModalStore === 'google' && (w === 1080 && h === 1920);
-            dimOk = isStandardApple || isStandardGoogle;
+            const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+            const isStandardGoogle = _activeModalStore === 'google' && (
+              (w === 1080 && h === 1920) ||
+              (w === 1080 && h === 2340) ||
+              (w === 1080 && h === 2400) ||
+              (w === 1080 && h === 2160) ||
+              (w === 1080 && h === 2280) ||
+              (w === 1440 && h === 2560) ||
+              (w === 1440 && h === 3120) ||
+              (w === 1440 && h === 3200) ||
+              (w === 1440 && h === 2880) ||
+              (w === 1440 && h === 2960) ||
+              (w === 1440 && h === 3088) ||
+              (w === 720 && h === 1280) ||
+              (w === 720 && h === 1560) ||
+              (w === 720 && h === 1600) ||
+              (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+            );
+            const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
+            dimOk = isPreset || isStandardApple || isStandardGoogle;
           }
         }
         dimEl.className = 'icon-metric-val ' + (dimErr ? 'err' : (dimOk ? 'ok' : 'warn'));
@@ -6003,9 +6037,26 @@ if(ipadShotFile){
           detailsHtml = '<p><strong>Google Play Dimension Notice:</strong> Recommended dimension range is 320–3,840 px. Please check Play Console requirements.</p><p class="icon-modal-warn-hint">Recommended standard: 1080×1920 px.</p>';
         } else {
           // Check standard dimensions
-          const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
-          const isStandardGoogle = _activeModalStore === 'google' && (w === 1080 && h === 1920);
-          if ((_activeModalStore === 'apple' && !isStandardApple) || (_activeModalStore === 'google' && !isStandardGoogle)) {
+          const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688) || (w === 1080 && h === 2340));
+          const isStandardGoogle = _activeModalStore === 'google' && (
+            (w === 1080 && h === 1920) ||
+            (w === 1080 && h === 2340) ||
+            (w === 1080 && h === 2400) ||
+            (w === 1080 && h === 2160) ||
+            (w === 1080 && h === 2280) ||
+            (w === 1440 && h === 2560) ||
+            (w === 1440 && h === 3120) ||
+            (w === 1440 && h === 3200) ||
+            (w === 1440 && h === 2880) ||
+            (w === 1440 && h === 2960) ||
+            (w === 1440 && h === 3088) ||
+            (w === 720 && h === 1280) ||
+            (w === 720 && h === 1560) ||
+            (w === 720 && h === 1600) ||
+            (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
+          );
+          const isPreset = (typeof CURRENT_PRESET_KEY !== 'undefined' && CURRENT_PRESET_KEY !== 'draft') || (w === 1080 && h === 2340);
+          if (!isPreset && ((_activeModalStore === 'apple' && !isStandardApple) || (_activeModalStore === 'google' && !isStandardGoogle))) {
             level = 'warn';
             badgeText = `Dimension Notice: ${w}×${h} px · Scaled to Canvas`;
             detailsHtml = '<p>Screenshot is portrait ratio but differs from target (' + (_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px') + '). It will be scaled to fit device frames.</p><p class="icon-modal-warn-hint">Export at standard target resolution for optimal crispness.</p>';
@@ -8898,6 +8949,24 @@ function setStore(s, animate = true, preserveDual = false){
   $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
   syncSegPill(s);
 
+  // Immediately update Phone Screenshots description and counter for the new store (<1ms)
+  const hintEl = $('shotHint');
+  if(hintEl){
+    if(s === 'apple'){
+      hintEl.innerHTML = '<strong>Apple App Store:</strong> Upload 1–10 screenshots per display (iPhone 6.9" 1320×2868 / 1290×2796 px or 6.5" 1284×2778 px).<br>• PNG or JPEG, no alpha transparency.<br>• Drag ⠿ handle to reorder.';
+    } else {
+      hintEl.innerHTML = '<strong>Google Play:</strong> Upload 2–8 screenshots (16:9 or 9:16 aspect ratio, each side between 320 px and 3,840 px).<br>• PNG or JPEG, up to 8 MB each.<br>• Drag ⠿ handle to reorder.';
+    }
+  }
+  const counterEl = $('shotCounter');
+  if(counterEl && typeof SHOTS !== 'undefined'){
+    const validCount = SHOTS.filter(sh => sh && sh.trim()).length;
+    const maxAllowed = s === 'apple' ? 10 : 8;
+    const minRequired = s === 'apple' ? 1 : 2;
+    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
+    counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+  }
+
   if(fromMode === toMode){
     syncAllVtPills();
     return;
@@ -9040,6 +9109,8 @@ function setStore(s, animate = true, preserveDual = false){
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
+      if(typeof validateScreenshots === 'function') validateScreenshots();
+      if(typeof validateTabletShots === 'function') validateTabletShots();
     if(typeof saveState === 'function') saveState(false);
   };
 
