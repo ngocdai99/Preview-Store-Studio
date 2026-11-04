@@ -51,9 +51,11 @@ function sanitizeStateForLocalStorage(state){
 
 function applyStateObject(s){
   if(!s || typeof s !== 'object') return false;
-  if(s.store) setStore(s.store, false);
+  const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
+  if(s.store) setStore(s.store, false, isSavedDual);
   if(s.appleDevice) setAppleDevice(s.appleDevice, false);
   else if(document.body) document.body.dataset.appleDevice = appleDevice;
+  if(s.view && typeof setView === 'function') setView(s.view, true);
   if(s.theme && $$('.phone').length) (typeof setDeviceTheme === 'function' ? setDeviceTheme(s.theme, false) : $$('.phone').forEach(p => p.dataset.theme = s.theme));
   if(s.form){
     if(s.form.name !== undefined && $('f-name')) $('f-name').value = s.form.name;
@@ -169,9 +171,12 @@ function applyStateObject(s){
 }
 
 function getCurrentStateObject(){
+  const activeViewBtn = document.querySelector('#vt button[data-v].on');
+  const currentView = activeViewBtn ? activeViewBtn.dataset.v : 'detail';
   return {
     store,
     appleDevice,
+    view: currentView,
     theme: document.querySelector('.phone') ? (document.querySelector('.phone').dataset.theme || 'light') : 'light',
     form: {
       name: $('f-name') ? $('f-name').value : '',
@@ -734,6 +739,17 @@ async function resetFactoryStorage(){
   // 3. Wipe all LocalStorage & SessionStorage
   try{ if(typeof localStorage !== 'undefined') localStorage.clear(); }catch(_){}
   try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
+
+  // In-memory reset to default dual phone + detail view
+  try{
+    document.body.dataset.dual = 'true';
+    appleDevice = 'dual';
+    googleDevice = 'dual';
+    document.body.dataset.appleDevice = 'iphone';
+    document.body.dataset.googleDevice = 'phone';
+    if(typeof setStore === 'function') setStore('apple', false, true);
+    if(typeof setView === 'function') setView('detail', true);
+  }catch(_){}
 
   // 4. Reload page cleanly to bootstrap pristine factory state
   if(typeof window !== 'undefined' && window.location){

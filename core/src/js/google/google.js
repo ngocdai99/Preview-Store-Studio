@@ -1,6 +1,6 @@
 // Store Preview Studio · Google Play Devices & Tablet Orientation
 // --- Google Play Tablet Screenshots (7-inch & 10-inch) ---
-let googleDevice = 'phone'; // 'phone' | 'tab7' | 'tab10'
+let googleDevice = 'dual'; // 'phone' | 'tab7' | 'tab10' | 'dual'
 const tabOrient = {tab7:'landscape', tab10:'landscape'};
 const MAX_TAB = 8;
 const TAB_CFG = {
@@ -317,14 +317,18 @@ function applyGoogleDevice(){
   const selApple = (isDual || appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
-  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'google'));
-  if (isDual) {
-    const btn = $('btnDualPhone');
-    if (btn) btn.classList.add('on');
-  } else {
-    const btn = $('btnDualPhone');
-    if (btn) btn.classList.remove('on');
+  if (!isDual && typeof store !== 'undefined' && store) {
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === store));
+  } else if (!isDual) {
+    $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'google'));
   }
+  const btn = $('btnDualPhone');
+  if (btn) {
+    btn.classList.toggle('on', isDual);
+    btn.setAttribute('aria-checked', isDual ? 'true' : 'false');
+  }
+  const badge = $('stageDualBadge');
+  if (badge) badge.style.display = isDual ? 'inline-flex' : 'none';
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){

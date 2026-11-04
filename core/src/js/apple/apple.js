@@ -1,6 +1,6 @@
 // Store Preview Studio · Apple App Store & Devices
 // --- Apple Device Mode & Store Switchers ---
-let appleDevice = 'iphone'; // 'iphone' | 'ipad' | 'dual'
+let appleDevice = 'dual'; // 'iphone' | 'ipad' | 'dual'
 
 function setAppleDevice(d, animate = true){
   if (typeof isDemoMode === 'function' && isDemoMode() && d === 'ipad') {
@@ -32,10 +32,13 @@ function setAppleDevice(d, animate = true){
     $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
     $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
     $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'apple'));
-    if (!nextDual) {
-      const btn = $('btnDualPhone');
-      if (btn) btn.classList.remove('on');
+    const btn = $('btnDualPhone');
+    if (btn) {
+      btn.classList.toggle('on', nextDual);
+      btn.setAttribute('aria-checked', nextDual ? 'true' : 'false');
     }
+    const badge = $('stageDualBadge');
+    if (badge) badge.style.display = nextDual ? 'inline-flex' : 'none';
     renderIcons();
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();

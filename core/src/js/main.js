@@ -107,10 +107,12 @@ addEventListener('orientationchange', () => setTimeout(onStageResize, 200));
 store = 'apple';
 document.body.dataset.store = 'apple';
 document.body.dataset.uiStore = 'apple';
-document.body.dataset.dual = 'false';
-if (typeof setStore === 'function') setStore('apple', false);
-document.body.dataset.appleDevice = appleDevice;
-document.body.dataset.googleDevice = googleDevice;
+document.body.dataset.dual = 'true';
+appleDevice = 'dual';
+googleDevice = 'dual';
+document.body.dataset.appleDevice = 'iphone';
+document.body.dataset.googleDevice = 'phone';
+if (typeof setStore === 'function') setStore('apple', false, true);
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
 
 if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
@@ -122,6 +124,9 @@ if(typeof hasUserDraft === 'function' && hasUserDraft()){
   restoring = true;
   try{
     loadPreset('studio');
+    if(typeof toggleDualPhone === 'function'){
+      toggleDualPhone(true);
+    }
   }finally{
     restoring = false;
   }
@@ -152,6 +157,9 @@ if(typeof updateMockupClocks === 'function'){
   window.addEventListener('load', updateMockupClocks);
 }
 setInterval(() => { if(typeof updateMockupClocks === 'function') updateMockupClocks(); }, 10000);
+if(typeof setView === 'function'){
+  setView('detail', true);
+}
 fit();
 setTimeout(syncAllVtPills, 10);
 setTimeout(syncAllVtPills, 120);

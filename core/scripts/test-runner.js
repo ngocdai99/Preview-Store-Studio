@@ -3740,6 +3740,50 @@ asyncSuites.push((async () => {
 })());
 
 // ---------------------------------------------------------------------
+// [SUITE 53]: Dual Phone & Detail View Default State & Factory Reset Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 53]: Dual Phone & Detail View Default State & Factory Reset Verification');
+
+// 1. Initial static HTML bodies default to dual phone mode
+const srcIndexRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'index.html'), 'utf8');
+const tryHtmlRaw = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'try.html'), 'utf8');
+assert(srcIndexRaw.includes('data-dual="true"'), 'src/index.html body defaults to data-dual="true"');
+assert(tryHtmlRaw.includes('data-dual="true"'), 'docs/src/marketing/try.html body defaults to data-dual="true"');
+
+// 2. View switcher HTML defaults comparison to Dual Phone active and Detail View on
+const viewSwitcherRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'stage', 'view-switcher.html'), 'utf8');
+assert(viewSwitcherRaw.includes('id="btnDualPhone"') && viewSwitcherRaw.includes('aria-checked="true"') && viewSwitcherRaw.includes('class="menu-item toggle-item on"'), 'btnDualPhone toggle defaults to on and aria-checked="true"');
+assert(viewSwitcherRaw.includes('id="stageDualBadge">Dual</span>'), 'stageDualBadge is displayed by default without display:none');
+assert(viewSwitcherRaw.includes('id="optViewDetail"') && viewSwitcherRaw.includes('class="menu-item on"'), 'optViewDetail defaults to active state on');
+assert(viewSwitcherRaw.includes('id="stageViewLabel">Detail View</span>'), 'stageViewLabel defaults to Detail View');
+
+// 3. Apple and Google device scripts default to dual
+const appleJsRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'apple', 'apple.js'), 'utf8');
+const googleJsRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'google', 'google.js'), 'utf8');
+assert(appleJsRaw.includes("let appleDevice = 'dual'"), 'apple.js initializes appleDevice to "dual"');
+assert(googleJsRaw.includes("let googleDevice = 'dual'"), 'google.js initializes googleDevice to "dual"');
+
+// 4. Main script initializes dual phone and detail view on fresh boot without saved draft
+const mainJsRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'main.js'), 'utf8');
+assert(mainJsRaw.includes("document.body.dataset.dual = 'true'"), 'main.js sets document.body.dataset.dual to "true"');
+assert(mainJsRaw.includes("appleDevice = 'dual'") && mainJsRaw.includes("googleDevice = 'dual'"), 'main.js bootstraps dual device variables');
+assert(mainJsRaw.includes("setStore('apple', false, true)"), 'main.js initializes store while preserving dual mode');
+assert(mainJsRaw.includes("setView('detail', true)"), 'main.js explicitly applies Detail View on bootstrap');
+
+// 5. Storage engine resetFactoryStorage applies pristine dual phone + detail view defaults
+const storageJsRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'storage.js'), 'utf8');
+assert(storageJsRaw.includes("document.body.dataset.dual = 'true'") && storageJsRaw.includes("setView('detail', true)"), 'resetFactoryStorage resets to dual phone and detail view');
+assert(storageJsRaw.includes("isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual'"), 'applyStateObject correctly inspects saved dual state');
+
+// 6. Bundled core.html and try.html contain dual phone and detail view defaults
+const bundledCore = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
+const bundledTry = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'try.html'), 'utf8');
+assert(bundledCore.includes('data-dual="true"'), 'core.html contains data-dual="true"');
+assert(bundledTry.includes('data-dual="true"'), 'try.html contains data-dual="true"');
+assert(bundledTry.includes('id="stageDualBadge">Dual</span>'), 'try.html displays Dual badge by default');
+
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {

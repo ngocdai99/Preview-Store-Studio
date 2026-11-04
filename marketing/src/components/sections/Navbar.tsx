@@ -10,7 +10,14 @@ import { Menu, X } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState<string>("Studio");
+  const isTryPage = pathname === "/try" || pathname?.startsWith("/try");
+  const isHomePage = pathname === "/" || pathname === "";
+
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (isTryPage) return "Live Demo";
+    if (isHomePage) return "Studio";
+    return "";
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isClickScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -25,6 +32,16 @@ export function Navbar() {
 
   // Scroll spy to dynamically sync selected tab with current section in view
   useEffect(() => {
+    if (isTryPage) {
+      setActiveTab("Live Demo");
+      return;
+    }
+
+    if (!isHomePage) {
+      setActiveTab("");
+      return;
+    }
+
     const handleScroll = () => {
       if (isClickScrollingRef.current) return;
 
@@ -55,7 +72,7 @@ export function Navbar() {
         clearTimeout(scrollTimeoutRef.current);
       }
     };
-  }, []);
+  }, [isTryPage, isHomePage]);
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -128,7 +145,7 @@ export function Navbar() {
                   onClick={(e) => handleNavClick(e, item.label, item.href)}
                   className={`text-[13.5px] transition-colors duration-150 ${
                     isSelected
-                      ? "text-slate-900 dark:text-white font-semibold"
+                      ? "text-[#006636] dark:text-[#00D085] font-semibold"
                       : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
                   }`}
                 >
@@ -145,8 +162,8 @@ export function Navbar() {
             href="/try"
             onClick={handleLiveDemoClick}
             className={`hidden sm:inline-flex items-center text-[13px] font-medium px-2.5 py-1.5 transition-colors ${
-              pathname === "/try"
-                ? "text-slate-900 dark:text-white font-semibold"
+              isTryPage || activeTab === "Live Demo"
+                ? "text-[#006636] dark:text-[#00D085] font-semibold"
                 : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
             }`}
           >
@@ -182,26 +199,29 @@ export function Navbar() {
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200/90 dark:border-[#282928] bg-white/95 dark:bg-[#131413]/95 backdrop-blur-xl px-4 py-3 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={(e) => handleNavClick(e, item.label, item.href)}
-              className={`block px-3 py-2 rounded-md text-[14px] transition-colors ${
-                activeTab === item.label
-                  ? "text-slate-900 dark:text-white font-semibold bg-slate-100 dark:bg-white/[0.06]"
-                  : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            const isSelected = activeTab === item.label;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.label, item.href)}
+                className={`block px-3 py-2 rounded-md text-[14px] transition-colors ${
+                  isSelected
+                    ? "text-[#006636] dark:text-[#00D085] font-semibold bg-[#006636]/10 dark:bg-[#00D085]/10"
+                    : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <Link
             href="/try"
             onClick={handleLiveDemoClick}
-            className={`block px-3 py-2 text-[14px] font-medium transition-colors ${
-              pathname === "/try"
-                ? "text-slate-900 dark:text-white font-semibold bg-slate-100 dark:bg-white/[0.06] rounded-md"
+            className={`block px-3 py-2 text-[14px] font-medium transition-colors rounded-md ${
+              isTryPage || activeTab === "Live Demo"
+                ? "text-[#006636] dark:text-[#00D085] font-semibold bg-[#006636]/10 dark:bg-[#00D085]/10"
                 : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
             }`}
           >
