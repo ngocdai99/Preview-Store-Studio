@@ -740,6 +740,9 @@ async function resetFactoryStorage(){
   try{ if(typeof localStorage !== 'undefined') localStorage.clear(); }catch(_){}
   try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
 
+  // Mark sessionStorage so after reload it boots into clean draft with dashed placeholder app icon
+  try{ if(typeof sessionStorage !== 'undefined') sessionStorage.setItem('sps_reset_to_blank', '1'); }catch(_){}
+
   // In-memory reset to default dual phone + detail view
   try{
     document.body.dataset.dual = 'true';

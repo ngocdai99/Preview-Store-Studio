@@ -117,7 +117,16 @@ $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== sto
 
 if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
 
-if(typeof hasUserDraft === 'function' && hasUserDraft()){
+if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
+  try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
+  CURRENT_PRESET_KEY = 'draft';
+  loadPreset('none');
+  IS_CUSTOM_ICON = false;
+  if(typeof userDraft !== 'undefined' && userDraft){
+    userDraft.isCustomIcon = false;
+    userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+  }
+} else if(typeof hasUserDraft === 'function' && hasUserDraft()){
   CURRENT_PRESET_KEY = 'draft';
   loadPreset('draft');
 } else if(!loadState()){
