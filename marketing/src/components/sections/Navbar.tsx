@@ -2,12 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { Menu, X } from "lucide-react";
 
 export function Navbar() {
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<string>("Studio");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isClickScrollingRef = useRef(false);
@@ -90,6 +92,14 @@ export function Navbar() {
     }
   };
 
+  const handleLiveDemoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setMobileMenuOpen(false);
+    if (pathname === "/try" || (typeof window !== "undefined" && window.location.pathname === "/try")) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 dark:border-[#282928] bg-white/85 dark:bg-[#131413]/85 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
@@ -133,7 +143,12 @@ export function Navbar() {
         <div className="flex items-center gap-2.5 sm:gap-3.5">
           <Link
             href="/try"
-            className="hidden sm:inline-flex items-center text-[13px] font-medium text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 transition-colors"
+            onClick={handleLiveDemoClick}
+            className={`hidden sm:inline-flex items-center text-[13px] font-medium px-2.5 py-1.5 transition-colors ${
+              pathname === "/try"
+                ? "text-slate-900 dark:text-white font-semibold"
+                : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
+            }`}
           >
             Live Demo
           </Link>
@@ -183,8 +198,12 @@ export function Navbar() {
           ))}
           <Link
             href="/try"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-[14px] text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
+            onClick={handleLiveDemoClick}
+            className={`block px-3 py-2 text-[14px] font-medium transition-colors ${
+              pathname === "/try"
+                ? "text-slate-900 dark:text-white font-semibold bg-slate-100 dark:bg-white/[0.06] rounded-md"
+                : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
+            }`}
           >
             Live Demo
           </Link>
