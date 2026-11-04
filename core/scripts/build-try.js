@@ -38,14 +38,14 @@ function buildTry() {
   // 1. Resolve HTML includes (all component paths like components/*.html)
   let html = resolveHtmlIncludes(raw, SRC_DIR);
 
-  // 2. Resolve CSS
+  // 2. Resolve CSS (Demo Mode includes demo-upgrade-modal.css)
   const cssPath = path.join(SRC_DIR, 'css', 'style.css');
   if (!fs.existsSync(cssPath)) throw new Error('Missing src/css/style.css');
   const rawCss = fs.readFileSync(cssPath, 'utf8');
-  const css = resolveCssImports(rawCss, path.dirname(cssPath));
+  const css = resolveCssImports(rawCss, path.dirname(cssPath), { isDemo: true });
 
-  // 3. Resolve JS
-  const js = getBundledJs();
+  // 3. Resolve JS (Demo Mode strips PRO implementations & replaces with stubs)
+  const js = getBundledJs({ isDemo: true });
 
   // 4. Resolve html2canvas
   const libPath = path.join(SRC_DIR, 'lib', 'html2canvas.min.js');

@@ -56,8 +56,12 @@ function resolveHtmlIncludes(content, baseDir) {
 /**
  * Resolves @import "path/to/file.css"; in CSS
  */
-function resolveCssImports(content, baseDir) {
+function resolveCssImports(content, baseDir, options = {}) {
+  const isDemo = !!options.isDemo;
   return content.replace(/@import\s+["']([^"']+)["'];?/gi, (match, importPath) => {
+    if (!isDemo && importPath.includes('demo-upgrade-modal.css')) {
+      return '';
+    }
     const fullPath = path.isAbsolute(importPath)
       ? importPath
       : path.join(baseDir, importPath);
@@ -67,20 +71,124 @@ function resolveCssImports(content, baseDir) {
       return `/* Missing CSS import: ${importPath} */`;
     }
     const imported = fs.readFileSync(fullPath, 'utf8');
-    return resolveCssImports(imported, path.dirname(fullPath));
+    return resolveCssImports(imported, path.dirname(fullPath), options);
   });
+}
+
+/**
+ * Strips `if (typeof isDemoMode === 'function' && isDemoMode()...) { ... }` blocks
+ * from commercial paid builds so zero demo/paywall references remain.
+ */
+function stripDemoBlocks(code) {
+  const pattern = /\n?[ \t]*if\s*\(\s*typeof\s+isDemoMode\s*===\s*['"]function['"]\s*&&\s*isDemoMode\(\)(?:[^){]|\([^)]*\))*\)\s*\{/g;
+  let result = '';
+  let lastIdx = 0;
+  let match;
+
+  while ((match = pattern.exec(code)) !== null) {
+    result += code.slice(lastIdx, match.index);
+    let depth = 1;
+    let i = match.index + match[0].length;
+    while (i < code.length && depth > 0) {
+      if (code[i] === '{') depth++;
+      else if (code[i] === '}') depth--;
+      i++;
+    }
+    lastIdx = i;
+    pattern.lastIndex = i;
+  }
+  result += code.slice(lastIdx);
+  return result;
+}
+
+/**
+ * Replaces PRO feature implementations with stubs for Demo Mode builds (`try.html`)
+ * so that PRO source code is never shipped to the client in Demo bundles.
+ */
+function transformModuleForDemo(relPath, content) {
+  if (relPath === 'modules/demo-guard.js') {
+    return content.replace(
+      /function\s+isDemoMode\s*\(\s*\)\s*\{[\s\S]*?\}/,
+      'function isDemoMode() { return true; }'
+    );
+  }
+
+  if (relPath === 'modules/export/clipboard.js') {
+    return `if($('btnCopyText')) $('btnCopyText').onclick = copyAllText;\nfunction copyAllText(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-copy');\n}`;
+  }
+
+  if (relPath === 'modules/export/markdown.js') {
+    return `if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;\nfunction exportMarkdown(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-markdown');\n}`;
+  }
+
+  if (relPath === 'modules/export/json.js') {
+    const tailIdx = content.indexOf("if($('optImportJSON')){");
+    const tail = tailIdx >= 0 ? content.slice(tailIdx) : '';
+    return `if($('optExportJSON')) $('optExportJSON').onclick = exportJSON;\nfunction exportJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-json');\n}\nfunction parseAndApplyJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('import-json');\n  return false;\n}\n` + tail;
+  }
+
+  if (relPath === 'modules/store-import.js') {
+    const netIdx = content.indexOf('function isNetworkOnline()');
+    const middleAndTail = netIdx >= 0 ? content.slice(netIdx) : content;
+    const strippedSubmit = middleAndTail.replace(
+      /async function handleStoreImportSubmit[\s\S]*?(?=\/\*\*\s*\n\s*\*\s*Initializes modal event listeners)/,
+      `async function handleStoreImportSubmit() {\n  if (typeof requireFullVersion === 'function') requireFullVersion('store-import');\n}\n\n`
+    );
+    return `function parseStoreInput() { return null; }\nfunction normalizeAppleApp() { return null; }\nasync function fetchAppleAppData() { throw new Error('Available in Full Version'); }\nasync function fetchStoreAppData() { throw new Error('Available in Full Version'); }\nfunction applyImportedStoreApp() { return false; }\n\n` + strippedSubmit;
+  }
+
+  if (relPath === 'modules/export/storage.js') {
+    return content
+      .replace(
+        /function saveDraftToStorage\(\)\{[\s\S]*?(?=function loadDraftFromStorage\(\)\{)/,
+        'function saveDraftToStorage(){\n  return Promise.resolve(true);\n}\n\n'
+      )
+      .replace(
+        /if\(CURRENT_PRESET_KEY !== 'draft'[\s\S]*?if\(typeof exportJSON === 'function'\)\{\s*exportJSON\(\);\s*\}/,
+        "if(typeof exportJSON === 'function') exportJSON();"
+      );
+  }
+
+  if (relPath === 'modules/export/png.js') {
+    return content
+      .replace(
+        /if\(typeof isDemoMode === 'function' && isDemoMode\(\) && !opts\.allowDemo\)\{[\s\S]*?return;\s*\}/,
+        `if(!opts || !opts.allowDemo || opts.frameless || opts.transparent || scaleFactor > 2){\n    if(typeof requireFullVersion === 'function') requireFullVersion('export-png');\n    return;\n  }\n  scaleFactor = 2;\n  opts = { watermark: true, allowDemo: true };`
+      )
+      .replace(
+        'if(opts.watermark) drawStudioWatermark(canvas);',
+        'drawStudioWatermark(canvas);'
+      );
+  }
+
+  if (relPath === 'apple/apple.js') {
+    return content.replace(
+      "if (typeof isDemoMode === 'function' && isDemoMode() && d === 'ipad')",
+      "if (d === 'ipad')"
+    );
+  }
+
+  if (relPath === 'google/google.js') {
+    return content.replace(
+      "if (typeof isDemoMode === 'function' && isDemoMode() && (d === 'tab7' || d === 'tab10'))",
+      "if (d === 'tab7' || d === 'tab10')"
+    );
+  }
+
+  return content;
 }
 
 /**
  * Bundles all JavaScript modules in strict dependency order
  */
-function getBundledJs() {
+function getBundledJs(options = {}) {
+  const isDemo = !!options.isDemo;
   const jsDir = path.join(SRC_DIR, 'js');
   const jsFiles = [
     'core/utils.js',
     'core/state.js',
     'core/resizer.js',
-    'modules/demo-guard.js',
+    ...(isDemo ? ['modules/demo-guard.js'] : []),
     'modules/tour.js',
     'modules/shots/icon.js',
     'modules/shots/phone.js',
@@ -111,13 +219,17 @@ function getBundledJs() {
   if (allExist) {
     const contents = jsFiles.map(f => {
       const header = `/* =========================================================================\n   Module: src/js/${f}\n   ========================================================================= */`;
-      return `${header}\n${fs.readFileSync(path.join(jsDir, f), 'utf8')}`;
+      const raw = fs.readFileSync(path.join(jsDir, f), 'utf8');
+      const processed = isDemo ? transformModuleForDemo(f, raw) : stripDemoBlocks(raw);
+      return `${header}\n${processed}`;
     });
     const combined = contents.join('\n\n');
-    // Keep app.js synced for convenience without redundant disk writes
-    const appJsPath = path.join(jsDir, 'app.js');
-    if (!fs.existsSync(appJsPath) || fs.readFileSync(appJsPath, 'utf8') !== combined) {
-      fs.writeFileSync(appJsPath, combined, 'utf8');
+    // Keep app.js synced for paid build only
+    if (!isDemo) {
+      const appJsPath = path.join(jsDir, 'app.js');
+      if (!fs.existsSync(appJsPath) || fs.readFileSync(appJsPath, 'utf8') !== combined) {
+        fs.writeFileSync(appJsPath, combined, 'utf8');
+      }
     }
     return combined;
   }

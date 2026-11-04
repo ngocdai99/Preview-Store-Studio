@@ -6613,9 +6613,7 @@ showToast(`Added ${validFiles.length} screenshot(s)!`, 'ok');
 });
 }
 });
-function isDemoMode() {
-return typeof window !== 'undefined' && !!window.SPS_DEMO_MODE;
-}
+function isDemoMode() { return true; }
 const DEMO_PAYWALL_CONFIGS = {
 'export-png': {
 title: 'Unlock 4K Ultra HD Mockup Exports',
@@ -9760,7 +9758,7 @@ if (btn) btn.classList.remove('on');
 syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){
-if (typeof isDemoMode === 'function' && isDemoMode() && (d === 'tab7' || d === 'tab10')) {
+if (d === 'tab7' || d === 'tab10') {
 if (typeof requireFullVersion === 'function') requireFullVersion('google-tablet');
 return;
 }
@@ -11841,7 +11839,7 @@ setDeviceTheme(cur, false);
 }, 0);
 let appleDevice = 'iphone'; // 'iphone' | 'ipad' | 'dual'
 function setAppleDevice(d, animate = true){
-if (typeof isDemoMode === 'function' && isDemoMode() && d === 'ipad') {
+if (d === 'ipad') {
 if (typeof requireFullVersion === 'function') requireFullVersion('apple-ipad');
 return;
 }
@@ -12848,25 +12846,7 @@ onProceed,
 desc,
 'Replace Draft',
 function(){
-if(CURRENT_PRESET_KEY !== 'draft' && typeof userDraft === 'object' && userDraft){
-try{
-const rawName = (userDraft.form && userDraft.form.name ? userDraft.form.name : '').trim();
-const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'draft');
-const backupObj = Object.assign({
-generator: "Store Preview Studio",
-version: "2.1.0",
-timestamp: new Date().toISOString()
-}, userDraft);
-if(typeof downloadFile === 'function'){
-downloadFile(slug + '-store-config.json', JSON.stringify(backupObj, null, 2), 'application/json');
-if(typeof showToast === 'function') showToast('Exported draft backup JSON!', 'ok');
-return;
-}
-}catch(_){}
-}
-if(typeof exportJSON === 'function'){
-exportJSON();
-}
+if(typeof exportJSON === 'function') exportJSON();
 }
 );
 return true;
@@ -12888,34 +12868,7 @@ lastStorageWarnAt = now;
 showToast('Storage quota exceeded! Export JSON to save your work.', 'warn', 6000);
 }
 function saveDraftToStorage(){
-if(typeof isDemoMode === 'function' && isDemoMode()){
 return Promise.resolve(true);
-}
-if(!userDraft) return Promise.resolve(true);
-userDraft._savedAt = Date.now();
-const idbPromise = (typeof idbSave === 'function') ? idbSave(DRAFT_STORAGE_KEY, userDraft) : Promise.resolve(false);
-if(userDraft.isCustomFeature && userDraft.featureGraphic && userDraft.featureGraphic !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
-if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE.has(userDraft.featureGraphic)){
-try{ localStorage.setItem(DRAFT_FEATURE_THUMB_KEY, THUMB_CACHE.get(userDraft.featureGraphic)); }catch(_){}
-} else if(typeof generateDisplayThumbnail === 'function'){
-generateDisplayThumbnail(userDraft.featureGraphic).then(thumb => {
-try{ localStorage.setItem(DRAFT_FEATURE_THUMB_KEY, thumb); }catch(_){}
-});
-}
-} else {
-try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(_){}
-}
-let lsFull = false;
-try{
-localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(userDraft));
-lsFull = true;
-}catch(e){
-try{
-const sanitized = sanitizeStateForLocalStorage(userDraft);
-localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(sanitized));
-}catch(err2){}
-}
-return idbPromise.then(ok => ok || lsFull).catch(() => lsFull);
 }
 function loadDraftFromStorage(){
 try{
@@ -13261,403 +13214,19 @@ resetFactoryStorage,
 }
 if($('btnCopyText')) $('btnCopyText').onclick = copyAllText;
 function copyAllText(){
-if(typeof isDemoMode === 'function' && isDemoMode()){
 if(typeof requireFullVersion === 'function') requireFullVersion('export-copy');
-return;
-}
-const name = $('f-name') ? $('f-name').value : '';
-const sub = $('f-sub') ? $('f-sub').value : '';
-const promo = $('f-promo') ? $('f-promo').value : '';
-const short = $('f-short') ? $('f-short').value : '';
-const catApple = (typeof CAT === 'object' && CAT.apple) ? CAT.apple : '-';
-const catGoogle = (typeof CAT === 'object' && CAT.google) ? CAT.google : '-';
-const wn = $('f-new') ? $('f-new').value : '';
-const desc = $('f-desc') ? $('f-desc').value : '';
-const safeCount = typeof countChars === 'function' ? countChars : (s => (s || '').length);
-const text = `=====================================================
-APPLE APP STORE (iOS)
-=====================================================
-[ App Title ] (${safeCount(name)}/30 chars)
-${name}
-[ Subtitle ] (${safeCount(sub)}/30 chars)
-${sub}
-[ Promotional Text ] (${safeCount(promo)}/170 chars)
-${promo}
-[ Primary Category ]
-${catApple}
-[ Description ] (${safeCount(desc)}/4,000 chars)
-${desc}
-[ What's New ]
-${wn}
-=====================================================
-GOOGLE PLAY STORE (Android)
-=====================================================
-[ App Name ] (${safeCount(name)}/30 chars)
-${name}
-[ Short Description ] (${safeCount(short)}/80 chars)
-${short}
-[ App Category ]
-${catGoogle}
-[ Full Description ] (${safeCount(desc)}/4,000 chars)
-${desc}
-[ What's New / Release Notes ]
-${wn}
-=====================================================`;
-navigator.clipboard.writeText(text).then(()=>{
-showToast('Store metadata copied to clipboard!', 'ok');
-}).catch(()=>{
-showToast('Clipboard access denied, check permissions', 'warn');
-});
 }
 if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;
 function exportMarkdown(){
-if(typeof isDemoMode === 'function' && isDemoMode()){
 if(typeof requireFullVersion === 'function') requireFullVersion('export-markdown');
-return;
-}
-if(typeof canDownload === 'function' && !canDownload(1000)) return;
-function safeFence(text, lang='text'){
-let fence = '```';
-while((text||'').includes(fence)){
-fence += '`';
-}
-return fence + lang + '\n' + (text||'') + '\n' + fence;
-}
-const name = $('f-name') ? $('f-name').value : '';
-const sub = $('f-sub') ? $('f-sub').value : '';
-const promo = $('f-promo') ? $('f-promo').value : '';
-const short = $('f-short') ? $('f-short').value : '';
-const dev = $('f-dev') ? $('f-dev').value : '';
-const cat = CAT.apple || '-';
-const catG = CAT.google || '-';
-const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
-const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
-const email = $('f-email') ? $('f-email').value : '-';
-const addr = $('f-addr') ? $('f-addr').value : '-';
-const privLinked = $('f-priv-linked') ? $('f-priv-linked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.linked || 'None') : 'None');
-const privNotLinked = $('f-priv-notlinked') ? $('f-priv-notlinked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.notLinked || 'None') : 'None');
-const privGoogle = $('f-priv-google') ? $('f-priv-google').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.google || 'None') : 'None');
-const wn = $('f-new') ? $('f-new').value : '';
-const desc = $('f-desc') ? $('f-desc').value : '';
-const ageVal = STATS.age || '4+';
-const gAge = GOOGLE_AGE_MAP[ageVal] || GOOGLE_AGE_MAP['4+'];
-const iapLabels = {
-iap: 'In-App Purchases (No Ads)',
-ads_iap: 'Contains Ads · In-App Purchases',
-ads: 'Contains Ads Only',
-free: 'None (100% Free / Paid Upfront)'
-};
-const iapText = iapLabels[STATS.iap || 'iap'] || iapLabels.iap;
-const validCount = SHOTS.filter(s=>s && s.trim()).length;
-const isShotCompliant = validCount >= 2 && validCount <= 8;
-const md = `# Store Listing Metadata: ${name}
-> Generated by **Store Preview Studio** on ${new Date().toLocaleDateString()}
-> Zero-server client-side validation report.
----
-## Character Limits & Compliance Summary
-| Field | Target Store | Official Limit | Current Length | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **App Title** | Both | 30 chars | ${countChars(name)} | ${countChars(name) <= 30 ? 'PASS' : 'EXCEEDED'} |
-| **Subtitle** | App Store | 30 chars | ${countChars(sub)} | ${countChars(sub) <= 30 ? 'PASS' : 'EXCEEDED'} |
-| **Promotional Text** | App Store | 170 chars | ${countChars(promo)} | ${countChars(promo) <= 170 ? 'PASS' : 'EXCEEDED'} |
-| **Short Description** | Google Play | 80 chars | ${countChars(short)} | ${countChars(short) <= 80 ? 'PASS' : 'EXCEEDED'} |
-| **Full Description** | Both | 4,000 chars | ${countChars(desc)} | ${countChars(desc) <= 4000 ? 'PASS' : 'EXCEEDED'} |
----
-## Graphic Assets Checklist (Google Play & Apple App Store)
-| Asset | Target Platform | Specification | Store Requirement | Current Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **App Icon (Google Play)** | Google Play | PNG/JPEG, up to 1 MB, 512 × 512 px | **Mandatory** | ${ICON ? 'Ready' : 'Missing'} |
-| **App Icon (Apple)** | App Store | PNG/JPEG, 1024 × 1024 px (sRGB/P3, no alpha) | **Mandatory** | ${ICON ? 'Ready' : 'Missing'} |
-| **Feature Graphic** | Google Play | PNG/JPEG, up to 15 MB, 1,024 × 500 px | **Mandatory for Featuring** | ${FEATURE_GRAPHIC ? 'Ready' : 'Missing'} |
-| **Phone Screenshots** | Google Play | PNG/JPEG, up to 8 MB each, 16:9 or 9:16 (320px–3,840px) | **2 to 8 Screenshots** | ${isShotCompliant ? `PASS (${validCount} screenshots)` : `REJECT RISK (${validCount} screenshots - requires 2 to 8)`} |
-| **7-inch Tablet Screenshots** | Google Play | 24-bit PNG/JPEG (no alpha), up to 8 MB each, 16:9 or 9:16 (320px–3,840px per side) | **Up to 8 screenshots** | ${tabStatus('tab7')} |
-| **10-inch Tablet Screenshots** | Google Play | 24-bit PNG/JPEG (no alpha), up to 8 MB each, 16:9 or 9:16 (1,080px–7,680px per side) | **Up to 8 screenshots** | ${tabStatus('tab10')} |
----
-## App Privacy, Data Safety & Store Badges
-* **Version & Release Date:** \`v${ver}\` (${rdate})
-* **Age Rating:** App Store \`${ageVal}\` | Google Play \`${gAge.badge} (${gAge.label})\`
-* **Monetization / IAP Badge:** \`${iapText}\`
-* **Apple Privacy — Data Linked to You:** ${privLinked}
-* **Apple Privacy — Data Not Linked to You:** ${privNotLinked}
-* **Google Play — Data Safety Practices:** ${privGoogle}
-* **Developer Support Contact:** \`${email}\` (${addr})
----
-## Apple App Store Metadata
-### Title
-${safeFence(name)}
-### Subtitle
-${safeFence(sub)}
-### Promotional Text
-${safeFence(promo)}
-### Category
-* **Primary:** \`${cat}\`
-* **Developer:** \`${dev}\`
----
-## Google Play Store Metadata
-### Category
-\`${catG}\`
-### Title
-${safeFence(name)}
-### Short Description
-${safeFence(short)}
-### Full Description
-${safeFence(desc)}
----
-## Release Notes (What's New)
-${safeFence(wn)}
----
-## Fastlane CLI Mapping Cheat-Sheet
-- \`fastlane/metadata/android/en-US/title.txt\` -> App Title
-- \`fastlane/metadata/android/en-US/short_description.txt\` -> Short Description
-- \`fastlane/metadata/android/en-US/full_description.txt\` -> Full Description
-- \`fastlane/metadata/ios/en-US/name.txt\` -> App Title
-- \`fastlane/metadata/ios/en-US/subtitle.txt\` -> Subtitle
-- \`fastlane/metadata/ios/en-US/promotional_text.txt\` -> Promotional Text
-- \`fastlane/metadata/ios/en-US/description.txt\` -> Full Description
-`;
-downloadFile('LISTING_METADATA.md', md, 'text/markdown');
-showToast('Downloaded LISTING_METADATA.md!', 'ok');
 }
 if($('optExportJSON')) $('optExportJSON').onclick = exportJSON;
 function exportJSON(){
-if(typeof isDemoMode === 'function' && isDemoMode()){
 if(typeof requireFullVersion === 'function') requireFullVersion('export-json');
-return;
 }
-if(typeof canDownload === 'function' && !canDownload(1000)) return;
-const config = {
-generator: "Store Preview Studio",
-version: "2.1.0",
-timestamp: new Date().toISOString(),
-store,
-theme: document.querySelector('.phone') ? (document.querySelector('.phone').dataset.theme || 'light') : 'light',
-form: {
-name: $('f-name') ? $('f-name').value : '',
-sub: $('f-sub') ? $('f-sub').value : '',
-promo: $('f-promo') ? $('f-promo').value : '',
-short: $('f-short') ? $('f-short').value : '',
-dev: $('f-dev') ? $('f-dev').value : '',
-cat: $('f-cat') ? $('f-cat').value : '',
-catApple: CAT.apple,
-catGoogle: CAT.google,
-ver: $('f-ver') ? $('f-ver').value : '2.4.0',
-rdate: $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true),
-email: $('f-email') ? $('f-email').value : '',
-addr: $('f-addr') ? $('f-addr').value : '',
-privLinked: $('f-priv-linked') ? $('f-priv-linked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.linked : ''),
-privNotLinked: $('f-priv-notlinked') ? $('f-priv-notlinked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.notLinked : ''),
-privGoogle: $('f-priv-google') ? $('f-priv-google').value : (typeof CURRENT_PRIVACY !== 'undefined' ? CURRENT_PRIVACY.google : ''),
-new: $('f-new') ? $('f-new').value : '',
-desc: $('f-desc') ? $('f-desc').value : ''
-},
-icon: ICON,
-icon1024: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
-icon512: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
-iconApple: (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : (store === 'apple' ? ICON : ''),
-iconGoogle: (typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) ? CUSTOM_ICON_512 : (store === 'google' ? ICON : ''),
-isCustomIcon: typeof IS_CUSTOM_ICON !== 'undefined' ? IS_CUSTOM_ICON : true,
-featureGraphic: FEATURE_GRAPHIC,
-isCustomFeature: typeof IS_CUSTOM_FEATURE !== 'undefined' ? IS_CUSTOM_FEATURE : false,
-shots: SHOTS,
-supportsIpad: SUPPORTS_IPAD,
-ipadShots: IPAD_SHOTS,
-ipadFitMode: IPAD_FIT_MODE || 'cover',
-tab7Shots: TABS.tab7.map(i => i.src),
-tab10Shots: TABS.tab10.map(i => i.src),
-stats: (typeof statsToObject === 'function') ? statsToObject() : {}
-};
-const jsonStr = JSON.stringify(config, null, 2);
-const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
-const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
-downloadFile(`${slug}-store-config.json`, jsonStr, 'application/json');
-showToast('Exported store configuration JSON!', 'ok');
-}
-function parseAndApplyJSON(jsonString, opts = {}){
-if(typeof isDemoMode === 'function' && isDemoMode()){
+function parseAndApplyJSON(){
 if(typeof requireFullVersion === 'function') requireFullVersion('import-json');
 return false;
-}
-if(typeof jsonString === 'string'){
-if(jsonString.charCodeAt(0) === 0xFEFF){
-jsonString = jsonString.slice(1);
-}
-}
-let data;
-try{
-data = typeof jsonString === 'string' ? JSON.parse(jsonString) : jsonString;
-}catch(err){
-showToast('Invalid JSON file format (Syntax Error)', 'warn');
-return false;
-}
-if(!data || typeof data !== 'object' || Array.isArray(data)){
-showToast('Invalid file: JSON root must be an object', 'warn');
-return false;
-}
-if(!data.form && !data.app && (data.main || data.scripts || (data.version && data.main) || data.dependencies || data.devDependencies)){
-showToast('File does not contain valid App Listing metadata', 'warn');
-return false;
-}
-const isKnownGenerator = data.generator === 'Store Preview Studio';
-const hasAppWrapper = (data.form && typeof data.form === 'object') || (data.app && typeof data.app === 'object');
-const hasStoreKeys = !!(data.store || data.shots || data.tab7Shots || data.tab10Shots || data.icon || data.featureGraphic || data.feature);
-const src = (data.form && typeof data.form === 'object') ? data.form : ((data.app && typeof data.app === 'object') ? data.app : data);
-let hadWrongTypes = false;
-const getStr = val => {
-if(val === undefined || val === null) return '';
-if(typeof val === 'string') return val;
-hadWrongTypes = true;
-return '';
-};
-const mapped = {
-name: getStr(src.name || src.title || src.appName),
-sub: getStr(src.sub || src.subtitle),
-promo: getStr(src.promo || src.promotionalText || src.promoText),
-short: getStr(src.short || src.shortDesc || src.shortDescription),
-dev: getStr(src.dev || src.developer || src.developerName || src.author),
-cat: getStr(src.cat || src.category),
-ver: getStr(src.ver || src.appVersion),
-rdate: getStr(src.rdate || src.releaseDate),
-email: getStr(src.email || src.supportEmail),
-addr: getStr(src.addr || src.address || src.location),
-privLinked: getStr(src.privLinked),
-privNotLinked: getStr(src.privNotLinked),
-privGoogle: getStr(src.privGoogle),
-new: getStr(src.new || src.whatsNew || src.releaseNotes || src.changelog),
-desc: getStr(src.desc || src.description || src.fullDescription)
-};
-const hasMobileSpecificFields = !!(mapped.sub || mapped.promo || mapped.short || src.catApple || src.catGoogle);
-if(!isKnownGenerator && !hasAppWrapper && !hasStoreKeys && !hasMobileSpecificFields){
-showToast('Unrecognized format: Missing Store Preview Studio schema or listing fields', 'warn');
-return false;
-}
-const hasFields = Object.values(mapped).some(v => v.trim().length > 0);
-if(!hasFields && !data.icon && !Array.isArray(data.shots)){
-showToast('File does not contain valid App Listing metadata', 'warn');
-return false;
-}
-if(!opts.skipDraftGuard && typeof confirmReplaceDraft === 'function'){
-let applied = false;
-const asked = confirmReplaceDraft(mapped.name, () => {
-applied = parseAndApplyJSON(data, { skipDraftGuard: true });
-});
-return asked ? false : applied;
-}
-if(mapped.name && $('f-name')) $('f-name').value = mapped.name;
-if(mapped.sub && $('f-sub')) $('f-sub').value = mapped.sub;
-if(mapped.promo && $('f-promo')) $('f-promo').value = mapped.promo;
-if(mapped.short && $('f-short')) $('f-short').value = mapped.short;
-if(mapped.dev && $('f-dev')) $('f-dev').value = mapped.dev;
-if(mapped.cat) setCategory(mapped.cat);
-if(src.catApple && typeof src.catApple === 'string') setCategory(src.catApple, 'apple');
-if(src.catGoogle && typeof src.catGoogle === 'string') setCategory(src.catGoogle, 'google');
-if(mapped.ver && $('f-ver')) $('f-ver').value = mapped.ver;
-if(mapped.rdate && $('f-rdate')) $('f-rdate').value = mapped.rdate;
-if(mapped.email && $('f-email')) $('f-email').value = mapped.email;
-if(mapped.addr && $('f-addr')) $('f-addr').value = mapped.addr;
-if(mapped.privLinked) {
-if($('f-priv-linked')) $('f-priv-linked').value = mapped.privLinked;
-if(typeof CURRENT_PRIVACY !== 'undefined') CURRENT_PRIVACY.linked = mapped.privLinked;
-}
-if(mapped.privNotLinked) {
-if($('f-priv-notlinked')) $('f-priv-notlinked').value = mapped.privNotLinked;
-if(typeof CURRENT_PRIVACY !== 'undefined') CURRENT_PRIVACY.notLinked = mapped.privNotLinked;
-}
-if(mapped.privGoogle) {
-if($('f-priv-google')) $('f-priv-google').value = mapped.privGoogle;
-if(typeof CURRENT_PRIVACY !== 'undefined') CURRENT_PRIVACY.google = mapped.privGoogle;
-}
-if(mapped.new && $('f-new')) $('f-new').value = mapped.new;
-if(mapped.desc && $('f-desc')) $('f-desc').value = mapped.desc;
-CURRENT_PRESET_KEY = 'draft';
-isPresetModified = false;
-const isBlankIconUri = uri => !uri || (typeof BLANK_ICON !== 'undefined' && uri === BLANK_ICON) || (typeof uri === 'string' && (uri.includes('c6-bg') || uri.includes('bfd1fd') || uri.includes('d2c7fc') || uri.includes('bp-bg') || uri.includes('blueprint')));
-const importedRawIcon = data.icon1024 || data.iconApple || data.icon512 || data.iconGoogle || data.icon || '';
-const hasRealIcon = !isBlankIconUri(importedRawIcon);
-if(data.isCustomIcon !== undefined){
-IS_CUSTOM_ICON = !!data.isCustomIcon;
-} else {
-IS_CUSTOM_ICON = hasRealIcon;
-}
-if(data.icon1024) CUSTOM_ICON_1024 = data.icon1024;
-else if(data.iconApple) CUSTOM_ICON_1024 = data.iconApple;
-else if(data.icon) CUSTOM_ICON_1024 = data.icon;
-if(data.icon512) CUSTOM_ICON_512 = data.icon512;
-else if(data.iconGoogle) CUSTOM_ICON_512 = data.iconGoogle;
-else if(data.icon) CUSTOM_ICON_512 = data.icon;
-if(data.icon1024 || data.icon512 || data.iconApple || data.iconGoogle) {
-if(store === 'apple' && (data.icon1024 || data.iconApple)) ICON = data.icon1024 || data.iconApple;
-else if(store === 'google' && (data.icon512 || data.iconGoogle)) ICON = data.icon512 || data.iconGoogle;
-else if(data.icon) ICON = data.icon;
-} else if(data.icon && typeof data.icon === 'string') {
-ICON = data.icon;
-}
-if(typeof rasterizeSvgToStorePng === 'function' && typeof ICON === 'string' && (ICON.startsWith('data:image/svg+xml') || ICON.includes('<svg'))){
-const rawSvg = ICON;
-rasterizeSvgToStorePng(rawSvg, 1024, png1024 => {
-data.icon1024 = png1024;
-if(store === 'apple' && !IS_CUSTOM_ICON){
-ICON = png1024;
-renderIcons();
-}
-});
-rasterizeSvgToStorePng(rawSvg, 512, png512 => {
-data.icon512 = png512;
-if(store === 'google' && !IS_CUSTOM_ICON){
-ICON = png512;
-renderIcons();
-}
-});
-}
-if(data.featureGraphic && typeof data.featureGraphic === 'string') FEATURE_GRAPHIC = data.featureGraphic;
-else if(data.feature && typeof data.feature === 'string') FEATURE_GRAPHIC = data.feature;
-if(data.isCustomFeature !== undefined){
-IS_CUSTOM_FEATURE = !!data.isCustomFeature;
-} else {
-IS_CUSTOM_FEATURE = !!(FEATURE_GRAPHIC && FEATURE_GRAPHIC !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '') && FEATURE_GRAPHIC !== (typeof DEFAULT_FEATURE !== 'undefined' ? DEFAULT_FEATURE : ''));
-}
-if(Array.isArray(data.shots)){
-const cleanShots = data.shots.filter(x => typeof x === 'string' && x.trim().length > 0);
-if(cleanShots.length > 0) SHOTS = cleanShots;
-}
-if(Array.isArray(data.tab7Shots) && typeof makeTabItem === 'function') TABS.tab7 = data.tab7Shots.filter(x => typeof x === 'string').slice(0, MAX_TAB).map(makeTabItem);
-if(Array.isArray(data.tab10Shots) && typeof makeTabItem === 'function') TABS.tab10 = data.tab10Shots.filter(x => typeof x === 'string').slice(0, MAX_TAB).map(makeTabItem);
-if(data.store && (data.store === 'apple' || data.store === 'google')) setStore(data.store);
-if(data.theme && (data.theme === 'light' || data.theme === 'dark')){
-if(typeof setDeviceTheme === 'function') setDeviceTheme(data.theme, false);
-else $$('.phone').forEach(p => p.dataset.theme = data.theme);
-}
-if(data.stats){ applyStatsFromObject(data.stats); syncStatInputs(); renderStats(); }
-if(typeof data.supportsIpad === 'boolean' && typeof setSupportsIpad === 'function') setSupportsIpad(data.supportsIpad);
-if(data.ipadFitMode === 'cover' || data.ipadFitMode === 'contain'){
-IPAD_FIT_MODE = data.ipadFitMode;
-if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
-}
-if(Array.isArray(data.ipadShots)){
-IPAD_SHOTS = data.ipadShots.filter(x => typeof x === 'string');
-}
-if(typeof renderIcons === 'function') renderIcons();
-if(typeof renderFeature === 'function') renderFeature();
-if(typeof renderShots === 'function') renderShots();
-if(typeof renderIpadShots === 'function') renderIpadShots();
-if(typeof renderTablets === 'function') renderTablets();
-if(typeof update === 'function') update();
-if(typeof validateAppIcon === 'function') validateAppIcon();
-if(typeof updateIconDropZoneUi === 'function') updateIconDropZoneUi();
-if(typeof getCurrentStateObject === 'function'){
-userDraft = getCurrentStateObject();
-userDraft.isCustomized = true;
-userDraft.isCustomIcon = IS_CUSTOM_ICON;
-}
-if(typeof saveDraftToStorage === 'function') saveDraftToStorage();
-if(typeof updatePresetBanner === 'function') updatePresetBanner();
-if(typeof updateDraftPill === 'function') updateDraftPill();
-saveState();
-if(hadWrongTypes){
-showToast('Imported config (Note: invalid non-string fields were ignored)', 'warn', 3500);
-} else {
-showToast('Configuration imported successfully!', 'ok');
-}
-return true;
 }
 if($('optImportJSON')){
 $('optImportJSON').onclick = () => {
@@ -13943,10 +13512,12 @@ ctx.fillText(text, x + shift, y);
 ctx.restore();
 }
 async function exportPNG(scaleFactor = 2, opts = {}){
-if(typeof isDemoMode === 'function' && isDemoMode() && !opts.allowDemo){
+if(!opts || !opts.allowDemo || opts.frameless || opts.transparent || scaleFactor > 2){
 if(typeof requireFullVersion === 'function') requireFullVersion('export-png');
 return;
 }
+scaleFactor = 2;
+opts = { watermark: true, allowDemo: true };
 if(typeof canDownload === 'function' && !canDownload(1000)) return;
 if(typeof scaleFactor !== 'number') scaleFactor = 3;
 if(typeof html2canvas === 'undefined'){
@@ -14204,7 +13775,7 @@ el.style.boxShadow = 'none';
 }
 });
 if(EXPORT_WM && !opts.transparent) canvas = addMockupNote(canvas, scaleFactor);
-if(opts.watermark) drawStudioWatermark(canvas);
+drawStudioWatermark(canvas);
 const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
 const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
 const link = document.createElement('a');
@@ -14250,205 +13821,11 @@ restoreImages();
 isExporting = false;
 }
 }
-function parseStoreInput(input) {
-if (!input || typeof input !== 'string') return null;
-const raw = input.trim();
-if (!raw) return null;
-const appleUrlMatch = raw.match(/(?:apps|itunes)\.apple\.com\/(?:([a-z]{2}(?:-[a-z]{2})?)\/)?(?:app\/[^\/]+\/)?id(\d{7,12})/i);
-if (appleUrlMatch) {
-return { platform: 'apple', id: appleUrlMatch[2], country: appleUrlMatch[1] || '' };
-}
-const lookupMatch = raw.match(/[?&]id=(\d{7,12})/i);
-if (lookupMatch) {
-const countryMatch = raw.match(/[?&]country=([a-z]{2}(?:-[a-z]{2})?)/i);
-return { platform: 'apple', id: lookupMatch[1], country: countryMatch ? countryMatch[1] : '' };
-}
-if (/^id\d{7,12}$/i.test(raw)) {
-return { platform: 'apple', id: raw.replace(/^id/i, ''), country: '' };
-}
-if (/^\d{7,12}$/.test(raw)) {
-return { platform: 'apple', id: raw, country: '' };
-}
-return null;
-}
-function normalizeAppleApp(item) {
-if (!item) return null;
-const rawName = (item.trackName || item.trackCensoredName || 'App Name').trim();
-let name = rawName;
-let sub = '';
-const devCompany = (item.artistName || item.sellerName || '').trim();
-const cleanStr = s => (typeof slugify === 'function' ? slugify(s, '').replace(/-/g, '') : (s || '').replace(/[\u0110\u00D0\u0189]/g, 'd').replace(/[\u0111\u00F0\u0256\u0257]/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''));
-const cleanDev = cleanStr(devCompany);
-const splitMatch = rawName.split(/\s*[-–—:]\s*/);
-if (splitMatch.length >= 2 && splitMatch[0].length >= 2) {
-const candidateName = splitMatch[0].trim();
-const candidateSub = splitMatch.slice(1).join(' · ').trim();
-const cleanSub = cleanStr(candidateSub);
-const isDevCompany = cleanSub.length >= 3 && cleanDev.includes(cleanSub);
-if (isDevCompany) {
-name = candidateName;
-sub = 'Official ' + (item.primaryGenreName || 'Mobile') + ' App';
-} else {
-name = candidateName;
-sub = candidateSub;
-}
-} else {
-sub = 'Official ' + (item.primaryGenreName || 'Mobile') + ' App';
-}
-const primaryGenre = item.primaryGenreName || (item.genres && item.genres[0]) || 'Productivity';
-const ratingNum = typeof item.averageUserRating === 'number' ? item.averageUserRating : 4.8;
-const ratingStr = ratingNum.toFixed(1);
-const ratingCount = item.userRatingCount || 1000;
-const rawIcon = item.artworkUrl512 || item.artworkUrl100 || '';
-const icon1024 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1024x1024bb.png') : '';
-const icon512 = rawIcon ? rawIcon.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/512x512bb.png') : '';
-const iconUrl = icon1024;
-const shots = (item.screenshotUrls || []).map(u => {
-const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
-if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
-return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2688x1242bb.png');
-}
-return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/1242x2688bb.png');
-}).slice(0, 8);
-const ipadShots = (item.ipadScreenshotUrls || []).map(u => {
-const match = u.match(/\/(\d+)x(\d+)bb\.(jpg|png)$/i);
-if (match && parseInt(match[1], 10) > parseInt(match[2], 10)) {
-return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2732x2048bb.png');
-}
-return u.replace(/\/\d+x\d+bb\.(jpg|png)$/i, '/2048x2732bb.png');
-}).slice(0, 8);
-const isUniversal = (Array.isArray(item.features) && item.features.includes('iosUniversal')) || (ipadShots.length > 0);
-const cleanDesc = (item.description || '').replace(/[\r\n]+/g, ' ').trim();
-const firstSentence = cleanDesc.split(/[.!?]\s+/)[0];
-const shortDesc = (firstSentence && firstSentence.length <= 80) ? firstSentence : cleanDesc.slice(0, 80);
-const bundleDomain = item.bundleId ? item.bundleId.split('.').slice(1, 3).reverse().join('.') : 'app.com';
-return {
-platform: 'apple',
-store: 'apple',
-appleDevice: 'iphone',
-form: {
-name: name,
-sub: sub,
-short: shortDesc || 'Download the latest version on iOS and Android.',
-promo: 'Experience ' + name + ' with seamless design and powerful features.',
-dev: item.artistName || item.sellerName || 'App Developer',
-cat: primaryGenre,
-catApple: primaryGenre,
-catGoogle: primaryGenre,
-ver: item.version || '2.4.0',
-rdate: (typeof getCurrentMonthDateStr === 'function') ? getCurrentMonthDateStr(2, true) : 'Oct 26, 2026',
-email: 'support@' + bundleDomain,
-phone: '+1 800-555-0199',
-addr: 'Global',
-privLinked: '',
-privNotLinked: '',
-privGoogle: 'No data shared with third parties, No data collected, Data is encrypted in transit',
-new: (item.releaseNotes || 'Performance improvements and bug fixes.').slice(0, 300),
-desc: (item.description || '').slice(0, 1000)
-},
-icon: iconUrl,
-icon1024: icon1024,
-icon512: icon512,
-iconApple: icon1024,
-iconGoogle: icon512,
-rawIcon: rawIcon,
-isCustomIcon: !!iconUrl,
-shots: shots,
-ipadShots: ipadShots,
-supportsIpad: isUniversal,
-isUniversal: isUniversal,
-featureGraphic: (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : ''),
-feature: (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : ''),
-stats: {
-rating: ratingStr,
-ratingsCount: ratingCount,
-age: item.contentAdvisoryRating || '4+',
-chartRank: '1',
-developer: item.artistName || item.sellerName || ''
-}
-};
-}
-async function fetchAppleAppData(appId, country) {
-const query = 'id=' + encodeURIComponent(appId) + (country ? '&country=' + encodeURIComponent(country) : '');
-const proxyUrl = '/api/lookup?' + query;
-const directUrl = 'https://itunes.apple.com/lookup?' + query;
-let res;
-const isWeb = typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:');
-if (isWeb) {
-try {
-res = await fetch(proxyUrl);
-if (!res.ok) throw new Error('Proxy returned ' + res.status);
-} catch (_) {
-res = await fetch(directUrl);
-}
-} else {
-res = await fetch(directUrl);
-}
-if (!res.ok) throw new Error('Apple App Store returned status ' + res.status);
-const data = await res.json();
-if (!data || !data.resultCount || !data.results || !data.results.length) {
-throw new Error('App not found on Apple App Store (ID: ' + appId + ')');
-}
-return normalizeAppleApp(data.results[0]);
-}
-async function fetchStoreAppData(target) {
-if (!target || !target.id) {
-throw new Error('Invalid Apple App Store target');
-}
-return await fetchAppleAppData(target.id, target.country);
-}
-function applyImportedStoreApp(state) {
-if (!state) return false;
-CURRENT_PRESET_KEY = 'draft';
-isPresetModified = false;
-if (state.icon1024) CUSTOM_ICON_1024 = state.icon1024;
-else if (state.iconApple) CUSTOM_ICON_1024 = state.iconApple;
-else if (state.icon) CUSTOM_ICON_1024 = state.icon;
-if (state.icon512) CUSTOM_ICON_512 = state.icon512;
-else if (state.iconGoogle) CUSTOM_ICON_512 = state.iconGoogle;
-if (typeof setStore === 'function') {
-setStore('apple', false);
-}
-if (typeof setAppleDevice === 'function') {
-setAppleDevice('iphone', false);
-}
-FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
-state.featureGraphic = FEATURE_GRAPHIC;
-state.feature = FEATURE_GRAPHIC;
-if (typeof applyStateObject === 'function') {
-applyStateObject(state);
-}
-FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
-if (typeof setStore === 'function') {
-setStore('apple', false);
-}
-if (typeof setAppleDevice === 'function') {
-setAppleDevice('iphone', false);
-}
-if (typeof renderIcons === 'function') renderIcons();
-if (typeof renderFeature === 'function') renderFeature();
-if (typeof validateFeatureGraphic === 'function') validateFeatureGraphic();
-if (typeof renderShots === 'function') renderShots();
-if (typeof renderIpadShots === 'function') renderIpadShots();
-if (typeof renderTablets === 'function') renderTablets();
-if (typeof renderStats === 'function') renderStats();
-if (typeof syncStatInputs === 'function') syncStatInputs();
-if (typeof update === 'function') update();
-if (typeof getCurrentStateObject === 'function') {
-userDraft = getCurrentStateObject();
-userDraft.isCustomized = true;
-}
-if (typeof saveDraftToStorage === 'function') saveDraftToStorage();
-if (typeof updatePresetBanner === 'function') updatePresetBanner();
-if (typeof updateDraftPill === 'function') updateDraftPill();
-if (typeof syncAllVtPills === 'function') syncAllVtPills();
-if (typeof fit === 'function') fit();
-const appName = state.form && state.form.name ? state.form.name : 'App';
-if (typeof showToast === 'function') {
-showToast('Imported ' + appName + ' from App Store successfully');
-}
-return true;
-}
+function parseStoreInput() { return null; }
+function normalizeAppleApp() { return null; }
+async function fetchAppleAppData() { throw new Error('Available in Full Version'); }
+async function fetchStoreAppData() { throw new Error('Available in Full Version'); }
+function applyImportedStoreApp() { return false; }
 function isNetworkOnline() {
 if (typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean') {
 return navigator.onLine;
@@ -14625,74 +14002,8 @@ status.className = 'store-import-status ' + (type || 'info');
 status.textContent = message;
 status.style.display = 'block';
 }
-async function handleStoreImportSubmit(confirmed = false) {
-if (typeof isDemoMode === 'function' && isDemoMode()) {
+async function handleStoreImportSubmit() {
 if (typeof requireFullVersion === 'function') requireFullVersion('store-import');
-return;
-}
-const input = $('storeImportInput');
-if (!input) return;
-const val = input.value.trim();
-if (!val) {
-setStoreImportStatus('error', 'Please enter an App Store link or Apple App ID.');
-input.focus();
-return;
-}
-const target = parseStoreInput(val);
-if (!target) {
-if (val.includes('play.google.com') || /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]+)+$/.test(val)) {
-setStoreImportStatus('error', 'Google Play does not provide a public API. Please enter an Apple App Store link or numeric App ID (e.g. 324684580).');
-} else {
-setStoreImportStatus('error', 'Unrecognized App Store link or ID format. Try an Apple App Store URL or numeric App ID (e.g. 324684580).');
-}
-return;
-}
-if (!isNetworkOnline()) {
-updateStoreImportNetworkStatus();
-showNetworkConfirmModal({
-onConfirm: () => handleStoreImportSubmit(true),
-onCancel: () => setStoreImportStatus('info', 'Kept in 100% offline mode.')
-});
-setStoreImportStatus('error', 'No internet connection detected. Please turn on your Wi-Fi or internet connection to import from Apple App Store.');
-return;
-}
-if (!confirmed) {
-showNetworkConfirmModal({
-onConfirm: () => handleStoreImportSubmit(true),
-onCancel: () => setStoreImportStatus('info', 'Import cancelled. Kept in 100% offline mode.')
-});
-return;
-}
-const submitBtn = $('storeImportSubmit');
-if (submitBtn) {
-submitBtn.disabled = true;
-submitBtn.textContent = 'Cloning...';
-}
-setStoreImportStatus('info', 'Connecting to Apple App Store API...');
-try {
-const importedState = await fetchStoreAppData(target);
-closeStoreImportModal();
-const apply = () => {
-applyImportedStoreApp(importedState);
-};
-if (typeof confirmReplaceDraft === 'function') {
-const importedName = (importedState && importedState.form && importedState.form.name) || '';
-confirmReplaceDraft(importedName, apply);
-} else {
-apply();
-}
-} catch (err) {
-if (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError')))) {
-setStoreImportStatus('error', 'Network error: Unable to reach Apple App Store. Please check your internet connection and try again.');
-} else {
-setStoreImportStatus('error', err.message || 'Failed to import app data from App Store.');
-}
-} finally {
-if (submitBtn) {
-submitBtn.disabled = false;
-submitBtn.textContent = 'Clone App';
-}
-}
 }
 function initStoreImportEvents() {
 const openBtn = $('btnOpenStoreImport');
