@@ -59,30 +59,55 @@ function renderShots(){
     handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
+    const hasImg = !!(s && typeof s === 'string' && s.trim() && (typeof PH === 'undefined' || s !== PH) && (typeof PH_LIGHT === 'undefined' || s !== PH_LIGHT));
+
     // Thumbnail Preview with Click-to-Inspect & Floating Delete Button
     const thumbWrap = document.createElement('div');
-    thumbWrap.className = 'shot-thumb-wrap';
 
-    const thumb = mk(s || PH);
-    thumb.style.cursor = 'pointer';
-    thumb.title = 'Click to inspect & view details';
-    thumb.onclick = () => {
-      if(typeof openImageDetailModal === 'function'){
-        openImageDetailModal({
-          src: s || PH,
-          type: 'screenshot',
-          store,
-          index: i,
-          title: `Phone Screenshot #${i + 1} Inspector`,
-          onReplace: (file, dataUrl) => {
-            SHOTS[i] = dataUrl;
-            renderShots();
-            saveState();
-          }
-        });
-      }
-    };
-    thumbWrap.appendChild(thumb);
+    if (hasImg) {
+      thumbWrap.className = 'shot-thumb-wrap has';
+      const thumb = mk(s, 'Screenshot ' + (i + 1));
+      thumb.style.cursor = 'pointer';
+      thumb.title = 'Click to inspect & view details';
+      thumb.onclick = () => {
+        if(typeof openImageDetailModal === 'function'){
+          openImageDetailModal({
+            src: s,
+            type: 'screenshot',
+            store,
+            index: i,
+            title: `Phone Screenshot #${i + 1} Inspector`,
+            onReplace: (file, dataUrl) => {
+              SHOTS[i] = dataUrl;
+              renderShots();
+              saveState();
+            }
+          });
+        }
+      };
+      thumbWrap.appendChild(thumb);
+    } else {
+      thumbWrap.className = 'shot-thumb-wrap is-placeholder';
+      thumbWrap.title = 'Click to upload screenshot';
+      thumbWrap.setAttribute('role', 'button');
+      thumbWrap.setAttribute('tabindex', '0');
+      const ov = document.createElement('div');
+      ov.className = 'shot-thumb-ov';
+      ov.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+      thumbWrap.appendChild(ov);
+      thumbWrap.onclick = () => {
+        if(typeof canUpload === 'function' && !canUpload(1000)) return;
+        pick = i;
+        const fi = $('shotFile');
+        if(fi) fi.click();
+      };
+      thumbWrap.onkeydown = e => {
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          thumbWrap.click();
+        }
+      };
+    }
 
     const delBtn = document.createElement('button');
     delBtn.type = 'button';
@@ -114,26 +139,33 @@ function renderShots(){
     const act = document.createElement('div'); act.className = 'act';
     act.innerHTML =
       '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>' +
-      '<button type="button" class="mini shot-inspect-btn" title="Inspect screenshot details" aria-label="Inspect screenshot details">' + ICO_INSPECT + '</button>';
+      '<button type="button" class="mini shot-inspect-btn' + (hasImg ? '' : ' disabled') + '" title="' + (hasImg ? 'Inspect screenshot details' : 'Upload a screenshot to inspect details') + '" aria-label="Inspect screenshot details"' + (hasImg ? '' : ' disabled aria-disabled="true"') + '>' + ICO_INSPECT + '</button>';
     const upBtn = act.children[0];
     const inspectBtn = act.children[1];
+    if(!hasImg){
+      inspectBtn.classList.add('disabled');
+    }
     upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
-    inspectBtn.onclick = () => {
-      if(typeof openImageDetailModal === 'function'){
-        openImageDetailModal({
-          src: s || PH,
-          type: 'screenshot',
-          store,
-          index: i,
-          title: `Phone Screenshot #${i + 1} Inspector`,
-          onReplace: (file, dataUrl) => {
-            SHOTS[i] = dataUrl;
-            renderShots();
-            saveState();
-          }
-        });
-      }
-    };
+    if(hasImg){
+      inspectBtn.onclick = () => {
+        if(typeof openImageDetailModal === 'function'){
+          openImageDetailModal({
+            src: s,
+            type: 'screenshot',
+            store,
+            index: i,
+            title: `Phone Screenshot #${i + 1} Inspector`,
+            onReplace: (file, dataUrl) => {
+              SHOTS[i] = dataUrl;
+              renderShots();
+              saveState();
+            }
+          });
+        }
+      };
+    } else {
+      inspectBtn.onclick = null;
+    }
     r.appendChild(act);
 
     // Drag & Drop event handlers for row reordering

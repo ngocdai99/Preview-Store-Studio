@@ -249,6 +249,8 @@
           dimEl.textContent = 'Empty (1024 × 500 px target)';
         } else if (_activeModalType === 'icon') {
           dimEl.textContent = _activeModalStore === 'apple' ? 'Empty (1024 × 1024 px target)' : 'Empty (512 × 512 px target)';
+        } else if (_activeModalStore === 'google') {
+          dimEl.textContent = 'Empty (1080 × 1920 px target)';
         } else {
           dimEl.textContent = 'Empty (1290 × 2796 px target)';
         }
@@ -259,6 +261,7 @@
         else if (_activeModalType === 'tablet') ratioEl.textContent = '16:10 (Target)';
         else if (_activeModalType === 'icon') ratioEl.textContent = '1:1 Square';
         else if (_activeModalType === 'feature') ratioEl.textContent = '2.05:1 Landscape';
+        else if (_activeModalStore === 'google') ratioEl.textContent = '9:16 (Target)';
         else ratioEl.textContent = '9:19.5 (Target)';
         ratioEl.className = 'icon-metric-val';
       }

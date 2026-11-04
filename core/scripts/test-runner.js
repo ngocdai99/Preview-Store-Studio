@@ -2043,6 +2043,17 @@ assert(identityCardHtml.includes('id="icoInspect"') && identityCardHtml.includes
 assert(bundledHtml.includes('.mini:disabled') && bundledHtml.includes('cursor:not-allowed'), 'Bundled CSS provides explicit disabled cursor and opacity styles for mini buttons');
 assert(!iconJsCode.includes("dimTag.className = 'shot-dim-tag ok';"), 'runIconPixelAudit does not render green dim tag when icon is compliant');
 
+// Verification for Screenshots Inspector Disabled State and Dashed Lookup Placeholder
+const phoneShotsJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'phone.js'), 'utf8');
+assert(phoneShotsJsCode.includes("thumbWrap.className = 'shot-thumb-wrap is-placeholder'"), 'Phone screenshots renders is-placeholder class when no image');
+assert(phoneShotsJsCode.includes("shot-thumb-ov"), 'Phone screenshots renders lookup icon overlay');
+assert(phoneShotsJsCode.includes("inspectBtn.classList.add('disabled')"), 'Phone screenshots disables inspect button when no image');
+assert(phoneShotsJsCode.includes("Upload a screenshot to inspect details"), 'Phone screenshots sets informative title on disabled inspect button');
+
+assert(bundledHtml.includes('.shot-thumb-wrap.is-placeholder{'), 'Bundled CSS contains dashed placeholder styling for empty screenshot slots');
+assert(bundledHtml.includes('.shot-thumb-ov{'), 'Bundled CSS contains lookup icon overlay styles for empty screenshot slots');
+assert(bundledHtml.includes('.shot-inspect-btn:disabled, .shot-inspect-btn.disabled{'), 'Bundled CSS contains disabled styling for screenshot inspect buttons');
+
 // ---------------------------------------------------------------------
 // SUITE 28: Live Demo (Lite) Positioning Verification
 // ---------------------------------------------------------------------

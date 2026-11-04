@@ -123,30 +123,55 @@ function renderTablets(){
       const handle = document.createElement('div');
       handle.className = 'drag-handle'; handle.textContent = '⠿'; handle.title = 'Drag to reorder';
       r.appendChild(handle);
+      const hasImg = !!(it && it.src && typeof it.src === 'string' && it.src.trim() && (typeof PH === 'undefined' || it.src !== PH) && (typeof PH_TAB === 'undefined' || it.src !== PH_TAB) && (typeof PH_LIGHT === 'undefined' || it.src !== PH_LIGHT));
+
       // Thumbnail Preview with Click-to-Inspect & Floating Delete Button
       const thumbWrap = document.createElement('div');
-      thumbWrap.className = 'shot-thumb-wrap';
 
-      const thumb = mk(it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH));
-      thumb.style.cursor = 'pointer';
-      thumb.title = 'Click to inspect & view details';
-      thumb.onclick = () => {
-        if(typeof openImageDetailModal === 'function'){
-          openImageDetailModal({
-            src: it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH),
-            type: 'tablet',
-            store: 'google',
-            index: i,
-            title: `${c.name} Screenshot #${i + 1} Inspector`,
-            onReplace: (file, dataUrl) => {
-              TABS[key][i] = makeTabItem(dataUrl);
-              renderTablets();
-              saveState();
-            }
-          });
-        }
-      };
-      thumbWrap.appendChild(thumb);
+      if (hasImg) {
+        thumbWrap.className = 'shot-thumb-wrap has';
+        const thumb = mk(it.src, `${c.name} Screenshot ` + (i + 1));
+        thumb.style.cursor = 'pointer';
+        thumb.title = 'Click to inspect & view details';
+        thumb.onclick = () => {
+          if(typeof openImageDetailModal === 'function'){
+            openImageDetailModal({
+              src: it.src,
+              type: 'tablet',
+              store: 'google',
+              index: i,
+              title: `${c.name} Screenshot #${i + 1} Inspector`,
+              onReplace: (file, dataUrl) => {
+                TABS[key][i] = makeTabItem(dataUrl);
+                renderTablets();
+                saveState();
+              }
+            });
+          }
+        };
+        thumbWrap.appendChild(thumb);
+      } else {
+        thumbWrap.className = 'shot-thumb-wrap is-placeholder';
+        thumbWrap.title = `Click to upload ${c.name} screenshot`;
+        thumbWrap.setAttribute('role', 'button');
+        thumbWrap.setAttribute('tabindex', '0');
+        const ov = document.createElement('div');
+        ov.className = 'shot-thumb-ov';
+        ov.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+        thumbWrap.appendChild(ov);
+        thumbWrap.onclick = () => {
+          if(typeof canUpload === 'function' && !canUpload(1000)) return;
+          tabPick = {key, idx:i};
+          const fi = $(c.file);
+          if(fi) fi.click();
+        };
+        thumbWrap.onkeydown = e => {
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            thumbWrap.click();
+          }
+        };
+      }
 
       const delBtn = document.createElement('button');
       delBtn.type = 'button';
@@ -188,26 +213,33 @@ function renderTablets(){
       const act = document.createElement('div'); act.className = 'act';
       act.innerHTML =
         '<button type="button" class="mini shot-upload-btn" title="Upload / Replace screenshot" aria-label="Upload / Replace screenshot">' + ICO_UPLOAD + '</button>' +
-        '<button type="button" class="mini shot-inspect-btn" title="Inspect screenshot details" aria-label="Inspect screenshot details">' + ICO_INSPECT + '</button>';
+        '<button type="button" class="mini shot-inspect-btn' + (hasImg ? '' : ' disabled') + '" title="' + (hasImg ? 'Inspect screenshot details' : `Upload a ${c.name} screenshot to inspect details`) + '" aria-label="Inspect screenshot details"' + (hasImg ? '' : ' disabled aria-disabled="true"') + '>' + ICO_INSPECT + '</button>';
       const upBtn = act.children[0];
       const inspectBtn = act.children[1];
+      if(!hasImg){
+        inspectBtn.classList.add('disabled');
+      }
       upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; tabPick = {key, idx:i}; $(c.file).click(); };
-      inspectBtn.onclick = () => {
-        if(typeof openImageDetailModal === 'function'){
-          openImageDetailModal({
-            src: it.src || (typeof PH_TAB !== 'undefined' ? PH_TAB : PH),
-            type: 'tablet',
-            store: 'google',
-            index: i,
-            title: `${c.name} Screenshot #${i + 1} Inspector`,
-            onReplace: (file, dataUrl) => {
-              TABS[key][i] = makeTabItem(dataUrl);
-              renderTablets();
-              saveState();
-            }
-          });
-        }
-      };
+      if(hasImg){
+        inspectBtn.onclick = () => {
+          if(typeof openImageDetailModal === 'function'){
+            openImageDetailModal({
+              src: it.src,
+              type: 'tablet',
+              store: 'google',
+              index: i,
+              title: `${c.name} Screenshot #${i + 1} Inspector`,
+              onReplace: (file, dataUrl) => {
+                TABS[key][i] = makeTabItem(dataUrl);
+                renderTablets();
+                saveState();
+              }
+            });
+          }
+        };
+      } else {
+        inspectBtn.onclick = null;
+      }
       r.appendChild(act);
 
       r.addEventListener('dragstart', e => { r.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'tabshot:' + key + ':' + i); });
