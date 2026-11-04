@@ -300,8 +300,12 @@ window.addEventListener('drop', e => {
       parseAndApplyJSON(reader.result);
     };
     reader.readAsText(file);
-  } else if (!e.target.closest('#icoDropZone') && !e.target.closest('#featureDropZone') && !e.target.closest('#shotDropZone') && !e.target.closest('#ipadDropZone') && !e.target.closest('#bundleDropZone') && !e.target.closest('.drop-zone') && !e.target.closest('.sl') && !e.target.closest('.tabsec')) {
-    showToast('Unsupported file type. Please drop a .json configuration file.', 'warn');
+  } else if (!e.target.closest('#icoDropZone') && !e.target.closest('#featureDropZone') && !e.target.closest('#shotDropZone') && !e.target.closest('#ipadDropZone') && !e.target.closest('#bundleDropZone') && !e.target.closest('.drop-zone') && !e.target.closest('.sl') && !e.target.closest('.tabsec') && !e.target.closest('#msIconModal') && !e.target.closest('#imageDetailModal') && !e.target.closest('.icon-modal-backdrop') && !e.target.closest('.modal')) {
+    const isImage = (file.type && file.type.startsWith('image/')) || /\.(png|jpe?g|webp|svg|gif|bmp|ico)$/i.test(file.name);
+    const isModalOpen = !!document.querySelector('#msIconModal.open, #imageDetailModal.open, .icon-modal-backdrop.open, .modal.open');
+    if (!isImage && !isModalOpen) {
+      showToast('Unsupported file type. Please drop a .json configuration file.', 'warn');
+    }
   }
 });
 

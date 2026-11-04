@@ -3603,6 +3603,29 @@ asyncSuites.push((async () => {
 })());
 
 // ---------------------------------------------------------------------
+// [SUITE 51]: Drag & Drop Image vs JSON Toast Suppression Verification
+// ---------------------------------------------------------------------
+asyncSuites.push((async () => {
+  console.log('\n[SUITE 51]: Drag & Drop Image vs JSON Toast Suppression Verification');
+
+  const modalJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/modal.js'), 'utf8');
+  assert(modalJsSrc.includes('modal.addEventListener(\'drop\', handleModalDrop)'), 'modal.js binds drop listener to entire modal dialog');
+  assert(modalJsSrc.includes('e.stopPropagation()') && modalJsSrc.includes('handleFileReplacement(file)'), 'modal.js stops event propagation on image drop to prevent bubbling to window');
+
+  const jsonJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/json.js'), 'utf8');
+  assert(jsonJsSrc.includes('#msIconModal') && jsonJsSrc.includes('#imageDetailModal'), 'json.js drop listener excludes modal elements from unsupported file check');
+  assert(jsonJsSrc.includes('!isImage && !isModalOpen'), 'json.js suppresses unsupported file warning when dropped file is an image or modal is open');
+
+  const iconShotsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/shots/icon.js'), 'utf8');
+  assert(iconShotsSrc.includes('icoDropZone.addEventListener(\'drop\'') && iconShotsSrc.includes('e.stopPropagation()'), 'icon.js stops event propagation on icon drop');
+
+  const featureGraphicSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/google/feature-graphic.js'), 'utf8');
+  assert(featureGraphicSrc.includes('featureDropZone.addEventListener(\'drop\'') && featureGraphicSrc.includes('e.stopPropagation()'), 'feature-graphic.js stops event propagation on feature graphic drop');
+
+  assert(bundledHtml.includes('!isImage && !isModalOpen'), 'Bundled core.html includes image and modal-open drop suppression');
+})());
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {

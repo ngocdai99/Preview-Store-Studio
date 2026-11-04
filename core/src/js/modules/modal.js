@@ -622,23 +622,45 @@
       });
     }
 
-    // Drag and Drop on Art Container
+    // Drag and Drop on Modal and Art Container
     const artContainer = $('msIconModalArt') || $('imageDetailModalArt');
+    const modalCanvas = $('msIconModalCanvas') || $('imageDetailModalCanvas');
+
+    const handleModalDrop = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (artContainer) artContainer.classList.remove('drag-over');
+      if (modalCanvas) modalCanvas.classList.remove('drag-over');
+      const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (file) {
+        handleFileReplacement(file);
+      }
+    };
+
+    const handleModalDragOver = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+      if (artContainer) artContainer.classList.add('drag-over');
+    };
+
+    const handleModalDragLeave = e => {
+      if (e.target === modal || !modal.contains(e.relatedTarget)) {
+        if (artContainer) artContainer.classList.remove('drag-over');
+        if (modalCanvas) modalCanvas.classList.remove('drag-over');
+      }
+    };
+
+    modal.addEventListener('dragover', handleModalDragOver);
+    modal.addEventListener('dragleave', handleModalDragLeave);
+    modal.addEventListener('drop', handleModalDrop);
+
     if (artContainer) {
-      artContainer.addEventListener('dragover', e => {
-        e.preventDefault();
-        artContainer.classList.add('drag-over');
-      });
+      artContainer.addEventListener('dragover', handleModalDragOver);
       artContainer.addEventListener('dragleave', () => {
         artContainer.classList.remove('drag-over');
       });
-      artContainer.addEventListener('drop', e => {
-        e.preventDefault();
-        artContainer.classList.remove('drag-over');
-        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
-          handleFileReplacement(e.dataTransfer.files[0]);
-        }
-      });
+      artContainer.addEventListener('drop', handleModalDrop);
     }
   }
 

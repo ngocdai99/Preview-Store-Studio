@@ -73,6 +73,7 @@ if(featureDropZone){
   });
   featureDropZone.addEventListener('drop', e => {
     e.preventDefault();
+    e.stopPropagation();
     featureDragCounter = 0;
     featureDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];

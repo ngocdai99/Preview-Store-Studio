@@ -479,6 +479,7 @@ if(icoDropZone){
   });
   icoDropZone.addEventListener('drop', e => {
     e.preventDefault();
+    e.stopPropagation();
     icoDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file && file.type.startsWith('image/')){

@@ -122,6 +122,7 @@ slistArea.addEventListener('drop',e=>{
   const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
   if(files.length){
     e.preventDefault();
+    e.stopPropagation();
     const validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
     if(!validFiles.length) return;
     let loaded=0;

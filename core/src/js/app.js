@@ -3580,6 +3580,7 @@ slistArea.addEventListener('drop',e=>{
   const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
   if(files.length){
     e.preventDefault();
+    e.stopPropagation();
     const validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
     if(!validFiles.length) return;
     let loaded=0;
@@ -4083,6 +4084,7 @@ if(icoDropZone){
   });
   icoDropZone.addEventListener('drop', e => {
     e.preventDefault();
+    e.stopPropagation();
     icoDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file && file.type.startsWith('image/')){
@@ -5599,23 +5601,45 @@ if(ipadShotFile){
       });
     }
 
-    // Drag and Drop on Art Container
+    // Drag and Drop on Modal and Art Container
     const artContainer = $('msIconModalArt') || $('imageDetailModalArt');
+    const modalCanvas = $('msIconModalCanvas') || $('imageDetailModalCanvas');
+
+    const handleModalDrop = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (artContainer) artContainer.classList.remove('drag-over');
+      if (modalCanvas) modalCanvas.classList.remove('drag-over');
+      const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (file) {
+        handleFileReplacement(file);
+      }
+    };
+
+    const handleModalDragOver = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+      if (artContainer) artContainer.classList.add('drag-over');
+    };
+
+    const handleModalDragLeave = e => {
+      if (e.target === modal || !modal.contains(e.relatedTarget)) {
+        if (artContainer) artContainer.classList.remove('drag-over');
+        if (modalCanvas) modalCanvas.classList.remove('drag-over');
+      }
+    };
+
+    modal.addEventListener('dragover', handleModalDragOver);
+    modal.addEventListener('dragleave', handleModalDragLeave);
+    modal.addEventListener('drop', handleModalDrop);
+
     if (artContainer) {
-      artContainer.addEventListener('dragover', e => {
-        e.preventDefault();
-        artContainer.classList.add('drag-over');
-      });
+      artContainer.addEventListener('dragover', handleModalDragOver);
       artContainer.addEventListener('dragleave', () => {
         artContainer.classList.remove('drag-over');
       });
-      artContainer.addEventListener('drop', e => {
-        e.preventDefault();
-        artContainer.classList.remove('drag-over');
-        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
-          handleFileReplacement(e.dataTransfer.files[0]);
-        }
-      });
+      artContainer.addEventListener('drop', handleModalDrop);
     }
   }
 
@@ -5706,6 +5730,7 @@ if(featureDropZone){
   });
   featureDropZone.addEventListener('drop', e => {
     e.preventDefault();
+    e.stopPropagation();
     featureDragCounter = 0;
     featureDropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
@@ -10816,8 +10841,12 @@ window.addEventListener('drop', e => {
       parseAndApplyJSON(reader.result);
     };
     reader.readAsText(file);
-  } else if (!e.target.closest('#icoDropZone') && !e.target.closest('#featureDropZone') && !e.target.closest('#shotDropZone') && !e.target.closest('#ipadDropZone') && !e.target.closest('#bundleDropZone') && !e.target.closest('.drop-zone') && !e.target.closest('.sl') && !e.target.closest('.tabsec')) {
-    showToast('Unsupported file type. Please drop a .json configuration file.', 'warn');
+  } else if (!e.target.closest('#icoDropZone') && !e.target.closest('#featureDropZone') && !e.target.closest('#shotDropZone') && !e.target.closest('#ipadDropZone') && !e.target.closest('#bundleDropZone') && !e.target.closest('.drop-zone') && !e.target.closest('.sl') && !e.target.closest('.tabsec') && !e.target.closest('#msIconModal') && !e.target.closest('#imageDetailModal') && !e.target.closest('.icon-modal-backdrop') && !e.target.closest('.modal')) {
+    const isImage = (file.type && file.type.startsWith('image/')) || /\.(png|jpe?g|webp|svg|gif|bmp|ico)$/i.test(file.name);
+    const isModalOpen = !!document.querySelector('#msIconModal.open, #imageDetailModal.open, .icon-modal-backdrop.open, .modal.open');
+    if (!isImage && !isModalOpen) {
+      showToast('Unsupported file type. Please drop a .json configuration file.', 'warn');
+    }
   }
 });
 
