@@ -21,6 +21,10 @@ try{
 }catch(e){
   document.documentElement.dataset.ui = "dark";
 }
+try{
+  const savedDevTheme = localStorage.getItem("store_preview_studio_device_theme") || "dark";
+  document.documentElement.dataset.deviceTheme = savedDevTheme;
+}catch(_){}
 </script>
 <style>
 /* Try.html Shell & Top Navigation */
@@ -162,7 +166,7 @@ html, body {
 <link rel="stylesheet" href="css/style.css">
 
 </head>
-<body data-store="apple" data-ui-store="apple" data-apple-device="iphone" data-google-device="phone" data-dual="false" data-panel="view" class="sps-demo-mode">
+<body data-store="apple" data-ui-store="apple" data-apple-device="iphone" data-google-device="phone" data-dual="true" data-panel="view" class="sps-demo-mode">
 
 <header class="try-topbar" id="tryTopbar">
   <div class="try-topbar-left">

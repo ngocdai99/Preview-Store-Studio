@@ -542,14 +542,19 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
   }
 }
 
-function setStore(s, animate = true){
+function setStore(s, animate = true, preserveDual = false){
   const fromMode = document.body.dataset.dual === 'true' ? 'dual' : store;
   const toMode = s;
 
-  if (document.body.dataset.dual === 'true') {
+  if (document.body.dataset.dual === 'true' && !preserveDual) {
     document.body.dataset.dual = 'false';
     const btn = $('btnDualPhone');
-    if (btn) btn.classList.remove('on');
+    if (btn) {
+      btn.classList.remove('on');
+      btn.setAttribute('aria-checked', 'false');
+    }
+    const badge = $('stageDualBadge');
+    if (badge) badge.style.display = 'none';
   }
 
   // Set UI store state immediately so pill and toolbar tabviews #dt and #gdt switch instantly (<1ms)
@@ -600,13 +605,24 @@ function setStore(s, animate = true){
   });
 
   const applyStoreMode = () => {
-    document.body.dataset.dual = 'false';
+    if (!preserveDual) {
+      document.body.dataset.dual = 'false';
+      if(appleDevice === 'dual') appleDevice = 'iphone';
+      if(googleDevice === 'dual') googleDevice = 'phone';
+    }
     store = s;
     document.body.dataset.store = s;
-    if(appleDevice === 'dual') appleDevice = 'iphone';
-    if(googleDevice === 'dual') googleDevice = 'phone';
-    document.body.dataset.appleDevice = appleDevice;
-    document.body.dataset.googleDevice = googleDevice;
+    document.body.dataset.appleDevice = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
+    document.body.dataset.googleDevice = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
+
+    const isDual = document.body.dataset.dual === 'true';
+    const btn = $('btnDualPhone');
+    if (btn) {
+      btn.classList.toggle('on', isDual);
+      btn.setAttribute('aria-checked', isDual ? 'true' : 'false');
+    }
+    const badge = $('stageDualBadge');
+    if (badge) badge.style.display = isDual ? 'inline-flex' : 'none';
 
     const iconLabel = $('iconSpecLabel');
     const iconHint = $('iconSpecHint');
@@ -938,6 +954,9 @@ function setDeviceTheme(theme, save = true){
   if(btnL) btnL.classList.toggle('on', t === 'light');
   if(btnD) btnD.classList.toggle('on', t === 'dark');
   syncVtPill($('theme'));
+  try{
+    localStorage.setItem('store_preview_studio_device_theme', t);
+  }catch(e){}
   if(save && typeof saveState === 'function') saveState(false);
 }
 
@@ -949,9 +968,17 @@ if($('theme') && !$('themeLight')){
     setDeviceTheme(cur === 'dark' ? 'light' : 'dark');
   };
 }
-// Sync theme segment indicator to initial mockup theme
-setTimeout(() => {
-  const cur = document.querySelector('.phone') ? (document.querySelector('.phone').dataset.theme || 'light') : 'light';
+
+// Sync theme segment indicator to saved or initial mockup theme
+function initDeviceTheme(){
+  let saved = null;
+  try{
+    saved = localStorage.getItem('store_preview_studio_device_theme');
+  }catch(e){}
+  const defaultTheme = (typeof window !== 'undefined' && !!window.SPS_DEMO_MODE) || document.documentElement.dataset.ui === 'dark' ? 'dark' : 'light';
+  const cur = saved || (document.querySelector('.phone') ? (document.querySelector('.phone').dataset.theme || defaultTheme) : defaultTheme);
   setDeviceTheme(cur, false);
-}, 0);
+}
+initDeviceTheme();
+setTimeout(initDeviceTheme, 0);
 
