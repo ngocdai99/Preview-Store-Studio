@@ -2056,7 +2056,7 @@ assert(bundledHtml.includes('.shot-inspect-btn:disabled, .shot-inspect-btn.disab
 
 // App Icon Dashed Placeholder and Menu Reset Verification
 assert(/\.ico-wrap\.is-placeholder\s*\{[\s\S]*?border:\s*1\.5px dashed #f59e0b/.test(bundledHtml), 'App icon zone defines amber-orange dashed border for placeholder state');
-assert(iconJsCode.includes("CURRENT_PRESET_KEY === 'draft' && typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON"), 'isPlaceholderIcon correctly detects draft placeholder when no custom icon');
+assert(iconJsCode.includes("typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON"), 'isPlaceholderIcon returns false when custom icon is uploaded');
 assert(bundledHtml.includes('sps_reset_to_blank'), 'Factory reset in menu triggers clean draft with dashed placeholder app icon');
 
 // ---------------------------------------------------------------------
@@ -3805,11 +3805,14 @@ console.log('\n[SUITE 54]: Inspector Modal Ratio & Status Compliance Verificatio
 
 const modalJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'modal.js'), 'utf8');
 assert(modalJsSrc.includes("ratioEl.textContent = '1:1 Square'"), 'modal.js correctly displays 1:1 Square label');
-assert(modalJsSrc.includes("ratioEl.className = 'icon-metric-val ' + (_activeModalStore === 'apple' ? 'err' : 'warn')"), 'modal.js flags square phone ratio as err on Apple and warn on Google');
+assert(modalJsSrc.includes("ratioEl.className = 'icon-metric-val err'"), 'modal.js flags square phone ratio as err');
 assert(modalJsSrc.includes("App Store Rejection Risk: 1:1 Square"), 'modal.js evaluates 1:1 Square as App Store Rejection Risk');
 assert(modalJsSrc.includes("App Store Rejection Risk: Landscape"), 'modal.js flags landscape phone screenshot as rejection risk on Apple');
 assert(modalJsSrc.includes("Alpha detected · 100% Opaque required"), 'modal.js flags alpha transparency on Apple screenshots as error');
-assert(modalJsSrc.includes("const isGoogleSizeIssue = _activeModalStore === 'google' && (w < 320 || h < 320 || w > 3840 || h > 3840)"), 'modal.js checks Google Play dimension boundary');
+
+const phoneJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'phone.js'), 'utf8');
+assert(phoneJsSrc.includes("tag.className = 'shot-dim-tag err';\n            tag.textContent = `1:1 Square (${w}×${h})`"), 'phone.js marks square screenshot tag as err');
+assert(phoneJsSrc.includes("tag.className = 'shot-dim-tag warn';\n            tag.textContent = `>8 MB"), 'phone.js marks oversize as warn');
 assert(bundledCore.includes("App Store Rejection Risk: 1:1 Square"), 'Bundled core.html contains App Store Rejection Risk square evaluation');
 assert(bundledTry.includes("App Store Rejection Risk: 1:1 Square"), 'Bundled try.html contains App Store Rejection Risk square evaluation');
 

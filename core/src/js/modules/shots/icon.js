@@ -4,17 +4,21 @@ let ICON_FILE_TYPE = '';
 let ICON_FILE_NAME = '';
 
 function isPlaceholderIcon(){
+  // 1. If user uploaded a custom icon, it is NEVER a placeholder
+  if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) return false;
+
+  // 2. If a curated template preset is active (studio, pulsefit, zenmind, etc.), it's not a placeholder
   if(typeof CURRENT_PRESET_KEY !== 'undefined'){
-    if(CURRENT_PRESET_KEY === 'none') return true;
     if(CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none' && CURRENT_PRESET_KEY !== 'draft') return false;
-    if(CURRENT_PRESET_KEY === 'draft' && typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) return false;
   }
+
+  // 3. Otherwise (in draft or none/blank without custom icon), check if icon is missing or placeholder
   if(!ICON) return true;
   if(typeof BLANK_ICON !== 'undefined' && ICON === BLANK_ICON) return true;
   if(typeof BLUEPRINT_ICON !== 'undefined' && ICON === BLUEPRINT_ICON) return true;
   if(typeof BLANK_ICON_1024 !== 'undefined' && BLANK_ICON_1024 && ICON === BLANK_ICON_1024) return true;
   if(typeof BLANK_ICON_512 !== 'undefined' && BLANK_ICON_512 && ICON === BLANK_ICON_512) return true;
-  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('f59e0b') || ICON.includes('ea580c') || ICON.includes('bp-bg') || ICON.includes('blueprint') || ICON.includes('BLUEPRINT GRID'))) return true;
+  if(typeof ICON === 'string' && (ICON.includes('c6-bg') || ICON.includes('bfd1fd') || ICON.includes('d2c7fc') || ICON.includes('bp-bg') || ICON.includes('blueprint') || ICON.includes('BLUEPRINT GRID'))) return true;
   if(typeof IS_CUSTOM_ICON !== 'undefined') return !IS_CUSTOM_ICON;
   return true;
 }
@@ -442,6 +446,7 @@ if($('icoFile')){
       return;
     }
     IS_CUSTOM_ICON = true;
+    CURRENT_PRESET_KEY = 'draft';
     ICON_FILE_SIZE = f.size || 0;
     ICON_FILE_TYPE = f.type || '';
     ICON_FILE_NAME = f.name || '';
@@ -453,6 +458,7 @@ if($('icoFile')){
         userDraft.icon1024 = d;
         userDraft.isCustomIcon = true;
       }
+      CURRENT_PRESET_KEY = 'draft';
       renderIcons();
       saveState();
       if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -487,6 +493,7 @@ if(icoDropZone){
     if(file && file.type.startsWith('image/')){
       if(typeof validateUploadFile === 'function' && !validateUploadFile(file, MAX_UPLOAD_BYTES, 'App icon')) return;
       IS_CUSTOM_ICON = true;
+      CURRENT_PRESET_KEY = 'draft';
       ICON_FILE_SIZE = file.size || 0;
       ICON_FILE_TYPE = file.type || '';
       ICON_FILE_NAME = file.name || '';
@@ -498,6 +505,7 @@ if(icoDropZone){
           userDraft.icon1024 = d;
           userDraft.isCustomIcon = true;
         }
+        CURRENT_PRESET_KEY = 'draft';
         renderIcons();
         saveState();
         if(typeof updateDraftPill === 'function') updateDraftPill();

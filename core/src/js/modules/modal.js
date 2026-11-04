@@ -340,19 +340,21 @@
           dimErr = (w !== 1024 || h !== 500);
         } else if (_activeModalType === 'ipad') {
           dimOk = (w === 2048 && h === 2732) || (w === 2732 && h === 2048) || isIpadPortrait || isIpadLandscape;
-          dimErr = isSq;
+          dimErr = isSq || (h > w * 1.5 || w > h * 1.5);
         } else if (_activeModalType === 'tablet') {
           dimOk = !isSq && (w >= 1080 && h >= 1080);
-          dimErr = false;
+          dimErr = isSq;
         } else {
           // Phone Screenshot
-          if (_activeModalStore === 'apple') {
-            dimOk = !isSq && isPhonePortrait && (w >= 1000 && h >= 2000);
-            dimErr = isSq || isLandscape;
+          const isWrongRatio = isSq || isLandscape || !isPhonePortrait;
+          if (isWrongRatio) {
+            dimErr = true;
+            dimOk = false;
           } else {
-            // Google Phone
-            dimOk = !isSq && (w >= 320 && h >= 320 && w <= 3840 && h <= 3840);
-            dimErr = (w < 320 || h < 320 || w > 3840 || h > 3840);
+            dimErr = false;
+            const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
+            const isStandardGoogle = _activeModalStore === 'google' && (w === 1080 && h === 1920);
+            dimOk = isStandardApple || isStandardGoogle;
           }
         }
         dimEl.className = 'icon-metric-val ' + (dimErr ? 'err' : (dimOk ? 'ok' : 'warn'));
@@ -386,25 +388,25 @@
           } else {
             const r = (w / (h || 1)).toFixed(2);
             ratioEl.textContent = `${r}:1 Non-standard`;
-            ratioEl.className = 'icon-metric-val warn';
+            ratioEl.className = 'icon-metric-val err';
           }
         } else if (_activeModalType === 'tablet') {
           if (isSq) {
             ratioEl.textContent = '1:1 Square';
-            ratioEl.className = 'icon-metric-val warn';
+            ratioEl.className = 'icon-metric-val err';
           } else if (isTabletPortrait || isTabletLandscape) {
             ratioEl.textContent = isTabletPortrait ? '16:10 Portrait' : '16:10 Landscape';
             ratioEl.className = 'icon-metric-val ok';
           } else {
             const r = (w / (h || 1)).toFixed(2);
             ratioEl.textContent = `${r}:1 Non-standard`;
-            ratioEl.className = 'icon-metric-val warn';
+            ratioEl.className = 'icon-metric-val err';
           }
         } else {
-          // Phone Screenshot
+          // Phone Screenshot - Sai ratio là ERROR (red)
           if (isSq) {
             ratioEl.textContent = '1:1 Square';
-            ratioEl.className = 'icon-metric-val ' + (_activeModalStore === 'apple' ? 'err' : 'warn');
+            ratioEl.className = 'icon-metric-val err';
           } else if (isPhonePortrait) {
             let rLabel = 'Portrait';
             if (Math.abs(h / w - 19.5 / 9) < 0.15) rLabel = '9:19.5 Portrait';
@@ -417,11 +419,11 @@
             if (Math.abs(w / h - 16 / 9) < 0.15) rLabel = '16:9 Landscape';
             else rLabel = `${(w / h).toFixed(2)}:1 Landscape`;
             ratioEl.textContent = rLabel;
-            ratioEl.className = 'icon-metric-val ' + (_activeModalStore === 'apple' ? 'err' : 'warn');
+            ratioEl.className = 'icon-metric-val err';
           } else {
             const r = (h / (w || 1)).toFixed(2);
-            ratioEl.textContent = `${r}:1 Non-phone`;
-            ratioEl.className = 'icon-metric-val warn';
+            ratioEl.textContent = `${r}:1 Non-portrait`;
+            ratioEl.className = 'icon-metric-val err';
           }
         }
       }
@@ -431,8 +433,9 @@
           const kb = (sizeBytes / 1024).toFixed(0);
           sizeEl.textContent = `${kb} KB`;
           sizeEl.title = `${sizeBytes.toLocaleString('en-US')} bytes`;
-          const sizeErr = (_activeModalType === 'icon' && _activeModalStore === 'google' && sizeBytes > 1024 * 1024);
-          sizeEl.className = 'icon-metric-val ' + (sizeErr ? 'err' : 'ok');
+          const isOverSize = sizeBytes > 8 * 1024 * 1024;
+          // Sai fileSize là warning
+          sizeEl.className = 'icon-metric-val ' + (isOverSize ? 'warn' : 'ok');
         } else {
           sizeEl.textContent = 'Optimized';
           sizeEl.className = 'icon-metric-val ok';
@@ -584,47 +587,47 @@
         const MAX_PHONE_SHOT_BYTES = 8 * 1024 * 1024;
         const isGoogleSizeIssue = _activeModalStore === 'google' && (w < 320 || h < 320 || w > 3840 || h > 3840);
 
-        if (sizeBytes > MAX_PHONE_SHOT_BYTES) {
-          const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
-          level = 'err';
-          badgeText = `File size error: ${mb} MB · Exceeds maximum 8 MB`;
-          detailsHtml = `<p>Screenshot file size (${mb} MB) exceeds the 8 MB safety limit. Store guidelines strictly enforce file size limits.</p><p class="icon-modal-warn-hint">Please compress or optimize the image before submitting.</p>`;
-        } else if (_activeModalStore === 'apple' && hasAlpha) {
+        // 1. SAI RATIO LÀ ERROR (RED)
+        if (_activeModalStore === 'apple' && hasAlpha) {
           level = 'err';
           badgeText = 'Alpha detected · 100% Opaque required';
           detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Apple App Store Connect rejects screenshots with transparent alpha channels. The image must be 100% opaque.</p><p class="icon-modal-warn-hint">Flatten background layers and export as PNG or JPEG without transparency.</p>';
-        } else if (isGoogleSizeIssue) {
-          level = 'err';
-          badgeText = `Google Play Error: Dimension out of range (${w}×${h} px)`;
-          detailsHtml = '<p><strong>Google Play Console Error:</strong> Minimum dimension is 320 px and maximum dimension is 3,840 px. The aspect ratio must not exceed 2:1.</p><p class="icon-modal-warn-hint">Re-export within 320–3,840 px (standard: 1080×1920 px).</p>';
         } else if (isSq) {
-          if (_activeModalStore === 'apple') {
-            level = 'err';
-            badgeText = `App Store Rejection Risk: 1:1 Square (${w}×${h} px)`;
-            detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Screenshot is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px or 1284×2778 px, 9:19.5 aspect ratio). Square screenshots will be rejected by App Store Connect.</p><p class="icon-modal-warn-hint">Please crop or re-export a portrait screenshot (9:19.5 or 9:16) from your design tool.</p>';
-          } else {
-            level = 'warn';
-            badgeText = `Dimension Notice: 1:1 Square (${w}×${h} px)`;
-            detailsHtml = '<p><strong>Dimension Notice:</strong> Screenshot is square (1:1). Standard phone screenshots should be portrait (9:16 or 9:19.5). Square photos will be cropped or letterboxed in phone mockups.</p><p class="icon-modal-warn-hint">Upload a 9:16 portrait screenshot (e.g. 1080×1920 px) for optimal store presentation.</p>';
-          }
+          level = 'err';
+          badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: 1:1 Square (${w}×${h} px)` : `Aspect Ratio Error: 1:1 Square (${w}×${h} px)`;
+          detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Screenshot is square (1:1). Phone screenshots must be portrait (e.g. 1290×2796 px or 1080×1920 px). Square screenshots will be rejected by store review.</p><p class="icon-modal-warn-hint">Please crop or re-export a portrait screenshot (9:19.5 or 9:16) from your design tool.</p>`;
         } else if (isLandscape) {
-          if (_activeModalStore === 'apple') {
-            level = 'err';
-            badgeText = `App Store Rejection Risk: Landscape (${w}×${h} px)`;
-            detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Apple App Store requires portrait phone screenshots for iPhone listings. Uploading landscape screenshots will fail store submission review.</p><p class="icon-modal-warn-hint">Re-export as portrait (e.g. 1290×2796 px) to match iPhone display specifications.</p>';
-          } else {
-            level = 'warn';
-            badgeText = `Landscape Screenshot (${w}×${h} px)`;
-            detailsHtml = '<p>Google Play allows landscape screenshots, but portrait screenshots (9:16) are strongly recommended for phone listings to maximize visibility on mobile displays.</p><p class="icon-modal-warn-hint">Portrait 1080×1920 px is recommended.</p>';
-          }
+          level = 'err';
+          badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: Landscape (${w}×${h} px)` : `Aspect Ratio Error: Landscape (${w}×${h} px)`;
+          detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Phone screenshots must be portrait. Uploading landscape screenshots will fail phone store presentation.</p><p class="icon-modal-warn-hint">Re-export as portrait (e.g. 1290×2796 px or 1080×1920 px) to match phone display specifications.</p>`;
         } else if (!isPhonePortrait) {
+          level = 'err';
+          badgeText = `Aspect Ratio Error: Non-portrait (${w}×${h} px)`;
+          detailsHtml = '<p><strong>Aspect Ratio Error:</strong> This screenshot has a non-portrait aspect ratio. Phone screenshots must be portrait (9:16 or 9:19.5).</p><p class="icon-modal-warn-hint">Recommended resolution: ' + (_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px') + '.</p>';
+        }
+        // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+        else if (sizeBytes > MAX_PHONE_SHOT_BYTES) {
+          const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
           level = 'warn';
-          badgeText = `Non-standard Ratio (${w}×${h} px)`;
-          detailsHtml = '<p>This screenshot has a non-standard aspect ratio. Recommended: 9:16 or 9:19.5 phone portrait for optimal rendering across devices.</p><p class="icon-modal-warn-hint">Recommended resolution: ' + (_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px') + '.</p>';
+          badgeText = `File Size Warning: ${mb} MB · Exceeds 8 MB limit`;
+          detailsHtml = `<p>Screenshot file size (${mb} MB) exceeds the 8 MB recommended limit. While Preview Studio displays it, compressing is recommended before store submission.</p><p class="icon-modal-warn-hint">Please compress or optimize the image before submitting.</p>`;
+        } else if (isGoogleSizeIssue) {
+          level = 'warn';
+          badgeText = `Dimension Warning: Out of range (${w}×${h} px)`;
+          detailsHtml = '<p><strong>Google Play Dimension Notice:</strong> Recommended dimension range is 320–3,840 px. Please check Play Console requirements.</p><p class="icon-modal-warn-hint">Recommended standard: 1080×1920 px.</p>';
         } else {
-          level = 'ok';
-          badgeText = `${w}×${h} px · Active Screenshot`;
-          detailsHtml = '';
+          // Check standard dimensions
+          const isStandardApple = _activeModalStore === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
+          const isStandardGoogle = _activeModalStore === 'google' && (w === 1080 && h === 1920);
+          if ((_activeModalStore === 'apple' && !isStandardApple) || (_activeModalStore === 'google' && !isStandardGoogle)) {
+            level = 'warn';
+            badgeText = `Dimension Notice: ${w}×${h} px · Scaled to Canvas`;
+            detailsHtml = '<p>Screenshot is portrait ratio but differs from target (' + (_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px') + '). It will be scaled to fit device frames.</p><p class="icon-modal-warn-hint">Export at standard target resolution for optimal crispness.</p>';
+          } else {
+            level = 'ok';
+            badgeText = `${w}×${h} px · Active Screenshot`;
+            detailsHtml = '';
+          }
         }
       }
 

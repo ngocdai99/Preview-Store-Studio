@@ -353,23 +353,31 @@ function validateIpadScreenshots(){
       }
       const isOverSize = shotSize > 8 * 1024 * 1024;
 
+      const isSquare = (Math.abs(w - h) / Math.max(w, h)) < 0.12;
+
       if(tag){
         tag.style.display = 'inline-flex';
-        if(isOverSize){
+        // 1. SAI RATIO LÀ ERROR (RED)
+        if(isSquare){
           tag.className = 'shot-dim-tag err';
+          tag.textContent = `1:1 Square (${w}×${h})`;
+        } else if(h > w * 1.5 || w > h * 1.5){
+          tag.className = 'shot-dim-tag err';
+          tag.textContent = `Phone Ratio (${w}×${h})`;
+        } else if(!isExactIpad && !is3to4){
+          tag.className = 'shot-dim-tag err';
+          tag.textContent = `Wrong Ratio (${w}×${h})`;
+        }
+        // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+        else if(isOverSize){
+          tag.className = 'shot-dim-tag warn';
           tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
-        } else if(isExactIpad){
+        } else if(!isExactIpad){
+          tag.className = 'shot-dim-tag warn';
+          tag.textContent = `iPad 4:3 (${w}×${h})`;
+        } else {
           tag.className = 'shot-dim-tag ok';
           tag.textContent = `iPad Pro 13" (${w}×${h})`;
-        } else if(is3to4){
-          tag.className = 'shot-dim-tag ok';
-          tag.textContent = `iPad 4:3 (${w}×${h})`;
-        } else if(h > w * 1.5 || w > h * 1.5){
-          tag.className = 'shot-dim-tag warn';
-          tag.textContent = `Phone Ratio (${w}×${h})`;
-        } else {
-          tag.className = 'shot-dim-tag warn';
-          tag.textContent = `Non-standard (${w}×${h})`;
         }
       }
 

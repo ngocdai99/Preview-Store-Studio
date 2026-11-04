@@ -254,6 +254,7 @@ function validateScreenshots(){
 
   let checked = 0;
   const squareIndices = [];
+  const landscapeIndices = [];
   const nonPhoneIndices = [];
   const sizeIssueIndices = [];
   const overSizeIndices = [];
@@ -292,38 +293,52 @@ function validateScreenshots(){
 
         if(tag){
           tag.style.display = 'inline-flex';
-          if(isOverSize){
+          // 1. SAI RATIO LÀ ERROR (RED)
+          if(isSquare){
             tag.className = 'shot-dim-tag err';
-            tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
-          } else if(isSquare){
-            tag.className = 'shot-dim-tag warn';
             tag.textContent = `1:1 Square (${w}×${h})`;
-          } else if(isGoogleSizeIssue){
-            tag.className = 'shot-dim-tag err';
-            tag.textContent = `Out of Range (${w}×${h})`;
           } else if(isLandscape){
-            tag.className = 'shot-dim-tag info';
-            tag.textContent = `16:9 Landscape (${w}×${h})`;
-          } else if(isPhonePortrait){
-            tag.className = 'shot-dim-tag ok';
-            tag.textContent = `Portrait (${w}×${h})`;
-          } else {
+            tag.className = 'shot-dim-tag err';
+            tag.textContent = `Landscape (${w}×${h})`;
+          } else if(!isPhonePortrait){
+            tag.className = 'shot-dim-tag err';
+            tag.textContent = `Non-portrait (${w}×${h})`;
+          }
+          // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+          else if(isOverSize){
             tag.className = 'shot-dim-tag warn';
-            tag.textContent = `Non-phone (${w}×${h})`;
+            tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
+          } else if(isGoogleSizeIssue){
+            tag.className = 'shot-dim-tag warn';
+            tag.textContent = `Out of Range (${w}×${h})`;
+          } else {
+            const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
+            const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
+            if((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)){
+              tag.className = 'shot-dim-tag warn';
+              tag.textContent = `Scaled (${w}×${h})`;
+            } else {
+              tag.className = 'shot-dim-tag ok';
+              tag.textContent = `Portrait (${w}×${h})`;
+            }
           }
         }
 
-        if(isOverSize){
-          overSizeIndices.push(idx + 1);
-        }
+        // Collect indices for badge banner
         if(isSquare){
           squareIndices.push(idx + 1);
-        } else if(!isPhonePortrait && !isLandscape){
+        } else if(isLandscape){
+          landscapeIndices.push(idx + 1);
+        } else if(!isPhonePortrait){
           nonPhoneIndices.push(idx + 1);
-        }
-
-        if(isGoogleSizeIssue){
-          sizeIssueIndices.push(idx + 1);
+        } else {
+          // Đúng ratio: kiểm tra fileSize & kích thước
+          if(isOverSize){
+            overSizeIndices.push(idx + 1);
+          }
+          if(isGoogleSizeIssue){
+            sizeIssueIndices.push(idx + 1);
+          }
         }
       }
 
@@ -344,34 +359,37 @@ function validateScreenshots(){
 
   function finalizeBadge(){
     const maxAllowed = store === 'apple' ? 10 : 8;
-    if(overSizeIndices.length > 0){
-      const items = overSizeIndices.map(n => `#${n}`).join(', ');
-      const noun = overSizeIndices.length > 1 ? 'Screenshots' : 'Screenshot';
-      const verb = overSizeIndices.length > 1 ? 'exceed' : 'exceeds';
-      badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>File Size Error:</strong> ${noun} ${items} ${verb} 8 MB maximum limit. Please compress to avoid upload rejection and high memory usage.</span>`;
-      badgeEl.style.display = 'flex';
-    } else if(squareIndices.length > 0){
+    // 1. SAI RATIO LÀ ERROR (RED)
+    if(squareIndices.length > 0){
       const items = squareIndices.map(n => `#${n}`).join(', ');
-      if(store === 'apple'){
-        badgeEl.className = 'shot-status-badge err';
-        badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>`;
-      } else {
-        badgeEl.className = 'shot-status-badge warn';
-        badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Notice:</strong> Screenshot ${items} is square (1:1). Standard phone screenshots should be portrait (9:16 or 9:19.5). Square photos will be cropped or letterboxed in phone mockups.</span>`;
-      }
+      badgeEl.className = 'shot-status-badge err';
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Screenshot ${items} is square (1:1). Apple requires portrait phone resolutions (e.g. 1290×2796 px).</span>`;
+      badgeEl.style.display = 'flex';
+    } else if(landscapeIndices.length > 0){
+      const items = landscapeIndices.map(n => `#${n}`).join(', ');
+      badgeEl.className = 'shot-status-badge err';
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>Aspect Ratio Error:</strong> Screenshot ${items} is landscape. Phone screenshots must be portrait.</span>`;
       badgeEl.style.display = 'flex';
     } else if(nonPhoneIndices.length > 0){
       const items = nonPhoneIndices.map(n => `#${n}`).join(', ');
+      badgeEl.className = 'shot-status-badge err';
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>Aspect Ratio Error:</strong> Screenshot ${items} has non-portrait ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>`;
+      badgeEl.style.display = 'flex';
+    }
+    // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+    else if(overSizeIndices.length > 0){
+      const items = overSizeIndices.map(n => `#${n}`).join(', ');
+      const noun = overSizeIndices.length > 1 ? 'Screenshots' : 'Screenshot';
+      const verb = overSizeIndices.length > 1 ? 'exceed' : 'exceeds';
       badgeEl.className = 'shot-status-badge warn';
-      badgeEl.innerHTML = `${SB_WARN}<span><strong>Aspect Ratio Notice:</strong> Screenshot ${items} has non-standard ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>`;
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>File Size Warning:</strong> ${noun} ${items} ${verb} 8 MB maximum limit. Consider optimizing to reduce load times.</span>`;
       badgeEl.style.display = 'flex';
     } else if(sizeIssueIndices.length > 0){
       const items = sizeIssueIndices.map(n => `#${n}`).join(', ');
       const noun = sizeIssueIndices.length > 1 ? 'Screenshots' : 'Screenshot';
       const verb = sizeIssueIndices.length > 1 ? 'have' : 'has';
-      badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>Google Play Error:</strong> ${noun} ${items} ${verb} side length outside 320–3,840 px.</span>`;
+      badgeEl.className = 'shot-status-badge warn';
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Dimension Warning:</strong> ${noun} ${items} ${verb} side length outside 320–3,840 px.</span>`;
       badgeEl.style.display = 'flex';
     } else {
       // Compliant: All criteria met -> hide badge, do not show green message box
