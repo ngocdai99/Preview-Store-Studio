@@ -15,9 +15,9 @@ document.documentElement.classList.add('is-embedded');
 }
 }catch(_){}
 try{
-document.documentElement.dataset.ui = localStorage.getItem("store_preview_studio_ui") || "light";
+document.documentElement.dataset.ui = localStorage.getItem("store_preview_studio_demo_ui") || "dark";
 }catch(e){
-document.documentElement.dataset.ui = "light";
+document.documentElement.dataset.ui = "dark";
 }</script>
 <style>:root{--try-bar-bg:#111211;--try-bar-border:rgba(255,255,255,0.1);--try-bar-text:#e5e7eb}[data-ui="light"]{--try-bar-bg:#f9fafb;--try-bar-border:rgba(0,0,0,0.1);--try-bar-text:#111827}html,body{margin:0;padding:0;width:100%;height:100%;background:var(--bg-primary,#0c0d0c);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden}.try-topbar{display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 16px;background:var(--try-bar-bg);border-bottom:1px solid var(--try-bar-border);box-sizing:border-box;flex-shrink:0;z-index:100}.try-topbar-left{display:flex;align-items:center;gap:12px;flex:1}.try-back-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--try-bar-text);text-decoration:none;padding:4px 8px;border-radius:6px;transition:background 0.15s ease}.try-back-link:hover{background:rgba(255,255,255,0.08)}[data-ui="light"] .try-back-link:hover{background:rgba(0,0,0,0.05)}.try-topbar-center{display:flex;align-items:center;justify-content:center;gap:8px}.try-demo-badge{display:inline-flex;align-items:center;justify-content:center;text-align:center;gap:7px;padding:5.5px 12px;border-radius:20px;font-size:11.5px;line-height:1;font-weight:600;letter-spacing:0.3px;background:rgba(0,208,133,0.15);color:#ffffff;border:1px solid rgba(0,208,133,0.3)}[data-ui="light"] .try-demo-badge{color:#111827;background:rgba(0,208,133,0.12);border:1px solid rgba(0,180,110,0.35)}.try-demo-dot{width:6px;height:6px;border-radius:50%;background:#00d085;box-shadow:0 0 6px #00d085;flex-shrink:0}.try-topbar-right{display:flex;align-items:center;justify-content:flex-end;flex:1}.studio-app-shell{width:100vw;height:calc(100vh - 48px);position:relative;display:flex;flex-direction:column;overflow:hidden}.is-embedded .try-topbar{display:none !important}.is-embedded .studio-app-shell{height:100vh !important;width:100vw !important}.theme-toggle-btn,#btnUi{display:none !important}</style>
 <script>!function(A,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(A="undefined"!=typeof globalThis?globalThis:A||self).html2canvas=e()}(this,function(){"use strict";
@@ -7219,6 +7219,14 @@ requireFullVersion(paywallKey);
 }
 }
 if (typeof document !== 'undefined') {
+try {
+const demoUiPref = localStorage.getItem('store_preview_studio_demo_ui');
+const curUi = demoUiPref || 'dark';
+document.documentElement.dataset.ui = curUi;
+if (typeof applyUiTheme === 'function') {
+applyUiTheme(curUi);
+}
+} catch (_) {}
 if (document.readyState === 'loading') {
 document.addEventListener('DOMContentLoaded', initDemoGuard);
 } else {
@@ -12047,7 +12055,7 @@ if(typeof renderShots === 'function') renderShots();
 if(typeof renderIpadShots === 'function') renderIpadShots();
 if(typeof renderTabShots === 'function') renderTabShots();
 }
-applyUiTheme(document.documentElement.dataset.ui || 'light');
+applyUiTheme(document.documentElement.dataset.ui || 'dark');
 $('btnUi').onclick = () => {
 const next = document.documentElement.dataset.ui === 'light' ? 'dark' : 'light';
 applyUiTheme(next);

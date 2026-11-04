@@ -161,6 +161,13 @@ function transformModuleForDemo(relPath, content) {
       );
   }
 
+  if (relPath === 'modules/theme.js') {
+    return content.replace(
+      "applyUiTheme(document.documentElement.dataset.ui || 'light');",
+      "applyUiTheme(document.documentElement.dataset.ui || 'dark');"
+    );
+  }
+
   if (relPath === 'apple/apple.js') {
     return content.replace(
       "if (typeof isDemoMode === 'function' && isDemoMode() && d === 'ipad')",

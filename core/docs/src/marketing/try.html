@@ -17,9 +17,9 @@ try{
   }
 }catch(_){}
 try{
-  document.documentElement.dataset.ui = localStorage.getItem("store_preview_studio_ui") || "light";
+  document.documentElement.dataset.ui = localStorage.getItem("store_preview_studio_demo_ui") || "dark";
 }catch(e){
-  document.documentElement.dataset.ui = "light";
+  document.documentElement.dataset.ui = "dark";
 }
 </script>
 <style>

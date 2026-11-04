@@ -684,6 +684,16 @@ function initDemoGuard() {
 }
 
 if (typeof document !== 'undefined') {
+  // Ensure default Dark Mode in Demo Mode if user has not explicitly set a preference
+  try {
+    const demoUiPref = localStorage.getItem('store_preview_studio_demo_ui');
+    const curUi = demoUiPref || 'dark';
+    document.documentElement.dataset.ui = curUi;
+    if (typeof applyUiTheme === 'function') {
+      applyUiTheme(curUi);
+    }
+  } catch (_) {}
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDemoGuard);
   } else {
