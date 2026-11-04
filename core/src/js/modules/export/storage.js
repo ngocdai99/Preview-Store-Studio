@@ -736,8 +736,34 @@ async function resetFactoryStorage(){
   try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
 
   // 4. Reload page cleanly to bootstrap pristine factory state
-  if(typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function'){
-    window.location.reload();
+  if(typeof window !== 'undefined' && window.location){
+    try{
+      const sp = new URLSearchParams(window.location.search || '');
+      const storeKeys = ['appid', 'apple', 'app_id', 'apple_id', 'id', 'app', 'url', 'store_url', 'link', 'itunes', 'country', 'bundle'];
+      let hasStoreParam = false;
+      storeKeys.forEach(k => {
+        if(sp.has(k)){
+          sp.delete(k);
+          hasStoreParam = true;
+        }
+      });
+      if(hasStoreParam && typeof window.location.replace === 'function'){
+        if(window.parent && window.parent !== window){
+          try{
+            const psp = new URLSearchParams(window.parent.location.search || '');
+            storeKeys.forEach(k => psp.delete(k));
+            const pSearch = psp.toString();
+            window.parent.history.replaceState(null, '', window.parent.location.pathname + (pSearch ? '?' + pSearch : ''));
+          }catch(_){}
+        }
+        const cleanSearch = sp.toString();
+        window.location.replace(window.location.pathname + (cleanSearch ? '?' + cleanSearch : ''));
+        return;
+      }
+    }catch(_){}
+    if(typeof window.location.reload === 'function'){
+      window.location.reload();
+    }
   }
 }
 

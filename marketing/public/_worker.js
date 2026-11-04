@@ -1,0 +1,77 @@
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // Fast Edge API Proxy for App Store Metadata
+    if (url.pathname === '/api/lookup') {
+      const id = url.searchParams.get('id') || url.searchParams.get('appid');
+      const bundle = url.searchParams.get('bundle');
+      const country = url.searchParams.get('country') || '';
+
+      if (!id && !bundle) {
+        return new Response(JSON.stringify({ error: 'Missing id or bundle' }), {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+
+      const itunesUrl = 'https://itunes.apple.com/lookup?' +
+        (id ? 'id=' + encodeURIComponent(id) : 'bundleId=' + encodeURIComponent(bundle)) +
+        (country ? '&country=' + encodeURIComponent(country) : '');
+
+      try {
+        const res = await fetch(itunesUrl, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/json'
+          }
+        });
+        const data = await res.text();
+        return new Response(data, {
+          status: res.status,
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'public, max-age=3600'
+          }
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ error: err.message }), {
+          status: 502,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+    }
+
+    // Edge Invite Analytics & Follow-up Tracking (Verified Apple App ID only)
+    if (url.pathname === '/api/track') {
+      const appid = (url.searchParams.get('appid') || '').trim();
+      const app = (url.searchParams.get('app') || '').trim();
+      const dev = (url.searchParams.get('dev') || '').trim();
+      const event = url.searchParams.get('event') || 'view';
+      const tier = url.searchParams.get('tier') || '';
+      const country = request.cf ? (request.cf.country || '') : '';
+      const city = request.cf ? (request.cf.city || '') : '';
+      const ip = request.headers.get('cf-connecting-ip') || '';
+
+      if (/^\d{7,12}$/.test(appid)) {
+        console.log(`[INVITE_TRACK] ${new Date().toISOString()} event=${event} appid=${appid} app="${app}" dev="${dev}" tier=${tier} geo=${city},${country} ip=${ip}`);
+      }
+
+      return new Response(JSON.stringify({ ok: true, ts: Date.now() }), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
+
+    return env.ASSETS.fetch(request);
+  }
+};
