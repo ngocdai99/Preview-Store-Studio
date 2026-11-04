@@ -40,10 +40,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (window.location.search) {
+                if (window.location.search && !window.location.pathname.startsWith('/try')) {
                   var p = new URLSearchParams(window.location.search);
                   if (p.get('id') || p.get('appid') || p.get('app') || p.get('url') || p.get('itunes') || p.get('link') || p.get('bundle')) {
-                    window.location.replace('/demo' + window.location.search);
+                    window.location.replace('/try' + window.location.search);
                   }
                 }
               } catch(_) {}
