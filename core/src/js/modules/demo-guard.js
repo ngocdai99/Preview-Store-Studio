@@ -523,6 +523,33 @@ function initDemoGuard() {
       }, true);
     }
 
+    // Add Buy badge on Phone Screenshots header to indicate Pro capability limit
+    const shotsCard = $('shotsCard');
+    if (shotsCard) {
+      const headerRight = shotsCard.querySelector('.card-header-right');
+      if (headerRight && !headerRight.querySelector('.demo-locked-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'demo-locked-badge btn-primary';
+        badge.textContent = 'Buy';
+        badge.style.pointerEvents = 'none';
+        headerRight.insertBefore(badge, headerRight.firstChild);
+      }
+
+      // Intercept upload trigger when already reached 2 uploaded screenshots limit
+      shotsCard.addEventListener('click', e => {
+        if (e.target.closest('.card-header, .info-tip-btn, .shot-remove-btn, .shot-inspect-btn')) return;
+        const isUploadTrigger = e.target.closest('#addShot, .shot-upload-btn');
+        if (isUploadTrigger) {
+          const currentUploaded = (window._demoScreenshotUploadCount || 0);
+          if (currentUploaded >= 2) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            requireFullVersion('upload-shots');
+          }
+        }
+      }, true);
+    }
+
     // Gated Editor Form Cards: Allow normal expand/collapse, but intercept and block uploads
     const gatedUploadCards = [
       {

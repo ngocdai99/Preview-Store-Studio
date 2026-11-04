@@ -7079,6 +7079,29 @@ if (stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remov
 requireFullVersion('apple-ipad');
 }, true);
 }
+const shotsCard = $('shotsCard');
+if (shotsCard) {
+const headerRight = shotsCard.querySelector('.card-header-right');
+if (headerRight && !headerRight.querySelector('.demo-locked-badge')) {
+const badge = document.createElement('span');
+badge.className = 'demo-locked-badge btn-primary';
+badge.textContent = 'Buy';
+badge.style.pointerEvents = 'none';
+headerRight.insertBefore(badge, headerRight.firstChild);
+}
+shotsCard.addEventListener('click', e => {
+if (e.target.closest('.card-header, .info-tip-btn, .shot-remove-btn, .shot-inspect-btn')) return;
+const isUploadTrigger = e.target.closest('#addShot, .shot-upload-btn');
+if (isUploadTrigger) {
+const currentUploaded = (window._demoScreenshotUploadCount || 0);
+if (currentUploaded >= 2) {
+e.preventDefault();
+e.stopImmediatePropagation();
+requireFullVersion('upload-shots');
+}
+}
+}, true);
+}
 const gatedUploadCards = [
 {
 cardId: 'ipadCard',
