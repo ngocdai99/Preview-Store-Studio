@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
+import { MiniStudioToast } from "@/components/MiniStudioToast";
 
 export const metadata: Metadata = {
   title: "Live Interactive Demo · Store Preview Studio",
@@ -52,6 +53,9 @@ export default function TryPage() {
           </div>
         </section>
       </main>
+
+      {/* Floating Mini Studio Toast triggered by embedded sandbox actions */}
+      <MiniStudioToast />
 
       {/* Footer matching Landing Page & demo.html */}
       <Footer />

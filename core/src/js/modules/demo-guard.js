@@ -77,31 +77,182 @@ const DEMO_PAYWALL_CONFIGS = {
   }
 };
 
-function requireFullVersion(featureKey, context = {}) {
-  const modal = $('demoUpgradeModal');
-  if (!modal) {
-    if (typeof showToast === 'function') {
-      showToast('This feature is available in the Full Version.', 'info');
-    }
-    return false;
+const MINI_STUDIO_TOAST_MAP = {
+  'export-png': {
+    title: '4K Ultra HD Export',
+    desc: 'Export pristine, watermark-free 4K mockups ready for store marketing.'
+  },
+  'export-copy': {
+    title: 'Store Metadata Clipboard',
+    desc: 'Copy formatted metadata directly for App Store Connect & Google Play.'
+  },
+  'export-markdown': {
+    title: 'Store Listing Documents',
+    desc: 'Export structured listing documents with compliance audits & character counts.'
+  },
+  'export-json': {
+    title: 'Project Backup Export',
+    desc: 'Save and restore complete workspace configurations & custom assets.'
+  },
+  'import-json': {
+    title: 'Project JSON Import',
+    desc: 'Open and load saved .json project files and templates seamlessly.'
+  },
+  'store-import': {
+    title: '1-Click App Store Clone',
+    desc: 'Clone live Apple App Store listings by URL or ID in seconds.'
+  },
+  'upload-shots': {
+    title: 'Screenshot Upload Limit',
+    desc: 'Demo mode is limited to 2 screenshots. Full Version supports up to 10 screenshots.'
+  },
+  'phone-screenshots': {
+    title: 'Phone Screenshots Gallery',
+    desc: 'Upload and manage up to 10 full-resolution screenshots with compliance checks.'
+  },
+  'google-tablet': {
+    title: 'Android Tablet Previews',
+    desc: 'Preview and validate 7-inch & 10-inch Android tablet layouts.'
+  },
+  'apple-ipad': {
+    title: 'iPad Pro 13" Previews',
+    desc: 'Preview and validate Universal Apple App Store listings on iPad Pro 13".'
+  },
+  'ipad-screenshots': {
+    title: 'iPad Screenshots Upload',
+    desc: 'Upload and manage dedicated 13" iPad Pro screenshots (2048×2732 px).'
+  },
+  'tablet-screenshots': {
+    title: 'Tablet Screenshots Upload',
+    desc: 'Upload 7" and 10" Android tablet screenshots with Play Store audits.'
+  },
+  'feature-graphic': {
+    title: 'Feature Graphic (1024×500)',
+    desc: 'Upload and inspect Google Play promotional graphics required for store featuring.'
+  },
+  'default': {
+    title: 'Exclusive Feature',
+    desc: 'Available in Plus Edition & Pro Studio.'
+  }
+};
+
+let msLocalToastTimer = null;
+
+function showMiniStudioToast(item) {
+  const isEmbedded = typeof window !== 'undefined' && window.self !== window.top;
+  const payload = {
+    title: (item && item.title) || 'Exclusive Feature',
+    desc: (item && item.desc) || 'Available in Plus Edition & Pro Studio.',
+    ctaText: (item && item.ctaText) || 'Buy Now',
+    url: (item && item.url) || '/#pricing',
+    tagText: (item && item.tagText) || 'BUY'
+  };
+
+  // 1. When inside an iframe on the /try page, show toast on parent page context!
+  if (isEmbedded) {
+    try {
+      window.parent.postMessage({
+        type: 'sps-mini-toast',
+        toast: payload
+      }, '*');
+      return;
+    } catch (_) {}
   }
 
-  const conf = DEMO_PAYWALL_CONFIGS[featureKey] || DEMO_PAYWALL_CONFIGS['default'];
-  const titleEl = $('demoUpgradeTitle');
-  const descEl = $('demoUpgradeDesc');
-  const mainFeatEl = $('demoUpgradeFeatureMain');
+  // 2. Standalone page mode (/try.html): render in local document context
+  let t = $('msToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.className = 'ms-toast';
+    t.id = 'msToast';
+    t.hidden = true;
+    t.innerHTML = `
+      <div class="ms-toast-body">
+        <div class="ms-toast-header-row">
+          <span class="ms-tag plus buy" id="msToastTag">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            BUY
+          </span>
+          <b id="msToastTitle">Exclusive Feature</b>
+        </div>
+        <span id="msToastDesc">Available in Plus Edition &amp; Pro Studio</span>
+      </div>
+      <a href="/#pricing" class="ms-toast-cta" id="msToastCta">
+        <span>Buy Now</span>
+      </a>
+      <button type="button" class="ms-toast-close" id="msToastClose" aria-label="Close notification">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    `;
+    document.body.appendChild(t);
 
-  if (titleEl) titleEl.textContent = conf.title;
-  if (descEl) descEl.textContent = conf.desc;
-  if (mainFeatEl) mainFeatEl.textContent = conf.mainFeature;
+    const closeBtn = t.querySelector('#msToastClose');
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        t.classList.remove('show');
+        setTimeout(() => { t.hidden = true; }, 300);
+      };
+    }
+  }
 
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
+  const titleEl = t.querySelector('#msToastTitle');
+  if (titleEl) titleEl.textContent = payload.title;
 
-  const cta = $('demoUpgradeCta');
-  if (cta) cta.focus();
+  const descEl = t.querySelector('#msToastDesc');
+  if (descEl) descEl.textContent = payload.desc;
 
-  return true;
+  const ctaEl = t.querySelector('#msToastCta');
+  if (ctaEl) {
+    ctaEl.href = payload.url;
+    const ctaSpan = ctaEl.querySelector('span');
+    if (ctaSpan) ctaSpan.textContent = payload.ctaText;
+  }
+
+  t.hidden = false;
+  void t.offsetWidth;
+  t.classList.add('show');
+
+  clearTimeout(msLocalToastTimer);
+  msLocalToastTimer = setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => { t.hidden = true; }, 300);
+  }, 4500);
+}
+
+function requireFullVersion(featureKey, context = {}) {
+  // Allow explicit modal opening only when explicitly flagged in context
+  if (context && context.showModal) {
+    const modal = $('demoUpgradeModal');
+    if (modal) {
+      const conf = DEMO_PAYWALL_CONFIGS[featureKey] || DEMO_PAYWALL_CONFIGS['default'];
+      const titleEl = $('demoUpgradeTitle');
+      const descEl = $('demoUpgradeDesc');
+      const mainFeatEl = $('demoUpgradeFeatureMain');
+
+      if (titleEl) titleEl.textContent = conf.title;
+      if (descEl) descEl.textContent = conf.desc;
+      if (mainFeatEl) mainFeatEl.textContent = conf.mainFeature;
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+
+      const cta = $('demoUpgradeCta');
+      if (cta) cta.focus();
+
+      return true;
+    }
+  }
+
+  // Use Mini Studio Toast system (context is parent page when embedded in iframe)
+  const item = MINI_STUDIO_TOAST_MAP[featureKey] || MINI_STUDIO_TOAST_MAP['default'];
+  showMiniStudioToast(item);
+  return false;
 }
 
 function closeDemoUpgradeModal() {
@@ -372,32 +523,83 @@ function initDemoGuard() {
       }, true);
     }
 
-    // Add Buy badges and click locks to Phone Screenshots, iPad Screenshots, Tablet Screenshots and Feature Graphic cards
-    const cardGatedConfigs = [
-      { id: 'shotsCard', paywallKey: 'phone-screenshots' },
-      { id: 'ipadCard', paywallKey: 'ipad-screenshots' },
-      { id: 'tabCard', paywallKey: 'tablet-screenshots' },
-      { id: 'featureCard', paywallKey: 'feature-graphic' }
+    // Gated Editor Form Cards: Allow normal expand/collapse, but intercept and block uploads
+    const gatedUploadCards = [
+      {
+        cardId: 'ipadCard',
+        paywallKey: 'ipad-screenshots',
+        uploadSelectors: ['#addIpadShot', '.shot-upload-btn'],
+        fileInputIds: ['ipadShotFile']
+      },
+      {
+        cardId: 'tabCard',
+        paywallKey: 'tablet-screenshots',
+        uploadSelectors: ['#tab7Add', '#tab10Add', '.shot-upload-btn'],
+        fileInputIds: ['tab7File', 'tab10File']
+      },
+      {
+        cardId: 'featureCard',
+        paywallKey: 'feature-graphic',
+        uploadSelectors: ['#featureUp', '#featureDropZone', '#featurePrev'],
+        fileInputIds: ['featureFile']
+      }
     ];
 
-    cardGatedConfigs.forEach(({ id, paywallKey }) => {
-      const card = $(id);
+    gatedUploadCards.forEach(({ cardId, paywallKey, uploadSelectors, fileInputIds }) => {
+      const card = $(cardId);
       if (card) {
+        // Add subtle Buy badge on header right without blocking expand/collapse
         const headerRight = card.querySelector('.card-header-right');
         if (headerRight && !headerRight.querySelector('.demo-locked-badge')) {
           const badge = document.createElement('span');
           badge.className = 'demo-locked-badge btn-primary';
           badge.textContent = 'Buy';
-          badge.style.cursor = 'pointer';
+          badge.style.pointerEvents = 'none';
           headerRight.insertBefore(badge, headerRight.firstChild);
         }
 
+        // Intercept upload trigger clicks inside card body only
         card.addEventListener('click', e => {
-          if (e.target.closest('.info-tip-btn')) return;
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          requireFullVersion(paywallKey);
+          // Allow normal header collapse/expand, tooltips, inspection, and removal
+          if (e.target.closest('.card-header, .info-tip-btn, #featureRemove, #featureInspect')) return;
+
+          const isUploadTrigger = uploadSelectors.some(sel => e.target.closest(sel));
+          if (isUploadTrigger) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            requireFullVersion(paywallKey);
+          }
         }, true);
+
+        // Intercept file drag-and-drop uploads
+        card.addEventListener('dragover', e => {
+          const dt = e.dataTransfer;
+          if (dt && Array.from(dt.types || []).includes('Files')) {
+            e.preventDefault();
+          }
+        }, true);
+
+        card.addEventListener('drop', e => {
+          const files = e.dataTransfer && e.dataTransfer.files;
+          if (files && files.length > 0) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            requireFullVersion(paywallKey);
+          }
+        }, true);
+
+        // Intercept file input change events as failsafe
+        fileInputIds.forEach(fId => {
+          const input = $(fId);
+          if (input) {
+            input.addEventListener('change', e => {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              input.value = '';
+              requireFullVersion(paywallKey);
+            }, true);
+          }
+        });
       }
     });
   }
