@@ -11279,7 +11279,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             }
             const tab = phone.querySelector('.tab');
             if(tab){
-              tab.style.backgroundColor = isDark ? 'rgba(22, 22, 24, 0.95)' : 'rgba(249, 249, 249, 0.95)';
+              tab.style.background = isDark ? '#1c1c1e' : '#ffffff';
+              tab.style.backgroundColor = isDark ? '#1c1c1e' : '#ffffff';
+              tab.style.boxShadow = isDark ? '0 8px 32px rgba(0,0,0,.6)' : '0 8px 30px rgba(0,0,0,.15)';
             }
             const hi = phone.querySelector('.hi');
             if(hi){
@@ -11334,10 +11336,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Ensure Google Play age rating badge retains centered text & tight box
         clonedEl.querySelectorAll('.g-age-badge, [data-age-google-badge]').forEach(el => {
           el.style.display = 'inline-block';
-          el.style.verticalAlign = 'middle';
+          el.style.width = '16px';
+          el.style.height = '16px';
           el.style.lineHeight = '14px';
           el.style.textAlign = 'center';
+          el.style.verticalAlign = 'middle';
           el.style.boxSizing = 'border-box';
+          el.style.padding = '0';
         });
 
         // Strip focus highlight from export capture
