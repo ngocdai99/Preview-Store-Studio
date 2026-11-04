@@ -3645,7 +3645,7 @@ asyncSuites.push((async () => {
   const nextTryPageSrc = fs.readFileSync(nextTryPagePath, 'utf8');
   assert(nextTryPageSrc.includes('/try-studio.html?embed=true'), 'Next.js /try page embeds /try-studio.html?embed=true via iframe');
   assert(nextTryPageSrc.includes('<Navbar />') && nextTryPageSrc.includes('<Footer />'), 'Next.js /try page includes Navbar and Footer');
-  assert(nextTryPageSrc.includes('Stop guessing how your app listing') && nextTryPageSrc.includes('Interactive Live Sandbox'), 'Next.js /try page includes hero section from demo.html');
+  assert(nextTryPageSrc.includes('Stop guessing how your app listing') && !nextTryPageSrc.includes('Interactive Live Sandbox'), 'Next.js /try page includes clean hero section without badge');
 
   const tryHtml = fs.readFileSync(tryHtmlPath, 'utf8');
   const coreHtml = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');

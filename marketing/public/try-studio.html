@@ -14171,6 +14171,10 @@ banner.innerHTML = `
 }
 }
 function showNetworkConfirmModal(options) {
+if (typeof isDemoMode === 'function' && isDemoMode()) {
+if (options && typeof options.onConfirm === 'function') options.onConfirm();
+return;
+}
 const modal = $('networkConfirmModal');
 if (!modal) {
 if (options && typeof options.onConfirm === 'function') options.onConfirm();
@@ -14488,6 +14492,12 @@ target = parseStoreInput(appid) || { platform: 'apple', id: appid.replace(/^id/i
 target = parseStoreInput(url);
 }
 if (target) {
+if (typeof isDemoMode === 'function' && isDemoMode()) {
+const demoInput = $('storeImportInput');
+if (demoInput) demoInput.value = appid || url;
+handleStoreImportSubmit(true, true);
+return;
+}
 openStoreImportModal();
 const input = $('storeImportInput');
 if (input) input.value = appid || url;

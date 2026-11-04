@@ -336,6 +336,10 @@ function updateStoreImportNetworkStatus() {
  * }} options 
  */
 function showNetworkConfirmModal(options) {
+  if (typeof isDemoMode === 'function' && isDemoMode()) {
+    if (options && typeof options.onConfirm === 'function') options.onConfirm();
+    return;
+  }
   const modal = $('networkConfirmModal');
   if (!modal) {
     if (options && typeof options.onConfirm === 'function') options.onConfirm();
@@ -711,6 +715,12 @@ function checkAndLoadStoreParams() {
     }
 
     if (target) {
+      if (typeof isDemoMode === 'function' && isDemoMode()) {
+        const demoInput = $('storeImportInput');
+        if (demoInput) demoInput.value = appid || url;
+        handleStoreImportSubmit(true, true);
+        return;
+      }
       openStoreImportModal();
       const input = $('storeImportInput');
       if (input) input.value = appid || url;

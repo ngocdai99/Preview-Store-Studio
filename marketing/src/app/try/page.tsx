@@ -22,12 +22,6 @@ export default function TryPage() {
           {/* Ambient Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-tr from-emerald-500/18 via-[#00D085]/14 to-[#006636]/20 blur-[130px] rounded-full pointer-events-none -z-10" />
 
-          {/* Hero Badge */}
-          <div className="inline-flex items-center gap-2.5 bg-slate-900/5 dark:bg-white/5 border border-slate-900/10 dark:border-white/12 px-4 py-1.5 rounded-full text-[13px] font-medium text-slate-700 dark:text-slate-300 mb-5 tracking-tight shadow-sm select-none">
-            <span className="w-2 h-2 rounded-full bg-[#00D085] shadow-[0_0_10px_#00D085] animate-pulse" />
-            <span>Interactive Live Sandbox · 100% Client-Side</span>
-          </div>
-
           {/* Main H1 */}
           <h1 className="text-[32px] sm:text-[44px] lg:text-[54px] font-extrabold tracking-[-0.03em] max-w-4xl mx-auto mb-4 leading-[1.15] text-[#0f172a] [html:not(.dark)_&]:bg-[linear-gradient(180deg,#0f172a_40%,#334155_100%)] [html:not(.dark)_&]:bg-clip-text [html:not(.dark)_&]:text-transparent dark:text-white dark:bg-[linear-gradient(180deg,#ffffff_40%,#94a3b8_100%)] dark:bg-clip-text dark:text-transparent">
             Stop guessing how your app listing <br className="hidden sm:inline" />
