@@ -535,10 +535,22 @@ function initDemoGuard() {
         headerRight.insertBefore(badge, headerRight.firstChild);
       }
 
-      // Intercept upload trigger when already reached 2 uploaded screenshots limit
+      // Intercept upload and add slot triggers when at limit
       shotsCard.addEventListener('click', e => {
         if (e.target.closest('.card-header, .info-tip-btn, .shot-remove-btn, .shot-inspect-btn')) return;
-        const isUploadTrigger = e.target.closest('#addShot, .shot-upload-btn');
+        const addBtn = e.target.closest('#addShot');
+        if (addBtn) {
+          const currentValid = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length : 0;
+          const currentCount = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.length : 0;
+          const currentUploaded = (window._demoScreenshotUploadCount || 0);
+          if (currentCount >= 2 || currentValid >= 2 || currentUploaded >= 2) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            requireFullVersion('upload-shots');
+            return;
+          }
+        }
+        const isUploadTrigger = e.target.closest('.shot-upload-btn');
         if (isUploadTrigger) {
           const currentUploaded = (window._demoScreenshotUploadCount || 0);
           if (currentUploaded >= 2) {

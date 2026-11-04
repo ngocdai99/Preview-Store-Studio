@@ -392,6 +392,10 @@ if(fDestIpad){
 const addIpadShot = $('addIpadShot');
 if(addIpadShot){
   addIpadShot.onclick = () => {
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      if(typeof requireFullVersion === 'function') requireFullVersion('ipad-screenshots');
+      return;
+    }
     if(!SUPPORTS_IPAD) setSupportsIpad(true);
     IPAD_SHOTS.push('');
     renderIpadShots();

@@ -380,6 +380,14 @@ if($('shotFile')){
 
 if($('addShot')){
   $('addShot').onclick = () => {
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
+      const currentUploaded = (window._demoScreenshotUploadCount || 0);
+      if(SHOTS.length >= 2 || currentValid >= 2 || currentUploaded >= 2){
+        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+        return;
+      }
+    }
     SHOTS.push('');
     renderShots();
     saveState();
