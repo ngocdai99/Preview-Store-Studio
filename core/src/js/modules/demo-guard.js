@@ -428,7 +428,6 @@ function initDemoGuard() {
                     <span class="mi-name">Reset Workspace</span>
                     <svg class="mi-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                   </span>
-                  <span class="mi-supa-tag">Clean</span>
                 </span>
                 <small>Clear all data &amp; reload</small>
               </span>
