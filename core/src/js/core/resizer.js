@@ -53,7 +53,10 @@ if (editorResizer && editorPanel) {
 
 // Toggle Sidebar (Hide / Show Form)
 function updateSidebarButtonState() {
-  const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+  const isMobile = typeof isM === 'function' && isM();
+  const isCollapsed = isMobile
+    ? (document.body.dataset.panel || 'view') !== 'edit'
+    : document.body.classList.contains('sidebar-collapsed');
   const btn = $('btnToggleSidebar');
   if (btn) {
     btn.classList.toggle('active', !isCollapsed);
@@ -67,7 +70,11 @@ function updateSidebarButtonState() {
 function toggleSidebar(forceOpen) {
   if (typeof isM === 'function' && isM()) {
     if (typeof setPanel === 'function') {
-      setPanel(document.body.dataset.panel === 'edit' ? 'view' : 'edit');
+      const cur = document.body.dataset.panel || 'view';
+      const willOpen = typeof forceOpen === 'boolean' 
+        ? forceOpen 
+        : cur !== 'edit';
+      setPanel(willOpen ? 'edit' : 'view');
       return;
     }
   }
@@ -123,8 +130,21 @@ slistArea.addEventListener('drop',e=>{
   if(files.length){
     e.preventDefault();
     e.stopPropagation();
-    const validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
+    let validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
     if(!validFiles.length) return;
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      const currentUploaded = (window._demoScreenshotUploadCount || 0);
+      if(currentUploaded >= 2){
+        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+        return;
+      }
+      const allowedCount = Math.min(validFiles.length, 2 - currentUploaded);
+      if(allowedCount < validFiles.length && typeof requireFullVersion === 'function'){
+        requireFullVersion('upload-shots');
+      }
+      validFiles = validFiles.slice(0, allowedCount);
+      window._demoScreenshotUploadCount = currentUploaded + allowedCount;
+    }
     let loaded=0;
     validFiles.forEach(f=>{
       readFile(f,d=>{

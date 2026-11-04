@@ -5,7 +5,7 @@
 .sb-icons{display:inline-flex;align-items:center;gap:7px;color:currentColor;user-select:none;pointer-events:none}
 .sb-ico{display:block;flex-shrink:0}
 .hole{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:15px;height:15px;border-radius:50%;background:#000;z-index:8;box-shadow:0 0 0 2px #111}
-.google .scr{padding:0 20px 20px}
+.google .scr{padding:0 20px 36px}
 .g-top{display:flex;justify-content:space-between;align-items:center;padding:8px 0 14px;font-size:19px;color:var(--t)}
 .g-top-act{display:inline-flex;align-items:center;gap:20px}
 .g-top svg{width:21px;height:21px;stroke-width:2;display:block}

@@ -202,7 +202,42 @@ function addMockupNote(canvas, scaleFactor){
   return out;
 }
 
+function drawStudioWatermark(cv) {
+  const ctx = cv.getContext('2d');
+  if (!ctx) return;
+  const w = cv.width;
+  const h = cv.height;
+  const isLight = (document.documentElement.dataset && document.documentElement.dataset.ui === 'light') || document.documentElement.getAttribute('data-theme') === 'light';
+  ctx.save();
+  ctx.translate(w / 2, h / 2);
+  ctx.rotate(-22 * Math.PI / 180);
+  const patFontSize = Math.max(16, Math.round(w * 0.016));
+  ctx.font = '600 ' + patFontSize + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const maxDim = Math.sqrt(w * w + h * h);
+  const stepX = Math.round(w * 0.28);
+  const stepY = Math.round(h * 0.15);
+  const text = 'STORE PREVIEW STUDIO';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+  ctx.shadowBlur = 3;
+  ctx.fillStyle = isLight ? 'rgba(0, 0, 0, 0.11)' : 'rgba(255, 255, 255, 0.10)';
+  let row = 0;
+  for (let y = -maxDim; y <= maxDim; y += stepY) {
+    row++;
+    const shift = (row % 2 === 0) ? (stepX / 2) : 0;
+    for (let x = -maxDim; x <= maxDim; x += stepX) {
+      ctx.fillText(text, x + shift, y);
+    }
+  }
+  ctx.restore();
+}
+
 async function exportPNG(scaleFactor = 2, opts = {}){
+  if(typeof isDemoMode === 'function' && isDemoMode() && !opts.allowDemo){
+    if(typeof requireFullVersion === 'function') requireFullVersion('export-png');
+    return;
+  }
   if(typeof canDownload === 'function' && !canDownload(1000)) return;
   if(typeof scaleFactor !== 'number') scaleFactor = 3;
   if(typeof html2canvas === 'undefined'){
@@ -497,11 +532,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       }
     });
     if(EXPORT_WM && !opts.transparent) canvas = addMockupNote(canvas, scaleFactor);
+    if(opts.watermark) drawStudioWatermark(canvas);
 
     const rawName = ($('f-name') && $('f-name').value ? $('f-name').value : '').trim();
     const slug = (typeof slugify === 'function') ? slugify(rawName, 'app') : (rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'app');
     const link = document.createElement('a');
-    const typeLabel = opts.frameless ? 'screen' : (opts.transparent ? 'mockup-transparent' : 'preview');
+    const typeLabel = opts.watermark ? 'mockup-sample-watermark' : (opts.frameless ? 'screen' : (opts.transparent ? 'mockup-transparent' : 'preview'));
     link.download = `${slug}-${devSlug}-${typeLabel}-${scaleFactor}x.png`;
     link.href = canvas.toDataURL('image/png');
 
@@ -530,7 +566,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       }
     } else {
       link.click();
-      showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : (opts.transparent ? ', transparent cutout' : '')}) downloaded!`, 'ok');
+      if(opts.watermark){
+        showToast('Sample mockup (2x with watermark) downloaded!', 'ok');
+      } else {
+        showToast(`PNG (${scaleFactor}x${opts.frameless ? ', screen only' : (opts.transparent ? ', transparent cutout' : '')}) downloaded!`, 'ok');
+      }
     }
   }catch(err){
     console.error('Export PNG failed:', err);

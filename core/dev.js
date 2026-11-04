@@ -29,6 +29,10 @@ const sseClients = new Set();
 
 // Import unified build function from build.js
 const { build } = require('./build.js');
+let buildTry = null;
+try {
+  buildTry = require('./scripts/build-try.js').buildTry;
+} catch (_) {}
 
 /**
  * Broadcasts reload event to all open browser tabs
@@ -104,7 +108,7 @@ function startServer(port) {
       return;
     }
 
-    // 2. Serve the Studio HTML at root
+    // 2. Serve the Studio HTML at root (Core Studio)
     if (pathname === '/' || pathname === '/index.html' || pathname === '/core.html' || pathname === '/store_preview_studio.html') {
       if (!fs.existsSync(OUTPUT_FILE)) {
         build();
@@ -137,6 +141,42 @@ function startServer(port) {
       });
       res.end(content);
       return;
+    }
+
+    // 2b. Serve the Try Demo Studio at /try or /try.html
+    if (pathname === '/try' || pathname === '/try/' || pathname === '/try.html') {
+      const TRY_OUTPUT_FILE = path.join(ROOT_DIR, 'docs', 'try.html');
+      if (!fs.existsSync(TRY_OUTPUT_FILE)) {
+        if (typeof buildTry === 'function') buildTry();
+      }
+      if (fs.existsSync(TRY_OUTPUT_FILE)) {
+        let content = fs.readFileSync(TRY_OUTPUT_FILE, 'utf8');
+        const liveReloadScript = `
+<!-- Live Reload Client Script (Dev Mode Only) -->
+<script>
+(() => {
+  const es = new EventSource('/__livereload');
+  es.onmessage = (e) => {
+    if (e.data === 'reload') {
+      console.log('[Dev] Code change detected. Reloading...');
+      window.location.reload();
+    }
+  };
+  es.onerror = () => {
+    // Retry connection automatically
+  };
+})();
+</script>
+</body>`;
+        content = content.replace('</body>', liveReloadScript);
+
+        res.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-cache'
+        });
+        res.end(content);
+        return;
+      }
     }
 
     // 3. Serve other static files (e.g. presets, images, test_data, docs, package)
@@ -190,43 +230,81 @@ function startServer(port) {
   });
 
   server.listen(port, () => {
-    const url = `http://localhost:${port}`;
+    const coreUrl = `http://localhost:${port}`;
+    const tryUrl = `http://localhost:${port}/try`;
     console.log('\n======================================================');
     console.log('Store Preview Studio · Real-time Live Dev Server');
     console.log('======================================================');
-    console.log(`Local URL:     ${url}`);
-    console.log(`Watching:      src/ (index.html, style.css, app.js)`);
+    console.log(`Core Studio:   ${coreUrl}`);
+    console.log(`Try Demo:      ${tryUrl}`);
+    console.log(`Watching:      src/ (components, css, js, modals) & try.html`);
     console.log(`Live Reload:   ACTIVE (Trình duyệt tự F5 tức thì khi sửa code)`);
     console.log('------------------------------------------------------');
     console.log('Nhấn Ctrl + C để dừng server.\n');
 
-    // Auto open in browser
-    const openCmd = process.platform === 'darwin' ? `open "${url}"`
-      : process.platform === 'win32' ? `start "${url}"`
-      : `xdg-open "${url}"`;
-    exec(openCmd, () => {});
+    // Auto open in browser: open Core Studio and Try Demo tabs
+    const openCoreCmd = process.platform === 'darwin' ? `open "${coreUrl}"`
+      : process.platform === 'win32' ? `start "${coreUrl}"`
+      : `xdg-open "${coreUrl}"`;
+    const openTryCmd = process.platform === 'darwin' ? `open "${tryUrl}"`
+      : process.platform === 'win32' ? `start "${tryUrl}"`
+      : `xdg-open "${tryUrl}"`;
 
-    // Initial build
+    exec(openCoreCmd, () => {
+      setTimeout(() => {
+        exec(openTryCmd, () => {});
+      }, 400);
+    });
+
+    // Initial build for both Core and Try
     const res = build();
     if (res.success) {
-      console.log(`[OK] Initial build completed (${res.duration}ms)`);
+      console.log(`[OK] Core build completed (${res.duration}ms)`);
+    }
+    if (typeof buildTry === 'function') {
+      try {
+        const tryRes = buildTry();
+        if (tryRes.success) {
+          console.log(`[OK] Try build completed (${tryRes.duration}ms)`);
+        }
+      } catch (err) {
+        console.error('[!] buildTry error:', err.message);
+      }
     }
 
-    // Start watching src/
+    // Start watching src/ and try template
     let debounceTimer = null;
-    fs.watch(SRC_DIR, { recursive: true }, (eventType, filename) => {
+    const triggerDevRebuild = (filename) => {
       if (debounceTimer) clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         if (filename && filename.endsWith('app.js')) return; // Ignore generated bundle file
         const fileInfo = filename ? `[${filename}]` : 'files';
-        console.log(`\n[i] Change detected in ${fileInfo}, rebuilding...`);
+        console.log(`\n[i] Change detected in ${fileInfo}, rebuilding core and try...`);
         const b = build();
+        if (typeof buildTry === 'function') {
+          try {
+            buildTry();
+          } catch (e) {
+            console.error('[!] buildTry error:', e.message);
+          }
+        }
         if (b.success) {
-          console.log(`[OK] Bundled store_preview_studio.html (${b.duration}ms)`);
+          console.log(`[OK] Rebuilt core.html (${b.duration}ms) & try.html`);
           triggerReload();
         }
       }, 150);
+    };
+
+    fs.watch(SRC_DIR, { recursive: true }, (eventType, filename) => {
+      triggerDevRebuild(filename);
     });
+
+    const tryTemplate = path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'try.html');
+    if (fs.existsSync(tryTemplate)) {
+      fs.watch(tryTemplate, () => {
+        triggerDevRebuild('try.html');
+      });
+    }
   });
 }
 

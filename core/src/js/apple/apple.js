@@ -3,6 +3,10 @@
 let appleDevice = 'iphone'; // 'iphone' | 'ipad' | 'dual'
 
 function setAppleDevice(d, animate = true){
+  if (typeof isDemoMode === 'function' && isDemoMode() && d === 'ipad') {
+    if (typeof requireFullVersion === 'function') requireFullVersion('apple-ipad');
+    return;
+  }
   const stageMenu = $('menuAppleDevice');
   if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   if(d !== 'ipad' && d !== 'dual') d = 'iphone';

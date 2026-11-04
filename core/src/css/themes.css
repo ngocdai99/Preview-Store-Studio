@@ -261,7 +261,14 @@
 :root[data-ui=light] .shot-status-badge.warn{color:#b45309;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35)}
 :root[data-ui=light] .shot-status-badge.err{color:#b91c1c;background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)}
 :root[data-ui=light] .mtabs{background:rgba(255,255,255,.92)}
-:root[data-ui=light] .mtabs button.on{color:#fff}
+:root[data-ui=light] .mtabs button{color:#64748b}
+:root[data-ui=light] .mtabs button:hover:not(.on){color:#0f172a;background:rgba(15,23,42,.04)}
+:root[data-ui=light] .mtabs button.on{
+  background-color: var(--btn-white-bg, #EFF1F0);
+  color: var(--btn-white-text, #252625);
+  border: 1px solid var(--btn-white-border, rgba(0, 0, 0, 0.08));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
 @media(min-width:821px){
   :root[data-ui=light] .dev,:root[data-ui=light] .dev.ipad,:root[data-ui=light] .dev.gtab{
     box-shadow:0 0 0 1.5px #0b0b0d,0 30px 60px -22px rgba(0,0,0,.4),0 10px 24px -10px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.08);
@@ -362,7 +369,6 @@
 }
 :root[data-ui=light] .meter{background:#dcdce2}
 :root[data-ui=light] .logo{box-shadow:none;background:transparent}
-:root[data-ui=light] .mtabs button.on{background:linear-gradient(135deg,var(--ac),var(--ac2))}
 :root[data-ui=light] .meter i{background:var(--ac)}
 
   /* Crisp Tactile Header Action Buttons in Light Mode */

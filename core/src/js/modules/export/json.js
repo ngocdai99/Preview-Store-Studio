@@ -2,6 +2,10 @@
 if($('optExportJSON')) $('optExportJSON').onclick = exportJSON;
 
 function exportJSON(){
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    if(typeof requireFullVersion === 'function') requireFullVersion('export-json');
+    return;
+  }
   if(typeof canDownload === 'function' && !canDownload(1000)) return;
   const config = {
     generator: "Store Preview Studio",
@@ -53,6 +57,10 @@ function exportJSON(){
 
 // Smart & Fault-Tolerant JSON Import Parser
 function parseAndApplyJSON(jsonString, opts = {}){
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    if(typeof requireFullVersion === 'function') requireFullVersion('import-json');
+    return false;
+  }
   if(typeof jsonString === 'string'){
     // Strip UTF-8 BOM if present
     if(jsonString.charCodeAt(0) === 0xFEFF){
@@ -271,6 +279,10 @@ function parseAndApplyJSON(jsonString, opts = {}){
 
 if($('optImportJSON')){
   $('optImportJSON').onclick = () => {
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      if(typeof requireFullVersion === 'function') requireFullVersion('import-json');
+      return;
+    }
     if(typeof canUpload === 'function' && !canUpload(1000)) return;
     if($('jsonFileInput')) $('jsonFileInput').click();
   };

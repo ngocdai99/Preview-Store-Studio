@@ -1,0 +1,297 @@
+/* Store Preview Studio · Guided Tour Overlay & Spotlight Styles */
+
+.sps-tour-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.sps-tour-spotlight {
+  position: fixed;
+  z-index: 9992;
+  pointer-events: none;
+  border-radius: 10px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.68), 0 0 0 2px #00d085, 0 0 24px rgba(0, 208, 133, 0.4);
+  transition: top 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              left 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease;
+  opacity: 1;
+}
+
+.sps-tour-popover {
+  position: fixed;
+  z-index: 9995;
+  width: 330px;
+  max-width: calc(100vw - 28px);
+  background: var(--bg-card, #1c1d1c);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.16));
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  padding: 18px 20px 16px;
+  color: var(--text-primary, #ffffff);
+  transition: top 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              left 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease,
+              transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sps-tour-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sps-tour-step-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 20px;
+  background-color: var(--btn-white-bg, #EFF1F0);
+  color: var(--btn-white-text, #252625);
+  border: 1px solid var(--btn-white-border, rgba(0, 0, 0, 0.08));
+  letter-spacing: 0.3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.sps-tour-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted, #9ca3af);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.sps-tour-close-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sps-tour-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-primary, #ffffff);
+}
+
+.sps-tour-desc {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-muted, #9ca3af);
+}
+
+.sps-tour-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+}
+
+.sps-tour-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sps-tour-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.sps-tour-dot.active {
+  width: 16px;
+  border-radius: 4px;
+  background: #00d085;
+}
+
+.sps-tour-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sps-tour-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  transform: none !important;
+}
+
+.sps-tour-btn:hover,
+.sps-tour-btn:active {
+  transform: none !important;
+}
+
+.sps-tour-btn-skip {
+  background: transparent;
+  color: var(--text-muted, #9ca3af);
+}
+
+.sps-tour-btn-skip:hover {
+  color: #ffffff;
+}
+
+.sps-tour-btn-back {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sps-tour-btn-back:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: none !important;
+}
+
+.sps-tour-btn-next {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%), #006636;
+  border: 1px solid #1B845E;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.22), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.sps-tour-btn-next:hover {
+  background: #007a41;
+  border-color: #209d70;
+  color: #ffffff;
+  transform: none !important;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.28), 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.sps-tour-btn-next:active {
+  background: #005a30;
+  border-color: #166e4e;
+  transform: none !important;
+}
+
+/* Tour Launch Button on Workspace Bar - Supabase Signature Primary Button */
+.ms-pill.tour-btn {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%), #006636 !important;
+  border: 1px solid #1B845E !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 12px !important;
+  border-radius: 999px !important;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.22), 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.ms-pill.tour-btn svg {
+  color: #ffffff;
+  stroke: #ffffff;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.ms-pill.tour-btn:hover {
+  background: #007a41 !important;
+  border-color: #209d70 !important;
+  color: #ffffff !important;
+  transform: translateY(-0.5px);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.28), 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+.ms-pill.tour-btn:active {
+  background: #005a30 !important;
+  border-color: #166e4e !important;
+  transform: translateY(0.5px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Light Theme Overrides */
+[data-ui="light"] .sps-tour-popover {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  color: #111827;
+}
+
+[data-ui="light"] .sps-tour-title {
+  color: #111827;
+}
+
+[data-ui="light"] .sps-tour-desc {
+  color: #4b5563;
+}
+
+[data-ui="light"] .sps-tour-dot {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+[data-ui="light"] .sps-tour-dot.active {
+  background: #006636;
+}
+
+[data-ui="light"] .sps-tour-step-badge {
+  background-color: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0f172a;
+}
+
+[data-ui="light"] .sps-tour-btn-back {
+  background: #f3f4f6;
+  color: #111827;
+  border-color: #e5e7eb;
+}
+
+[data-ui="light"] .sps-tour-btn-next {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%), #006636;
+  border: 1px solid #1B845E;
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[data-ui="light"] .sps-tour-btn-next:hover {
+  background: #007a41;
+  border-color: #209d70;
+  color: #ffffff;
+}
+
+[data-ui="light"] .ms-pill.tour-btn {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%), #006636 !important;
+  border-color: #1B845E !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-ui="light"] .ms-pill.tour-btn:hover {
+  background: #007a41 !important;
+  border-color: #209d70 !important;
+  color: #ffffff !important;
+}

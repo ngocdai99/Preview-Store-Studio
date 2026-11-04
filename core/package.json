@@ -5,6 +5,7 @@
   "main": "build.js",
   "scripts": {
     "dev": "node dev.js",
+    "start": "node dev.js",
     "dev:marketing": "node dev-marketing.js",
     "dev:demo": "node dev-marketing.js 4000 demo.html",
     "build": "node build.js",
@@ -16,6 +17,8 @@
     "check:og": "python3 scripts/generate-og-image.py --check-only",
     "build:demo": "node scripts/build-demo.js",
     "watch:demo": "node scripts/build-demo.js --watch",
+    "build:try": "node scripts/build-try.js",
+    "watch:try": "node scripts/build-try.js --watch",
     "deploy": "npx --yes surge docs preview-studio-app-vi.surge.sh",
     "deploy:cf": "node scripts/build-marketing.js && node scripts/build-marketing-vi.js && npx wrangler pages deploy cloudflare --project-name store-preview-studio",
     "test": "node scripts/test-runner.js"

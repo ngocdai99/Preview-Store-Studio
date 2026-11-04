@@ -22,7 +22,7 @@ export function Hero() {
         <p className="hero-sub text-[16.5px] sm:text-[18.26px] text-[#475569] dark:text-slate-400 max-w-[820px] mx-auto mb-6 leading-[1.6]">
           <span>{hero.subheadlineLead || "Save 2 hours of back-and-forth with your client before every App Store submission."}</span>
           <br className="hidden sm:inline" />{" "}
-          <span>{hero.subheadlineFollow || "App Store Connect & Google Play provide zero live preview — preview and refine your listings with confidence."}</span>
+          <span>{hero.subheadlineFollow || "App Store Connect & Google Play provide zero live preview — see exactly how your listing looks before submitting."}</span>
         </p>
 
         {/* CTAs */}

@@ -328,6 +328,10 @@ function applyGoogleDevice(){
   syncAllVtPills();
 }
 function setGoogleDevice(d, animate = true){
+  if (typeof isDemoMode === 'function' && isDemoMode() && (d === 'tab7' || d === 'tab10')) {
+    if (typeof requireFullVersion === 'function') requireFullVersion('google-tablet');
+    return;
+  }
   const stageMenu = $('menuGoogleDevice');
   if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   const nextDev = (d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone';

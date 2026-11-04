@@ -80,6 +80,8 @@ function getBundledJs() {
     'core/utils.js',
     'core/state.js',
     'core/resizer.js',
+    'modules/demo-guard.js',
+    'modules/tour.js',
     'modules/shots/icon.js',
     'modules/shots/phone.js',
     'modules/shots/ipad.js',

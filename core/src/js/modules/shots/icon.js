@@ -435,6 +435,9 @@ if($('icoFile')){
   $('icoFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      window._demoIconUploadCount = (window._demoIconUploadCount || 0) + 1;
+    }
     if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'App icon')){
       e.target.value = '';
       return;

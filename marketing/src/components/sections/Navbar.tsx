@@ -78,8 +78,14 @@ export function Navbar() {
         target.scrollIntoView({ behavior: "smooth" });
         window.history.pushState(null, "", href);
       } else if (href === "#hero") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        window.history.pushState(null, "", window.location.pathname);
+        if (typeof window !== "undefined" && window.location.pathname !== "/") {
+          window.location.href = "/";
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.history.pushState(null, "", "/");
+        }
+      } else {
+        window.location.href = `/${href}`;
       }
     }
   };
@@ -125,12 +131,12 @@ export function Navbar() {
 
         {/* Right Section: Demo Link + Supabase Emerald CTA Button */}
         <div className="flex items-center gap-2.5 sm:gap-3.5">
-          <a
-            href="/demo.html"
+          <Link
+            href="/try"
             className="hidden sm:inline-flex items-center text-[13px] font-medium text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 transition-colors"
           >
             Live Demo
-          </a>
+          </Link>
 
           <PrimaryButton
             href="#pricing"
@@ -175,12 +181,13 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
-          <a
-            href="/demo.html"
+          <Link
+            href="/try"
+            onClick={() => setMobileMenuOpen(false)}
             className="block px-3 py-2 text-[14px] text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white font-medium"
           >
             Live Demo
-          </a>
+          </Link>
         </div>
       )}
     </header>

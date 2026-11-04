@@ -1,7 +1,6 @@
 // Store Preview Studio · Application Bootstrap & Lifecycle
 // --- Dynamic Scaling / Responsive Zoom to Fit Window ---
 let isExporting = false;
-const isM=()=>innerWidth<=820;
 function fit(force = false){
   if(isExporting) return;
   const st=document.querySelector('.stage');
@@ -19,8 +18,13 @@ function fit(force = false){
   let baseW = 416, baseH = 870;
   if(isDual){
     const isLand = !!document.querySelector('.dev.apple.single.landscape');
-    baseW = (isLand ? 870 : 416) * 2 + 28;
-    baseH = isLand ? 416 : 870;
+    if(m){
+      baseW = isLand ? 870 : 416;
+      baseH = (isLand ? 416 : 870) * 2 + 56;
+    }else{
+      baseW = (isLand ? 870 : 416) * 2 + 28;
+      baseH = isLand ? 416 : 870;
+    }
   }else if(store === 'apple'){
     if(appleDevice === 'ipad'){
       baseW = 750;
@@ -48,7 +52,13 @@ function fit(force = false){
   st.dataset.fitZ = z.toFixed(4);
 
   const sd = $('stageDevices');
-  if(sd) sd.style.gap = Math.round(28 * z) + 'px';
+  if(sd){
+    if(isDual && m){
+      sd.style.gap = '56px';
+    }else{
+      sd.style.gap = Math.round(28 * z) + 'px';
+    }
+  }
 
   document.documentElement.style.setProperty('--dev-zoom', z);
 
@@ -74,6 +84,7 @@ function fit(force = false){
 function setPanel(p){
   document.body.dataset.panel=p;
   $$('.mtabs button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+  if (typeof updateSidebarButtonState === 'function') updateSidebarButtonState();
   requestAnimationFrame(fit);
 }
 $$('.mtabs button').forEach(b=>b.onclick=()=>setPanel(b.dataset.p));
@@ -84,6 +95,7 @@ const onStageResize = () => {
     resizeRaf = null;
     fit();
     if (typeof syncAllVtPills === 'function') syncAllVtPills();
+    if (typeof updateSidebarButtonState === 'function') updateSidebarButtonState();
   });
 };
 new ResizeObserver(onStageResize).observe(document.querySelector('.stage'));

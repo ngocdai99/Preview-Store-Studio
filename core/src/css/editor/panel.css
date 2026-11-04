@@ -45,9 +45,9 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   background: rgba(0, 0, 0, 0.32);
 }
 body.sidebar-collapsed .editor{
-  margin-left:calc(-1 * var(--editor-w, 500px));
-  visibility:hidden;
-  pointer-events:none;
+  margin-left:calc(-1 * var(--editor-w, 500px)) !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
 }
 body.resizing-sidebar .editor{
   transition:none!important;
@@ -67,8 +67,8 @@ body.resizing-sidebar .editor{
   background:var(--ac);height:68px;box-shadow:0 0 10px var(--glow);width:4px;
 }
 body.sidebar-collapsed .editor-resizer{
-  opacity:0;
-  pointer-events:none;
+  opacity:0 !important;
+  pointer-events:none !important;
 }
 :root[data-ui=light] .editor-resizer::after{background:rgba(0,0,0,.18)}
 

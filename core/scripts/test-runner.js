@@ -3626,6 +3626,110 @@ asyncSuites.push((async () => {
 })());
 
 // ---------------------------------------------------------------------
+// [SUITE 52]: Single-Source-of-Truth Demo Mode (try.html) & Guided Tour Verification
+// ---------------------------------------------------------------------
+asyncSuites.push((async () => {
+  console.log('\n[SUITE 52]: Single-Source-of-Truth Demo Mode (try.html) & Guided Tour Verification');
+
+  // 1. Verify build files exist
+  const tryHtmlPath = path.join(ROOT_DIR, 'docs', 'try.html');
+  const publicTryHtmlPath = path.join(ROOT_DIR, '..', 'marketing', 'public', 'try.html');
+  const publicStudioHtmlPath = path.join(ROOT_DIR, '..', 'marketing', 'public', 'try-studio.html');
+  const nextTryPagePath = path.join(ROOT_DIR, '..', 'marketing', 'src', 'app', 'try', 'page.tsx');
+  
+  assert(fs.existsSync(tryHtmlPath), 'core/docs/try.html exists and is generated');
+  assert(fs.existsSync(publicTryHtmlPath), 'marketing/public/try.html exists');
+  assert(fs.existsSync(publicStudioHtmlPath), 'marketing/public/try-studio.html exists for embedded studio iframe');
+  assert(fs.existsSync(nextTryPagePath), 'marketing/src/app/try/page.tsx exists in Next.js app directory');
+
+  const nextTryPageSrc = fs.readFileSync(nextTryPagePath, 'utf8');
+  assert(nextTryPageSrc.includes('/try-studio.html?embed=true'), 'Next.js /try page embeds /try-studio.html?embed=true via iframe');
+  assert(nextTryPageSrc.includes('<Navbar />') && nextTryPageSrc.includes('<Footer />'), 'Next.js /try page includes Navbar and Footer');
+  assert(nextTryPageSrc.includes('Stop guessing how your app listing') && nextTryPageSrc.includes('Interactive Live Sandbox'), 'Next.js /try page includes hero section from demo.html');
+
+  const tryHtml = fs.readFileSync(tryHtmlPath, 'utf8');
+  const coreHtml = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
+
+  // 2. core.html is full paid version without demo mode
+  assert(!coreHtml.includes('window.SPS_DEMO_MODE = true'), 'core.html does NOT enable SPS_DEMO_MODE (Paid offline full version)');
+  assert(!coreHtml.includes('class="sps-demo-mode"'), 'core.html body does not hardcode demo mode class');
+
+  // 3. try.html has SPS_DEMO_MODE active and has try shell
+  assert(tryHtml.includes('window.SPS_DEMO_MODE = true'), 'try.html explicitly sets window.SPS_DEMO_MODE = true');
+  assert(tryHtml.includes('id="studioAppShell"'), 'try.html wraps application in #studioAppShell');
+  assert(tryHtml.includes('id="tryTopbar"'), 'try.html includes standalone top bar navigation');
+  assert(tryHtml.includes('is-embedded'), 'try.html contains auto-embed responsive CSS styles for iframe');
+
+  // 4. try.html contains full Core DOM components (Single Source of Truth)
+  assert(tryHtml.includes('id="editorPanel"'), 'try.html contains #editorPanel');
+  assert(tryHtml.includes('id="stageDevices"'), 'try.html contains #stageDevices');
+  assert(tryHtml.includes('id="workspaceBar"'), 'try.html contains #workspaceBar');
+  assert(tryHtml.includes('id="storeSwitcher"'), 'try.html contains #storeSwitcher');
+  assert(tryHtml.includes('id="icoDropZone"'), 'try.html contains #icoDropZone');
+  assert(tryHtml.includes('id="demoUpgradeModal"'), 'try.html contains #demoUpgradeModal');
+  assert(tryHtml.includes('id="btnStartTour"'), 'try.html contains #btnStartTour');
+
+  // 5. Verify demo-guard logic and paywall triggers
+  const demoGuardSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/demo-guard.js'), 'utf8');
+  assert(demoGuardSrc.includes('function isDemoMode()') && demoGuardSrc.includes('window.SPS_DEMO_MODE'), 'demo-guard.js exports isDemoMode checking window.SPS_DEMO_MODE');
+  assert(demoGuardSrc.includes('function requireFullVersion('), 'demo-guard.js exports requireFullVersion');
+  assert(demoGuardSrc.includes('export-png') && demoGuardSrc.includes('export-copy') && demoGuardSrc.includes('export-markdown') && demoGuardSrc.includes('export-json') && demoGuardSrc.includes('store-import') && demoGuardSrc.includes('upload-shots'), 'demo-guard.js defines all contextual paywall messages');
+
+  // 6. Verify 1-line gating hooks in export modules
+  const pngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
+  assert(pngSrc.includes('isDemoMode()') && pngSrc.includes("requireFullVersion('export-png')"), 'png.js guards mockup image export in demo mode');
+
+  const clipboardSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/clipboard.js'), 'utf8');
+  assert(clipboardSrc.includes('isDemoMode()') && clipboardSrc.includes("requireFullVersion('export-copy')"), 'clipboard.js guards text metadata copy in demo mode');
+
+  const markdownSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/markdown.js'), 'utf8');
+  assert(markdownSrc.includes('isDemoMode()') && markdownSrc.includes("requireFullVersion('export-markdown')"), 'markdown.js guards Markdown file export in demo mode');
+
+  const jsonSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/json.js'), 'utf8');
+  assert(jsonSrc.includes('isDemoMode()') && jsonSrc.includes("requireFullVersion('export-json')"), 'json.js guards JSON file export in demo mode');
+  assert(jsonSrc.includes('isDemoMode()') && jsonSrc.includes("requireFullVersion('import-json')"), 'json.js guards JSON file import in demo mode');
+
+  const storeImportSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/store-import.js'), 'utf8');
+  assert(storeImportSrc.includes('isDemoMode()') && storeImportSrc.includes("requireFullVersion('store-import')"), 'store-import.js guards App Store cloning in demo mode');
+
+  // 7. Verify Guided Tour module and step targets
+  const tourSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/tour.js'), 'utf8');
+  assert(tourSrc.includes('SPS_TOUR_STEPS'), 'tour.js defines SPS_TOUR_STEPS');
+  assert(tourSrc.includes('#storeSwitcher'), 'tour.js step 1 targets #storeSwitcher');
+  assert(tourSrc.includes('#btnPresetPill'), 'tour.js step 2 targets #btnPresetPill');
+  assert(tourSrc.includes('#editorPanel'), 'tour.js step 3 targets #editorPanel');
+  assert(tourSrc.includes('#icoDropZone'), 'tour.js step 4 targets #icoDropZone');
+  assert(tourSrc.includes('#workspaceExportDropdown'), 'tour.js step 5 targets #workspaceExportDropdown');
+  assert(tourSrc.includes('function startTour'), 'tour.js exposes startTour()');
+
+  // 8. Verify upload limit in demo mode and storage no-op
+  const phoneShotsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/shots/phone.js'), 'utf8');
+  assert(phoneShotsSrc.includes('isDemoMode()') && phoneShotsSrc.includes('_demoScreenshotUploadCount') && phoneShotsSrc.includes("requireFullVersion('upload-shots')"), 'phone.js enforces 2-screenshot upload limit in demo mode');
+
+  const ipadShotsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/shots/ipad.js'), 'utf8');
+  assert(ipadShotsSrc.includes('isDemoMode()') && ipadShotsSrc.includes('_demoScreenshotUploadCount') && ipadShotsSrc.includes("requireFullVersion('upload-shots')"), 'ipad.js enforces 2-screenshot upload limit in demo mode');
+
+  const storageSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/storage.js'), 'utf8');
+  assert(storageSrc.includes('isDemoMode()') && storageSrc.includes('return Promise.resolve(true);'), 'storage.js keeps demo state in RAM only without persisting to IndexedDB');
+
+  // 9. Legacy preservation: verify mini-studio and demo.html remain 100% untouched
+  assert(fs.existsSync(path.join(ROOT_DIR, 'docs/demo.html')), 'Legacy docs/demo.html remains untouched and intact');
+  assert(fs.existsSync(path.join(ROOT_DIR, '../marketing/public/demo.html')), 'Legacy marketing/public/demo.html remains untouched and intact');
+  assert(fs.existsSync(path.join(ROOT_DIR, 'docs/src/marketing/components/mini-studio.html')), 'Mini-studio HTML component remains intact');
+  assert(fs.existsSync(path.join(ROOT_DIR, 'docs/src/marketing/js/mini-studio.js')), 'Mini-studio JS remains intact');
+
+  // 10. Verify dev server routing for localhost:3000 (core) and localhost:3000/try (try)
+  const devJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'dev.js'), 'utf8');
+  assert(devJsSrc.includes("pathname === '/try'") && devJsSrc.includes("pathname === '/try.html'"), 'dev.js handles /try and /try.html endpoints');
+  assert(devJsSrc.includes('Core Studio:') && devJsSrc.includes('Try Demo:'), 'dev.js logs both Core and Try URLs on port 3000');
+  assert(devJsSrc.includes('openTryCmd') && devJsSrc.includes('openCoreCmd'), 'dev.js automatically launches both Core and Try in browser');
+
+  const rootPkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, '../package.json'), 'utf8'));
+  assert(rootPkg.scripts.dev === 'npm --prefix core run dev', 'root package.json dev script starts core dev server');
+  assert(rootPkg.scripts.start === 'npm --prefix core run dev', 'root package.json start script starts core dev server');
+})());
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {

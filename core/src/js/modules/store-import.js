@@ -498,6 +498,10 @@ function setStoreImportStatus(type, message) {
 }
 
 async function handleStoreImportSubmit(confirmed = false) {
+  if (typeof isDemoMode === 'function' && isDemoMode()) {
+    if (typeof requireFullVersion === 'function') requireFullVersion('store-import');
+    return;
+  }
   const input = $('storeImportInput');
   if (!input) return;
   const val = input.value.trim();

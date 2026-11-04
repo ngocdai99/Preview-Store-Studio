@@ -354,6 +354,15 @@ if($('shotFile')){
   $('shotFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      const currentUploaded = (window._demoScreenshotUploadCount || 0);
+      if(currentUploaded >= 2){
+        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+        e.target.value = '';
+        return;
+      }
+      window._demoScreenshotUploadCount = currentUploaded + 1;
+    }
     if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'Phone screenshot')){
       e.target.value = '';
       return;

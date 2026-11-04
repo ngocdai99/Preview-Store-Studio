@@ -100,8 +100,13 @@ function computeDeviceZoom(s, d){
   let baseW = 416, baseH = 870;
   if(isDual){
     const isLand = !!document.querySelector('.dev.apple.single.landscape');
-    baseW = (isLand ? 870 : 416) * 2 + 28;
-    baseH = isLand ? 416 : 870;
+    if(m){
+      baseW = isLand ? 870 : 416;
+      baseH = (isLand ? 416 : 870) * 2 + 56;
+    }else{
+      baseW = (isLand ? 870 : 416) * 2 + 28;
+      baseH = isLand ? 416 : 870;
+    }
   } else if(s === 'apple'){
     if(d === 'ipad'){
       baseW = 750;
@@ -274,9 +279,10 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
     return;
   }
 
-  // If currently using iPad or Android tablet, skip 3D dual slide and apply cleanly
+  // If currently using iPad, Android tablet, or mobile viewport, skip 3D dual slide and apply cleanly
   if((fromMode === 'apple' && appleDevice === 'ipad') || (toMode === 'apple' && appleDevice === 'ipad') ||
-     (fromMode === 'google' && googleDevice !== 'phone') || (toMode === 'google' && googleDevice !== 'phone')){
+     (fromMode === 'google' && googleDevice !== 'phone') || (toMode === 'google' && googleDevice !== 'phone') ||
+     (typeof isM === 'function' && isM())){
     onApply();
     fit();
     syncAllVtPills();

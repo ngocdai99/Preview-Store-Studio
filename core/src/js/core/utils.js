@@ -6,6 +6,9 @@
 
 const $=id=>document.getElementById(id), $$=s=>[...document.querySelectorAll(s)];
 let store = 'apple';
+function isM() {
+  return typeof window !== 'undefined' ? window.innerWidth <= 980 : false;
+}
 
 // --- Reusable Crisp Vector Action Icons ---
 const ICO_SPARKLE = `<span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.4 5.4 5.6 2.1-5.6 2.1-2.4 5.4-2.4-5.4-5.6-2.1 5.6-2.1 2.4-5.4zm7.5 12.5l1.2 2.7 2.8 1-2.8 1-1.2 2.8-1.2-2.8-2.8-1 2.8-1 1.2-2.7z"></path></svg></span>`;

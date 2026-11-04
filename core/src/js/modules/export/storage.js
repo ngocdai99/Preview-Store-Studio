@@ -315,6 +315,9 @@ function notifyStorageNotPersisted(){
 
 // Resolves true when a FULL (non-sanitized) copy of the draft was persisted somewhere.
 function saveDraftToStorage(){
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    return Promise.resolve(true);
+  }
   if(!userDraft) return Promise.resolve(true);
   // Timestamp lets loadDraftFromStorage() pick the newest copy if one store missed a write.
   userDraft._savedAt = Date.now();

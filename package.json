@@ -5,8 +5,12 @@
   "description": "Store Preview Studio monorepo: Core standalone studio & React Next.js marketing landing page",
   "author": "Kai DevLabs <kai.devlabs@gmail.com>",
   "scripts": {
-    "dev": "npm --prefix marketing run dev",
+    "dev": "npm --prefix core run dev",
+    "start": "npm --prefix core run dev",
+    "dev:core": "npm --prefix core run dev",
     "dev:marketing": "npm --prefix marketing run dev",
+    "build": "npm --prefix core run build && npm --prefix core run build:try",
+    "build:core": "npm --prefix core run build",
     "build:marketing": "npm --prefix marketing run build",
     "generate:og": "python3 core/scripts/generate-og-image.py",
     "check:og": "python3 core/scripts/generate-og-image.py --check-only",

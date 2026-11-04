@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>Interactive Studio Demo · Store Preview Studio</title>
+<meta name="description" content="Try Store Preview Studio live in your browser. Dual App Store & Google Play preview, 8-card ASO editor, and instant device mockups.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='fav-sq-bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231F211F'/%3E%3Cstop offset='100%25' stop-color='%23121312'/%3E%3C/linearGradient%3E%3Cfilter id='fav-shadow' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeDropShadow dx='-2' dy='3' stdDeviation='3.5' flood-color='%23000000' flood-opacity='0.8'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23fav-sq-bg)' stroke='rgba(255,255,255,0.12)' stroke-width='1.5'/%3E%3Cg transform='scale(0.72) translate(19, 19)'%3E%3Cpath d='M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z' fill='%23006636'/%3E%3Cg filter='url(%23fav-shadow)'%3E%3Cpath d='M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z' fill='%2300D085'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<!-- Enable SPS Demo Mode Flag -->
+<script>
+window.SPS_DEMO_MODE = true;
+try{
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('embed') === 'true' || window.self !== window.top){
+    document.documentElement.classList.add('is-embedded');
+  }
+}catch(_){}
+try{
+  document.documentElement.dataset.ui = localStorage.getItem("store_preview_studio_ui") || "light";
+}catch(e){
+  document.documentElement.dataset.ui = "light";
+}
+</script>
+<style>
+/* Try.html Shell & Top Navigation */
+:root {
+  --try-bar-bg: #111211;
+  --try-bar-border: rgba(255, 255, 255, 0.1);
+  --try-bar-text: #e5e7eb;
+}
+[data-ui="light"] {
+  --try-bar-bg: #f9fafb;
+  --try-bar-border: rgba(0, 0, 0, 0.1);
+  --try-bar-text: #111827;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-primary, #0c0d0c);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* Standalone Top Bar */
+.try-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--try-bar-bg);
+  border-bottom: 1px solid var(--try-bar-border);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.try-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.try-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--try-bar-text);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+.try-back-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+[data-ui="light"] .try-back-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.try-topbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.try-demo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 7px;
+  padding: 5.5px 12px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: rgba(0, 208, 133, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(0, 208, 133, 0.3);
+}
+[data-ui="light"] .try-demo-badge {
+  color: #111827;
+  background: rgba(0, 208, 133, 0.12);
+  border: 1px solid rgba(0, 180, 110, 0.35);
+}
+.try-demo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00d085;
+  box-shadow: 0 0 6px #00d085;
+  flex-shrink: 0;
+}
+
+.try-topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+/* Studio App Shell */
+.studio-app-shell {
+  width: 100vw;
+  height: calc(100vh - 48px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Embedded Mode: Clean 100% Edge-to-Edge */
+.is-embedded .try-topbar {
+  display: none !important;
+}
+.is-embedded .studio-app-shell {
+  height: 100vh !important;
+  width: 100vw !important;
+}
+
+/* Demo Sandbox: Hide Page Theme Toggle Button */
+.theme-toggle-btn,
+#btnUi {
+  display: none !important;
+}
+</style>
+
+<!-- Inlined HTML2Canvas -->
+<script src="lib/html2canvas.min.js"></script>
+
+<!-- Inlined Core CSS Modules -->
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body data-store="apple" data-ui-store="apple" data-apple-device="iphone" data-google-device="phone" data-dual="false" data-panel="view" class="sps-demo-mode">
+
+<header class="try-topbar" id="tryTopbar">
+  <div class="try-topbar-left">
+    <a href="/" class="try-back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Overview</span>
+    </a>
+  </div>
+  <div class="try-topbar-center">
+    <span class="try-demo-badge">
+      <span class="try-demo-dot"></span>
+      Interactive Sandbox Demo
+    </span>
+  </div>
+  <div class="try-topbar-right"></div>
+</header>
+
+<div class="studio-app-shell" id="studioAppShell">
+  <!-- Header Component -->
+  <!-- @include "components/header.html" -->
+
+  <!-- Workspace Control Bar (Above Form & Canvas) -->
+  <!-- @include "components/workspace-bar.html" -->
+
+  <main>
+    <!-- Editor Panel (Left Sidebar) -->
+    <section class="editor" id="editorPanel">
+      <!-- @include "components/editor.html" -->
+    </section>
+
+    <!-- Drag Resizer Splitter -->
+    <div class="editor-resizer" id="editorResizer" role="separator" aria-orientation="vertical" title="Drag to resize form panel · Double-click to reset"></div>
+
+    <!-- Stage Area (Right Canvas / Device Mockups) -->
+    <section class="stage">
+      <!-- @include "components/stage-toolbar.html" -->
+      <div class="stage-devices" id="stageDevices">
+        <!-- @include "components/mockups/apple/iphone.html" -->
+        <!-- @include "components/mockups/apple/ipad.html" -->
+        <!-- @include "components/mockups/google/phone.html" -->
+        <!-- @include "components/mockups/google/tab7.html" -->
+        <!-- @include "components/mockups/google/tab10.html" -->
+      </div>
+    </section>
+  </main>
+
+  <nav class="mtabs">
+    <button data-p="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Edit Listing</button>
+    <button data-p="view" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Live Preview</button>
+  </nav>
+
+  <!-- @include "components/popover.html" -->
+
+  <!-- Image Detail & Asset Inspector Modal -->
+  <!-- @include "components/modals/icon-modal.html" -->
+  <!-- @include "components/modals/confirm-modal.html" -->
+  <!-- @include "components/modals/store-import-modal.html" -->
+  <!-- @include "components/modals/templates-modal.html" -->
+  <!-- @include "components/modals/export-modal.html" -->
+  <!-- @include "components/modals/demo-upgrade-modal.html" -->
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -21,16 +21,16 @@ export const en = {
     subheadlineLead:
       "Save 2 hours of back-and-forth with your client before every App Store submission.",
     subheadlineFollow:
-      "App Store Connect & Google Play provide no live preview — preview and refine your listings with confidence.",
+      "App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
     subheadline:
-      "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — preview and refine your listings with confidence.",
+      "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
     primaryCta: {
       label: "Get Lifetime Access",
       href: "#pricing",
     },
     secondaryCta: {
       label: "Try Live Demo",
-      href: "/demo.html",
+      href: "/try",
     },
     trustBadges: [
       "100% Offline & Private",
@@ -81,7 +81,7 @@ export const en = {
         icon: "folderArchive" as const,
         title: "Multi-Format Export & Dev Markdown",
         description:
-          "Bulk export clean 4K Retina PNG mockups and client-side ZIP bundles. Generate structured LISTING_METADATA.md and portable JSON presets for seamless developer handoff.",
+          "Bulk export clean 4K Retina PNG mockups and client-side ZIP bundles. Generate structured store submission Markdown and portable JSON presets for seamless developer handoff.",
         badge: "Ultra HD 4K",
       },
     ],
@@ -108,7 +108,7 @@ export const en = {
           badge: "INDEPENDENT MARKETING WORKFLOW",
           title: "Preview and validate listings without needing developer accounts",
           description:
-            "Finalize store pages with confidence. Hand over paste-ready copy and assets to developers without confusion or misaligned specs.",
+            "Finalize store pages before release. Hand over paste-ready copy and assets to developers without confusion or misaligned specs.",
         },
       },
       {
@@ -124,7 +124,7 @@ export const en = {
           badge: "PROACTIVE RELEASE PLANNING",
           title: "Know what updates live vs. what needs a new release",
           description:
-            "Plan marketing campaigns with confidence, and only loop in developers when a new app release is actually required.",
+            "Plan marketing campaigns independently, and only loop in developers when a new app release is actually required.",
         },
       },
       {
@@ -225,7 +225,7 @@ export const en = {
           { text: "iPhone, iPad & Android Hardware Bezels", tag: "Dark/Light OS" },
           { text: "Smart Size & Icon Alpha Channel Detection" },
           { text: "Clean 4K Ultra HD Export", tag: "No Watermark" },
-          { text: "LISTING_METADATA.md & JSON Presets", tag: "Dev Handoff" },
+          { text: "Store Submission Markdown & JSON Presets", tag: "Dev Handoff" },
           { text: "100% Private Offline Single-File Studio", tag: ".html" },
           { text: "Single-User Lifetime Commercial License" },
         ] as TierFeature[],
@@ -278,7 +278,7 @@ export const en = {
   faq: {
     title: "Frequently Asked Questions",
     description:
-      "Everything you need to know about store review compliance, client handoff, and lifetime updates.",
+      "Everything you need to know about store review compliance, client handoff, and product updates.",
     items: [
       {
         id: "store-review-policy",
@@ -309,7 +309,7 @@ export const en = {
   footer: {
     copyright: "© 2026 Store Preview Studio by Kai DevLabs",
     links: [
-      { label: "Live Demo", href: "/demo" },
+      { label: "Live Demo", href: "/try" },
       { label: "Why Us", href: "#comparison" },
       { label: "Features", href: "#features" },
       { label: "Reviews", href: "#testimonials" },

@@ -2,6 +2,10 @@
 if($('btnCopyText')) $('btnCopyText').onclick = copyAllText;
 
 function copyAllText(){
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    if(typeof requireFullVersion === 'function') requireFullVersion('export-copy');
+    return;
+  }
   const name = $('f-name') ? $('f-name').value : '';
   const sub = $('f-sub') ? $('f-sub').value : '';
   const promo = $('f-promo') ? $('f-promo').value : '';

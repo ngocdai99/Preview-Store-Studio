@@ -622,3 +622,9 @@
 :root[data-ui=light] .theme-toggle-btn .moon-icon {
   display: block;
 }
+
+/* Demo Sandbox Mode: Hide Page Theme Toggle Button */
+.sps-demo-mode .theme-toggle-btn,
+.sps-demo-mode #btnUi {
+  display: none !important;
+}

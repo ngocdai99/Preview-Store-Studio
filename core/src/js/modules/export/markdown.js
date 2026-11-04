@@ -2,6 +2,10 @@
 if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;
 
 function exportMarkdown(){
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    if(typeof requireFullVersion === 'function') requireFullVersion('export-markdown');
+    return;
+  }
   if(typeof canDownload === 'function' && !canDownload(1000)) return;
 
   function safeFence(text, lang='text'){
