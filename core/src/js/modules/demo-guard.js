@@ -411,6 +411,25 @@ function initDemoGuard() {
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
               </span>
             </button>
+
+            <div class="menu-div" style="margin: 6px 0;"></div>
+
+            <button type="button" class="menu-item" id="optResetAllData" title="Reset all data">
+              <span class="mi-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <polyline points="23 20 23 14 17 14"></polyline>
+                  <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                </svg>
+              </span>
+              <span class="mi-t">
+                <span class="mi-name-row">
+                  <span class="mi-name">Reset</span>
+                </span>
+                <small>Clear all data &amp; reload</small>
+              </span>
+              <span class="mi-pill btn-white">Reset</span>
+            </button>
           </div>
         </div>
 
@@ -482,6 +501,24 @@ function initDemoGuard() {
           };
         }
       });
+
+      // 3. Reset Action on Demo Menu (Same behavior as Core Studio)
+      const btnResetDemo = $('optResetAllData');
+      if (btnResetDemo) {
+        btnResetDemo.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          menuExport.classList.remove('show');
+          if (typeof showResetConfirmModal === 'function' && typeof resetFactoryStorage === 'function') {
+            showResetConfirmModal(
+              resetFactoryStorage,
+              'Reset All Data?',
+              'Clear all stored data and reload to clean state.',
+              'Reset'
+            );
+          }
+        };
+      }
     }
 
     // Add Buy badges and click locks to Google 7" and 10" Tablet selectors
