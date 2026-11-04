@@ -109,7 +109,28 @@
 .shot-row-head{display:flex;align-items:center;gap:6px;min-height:20px}
 .shot-row-title{font-size:12px;font-weight:750;color:#f1f5f9;letter-spacing:.02em;font-variant-numeric:tabular-nums}
 :root[data-ui=light] .shot-row-title{color:#0f172a}
-.shot-role-tag{display:none}
+/* App Preview Badge in Shot Row */
+.shot-preview-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  line-height: 1.25;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  user-select: none;
+}
+:root[data-ui=light] .shot-preview-pill {
+  background-color: var(--btn-white-bg, #EFF1F0);
+  color: var(--btn-white-text, #252625);
+  border: 1px solid var(--btn-white-border, rgba(0, 0, 0, 0.08));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
 .shot-meta-line{display:flex;align-items:center;gap:6px;min-height:18px}
 .srow input{font-size:11px;padding:6px 9px;border-radius:7px}
 .srow .act{display:flex;gap:6px;align-items:center;flex-shrink:0;margin-left:auto}

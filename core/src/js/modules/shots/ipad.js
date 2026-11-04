@@ -198,6 +198,10 @@ function renderIpadSlist(){
     delBtn.onclick = e => {
       e.stopPropagation();
       IPAD_SHOTS.splice(i, 1);
+      if(typeof isDemoMode === 'function' && isDemoMode()){
+        const remainingCount = IPAD_SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
+        window._demoIpadUploadCount = Math.min(window._demoIpadUploadCount || 0, remainingCount);
+      }
       renderIpadShots();
       saveState();
     };

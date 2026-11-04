@@ -315,13 +315,13 @@
         (w === 2034 && h === 1398) || (w === 2853 && h === 2007) ||
         (w === 1136 && h === 640) || (w === 1096 && h === 640) || (w === 960 && h === 640) || (w === 920 && h === 640)
       );
-      // Standard Google landscape: phone aspect ratio within range
+      // Standard Google landscape: phone aspect ratio within range (1.5:1 to 2.2:1)
       const isStandardGoogleLandscapeModal = isLandscape && _activeModalStore === 'google' &&
-        !isSq && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
+        !isSq && (w / h >= 1.5) && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
       // Any standard landscape for the current store
       const isStandardLandscape = isStandardAppleLandscapeModal || isStandardGoogleLandscapeModal;
-      // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) — always err
-      const isExtremeRatio = isLandscape && (w / h > 2.5);
+      // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) OR below phone AR range — always err
+      const isExtremeRatio = isLandscape && ((w / h > 2.5) || (w / h < 1.5 && !isStandardAppleLandscapeModal));
 
       // Pixel audit (alpha channel & apex corners)
       let hasAlpha = false;

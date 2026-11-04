@@ -584,8 +584,7 @@ function initDemoGuard() {
         if (addBtn) {
           const currentValid = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length : 0;
           const currentCount = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.length : 0;
-          const currentUploaded = (window._demoScreenshotUploadCount || 0);
-          if (currentCount >= 2 || currentValid >= 2 || currentUploaded >= 2) {
+          if (currentCount >= 2 || currentValid >= 2) {
             e.preventDefault();
             e.stopImmediatePropagation();
             const isImportedLargeGallery = currentCount > 2 || currentValid > 2;
@@ -600,8 +599,9 @@ function initDemoGuard() {
         }
         const isUploadTrigger = e.target.closest('.shot-upload-btn');
         if (isUploadTrigger) {
-          const currentUploaded = (window._demoScreenshotUploadCount || 0);
-          if (currentUploaded >= 2) {
+          const currentValid = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length : 0;
+          const currentCount = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.length : 0;
+          if (currentCount >= 2 && currentValid >= 2) {
             e.preventDefault();
             e.stopImmediatePropagation();
             requireFullVersion('upload-shots');

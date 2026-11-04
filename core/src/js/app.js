@@ -4600,7 +4600,9 @@ function renderShots(){
     // Row Title, Role Tag & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>`;
+    const isAppPreview = store === 'apple' && i < 3;
+    const previewBadgeHtml = isAppPreview ? '<span class="shot-preview-pill" title="Ảnh sẽ xuất hiện trên App Store search/product page">App Preview</span>' : '';
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${previewBadgeHtml}`;
 
     const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
     metaLine.innerHTML = `<span class="shot-dim-tag" id="shotDimTag_${i}" style="display:none"></span>`;
@@ -4684,9 +4686,26 @@ function validateScreenshots(){
   const minRequired = store === 'apple' ? 1 : 2;
 
   const counterEl = $('shotCounter');
-  if(counterEl){
-    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
-    counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+  const previewCounterEl = $('appPreviewCounter');
+  if(store === 'apple'){
+    const appPreviewCount = Math.min(validCount, 3);
+    if(previewCounterEl){
+      previewCounterEl.style.display = 'inline-flex';
+      previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
+      previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+    }
+    if(counterEl){
+      counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
+      counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+    }
+  } else {
+    if(previewCounterEl){
+      previewCounterEl.style.display = 'none';
+    }
+    if(counterEl){
+      counterEl.textContent = `${validCount} of ${maxAllowed} screenshots`;
+      counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+    }
   }
 
   const hintEl = $('shotHint');
@@ -4726,7 +4745,10 @@ function validateScreenshots(){
 
   let checked = 0;
   const squareIndices = [];
-  const landscapeIndices = [];
+  const extremeRatioIndices = [];   // e.g. banner 730×172 — ratio > 2.5:1
+  const landscapeOkIndices = [];    // standard Apple/Google landscape → ok (green)
+  const landscapeWarnIndices = [];  // non-standard landscape (unusual ratio) → warn
+  const portraitIndices = [];       // normal portrait shots
   const nonPhoneIndices = [];
   const sizeIssueIndices = [];
   const overSizeIndices = [];
@@ -4763,14 +4785,41 @@ function validateScreenshots(){
         const isPhonePortrait = h >= w * 1.35;
         const isGoogleSizeIssue = store === 'google' && (w < 320 || h < 320 || w > 3840 || h > 3840);
 
+        // Standard Apple landscape resolutions (portrait dimensions swapped)
+        const isStandardAppleLandscape = store === 'apple' && (
+          (w === 2868 && h === 1320) || (w === 2796 && h === 1290) || (w === 2736 && h === 1260) ||
+          (w === 2622 && h === 1206) || (w === 2556 && h === 1179) ||
+          (w === 2778 && h === 1284) || (w === 2688 && h === 1242) ||
+          (w === 2532 && h === 1170) || (w === 2436 && h === 1125) || (w === 2340 && h === 1080) ||
+          (w === 2208 && h === 1242) || (w === 1334 && h === 750) ||
+          (w === 2034 && h === 1398) || (w === 2853 && h === 2007) ||
+          (w === 1136 && h === 640) || (w === 1096 && h === 640) || (w === 960 && h === 640) || (w === 920 && h === 640)
+        );
+        // Standard Google landscape: phone aspect ratio within range (1.5:1 to 2.2:1)
+        const isStandardGoogleLandscape = store === 'google' && isLandscape &&
+          !isSquare && (w / h >= 1.5) && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
+        // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) — always err
+        const isExtremeRatio = isLandscape && (w / h > 2.5);
+        // Landscape below phone AR range (e.g. 800×600 = 1.33:1 = tablet) — err
+        const isNonPhoneLandscape = isLandscape && !isExtremeRatio && (w / h < 1.5) && !isStandardAppleLandscape;
+
         if(tag){
           tag.style.display = 'inline-flex';
           // 1. SAI RATIO LÀ ERROR (RED)
           if(isSquare){
             tag.className = 'shot-dim-tag err';
             tag.textContent = `1:1 Square (${w}×${h})`;
-          } else if(isLandscape){
+          } else if(isLandscape && (isExtremeRatio || isNonPhoneLandscape)){
+            // e.g. 730×172 banner — aspect ratio is not a phone screen at all
             tag.className = 'shot-dim-tag err';
+            tag.textContent = `Invalid Ratio (${w}×${h})`;
+          } else if(isLandscape && (isStandardAppleLandscape || isStandardGoogleLandscape)){
+            // Official landscape dimensions from App Store Connect / Google Play → ok
+            tag.className = 'shot-dim-tag ok';
+            tag.textContent = `Landscape (${w}×${h})`;
+          } else if(isLandscape){
+            // Landscape but not an extreme ratio and not a known standard → warn (unusual)
+            tag.className = 'shot-dim-tag warn';
             tag.textContent = `Landscape (${w}×${h})`;
           } else if(!isPhonePortrait){
             tag.className = 'shot-dim-tag err';
@@ -4842,12 +4891,17 @@ function validateScreenshots(){
         // Collect indices for badge banner
         if(isSquare){
           squareIndices.push(idx + 1);
-        } else if(isLandscape){
-          landscapeIndices.push(idx + 1);
+        } else if(isLandscape && isExtremeRatio){
+          extremeRatioIndices.push(idx + 1);
+        } else if(isLandscape && (isStandardAppleLandscape || isStandardGoogleLandscape)){
+          landscapeOkIndices.push(idx + 1);
+        } else if(isLandscape && !(isExtremeRatio || isNonPhoneLandscape)){
+          landscapeWarnIndices.push(idx + 1);
         } else if(!isPhonePortrait){
           nonPhoneIndices.push(idx + 1);
         } else {
-          // Đúng ratio: kiểm tra fileSize & kích thước
+          portraitIndices.push(idx + 1);
+          // Đúng ratio portrait: kiểm tra fileSize & kích thước
           if(isOverSize){
             overSizeIndices.push(idx + 1);
           }
@@ -4886,10 +4940,13 @@ function validateScreenshots(){
         badgeEl.innerHTML = `${SB_ERR}<span><strong>Aspect Ratio Error:</strong> ${noun} ${items} ${verb} square (1:1). Google Play requires standard dimensions (such as 1080×1920 px).</span>`;
       }
       badgeEl.style.display = 'flex';
-    } else if(landscapeIndices.length > 0){
-      const items = landscapeIndices.map(n => `#${n}`).join(', ');
+    } else if(extremeRatioIndices.length > 0){
+      // e.g. 730×172 banner — aspect ratio is not a phone screen at all
+      const items = extremeRatioIndices.map(n => `#${n}`).join(', ');
+      const noun = extremeRatioIndices.length > 1 ? 'Screenshots' : 'Screenshot';
+      const verb = extremeRatioIndices.length > 1 ? 'have' : 'has';
       badgeEl.className = 'shot-status-badge err';
-      badgeEl.innerHTML = `${SB_ERR}<span><strong>Aspect Ratio Error:</strong> Screenshot ${items} is landscape. Phone screenshots must be portrait.</span>`;
+      badgeEl.innerHTML = `${SB_ERR}<span><strong>Invalid Aspect Ratio:</strong> ${noun} ${items} ${verb} an unsupported banner-like ratio. Phone screenshots must have a phone screen aspect ratio (e.g. 9:16 or 9:19.5). Re-export at a supported dimension such as 1179×2556 px.</span>`;
       badgeEl.style.display = 'flex';
     } else if(nonPhoneIndices.length > 0){
       const items = nonPhoneIndices.map(n => `#${n}`).join(', ');
@@ -4897,7 +4954,29 @@ function validateScreenshots(){
       badgeEl.innerHTML = `${SB_ERR}<span><strong>Aspect Ratio Error:</strong> Screenshot ${items} has non-portrait ratio. Recommended: 9:16 or 9:19.5 phone portrait.</span>`;
       badgeEl.style.display = 'flex';
     }
-    // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+    // 2. MIXED ORIENTATION WARNING (AMBER) — portrait + landscape mixed in same set
+    else if(landscapeOkIndices.length > 0 && portraitIndices.length > 0){
+      const lItems = landscapeOkIndices.map(n => `#${n}`).join(', ');
+      const pItems = portraitIndices.map(n => `#${n}`).join(', ');
+      badgeEl.className = 'shot-status-badge warn';
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Mixed Orientation:</strong> Landscape ${lItems} and portrait ${pItems} in the same set. ${store === 'apple' ? 'Apple may reject for inconsistent presentation (Guideline 2.3).' : 'Google Play recommends consistent orientation.'} Use all-portrait or all-landscape per device size.</span>`;
+      badgeEl.style.display = 'flex';
+    }
+    // 3. ALL LANDSCAPE OK — standard Apple/Google landscape only
+    else if(landscapeOkIndices.length > 0 && portraitIndices.length === 0){
+      // All-landscape set, all standard — green (no banner needed)
+      badgeEl.className = 'shot-status-badge ok';
+      badgeEl.innerHTML = '';
+      badgeEl.style.display = 'none';
+    }
+    // 4. UNUSUAL LANDSCAPE WARNING (non-standard ratio but not extreme)
+    else if(landscapeWarnIndices.length > 0){
+      const items = landscapeWarnIndices.map(n => `#${n}`).join(', ');
+      badgeEl.className = 'shot-status-badge warn';
+      badgeEl.innerHTML = `${SB_WARN}<span><strong>Non-standard Landscape:</strong> Screenshot ${items} is landscape with an unusual aspect ratio. Verify this matches a supported store dimension before submission.</span>`;
+      badgeEl.style.display = 'flex';
+    }
+    // 5. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
     else if(overSizeIndices.length > 0){
       const items = overSizeIndices.map(n => `#${n}`).join(', ');
       const noun = overSizeIndices.length > 1 ? 'Screenshots' : 'Screenshot';
@@ -5751,6 +5830,24 @@ if(ipadShotFile){
       const isTabletPortrait = (w / h >= 0.55 && w / h <= 0.7);
       const isTabletLandscape = (w / h >= 1.4 && w / h <= 1.8);
 
+      // Standard Apple landscape resolutions (official App Store Connect dims)
+      const isStandardAppleLandscapeModal = isLandscape && _activeModalStore === 'apple' && (
+        (w === 2868 && h === 1320) || (w === 2796 && h === 1290) || (w === 2736 && h === 1260) ||
+        (w === 2622 && h === 1206) || (w === 2556 && h === 1179) ||
+        (w === 2778 && h === 1284) || (w === 2688 && h === 1242) ||
+        (w === 2532 && h === 1170) || (w === 2436 && h === 1125) || (w === 2340 && h === 1080) ||
+        (w === 2208 && h === 1242) || (w === 1334 && h === 750) ||
+        (w === 2034 && h === 1398) || (w === 2853 && h === 2007) ||
+        (w === 1136 && h === 640) || (w === 1096 && h === 640) || (w === 960 && h === 640) || (w === 920 && h === 640)
+      );
+      // Standard Google landscape: phone aspect ratio within range (1.5:1 to 2.2:1)
+      const isStandardGoogleLandscapeModal = isLandscape && _activeModalStore === 'google' &&
+        !isSq && (w / h >= 1.5) && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
+      // Any standard landscape for the current store
+      const isStandardLandscape = isStandardAppleLandscapeModal || isStandardGoogleLandscapeModal;
+      // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) OR below phone AR range — always err
+      const isExtremeRatio = isLandscape && ((w / h > 2.5) || (w / h < 1.5 && !isStandardAppleLandscapeModal));
+
       // Pixel audit (alpha channel & apex corners)
       let hasAlpha = false;
       let hasPreRoundedCorners = false;
@@ -5792,9 +5889,17 @@ if(ipadShotFile){
           dimErr = isSq;
         } else {
           // Phone Screenshot
-          const isWrongRatio = isSq || isLandscape || !isPhonePortrait;
+          const isWrongRatio = isSq || isExtremeRatio || (!isLandscape && !isPhonePortrait);
           if (isWrongRatio) {
             dimErr = true;
+            dimOk = false;
+          } else if (isStandardLandscape) {
+            // Official landscape dimensions → ok
+            dimErr = false;
+            dimOk = true;
+          } else if (isLandscape) {
+            // Non-standard landscape but valid ratio → warn
+            dimErr = false;
             dimOk = false;
           } else {
             dimErr = false;
@@ -5896,6 +6001,10 @@ if(ipadShotFile){
           if (isSq) {
             ratioEl.textContent = '1:1 Square';
             ratioEl.className = 'icon-metric-val err';
+          } else if (isExtremeRatio) {
+            const r = (w / (h || 1)).toFixed(2);
+            ratioEl.textContent = `${r}:1 Invalid`;
+            ratioEl.className = 'icon-metric-val err';
           } else if (isPhonePortrait) {
             let rLabel = 'Portrait';
             if (Math.abs(h / w - 19.5 / 9) < 0.15) rLabel = '9:19.5 Portrait';
@@ -5908,7 +6017,8 @@ if(ipadShotFile){
             if (Math.abs(w / h - 16 / 9) < 0.15) rLabel = '16:9 Landscape';
             else rLabel = `${(w / h).toFixed(2)}:1 Landscape`;
             ratioEl.textContent = rLabel;
-            ratioEl.className = 'icon-metric-val err';
+            // Standard landscape dims are accepted by App Store Connect → ok; non-standard → warn
+            ratioEl.className = 'icon-metric-val ' + (isStandardLandscape ? 'ok' : 'warn');
           } else {
             const r = (h / (w || 1)).toFixed(2);
             ratioEl.textContent = `${r}:1 Non-portrait`;
@@ -6085,10 +6195,22 @@ if(ipadShotFile){
           level = 'err';
           badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: 1:1 Square (${w}×${h} px)` : `Aspect Ratio Error: 1:1 Square (${w}×${h} px)`;
           detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Screenshot is square (1:1). ${_activeModalStore === 'apple' ? 'Apple requires standard supported dimensions (such as 1179×2556 px or 1206×2622 px, portrait or landscape)' : 'Google Play requires standard phone dimensions (such as 1080×1920 px)'}. Square screenshots are not supported by the store.</p><p class="icon-modal-warn-hint">Please re-export standard supported dimensions from your design tool.</p>`;
-        } else if (isLandscape) {
+        } else if (isExtremeRatio) {
+          // e.g. 730×172 banner — aspect ratio is not a phone screen at all
+          const ratio = (w / h).toFixed(2);
           level = 'err';
-          badgeText = _activeModalStore === 'apple' ? `App Store Rejection Risk: Landscape (${w}×${h} px)` : `Aspect Ratio Error: Landscape (${w}×${h} px)`;
-          detailsHtml = `<p><strong>${_activeModalStore === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error'}:</strong> Phone screenshots must be portrait. Uploading landscape screenshots will fail phone store presentation.</p><p class="icon-modal-warn-hint">Re-export as portrait (e.g. 1290×2796 px or 1080×1920 px) to match phone display specifications.</p>`;
+          badgeText = `Invalid Aspect Ratio: Banner ${w}×${h} px (${ratio}:1)`;
+          detailsHtml = `<p><strong>Invalid Aspect Ratio:</strong> This image (${w}×${h} px, ${ratio}:1) has a banner-like ratio, not a phone screen aspect ratio. Phone screenshots must have a portrait or landscape phone ratio (e.g. 9:16 or 9:19.5).</p><p class="icon-modal-warn-hint">Re-export at a supported dimension such as ${_activeModalStore === 'apple' ? '1179×2556 px or 2556×1179 px' : '1080×1920 px or 1920×1080 px'}.</p>`;
+        } else if (isLandscape && isStandardLandscape) {
+          // Official landscape dimensions — accepted by App Store Connect
+          level = 'ok';
+          badgeText = `${w}×${h} px · Landscape · Store Compliant`;
+          detailsHtml = '';
+        } else if (isLandscape) {
+          // Landscape but non-standard ratio — warn, not err
+          level = 'warn';
+          badgeText = `Non-standard Landscape (${w}×${h} px)`;
+          detailsHtml = `<p><strong>Non-standard Landscape:</strong> This screenshot is landscape orientation but does not match a known ${_activeModalStore === 'apple' ? 'App Store Connect' : 'Google Play'} dimension. It may display letterboxed in the store.</p><p class="icon-modal-warn-hint">Verify this dimension is accepted before submission. Standard landscape: ${_activeModalStore === 'apple' ? '2556×1179 px or 2622×1206 px' : '1920×1080 px'}.</p>`;
         } else if (!isPhonePortrait) {
           level = 'err';
           badgeText = `Aspect Ratio Error: Non-portrait (${w}×${h} px)`;
@@ -9055,11 +9177,25 @@ function setStore(s, animate = true, preserveDual = false){
     }
   }
   const counterEl = $('shotCounter');
+  const previewCounterEl = $('appPreviewCounter');
   if(counterEl && typeof SHOTS !== 'undefined'){
     const validCount = SHOTS.filter(sh => sh && sh.trim()).length;
     const maxAllowed = s === 'apple' ? 10 : 8;
     const minRequired = s === 'apple' ? 1 : 2;
-    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
+    if(s === 'apple'){
+      const appPreviewCount = Math.min(validCount, 3);
+      if(previewCounterEl){
+        previewCounterEl.style.display = 'inline-flex';
+        previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
+        previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+      }
+      counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
+    } else {
+      if(previewCounterEl){
+        previewCounterEl.style.display = 'none';
+      }
+      counterEl.textContent = `${validCount} of ${maxAllowed} screenshots`;
+    }
     counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
   }
 

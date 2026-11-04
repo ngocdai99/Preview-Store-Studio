@@ -574,11 +574,25 @@ function setStore(s, animate = true, preserveDual = false){
     }
   }
   const counterEl = $('shotCounter');
+  const previewCounterEl = $('appPreviewCounter');
   if(counterEl && typeof SHOTS !== 'undefined'){
     const validCount = SHOTS.filter(sh => sh && sh.trim()).length;
     const maxAllowed = s === 'apple' ? 10 : 8;
     const minRequired = s === 'apple' ? 1 : 2;
-    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
+    if(s === 'apple'){
+      const appPreviewCount = Math.min(validCount, 3);
+      if(previewCounterEl){
+        previewCounterEl.style.display = 'inline-flex';
+        previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
+        previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+      }
+      counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
+    } else {
+      if(previewCounterEl){
+        previewCounterEl.style.display = 'none';
+      }
+      counterEl.textContent = `${validCount} of ${maxAllowed} screenshots`;
+    }
     counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
   }
 

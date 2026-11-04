@@ -119,6 +119,10 @@ function renderShots(){
     delBtn.onclick = e => {
       e.stopPropagation();
       SHOTS.splice(i, 1);
+      if(typeof isDemoMode === 'function' && isDemoMode()){
+        const remainingCount = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
+        window._demoScreenshotUploadCount = Math.min(window._demoScreenshotUploadCount || 0, remainingCount);
+      }
       renderShots();
       saveState();
     };
@@ -128,7 +132,9 @@ function renderShots(){
     // Row Title, Role Tag & Actions
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
-    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>`;
+    const isAppPreview = store === 'apple' && i < 3;
+    const previewBadgeHtml = isAppPreview ? '<span class="shot-preview-pill" title="Ảnh sẽ xuất hiện trên App Store search/product page">App Preview</span>' : '';
+    head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${previewBadgeHtml}`;
 
     const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
     metaLine.innerHTML = `<span class="shot-dim-tag" id="shotDimTag_${i}" style="display:none"></span>`;
@@ -212,9 +218,26 @@ function validateScreenshots(){
   const minRequired = store === 'apple' ? 1 : 2;
 
   const counterEl = $('shotCounter');
-  if(counterEl){
-    counterEl.textContent = `${validCount} / ${maxAllowed} screenshots`;
-    counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+  const previewCounterEl = $('appPreviewCounter');
+  if(store === 'apple'){
+    const appPreviewCount = Math.min(validCount, 3);
+    if(previewCounterEl){
+      previewCounterEl.style.display = 'inline-flex';
+      previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
+      previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+    }
+    if(counterEl){
+      counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
+      counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+    }
+  } else {
+    if(previewCounterEl){
+      previewCounterEl.style.display = 'none';
+    }
+    if(counterEl){
+      counterEl.textContent = `${validCount} of ${maxAllowed} screenshots`;
+      counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+    }
   }
 
   const hintEl = $('shotHint');
@@ -304,11 +327,13 @@ function validateScreenshots(){
           (w === 2034 && h === 1398) || (w === 2853 && h === 2007) ||
           (w === 1136 && h === 640) || (w === 1096 && h === 640) || (w === 960 && h === 640) || (w === 920 && h === 640)
         );
-        // Standard Google landscape: 16:9 / phone ratio within range
+        // Standard Google landscape: phone aspect ratio within range (1.5:1 to 2.2:1)
         const isStandardGoogleLandscape = store === 'google' && isLandscape &&
-          !isSquare && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
-        // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) — always err regardless of orientation
-        const isExtremeRatio = (w / h > 2.5) || (h / w > 2.5 && !isPhonePortrait);
+          !isSquare && (w / h >= 1.5) && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
+        // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) — always err
+        const isExtremeRatio = isLandscape && (w / h > 2.5);
+        // Landscape below phone AR range (e.g. 800×600 = 1.33:1 = tablet) — err
+        const isNonPhoneLandscape = isLandscape && !isExtremeRatio && (w / h < 1.5) && !isStandardAppleLandscape;
 
         if(tag){
           tag.style.display = 'inline-flex';
@@ -316,7 +341,7 @@ function validateScreenshots(){
           if(isSquare){
             tag.className = 'shot-dim-tag err';
             tag.textContent = `1:1 Square (${w}×${h})`;
-          } else if(isLandscape && isExtremeRatio){
+          } else if(isLandscape && (isExtremeRatio || isNonPhoneLandscape)){
             // e.g. 730×172 banner — aspect ratio is not a phone screen at all
             tag.className = 'shot-dim-tag err';
             tag.textContent = `Invalid Ratio (${w}×${h})`;
@@ -402,7 +427,7 @@ function validateScreenshots(){
           extremeRatioIndices.push(idx + 1);
         } else if(isLandscape && (isStandardAppleLandscape || isStandardGoogleLandscape)){
           landscapeOkIndices.push(idx + 1);
-        } else if(isLandscape){
+        } else if(isLandscape && !(isExtremeRatio || isNonPhoneLandscape)){
           landscapeWarnIndices.push(idx + 1);
         } else if(!isPhonePortrait){
           nonPhoneIndices.push(idx + 1);
@@ -512,13 +537,13 @@ if($('shotFile')){
     const f = e.target.files[0];
     if(!f) return;
     if(typeof isDemoMode === 'function' && isDemoMode()){
-      const currentUploaded = (window._demoScreenshotUploadCount || 0);
-      if(currentUploaded >= 2){
+      const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
+      if(pick < 0 && (SHOTS.length >= 2 || currentValid >= 2)){
         if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
         e.target.value = '';
         return;
       }
-      window._demoScreenshotUploadCount = currentUploaded + 1;
+      window._demoScreenshotUploadCount = Math.max(0, currentValid) + 1;
     }
     if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'Phone screenshot')){
       e.target.value = '';
@@ -539,8 +564,7 @@ if($('addShot')){
   $('addShot').onclick = () => {
     if(typeof isDemoMode === 'function' && isDemoMode()){
       const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
-      const currentUploaded = (window._demoScreenshotUploadCount || 0);
-      if(SHOTS.length >= 2 || currentValid >= 2 || currentUploaded >= 2){
+      if(SHOTS.length >= 2 || currentValid >= 2){
         if(typeof requireFullVersion === 'function') {
           const isImportedLargeGallery = SHOTS.length > 2 || currentValid > 2;
           requireFullVersion('upload-shots', {

@@ -3818,6 +3818,24 @@ function evaluatePhoneShot(w, h, sizeBytes, store) {
   const isGoogleSizeIssue = store === 'google' && (w < 320 || h < 320 || w > 3840 || h > 3840);
   const isOverSize = sizeBytes > 8 * 1024 * 1024;
 
+  // Standard Apple landscape resolutions (official App Store Connect dims — portrait dims swapped)
+  const isStandardAppleLandscape = store === 'apple' && (
+    (w === 2868 && h === 1320) || (w === 2796 && h === 1290) || (w === 2736 && h === 1260) ||
+    (w === 2622 && h === 1206) || (w === 2556 && h === 1179) ||
+    (w === 2778 && h === 1284) || (w === 2688 && h === 1242) ||
+    (w === 2532 && h === 1170) || (w === 2436 && h === 1125) || (w === 2340 && h === 1080) ||
+    (w === 2208 && h === 1242) || (w === 1334 && h === 750) ||
+    (w === 2034 && h === 1398) || (w === 2853 && h === 2007) ||
+    (w === 1136 && h === 640) || (w === 1096 && h === 640) || (w === 960 && h === 640) || (w === 920 && h === 640)
+  );
+  // Standard Google landscape: phone aspect ratio within range (1.5:1 to 2.2:1)
+  const isStandardGoogleLandscape = store === 'google' && isLandscape &&
+    !isSquare && (w / h >= 1.5) && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
+  // Extreme non-phone ratio (e.g. banner 730×172 → 4.24:1) — always err
+  const isExtremeRatio = isLandscape && (w / h > 2.5);
+  // Landscape but below phone aspect ratio range (e.g. 800×600 = 1.33:1 is tablet/monitor, not phone) — err
+  const isNonPhoneLandscape = isLandscape && !isExtremeRatio && (w / h < 1.5) && !isStandardAppleLandscape;
+
   let tagClass = 'ok';
   let tagText = '';
   let bannerLevel = 'ok';
@@ -3828,11 +3846,23 @@ function evaluatePhoneShot(w, h, sizeBytes, store) {
     tagText = `1:1 Square (${w}×${h})`;
     bannerLevel = 'err';
     bannerType = store === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error';
-  } else if (isLandscape) {
+  } else if (isLandscape && (isExtremeRatio || isNonPhoneLandscape)) {
+    // Extreme ratio OR below phone AR range (e.g. 800×600 = 1.33:1) — err
     tagClass = 'err';
-    tagText = `Landscape (${w}×${h})`;
+    tagText = `Invalid Ratio (${w}×${h})`;
     bannerLevel = 'err';
-    bannerType = 'Aspect Ratio Error';
+    bannerType = 'Invalid Aspect Ratio';
+  } else if (isLandscape && (isStandardAppleLandscape || isStandardGoogleLandscape)) {
+    tagClass = 'ok';
+    tagText = `Landscape (${w}×${h})`;
+    bannerLevel = 'ok';
+    bannerType = '';
+  } else if (isLandscape) {
+    // Non-standard phone-range landscape (1.5-2.2:1 but not a known dim) -> warn
+    tagClass = 'warn';
+    tagText = `Landscape (${w}×${h})`;
+    bannerLevel = 'warn';
+    bannerType = 'Non-standard Landscape';
   } else if (!isPhonePortrait) {
     tagClass = 'err';
     tagText = `Non-portrait (${w}×${h})`;
@@ -3850,48 +3880,20 @@ function evaluatePhoneShot(w, h, sizeBytes, store) {
     bannerType = 'Dimension Warning';
   } else {
     const isStandardApple = store === 'apple' && (
-      // Dynamic Island (large display)
-      (w === 1320 && h === 2868) || // iPhone 6.9"
-      (w === 1290 && h === 2796) || // iPhone 6.7"
-      (w === 1260 && h === 2736) || // iPhone Air / 6.7"
-      // Dynamic Island (medium display)
-      (w === 1206 && h === 2622) || // iPhone 6.3"
-      (w === 1179 && h === 2556) || // iPhone 6.1"
-      // Face ID (large display)
-      (w === 1284 && h === 2778) || // iPhone 6.5"
-      (w === 1242 && h === 2688) || // iPhone 6.5"
-      // Face ID (medium display)
-      (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
-      (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
-      (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
-      // Home Button (large display)
-      (w === 1242 && h === 2208) || // iPhone 5.5"
-      // Home Button (medium display)
-      (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
-      // iPhone Duo
-      (w === 1398 && h === 2034) ||
-      (w === 2007 && h === 2853) ||
-      // Legacy 4" / 3.5"
-      (w === 640 && h === 1136) ||
-      (w === 640 && h === 1096) ||
-      (w === 640 && h === 960) ||
-      (w === 640 && h === 920)
+      (w === 1320 && h === 2868) || (w === 1290 && h === 2796) || (w === 1260 && h === 2736) ||
+      (w === 1206 && h === 2622) || (w === 1179 && h === 2556) ||
+      (w === 1284 && h === 2778) || (w === 1242 && h === 2688) ||
+      (w === 1170 && h === 2532) || (w === 1125 && h === 2436) || (w === 1080 && h === 2340) ||
+      (w === 1242 && h === 2208) || (w === 750 && h === 1334) ||
+      (w === 1398 && h === 2034) || (w === 2007 && h === 2853) ||
+      (w === 640 && h === 1136) || (w === 640 && h === 1096) || (w === 640 && h === 960) || (w === 640 && h === 920)
     );
     const isStandardGoogle = store === 'google' && (
-      (w === 1080 && h === 1920) ||
-      (w === 1080 && h === 2340) ||
-      (w === 1080 && h === 2400) ||
-      (w === 1080 && h === 2160) ||
-      (w === 1080 && h === 2280) ||
-      (w === 1440 && h === 2560) ||
-      (w === 1440 && h === 3120) ||
-      (w === 1440 && h === 3200) ||
-      (w === 1440 && h === 2880) ||
-      (w === 1440 && h === 2960) ||
-      (w === 1440 && h === 3088) ||
-      (w === 720 && h === 1280) ||
-      (w === 720 && h === 1560) ||
-      (w === 720 && h === 1600) ||
+      (w === 1080 && h === 1920) || (w === 1080 && h === 2340) || (w === 1080 && h === 2400) ||
+      (w === 1080 && h === 2160) || (w === 1080 && h === 2280) ||
+      (w === 1440 && h === 2560) || (w === 1440 && h === 3120) || (w === 1440 && h === 3200) ||
+      (w === 1440 && h === 2880) || (w === 1440 && h === 2960) || (w === 1440 && h === 3088) ||
+      (w === 720 && h === 1280) || (w === 720 && h === 1560) || (w === 720 && h === 1600) ||
       (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
     );
     if ((store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) {
@@ -3915,60 +3917,50 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
   const isPhonePortrait = h >= w * 1.35;
   const isIpadPortrait = (Math.abs(w / h - 0.75) < 0.08) || (w / h >= 0.65 && w / h <= 0.85);
   const isIpadLandscape = (Math.abs(w / h - 1.333) < 0.08) || (w / h >= 1.18 && w / h <= 1.54);
-  const isTabletPortrait = (w / h >= 0.55 && w / h <= 0.7);
-  const isTabletLandscape = (w / h >= 1.4 && w / h <= 1.8);
   const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg';
+
+  // Standard Apple/Google landscape resolutions
+  const isStandardAppleLandscapeModal = isLandscape && store === 'apple' && (
+    (w === 2868 && h === 1320) || (w === 2796 && h === 1290) || (w === 2736 && h === 1260) ||
+    (w === 2622 && h === 1206) || (w === 2556 && h === 1179) ||
+    (w === 2778 && h === 1284) || (w === 2688 && h === 1242) ||
+    (w === 2532 && h === 1170) || (w === 2436 && h === 1125) || (w === 2340 && h === 1080) ||
+    (w === 2208 && h === 1242) || (w === 1334 && h === 750) ||
+    (w === 2034 && h === 1398) || (w === 2853 && h === 2007) ||
+    (w === 1136 && h === 640) || (w === 1096 && h === 640) || (w === 960 && h === 640) || (w === 920 && h === 640)
+  );
+  const isStandardGoogleLandscapeModal = isLandscape && store === 'google' &&
+    !isSq && (w / h >= 1.5) && (w / h <= 2.2) && w >= 320 && h >= 320 && w <= 3840 && h <= 3840;
+  const isStandardLandscape = isStandardAppleLandscapeModal || isStandardGoogleLandscapeModal;
+  // Extreme ratio OR below phone AR range (e.g. 800×600 = 1.33:1 = tablet) — err
+  const isExtremeRatio = isLandscape && ((w / h > 2.5) || (w / h < 1.5 && !isStandardAppleLandscapeModal));
 
   // dimEl
   let dimClass = 'ok';
   if (type === 'screenshot') {
-    const isWrongRatio = isSq || isLandscape || !isPhonePortrait;
+    const isWrongRatio = isSq || isExtremeRatio || (!isLandscape && !isPhonePortrait);
     if (isWrongRatio) {
       dimClass = 'err';
+    } else if (isStandardLandscape) {
+      dimClass = 'ok';
+    } else if (isLandscape) {
+      dimClass = 'warn';
     } else {
       const isStandardApple = store === 'apple' && (
-        // Dynamic Island (large display)
-        (w === 1320 && h === 2868) || // iPhone 6.9"
-        (w === 1290 && h === 2796) || // iPhone 6.7"
-        (w === 1260 && h === 2736) || // iPhone Air / 6.7"
-        // Dynamic Island (medium display)
-        (w === 1206 && h === 2622) || // iPhone 6.3"
-        (w === 1179 && h === 2556) || // iPhone 6.1"
-        // Face ID (large display)
-        (w === 1284 && h === 2778) || // iPhone 6.5"
-        (w === 1242 && h === 2688) || // iPhone 6.5"
-        // Face ID (medium display)
-        (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
-        (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
-        (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
-        // Home Button (large display)
-        (w === 1242 && h === 2208) || // iPhone 5.5"
-        // Home Button (medium display)
-        (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
-        // iPhone Duo
-        (w === 1398 && h === 2034) ||
-        (w === 2007 && h === 2853) ||
-        // Legacy 4" / 3.5"
-        (w === 640 && h === 1136) ||
-        (w === 640 && h === 1096) ||
-        (w === 640 && h === 960) ||
-        (w === 640 && h === 920)
+        (w === 1320 && h === 2868) || (w === 1290 && h === 2796) || (w === 1260 && h === 2736) ||
+        (w === 1206 && h === 2622) || (w === 1179 && h === 2556) ||
+        (w === 1284 && h === 2778) || (w === 1242 && h === 2688) ||
+        (w === 1170 && h === 2532) || (w === 1125 && h === 2436) || (w === 1080 && h === 2340) ||
+        (w === 1242 && h === 2208) || (w === 750 && h === 1334) ||
+        (w === 1398 && h === 2034) || (w === 2007 && h === 2853) ||
+        (w === 640 && h === 1136) || (w === 640 && h === 1096) || (w === 640 && h === 960) || (w === 640 && h === 920)
       );
       const isStandardGoogle = store === 'google' && (
-        (w === 1080 && h === 1920) ||
-        (w === 1080 && h === 2340) ||
-        (w === 1080 && h === 2400) ||
-        (w === 1080 && h === 2160) ||
-        (w === 1080 && h === 2280) ||
-        (w === 1440 && h === 2560) ||
-        (w === 1440 && h === 3120) ||
-        (w === 1440 && h === 3200) ||
-        (w === 1440 && h === 2880) ||
-        (w === 1440 && h === 2960) ||
-        (w === 1440 && h === 3088) ||
-        (w === 720 && h === 1280) ||
-        (w === 720 && h === 1560) ||
-        (w === 720 && h === 1600) ||
+        (w === 1080 && h === 1920) || (w === 1080 && h === 2340) || (w === 1080 && h === 2400) ||
+        (w === 1080 && h === 2160) || (w === 1080 && h === 2280) ||
+        (w === 1440 && h === 2560) || (w === 1440 && h === 3120) || (w === 1440 && h === 3200) ||
+        (w === 1440 && h === 2880) || (w === 1440 && h === 2960) || (w === 1440 && h === 3088) ||
+        (w === 720 && h === 1280) || (w === 720 && h === 1560) || (w === 720 && h === 1600) ||
         (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
       );
       dimClass = ((store === 'apple' && isStandardApple) || (store === 'google' && isStandardGoogle)) ? 'ok' : 'warn';
@@ -3981,8 +3973,10 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
   // ratioEl
   let ratioClass = 'ok';
   if (type === 'screenshot') {
-    if (isSq || isLandscape || !isPhonePortrait) {
+    if (isSq || isExtremeRatio || (!isLandscape && !isPhonePortrait)) {
       ratioClass = 'err';
+    } else if (isLandscape) {
+      ratioClass = isStandardLandscape ? 'ok' : 'warn';
     } else {
       ratioClass = 'ok';
     }
@@ -4012,9 +4006,15 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
     } else if (isSq) {
       level = 'err';
       badgeText = store === 'apple' ? `App Store Rejection Risk: 1:1 Square (${w}×${h} px)` : `Aspect Ratio Error: 1:1 Square (${w}×${h} px)`;
-    } else if (isLandscape) {
+    } else if (isExtremeRatio) {
       level = 'err';
-      badgeText = store === 'apple' ? `App Store Rejection Risk: Landscape (${w}×${h} px)` : `Aspect Ratio Error: Landscape (${w}×${h} px)`;
+      badgeText = `Invalid Aspect Ratio: Banner ${w}×${h} px`;
+    } else if (isLandscape && isStandardLandscape) {
+      level = 'ok';
+      badgeText = `${w}×${h} px · Landscape · Store Compliant`;
+    } else if (isLandscape) {
+      level = 'warn';
+      badgeText = `Non-standard Landscape (${w}×${h} px)`;
     } else if (!isPhonePortrait) {
       level = 'err';
       badgeText = `Aspect Ratio Error: Non-portrait (${w}×${h} px)`;
@@ -4026,48 +4026,20 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
       badgeText = `Dimension Warning: Out of range (${w}×${h} px)`;
     } else {
       const isStandardApple = store === 'apple' && (
-        // Dynamic Island (large display)
-        (w === 1320 && h === 2868) || // iPhone 6.9"
-        (w === 1290 && h === 2796) || // iPhone 6.7"
-        (w === 1260 && h === 2736) || // iPhone Air / 6.7"
-        // Dynamic Island (medium display)
-        (w === 1206 && h === 2622) || // iPhone 6.3"
-        (w === 1179 && h === 2556) || // iPhone 6.1"
-        // Face ID (large display)
-        (w === 1284 && h === 2778) || // iPhone 6.5"
-        (w === 1242 && h === 2688) || // iPhone 6.5"
-        // Face ID (medium display)
-        (w === 1170 && h === 2532) || // iPhone 6.1" (notch)
-        (w === 1125 && h === 2436) || // iPhone 5.8" (notch)
-        (w === 1080 && h === 2340) || // iPhone 5.4" (mini)
-        // Home Button (large display)
-        (w === 1242 && h === 2208) || // iPhone 5.5"
-        // Home Button (medium display)
-        (w === 750 && h === 1334) ||  // iPhone 4.7" (SE)
-        // iPhone Duo
-        (w === 1398 && h === 2034) ||
-        (w === 2007 && h === 2853) ||
-        // Legacy 4" / 3.5"
-        (w === 640 && h === 1136) ||
-        (w === 640 && h === 1096) ||
-        (w === 640 && h === 960) ||
-        (w === 640 && h === 920)
+        (w === 1320 && h === 2868) || (w === 1290 && h === 2796) || (w === 1260 && h === 2736) ||
+        (w === 1206 && h === 2622) || (w === 1179 && h === 2556) ||
+        (w === 1284 && h === 2778) || (w === 1242 && h === 2688) ||
+        (w === 1170 && h === 2532) || (w === 1125 && h === 2436) || (w === 1080 && h === 2340) ||
+        (w === 1242 && h === 2208) || (w === 750 && h === 1334) ||
+        (w === 1398 && h === 2034) || (w === 2007 && h === 2853) ||
+        (w === 640 && h === 1136) || (w === 640 && h === 1096) || (w === 640 && h === 960) || (w === 640 && h === 920)
       );
       const isStandardGoogle = store === 'google' && (
-        (w === 1080 && h === 1920) ||
-        (w === 1080 && h === 2340) ||
-        (w === 1080 && h === 2400) ||
-        (w === 1080 && h === 2160) ||
-        (w === 1080 && h === 2280) ||
-        (w === 1440 && h === 2560) ||
-        (w === 1440 && h === 3120) ||
-        (w === 1440 && h === 3200) ||
-        (w === 1440 && h === 2880) ||
-        (w === 1440 && h === 2960) ||
-        (w === 1440 && h === 3088) ||
-        (w === 720 && h === 1280) ||
-        (w === 720 && h === 1560) ||
-        (w === 720 && h === 1600) ||
+        (w === 1080 && h === 1920) || (w === 1080 && h === 2340) || (w === 1080 && h === 2400) ||
+        (w === 1080 && h === 2160) || (w === 1080 && h === 2280) ||
+        (w === 1440 && h === 2560) || (w === 1440 && h === 3120) || (w === 1440 && h === 3200) ||
+        (w === 1440 && h === 2880) || (w === 1440 && h === 2960) || (w === 1440 && h === 3088) ||
+        (w === 720 && h === 1280) || (w === 720 && h === 1560) || (w === 720 && h === 1600) ||
         (isPhonePortrait && w >= 320 && w <= 3840 && h >= 320 && h <= 3840)
       );
       if ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)) {
@@ -4086,7 +4058,7 @@ function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', has
 // ---------------------------------------------------------------------
 // TEST MATRIX: SAI RATIO LÀ ERROR (RED)
 // ---------------------------------------------------------------------
-// Test 1: User's exact case - Square image (2252x2252, 1032 KB, Apple)
+// Test 1: Square image (2252×2252, 1032 KB, Apple)
 const rUserApple = evaluatePhoneShot(2252, 2252, 1032 * 1024, 'apple');
 assert(rUserApple.tagClass === 'err', 'Apple Square Phone: tagClass is err (RED)');
 assert(rUserApple.tagText === '1:1 Square (2252×2252)', 'Apple Square Phone: tagText is 1:1 Square (2252×2252)');
@@ -4099,7 +4071,7 @@ assert(mUserApple.dimClass === 'err', 'Apple Square Modal: dimClass is err (RED)
 assert(mUserApple.level === 'err', 'Apple Square Modal: level is err (RED)');
 assert(mUserApple.badgeText.includes('App Store Rejection Risk: 1:1 Square'), 'Apple Square Modal: badge identifies rejection risk');
 
-// Test 2: Square image on Google Play (2252x2252, 1032 KB, Google)
+// Test 2: Square image on Google Play (2252×2252)
 const rUserGoogle = evaluatePhoneShot(2252, 2252, 1032 * 1024, 'google');
 assert(rUserGoogle.tagClass === 'err', 'Google Square Phone: tagClass is err (RED)');
 assert(rUserGoogle.bannerLevel === 'err', 'Google Square Phone: bannerLevel is err (RED)');
@@ -4108,21 +4080,63 @@ assert(mUserGoogle.ratioClass === 'err', 'Google Square Modal: ratioClass is err
 assert(mUserGoogle.dimClass === 'err', 'Google Square Modal: dimClass is err (RED)');
 assert(mUserGoogle.level === 'err', 'Google Square Modal: level is err (RED)');
 
-// Test 3: Landscape image on iPhone (1920x1080, Apple)
-const rLandApple = evaluatePhoneShot(1920, 1080, 1024 * 1024, 'apple');
-assert(rLandApple.tagClass === 'err', 'Apple Landscape Phone: tagClass is err (RED)');
-assert(rLandApple.bannerLevel === 'err', 'Apple Landscape Phone: bannerLevel is err (RED)');
-const mLandApple = evaluateInspectorModal(1920, 1080, 1024 * 1024, 'apple', 'screenshot', false);
-assert(mLandApple.ratioClass === 'err', 'Apple Landscape Modal: ratioClass is err (RED)');
-assert(mLandApple.level === 'err', 'Apple Landscape Modal: level is err (RED)');
+// Test 3: Extreme ratio banner 730×172 (4.24:1) — err because ASPECT RATIO, not because landscape
+const rBanner = evaluatePhoneShot(730, 172, 50 * 1024, 'apple');
+assert(rBanner.tagClass === 'err', 'Banner 730×172 Apple Phone: tagClass is err (RED)');
+assert(rBanner.tagText === 'Invalid Ratio (730×172)', 'Banner 730×172 Apple Phone: tagText is Invalid Ratio');
+assert(rBanner.bannerLevel === 'err', 'Banner 730×172 Apple Phone: bannerLevel is err');
+assert(rBanner.bannerType === 'Invalid Aspect Ratio', 'Banner 730×172 Apple Phone: bannerType is Invalid Aspect Ratio (NOT landscape restriction)');
+const mBanner = evaluateInspectorModal(730, 172, 50 * 1024, 'apple', 'screenshot', false);
+assert(mBanner.level === 'err', 'Banner 730×172 Apple Modal: level is err (RED)');
+assert(mBanner.badgeText.includes('Invalid Aspect Ratio'), 'Banner 730×172 Apple Modal: badge says Invalid Aspect Ratio, NOT landscape forbidden');
 
-// Test 4: Non-portrait non-phone ratio (800x600, Apple)
+// Test 4: Standard Apple landscape 2556×1179 — MUST be ok (GREEN), NOT err
+const rAppleLandStd = evaluatePhoneShot(2556, 1179, 1024 * 1024, 'apple');
+assert(rAppleLandStd.tagClass === 'ok', 'Apple Standard Landscape 2556×1179 Phone: tagClass is ok (GREEN)');
+assert(rAppleLandStd.tagText === 'Landscape (2556×1179)', 'Apple Standard Landscape 2556×1179 Phone: tagText contains Landscape');
+assert(rAppleLandStd.bannerLevel === 'ok', 'Apple Standard Landscape 2556×1179 Phone: bannerLevel is ok (no banner)');
+const mAppleLandStd = evaluateInspectorModal(2556, 1179, 1024 * 1024, 'apple', 'screenshot', false);
+assert(mAppleLandStd.level === 'ok', 'Apple Standard Landscape 2556×1179 Modal: level is ok (GREEN)');
+assert(mAppleLandStd.badgeText.includes('Landscape · Store Compliant'), 'Apple Standard Landscape 2556×1179 Modal: badge says Store Compliant');
+assert(mAppleLandStd.ratioClass === 'ok', 'Apple Standard Landscape 2556×1179 Modal: ratioClass is ok (GREEN)');
+assert(mAppleLandStd.dimClass === 'ok', 'Apple Standard Landscape 2556×1179 Modal: dimClass is ok (GREEN)');
+
+// Test 5: Standard Apple landscape 2622×1206 — MUST be ok
+const rAppleLandStd2 = evaluatePhoneShot(2622, 1206, 1024 * 1024, 'apple');
+assert(rAppleLandStd2.tagClass === 'ok', 'Apple Standard Landscape 2622×1206 Phone: tagClass is ok (GREEN)');
+assert(rAppleLandStd2.bannerLevel === 'ok', 'Apple Standard Landscape 2622×1206 Phone: bannerLevel is ok');
+
+// Test 6: Standard Apple landscape 2796×1290 — MUST be ok
+const rAppleLandStd3 = evaluatePhoneShot(2796, 1290, 1024 * 1024, 'apple');
+assert(rAppleLandStd3.tagClass === 'ok', 'Apple Standard Landscape 2796×1290 Phone: tagClass is ok (GREEN)');
+assert(rAppleLandStd3.bannerLevel === 'ok', 'Apple Standard Landscape 2796×1290 Phone: bannerLevel is ok');
+
+// Test 7: Standard Google landscape 1920×1080 — MUST be ok
+const rGoogleLandStd = evaluatePhoneShot(1920, 1080, 1024 * 1024, 'google');
+assert(rGoogleLandStd.tagClass === 'ok', 'Google Standard Landscape 1920×1080 Phone: tagClass is ok (GREEN)');
+assert(rGoogleLandStd.bannerLevel === 'ok', 'Google Standard Landscape 1920×1080 Phone: bannerLevel is ok');
+const mGoogleLandStd = evaluateInspectorModal(1920, 1080, 1024 * 1024, 'google', 'screenshot', false);
+assert(mGoogleLandStd.level === 'ok', 'Google Standard Landscape 1920×1080 Modal: level is ok (GREEN)');
+assert(mGoogleLandStd.badgeText.includes('Landscape · Store Compliant'), 'Google Standard Landscape 1920×1080 Modal: badge says Store Compliant');
+
+// Test 8: Mixed orientation warn — portrait + standard landscape in same set
+// (banner-level test only since evaluatePhoneShot is per-shot; mixed is finalizeBadge logic)
+// We verify the individual classifications are correct so finalizeBadge can detect mixing
+const rPortrait = evaluatePhoneShot(1179, 2556, 1024 * 1024, 'apple');
+assert(rPortrait.tagClass === 'ok', 'Apple Portrait 1179×2556 Phone: tagClass is ok (GREEN)');
+// When portrait and landscape both present, finalizeBadge emits warn for mixed orientation
+
+// Test 9: Non-portrait non-landscape ratio (800×600, Apple) — err
 const rNonPhone = evaluatePhoneShot(800, 600, 500 * 1024, 'apple');
 assert(rNonPhone.tagClass === 'err', 'Apple Non-portrait Phone: tagClass is err (RED)');
 assert(rNonPhone.bannerLevel === 'err', 'Apple Non-portrait Phone: bannerLevel is err (RED)');
 const mNonPhone = evaluateInspectorModal(800, 600, 500 * 1024, 'apple', 'screenshot', false);
 assert(mNonPhone.ratioClass === 'err', 'Apple Non-portrait Modal: ratioClass is err (RED)');
 assert(mNonPhone.level === 'err', 'Apple Non-portrait Modal: level is err (RED)');
+
+
+
+// Test 4: Non-portrait non-phone ratio (800x600, Apple)
 
 // ---------------------------------------------------------------------
 // TEST MATRIX: ĐÚNG RATIO MÀ SAI FILESIZE HOẶC KÍCH THƯỚC LÀ WARNING (AMBER)
