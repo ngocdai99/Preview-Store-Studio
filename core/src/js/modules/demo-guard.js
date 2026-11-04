@@ -36,8 +36,8 @@ const DEMO_PAYWALL_CONFIGS = {
     mainFeature: 'Instant App Store cloning from any public URL or ID'
   },
   'upload-shots': {
-    title: 'Upload Unlimited Screenshots',
-    desc: 'Demo mode allows testing up to 2 screenshots in RAM. Upgrade to Full Studio for up to 10 screenshots per device, iPad layouts, and persistent local storage.',
+    title: 'Custom Screenshot Upload Limit',
+    desc: 'Demo mode allows uploading up to 2 custom screenshots for testing. Upgrade to Full Studio to upload up to 10 screenshots per device, iPad layouts, and persistent local storage.',
     mainFeature: 'Full 10-screenshot gallery per device with offline persistence'
   },
   'phone-screenshots': {
@@ -103,8 +103,8 @@ const MINI_STUDIO_TOAST_MAP = {
     desc: 'Clone live Apple App Store listings by URL or ID in seconds.'
   },
   'upload-shots': {
-    title: 'Screenshot Upload Limit',
-    desc: 'Demo mode is limited to 2 screenshots. Full Version supports up to 10 screenshots.'
+    title: 'Custom Upload Limit',
+    desc: 'Demo mode allows up to 2 custom screenshot uploads. Full Version supports up to 10 screenshots per device.'
   },
   'phone-screenshots': {
     title: 'Phone Screenshots Gallery',
@@ -235,8 +235,8 @@ function requireFullVersion(featureKey, context = {}) {
       const descEl = $('demoUpgradeDesc');
       const mainFeatEl = $('demoUpgradeFeatureMain');
 
-      if (titleEl) titleEl.textContent = conf.title;
-      if (descEl) descEl.textContent = conf.desc;
+      if (titleEl) titleEl.textContent = (context.title || conf.title);
+      if (descEl) descEl.textContent = (context.desc || conf.desc);
       if (mainFeatEl) mainFeatEl.textContent = conf.mainFeature;
 
       modal.classList.add('open');
@@ -250,7 +250,8 @@ function requireFullVersion(featureKey, context = {}) {
   }
 
   // Use Mini Studio Toast system (context is parent page when embedded in iframe)
-  const item = MINI_STUDIO_TOAST_MAP[featureKey] || MINI_STUDIO_TOAST_MAP['default'];
+  const defaultItem = MINI_STUDIO_TOAST_MAP[featureKey] || MINI_STUDIO_TOAST_MAP['default'];
+  const item = Object.assign({}, defaultItem, context && context.toast ? context.toast : {});
   showMiniStudioToast(item);
   return false;
 }
@@ -585,7 +586,13 @@ function initDemoGuard() {
           if (currentCount >= 2 || currentValid >= 2 || currentUploaded >= 2) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            requireFullVersion('upload-shots');
+            const isImportedLargeGallery = currentCount > 2 || currentValid > 2;
+            requireFullVersion('upload-shots', {
+              toast: isImportedLargeGallery ? {
+                title: 'Screenshot Limit Reached',
+                desc: 'Demo mode previews imported apps. Upgrade to Full Studio to add or upload up to 10 screenshots.'
+              } : undefined
+            });
             return;
           }
         }

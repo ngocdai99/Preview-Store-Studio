@@ -384,7 +384,15 @@ if($('addShot')){
       const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
       const currentUploaded = (window._demoScreenshotUploadCount || 0);
       if(SHOTS.length >= 2 || currentValid >= 2 || currentUploaded >= 2){
-        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+        if(typeof requireFullVersion === 'function') {
+          const isImportedLargeGallery = SHOTS.length > 2 || currentValid > 2;
+          requireFullVersion('upload-shots', {
+            toast: isImportedLargeGallery ? {
+              title: 'Screenshot Limit Reached',
+              desc: 'Demo mode previews imported apps. Upgrade to Full Studio to add or upload up to 10 screenshots.'
+            } : undefined
+          });
+        }
         return;
       }
     }
