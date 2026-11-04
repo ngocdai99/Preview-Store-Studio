@@ -10693,6 +10693,7 @@ function updateDraftPill(){
           if(typeof closePresetPill === 'function') closePresetPill();
         });
       }
+
     }
   }
 

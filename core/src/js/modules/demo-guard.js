@@ -285,6 +285,8 @@ function initDemoGuard() {
 
   if (isDemoMode()) {
     document.body.classList.add('sps-demo-mode');
+    const closeBtn = document.getElementById('presetPillCloseBtn');
+    if (closeBtn) closeBtn.remove();
     
     // Setup Mini Studio Supabase Menu in Demo Mode
     const menuExport = $('menuExport');

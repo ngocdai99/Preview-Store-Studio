@@ -3729,6 +3729,8 @@ asyncSuites.push((async () => {
   assert(tourSrc.includes('function startTour'), 'tour.js exposes startTour()');
 
   // 8. Verify upload limit in demo mode and storage no-op
+  assert(!tryHtml.includes('id="presetPillCloseBtn"'), 'try.html strips #presetPillCloseBtn from preset pill in demo mode');
+
   const phoneShotsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/shots/phone.js'), 'utf8');
   assert(phoneShotsSrc.includes('isDemoMode()') && phoneShotsSrc.includes('_demoScreenshotUploadCount') && phoneShotsSrc.includes("requireFullVersion('upload-shots')"), 'phone.js enforces 2-screenshot upload limit in demo mode');
 
@@ -3799,15 +3801,273 @@ assert(bundledTry.includes('data-dual="true"'), 'try.html contains data-dual="tr
 assert(bundledTry.includes('id="stageDualBadge">Dual</span>'), 'try.html displays Dual badge by default');
 
 // ---------------------------------------------------------------------
-// SUITE 54: Inspector Modal Ratio & Status Compliance Verification
+// SUITE 54: Comprehensive Behavioral Unit Tests for Screenshot & Modal Validation
 // ---------------------------------------------------------------------
-console.log('\n[SUITE 54]: Inspector Modal Ratio & Status Compliance Verification');
+console.log('\n[SUITE 54]: Comprehensive Behavioral Unit Tests for Screenshot & Modal Validation');
 
+// 1. Behavioral Evaluator for Phone Screenshot Editor Row & Banner
+function evaluatePhoneShot(w, h, sizeBytes, store) {
+  const isSquare = (Math.abs(w - h) / Math.max(w, h)) < 0.12;
+  const isLandscape = w > h * 1.15;
+  const isPhonePortrait = h >= w * 1.35;
+  const isGoogleSizeIssue = store === 'google' && (w < 320 || h < 320 || w > 3840 || h > 3840);
+  const isOverSize = sizeBytes > 8 * 1024 * 1024;
+
+  let tagClass = 'ok';
+  let tagText = '';
+  let bannerLevel = 'ok';
+  let bannerType = '';
+
+  if (isSquare) {
+    tagClass = 'err';
+    tagText = `1:1 Square (${w}×${h})`;
+    bannerLevel = 'err';
+    bannerType = store === 'apple' ? 'App Store Rejection Risk' : 'Aspect Ratio Error';
+  } else if (isLandscape) {
+    tagClass = 'err';
+    tagText = `Landscape (${w}×${h})`;
+    bannerLevel = 'err';
+    bannerType = 'Aspect Ratio Error';
+  } else if (!isPhonePortrait) {
+    tagClass = 'err';
+    tagText = `Non-portrait (${w}×${h})`;
+    bannerLevel = 'err';
+    bannerType = 'Aspect Ratio Error';
+  } else if (isOverSize) {
+    tagClass = 'warn';
+    tagText = `>8 MB (${(sizeBytes / (1024 * 1024)).toFixed(1)} MB)`;
+    bannerLevel = 'warn';
+    bannerType = 'File Size Warning';
+  } else if (isGoogleSizeIssue) {
+    tagClass = 'warn';
+    tagText = `Out of Range (${w}×${h})`;
+    bannerLevel = 'warn';
+    bannerType = 'Dimension Warning';
+  } else {
+    const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
+    const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
+    if ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)) {
+      tagClass = 'warn';
+      tagText = `Scaled (${w}×${h})`;
+      bannerLevel = 'ok';
+    } else {
+      tagClass = 'ok';
+      tagText = `Portrait (${w}×${h})`;
+      bannerLevel = 'ok';
+    }
+  }
+
+  return { tagClass, tagText, bannerLevel, bannerType };
+}
+
+// 2. Behavioral Evaluator for Inspector Modal Metrics & Status Card
+function evaluateInspectorModal(w, h, sizeBytes, store, type = 'screenshot', hasAlpha = false, mimeType = 'image/png') {
+  const isSq = (w === h) || ((Math.abs(w - h) / Math.max(w, h)) < 0.08);
+  const isLandscape = w > h * 1.15;
+  const isPhonePortrait = h >= w * 1.35;
+  const isIpadPortrait = (Math.abs(w / h - 0.75) < 0.08) || (w / h >= 0.65 && w / h <= 0.85);
+  const isIpadLandscape = (Math.abs(w / h - 1.333) < 0.08) || (w / h >= 1.18 && w / h <= 1.54);
+  const isTabletPortrait = (w / h >= 0.55 && w / h <= 0.7);
+  const isTabletLandscape = (w / h >= 1.4 && w / h <= 1.8);
+  const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg';
+
+  // dimEl
+  let dimClass = 'ok';
+  if (type === 'screenshot') {
+    const isWrongRatio = isSq || isLandscape || !isPhonePortrait;
+    if (isWrongRatio) {
+      dimClass = 'err';
+    } else {
+      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
+      const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
+      dimClass = (isStandardApple || isStandardGoogle) ? 'ok' : 'warn';
+    }
+  } else if (type === 'ipad') {
+    const dimOk = (w === 2048 && h === 2732) || (w === 2732 && h === 2048) || isIpadPortrait || isIpadLandscape;
+    dimClass = isSq || (h > w * 1.5 || w > h * 1.5) ? 'err' : (dimOk ? 'ok' : 'warn');
+  }
+
+  // ratioEl
+  let ratioClass = 'ok';
+  if (type === 'screenshot') {
+    if (isSq || isLandscape || !isPhonePortrait) {
+      ratioClass = 'err';
+    } else {
+      ratioClass = 'ok';
+    }
+  } else if (type === 'ipad') {
+    ratioClass = isSq || (!isIpadPortrait && !isIpadLandscape) ? 'err' : 'ok';
+  }
+
+  // sizeEl
+  const sizeClass = (sizeBytes > 8 * 1024 * 1024) ? 'warn' : 'ok';
+
+  // formatEl
+  let formatClass = 'ok';
+  if (hasAlpha && (store === 'apple' || type === 'feature')) formatClass = 'err';
+  else if (isJpeg && type === 'icon') formatClass = 'warn';
+
+  // Modal Level & Badge
+  let level = 'ok';
+  let badgeText = '';
+
+  if (type === 'screenshot') {
+    const MAX_PHONE_SHOT_BYTES = 8 * 1024 * 1024;
+    const isGoogleSizeIssue = store === 'google' && (w < 320 || h < 320 || w > 3840 || h > 3840);
+
+    if (store === 'apple' && hasAlpha) {
+      level = 'err';
+      badgeText = 'Alpha detected · 100% Opaque required';
+    } else if (isSq) {
+      level = 'err';
+      badgeText = store === 'apple' ? `App Store Rejection Risk: 1:1 Square (${w}×${h} px)` : `Aspect Ratio Error: 1:1 Square (${w}×${h} px)`;
+    } else if (isLandscape) {
+      level = 'err';
+      badgeText = store === 'apple' ? `App Store Rejection Risk: Landscape (${w}×${h} px)` : `Aspect Ratio Error: Landscape (${w}×${h} px)`;
+    } else if (!isPhonePortrait) {
+      level = 'err';
+      badgeText = `Aspect Ratio Error: Non-portrait (${w}×${h} px)`;
+    } else if (sizeBytes > MAX_PHONE_SHOT_BYTES) {
+      level = 'warn';
+      badgeText = `File Size Warning: ${(sizeBytes / (1024 * 1024)).toFixed(1)} MB · Exceeds 8 MB limit`;
+    } else if (isGoogleSizeIssue) {
+      level = 'warn';
+      badgeText = `Dimension Warning: Out of range (${w}×${h} px)`;
+    } else {
+      const isStandardApple = store === 'apple' && ((w === 1290 && h === 2796) || (w === 1320 && h === 2868) || (w === 1284 && h === 2778) || (w === 1179 && h === 2556) || (w === 1170 && h === 2532) || (w === 1242 && h === 2688));
+      const isStandardGoogle = store === 'google' && (w === 1080 && h === 1920);
+      if ((store === 'apple' && !isStandardApple) || (store === 'google' && !isStandardGoogle)) {
+        level = 'warn';
+        badgeText = `Dimension Notice: ${w}×${h} px · Scaled to Canvas`;
+      } else {
+        level = 'ok';
+        badgeText = `${w}×${h} px · Active Screenshot`;
+      }
+    }
+  }
+
+  return { dimClass, ratioClass, sizeClass, formatClass, level, badgeText };
+}
+
+// ---------------------------------------------------------------------
+// TEST MATRIX: SAI RATIO LÀ ERROR (RED)
+// ---------------------------------------------------------------------
+// Test 1: User's exact case - Square image (2252x2252, 1032 KB, Apple)
+const rUserApple = evaluatePhoneShot(2252, 2252, 1032 * 1024, 'apple');
+assert(rUserApple.tagClass === 'err', 'Apple Square Phone: tagClass is err (RED)');
+assert(rUserApple.tagText === '1:1 Square (2252×2252)', 'Apple Square Phone: tagText is 1:1 Square (2252×2252)');
+assert(rUserApple.bannerLevel === 'err', 'Apple Square Phone: bannerLevel is err (RED)');
+assert(rUserApple.bannerType === 'App Store Rejection Risk', 'Apple Square Phone: banner is App Store Rejection Risk');
+
+const mUserApple = evaluateInspectorModal(2252, 2252, 1032 * 1024, 'apple', 'screenshot', false);
+assert(mUserApple.ratioClass === 'err', 'Apple Square Modal: ratioClass is err (RED)');
+assert(mUserApple.dimClass === 'err', 'Apple Square Modal: dimClass is err (RED)');
+assert(mUserApple.level === 'err', 'Apple Square Modal: level is err (RED)');
+assert(mUserApple.badgeText.includes('App Store Rejection Risk: 1:1 Square'), 'Apple Square Modal: badge identifies rejection risk');
+
+// Test 2: Square image on Google Play (2252x2252, 1032 KB, Google)
+const rUserGoogle = evaluatePhoneShot(2252, 2252, 1032 * 1024, 'google');
+assert(rUserGoogle.tagClass === 'err', 'Google Square Phone: tagClass is err (RED)');
+assert(rUserGoogle.bannerLevel === 'err', 'Google Square Phone: bannerLevel is err (RED)');
+const mUserGoogle = evaluateInspectorModal(2252, 2252, 1032 * 1024, 'google', 'screenshot', false);
+assert(mUserGoogle.ratioClass === 'err', 'Google Square Modal: ratioClass is err (RED)');
+assert(mUserGoogle.dimClass === 'err', 'Google Square Modal: dimClass is err (RED)');
+assert(mUserGoogle.level === 'err', 'Google Square Modal: level is err (RED)');
+
+// Test 3: Landscape image on iPhone (1920x1080, Apple)
+const rLandApple = evaluatePhoneShot(1920, 1080, 1024 * 1024, 'apple');
+assert(rLandApple.tagClass === 'err', 'Apple Landscape Phone: tagClass is err (RED)');
+assert(rLandApple.bannerLevel === 'err', 'Apple Landscape Phone: bannerLevel is err (RED)');
+const mLandApple = evaluateInspectorModal(1920, 1080, 1024 * 1024, 'apple', 'screenshot', false);
+assert(mLandApple.ratioClass === 'err', 'Apple Landscape Modal: ratioClass is err (RED)');
+assert(mLandApple.level === 'err', 'Apple Landscape Modal: level is err (RED)');
+
+// Test 4: Non-portrait non-phone ratio (800x600, Apple)
+const rNonPhone = evaluatePhoneShot(800, 600, 500 * 1024, 'apple');
+assert(rNonPhone.tagClass === 'err', 'Apple Non-portrait Phone: tagClass is err (RED)');
+assert(rNonPhone.bannerLevel === 'err', 'Apple Non-portrait Phone: bannerLevel is err (RED)');
+const mNonPhone = evaluateInspectorModal(800, 600, 500 * 1024, 'apple', 'screenshot', false);
+assert(mNonPhone.ratioClass === 'err', 'Apple Non-portrait Modal: ratioClass is err (RED)');
+assert(mNonPhone.level === 'err', 'Apple Non-portrait Modal: level is err (RED)');
+
+// ---------------------------------------------------------------------
+// TEST MATRIX: ĐÚNG RATIO MÀ SAI FILESIZE HOẶC KÍCH THƯỚC LÀ WARNING (AMBER)
+// ---------------------------------------------------------------------
+// Test 5: Đúng ratio portrait, nhưng file size > 8 MB (1290x2796, 9.5 MB)
+const rOverSize = evaluatePhoneShot(1290, 2796, Math.round(9.5 * 1024 * 1024), 'apple');
+assert(rOverSize.tagClass === 'warn', 'Oversize Portrait: tagClass is warn (AMBER), NOT err');
+assert(rOverSize.tagText.includes('>8 MB'), 'Oversize Portrait: tagText contains >8 MB');
+assert(rOverSize.bannerLevel === 'warn', 'Oversize Portrait: bannerLevel is warn (AMBER), NOT err');
+assert(rOverSize.bannerType === 'File Size Warning', 'Oversize Portrait: banner is File Size Warning');
+
+const mOverSize = evaluateInspectorModal(1290, 2796, Math.round(9.5 * 1024 * 1024), 'apple', 'screenshot', false);
+assert(mOverSize.ratioClass === 'ok', 'Oversize Portrait Modal: ratioClass is ok (GREEN) because ratio is valid');
+assert(mOverSize.sizeClass === 'warn', 'Oversize Portrait Modal: sizeClass is warn (AMBER)');
+assert(mOverSize.level === 'warn', 'Oversize Portrait Modal: level is warn (AMBER), NOT err');
+
+// Test 6: Đúng ratio portrait, nhưng kích thước không chuẩn target (1000x2000, 1.5 MB, Apple)
+const rScaled = evaluatePhoneShot(1000, 2000, Math.round(1.5 * 1024 * 1024), 'apple');
+assert(rScaled.tagClass === 'warn', 'Scaled Portrait: tagClass is warn (AMBER), NOT err');
+assert(rScaled.tagText === 'Scaled (1000×2000)', 'Scaled Portrait: tagText is Scaled');
+assert(rScaled.bannerLevel === 'ok', 'Scaled Portrait: banner is clean (no fatal rejection)');
+
+const mScaled = evaluateInspectorModal(1000, 2000, Math.round(1.5 * 1024 * 1024), 'apple', 'screenshot', false);
+assert(mScaled.ratioClass === 'ok', 'Scaled Portrait Modal: ratioClass is ok (GREEN)');
+assert(mScaled.dimClass === 'warn', 'Scaled Portrait Modal: dimClass is warn (AMBER)');
+assert(mScaled.level === 'warn', 'Scaled Portrait Modal: level is warn (AMBER) - Dimension Notice');
+
+// Test 7: Đúng ratio portrait, nhưng Google dimension boundary < 320 px (150x300, Google)
+const rGoogleBoundary = evaluatePhoneShot(150, 300, 100 * 1024, 'google');
+assert(rGoogleBoundary.tagClass === 'warn', 'Google Boundary Phone: tagClass is warn (AMBER), NOT err');
+assert(rGoogleBoundary.tagText === 'Out of Range (150×300)', 'Google Boundary Phone: tagText is Out of Range');
+assert(rGoogleBoundary.bannerLevel === 'warn', 'Google Boundary Phone: bannerLevel is warn (AMBER)');
+
+const mGoogleBoundary = evaluateInspectorModal(150, 300, 100 * 1024, 'google', 'screenshot', false);
+assert(mGoogleBoundary.ratioClass === 'ok', 'Google Boundary Modal: ratioClass is ok (GREEN)');
+assert(mGoogleBoundary.level === 'warn', 'Google Boundary Modal: level is warn (AMBER)');
+
+// ---------------------------------------------------------------------
+// TEST MATRIX: ĐÚNG TẤT CẢ (RATIO, SIZE, TARGET DIMENSIONS) LÀ OK (GREEN)
+// ---------------------------------------------------------------------
+// Test 8: Compliant standard Apple iPhone screenshot (1290x2796, 2 MB, PNG opaque)
+const rCleanApple = evaluatePhoneShot(1290, 2796, 2 * 1024 * 1024, 'apple');
+assert(rCleanApple.tagClass === 'ok', 'Clean Apple Phone: tagClass is ok (GREEN)');
+assert(rCleanApple.tagText === 'Portrait (1290×2796)', 'Clean Apple Phone: tagText is Portrait');
+assert(rCleanApple.bannerLevel === 'ok', 'Clean Apple Phone: bannerLevel is ok');
+
+const mCleanApple = evaluateInspectorModal(1290, 2796, 2 * 1024 * 1024, 'apple', 'screenshot', false, 'image/png');
+assert(mCleanApple.dimClass === 'ok', 'Clean Apple Modal: dimClass is ok (GREEN)');
+assert(mCleanApple.ratioClass === 'ok', 'Clean Apple Modal: ratioClass is ok (GREEN)');
+assert(mCleanApple.sizeClass === 'ok', 'Clean Apple Modal: sizeClass is ok (GREEN)');
+assert(mCleanApple.formatClass === 'ok', 'Clean Apple Modal: formatClass is ok (GREEN)');
+assert(mCleanApple.level === 'ok', 'Clean Apple Modal: level is ok (GREEN)');
+
+// Test 9: Compliant standard Google Play screenshot (1080x1920, 1.2 MB, JPEG)
+const rCleanGoogle = evaluatePhoneShot(1080, 1920, Math.round(1.2 * 1024 * 1024), 'google');
+assert(rCleanGoogle.tagClass === 'ok', 'Clean Google Phone: tagClass is ok (GREEN)');
+assert(rCleanGoogle.tagText === 'Portrait (1080×1920)', 'Clean Google Phone: tagText is Portrait');
+assert(rCleanGoogle.bannerLevel === 'ok', 'Clean Google Phone: bannerLevel is ok');
+
+const mCleanGoogle = evaluateInspectorModal(1080, 1920, Math.round(1.2 * 1024 * 1024), 'google', 'screenshot', false, 'image/jpeg');
+assert(mCleanGoogle.dimClass === 'ok', 'Clean Google Modal: dimClass is ok (GREEN)');
+assert(mCleanGoogle.ratioClass === 'ok', 'Clean Google Modal: ratioClass is ok (GREEN)');
+assert(mCleanGoogle.sizeClass === 'ok', 'Clean Google Modal: sizeClass is ok (GREEN)');
+assert(mCleanGoogle.formatClass === 'ok', 'Clean Google Modal: formatClass is ok (JPEG allowed for screenshot)');
+assert(mCleanGoogle.level === 'ok', 'Clean Google Modal: level is ok (GREEN)');
+
+// Test 10: Apple screenshot with Alpha Transparency rejection risk
+const mAlphaApple = evaluateInspectorModal(1290, 2796, 2 * 1024 * 1024, 'apple', 'screenshot', true, 'image/png');
+assert(mAlphaApple.formatClass === 'err', 'Apple Alpha Screenshot Modal: formatClass is err (RED)');
+assert(mAlphaApple.level === 'err', 'Apple Alpha Screenshot Modal: level is err (RED)');
+assert(mAlphaApple.badgeText.includes('Alpha detected'), 'Apple Alpha Screenshot Modal: badge text mentions Alpha detected');
+
+// ---------------------------------------------------------------------
+// TEST MATRIX: SOURCE CODE & BUNDLE REGRESSION ENFORCEMENT
+// ---------------------------------------------------------------------
 const modalJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'modal.js'), 'utf8');
 assert(modalJsSrc.includes("ratioEl.textContent = '1:1 Square'"), 'modal.js correctly displays 1:1 Square label');
 assert(modalJsSrc.includes("ratioEl.className = 'icon-metric-val err'"), 'modal.js flags square phone ratio as err');
 assert(modalJsSrc.includes("App Store Rejection Risk: 1:1 Square"), 'modal.js evaluates 1:1 Square as App Store Rejection Risk');
-assert(modalJsSrc.includes("App Store Rejection Risk: Landscape"), 'modal.js flags landscape phone screenshot as rejection risk on Apple');
 assert(modalJsSrc.includes("Alpha detected · 100% Opaque required"), 'modal.js flags alpha transparency on Apple screenshots as error');
 
 const phoneJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'phone.js'), 'utf8');

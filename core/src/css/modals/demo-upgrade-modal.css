@@ -1,5 +1,13 @@
 /* Store Preview Studio · Demo Upgrade Paywall Modal & Feature Gating Styles */
 
+/* Demo Mode: Remove close button on preset pill */
+body.sps-demo-mode #presetPillCloseBtn,
+body.sps-demo-mode #btnPresetPill .ms-pill-reset-btn,
+.sps-demo-mode #presetPillCloseBtn,
+.sps-demo-mode #btnPresetPill .ms-pill-reset-btn {
+  display: none !important;
+}
+
 .demo-upgrade-card {
   max-width: 520px;
   width: 92vw;

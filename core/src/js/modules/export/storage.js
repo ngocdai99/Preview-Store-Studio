@@ -501,6 +501,10 @@ function updateDraftPill(){
           if(typeof closePresetPill === 'function') closePresetPill();
         });
       }
+
+      if(typeof isDemoMode === 'function' && isDemoMode()){
+        if(closeBtn) closeBtn.remove();
+      }
     }
   }
 
