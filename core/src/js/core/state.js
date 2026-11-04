@@ -1897,405 +1897,112 @@ const STUDIO_FEATURE = makeSvgDataUri(`
 </svg>
 `);
 
-const STUDIO_SHOT_1 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
-  <defs>
-    <linearGradient id="ss1-bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#080C14"/>
-      <stop offset="50%" stop-color="#0E1424"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="ss1-acc" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="100%" stop-color="#34D399"/>
-    </linearGradient>
-    <linearGradient id="ss1-sq" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E293B"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-  </defs>
+// Store Preview Studio :: default preset screenshots (redesigned)
+// 4 inline SVGs, viewBox 0 0 460 996, rendered at 1080 x 2340. Self-contained, no external assets.
 
-  <rect width="460" height="996" fill="url(#ss1-bg)"/>
-  <circle cx="230" cy="400" r="280" fill="#38BDF8" opacity="0.08"/>
-  <circle cx="100" cy="800" r="200" fill="#818CF8" opacity="0.06"/>
+const STUDIO_SHOT_1 = makeSvgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 460 996" width="1080" height="2340" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif">
+<defs>
+<linearGradient id="s1bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#080C14"/><stop offset="1" stop-color="#0F172A"/></linearGradient>
+<radialGradient id="s1gc" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.3"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0"/></radialGradient>
+<radialGradient id="s1gi" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#6366F1" stop-opacity="0.34"/><stop offset="1" stop-color="#6366F1" stop-opacity="0"/></radialGradient>
+<radialGradient id="s1ge" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#10B981" stop-opacity="0.28"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<radialGradient id="s1ga" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#F59E0B" stop-opacity="0.2"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
+<linearGradient id="s1tg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38BDF8"/><stop offset="0.55" stop-color="#818CF8"/><stop offset="1" stop-color="#34D399"/></linearGradient>
+<linearGradient id="s1sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.06"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+<linearGradient id="s1scr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C1528"/><stop offset="1" stop-color="#05080F"/></linearGradient>
+<linearGradient id="s1okg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="s1btn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
+<linearGradient id="s1t1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.55"/><stop offset="1" stop-color="#6366F1" stop-opacity="0.25"/></linearGradient>
+<linearGradient id="s1t2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10B981" stop-opacity="0.5"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.2"/></linearGradient>
+<linearGradient id="s1t3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A78BFA" stop-opacity="0.55"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0.22"/></linearGradient>
+<radialGradient id="s1ig" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<pattern id="s1dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#FFFFFF" fill-opacity="0.05"/></pattern>
+<g id="s1K">
+<polygon points="-6,-6 22,-6 62,60 32,60" fill="#006636" stroke="#006636" stroke-width="4" stroke-linejoin="round"/>
+<rect x="-42" y="-60" width="28" height="120" rx="7" fill="#00D085"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#0F172A" stroke-width="3" stroke-linejoin="round"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#00D085" stroke-width="1" stroke-linejoin="round"/>
+</g>
+</defs><rect width="460" height="996" fill="url(#s1bg)"/><circle cx="60" cy="120" r="270" fill="url(#s1gc)"/><circle cx="440" cy="330" r="250" fill="url(#s1gi)"/><circle cx="90" cy="930" r="300" fill="url(#s1ge)"/><circle cx="450" cy="880" r="190" fill="url(#s1ga)"/><rect width="460" height="996" fill="url(#s1dots)"/><rect x="124" y="50" width="211" height="28" rx="14" fill="rgba(56,189,248,0.10)" stroke="rgba(56,189,248,0.35)"/><circle cx="140" cy="64" r="3" fill="#38BDF8"/><text x="236" y="68" font-size="11" font-weight="600" fill="#7DD3FC" text-anchor="middle" letter-spacing="2.5">DUAL-STORE VIEWPORT</text><text x="230" y="128" font-size="28" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="-0.5">Live Side-by-Side</text><text x="230" y="160" font-size="19" font-weight="700" fill="url(#s1tg)" text-anchor="middle">App Store &amp; Google Play</text><text x="230" y="188" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">Preview both store listings in real time</text><clipPath id="s1ci"><rect x="41" y="237" width="174" height="460" rx="29"/></clipPath><clipPath id="s1ca"><rect x="245" y="267" width="174" height="460" rx="24"/></clipPath><rect x="36" y="232" width="184" height="470" rx="34" fill="#0B1220" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/><rect x="39" y="235" width="178" height="464" rx="31" fill="none" stroke="rgba(255,255,255,0.06)"/><rect x="41" y="237" width="174" height="460" rx="29" fill="url(#s1scr)"/><g clip-path="url(#s1ci)"><text x="60" y="258" font-size="9.5" font-weight="700" fill="#fff" text-anchor="start">9:41</text><rect x="98" y="245" width="60" height="17" rx="8.5" fill="#000"/><rect x="164" y="255" width="2.5" height="3" rx="1" fill="#fff"/><rect x="168" y="253" width="2.5" height="5" rx="1" fill="#fff"/><rect x="172" y="251" width="2.5" height="7" rx="1" fill="#fff"/><rect x="176" y="249" width="2.5" height="9" rx="1" fill="#fff"/><rect x="187" y="250" width="17" height="8" rx="2.5" fill="none" stroke="#fff" stroke-opacity="0.6"/><rect x="188.7" y="251.7" width="12" height="4.6" rx="1.2" fill="#fff"/><path d="M57 297 l-4 4 l4 4" fill="none" stroke="#0A84FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><text x="62" y="304" font-size="9.5" font-weight="500" fill="#0A84FF" text-anchor="start">Search</text><rect x="55" y="316" width="50" height="50" rx="12.5" fill="#0F172A" stroke="rgba(0,208,133,0.45)"/><use xlink:href="#s1K" transform="translate(80.0 341.0) scale(0.250)"/><text x="113" y="332" font-size="9.5" font-weight="700" fill="#fff" text-anchor="start">Store Preview Studio</text><text x="113" y="344" font-size="8" font-weight="400" fill="#94A3B8" text-anchor="start">Listing designer</text><rect x="113" y="351" width="46" height="19" rx="9.5" fill="#0A84FF"/><text x="136" y="364" font-size="9.5" font-weight="800" fill="#fff" text-anchor="middle">GET</text><text x="79.3" y="399" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4.9</text><text x="79.3" y="410" font-size="6.5" font-weight="600" fill="#64748B" text-anchor="middle" letter-spacing="0.6">2.1K RATINGS</text><text x="128.0" y="399" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4+</text><text x="128.0" y="410" font-size="6.5" font-weight="600" fill="#64748B" text-anchor="middle" letter-spacing="0.6">AGE</text><text x="176.7" y="399" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">#1</text><text x="176.7" y="410" font-size="6.5" font-weight="600" fill="#64748B" text-anchor="middle" letter-spacing="0.6">IN TOOLS</text><line x1="103.7" y1="387" x2="103.7" y2="413" stroke="rgba(255,255,255,0.1)"/><line x1="152.3" y1="387" x2="152.3" y2="413" stroke="rgba(255,255,255,0.1)"/><line x1="55" y1="426" x2="201" y2="426" stroke="rgba(255,255,255,0.08)"/><text x="55" y="446" font-size="11" font-weight="700" fill="#fff" text-anchor="start">Preview</text><rect x="55" y="456" width="56" height="112" rx="9" fill="url(#s1t1)" stroke="rgba(255,255,255,0.12)"/><rect x="63" y="466" width="30" height="5" rx="2.5" fill="#fff" fill-opacity="0.75"/><rect x="63" y="476" width="22" height="3.5" rx="1.8" fill="#fff" fill-opacity="0.35"/><rect x="63" y="500" width="40" height="52" rx="6" fill="#0F172A" fill-opacity="0.65"/><rect x="117" y="456" width="56" height="112" rx="9" fill="url(#s1t2)" stroke="rgba(255,255,255,0.12)"/><rect x="125" y="466" width="30" height="5" rx="2.5" fill="#fff" fill-opacity="0.75"/><rect x="125" y="476" width="22" height="3.5" rx="1.8" fill="#fff" fill-opacity="0.35"/><rect x="125" y="500" width="40" height="52" rx="6" fill="#0F172A" fill-opacity="0.65"/><rect x="179" y="456" width="56" height="112" rx="9" fill="url(#s1t3)" stroke="rgba(255,255,255,0.12)"/><rect x="187" y="466" width="30" height="5" rx="2.5" fill="#fff" fill-opacity="0.75"/><rect x="187" y="476" width="22" height="3.5" rx="1.8" fill="#fff" fill-opacity="0.35"/><rect x="187" y="500" width="40" height="52" rx="6" fill="#0F172A" fill-opacity="0.65"/><rect x="55" y="588" width="146" height="4" rx="2" fill="#fff" fill-opacity="0.12"/><rect x="55" y="598" width="120" height="4" rx="2" fill="#fff" fill-opacity="0.12"/><rect x="55" y="608" width="134" height="4" rx="2" fill="#fff" fill-opacity="0.12"/><rect x="55" y="618" width="90" height="4" rx="2" fill="#fff" fill-opacity="0.12"/><rect x="41" y="646" width="174" height="51" fill="#0B1220"/><line x1="41" y1="646" x2="215" y2="646" stroke="rgba(255,255,255,0.08)"/><rect x="52.4" y="655" width="12" height="12" rx="3.5" fill="#64748B" fill-opacity="0.6"/><text x="58.4" y="679" font-size="5.8" font-weight="600" fill="#64748B" text-anchor="middle">Today</text><rect x="87.2" y="655" width="12" height="12" rx="3.5" fill="#64748B" fill-opacity="0.6"/><text x="93.2" y="679" font-size="5.8" font-weight="600" fill="#64748B" text-anchor="middle">Games</text><rect x="122.0" y="655" width="12" height="12" rx="3.5" fill="#64748B" fill-opacity="0.6"/><text x="128.0" y="679" font-size="5.8" font-weight="600" fill="#64748B" text-anchor="middle">Apps</text><rect x="156.8" y="655" width="12" height="12" rx="3.5" fill="#64748B" fill-opacity="0.6"/><text x="162.8" y="679" font-size="5.8" font-weight="600" fill="#64748B" text-anchor="middle">Arcade</text><rect x="191.6" y="655" width="12" height="12" rx="3.5" fill="#0A84FF" fill-opacity="1"/><text x="197.6" y="679" font-size="5.8" font-weight="600" fill="#0A84FF" text-anchor="middle">Search</text><rect x="94" y="689" width="68" height="4" rx="2" fill="#fff" fill-opacity="0.5"/></g><rect x="240" y="262" width="184" height="470" rx="28" fill="#0B1220" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/><rect x="243" y="265" width="178" height="464" rx="25" fill="none" stroke="rgba(255,255,255,0.06)"/><rect x="245" y="267" width="174" height="460" rx="24" fill="url(#s1scr)"/><g clip-path="url(#s1ca)"><text x="260" y="285" font-size="9.5" font-weight="700" fill="#fff" text-anchor="start">9:41</text><circle cx="332" cy="281" r="5.5" fill="#000" stroke="#1E293B"/><rect x="366" y="283" width="2.5" height="3" rx="1" fill="#fff"/><rect x="370" y="281" width="2.5" height="5" rx="1" fill="#fff"/><rect x="374" y="279" width="2.5" height="7" rx="1" fill="#fff"/><rect x="378" y="277" width="2.5" height="9" rx="1" fill="#fff"/><rect x="390" y="278" width="17" height="8" rx="2.5" fill="none" stroke="#fff" stroke-opacity="0.6"/><rect x="391.7" y="279.7" width="12" height="4.6" rx="1.2" fill="#fff"/><path d="M270 308 h-11 m4.5 -4.5 l-4.5 4.5 l4.5 4.5" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="392" cy="307" r="4.2" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M395 310 l3.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="408" cy="308" r="1.1" fill="#fff"/><circle cx="408" cy="304" r="1.1" fill="#fff"/><circle cx="408" cy="312" r="1.1" fill="#fff"/><rect x="259" y="328" width="52" height="52" rx="14" fill="#0F172A" stroke="rgba(0,208,133,0.45)"/><use xlink:href="#s1K" transform="translate(285.0 354.0) scale(0.260)"/><text x="319" y="345" font-size="9" font-weight="700" fill="#fff" text-anchor="start">Store Preview Studio</text><text x="319" y="358" font-size="8" font-weight="600" fill="#34D399" text-anchor="start">Listing designer</text><text x="283.3" y="399" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4.9</text><text x="283.3" y="410" font-size="6.5" font-weight="500" fill="#94A3B8" text-anchor="middle">2.1K reviews</text><text x="332.0" y="399" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">10K+</text><text x="332.0" y="410" font-size="6.5" font-weight="500" fill="#94A3B8" text-anchor="middle">Downloads</text><text x="380.7" y="399" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3+</text><text x="380.7" y="410" font-size="6.5" font-weight="500" fill="#94A3B8" text-anchor="middle">Everyone</text><line x1="307.7" y1="387" x2="307.7" y2="413" stroke="rgba(255,255,255,0.1)"/><line x1="356.3" y1="387" x2="356.3" y2="413" stroke="rgba(255,255,255,0.1)"/><rect x="259" y="424" width="146" height="28" rx="14" fill="#01875F"/><text x="332" y="442" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">Install</text><text x="332" y="468" font-size="8" font-weight="600" fill="#34D399" text-anchor="middle">Add to wishlist</text><text x="259" y="492" font-size="10.5" font-weight="700" fill="#fff" text-anchor="start">About this app</text><path d="M397 486 l5 5 l-5 5" fill="none" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="259" y="502" width="146" height="4" rx="2" fill="#fff" fill-opacity="0.12"/><rect x="259" y="512" width="122" height="4" rx="2" fill="#fff" fill-opacity="0.12"/><rect x="259" y="522" width="136" height="4" rx="2" fill="#fff" fill-opacity="0.12"/><rect x="259" y="540" width="56" height="104" rx="8" fill="url(#s1t2)" stroke="rgba(255,255,255,0.12)"/><rect x="267" y="550" width="30" height="5" rx="2.5" fill="#fff" fill-opacity="0.75"/><rect x="267" y="560" width="22" height="3.5" rx="1.8" fill="#fff" fill-opacity="0.35"/><rect x="267" y="584" width="40" height="46" rx="6" fill="#0F172A" fill-opacity="0.65"/><rect x="321" y="540" width="56" height="104" rx="8" fill="url(#s1t1)" stroke="rgba(255,255,255,0.12)"/><rect x="329" y="550" width="30" height="5" rx="2.5" fill="#fff" fill-opacity="0.75"/><rect x="329" y="560" width="22" height="3.5" rx="1.8" fill="#fff" fill-opacity="0.35"/><rect x="329" y="584" width="40" height="46" rx="6" fill="#0F172A" fill-opacity="0.65"/><rect x="383" y="540" width="56" height="104" rx="8" fill="url(#s1t3)" stroke="rgba(255,255,255,0.12)"/><rect x="391" y="550" width="30" height="5" rx="2.5" fill="#fff" fill-opacity="0.75"/><rect x="391" y="560" width="22" height="3.5" rx="1.8" fill="#fff" fill-opacity="0.35"/><rect x="391" y="584" width="40" height="46" rx="6" fill="#0F172A" fill-opacity="0.65"/><rect x="245" y="668" width="174" height="59" fill="#0B1220"/><circle cx="266.8" cy="684" r="5.5" fill="#64748B" fill-opacity="0.7"/><text x="266.8" y="705" font-size="6.2" font-weight="600" fill="#64748B" text-anchor="middle">Games</text><circle cx="310.2" cy="684" r="5.5" fill="#64748B" fill-opacity="0.7"/><text x="310.2" y="705" font-size="6.2" font-weight="600" fill="#64748B" text-anchor="middle">Apps</text><rect x="335.8" y="674" width="36" height="20" rx="10" fill="#01875F" fill-opacity="0.4"/><circle cx="353.8" cy="684" r="5.5" fill="#34D399" fill-opacity="1"/><text x="353.8" y="705" font-size="6.2" font-weight="600" fill="#E2E8F0" text-anchor="middle">Search</text><circle cx="397.2" cy="684" r="5.5" fill="#64748B" fill-opacity="0.7"/><text x="397.2" y="705" font-size="6.2" font-weight="600" fill="#64748B" text-anchor="middle">Books</text><rect x="302" y="716" width="60" height="4" rx="2" fill="#fff" fill-opacity="0.5"/></g><rect x="70" y="752" width="116" height="26" rx="13.0" fill="#0A84FF" fill-opacity="0.14" stroke="#0A84FF" stroke-opacity="0.38"/><text x="128.0" y="768.42" font-size="9.5" font-weight="700" fill="#7DB8FF" text-anchor="middle" letter-spacing="1.2">APP STORE</text><rect x="266" y="752" width="132" height="26" rx="13.0" fill="#34D399" fill-opacity="0.14" stroke="#34D399" stroke-opacity="0.38"/><text x="332.0" y="768.42" font-size="9.5" font-weight="700" fill="#6EE7B7" text-anchor="middle" letter-spacing="1.2">GOOGLE PLAY</text><line x1="192" y1="765" x2="260" y2="765" stroke="#38BDF8" stroke-opacity="0.5" stroke-dasharray="3 4"/><circle cx="226" cy="765" r="11" fill="#0F172A" stroke="rgba(56,189,248,0.5)"/><g transform="translate(226 765) scale(0.58)" fill="none" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M-9 -3 a9 9 0 0 1 15 -5"/><path d="M6 -13 v5 h-5"/><path d="M9 3 a9 9 0 0 1 -15 5"/><path d="M-6 13 v-5 h5"/></g><rect x="30" y="806" width="400" height="92" rx="22" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="806" width="400" height="92" rx="22" fill="url(#s1sh)"/><rect x="48" y="824" width="56" height="56" rx="16" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.4)"/><g transform="translate(76 852) scale(1.25)" fill="none" stroke="#38BDF8" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M-9 -3 a9 9 0 0 1 15 -5"/><path d="M6 -13 v5 h-5"/><path d="M9 3 a9 9 0 0 1 -15 5"/><path d="M-6 13 v-5 h5"/></g><text x="122" y="846" font-size="15" font-weight="700" fill="#fff" text-anchor="start">1-Click Simultaneous Sync</text><text x="122" y="868" font-size="12" font-weight="400" fill="#94A3B8" text-anchor="start">Edit once, audits both stores</text><rect x="372" y="840" width="40" height="22" rx="11" fill="#10B981"/><circle cx="401" cy="851" r="8" fill="#fff"/><line x1="170" y1="934" x2="290" y2="934" stroke="rgba(255,255,255,0.10)"/><text x="230" y="958" font-size="9" font-weight="600" fill="#475569" text-anchor="middle" letter-spacing="3">STORE PREVIEW STUDIO</text>
+</svg>`);
 
-  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#38BDF8" text-anchor="middle">DUAL-STORE VIEWPORTS</text>
-  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">Live Side-by-Side</text>
-  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss1-acc)" text-anchor="middle">App Store &amp; Google Play</text>
-  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Instant simultaneous preview across iPhone &amp; Android</text>
+const STUDIO_SHOT_2 = makeSvgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 460 996" width="1080" height="2340" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif">
+<defs>
+<linearGradient id="s2bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#080C14"/><stop offset="1" stop-color="#0F172A"/></linearGradient>
+<radialGradient id="s2gc" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.3"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0"/></radialGradient>
+<radialGradient id="s2gi" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#6366F1" stop-opacity="0.34"/><stop offset="1" stop-color="#6366F1" stop-opacity="0"/></radialGradient>
+<radialGradient id="s2ge" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#10B981" stop-opacity="0.28"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<radialGradient id="s2ga" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#F59E0B" stop-opacity="0.2"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
+<linearGradient id="s2tg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38BDF8"/><stop offset="0.55" stop-color="#818CF8"/><stop offset="1" stop-color="#34D399"/></linearGradient>
+<linearGradient id="s2sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.06"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+<linearGradient id="s2scr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C1528"/><stop offset="1" stop-color="#05080F"/></linearGradient>
+<linearGradient id="s2okg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="s2btn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
+<linearGradient id="s2t1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.55"/><stop offset="1" stop-color="#6366F1" stop-opacity="0.25"/></linearGradient>
+<linearGradient id="s2t2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10B981" stop-opacity="0.5"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.2"/></linearGradient>
+<linearGradient id="s2t3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A78BFA" stop-opacity="0.55"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0.22"/></linearGradient>
+<radialGradient id="s2ig" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<pattern id="s2dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#FFFFFF" fill-opacity="0.05"/></pattern>
+<g id="s2K">
+<polygon points="-6,-6 22,-6 62,60 32,60" fill="#006636" stroke="#006636" stroke-width="4" stroke-linejoin="round"/>
+<rect x="-42" y="-60" width="28" height="120" rx="7" fill="#00D085"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#0F172A" stroke-width="3" stroke-linejoin="round"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#00D085" stroke-width="1" stroke-linejoin="round"/>
+</g>
+</defs><rect width="460" height="996" fill="url(#s2bg)"/><circle cx="380" cy="110" r="260" fill="url(#s2gc)"/><circle cx="40" cy="420" r="250" fill="url(#s2gi)"/><circle cx="400" cy="800" r="280" fill="url(#s2ge)"/><circle cx="40" cy="960" r="200" fill="url(#s2ga)"/><rect width="460" height="996" fill="url(#s2dots)"/><rect x="134" y="50" width="193" height="28" rx="14" fill="rgba(56,189,248,0.10)" stroke="rgba(56,189,248,0.35)"/><circle cx="150" cy="64" r="3" fill="#38BDF8"/><text x="236" y="68" font-size="11" font-weight="600" fill="#7DD3FC" text-anchor="middle" letter-spacing="2.5">COMPLIANCE ENGINE</text><text x="230" y="128" font-size="28" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="-0.5">Pre-Flight ASO Audit</text><text x="230" y="160" font-size="19" font-weight="700" fill="url(#s2tg)" text-anchor="middle">Zero App Store Rejections</text><text x="230" y="188" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">Catch every store issue before you submit</text><rect x="30" y="232" width="400" height="446" rx="24" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="232" width="400" height="446" rx="24" fill="url(#s2sh)"/><text x="50" y="264" font-size="10" font-weight="600" fill="#64748B" text-anchor="start" letter-spacing="2">LISTING AUDIT</text><circle cx="378" cy="260.5" r="3" fill="#10B981"/><text x="412" y="264" font-size="9" font-weight="700" fill="#34D399" text-anchor="end" letter-spacing="1.5">LIVE</text><line x1="46" y1="282" x2="414" y2="282" stroke="rgba(255,255,255,0.07)"/><rect x="46" y="296" width="368" height="84" rx="16" fill="#0B1322" stroke="rgba(255,255,255,0.06)"/><rect x="60" y="310" width="36" height="36" rx="10" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.4"/><g fill="none" stroke="#7DD3FC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M72 323 h12 M78 323 v11"/></g><text x="108" y="325" font-size="13.5" font-weight="700" fill="#fff" text-anchor="start">Title Length</text><text x="108" y="343" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">20 / 30 characters</text><rect x="334" y="310" width="66" height="22" rx="11.0" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.38"/><text x="367.0" y="324.42" font-size="9.5" font-weight="700" fill="#7DD3FC" text-anchor="middle" letter-spacing="1.2">PASSED</text><rect x="108" y="356" width="292" height="6" rx="3" fill="#fff" fill-opacity="0.08"/><rect x="108" y="356" width="195" height="6" rx="3" fill="#38BDF8"/><rect x="46" y="390" width="368" height="84" rx="16" fill="#0B1322" stroke="rgba(255,255,255,0.06)"/><rect x="60" y="404" width="36" height="36" rx="10" fill="#A78BFA" fill-opacity="0.14" stroke="#A78BFA" stroke-opacity="0.4"/><g fill="none" stroke="#C4B5FD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M72 417 h12 M72 422 h12 M72 427 h7"/></g><text x="108" y="419" font-size="13.5" font-weight="700" fill="#fff" text-anchor="start">Subtitle &amp; Short Description</text><text x="108" y="437" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">16 / 30 characters</text><rect x="334" y="404" width="66" height="22" rx="11.0" fill="#A78BFA" fill-opacity="0.14" stroke="#A78BFA" stroke-opacity="0.38"/><text x="367.0" y="418.42" font-size="9.5" font-weight="700" fill="#C4B5FD" text-anchor="middle" letter-spacing="1.2">PASSED</text><rect x="108" y="450" width="292" height="6" rx="3" fill="#fff" fill-opacity="0.08"/><rect x="108" y="450" width="156" height="6" rx="3" fill="#A78BFA"/><rect x="46" y="484" width="368" height="84" rx="16" fill="#0B1322" stroke="rgba(255,255,255,0.06)"/><rect x="60" y="498" width="36" height="36" rx="10" fill="#10B981" fill-opacity="0.14" stroke="#10B981" stroke-opacity="0.4"/><g fill="none" stroke="#6EE7B7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="72" y="510" width="12" height="12" rx="2.5"/><path d="M72 516 h12 M78 510 v12" stroke-opacity="0.5"/></g><text x="108" y="513" font-size="13.5" font-weight="700" fill="#fff" text-anchor="start">App Icon Transparency</text><text x="108" y="531" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">Opaque master icon verified</text><rect x="334" y="498" width="66" height="22" rx="11.0" fill="#10B981" fill-opacity="0.14" stroke="#10B981" stroke-opacity="0.38"/><text x="367.0" y="512.42" font-size="9.5" font-weight="700" fill="#6EE7B7" text-anchor="middle" letter-spacing="1.2">PASSED</text><rect x="108" y="540" width="71" height="20" rx="10.0" fill="#10B981" fill-opacity="0.14" stroke="#10B981" stroke-opacity="0.38"/><text x="143.5" y="553.24" font-size="9" font-weight="700" fill="#6EE7B7" text-anchor="middle" letter-spacing="0.8">0% ALPHA</text><rect x="187" y="540" width="84" height="20" rx="10.0" fill="#10B981" fill-opacity="0.14" stroke="#10B981" stroke-opacity="0.38"/><text x="229.0" y="553.24" font-size="9" font-weight="700" fill="#6EE7B7" text-anchor="middle" letter-spacing="0.8">ITMS-90717</text><rect x="46" y="578" width="368" height="84" rx="16" fill="#0B1322" stroke="rgba(255,255,255,0.06)"/><rect x="60" y="592" width="36" height="36" rx="10" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.4"/><g fill="none" stroke="#FCD34D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M78 603 l6 2 v5 c0 4 -3 6 -6 7 c-3 -1 -6 -3 -6 -7 v-5 z"/><path d="M75.4 610.5 l2 2 l3.4 -4"/></g><text x="108" y="607" font-size="13.5" font-weight="700" fill="#fff" text-anchor="start">Age Rating Matrix</text><text x="108" y="625" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">Content rating verified</text><rect x="334" y="592" width="66" height="22" rx="11.0" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.38"/><text x="367.0" y="606.42" font-size="9.5" font-weight="700" fill="#FCD34D" text-anchor="middle" letter-spacing="1.2">PASSED</text><rect x="108" y="634" width="97" height="20" rx="10.0" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.38"/><text x="156.5" y="647.24" font-size="9" font-weight="700" fill="#FCD34D" text-anchor="middle" letter-spacing="0.8">4+ APP STORE</text><rect x="213" y="634" width="104" height="20" rx="10.0" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.38"/><text x="265.0" y="647.24" font-size="9" font-weight="700" fill="#FCD34D" text-anchor="middle" letter-spacing="0.8">EVERYONE PLAY</text><rect x="30" y="704" width="400" height="60" rx="30" fill="url(#s2okg)" stroke="rgba(16,185,129,0.45)"/><circle cx="64" cy="734" r="18" fill="#10B981"/><path d="M58.0 734.3 L62.5 739.1 L70.9 728.9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><text x="94" y="739" font-size="14" font-weight="700" fill="#fff" text-anchor="start">All 12 Automated Store Checks Passed</text><rect x="30" y="788" width="400" height="110" rx="22" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="788" width="400" height="110" rx="22" fill="url(#s2sh)"/><text x="97" y="837" font-size="28" font-weight="800" fill="#34D399" text-anchor="middle">12/12</text><text x="97" y="858" font-size="9" font-weight="600" fill="#64748B" text-anchor="middle" letter-spacing="1.6">CHECKS PASSED</text><text x="230" y="837" font-size="28" font-weight="800" fill="#FFFFFF" text-anchor="middle">0</text><text x="230" y="858" font-size="9" font-weight="600" fill="#64748B" text-anchor="middle" letter-spacing="1.6">ERRORS</text><text x="363" y="837" font-size="28" font-weight="800" fill="#FBBF24" text-anchor="middle">0</text><text x="363" y="858" font-size="9" font-weight="600" fill="#64748B" text-anchor="middle" letter-spacing="1.6">WARNINGS</text><line x1="163" y1="812" x2="163" y2="866" stroke="rgba(255,255,255,0.08)"/><line x1="297" y1="812" x2="297" y2="866" stroke="rgba(255,255,255,0.08)"/><rect x="50" y="878" width="360" height="5" rx="2.5" fill="#fff" fill-opacity="0.08"/><rect x="50" y="878" width="360" height="5" rx="2.5" fill="url(#s2btn)"/><line x1="170" y1="934" x2="290" y2="934" stroke="rgba(255,255,255,0.10)"/><text x="230" y="958" font-size="9" font-weight="600" fill="#475569" text-anchor="middle" letter-spacing="3">STORE PREVIEW STUDIO</text>
+</svg>`);
 
-  <!-- Mini Duo Phones Container -->
-  <g transform="translate(30, 220)">
-    <rect width="400" height="430" rx="24" fill="#0F172A" stroke="rgba(56,189,248,0.25)" stroke-width="1.5"/>
+const STUDIO_SHOT_3 = makeSvgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 460 996" width="1080" height="2340" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif">
+<defs>
+<linearGradient id="s3bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#080C14"/><stop offset="1" stop-color="#0F172A"/></linearGradient>
+<radialGradient id="s3gc" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.3"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0"/></radialGradient>
+<radialGradient id="s3gi" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#6366F1" stop-opacity="0.34"/><stop offset="1" stop-color="#6366F1" stop-opacity="0"/></radialGradient>
+<radialGradient id="s3ge" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#10B981" stop-opacity="0.28"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<radialGradient id="s3ga" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#F59E0B" stop-opacity="0.2"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
+<linearGradient id="s3tg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38BDF8"/><stop offset="0.55" stop-color="#818CF8"/><stop offset="1" stop-color="#34D399"/></linearGradient>
+<linearGradient id="s3sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.06"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+<linearGradient id="s3scr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C1528"/><stop offset="1" stop-color="#05080F"/></linearGradient>
+<linearGradient id="s3okg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="s3btn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
+<linearGradient id="s3t1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.55"/><stop offset="1" stop-color="#6366F1" stop-opacity="0.25"/></linearGradient>
+<linearGradient id="s3t2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10B981" stop-opacity="0.5"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.2"/></linearGradient>
+<linearGradient id="s3t3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A78BFA" stop-opacity="0.55"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0.22"/></linearGradient>
+<radialGradient id="s3ig" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<pattern id="s3dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#FFFFFF" fill-opacity="0.05"/></pattern>
+<g id="s3K">
+<polygon points="-6,-6 22,-6 62,60 32,60" fill="#006636" stroke="#006636" stroke-width="4" stroke-linejoin="round"/>
+<rect x="-42" y="-60" width="28" height="120" rx="7" fill="#00D085"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#0F172A" stroke-width="3" stroke-linejoin="round"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#00D085" stroke-width="1" stroke-linejoin="round"/>
+</g>
+</defs><rect width="460" height="996" fill="url(#s3bg)"/><circle cx="230" cy="430" r="300" fill="url(#s3ge)"/><circle cx="60" cy="110" r="250" fill="url(#s3gc)"/><circle cx="440" cy="700" r="260" fill="url(#s3gi)"/><circle cx="60" cy="920" r="190" fill="url(#s3ga)"/><rect width="460" height="996" fill="url(#s3dots)"/><rect x="138" y="50" width="184" height="28" rx="14" fill="rgba(56,189,248,0.10)" stroke="rgba(56,189,248,0.35)"/><circle cx="154" cy="64" r="3" fill="#38BDF8"/><text x="236" y="68" font-size="11" font-weight="600" fill="#7DD3FC" text-anchor="middle" letter-spacing="2.5">ASSET COMPLIANCE</text><text x="230" y="128" font-size="28" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="-0.5">App Icon Inspector</text><text x="230" y="160" font-size="19" font-weight="700" fill="url(#s3tg)" text-anchor="middle">ITMS-90717 Compliance</text><text x="230" y="188" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">Inspect the master icon before Apple does</text><clipPath id="s3cc"><rect x="30" y="232" width="400" height="410" rx="24"/></clipPath><rect x="30" y="232" width="400" height="410" rx="24" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="232" width="400" height="410" rx="24" fill="url(#s3sh)"/><g clip-path="url(#s3cc)"><circle cx="230" cy="437" r="190" fill="url(#s3ig)"/><line x1="30" y1="232" x2="30" y2="642" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="50" y1="232" x2="50" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="70" y1="232" x2="70" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="90" y1="232" x2="90" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="110" y1="232" x2="110" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="130" y1="232" x2="130" y2="642" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="150" y1="232" x2="150" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="170" y1="232" x2="170" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="190" y1="232" x2="190" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="210" y1="232" x2="210" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="230" y1="232" x2="230" y2="642" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="250" y1="232" x2="250" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="270" y1="232" x2="270" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="290" y1="232" x2="290" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="310" y1="232" x2="310" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="330" y1="232" x2="330" y2="642" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="350" y1="232" x2="350" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="370" y1="232" x2="370" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="390" y1="232" x2="390" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="410" y1="232" x2="410" y2="642" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="430" y1="232" x2="430" y2="642" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="30" y1="232" x2="430" y2="232" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="30" y1="252" x2="430" y2="252" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="272" x2="430" y2="272" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="292" x2="430" y2="292" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="312" x2="430" y2="312" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="332" x2="430" y2="332" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="30" y1="352" x2="430" y2="352" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="372" x2="430" y2="372" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="392" x2="430" y2="392" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="412" x2="430" y2="412" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="432" x2="430" y2="432" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="30" y1="452" x2="430" y2="452" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="472" x2="430" y2="472" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="492" x2="430" y2="492" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="512" x2="430" y2="512" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="532" x2="430" y2="532" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="30" y1="552" x2="430" y2="552" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="572" x2="430" y2="572" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="592" x2="430" y2="592" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="612" x2="430" y2="612" stroke="#38BDF8" stroke-opacity="0.06"/><line x1="30" y1="632" x2="430" y2="632" stroke="#38BDF8" stroke-opacity="0.13"/><line x1="20" y1="227" x2="440" y2="647" stroke="#A78BFA" stroke-opacity="0.35" stroke-dasharray="5 5"/><line x1="440" y1="227" x2="20" y2="647" stroke="#A78BFA" stroke-opacity="0.35" stroke-dasharray="5 5"/><line x1="230" y1="232" x2="230" y2="642" stroke="#38BDF8" stroke-opacity="0.35" stroke-dasharray="2 4"/><line x1="30" y1="437" x2="430" y2="437" stroke="#38BDF8" stroke-opacity="0.35" stroke-dasharray="2 4"/><circle cx="230" cy="437" r="150" fill="none" stroke="#38BDF8" stroke-opacity="0.18" stroke-dasharray="1 0"/><circle cx="230" cy="437" r="128" fill="none" stroke="#38BDF8" stroke-opacity="0.28" stroke-dasharray="6 6"/><circle cx="230" cy="437" r="100" fill="none" stroke="#10B981" stroke-opacity="0.55" stroke-dasharray="4 4"/></g><rect x="130" y="337" width="200" height="200" rx="45" fill="#0F172A" stroke="rgba(0,208,133,0.5)" stroke-width="1.5"/><rect x="130" y="337" width="200" height="200" rx="45" fill="url(#s3ig)"/><use xlink:href="#s3K" transform="translate(230 437)"/><path d="M130 351 V337 H144" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" transform="translate(-6 -6)"/><path d="M330 351 V337 H316" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" transform="translate(6 -6)"/><path d="M130 523 V537 H144" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" transform="translate(-6 6)"/><path d="M330 523 V537 H316" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" transform="translate(6 6)"/><line x1="130" y1="306" x2="330" y2="306" stroke="#38BDF8" stroke-opacity="0.8"/><line x1="130" y1="301" x2="130" y2="311" stroke="#38BDF8"/><line x1="330" y1="301" x2="330" y2="311" stroke="#38BDF8"/><rect x="203" y="298" width="54" height="16" rx="8" fill="#0F172A" stroke="rgba(56,189,248,0.5)"/><text x="230" y="309.5" font-size="9.5" font-weight="700" fill="#7DD3FC" text-anchor="middle">1024 px</text><text x="50" y="258" font-size="9" font-weight="600" fill="#64748B" text-anchor="start" letter-spacing="1.5">BLUEPRINT &#183; 1024 &#215; 1024</text><text x="410" y="258" font-size="9" font-weight="600" fill="#64748B" text-anchor="end" letter-spacing="1.5">RGB &#183; 8-BIT</text><text x="50" y="626" font-size="9" font-weight="600" fill="#64748B" text-anchor="start" letter-spacing="1.5">SQUIRCLE CLIP &#183; r = 22.37%</text><text x="410" y="626" font-size="9" font-weight="700" fill="#34D399" text-anchor="end" letter-spacing="1.5">ALPHA: 0</text><text x="348" y="307" font-size="9" font-weight="700" fill="#C4B5FD" text-anchor="start">45&#176;</text><rect x="30" y="660" width="122" height="34" rx="17" fill="#38BDF8" fill-opacity="0.15" stroke="#38BDF8" stroke-opacity="0.55"/><rect x="44" y="671" width="12" height="12" rx="4" fill="none" stroke="#7DD3FC" stroke-width="1.5"/><text x="64" y="681" font-size="11.5" font-weight="600" fill="#7DD3FC" text-anchor="start">Apple Squircle</text><rect x="160" y="660" width="130" height="34" rx="17" fill="#FFFFFF" fill-opacity="0.04" stroke="#FFFFFF" stroke-opacity="0.1"/><circle cx="180" cy="677" r="6" fill="none" stroke="#94A3B8" stroke-width="1.5"/><text x="194" y="681" font-size="11.5" font-weight="600" fill="#94A3B8" text-anchor="start">Android Circle</text><rect x="298" y="660" width="132" height="34" rx="17" fill="#FFFFFF" fill-opacity="0.04" stroke="#FFFFFF" stroke-opacity="0.1"/><rect x="312" y="671" width="12" height="12" rx="0.5" fill="none" stroke="#94A3B8" stroke-width="1.5"/><text x="332" y="681" font-size="11.5" font-weight="600" fill="#94A3B8" text-anchor="start">Square 1024</text><rect x="30" y="710" width="124" height="116" rx="20" fill="#0F172A" stroke="rgba(56,189,248,0.5)"/><rect x="30" y="710" width="124" height="116" rx="20" fill="url(#s3sh)"/><rect x="62" y="726" width="60" height="60" rx="14" fill="#0F172A" stroke="rgba(0,208,133,0.45)"/><use xlink:href="#s3K" transform="translate(92.0 756.0) scale(0.300)"/><circle cx="138" cy="726" r="7" fill="#10B981"/><path d="M135.0 726.15 L137.25 728.55 L141.45 723.45" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><text x="92" y="810" font-size="9" font-weight="600" fill="#94A3B8" text-anchor="middle" letter-spacing="0.3">iOS &#183; App Store</text><rect x="168" y="710" width="124" height="116" rx="20" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="168" y="710" width="124" height="116" rx="20" fill="url(#s3sh)"/><circle cx="230.0" cy="756.0" r="30.0" fill="#0F172A" stroke="rgba(0,208,133,0.45)"/><use xlink:href="#s3K" transform="translate(230.0 756.0) scale(0.300)"/><circle cx="276" cy="726" r="7" fill="#10B981"/><path d="M273.0 726.15 L275.25 728.55 L279.45 723.45" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><text x="230" y="810" font-size="9" font-weight="600" fill="#94A3B8" text-anchor="middle" letter-spacing="0.3">Android &#183; Adaptive</text><rect x="306" y="710" width="124" height="116" rx="20" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="306" y="710" width="124" height="116" rx="20" fill="url(#s3sh)"/><rect x="338" y="726" width="60" height="60" rx="0" fill="#0F172A" stroke="rgba(0,208,133,0.45)"/><use xlink:href="#s3K" transform="translate(368.0 756.0) scale(0.300)"/><circle cx="414" cy="726" r="7" fill="#10B981"/><path d="M411.0 726.15 L413.25 728.55 L417.45 723.45" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><text x="368" y="810" font-size="9" font-weight="600" fill="#94A3B8" text-anchor="middle" letter-spacing="0.3">Master &#183; 1024 px</text><rect x="30" y="844" width="400" height="84" rx="22" fill="url(#s3okg)" stroke="rgba(16,185,129,0.45)"/><rect x="48" y="860" width="52" height="52" rx="15" fill="#10B981" fill-opacity="0.18" stroke="#10B981" stroke-opacity="0.5"/><g fill="none" stroke="#6EE7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M74 872 l12 4 v9 c0 7 -5 11 -12 13 c-7 -2 -12 -6 -12 -13 v-9 z"/><path d="M68.5 886 l4 4 l7 -8"/></g><text x="116" y="883" font-size="14" font-weight="700" fill="#fff" text-anchor="start">100% Opaque &#183; Zero Alpha Pixels</text><text x="116" y="903" font-size="12" font-weight="400" fill="#94A3B8" text-anchor="start">Guards against Apple upload rejection</text><line x1="170" y1="934" x2="290" y2="934" stroke="rgba(255,255,255,0.10)"/><text x="230" y="958" font-size="9" font-weight="600" fill="#475569" text-anchor="middle" letter-spacing="3">STORE PREVIEW STUDIO</text>
+</svg>`);
 
-    <!-- Left Phone (Apple App Store) -->
-    <g transform="translate(25, 25)">
-      <rect width="165" height="380" rx="24" fill="#090D16" stroke="#253248" stroke-width="2.5"/>
-      <!-- Dynamic Island -->
-      <rect x="52" y="10" width="60" height="13" rx="6.5" fill="#1E293B"/>
-      <text x="82" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#38BDF8" text-anchor="middle">App Store</text>
-
-      <!-- App Row -->
-      <rect x="18" y="65" width="38" height="38" rx="10" fill="url(#ss1-sq)" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
-      <g transform="scale(0.27) translate(72, 248)">
-        <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
-        <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
-      </g>
-      <rect x="64" y="70" width="82" height="8" rx="4" fill="#FFFFFF"/>
-      <rect x="64" y="85" width="56" height="6" rx="3" fill="#64748B"/>
-
-      <!-- Get Button -->
-      <rect x="18" y="115" width="129" height="26" rx="13" fill="#0284C7"/>
-      <text x="82" y="132" font-family="-apple-system,system-ui,sans-serif" font-size="10.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">GET</text>
-
-      <!-- Mini Screenshots -->
-      <rect x="18" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
-      <rect x="87" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-
-      <!-- Home bar -->
-      <rect x="60" y="365" width="45" height="4" rx="2" fill="#64748B"/>
-    </g>
-
-    <!-- Right Phone (Google Play) -->
-    <g transform="translate(210, 25)">
-      <rect width="165" height="380" rx="22" fill="#090D16" stroke="#253248" stroke-width="2.5"/>
-      <!-- Punch Hole -->
-      <circle cx="82" cy="16" r="3.5" fill="#1E293B"/>
-      <text x="82" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#00D085" text-anchor="middle">Google Play</text>
-
-      <!-- App Row -->
-      <rect x="18" y="65" width="38" height="38" rx="10" fill="url(#ss1-sq)" stroke="rgba(0,208,133,0.3)" stroke-width="1"/>
-      <g transform="scale(0.27) translate(72, 248)">
-        <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
-        <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
-      </g>
-      <rect x="64" y="70" width="82" height="8" rx="4" fill="#FFFFFF"/>
-      <rect x="64" y="85" width="56" height="6" rx="3" fill="#64748B"/>
-
-      <!-- Install Button -->
-      <rect x="18" y="115" width="129" height="26" rx="8" fill="#00D085"/>
-      <text x="82" y="132" font-family="-apple-system,system-ui,sans-serif" font-size="10.5" font-weight="800" fill="#080C14" text-anchor="middle">Install</text>
-
-      <!-- Mini Screenshots -->
-      <rect x="18" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(0,208,133,0.3)" stroke-width="1"/>
-      <rect x="87" y="155" width="60" height="150" rx="10" fill="#161F33" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-
-      <!-- Nav gesture -->
-      <rect x="65" y="365" width="35" height="3" rx="1.5" fill="#64748B"/>
-    </g>
-  </g>
-
-  <!-- Bottom Feature Banner 1 (No Emoji, Clean Vector Sync Icon) -->
-  <g transform="translate(30, 680)">
-    <rect width="400" height="96" rx="20" fill="#131B2E" stroke="rgba(129,140,248,0.25)" stroke-width="1.5"/>
-    <g transform="translate(25, 28)">
-      <circle cx="18" cy="18" r="18" fill="rgba(129,140,248,0.15)"/>
-      <path d="M 12 18 A 6 6 0 1 1 24 21" fill="none" stroke="#818CF8" stroke-width="2" stroke-linecap="round"/>
-      <polyline points="23 15 25 21 19 21" fill="none" stroke="#818CF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-    <text x="75" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Simultaneous 1-Click Sync</text>
-    <text x="75" y="66" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Edit metadata once · Instantly audits both platforms</text>
-  </g>
-
-  <!-- Bottom Feature Checklist (Multi-Colored Specs) -->
-  <g transform="translate(30, 796)">
-    <rect width="400" height="150" rx="20" fill="#0F172A" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
-    <g transform="translate(25, 32)">
-      <circle cx="8" cy="8" r="8" fill="rgba(56,189,248,0.2)"/>
-      <path d="M 5 8 L 7 10 L 11 6" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
-      <text x="25" y="12" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#38BDF8">iPhone, iPad &amp; Android Viewports</text>
-    </g>
-    <g transform="translate(25, 74)">
-      <circle cx="8" cy="8" r="8" fill="rgba(251,191,36,0.2)"/>
-      <path d="M 5 8 L 7 10 L 11 6" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"/>
-      <text x="25" y="12" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#FBBF24">Real Device Aspect Ratios</text>
-    </g>
-    <g transform="translate(25, 116)">
-      <circle cx="8" cy="8" r="8" fill="rgba(52,211,153,0.2)"/>
-      <path d="M 5 8 L 7 10 L 11 6" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round"/>
-      <text x="25" y="12" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#34D399">100% Client-Side Privacy</text>
-    </g>
-  </g>
-</svg>
-`);
-
-const STUDIO_SHOT_2 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
-  <defs>
-    <linearGradient id="ss2-bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#080C14"/>
-      <stop offset="50%" stop-color="#0E1424"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="ss2-acc" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#FBBF24"/>
-      <stop offset="100%" stop-color="#FB7185"/>
-    </linearGradient>
-    <linearGradient id="ss2-btn" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#F59E0B"/>
-      <stop offset="100%" stop-color="#00D085"/>
-    </linearGradient>
-  </defs>
-
-  <rect width="460" height="996" fill="url(#ss2-bg)"/>
-  <circle cx="230" cy="400" r="280" fill="#F59E0B" opacity="0.06"/>
-  <circle cx="360" cy="700" r="220" fill="#818CF8" opacity="0.06"/>
-
-  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#FBBF24" text-anchor="middle">METADATA COMPLIANCE</text>
-  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">Store Limits &amp;</text>
-  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss2-acc)" text-anchor="middle">Pre-Flight Audit</text>
-  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Catches formatting &amp; dimension issues before release</text>
-
-  <!-- Card Checklist -->
-  <g transform="translate(30, 220)">
-    <rect width="400" height="490" rx="24" fill="#0F172A" stroke="rgba(251,191,36,0.25)" stroke-width="1.5"/>
-    <text x="28" y="44" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Metadata Validation Checklist</text>
-
-    <!-- Item 1: Title Length (Cyan) -->
-    <g transform="translate(25, 68)">
-      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(56,189,248,0.25)" stroke-width="1.2"/>
-      <circle cx="30" cy="39" r="15" fill="rgba(56,189,248,0.15)"/>
-      <path d="M24 39 L28 43 L36 34" stroke="#38BDF8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">App Title Length</text>
-      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Store Preview Studio · 20 / 30 chars</text>
-      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(56,189,248,0.15)"/>
-      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#38BDF8" text-anchor="middle">PASSED</text>
-    </g>
-
-    <!-- Item 2: Subtitle (Violet) -->
-    <g transform="translate(25, 158)">
-      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(192,132,252,0.25)" stroke-width="1.2"/>
-      <circle cx="30" cy="39" r="15" fill="rgba(192,132,252,0.15)"/>
-      <path d="M24 39 L28 43 L36 34" stroke="#C084FC" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">Subtitle &amp; Short Description</text>
-      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Store Mockup Pro · 16 / 30 chars</text>
-      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(192,132,252,0.15)"/>
-      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#C084FC" text-anchor="middle">PASSED</text>
-    </g>
-
-    <!-- Item 3: Icon Alpha (Emerald) -->
-    <g transform="translate(25, 248)">
-      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(0,208,133,0.25)" stroke-width="1.2"/>
-      <circle cx="30" cy="39" r="15" fill="rgba(0,208,133,0.15)"/>
-      <path d="M24 39 L28 43 L36 34" stroke="#00D085" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">Icon Alpha Audit</text>
-      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">ITMS-90717 Zero Alpha Compliance</text>
-      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(0,208,133,0.15)"/>
-      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#00D085" text-anchor="middle">PASSED</text>
-    </g>
-
-    <!-- Item 4: Age Rating (Amber) -->
-    <g transform="translate(25, 338)">
-      <rect width="350" height="78" rx="14" fill="#141D30" stroke="rgba(251,191,36,0.25)" stroke-width="1.2"/>
-      <circle cx="30" cy="39" r="15" fill="rgba(251,191,36,0.15)"/>
-      <path d="M24 39 L28 43 L36 34" stroke="#FBBF24" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <text x="56" y="32" font-family="-apple-system,system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">Age Rating Matrix</text>
-      <text x="56" y="55" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Apple 4+ &amp; Google Play Everyone</text>
-      <rect x="268" y="26" width="68" height="26" rx="8" fill="rgba(251,191,36,0.15)"/>
-      <text x="302" y="43" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#FBBF24" text-anchor="middle">PASSED</text>
-    </g>
-
-    <!-- Audit Summary Banner -->
-    <rect x="25" y="430" width="350" height="38" rx="10" fill="rgba(52,211,153,0.1)"/>
-    <text x="200" y="454" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="700" fill="#34D399" text-anchor="middle">✓ All 12 Automated Store Checks Passed</text>
-  </g>
-
-  <!-- Bottom CTA Card -->
-  <g transform="translate(30, 735)">
-    <rect width="400" height="195" rx="20" fill="#131B2E" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
-    <text x="30" y="42" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Ready For Submission</text>
-    <text x="30" y="70" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Export verified metadata and mockups directly into your developer release pipeline.</text>
-    <rect x="30" y="105" width="340" height="48" rx="24" fill="url(#ss2-btn)"/>
-    <text x="200" y="135" font-family="-apple-system,system-ui,sans-serif" font-size="14.5" font-weight="800" fill="#080C14" text-anchor="middle" letter-spacing="0.5">SPEC-VERIFIED METADATA</text>
-    <text x="200" y="178" font-family="-apple-system,system-ui,sans-serif" font-size="11" fill="#64748B" text-anchor="middle">App Store Connect &amp; Google Play Console Ready</text>
-  </g>
-</svg>
-`);
-
-const STUDIO_SHOT_3 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
-  <defs>
-    <linearGradient id="ss3-bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#080C14"/>
-      <stop offset="50%" stop-color="#0E1424"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="ss3-sq" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E293B"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <filter id="ss3-k-sh" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="-2.5" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.8"/>
-    </filter>
-    <linearGradient id="ss3-acc" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#C084FC"/>
-      <stop offset="100%" stop-color="#38BDF8"/>
-    </linearGradient>
-    <linearGradient id="ss3-border" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#C084FC" stop-opacity="0.7"/>
-      <stop offset="100%" stop-color="#00D085" stop-opacity="0.4"/>
-    </linearGradient>
-  </defs>
-
-  <rect width="460" height="996" fill="url(#ss3-bg)"/>
-  <circle cx="230" cy="330" r="220" fill="#818CF8" opacity="0.10"/>
-  <circle cx="360" cy="800" r="180" fill="#00D085" opacity="0.06"/>
-
-  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#C084FC" text-anchor="middle">ASSET AUDIT</text>
-  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">App Icon Inspector &amp;</text>
-  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss3-acc)" text-anchor="middle">ITMS-90717 Compliance</text>
-  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Instant alpha channel detection &amp; specification checks</text>
-
-  <!-- Hero Icon Box with Authentic Interlocking K -->
-  <g transform="translate(140, 225)">
-    <!-- Squircle Container -->
-    <rect width="180" height="180" rx="42" fill="url(#ss3-sq)" stroke="url(#ss3-border)" stroke-width="2.5" filter="drop-shadow(0 20px 35px rgba(129,140,248,0.3))"/>
-    <g transform="scale(1.3) translate(19, 19)">
-      <path d="M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z" fill="#006636"/>
-      <g filter="url(#ss3-k-sh)">
-        <path d="M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z" fill="#00D085"/>
-      </g>
-    </g>
-  </g>
-
-  <!-- Spec List Card -->
-  <g transform="translate(30, 445)">
-    <rect width="400" height="345" rx="24" fill="#0F172A" stroke="rgba(192,132,252,0.25)" stroke-width="1.5"/>
-    <text x="30" y="44" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Master Icon Specifications</text>
-
-    <!-- Spec 1: Dimension (Cyan) -->
-    <g transform="translate(30, 70)">
-      <rect width="340" height="50" rx="12" fill="#141D30"/>
-      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Dimension</text>
-      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#38BDF8" text-anchor="end">1024 × 1024 px</text>
-    </g>
-
-    <!-- Spec 2: Color Profile (Violet) -->
-    <g transform="translate(30, 132)">
-      <rect width="340" height="50" rx="12" fill="#141D30"/>
-      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Color Profile</text>
-      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#C084FC" text-anchor="end">sRGB / 24-bit RGB</text>
-    </g>
-
-    <!-- Spec 3: Alpha Channel (Emerald) -->
-    <g transform="translate(30, 194)">
-      <rect width="340" height="50" rx="12" fill="#141D30"/>
-      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Alpha Channel</text>
-      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#34D399" text-anchor="end">Zero Alpha (Passed ✓)</text>
-    </g>
-
-    <!-- Spec 4: Corner Masking (Amber) -->
-    <g transform="translate(30, 256)">
-      <rect width="340" height="50" rx="12" fill="#141D30"/>
-      <text x="20" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" fill="#94a3b8">Corner Masking</text>
-      <text x="320" y="31" font-family="-apple-system,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FBBF24" text-anchor="end">Auto Apple Squircle</text>
-    </g>
-  </g>
-
-  <!-- Bottom ITMS Shield Badge (Zero Emoji, Clean Vector Shield Icon) -->
-  <g transform="translate(30, 820)">
-    <rect width="400" height="110" rx="20" fill="rgba(0,208,133,0.12)" stroke="rgba(0,208,133,0.35)" stroke-width="1.5"/>
-    <g transform="translate(25, 30)">
-      <path d="M 18 10 L 26 14 L 26 22 C 26 27 18 31 18 31 C 18 31 10 27 10 22 L 10 14 Z" fill="none" stroke="#00D085" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M 14 20 L 17 23 L 22 17" fill="none" stroke="#00D085" stroke-width="2.2" stroke-linecap="round"/>
-    </g>
-    <text x="65" y="46" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="800" fill="#00D085">100% ITMS-90717 COMPLIANT</text>
-    <text x="65" y="72" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Guards against transparent icon upload errors (ITMS-90717)</text>
-  </g>
-</svg>
-`);
-
-const STUDIO_SHOT_4 = makeSvgDataUri(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 996" width="1080" height="2340">
-  <defs>
-    <linearGradient id="ss4-bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#080C14"/>
-      <stop offset="50%" stop-color="#0E1424"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="ss4-acc" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="50%" stop-color="#00D085"/>
-      <stop offset="100%" stop-color="#C084FC"/>
-    </linearGradient>
-    <linearGradient id="ss4-btn" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="50%" stop-color="#00D085"/>
-      <stop offset="100%" stop-color="#818CF8"/>
-    </linearGradient>
-  </defs>
-
-  <rect width="460" height="996" fill="url(#ss4-bg)"/>
-  <circle cx="230" cy="380" r="280" fill="#38BDF8" opacity="0.08"/>
-  <circle cx="360" cy="750" r="220" fill="#00D085" opacity="0.06"/>
-
-  <text x="230" y="75" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#00D085" text-anchor="middle">PRODUCTION READY</text>
-  <text x="230" y="118" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle">1-Click Ultra HD</text>
-  <text x="230" y="153" font-family="-apple-system,system-ui,sans-serif" font-size="28" font-weight="800" fill="url(#ss4-acc)" text-anchor="middle">Multi-Format Export</text>
-  <text x="230" y="188" font-family="-apple-system,system-ui,sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">3x PNG mockups, bulk ZIP packages &amp; dev Markdown</text>
-
-  <!-- Format 1: Ultra HD 3x PNG (Electric Cyan, Vector Image Icon) -->
-  <g transform="translate(30, 220)">
-    <rect width="400" height="110" rx="20" fill="#0F172A" stroke="rgba(56,189,248,0.25)" stroke-width="1.5"/>
-    <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(56,189,248,0.15)"/>
-    <rect x="41" y="41" width="28" height="22" rx="3" fill="none" stroke="#38BDF8" stroke-width="2"/>
-    <circle cx="49" cy="48" r="2.5" fill="#38BDF8"/>
-    <path d="M 44 60 L 52 52 L 58 58 L 64 50 L 68 56" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linejoin="round"/>
-    <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Ultra HD 3x PNG Mockups</text>
-    <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Pixel-perfect Retina quality for promo</text>
-    <rect x="300" y="38" width="75" height="32" rx="10" fill="#38BDF8"/>
-    <text x="337" y="59" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#080C14" text-anchor="middle">PNG 3X</text>
-  </g>
-
-  <!-- Format 2: Client-Side Bulk ZIP (Warm Amber, Vector Package Icon) -->
-  <g transform="translate(30, 350)">
-    <rect width="400" height="110" rx="20" fill="#0F172A" stroke="rgba(251,191,36,0.25)" stroke-width="1.5"/>
-    <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(251,191,36,0.15)"/>
-    <path d="M 40 44 L 55 37 L 70 44 L 55 51 Z" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 40 44 L 40 60 L 55 67 L 70 60 L 70 44" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 55 51 L 55 67" fill="none" stroke="#FBBF24" stroke-width="2"/>
-    <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Client-Side Bulk ZIP</text>
-    <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">All screenshots, icons &amp; assets in 1 file</text>
-    <rect x="300" y="38" width="75" height="32" rx="10" fill="#FBBF24"/>
-    <text x="337" y="59" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#080C14" text-anchor="middle">ZIP FILE</text>
-  </g>
-
-  <!-- Format 3: Developer Markdown Spec (Radiant Violet, Vector Doc Icon) -->
-  <g transform="translate(30, 480)">
-    <rect width="400" height="110" rx="20" fill="#0F172A" stroke="rgba(192,132,252,0.25)" stroke-width="1.5"/>
-    <rect x="25" y="25" width="60" height="60" rx="16" fill="rgba(192,132,252,0.15)"/>
-    <path d="M 44 38 L 60 38 L 66 44 L 66 66 L 44 66 Z" fill="none" stroke="#C084FC" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M 60 38 L 60 44 L 66 44" fill="none" stroke="#C084FC" stroke-width="2"/>
-    <line x1="49" y1="50" x2="61" y2="50" stroke="#C084FC" stroke-width="1.8" stroke-linecap="round"/>
-    <line x1="49" y1="56" x2="58" y2="56" stroke="#C084FC" stroke-width="1.8" stroke-linecap="round"/>
-    <text x="105" y="50" font-family="-apple-system,system-ui,sans-serif" font-size="16" font-weight="800" fill="#ffffff">Developer Markdown Spec</text>
-    <text x="105" y="74" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Clean structured copy for team docs</text>
-    <rect x="300" y="38" width="75" height="32" rx="10" fill="#C084FC"/>
-    <text x="337" y="59" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="800" fill="#080C14" text-anchor="middle">DOC .MD</text>
-  </g>
-
-  <!-- Card 4: 100% Client-Side Privacy (Vector Lock Icon) -->
-  <g transform="translate(30, 620)">
-    <rect width="400" height="120" rx="20" fill="#131B2E" stroke="rgba(52,211,153,0.25)" stroke-width="1.5"/>
-    <g transform="translate(30, 32)">
-      <rect x="6" y="16" width="20" height="16" rx="3" fill="none" stroke="#34D399" stroke-width="2.2"/>
-      <path d="M 10 16 L 10 10 C 10 6.5 22 6.5 22 10 L 22 16" fill="none" stroke="#34D399" stroke-width="2.2"/>
-      <circle cx="16" cy="24" r="2" fill="#34D399"/>
-    </g>
-    <text x="80" y="46" font-family="-apple-system,system-ui,sans-serif" font-size="15.5" font-weight="800" fill="#ffffff">100% Client-Side Generation</text>
-    <text x="80" y="70" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">Generated entirely in your browser using JSZip</text>
-    <text x="80" y="90" font-family="-apple-system,system-ui,sans-serif" font-size="12" fill="#94a3b8">&amp; HTML5 Canvas. Zero bytes sent to servers.</text>
-  </g>
-
-  <!-- Big CTA Button -->
-  <g transform="translate(30, 770)">
-    <rect width="400" height="120" rx="24" fill="url(#ss4-btn)"/>
-    <text x="200" y="56" font-family="-apple-system,system-ui,sans-serif" font-size="18" font-weight="800" fill="#080C14" text-anchor="middle" letter-spacing="0.5">INSTANT 1-CLICK EXPORT</text>
-    <text x="200" y="82" font-family="-apple-system,system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#080C14" opacity="0.85" text-anchor="middle">No login required · Completely private offline</text>
-  </g>
-</svg>
-`);
-
+const STUDIO_SHOT_4 = makeSvgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 460 996" width="1080" height="2340" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif">
+<defs>
+<linearGradient id="s4bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#080C14"/><stop offset="1" stop-color="#0F172A"/></linearGradient>
+<radialGradient id="s4gc" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.3"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0"/></radialGradient>
+<radialGradient id="s4gi" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#6366F1" stop-opacity="0.34"/><stop offset="1" stop-color="#6366F1" stop-opacity="0"/></radialGradient>
+<radialGradient id="s4ge" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#10B981" stop-opacity="0.28"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<radialGradient id="s4ga" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#F59E0B" stop-opacity="0.2"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
+<linearGradient id="s4tg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38BDF8"/><stop offset="0.55" stop-color="#818CF8"/><stop offset="1" stop-color="#34D399"/></linearGradient>
+<linearGradient id="s4sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.06"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+<linearGradient id="s4scr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C1528"/><stop offset="1" stop-color="#05080F"/></linearGradient>
+<linearGradient id="s4okg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="s4btn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
+<linearGradient id="s4t1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity="0.55"/><stop offset="1" stop-color="#6366F1" stop-opacity="0.25"/></linearGradient>
+<linearGradient id="s4t2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10B981" stop-opacity="0.5"/><stop offset="1" stop-color="#38BDF8" stop-opacity="0.2"/></linearGradient>
+<linearGradient id="s4t3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A78BFA" stop-opacity="0.55"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0.22"/></linearGradient>
+<radialGradient id="s4ig" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#10B981" stop-opacity="0.22"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+<pattern id="s4dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#FFFFFF" fill-opacity="0.05"/></pattern>
+<g id="s4K">
+<polygon points="-6,-6 22,-6 62,60 32,60" fill="#006636" stroke="#006636" stroke-width="4" stroke-linejoin="round"/>
+<rect x="-42" y="-60" width="28" height="120" rx="7" fill="#00D085"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#0F172A" stroke-width="3" stroke-linejoin="round"/>
+<polygon points="-14,4 22,-60 54,-60 10,12 -14,12" fill="#00D085" stroke="#00D085" stroke-width="1" stroke-linejoin="round"/>
+</g>
+</defs><rect width="460" height="996" fill="url(#s4bg)"/><circle cx="60" cy="260" r="250" fill="url(#s4gc)"/><circle cx="440" cy="460" r="240" fill="url(#s4ga)"/><circle cx="60" cy="700" r="240" fill="url(#s4gi)"/><circle cx="340" cy="900" r="300" fill="url(#s4ge)"/><rect width="460" height="996" fill="url(#s4dots)"/><rect x="138" y="50" width="184" height="28" rx="14" fill="rgba(56,189,248,0.10)" stroke="rgba(56,189,248,0.35)"/><circle cx="154" cy="64" r="3" fill="#38BDF8"/><text x="236" y="68" font-size="11" font-weight="600" fill="#7DD3FC" text-anchor="middle" letter-spacing="2.5">PRODUCTION READY</text><text x="230" y="128" font-size="28" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="-0.5">1-Click Ultra HD</text><text x="230" y="160" font-size="19" font-weight="700" fill="url(#s4tg)" text-anchor="middle">Multi-Format Export</text><text x="230" y="188" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">Every release asset, one click away</text><rect x="30" y="236" width="400" height="156" rx="24" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="236" width="400" height="156" rx="24" fill="url(#s4sh)"/><rect x="30" y="236" width="4" height="156" rx="2" fill="#38BDF8" fill-opacity="0.0"/><rect x="50" y="262" width="72" height="72" rx="20" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.45"/><g fill="none" stroke="#7DD3FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="74" y="278" width="24" height="40" rx="5"/><path d="M82 283 h8"/><path d="M74 306 l7 -7 l5 5 l4 -4 l8 8" stroke-width="1.6"/></g><text x="140" y="276" font-size="15" font-weight="700" fill="#fff" text-anchor="start">Ultra HD 3x PNG Mockups</text><text x="140" y="298" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">Retina-grade PNG at 3x scale.</text><text x="140" y="315" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">Frameless or with device frame.</text><rect x="140" y="340" width="37" height="22" rx="11.0" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.38"/><text x="158.5" y="354.24" font-size="9" font-weight="700" fill="#7DD3FC" text-anchor="middle" letter-spacing="0.8">@3x</text><rect x="185" y="340" width="76" height="22" rx="11.0" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.38"/><text x="223.0" y="354.24" font-size="9" font-weight="700" fill="#7DD3FC" text-anchor="middle" letter-spacing="0.8">FRAMELESS</text><rect x="269" y="340" width="95" height="22" rx="11.0" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.38"/><text x="316.5" y="354.24" font-size="9" font-weight="700" fill="#7DD3FC" text-anchor="middle" letter-spacing="0.8">DEVICE FRAME</text><circle cx="396" cy="270" r="16" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.4"/><g fill="none" stroke="#7DD3FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M396 263 v10 m-5 -5 l5 5 l5 -5"/><path d="M389 278 h14"/></g><rect x="30" y="412" width="400" height="156" rx="24" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="412" width="400" height="156" rx="24" fill="url(#s4sh)"/><rect x="30" y="412" width="4" height="156" rx="2" fill="#F59E0B" fill-opacity="0.0"/><rect x="50" y="438" width="72" height="72" rx="20" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.45"/><g fill="none" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M69 464 l5 -9 h24 l5 9 z"/><rect x="69" y="464" width="34" height="27" rx="4"/><path d="M86 464 v8 m0 4 v3 m0 4 v3" stroke-dasharray="1 0"/><rect x="82.5" y="479" width="7" height="8" rx="2" stroke-width="1.6"/></g><text x="140" y="452" font-size="15" font-weight="700" fill="#fff" text-anchor="start">Client-Side Bulk ZIP</text><text x="140" y="474" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">Structured archive of all shots</text><text x="140" y="491" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">and icons, zipped in your browser.</text><rect x="140" y="516" width="37" height="22" rx="11.0" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.38"/><text x="158.5" y="530.24" font-size="9" font-weight="700" fill="#FCD34D" text-anchor="middle" letter-spacing="0.8">ZIP</text><rect x="185" y="516" width="50" height="22" rx="11.0" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.38"/><text x="210.0" y="530.24" font-size="9" font-weight="700" fill="#FCD34D" text-anchor="middle" letter-spacing="0.8">SHOTS</text><rect x="243" y="516" width="50" height="22" rx="11.0" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.38"/><text x="268.0" y="530.24" font-size="9" font-weight="700" fill="#FCD34D" text-anchor="middle" letter-spacing="0.8">ICONS</text><circle cx="396" cy="446" r="16" fill="#F59E0B" fill-opacity="0.14" stroke="#F59E0B" stroke-opacity="0.4"/><g fill="none" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M396 439 v10 m-5 -5 l5 5 l5 -5"/><path d="M389 454 h14"/></g><rect x="30" y="588" width="400" height="156" rx="24" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="588" width="400" height="156" rx="24" fill="url(#s4sh)"/><rect x="30" y="588" width="4" height="156" rx="2" fill="#A78BFA" fill-opacity="0.0"/><rect x="50" y="614" width="72" height="72" rx="20" fill="#A78BFA" fill-opacity="0.14" stroke="#A78BFA" stroke-opacity="0.45"/><g fill="none" stroke="#C4B5FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M74 631 h17 l8 8 v27 a3 3 0 0 1 -3 3 h-22 a3 3 0 0 1 -3 -3 v-32 a3 3 0 0 1 3 -3 z"/><path d="M91 631 v8 h8" stroke-width="1.6"/><path d="M79 656 v-6 l3.5 4 l3.5 -4 v6 M91.5 650 v6 m-3 -3 l3 3 l3 -3" stroke-width="1.5"/></g><text x="140" y="628" font-size="15" font-weight="700" fill="#fff" text-anchor="start">Developer Markdown Spec</text><text x="140" y="650" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">Ready-to-paste store copy,</text><text x="140" y="667" font-size="11.5" font-weight="400" fill="#94A3B8" text-anchor="start">titles, subtitles &amp; descriptions.</text><rect x="140" y="692" width="37" height="22" rx="11.0" fill="#A78BFA" fill-opacity="0.14" stroke="#A78BFA" stroke-opacity="0.38"/><text x="158.5" y="706.24" font-size="9" font-weight="700" fill="#C4B5FD" text-anchor="middle" letter-spacing="0.8">.MD</text><rect x="185" y="692" width="50" height="22" rx="11.0" fill="#A78BFA" fill-opacity="0.14" stroke="#A78BFA" stroke-opacity="0.38"/><text x="210.0" y="706.24" font-size="9" font-weight="700" fill="#C4B5FD" text-anchor="middle" letter-spacing="0.8">TITLE</text><rect x="243" y="692" width="88" height="22" rx="11.0" fill="#A78BFA" fill-opacity="0.14" stroke="#A78BFA" stroke-opacity="0.38"/><text x="287.0" y="706.24" font-size="9" font-weight="700" fill="#C4B5FD" text-anchor="middle" letter-spacing="0.8">DESCRIPTION</text><circle cx="396" cy="622" r="16" fill="#A78BFA" fill-opacity="0.14" stroke="#A78BFA" stroke-opacity="0.4"/><g fill="none" stroke="#C4B5FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M396 615 v10 m-5 -5 l5 5 l5 -5"/><path d="M389 630 h14"/></g><rect x="30" y="768" width="400" height="84" rx="42" fill="url(#s4okg)" stroke="rgba(16,185,129,0.5)" stroke-width="1.2"/><circle cx="72" cy="810" r="20" fill="#10B981"/><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="64.5" y="808" width="15" height="11" rx="2.5" fill="#fff" fill-opacity="0.15"/><path d="M67.5 808 v-3.5 a4.5 4.5 0 0 1 9 0 v3.5"/></g><text x="106" y="806" font-size="13.5" font-weight="800" fill="#fff" text-anchor="start" letter-spacing="1.2">100% CLIENT-SIDE EXPORT</text><text x="106" y="826" font-size="11" font-weight="700" fill="#6EE7B7" text-anchor="start" letter-spacing="1.4">0 BYTES SENT TO SERVER</text><line x1="170" y1="934" x2="290" y2="934" stroke="rgba(255,255,255,0.10)"/><text x="230" y="958" font-size="9" font-weight="600" fill="#475569" text-anchor="middle" letter-spacing="3">STORE PREVIEW STUDIO</text>
+</svg>`);
 const LINGUA_ICON = SKILL_ICON;
 const LINGUA_FEATURE = SKILL_FEATURE;
 const LINGUA_SHOT_1 = SKILL_SHOT_1;

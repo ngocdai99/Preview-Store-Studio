@@ -444,6 +444,45 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.wordSpacing = '0.22em';
           el.style.letterSpacing = '0px';
         });
+        // Ensure SVG elements retain accurate computed stroke, fill, stroke-width and color
+        // when serialized to detached data-URI SVG images by html2canvas (Safari / WebKit)
+        const win = clonedDoc.defaultView || window;
+        clonedEl.querySelectorAll('svg').forEach(svg => {
+          const comp = win.getComputedStyle(svg);
+          const compColor = comp.color || '#000000';
+          svg.style.color = compColor;
+
+          if (svg.getAttribute('stroke') === 'currentColor') {
+            svg.setAttribute('stroke', compColor);
+          }
+          if (svg.getAttribute('fill') === 'currentColor') {
+            svg.setAttribute('fill', compColor);
+          }
+
+          if (!svg.getAttribute('stroke-width') && comp.strokeWidth && comp.strokeWidth !== 'none' && comp.strokeWidth !== '0px') {
+            svg.setAttribute('stroke-width', comp.strokeWidth.replace('px', ''));
+          }
+
+          // Bake explicit currentColor resolution on children if specified
+          svg.querySelectorAll('*').forEach(child => {
+            if (child.getAttribute('stroke') === 'currentColor') {
+              child.setAttribute('stroke', compColor);
+            }
+            if (child.getAttribute('fill') === 'currentColor') {
+              child.setAttribute('fill', compColor);
+            }
+          });
+        });
+
+        // Ensure Google Play age rating badge retains centered text & tight box
+        clonedEl.querySelectorAll('.g-age-badge, [data-age-google-badge]').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
+          el.style.lineHeight = '14px';
+          el.style.textAlign = 'center';
+          el.style.boxSizing = 'border-box';
+        });
+
         // Strip focus highlight from export capture
         clonedDoc.querySelectorAll('.hl-target, .hl-flash').forEach(el => {
           el.classList.remove('hl-target', 'hl-flash');

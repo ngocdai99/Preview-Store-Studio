@@ -1381,6 +1381,11 @@ assert(bundledHtml.includes('w = appleW + gap + googleW') && bundledHtml.include
 assert(bundledHtml.includes("clonedEl.style.paddingTop = '0px'") && bundledHtml.includes("clonedDoc.querySelectorAll('.dev-label').forEach(l => l.style.display = 'none')"), 'exportPNG removes 36px top blank gap and hides dev-labels in cloned dual phone export');
 assert(bundledHtml.includes("scr.style.overflow = 'hidden'") && bundledHtml.includes("gnav.style.position = 'absolute'") && bundledHtml.includes("gnav.style.bottom = '0px'"), 'exportPNG anchors Android bottom navigation bar (.gnav) and prevents .scr overflow expansion from pushing it offscreen');
 assert(bundledHtml.includes('scrollX: 0') && bundledHtml.includes('scrollY: 0'), 'exportPNG passes scrollX: 0 and scrollY: 0 to prevent scroll offset drift');
+assert(bundledHtml.includes('A.svg?this.ctx.drawImage(t,r.left,r.top,r.width,r.height):this.ctx.drawImage(t,0,0,A.intrinsicWidth,A.intrinsicHeight,r.left,r.top,r.width,r.height)'), 'html2canvas uses full-canvas 5-argument drawImage for SVGs preventing clipping and 1/4 shrunk icons on Safari/WebKit');
+assert(bundledHtml.includes('viewBox="0 -1 16 13"'), 'Status bar WiFi SVG uses viewBox="0 -1 16 13" giving safe top margin preventing arc clipping');
+assert(bundledHtml.includes('cx="11" cy="11" r="6.5" fill="none"'), 'Search icon circle defines explicit fill="none" and stroke-width="2"');
+assert(bundledHtml.includes('.g-age-badge'), 'Google Play age rating badge defines dedicated .g-age-badge styling for centered text and tight box');
+assert(bundledHtml.includes('g-info-ico'), 'Google Play Everyone tooltip icon uses .g-info-ico with fill="none" circle preventing clipping');
 assert(bundledHtml.includes('APP STORE &middot; iPhone') && bundledHtml.includes('GOOGLE PLAY &middot; Android'), 'Devices render marketing-style platform header labels (APP STORE · iPhone / GOOGLE PLAY · Android)');
 assert(bundledHtml.includes('.dev-label') && bundledHtml.includes('.dev-title'), 'Stage stylesheet includes .dev-label and .dev-title presentation styling');
 assert(bundledHtml.includes('font-size:calc(13px / var(--dev-zoom, 1))'), '.dev-title uses --dev-zoom invariant font scaling at 13px');
