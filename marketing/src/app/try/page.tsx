@@ -37,8 +37,8 @@ export default function TryPage() {
         </section>
 
         {/* Embedded Interactive Core Studio (/try-studio.html?embed=true with query params forwarding) */}
-        <section className="w-full max-w-[1880px] mx-auto px-2 sm:px-4 lg:px-6 pb-14 flex-1 flex flex-col">
-          <div className="relative w-full rounded-2xl sm:rounded-3xl border border-slate-200/90 dark:border-[#282928] bg-[#0c0d0c] shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden min-h-[1180px] h-[1180px] lg:h-[calc(100vh-70px)] lg:min-h-[850px] lg:max-h-[1080px]">
+        <section className="w-full px-0 pb-12 flex-1 flex flex-col">
+          <div className="relative w-full border-y border-slate-200/90 dark:border-[#282928] bg-[#0c0d0c] shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden min-h-[920px] h-[920px] lg:h-[calc(100vh-64px)] lg:min-h-[820px] lg:max-h-[1050px]">
             <TryStudioIframe />
           </div>
         </section>

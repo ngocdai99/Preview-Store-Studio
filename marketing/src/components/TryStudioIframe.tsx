@@ -26,6 +26,23 @@ function TryStudioIframeInner() {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      if (event.data && event.data.type === "sps-scroll-parent") {
+        const delta = Number(event.data.deltaY);
+        if (!isNaN(delta) && delta !== 0) {
+          window.scrollBy({
+            top: delta,
+            behavior: "auto",
+          });
+        }
+      }
+    }
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
+
   return (
     <iframe
       src={src}
