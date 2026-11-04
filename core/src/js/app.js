@@ -11174,7 +11174,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             -webkit-box-orient: unset !important;
             white-space: pre-wrap !important;
             word-break: normal !important;
-            word-spacing: 0.22em !important;
+            word-spacing: normal !important;
             letter-spacing: 0px !important;
           }
         `;
@@ -11300,7 +11300,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.webkitBoxOrient = 'unset';
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordBreak = 'normal';
-          el.style.wordSpacing = '0.22em';
+          el.style.wordSpacing = 'normal';
           el.style.letterSpacing = '0px';
         });
         // Ensure SVG elements retain accurate computed stroke, fill, stroke-width and color

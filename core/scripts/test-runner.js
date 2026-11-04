@@ -3592,10 +3592,10 @@ asyncSuites.push((async () => {
   const exportPngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
   assert(exportPngSrc.includes('.g-name, .a-name, .g-dev, .a-sub') && exportPngSrc.includes('display: block !important'), 'exportPNG overrides -webkit-box with display: block in clonedDoc');
   assert(exportPngSrc.includes('white-space: pre-wrap !important'), 'exportPNG enforces white-space: pre-wrap in clonedDoc style');
-  assert(exportPngSrc.includes('word-spacing: 0.22em !important'), 'exportPNG enforces generous word-spacing: 0.22em in clonedDoc style');
+  assert(exportPngSrc.includes('word-spacing: normal !important'), 'exportPNG enforces natural word-spacing: normal in clonedDoc style');
 
   // 3. exportPNG sets inline style overrides on cloned element nodes for guaranteed precedence
-  assert(exportPngSrc.includes("el.style.display = 'block'") && exportPngSrc.includes("el.style.whiteSpace = 'pre-wrap'"), 'exportPNG sets inline style display: block and whiteSpace: pre-wrap on cloned text nodes');
+  assert(exportPngSrc.includes("el.style.display = 'block'") && exportPngSrc.includes("el.style.whiteSpace = 'pre-wrap'") && exportPngSrc.includes("el.style.wordSpacing = 'normal'"), 'exportPNG sets inline style display: block, whiteSpace: pre-wrap and wordSpacing: normal on cloned text nodes');
 
   // 4. Bundled core.html contains both CSS and JS fixes
   assert(bundledHtml.includes('white-space:pre-wrap') && bundledHtml.includes('.g-name{'), 'Bundled application has white-space:pre-wrap on .g-name');
