@@ -252,8 +252,10 @@ function build(options = {}) {
       ? ` ${c.yellow}[Plus 5-Preset]${c.reset}`
       : (options.minify ? ` ${c.cyan}[Minified 6-Preset]${c.reset}` : ` ${c.gray}[Full 6-Preset]${c.reset}`);
 
-    console.log(`  ${c.green}[OK]${c.reset} Bundled: ${c.brightGreen}${outTarget}${c.reset}`);
-    console.log(`    ${c.gray}Variant:${c.reset}${tierLabel} ${c.gray}· Size:${c.reset} ${c.yellow}${sizeKb} KB${c.reset} ${c.gray}· Time:${c.reset} ${duration}ms`);
+    if (!options.silent) {
+      console.log(`  ${c.green}[OK]${c.reset} Bundled: ${c.brightGreen}${outTarget}${c.reset}`);
+      console.log(`    ${c.gray}Variant:${c.reset}${tierLabel} ${c.gray}· Size:${c.reset} ${c.yellow}${sizeKb} KB${c.reset} ${c.gray}· Time:${c.reset} ${duration}ms`);
+    }
     return { success: true, duration, sizeKb, html };
   } catch (err) {
     console.error(`  ${c.red}✗ Build failed:${c.reset}`, err.message);

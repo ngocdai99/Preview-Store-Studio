@@ -239,7 +239,7 @@ function markdownToHtml(mdContent, docType) {
 }
 
 // Generate complete standalone HTML file with styling and interactivity
-function buildDocHtml({ title, subtitle, badge, mdFile, outFile, docType }) {
+function buildDocHtml({ title, subtitle, badge, mdFile, outFile, docType, silent }) {
   const mdContent = fs.readFileSync(mdFile, 'utf8');
   const { htmlBody, toc } = markdownToHtml(mdContent, docType);
 
@@ -906,21 +906,22 @@ function buildDocHtml({ title, subtitle, badge, mdFile, outFile, docType }) {
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, html, 'utf8');
   const sizeKb = (fs.statSync(outFile).size / 1024).toFixed(1);
-  console.log(`  [OK] Generated: ${outFile} (${sizeKb} KB)`);
+  if (!silent) {
+    console.log(`  [OK] Generated: ${outFile} (${sizeKb} KB)`);
+  }
 }
 
-function buildAllDocs() {
-  console.log('\n======================================================');
-  console.log('Building Documentation HTML Files...');
-  console.log('======================================================');
+function buildAllDocs(options = {}) {
+  const silent = Boolean(options.silent);
+  if (!silent) {
+    console.log('\n======================================================');
+    console.log('Building Documentation HTML Files...');
+    console.log('======================================================');
+  }
 
   const faqMd = fs.existsSync(path.join(ROOT_DIR, 'docs', 'AGENCY_MARKETING_FAQ.md'))
     ? path.join(ROOT_DIR, 'docs', 'AGENCY_MARKETING_FAQ.md')
     : path.join(ROOT_DIR, 'AGENCY_MARKETING_FAQ.md');
-
-  const testCasesMd = fs.existsSync(path.join(ROOT_DIR, 'docs', 'TEST_CASES.md'))
-    ? path.join(ROOT_DIR, 'docs', 'TEST_CASES.md')
-    : path.join(ROOT_DIR, 'TEST_CASES.md');
 
   // 1. Marketing & Agency FAQ (English)
   const faqOut = path.join(ROOT_DIR, 'docs', 'AGENCY_MARKETING_FAQ.html');
@@ -930,24 +931,34 @@ function buildAllDocs() {
     badge: 'Marketing & ASO Guide',
     mdFile: faqMd,
     outFile: faqOut,
-    docType: 'faq'
+    docType: 'faq',
+    silent
   });
   // Also sync to package/ for backward compatibility
   const pkgFaqOut = path.join(ROOT_DIR, 'package', 'AGENCY_MARKETING_FAQ.html');
   fs.mkdirSync(path.dirname(pkgFaqOut), { recursive: true });
   fs.copyFileSync(faqOut, pkgFaqOut);
 
-  // 2. Comprehensive Test Cases (English)
-  buildDocHtml({
-    title: 'Store Preview Studio — Comprehensive Test Case Specification',
-    subtitle: '19 Quality Assurance Modules, automated regression suites, validation checks & delivery verification.',
-    badge: 'QA & Testing Spec',
-    mdFile: testCasesMd,
-    outFile: path.join(ROOT_DIR, 'package', 'TEST_CASES.html'),
-    docType: 'test-cases'
-  });
+  // 2. Comprehensive Test Cases (Only if explicitly requested)
+  if (options.includeTestCases) {
+    const testCasesMd = fs.existsSync(path.join(ROOT_DIR, 'docs', 'TEST_CASES.md'))
+      ? path.join(ROOT_DIR, 'docs', 'TEST_CASES.md')
+      : path.join(ROOT_DIR, 'TEST_CASES.md');
 
-  console.log('Documentation HTML build complete.\n');
+    buildDocHtml({
+      title: 'Store Preview Studio — Comprehensive Test Case Specification',
+      subtitle: '19 Quality Assurance Modules, automated regression suites, validation checks & delivery verification.',
+      badge: 'QA & Testing Spec',
+      mdFile: testCasesMd,
+      outFile: path.join(ROOT_DIR, 'package', 'TEST_CASES.html'),
+      docType: 'test-cases',
+      silent
+    });
+  }
+
+  if (!silent) {
+    console.log('Documentation HTML build complete.\n');
+  }
 }
 
 if (require.main === module) {
