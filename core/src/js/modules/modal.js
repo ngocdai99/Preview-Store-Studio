@@ -177,7 +177,7 @@
       if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';
     } else if (_activeModalType === 'ipad') {
-      if (titleEl) titleEl.textContent = 'Apple iPad Pro 13" Screenshot Inspector';
+      if (titleEl) titleEl.textContent = 'Apple iPad Screenshot Inspector';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New iPad Screenshot';
     } else if (_activeModalType === 'feature') {
       if (titleEl) titleEl.textContent = 'Google Play Feature Graphic Inspector';
@@ -628,17 +628,17 @@
           detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Apple App Store requires 3:4 portrait (2048×2732 px) or 4:3 landscape (2732×2048 px) for iPad screenshots. Square (1:1) screenshots will be rejected by App Store Connect.</p><p class="icon-modal-warn-hint">Export a standard iPad screenshot (2048×2732 px) from Figma or Sketch.</p>';
         } else if (w === 2048 && h === 2732) {
           level = 'ok';
-          badgeText = '2048×2732 px · iPad Pro 13" Compliant';
+          badgeText = '2048×2732 px · iPad Compliant';
         } else if (w === 2732 && h === 2048) {
           level = 'ok';
-          badgeText = '2732×2048 px · iPad Pro 13" Landscape Compliant';
+          badgeText = '2732×2048 px · iPad Landscape Compliant';
         } else if (isIpadPortrait || isIpadLandscape) {
           level = 'ok';
           badgeText = `${w}×${h} px · Standard iPad Compliant`;
         } else {
           level = 'warn';
           badgeText = `Dimension Notice (${w}×${h} px) · Target: 2048×2732 px`;
-          detailsHtml = '<p>Apple recommends 2048×2732 px for 13" iPad Pro screenshots (Portrait) or 2732×2048 px (Landscape).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
+          detailsHtml = '<p>Apple recommends 2048×2732 px for iPad screenshots (Portrait) or 2732×2048 px (Landscape).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
         }
       } else if (_activeModalType === 'tablet') {
         const MAX_TAB_SHOT_BYTES = 8 * 1024 * 1024;

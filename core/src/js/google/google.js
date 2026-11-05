@@ -432,8 +432,8 @@ $$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd
 function tabStatus(key){
   const v = TABS[key].filter(i => i.src), bad = v.filter(i => tabIssues(key, i).length).length;
   if(!v.length) return 'None uploaded (optional)';
-  if(v.length > MAX_TAB) return `${v.length} screenshots - max ${MAX_TAB}`;
-  return bad ? `${bad} of ${v.length} would be rejected` : `PASS (${v.length} screenshot${v.length===1?'':'s'})`;
+  if(v.length > MAX_TAB) return `${v.length} screenshots (exceeds max ${MAX_TAB})`;
+  return bad ? `${bad} of ${v.length} with format issues` : `Uploaded (${v.length} screenshot${v.length===1?'':'s'})`;
 }
 
 

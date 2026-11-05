@@ -1483,7 +1483,7 @@ const PH_IPAD = makeSvgDataUri(`
     <circle cx="65" cy="80" r="34" fill="#8b5cf6"/>
     <path d="M65 64 L65 96 M49 80 L81 80" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
     <text x="0" y="240" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="64" font-weight="700" fill="#f8fafc" text-anchor="middle" letter-spacing="-0.5">No iPad Screenshot Uploaded</text>
-    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#94a3b8" text-anchor="middle">iPad Pro 13&quot; Target: 2048 × 2732 px (3:4 Ratio)</text>
+    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#94a3b8" text-anchor="middle">iPad Target: 2048 × 2732 px (3:4 Ratio)</text>
     <text x="0" y="385" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="32" font-weight="400" fill="#64748b" text-anchor="middle">PNG or JPEG · Up to 8 MB · Supports Landscape &amp; Portrait</text>
   </g>
 </svg>
@@ -1572,7 +1572,7 @@ const PH_IPAD_LIGHT = makeSvgDataUri(`
     <circle cx="65" cy="80" r="34" fill="#8b5cf6"/>
     <path d="M65 64 L65 96 M49 80 L81 80" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
     <text x="0" y="240" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="64" font-weight="700" fill="#0f172a" text-anchor="middle" letter-spacing="-0.5">No iPad Screenshot Uploaded</text>
-    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#64748b" text-anchor="middle">iPad Pro 13&quot; Target: 2048 × 2732 px (3:4 Ratio)</text>
+    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#64748b" text-anchor="middle">iPad Target: 2048 × 2732 px (3:4 Ratio)</text>
     <text x="0" y="385" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="32" font-weight="400" fill="#94a3b8" text-anchor="middle">PNG or JPEG · Up to 8 MB · Supports Landscape &amp; Portrait</text>
   </g>
 </svg>
@@ -2856,7 +2856,7 @@ const STUDIO_FEATURE = makeSvgDataUri(`
   <text x="172" y="105" font-family="-apple-system,system-ui,sans-serif" font-size="36" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Store Preview Studio</text>
   <text x="172" y="132" font-family="-apple-system,system-ui,sans-serif" font-size="12.5" font-weight="700" fill="url(#sfeat-kicker)" letter-spacing="1.5">DUAL-STORE PREVIEW &amp; METADATA STUDIO</text>
 
-  <text x="72" y="200" font-family="-apple-system,system-ui,sans-serif" font-size="27" font-weight="700" fill="#ffffff">Design &amp; Validate Pixel-Perfect Store Mockups</text>
+  <text x="72" y="200" font-family="-apple-system,system-ui,sans-serif" font-size="27" font-weight="700" fill="#ffffff">Design &amp; Validate Realistic Store Mockups</text>
   <text x="72" y="235" font-family="-apple-system,system-ui,sans-serif" font-size="15" fill="#94A3B8">App Store &amp; Google Play live viewports, pre-flight audits, 100% offline in your browser.</text>
 
   <!-- 3 Colorful Feature Badges (Zero Emoji, Clean Vector Icons) -->
@@ -5098,7 +5098,7 @@ function setSupportsIpad(val){
   if(descBar && hint){
     descBar.classList.toggle('active-universal', SUPPORTS_IPAD);
     if(SUPPORTS_IPAD){
-      hint.innerHTML = '<strong>Universal App Active:</strong> Dedicated iPad Pro 13" screenshots in Card 5 below.';
+      hint.innerHTML = '<strong>Universal App Active:</strong> Dedicated iPad screenshots in Card 5 below.';
     } else {
       hint.innerHTML = '<strong>iPhone-only Mode:</strong> Apple displays scaled iPhone fallback unless dedicated iPad screenshots are added in Card 5.';
     }
@@ -5478,7 +5478,7 @@ function validateIpadScreenshots(){
           tag.textContent = `iPad 4:3 (${w}×${h})`;
         } else {
           tag.className = 'shot-dim-tag ok';
-          tag.textContent = `iPad Pro 13" (${w}×${h})`;
+          tag.textContent = `iPad (${w}×${h})`;
         }
       }
 
@@ -5793,7 +5793,7 @@ if(ipadSlistArea){
       if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';
     } else if (_activeModalType === 'ipad') {
-      if (titleEl) titleEl.textContent = 'Apple iPad Pro 13" Screenshot Inspector';
+      if (titleEl) titleEl.textContent = 'Apple iPad Screenshot Inspector';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New iPad Screenshot';
     } else if (_activeModalType === 'feature') {
       if (titleEl) titleEl.textContent = 'Google Play Feature Graphic Inspector';
@@ -6244,17 +6244,17 @@ if(ipadSlistArea){
           detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Apple App Store requires 3:4 portrait (2048×2732 px) or 4:3 landscape (2732×2048 px) for iPad screenshots. Square (1:1) screenshots will be rejected by App Store Connect.</p><p class="icon-modal-warn-hint">Export a standard iPad screenshot (2048×2732 px) from Figma or Sketch.</p>';
         } else if (w === 2048 && h === 2732) {
           level = 'ok';
-          badgeText = '2048×2732 px · iPad Pro 13" Compliant';
+          badgeText = '2048×2732 px · iPad Compliant';
         } else if (w === 2732 && h === 2048) {
           level = 'ok';
-          badgeText = '2732×2048 px · iPad Pro 13" Landscape Compliant';
+          badgeText = '2732×2048 px · iPad Landscape Compliant';
         } else if (isIpadPortrait || isIpadLandscape) {
           level = 'ok';
           badgeText = `${w}×${h} px · Standard iPad Compliant`;
         } else {
           level = 'warn';
           badgeText = `Dimension Notice (${w}×${h} px) · Target: 2048×2732 px`;
-          detailsHtml = '<p>Apple recommends 2048×2732 px for 13" iPad Pro screenshots (Portrait) or 2732×2048 px (Landscape).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
+          detailsHtml = '<p>Apple recommends 2048×2732 px for iPad screenshots (Portrait) or 2732×2048 px (Landscape).</p><p class="icon-modal-warn-hint">Store Preview Studio automatically scales screenshots to standard canvas proportions.</p>';
         }
       } else if (_activeModalType === 'tablet') {
         const MAX_TAB_SHOT_BYTES = 8 * 1024 * 1024;
@@ -7266,8 +7266,8 @@ $$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd
 function tabStatus(key){
   const v = TABS[key].filter(i => i.src), bad = v.filter(i => tabIssues(key, i).length).length;
   if(!v.length) return 'None uploaded (optional)';
-  if(v.length > MAX_TAB) return `${v.length} screenshots - max ${MAX_TAB}`;
-  return bad ? `${bad} of ${v.length} would be rejected` : `PASS (${v.length} screenshot${v.length===1?'':'s'})`;
+  if(v.length > MAX_TAB) return `${v.length} screenshots (exceeds max ${MAX_TAB})`;
+  return bad ? `${bad} of ${v.length} with format issues` : `Uploaded (${v.length} screenshot${v.length===1?'':'s'})`;
 }
 
 
@@ -11481,121 +11481,56 @@ function exportMarkdown(){
   const sub = $('f-sub') ? $('f-sub').value : '';
   const promo = $('f-promo') ? $('f-promo').value : '';
   const short = $('f-short') ? $('f-short').value : '';
-  const dev = $('f-dev') ? $('f-dev').value : '';
-  const cat = CAT.apple || '-';
-  const catG = CAT.google || '-';
-  const ver = $('f-ver') ? $('f-ver').value : '2.4.0';
-  const rdate = $('f-rdate') ? $('f-rdate').value : getCurrentMonthDateStr(2, true);
-  const email = $('f-email') ? $('f-email').value : '-';
-  const addr = $('f-addr') ? $('f-addr').value : '-';
-  const privLinked = $('f-priv-linked') ? $('f-priv-linked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.linked || 'None') : 'None');
-  const privNotLinked = $('f-priv-notlinked') ? $('f-priv-notlinked').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.notLinked || 'None') : 'None');
-  const privGoogle = $('f-priv-google') ? $('f-priv-google').value : (typeof CURRENT_PRIVACY !== 'undefined' ? (CURRENT_PRIVACY.google || 'None') : 'None');
+  const catApple = (typeof CAT === 'object' && CAT.apple) ? CAT.apple : (typeof CAT !== 'undefined' && CAT.apple ? CAT.apple : '-');
+  const catGoogle = (typeof CAT === 'object' && CAT.google) ? CAT.google : (typeof CAT !== 'undefined' && CAT.google ? CAT.google : '-');
   const wn = $('f-new') ? $('f-new').value : '';
   const desc = $('f-desc') ? $('f-desc').value : '';
-  const ageVal = STATS.age || '4+';
-  const gAge = GOOGLE_AGE_MAP[ageVal] || GOOGLE_AGE_MAP['4+'];
-  const iapLabels = {
-    iap: 'In-App Purchases (No Ads)',
-    ads_iap: 'Contains Ads · In-App Purchases',
-    ads: 'Contains Ads Only',
-    free: 'None (100% Free / Paid Upfront)'
-  };
-  const iapText = iapLabels[STATS.iap || 'iap'] || iapLabels.iap;
-
-  const validCount = SHOTS.filter(s=>s && s.trim()).length;
-  const isShotCompliant = validCount >= 2 && validCount <= 8;
+  const safeCount = typeof countChars === 'function' ? countChars : (s => (s || '').length);
 
   const md = `# Store Listing Metadata: ${name}
 
 > Generated by **Store Preview Studio** on ${new Date().toLocaleDateString()}
-> Zero-server client-side validation report.
 
 ---
 
-## Character Limits & Compliance Summary
+## Apple App Store (iOS)
 
-| Field | Target Store | Official Limit | Current Length | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **App Title** | Both | 30 chars | ${countChars(name)} | ${countChars(name) <= 30 ? 'PASS' : 'EXCEEDED'} |
-| **Subtitle** | App Store | 30 chars | ${countChars(sub)} | ${countChars(sub) <= 30 ? 'PASS' : 'EXCEEDED'} |
-| **Promotional Text** | App Store | 170 chars | ${countChars(promo)} | ${countChars(promo) <= 170 ? 'PASS' : 'EXCEEDED'} |
-| **Short Description** | Google Play | 80 chars | ${countChars(short)} | ${countChars(short) <= 80 ? 'PASS' : 'EXCEEDED'} |
-| **Full Description** | Both | 4,000 chars | ${countChars(desc)} | ${countChars(desc) <= 4000 ? 'PASS' : 'EXCEEDED'} |
-
----
-
-## Graphic Assets Checklist (Google Play & Apple App Store)
-
-| Asset | Target Platform | Specification | Store Requirement | Current Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **App Icon (Google Play)** | Google Play | PNG/JPEG, up to 1 MB, 512 × 512 px | **Mandatory** | ${ICON ? 'Ready' : 'Missing'} |
-| **App Icon (Apple)** | App Store | PNG/JPEG, 1024 × 1024 px (sRGB/P3, no alpha) | **Mandatory** | ${ICON ? 'Ready' : 'Missing'} |
-| **Feature Graphic** | Google Play | PNG/JPEG, up to 15 MB, 1,024 × 500 px | **Mandatory for Featuring** | ${FEATURE_GRAPHIC ? 'Ready' : 'Missing'} |
-| **Phone Screenshots** | Google Play | PNG/JPEG, up to 8 MB each, 16:9 or 9:16 (320px–3,840px) | **2 to 8 Screenshots** | ${isShotCompliant ? `PASS (${validCount} screenshots)` : `REJECT RISK (${validCount} screenshots - requires 2 to 8)`} |
-| **7-inch Tablet Screenshots** | Google Play | 24-bit PNG/JPEG (no alpha), up to 8 MB each, 16:9 or 9:16 (320px–3,840px per side) | **Up to 8 screenshots** | ${tabStatus('tab7')} |
-| **10-inch Tablet Screenshots** | Google Play | 24-bit PNG/JPEG (no alpha), up to 8 MB each, 16:9 or 9:16 (1,080px–7,680px per side) | **Up to 8 screenshots** | ${tabStatus('tab10')} |
-
----
-
-## App Privacy, Data Safety & Store Badges
-
-* **Version & Release Date:** \`v${ver}\` (${rdate})
-* **Age Rating:** App Store \`${ageVal}\` | Google Play \`${gAge.badge} (${gAge.label})\`
-* **Monetization / IAP Badge:** \`${iapText}\`
-* **Apple Privacy — Data Linked to You:** ${privLinked}
-* **Apple Privacy — Data Not Linked to You:** ${privNotLinked}
-* **Google Play — Data Safety Practices:** ${privGoogle}
-* **Developer Support Contact:** \`${email}\` (${addr})
-
----
-
-## Apple App Store Metadata
-
-### Title
+### App Title (${safeCount(name)}/30 chars)
 ${safeFence(name)}
 
-### Subtitle
+### Subtitle (${safeCount(sub)}/30 chars)
 ${safeFence(sub)}
 
-### Promotional Text
+### Promotional Text (${safeCount(promo)}/170 chars)
 ${safeFence(promo)}
 
-### Category
-* **Primary:** \`${cat}\`
-* **Developer:** \`${dev}\`
+### Primary Category
+${catApple}
 
----
-
-## Google Play Store Metadata
-
-### Category
-\`${catG}\`
-
-### Title
-${safeFence(name)}
-
-### Short Description
-${safeFence(short)}
-
-### Full Description
+### Description (${safeCount(desc)}/4,000 chars)
 ${safeFence(desc)}
 
----
-
-## Release Notes (What's New)
+### What's New
 ${safeFence(wn)}
 
 ---
 
-## Fastlane CLI Mapping Cheat-Sheet
-- \`fastlane/metadata/android/en-US/title.txt\` -> App Title
-- \`fastlane/metadata/android/en-US/short_description.txt\` -> Short Description
-- \`fastlane/metadata/android/en-US/full_description.txt\` -> Full Description
-- \`fastlane/metadata/ios/en-US/name.txt\` -> App Title
-- \`fastlane/metadata/ios/en-US/subtitle.txt\` -> Subtitle
-- \`fastlane/metadata/ios/en-US/promotional_text.txt\` -> Promotional Text
-- \`fastlane/metadata/ios/en-US/description.txt\` -> Full Description
+## Google Play Store (Android)
+
+### App Name (${safeCount(name)}/30 chars)
+${safeFence(name)}
+
+### Short Description (${safeCount(short)}/80 chars)
+${safeFence(short)}
+
+### App Category
+${catGoogle}
+
+### Full Description (${safeCount(desc)}/4,000 chars)
+${safeFence(desc)}
+
+### What's New / Release Notes
+${safeFence(wn)}
 `;
 
   downloadFile('LISTING_METADATA.md', md, 'text/markdown');

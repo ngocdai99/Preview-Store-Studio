@@ -18,7 +18,7 @@ function setSupportsIpad(val){
   if(descBar && hint){
     descBar.classList.toggle('active-universal', SUPPORTS_IPAD);
     if(SUPPORTS_IPAD){
-      hint.innerHTML = '<strong>Universal App Active:</strong> Dedicated iPad Pro 13" screenshots in Card 5 below.';
+      hint.innerHTML = '<strong>Universal App Active:</strong> Dedicated iPad screenshots in Card 5 below.';
     } else {
       hint.innerHTML = '<strong>iPhone-only Mode:</strong> Apple displays scaled iPhone fallback unless dedicated iPad screenshots are added in Card 5.';
     }
@@ -402,7 +402,7 @@ function validateIpadScreenshots(){
           tag.textContent = `iPad 4:3 (${w}×${h})`;
         } else {
           tag.className = 'shot-dim-tag ok';
-          tag.textContent = `iPad Pro 13" (${w}×${h})`;
+          tag.textContent = `iPad (${w}×${h})`;
         }
       }
 

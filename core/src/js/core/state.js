@@ -449,7 +449,7 @@ const PH_IPAD = makeSvgDataUri(`
     <circle cx="65" cy="80" r="34" fill="#8b5cf6"/>
     <path d="M65 64 L65 96 M49 80 L81 80" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
     <text x="0" y="240" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="64" font-weight="700" fill="#f8fafc" text-anchor="middle" letter-spacing="-0.5">No iPad Screenshot Uploaded</text>
-    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#94a3b8" text-anchor="middle">iPad Pro 13&quot; Target: 2048 × 2732 px (3:4 Ratio)</text>
+    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#94a3b8" text-anchor="middle">iPad Target: 2048 × 2732 px (3:4 Ratio)</text>
     <text x="0" y="385" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="32" font-weight="400" fill="#64748b" text-anchor="middle">PNG or JPEG · Up to 8 MB · Supports Landscape &amp; Portrait</text>
   </g>
 </svg>
@@ -538,7 +538,7 @@ const PH_IPAD_LIGHT = makeSvgDataUri(`
     <circle cx="65" cy="80" r="34" fill="#8b5cf6"/>
     <path d="M65 64 L65 96 M49 80 L81 80" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
     <text x="0" y="240" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif" font-size="64" font-weight="700" fill="#0f172a" text-anchor="middle" letter-spacing="-0.5">No iPad Screenshot Uploaded</text>
-    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#64748b" text-anchor="middle">iPad Pro 13&quot; Target: 2048 × 2732 px (3:4 Ratio)</text>
+    <text x="0" y="320" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="38" font-weight="500" fill="#64748b" text-anchor="middle">iPad Target: 2048 × 2732 px (3:4 Ratio)</text>
     <text x="0" y="385" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif" font-size="32" font-weight="400" fill="#94a3b8" text-anchor="middle">PNG or JPEG · Up to 8 MB · Supports Landscape &amp; Portrait</text>
   </g>
 </svg>
@@ -1822,7 +1822,7 @@ const STUDIO_FEATURE = makeSvgDataUri(`
   <text x="172" y="105" font-family="-apple-system,system-ui,sans-serif" font-size="36" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Store Preview Studio</text>
   <text x="172" y="132" font-family="-apple-system,system-ui,sans-serif" font-size="12.5" font-weight="700" fill="url(#sfeat-kicker)" letter-spacing="1.5">DUAL-STORE PREVIEW &amp; METADATA STUDIO</text>
 
-  <text x="72" y="200" font-family="-apple-system,system-ui,sans-serif" font-size="27" font-weight="700" fill="#ffffff">Design &amp; Validate Pixel-Perfect Store Mockups</text>
+  <text x="72" y="200" font-family="-apple-system,system-ui,sans-serif" font-size="27" font-weight="700" fill="#ffffff">Design &amp; Validate Realistic Store Mockups</text>
   <text x="72" y="235" font-family="-apple-system,system-ui,sans-serif" font-size="15" fill="#94A3B8">App Store &amp; Google Play live viewports, pre-flight audits, 100% offline in your browser.</text>
 
   <!-- 3 Colorful Feature Badges (Zero Emoji, Clean Vector Icons) -->

@@ -51,14 +51,14 @@ const DEMO_PAYWALL_CONFIGS = {
     mainFeature: '7-inch & 10-inch Android tablet layouts and mockup exports'
   },
   'apple-ipad': {
-    title: 'Unlock iPad Pro 13" Previews',
-    desc: 'Preview and validate Universal Apple App Store listings on 13-inch iPad Pro mockups with authentic bezels, responsive viewports, and compliance audits.',
-    mainFeature: 'iPad Pro 13" device preview and high-resolution exports'
+    title: 'Unlock iPad Previews',
+    desc: 'Preview and validate Universal Apple App Store listings on iPad mockups with realistic bezels, responsive viewports, and compliance audits.',
+    mainFeature: 'iPad device preview and high-resolution exports'
   },
   'ipad-screenshots': {
-    title: 'Unlock iPad Pro Screenshots Card',
-    desc: 'Upload, manage, and validate up to 10 high-resolution iPad Pro 13" screenshots (2048×2732 or 2064×2752 px) with real-time Apple compliance checks.',
-    mainFeature: 'Full iPad Pro screenshot suite and store deliverables'
+    title: 'Unlock iPad Screenshots Card',
+    desc: 'Upload, manage, and validate up to 10 high-resolution iPad screenshots (2048×2732 or 2064×2752 px) with real-time Apple compliance checks.',
+    mainFeature: 'Full iPad screenshot suite and store deliverables'
   },
   'tablet-screenshots': {
     title: 'Unlock Tablet Screenshots Card',
@@ -115,12 +115,12 @@ const MINI_STUDIO_TOAST_MAP = {
     desc: 'Preview and validate 7-inch & 10-inch Android tablet layouts.'
   },
   'apple-ipad': {
-    title: 'iPad Pro 13" Previews',
-    desc: 'Preview and validate Universal Apple App Store listings on iPad Pro 13".'
+    title: 'iPad Previews',
+    desc: 'Preview and validate Universal Apple App Store listings on iPad.'
   },
   'ipad-screenshots': {
     title: 'iPad Screenshots Upload',
-    desc: 'Upload and manage dedicated 13" iPad Pro screenshots (2048×2732 px).'
+    desc: 'Upload and manage dedicated iPad screenshots (2048×2732 px).'
   },
   'tablet-screenshots': {
     title: 'Tablet Screenshots Upload',
@@ -447,7 +447,7 @@ function initDemoGuard() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
               <span>Unlock Full Studio</span>
             </div>
-            <p class="ms-side-card-desc">Export pristine 4K print-ready mockups, iPad 13" previews &amp; instant store submission bundles.</p>
+            <p class="ms-side-card-desc">Export pristine 4K print-ready mockups, iPad &amp; tablet previews &amp; instant store submission bundles.</p>
           </div>
 
           <div class="ms-side-highlights">
@@ -457,7 +457,7 @@ function initDemoGuard() {
               <svg class="ms-side-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
             <div class="ms-side-link" id="btnHlTablet" role="button" tabindex="0">
-              <span>iPad Pro &amp; Tablet Layouts</span>
+              <span>iPad &amp; Tablet Layouts</span>
               <svg class="ms-side-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
             <div class="ms-side-link" id="btnHlOffline" role="button" tabindex="0">
