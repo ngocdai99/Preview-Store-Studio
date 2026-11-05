@@ -1017,7 +1017,7 @@ function initDeviceTheme(){
   try{
     saved = localStorage.getItem('store_preview_studio_device_theme');
   }catch(e){}
-  const defaultTheme = (typeof window !== 'undefined' && !!window.SPS_DEMO_MODE) || document.documentElement.dataset.ui === 'dark' ? 'dark' : 'light';
+  const defaultTheme = document.documentElement.dataset.ui === 'dark' ? 'dark' : 'light';
   const cur = saved || (document.querySelector('.phone') ? (document.querySelector('.phone').dataset.theme || defaultTheme) : defaultTheme);
   setDeviceTheme(cur, false);
 }
