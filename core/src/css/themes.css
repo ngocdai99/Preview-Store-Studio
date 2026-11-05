@@ -553,9 +553,10 @@
   }
   :root[data-ui=light] .add-ico{
     background:#e8f2ff;color:#0071e3;
+    transition:none;
   }
   :root[data-ui=light] .add:hover .add-ico{
-    background:#0071e3;color:#ffffff;
+    background:#e8f2ff !important;color:#0071e3 !important;
   }
 
 
