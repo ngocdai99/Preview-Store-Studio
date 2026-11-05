@@ -169,21 +169,21 @@
       storeBadge.textContent = _activeModalStore === 'google' ? 'Google' : 'Apple';
     }
 
+    if (targetSpec) {
+      targetSpec.textContent = '';
+    }
+
     if (_activeModalType === 'icon') {
       if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';
-      if (targetSpec) targetSpec.textContent = _activeModalStore === 'apple' ? 'Standard: 1024×1024 px (1:1 · Opaque)' : 'Standard: 512×512 px (1:1 · ≤1024 KB)';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';
     } else if (_activeModalType === 'ipad') {
       if (titleEl) titleEl.textContent = 'Apple iPad Pro 13" Screenshot Inspector';
-      if (targetSpec) targetSpec.textContent = 'Standard: 2048×2732 px (3:4 Portrait)';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New iPad Screenshot';
     } else if (_activeModalType === 'feature') {
       if (titleEl) titleEl.textContent = 'Google Play Feature Graphic Inspector';
-      if (targetSpec) targetSpec.textContent = 'Standard: 1024×500 px (Landscape · ≤15 MB)';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New Feature Graphic';
     } else {
       if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'iPhone Screenshot Inspector' : 'Android Screenshot Inspector';
-      if (targetSpec) targetSpec.textContent = _activeModalStore === 'apple' ? 'Standard: 1290×2796 px (Portrait 9:19.5)' : 'Standard: 1080×1920 px (Portrait 9:16)';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New Screenshot';
     }
 
