@@ -40,7 +40,7 @@
 .custom-cat-wrap.open .custom-cat-trigger {
   outline: 0;
   border-color: var(--ac);
-  box-shadow: 0 0 0 3px var(--glow);
+  box-shadow: none;
   background: var(--card, #1D1E1D);
 }
 
@@ -250,7 +250,7 @@
 :root[data-ui=light] .custom-cat-wrap.open .custom-cat-trigger {
   background: #ffffff;
   border-color: var(--ac);
-  box-shadow: 0 0 0 3.5px rgba(0, 113, 227, 0.16), 0 2px 8px rgba(0, 113, 227, 0.08);
+  box-shadow: none;
 }
 
 :root[data-ui=light] .custom-cat-val {
