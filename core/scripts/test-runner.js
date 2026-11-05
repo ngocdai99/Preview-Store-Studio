@@ -1735,6 +1735,8 @@ assert(mockIpadChk.checked === false, 'iPad checkbox checked property reset to f
 assert(!mockTileIpad.classList.contains('active'), 'iPad destination tile active class removed');
 assert(mockBadge.textContent === 'iPhone Only', 'Destination badge updated to "iPhone Only"');
 assert(!mockDescBar.classList.contains('active-universal'), 'Description bar active-universal class removed');
+assert(!bundledHtml.includes('id="destStatusBadge"'), 'identity-card.html removes iPhone Only / Universal App status badge for a cleaner UI');
+assert(bundledHtml.includes('.dest-desc-bar{') && bundledHtml.includes('background:transparent !important'), 'destinations.css renders flat clean description text without card background or border');
 
 // ---------------------------------------------------------------------
 // [SUITE 22]: Preset Pill Close Button & Dynamic Re-opening from Menu Verification

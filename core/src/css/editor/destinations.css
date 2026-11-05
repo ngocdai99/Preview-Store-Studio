@@ -145,31 +145,35 @@
 .dest-desc-bar{
   display:flex;
   align-items:flex-start;
-  gap:8px;
-  font-size:11px;
-  padding:8px 12px;
-  border-radius:8px;
-  margin-top:8px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid var(--line);
+  gap:7px;
+  font-size:11.5px;
+  padding:4px 2px 2px;
+  margin-top:6px;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
   line-height:1.45;
   color:var(--mut);
-  transition:all .2s ease;
 }
 .dest-desc-icon svg{
-  width:14px;
-  height:14px;
+  width:13.5px;
+  height:13.5px;
   margin-top:2px;
   flex-shrink:0;
   color:var(--mut);
 }
 .dest-desc-bar.active-universal{
-  border-color:rgba(10,132,255,0.25);
-  background:rgba(10,132,255,0.05);
-  color:var(--tx);
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+  color:var(--mut);
 }
 .dest-desc-bar.active-universal .dest-desc-icon svg{
   color:#0a84ff;
+}
+.dest-desc-bar strong{
+  color:var(--tx);
+  font-weight:600;
 }
 
 :root[data-ui=light] .dest-badge{background:#e2e8f0;color:#475569;border-color:#cbd5e1}
@@ -177,8 +181,9 @@
 :root[data-ui=light] .dest-tile{background:#fff;border-color:rgba(0,0,0,0.1)}
 :root[data-ui=light] .dest-tile:hover:not(.locked){background:#f8fafc;border-color:rgba(0,0,0,0.2)}
 :root[data-ui=light] .dest-tile.active{background:rgba(10,132,255,0.06);border-color:#0a84ff}
-:root[data-ui=light] .dest-desc-bar{background:#f8fafc;border-color:rgba(0,0,0,0.08);color:#64748b}
-:root[data-ui=light] .dest-desc-bar.active-universal{background:rgba(10,132,255,0.04);border-color:rgba(10,132,255,0.2);color:#1e293b}
+:root[data-ui=light] .dest-desc-bar{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
+:root[data-ui=light] .dest-desc-bar.active-universal{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
+:root[data-ui=light] .dest-desc-bar strong{color:#0f172a}
 
 @container editor (max-width: 360px) {
   .dest-grid{grid-template-columns:1fr}
