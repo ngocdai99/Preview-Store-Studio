@@ -48,42 +48,6 @@
     <span class="pcb-action">Inspect &rarr;</span>
   </div>
 
-  <!-- Collapsible customization when Data Collected is enabled -->
-  <details class="privacy-details" id="privCustomDetails" style="display:none;margin-top:8px">
-    <summary class="privacy-summary">
-      <div class="priv-btn-left">
-        <span class="priv-btn-ico">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line>
-            <line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line>
-            <line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line>
-          </svg>
-        </span>
-        <span class="priv-btn-title">Customize Disclosures</span>
-      </div>
-      <div class="priv-btn-action">
-        <svg class="priv-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </div>
-    </summary>
-    <div class="privacy-content" style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
-      <div class="fg">
-        <div class="lr"><label for="f-priv-linked-input">Data Linked to You (Apple)</label></div>
-        <input type="text" id="f-priv-linked-input" placeholder="e.g. User Content, Identifiers, Usage Data" value="">
-      </div>
-      <div class="fg">
-        <div class="lr"><label for="f-priv-notlinked-input">Data Not Linked to You (Apple)</label></div>
-        <input type="text" id="f-priv-notlinked-input" placeholder="e.g. Diagnostics, Performance Data" value="">
-      </div>
-      <div class="fg">
-        <div class="lr"><label for="f-priv-google-input">Data Safety (Google Play)</label></div>
-        <input type="text" id="f-priv-google-input" placeholder="e.g. No data shared with third parties, Data is encrypted in transit" value="">
-      </div>
-    </div>
-  </details>
-
   <!-- Hidden state inputs to maintain 100% backward compatibility for export & presets -->
   <input type="hidden" id="f-priv-linked" value="">
   <input type="hidden" id="f-priv-notlinked" value="">

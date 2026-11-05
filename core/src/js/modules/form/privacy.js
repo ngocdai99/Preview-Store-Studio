@@ -142,7 +142,6 @@ function updatePrivacyModeUI() {
   const bannerTitle = $('privacyStatusLabel');
   const banner = $('privacyMockBanner');
   const bannerSub = banner ? banner.querySelector('.pcb-sub') : null;
-  const customDetails = $('privCustomDetails');
 
   if (btnNone) {
     btnNone.classList.toggle('active', isNone);
@@ -160,17 +159,6 @@ function updatePrivacyModeUI() {
       ? 'The developer does not collect any data from this app.'
       : 'Standard disclosures: Data Linked & Diagnostics.';
   }
-  if (customDetails) {
-    customDetails.style.display = isNone ? 'none' : 'block';
-  }
-
-  // Synchronize customize text inputs if not focused
-  const inLinked = $('f-priv-linked-input');
-  const inNotLinked = $('f-priv-notlinked-input');
-  const inGoogle = $('f-priv-google-input');
-  if (inLinked && typeof document !== 'undefined' && document.activeElement !== inLinked) inLinked.value = linked;
-  if (inNotLinked && typeof document !== 'undefined' && document.activeElement !== inNotLinked) inNotLinked.value = notLinked;
-  if (inGoogle && typeof document !== 'undefined' && document.activeElement !== inGoogle && $('f-priv-google')) inGoogle.value = $('f-priv-google').value;
 }
 
 function setPrivacyMode(mode) {
@@ -215,27 +203,6 @@ function initPrivacyModeControls() {
   if (btnCol) {
     btnCol.onclick = () => setPrivacyMode('collected');
   }
-
-  const inLinked = $('f-priv-linked-input');
-  const inNotLinked = $('f-priv-notlinked-input');
-  const inGoogle = $('f-priv-google-input');
-
-  const onCustomChange = () => {
-    if ($('f-priv-linked') && inLinked) $('f-priv-linked').value = inLinked.value;
-    if ($('f-priv-notlinked') && inNotLinked) $('f-priv-notlinked').value = inNotLinked.value;
-    if ($('f-priv-google') && inGoogle) $('f-priv-google').value = inGoogle.value;
-    if (typeof CURRENT_PRIVACY !== 'undefined') {
-      if (inLinked) CURRENT_PRIVACY.linked = inLinked.value;
-      if (inNotLinked) CURRENT_PRIVACY.notLinked = inNotLinked.value;
-      if (inGoogle) CURRENT_PRIVACY.google = inGoogle.value;
-    }
-    renderPrivacy();
-    if (typeof debouncedSave === 'function') debouncedSave();
-  };
-
-  if (inLinked) inLinked.oninput = onCustomChange;
-  if (inNotLinked) inNotLinked.oninput = onCustomChange;
-  if (inGoogle) inGoogle.oninput = onCustomChange;
 }
 
 if (typeof document !== 'undefined') {

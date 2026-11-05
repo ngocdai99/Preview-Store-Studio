@@ -1220,7 +1220,7 @@ assert(
   'Data Safety card focus highlight maintains 14px border radius with yellow border'
 );
 assert(bundledHtml.includes('id="privBtnNone"') && bundledHtml.includes('id="privBtnCollected"'), 'Privacy card renders Data Not Collected and Data Collected segmented mode buttons');
-assert(bundledHtml.includes('id="privCustomDetails"'), 'Privacy card renders collapsible disclosures customization drawer');
+assert(!bundledHtml.includes('id="privCustomDetails"'), 'Privacy card omits invalid disclosures text inputs');
 assert(bundledHtml.includes('function updatePrivacyModeUI'), 'Bundled application defines updatePrivacyModeUI');
 assert(bundledHtml.includes('function setPrivacyMode'), 'Bundled application defines setPrivacyMode');
 
