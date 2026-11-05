@@ -112,8 +112,6 @@ function runRelease() {
   console.log(`${c.bold}${c.brightCyan}│               STORE PREVIEW STUDIO · RELEASE BUILDER             │${c.reset}`);
   console.log(`${c.bold}${c.brightCyan}└──────────────────────────────────────────────────────────────────┘${c.reset}\n`);
 
-  console.log(`${c.bold}1. Compiling HTML & Bundling Standalone Assets:${c.reset}`);
-
   // Clean up any legacy zip files from root and package/
   ['store-preview-studio-standard-v1.0.zip', 'store-preview-studio-v1.0.zip'].forEach(f => {
     const rootZip = path.join(ROOT_DIR, f);
@@ -248,8 +246,6 @@ function runRelease() {
   const proZipPath = path.join(ROOT_DIR, `${proName}.zip`);
   if (fs.existsSync(proZipPath)) fs.unlinkSync(proZipPath);
 
-  console.log(`\n${c.bold}2. Packaging Release Delivery Packages:${c.reset}`);
-
   try {
     execSync(`zip -rq "${plusZipPath}" "${plusName}"`, { cwd: distDir });
     if (fs.existsSync(path.join(ROOT_DIR, 'package'))) {
@@ -277,8 +273,6 @@ function runRelease() {
         if (fs.existsSync(p)) fs.unlinkSync(p);
       });
     }
-
-    console.log(`${c.bold}${c.brightGreen}All release packages created successfully and ready to publish!${c.reset}\n`);
   } catch (e) {
     console.warn(`[!] Could not run system zip utility (${e.message}), release folders are ready in dist/`);
   }
