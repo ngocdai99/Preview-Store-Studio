@@ -6,8 +6,18 @@
 }
 .feature-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 .feature-drop-overlay{
-  position:absolute;inset:0;background:rgba(0,179,126,.85);display:none;place-items:center;
-  font-size:13px;font-weight:700;color:#fff;text-align:center;pointer-events:none;user-select:none;
+  position:absolute;inset:0;background:rgba(29,30,29,.85);backdrop-filter:blur(4px);display:none;place-items:center;
+  font-size:12px;font-weight:600;letter-spacing:.02em;color:#f1f5f9;text-align:center;pointer-events:none;user-select:none;
+  border:1.5px dashed rgba(255,255,255,.3);border-radius:12px;
+}
+:root[data-ui=light] .feature-drop-overlay{
+  background:rgba(241,245,249,.92);color:#1e293b;border-color:rgba(0,0,0,.22);
+}
+.feature-wrap.drag-over{
+  outline:2px solid rgba(255,255,255,.25);outline-offset:2px;
+}
+:root[data-ui=light] .feature-wrap.drag-over{
+  outline:2px solid rgba(0,0,0,.2);outline-offset:2px;
 }
 .feature-wrap.drag-over .feature-drop-overlay{display:grid}
 .feature-remove-btn{
