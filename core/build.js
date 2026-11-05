@@ -56,12 +56,8 @@ function resolveHtmlIncludes(content, baseDir) {
 /**
  * Resolves @import "path/to/file.css"; in CSS
  */
-function resolveCssImports(content, baseDir, options = {}) {
-  const isDemo = !!options.isDemo;
+function resolveCssImports(content, baseDir) {
   return content.replace(/@import\s+["']([^"']+)["'];?/gi, (match, importPath) => {
-    if (!isDemo && importPath.includes('demo-upgrade-modal.css')) {
-      return '';
-    }
     const fullPath = path.isAbsolute(importPath)
       ? importPath
       : path.join(baseDir, importPath);
@@ -71,7 +67,7 @@ function resolveCssImports(content, baseDir, options = {}) {
       return `/* Missing CSS import: ${importPath} */`;
     }
     const imported = fs.readFileSync(fullPath, 'utf8');
-    return resolveCssImports(imported, path.dirname(fullPath), options);
+    return resolveCssImports(imported, path.dirname(fullPath));
   });
 }
 
@@ -102,91 +98,14 @@ function stripDemoBlocks(code) {
 }
 
 /**
- * Replaces PRO feature implementations with stubs for Demo Mode builds (`try.html`)
- * so that PRO source code is never shipped to the client in Demo bundles.
- */
-function transformModuleForDemo(relPath, content) {
-  if (relPath === 'modules/demo-guard.js') {
-    return content.replace(
-      /function\s+isDemoMode\s*\(\s*\)\s*\{[\s\S]*?\}/,
-      'function isDemoMode() { return true; }'
-    );
-  }
-
-  if (relPath === 'modules/export/clipboard.js') {
-    return `if($('btnCopyText')) $('btnCopyText').onclick = copyAllText;\nfunction copyAllText(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-copy');\n}`;
-  }
-
-  if (relPath === 'modules/export/markdown.js') {
-    return `if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;\nfunction exportMarkdown(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-markdown');\n}`;
-  }
-
-  if (relPath === 'modules/export/json.js') {
-    const tailIdx = content.indexOf("if($('optImportJSON')){");
-    const tail = tailIdx >= 0 ? content.slice(tailIdx) : '';
-    return `if($('optExportJSON')) $('optExportJSON').onclick = exportJSON;\nfunction exportJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-json');\n}\nfunction parseAndApplyJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('import-json');\n  return false;\n}\n` + tail;
-  }
-
-
-  if (relPath === 'modules/export/storage.js') {
-    return content
-      .replace(
-        /function saveDraftToStorage\(\)\{[\s\S]*?(?=function loadDraftFromStorage\(\)\{)/,
-        'function saveDraftToStorage(){\n  return Promise.resolve(true);\n}\n\n'
-      )
-      .replace(
-        /if\(CURRENT_PRESET_KEY !== 'draft'[\s\S]*?if\(typeof exportJSON === 'function'\)\{\s*exportJSON\(\);\s*\}/,
-        "if(typeof exportJSON === 'function') exportJSON();"
-      );
-  }
-
-  if (relPath === 'modules/export/png.js') {
-    return content
-      .replace(
-        /if\(typeof isDemoMode === 'function' && isDemoMode\(\) && !opts\.allowDemo\)\{[\s\S]*?return;\s*\}/,
-        `if(!opts || !opts.allowDemo || opts.frameless || opts.transparent || scaleFactor > 2){\n    if(typeof requireFullVersion === 'function') requireFullVersion('export-png');\n    return;\n  }\n  scaleFactor = 2;\n  opts = { watermark: true, allowDemo: true };`
-      )
-      .replace(
-        'if(opts.watermark) drawStudioWatermark(canvas);',
-        'drawStudioWatermark(canvas);'
-      );
-  }
-
-  if (relPath === 'modules/theme.js') {
-    return content.replace(
-      "applyUiTheme(document.documentElement.dataset.ui || 'light');",
-      "applyUiTheme(document.documentElement.dataset.ui || 'dark');"
-    );
-  }
-
-  if (relPath === 'apple/apple.js') {
-    return content.replace(
-      "if (typeof isDemoMode === 'function' && isDemoMode() && d === 'ipad')",
-      "if (d === 'ipad')"
-    );
-  }
-
-  if (relPath === 'google/google.js') {
-    return content.replace(
-      "if (typeof isDemoMode === 'function' && isDemoMode() && (d === 'tab7' || d === 'tab10'))",
-      "if (d === 'tab7' || d === 'tab10')"
-    );
-  }
-
-  return content;
-}
-
-/**
  * Bundles all JavaScript modules in strict dependency order
  */
-function getBundledJs(options = {}) {
-  const isDemo = !!options.isDemo;
+function getBundledJs() {
   const jsDir = path.join(SRC_DIR, 'js');
   const jsFiles = [
     'core/utils.js',
     'core/state.js',
     'core/resizer.js',
-    ...(isDemo ? ['modules/demo-guard.js'] : []),
     'modules/tour.js',
     'modules/shots/icon.js',
     'modules/shots/phone.js',
@@ -219,16 +138,14 @@ function getBundledJs(options = {}) {
     const contents = jsFiles.map(f => {
       const header = `/* =========================================================================\n   Module: src/js/${f}\n   ========================================================================= */`;
       const raw = fs.readFileSync(path.join(jsDir, f), 'utf8');
-      const processed = isDemo ? transformModuleForDemo(f, raw) : stripDemoBlocks(raw);
+      const processed = stripDemoBlocks(raw);
       return `${header}\n${processed}`;
     });
     const combined = contents.join('\n\n');
-    // Keep app.js synced for paid build only
-    if (!isDemo) {
-      const appJsPath = path.join(jsDir, 'app.js');
-      if (!fs.existsSync(appJsPath) || fs.readFileSync(appJsPath, 'utf8') !== combined) {
-        fs.writeFileSync(appJsPath, combined, 'utf8');
-      }
+    // Keep app.js synced for paid build
+    const appJsPath = path.join(jsDir, 'app.js');
+    if (!fs.existsSync(appJsPath) || fs.readFileSync(appJsPath, 'utf8') !== combined) {
+      fs.writeFileSync(appJsPath, combined, 'utf8');
     }
     return combined;
   }

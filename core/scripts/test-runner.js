@@ -3627,13 +3627,13 @@ asyncSuites.push((async () => {
 asyncSuites.push((async () => {
   console.log('\n[SUITE 50]: Mockup Title Word-Spacing & html2canvas Whitespace Preservation Verification');
 
-  // 1. Google Play and Apple headers specify white-space: pre-wrap to prevent whitespace collapse
+  // 1. Google Play and Apple headers specify white-space: normal to prevent whitespace collapse in Blink & Gecko
   const googleHeaderCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/google/header.css'), 'utf8');
-  assert(googleHeaderCss.includes('.g-name{') && googleHeaderCss.includes('white-space:pre-wrap;'), '.g-name specifies white-space:pre-wrap to preserve word boundaries');
-  assert(googleHeaderCss.includes('.g-dev{') && googleHeaderCss.includes('white-space:pre-wrap;'), '.g-dev specifies white-space:pre-wrap to preserve word boundaries');
+  assert(googleHeaderCss.includes('.g-name{') && googleHeaderCss.includes('white-space:normal'), '.g-name specifies white-space:normal to preserve word boundaries');
+  assert(googleHeaderCss.includes('.g-dev{') && googleHeaderCss.includes('white-space:normal'), '.g-dev specifies white-space:normal to preserve word boundaries');
 
   const appleHeroCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/apple/hero.css'), 'utf8');
-  assert(appleHeroCss.includes('.a-name{') && appleHeroCss.includes('white-space:pre-wrap;'), '.a-name specifies white-space:pre-wrap to preserve word boundaries');
+  assert(appleHeroCss.includes('.a-name{') && appleHeroCss.includes('white-space:normal'), '.a-name specifies white-space:normal to preserve word boundaries');
 
   // 2. exportPNG in onclone injects style rules that override -webkit-box multi-line clamp layouts during capture
   const exportPngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
@@ -3645,7 +3645,7 @@ asyncSuites.push((async () => {
   assert(exportPngSrc.includes("el.style.display = 'block'") && exportPngSrc.includes("el.style.whiteSpace = 'pre-wrap'") && exportPngSrc.includes("el.style.wordSpacing = 'normal'"), 'exportPNG sets inline style display: block, whiteSpace: pre-wrap and wordSpacing: normal on cloned text nodes');
 
   // 4. Bundled core.html contains both CSS and JS fixes
-  assert(bundledHtml.includes('white-space:pre-wrap') && bundledHtml.includes('.g-name{'), 'Bundled application has white-space:pre-wrap on .g-name');
+  assert(bundledHtml.includes('white-space:normal') && bundledHtml.includes('.g-name{'), 'Bundled application has white-space:normal on .g-name');
   assert(bundledHtml.includes('display: block !important') && bundledHtml.includes('white-space: pre-wrap !important'), 'Bundled application has exportPNG whitespace and -webkit-box override rules');
 })());
 

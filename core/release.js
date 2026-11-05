@@ -50,6 +50,63 @@ function copyDirRecursive(src, dest) {
   }
 }
 
+/**
+ * Strips `if (typeof isDemoMode === 'function' && isDemoMode()...) { ... }` blocks
+ * from commercial customer source files so zero demo/paywall references remain.
+ */
+function stripDemoBlocks(code) {
+  const pattern = /\n?[ \t]*if\s*\(\s*typeof\s+isDemoMode\s*===\s*['"]function['"]\s*&&\s*isDemoMode\(\)(?:[^){]|\([^)]*\))*\)\s*\{/g;
+  let result = '';
+  let lastIdx = 0;
+  let match;
+
+  while ((match = pattern.exec(code)) !== null) {
+    result += code.slice(lastIdx, match.index);
+    let depth = 1;
+    let i = match.index + match[0].length;
+    while (i < code.length && depth > 0) {
+      if (code[i] === '{') depth++;
+      else if (code[i] === '}') depth--;
+      i++;
+    }
+    lastIdx = i;
+    pattern.lastIndex = i;
+  }
+  result += code.slice(lastIdx);
+  return result;
+}
+
+/**
+ * Copies source tree to commercial Pro package, omitting all demo/paywall files
+ * and stripping any isDemoMode() blocks from JavaScript modules.
+ */
+function copyCleanSource(src, dest) {
+  if (!fs.existsSync(src)) return;
+  fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    if (entry.name === '.DS_Store') continue;
+    // Exclude internal demo/paywall files
+    if (entry.name === 'demo-guard.js' || entry.name === 'demo-upgrade-modal.css' || entry.name === 'demo-upgrade-modal.html') {
+      continue;
+    }
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyCleanSource(srcPath, destPath);
+    } else if (entry.name.endsWith('.js') && !srcPath.includes('html2canvas')) {
+      const code = fs.readFileSync(srcPath, 'utf8');
+      const cleanCode = stripDemoBlocks(code);
+      fs.writeFileSync(destPath, cleanCode, 'utf8');
+    } else if (entry.name === 'style.css') {
+      let css = fs.readFileSync(srcPath, 'utf8');
+      css = css.replace(/@import\s+["']modals\/demo-upgrade-modal\.css["'];?\n?/g, '');
+      fs.writeFileSync(destPath, css, 'utf8');
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
 function runRelease() {
   console.log(`\n${c.bold}${c.brightCyan}┌──────────────────────────────────────────────────────────────────┐${c.reset}`);
   console.log(`${c.bold}${c.brightCyan}│               STORE PREVIEW STUDIO · RELEASE BUILDER             │${c.reset}`);
@@ -121,14 +178,12 @@ function runRelease() {
     : path.join(ROOT_DIR, 'README.md');
   fs.copyFileSync(proReadme, path.join(proDir, 'README.md'));
 
-  // Copy documentation, Agency FAQ HTML, QA Test Cases HTML, Excel Checklist, and clean build/dev scripts
+  // Copy documentation, Agency FAQ HTML, QA Test Cases HTML, Excel Checklist, and launch script
   [
     'LICENSE.txt',
     'AGENCY_MARKETING_FAQ.html',
     'Store_Preview_Studio_Test_Checklist.xlsx',
     'TEST_CASES.html',
-    'build.js',
-    'dev.js',
     'start_dev.command'
   ].forEach(f => {
     const src = fs.existsSync(path.join(ROOT_DIR, f))
@@ -136,6 +191,10 @@ function runRelease() {
       : path.join(ROOT_DIR, 'package', f);
     if (fs.existsSync(src)) fs.copyFileSync(src, path.join(proDir, f));
   });
+
+  // Copy pristine commercial build.js and dev.js from package/ (zero demo references)
+  fs.copyFileSync(path.join(ROOT_DIR, 'package', 'build.js'), path.join(proDir, 'build.js'));
+  fs.copyFileSync(path.join(ROOT_DIR, 'package', 'dev.js'), path.join(proDir, 'dev.js'));
 
   // Generate clean customer package.json with ONLY customer commands: dev and build
   const proPkg = {
@@ -159,8 +218,8 @@ function runRelease() {
     });
   }
 
-  // Copy full modular source code (src/) ONLY - zero internal maintainer scripts
-  copyDirRecursive(path.join(ROOT_DIR, 'src'), path.join(proDir, 'src'));
+  // Copy full modular source code (src/) with zero internal demo files and stripped isDemoMode blocks
+  copyCleanSource(path.join(ROOT_DIR, 'src'), path.join(proDir, 'src'));
 
   const proZipPath = path.join(ROOT_DIR, `${proName}.zip`);
   const legacyZipPath = path.join(ROOT_DIR, 'store-preview-studio-v1.0.zip');

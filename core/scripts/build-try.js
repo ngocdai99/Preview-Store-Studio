@@ -14,7 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { resolveHtmlIncludes, resolveCssImports, getBundledJs } = require('../build.js');
+const { resolveHtmlIncludes, resolveCssImports } = require('../build.js');
 const { minifyHtmlPage } = require('./minifier.js');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -25,6 +25,126 @@ const DOCS_TRY_FILE = path.join(ROOT_DIR, 'docs', 'try.html');
 const PUBLIC_TRY_FILE = path.join(ROOT_DIR, '..', 'marketing', 'public', 'try.html');
 const PUBLIC_STUDIO_FILE = path.join(ROOT_DIR, '..', 'marketing', 'public', 'try-studio.html');
 const PUBLIC_TRY_DIR = path.join(ROOT_DIR, '..', 'marketing', 'public', 'try');
+
+/**
+ * Replaces PRO feature implementations with stubs for Demo Mode builds (`try.html`)
+ * so that PRO source code is never shipped to the client in Demo bundles.
+ */
+function transformModuleForDemo(relPath, content) {
+  if (relPath === 'modules/demo-guard.js') {
+    return content.replace(
+      /function\s+isDemoMode\s*\(\s*\)\s*\{[\s\S]*?\}/,
+      'function isDemoMode() { return true; }'
+    );
+  }
+
+  if (relPath === 'modules/export/clipboard.js') {
+    return `if($('btnCopyText')) $('btnCopyText').onclick = copyAllText;\nfunction copyAllText(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-copy');\n}`;
+  }
+
+  if (relPath === 'modules/export/markdown.js') {
+    return `if($('optExportMD')) $('optExportMD').onclick = exportMarkdown;\nfunction exportMarkdown(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-markdown');\n}`;
+  }
+
+  if (relPath === 'modules/export/json.js') {
+    const tailIdx = content.indexOf("if($('optImportJSON')){");
+    const tail = tailIdx >= 0 ? content.slice(tailIdx) : '';
+    return `if($('optExportJSON')) $('optExportJSON').onclick = exportJSON;\nfunction exportJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('export-json');\n}\nfunction parseAndApplyJSON(){\n  if(typeof requireFullVersion === 'function') requireFullVersion('import-json');\n  return false;\n}\n` + tail;
+  }
+
+  if (relPath === 'modules/export/storage.js') {
+    return content
+      .replace(
+        /function saveDraftToStorage\(\)\{[\s\S]*?(?=function loadDraftFromStorage\(\)\{)/,
+        'function saveDraftToStorage(){\n  return Promise.resolve(true);\n}\n\n'
+      )
+      .replace(
+        /if\(CURRENT_PRESET_KEY !== 'draft'[\s\S]*?if\(typeof exportJSON === 'function'\)\{\s*exportJSON\(\);\s*\}/,
+        "if(typeof exportJSON === 'function') exportJSON();"
+      );
+  }
+
+  if (relPath === 'modules/export/png.js') {
+    return content
+      .replace(
+        /if\(typeof isDemoMode === 'function' && isDemoMode\(\) && !opts\.allowDemo\)\{[\s\S]*?return;\s*\}/,
+        `if(!opts || !opts.allowDemo || opts.frameless || opts.transparent || scaleFactor > 2){\n    if(typeof requireFullVersion === 'function') requireFullVersion('export-png');\n    return;\n  }\n  scaleFactor = 2;\n  opts = { watermark: true, allowDemo: true };`
+      )
+      .replace(
+        'if(opts.watermark) drawStudioWatermark(canvas);',
+        'drawStudioWatermark(canvas);'
+      );
+  }
+
+  if (relPath === 'modules/theme.js') {
+    return content.replace(
+      "applyUiTheme(document.documentElement.dataset.ui || 'light');",
+      "applyUiTheme(document.documentElement.dataset.ui || 'dark');"
+    );
+  }
+
+  if (relPath === 'apple/apple.js') {
+    return content.replace(
+      "if (typeof isDemoMode === 'function' && isDemoMode() && d === 'ipad')",
+      "if (d === 'ipad')"
+    );
+  }
+
+  if (relPath === 'google/google.js') {
+    return content.replace(
+      "if (typeof isDemoMode === 'function' && isDemoMode() && (d === 'tab7' || d === 'tab10'))",
+      "if (d === 'tab7' || d === 'tab10')"
+    );
+  }
+
+  return content;
+}
+
+/**
+ * Bundles JavaScript modules specifically for Demo Mode with PRO stubs & demo-guard
+ */
+function getDemoBundledJs() {
+  const jsDir = path.join(SRC_DIR, 'js');
+  const jsFiles = [
+    'core/utils.js',
+    'core/state.js',
+    'core/resizer.js',
+    'modules/demo-guard.js',
+    'modules/tour.js',
+    'modules/shots/icon.js',
+    'modules/shots/phone.js',
+    'modules/shots/ipad.js',
+    'modules/modal.js',
+    'google/feature-graphic.js',
+    'google/google.js',
+    'modules/form/categories.js',
+    'modules/form/privacy.js',
+    'modules/form/reviews.js',
+    'modules/form/age.js',
+    'modules/form/monetization.js',
+    'modules/form/sync.js',
+    'modules/transitions.js',
+    'apple/apple.js',
+    'modules/theme.js',
+    'modules/header.js',
+    'modules/presets.js',
+    'modules/export/storage.js',
+    'modules/export/clipboard.js',
+    'modules/export/markdown.js',
+    'modules/export/json.js',
+    'modules/export/png.js',
+    'modules/store-import.js',
+    'main.js'
+  ];
+
+  const contents = jsFiles.map(f => {
+    const header = `/* =========================================================================\n   Module: src/js/${f}\n   ========================================================================= */`;
+    const raw = fs.readFileSync(path.join(jsDir, f), 'utf8');
+    const processed = transformModuleForDemo(f, raw);
+    return `${header}\n${processed}`;
+  });
+  return contents.join('\n\n');
+}
 
 function buildTry() {
   const t0 = Date.now();
@@ -42,10 +162,14 @@ function buildTry() {
   const cssPath = path.join(SRC_DIR, 'css', 'style.css');
   if (!fs.existsSync(cssPath)) throw new Error('Missing src/css/style.css');
   const rawCss = fs.readFileSync(cssPath, 'utf8');
-  const css = resolveCssImports(rawCss, path.dirname(cssPath), { isDemo: true });
+  let css = resolveCssImports(rawCss, path.dirname(cssPath));
+  const demoModalCssPath = path.join(SRC_DIR, 'css', 'modals', 'demo-upgrade-modal.css');
+  if (fs.existsSync(demoModalCssPath)) {
+    css += '\n' + fs.readFileSync(demoModalCssPath, 'utf8');
+  }
 
   // 3. Resolve JS (Demo Mode strips PRO implementations & replaces with stubs)
-  const js = getBundledJs({ isDemo: true });
+  const js = getDemoBundledJs();
 
   // 4. Resolve html2canvas
   const libPath = path.join(SRC_DIR, 'lib', 'html2canvas.min.js');
@@ -77,11 +201,15 @@ function buildTry() {
   // Check marketing/public directory
   const publicDir = path.join(ROOT_DIR, '..', 'marketing', 'public');
   if (fs.existsSync(publicDir)) {
-    fs.writeFileSync(PUBLIC_TRY_FILE, minified, 'utf8');
-    fs.writeFileSync(PUBLIC_STUDIO_FILE, minified, 'utf8');
-    // Remove static public/try directory if it exists so Next.js src/app/try/page.tsx route resolves cleanly
-    if (fs.existsSync(PUBLIC_TRY_DIR)) {
-      fs.rmSync(PUBLIC_TRY_DIR, { recursive: true, force: true });
+    try {
+      fs.writeFileSync(PUBLIC_TRY_FILE, minified, 'utf8');
+      fs.writeFileSync(PUBLIC_STUDIO_FILE, minified, 'utf8');
+      // Remove static public/try directory if it exists so Next.js src/app/try/page.tsx route resolves cleanly
+      if (fs.existsSync(PUBLIC_TRY_DIR)) {
+        fs.rmSync(PUBLIC_TRY_DIR, { recursive: true, force: true });
+      }
+    } catch (e) {
+      console.warn(`[!] Note: marketing/public sync skipped (${e.message})`);
     }
   }
 

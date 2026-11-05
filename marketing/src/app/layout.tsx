@@ -35,8 +35,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full scroll-smooth dark" data-theme="dark">
-      <head>
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased">
+        {children}
         <script
+          id="microsoft-clarity"
           dangerouslySetInnerHTML={{
             __html: `
               (function(c,l,a,r,i,t,y){
@@ -63,9 +65,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased">
-        {children}
       </body>
     </html>
   );
