@@ -740,6 +740,7 @@ function setStore(s, animate = true, preserveDual = false){
       }
       if(typeof validateScreenshots === 'function') validateScreenshots();
       if(typeof validateTabletShots === 'function') validateTabletShots();
+      if(typeof renderShots === 'function') renderShots();
     if(typeof saveState === 'function') saveState(false);
   };
 

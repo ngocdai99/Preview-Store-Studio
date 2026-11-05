@@ -109,7 +109,7 @@
 .shot-row-head{display:flex;align-items:center;gap:6px;min-height:20px}
 .shot-row-title{font-size:12px;font-weight:750;color:#f1f5f9;letter-spacing:.02em;font-variant-numeric:tabular-nums}
 :root[data-ui=light] .shot-row-title{color:#0f172a}
-/* App Preview Badge in Shot Row */
+/* App Preview Badge in Shot Row (Apple only) */
 .shot-preview-pill {
   font-size: 10px;
   font-weight: 600;
@@ -124,6 +124,11 @@
   color: #e2e8f0;
   border: 1px solid rgba(255, 255, 255, 0.14);
   user-select: none;
+}
+/* Hide App Preview pills when active store is Google Play */
+body[data-store="google"] .shot-preview-pill,
+body[data-ui-store="google"] .shot-preview-pill {
+  display: none !important;
 }
 :root[data-ui=light] .shot-preview-pill {
   background-color: var(--btn-white-bg, #EFF1F0);
