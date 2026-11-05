@@ -146,7 +146,7 @@ body[data-ui-store="google"] .shot-preview-pill {
   min-width:32px;
   min-height:32px;
   background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.08) !important;
   color:#cbd5e1;
   padding:0;
   border-radius:8px;
@@ -156,10 +156,16 @@ body[data-ui-store="google"] .shot-preview-pill {
   cursor:pointer;
   transition:background-color .15s ease, color .15s ease;
   box-sizing:border-box;
+  transform:none !important;
+  box-shadow:none !important;
 }
-.shot-upload-btn:hover, .shot-inspect-btn:hover{
-  background:rgba(255,255,255,.1);
-  color:#ffffff;
+.shot-upload-btn:hover, .shot-inspect-btn:hover,
+.mini.shot-upload-btn:hover, .mini.shot-inspect-btn:hover{
+  background:rgba(255,255,255,.1) !important;
+  border-color:rgba(255,255,255,.08) !important;
+  color:#ffffff !important;
+  transform:none !important;
+  box-shadow:none !important;
 }
 .shot-upload-btn .btn-mini-ico, .shot-inspect-btn .btn-mini-ico{
   display:inline-flex;
@@ -172,8 +178,10 @@ body[data-ui-store="google"] .shot-preview-pill {
   height:15px;
   stroke-width:2.3;
 }
-.shot-upload-btn:active, .shot-inspect-btn:active{
-  background:rgba(255,255,255,.14);
+.shot-upload-btn:active, .shot-inspect-btn:active,
+.mini.shot-upload-btn:active, .mini.shot-inspect-btn:active{
+  background:rgba(255,255,255,.14) !important;
+  transform:none !important;
 }
 .shot-upload-btn:disabled, .shot-inspect-btn:disabled, .shot-inspect-btn.disabled{
   opacity:.38!important;
@@ -195,16 +203,26 @@ body[data-ui-store="google"] .shot-preview-pill {
 }
 :root[data-ui=light] .shot-upload-btn, :root[data-ui=light] .shot-inspect-btn{
   background:#f8fafc;
-  border-color:#cbd5e1;
+  border:1px solid #cbd5e1 !important;
   color:#334155;
   box-shadow:0 1px 2px rgba(15,23,42,.04);
 }
-:root[data-ui=light] .shot-upload-btn:hover, :root[data-ui=light] .shot-inspect-btn:hover{
-  background:#ffffff;
-  color:#0f172a;
+:root[data-ui=light] .shot-upload-btn:hover, :root[data-ui=light] .shot-inspect-btn:hover,
+:root[data-ui=light] .mini.shot-upload-btn:hover, :root[data-ui=light] .mini.shot-inspect-btn:hover{
+  background:#ffffff !important;
+  border-color:#cbd5e1 !important;
+  color:#0f172a !important;
+  transform:none !important;
+  box-shadow:0 1px 2px rgba(15,23,42,.04) !important;
 }
-:root[data-ui=light] .shot-upload-btn:active, :root[data-ui=light] .shot-inspect-btn:active{
-  background:#f1f5f9;
+:root[data-ui=light] .mini.shot-upload-btn:not(.dl-btn):not(.fit-btn) .btn-mini-ico svg,
+:root[data-ui=light] .mini.shot-inspect-btn:not(.dl-btn):not(.fit-btn) .btn-mini-ico svg{
+  color:currentColor !important;
+}
+:root[data-ui=light] .shot-upload-btn:active, :root[data-ui=light] .shot-inspect-btn:active,
+:root[data-ui=light] .mini.shot-upload-btn:active, :root[data-ui=light] .mini.shot-inspect-btn:active{
+  background:#f1f5f9 !important;
+  transform:none !important;
 }
 :root[data-ui=light] .shot-upload-btn:disabled, :root[data-ui=light] .shot-inspect-btn:disabled, :root[data-ui=light] .shot-inspect-btn.disabled{
   opacity:.42!important;
