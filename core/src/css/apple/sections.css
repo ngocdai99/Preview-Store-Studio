@@ -8,8 +8,8 @@
 .a-txt{font-size:14.5px;line-height:1.5}
 .promo{background:var(--cd);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45;margin-bottom:20px;position:relative;padding-left:18px}
 .promo::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3.5px;border-radius:3px;background:var(--bl)}
-.apple .gal img{flex:0 0 222px;width:222px;border-radius:11px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.18)}
-.apple .gal img.landscape-shot{flex:0 0 340px;width:340px;aspect-ratio:16/9;border-radius:9px}
+.apple .gal img{flex:0 0 222px;width:222px;height:481px;aspect-ratio:460/996;border-radius:11px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.18)}
+.apple .gal img.landscape-shot{flex:0 0 340px;width:340px;height:191px;aspect-ratio:16/9;border-radius:9px}
 .pg{display:flex;gap:12px;margin-top:14px}
 .pc{flex:1;min-width:0;background:#ffffff;border-radius:18px;padding:20px 16px;display:flex;flex-direction:column;box-shadow:0 12px 38px rgba(0,0,0,.12),0 3px 10px rgba(0,0,0,.06);box-sizing:border-box}
 .phone.apple[data-theme=dark] .pc,

@@ -143,7 +143,13 @@ async function rasterizeSvgImages(root, scale){
   await Promise.all(imgs.map(async img => {
     try{
       const box = img.getBoundingClientRect();
-      if(!box.width || !box.height) return;
+      let boxWidth = box.width || img.offsetWidth;
+      let boxHeight = box.height || img.offsetHeight;
+      if (!boxHeight && boxWidth) {
+        const isLandscape = img.classList.contains('landscape-shot');
+        boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : Math.round(boxWidth * (996 / 460));
+      }
+      if(!boxWidth || !boxHeight) return;
       const original = img.src;
       let svgText = '';
       const commaIdx = original.indexOf(',');
@@ -157,17 +163,17 @@ async function rasterizeSvgImages(root, scale){
         }
       }
       const vb = svgText.match(/viewBox\s*=\s*["']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*["']/);
-      const vw = vb ? parseFloat(vb[1]) : box.width, vh = vb ? parseFloat(vb[2]) : box.height;
+      const vw = vb ? parseFloat(vb[1]) : boxWidth, vh = vb ? parseFloat(vb[2]) : boxHeight;
       const tmp = new Image();
       const safeSrc = typeof ensureSvgDimensions === 'function' ? ensureSvgDimensions(original) : original;
       await new Promise((res, rej) => { tmp.onload = res; tmp.onerror = rej; tmp.src = safeSrc; });
       // 1) draw the vector at its own aspect ratio
-      const k = Math.max(box.width * scale / vw, box.height * scale / vh);
+      const k = Math.max(boxWidth * scale / vw, boxHeight * scale / vh);
       const sw = Math.max(1, Math.round(vw * k)), sh = Math.max(1, Math.round(vh * k));
       const c1 = document.createElement('canvas'); c1.width = sw; c1.height = sh;
       c1.getContext('2d').drawImage(tmp, 0, 0, sw, sh);
       // 2) crop to the element box like object-fit: cover
-      const w = Math.max(1, Math.round(box.width * scale)), h = Math.max(1, Math.round(box.height * scale));
+      const w = Math.max(1, Math.round(boxWidth * scale)), h = Math.max(1, Math.round(boxHeight * scale));
       const c2 = document.createElement('canvas'); c2.width = w; c2.height = h;
       const f = Math.max(w / sw, h / sh);
       const dw = sw * f, dh = sh * f;
@@ -355,6 +361,43 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             word-spacing: normal !important;
             letter-spacing: 0px !important;
           }
+          /* Firefox & html2canvas horizontal screenshot gallery fixes:
+             Disable scroll-snap and overflow-x on .gal so html2canvas doesn't drop partially clipped images */
+          .gal, [data-shots="gal"], [data-shots="shots"], [data-shots="gp-search"], [data-shots="ipad-gal"], [data-shots="ipad-shots"] {
+            display: flex !important;
+            scroll-snap-type: none !important;
+            overflow: visible !important;
+            overflow-x: visible !important;
+          }
+          .gal img, [data-shots] img {
+            scroll-snap-align: none !important;
+            flex-shrink: 0 !important;
+            max-width: none !important;
+          }
+          .apple .gal img {
+            width: 222px !important;
+            height: 481px !important;
+          }
+          .apple .gal img.landscape-shot {
+            width: 340px !important;
+            height: 191px !important;
+          }
+          .google .gal img {
+            width: 190px !important;
+            height: 412px !important;
+          }
+          .google .gal img.landscape-shot {
+            width: 330px !important;
+            height: 186px !important;
+          }
+          .ipad-gal img {
+            width: 260px !important;
+            height: 347px !important;
+          }
+          .ipad-gal img.landscape-shot {
+            width: 380px !important;
+            height: 285px !important;
+          }
         `;
         clonedDoc.head.appendChild(btnStyle);
 
@@ -470,6 +513,29 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
         clonedEl.querySelectorAll('*').forEach(el => {
           el.style.letterSpacing = '0px';
+        });
+        // Ensure screenshot carousels and images are fully visible and explicitly sized in Firefox
+        clonedEl.querySelectorAll('.gal, [data-shots]').forEach(gal => {
+          gal.scrollLeft = 0;
+          gal.style.scrollSnapType = 'none';
+          gal.style.overflow = 'visible';
+          gal.style.overflowX = 'visible';
+        });
+        clonedEl.querySelectorAll('.gal img, [data-shots] img').forEach(img => {
+          img.style.scrollSnapAlign = 'none';
+          img.style.flexShrink = '0';
+          img.style.maxWidth = 'none';
+          const isLandscape = img.classList.contains('landscape-shot');
+          const isApple = img.closest('.apple');
+          const isGoogle = img.closest('.google');
+          const isIpad = img.closest('.ipad');
+          if (isApple && !isIpad) {
+            img.style.width = isLandscape ? '340px' : '222px';
+            img.style.height = isLandscape ? '191px' : '481px';
+          } else if (isGoogle) {
+            img.style.width = isLandscape ? '330px' : '190px';
+            img.style.height = isLandscape ? '186px' : '412px';
+          }
         });
         // Ensure mockup text containers don't collapse whitespace between words
         clonedEl.querySelectorAll('.g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title, .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name, [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"]').forEach(el => {
