@@ -238,9 +238,9 @@ function startServer(port) {
     console.log(`Core Studio:   ${coreUrl}`);
     console.log(`Try Demo:      ${tryUrl}`);
     console.log(`Watching:      src/ (components, css, js, modals) & try.html`);
-    console.log(`Live Reload:   ACTIVE (Trình duyệt tự F5 tức thì khi sửa code)`);
+    console.log(`Live Reload:   ACTIVE (Auto-reloads browser when code changes)`);
     console.log('------------------------------------------------------');
-    console.log('Nhấn Ctrl + C để dừng server.\n');
+    console.log('Press Ctrl + C to stop server.\n');
 
     // Auto open in browser: open Core Studio (localhost:3000)
     const openCoreCmd = process.platform === 'darwin' ? `open "${coreUrl}"`

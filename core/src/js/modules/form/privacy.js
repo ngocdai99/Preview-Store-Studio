@@ -35,11 +35,11 @@ const GOOGLE_SAFETY_ICONS = {
 
 function getGoogleSafetyIcon(text){
   const t = text.toLowerCase();
-  if(/share|third part|chia sẻ/.test(t)) return GOOGLE_SAFETY_ICONS.share;
-  if(/collect|thu thập/.test(t)) return GOOGLE_SAFETY_ICONS.collect;
-  if(/encrypt|transit|security|ssl|mã hóa/.test(t)) return GOOGLE_SAFETY_ICONS.encrypt;
-  if(/delet|remove|xoá|xóa/.test(t)) return GOOGLE_SAFETY_ICONS.delete;
-  if(/famil|child|kid|trẻ em|gia đình/.test(t)) return GOOGLE_SAFETY_ICONS.family;
+  if(/share|third part/.test(t)) return GOOGLE_SAFETY_ICONS.share;
+  if(/collect/.test(t)) return GOOGLE_SAFETY_ICONS.collect;
+  if(/encrypt|transit|security|ssl/.test(t)) return GOOGLE_SAFETY_ICONS.encrypt;
+  if(/delet|remove/.test(t)) return GOOGLE_SAFETY_ICONS.delete;
+  if(/famil|child|kid/.test(t)) return GOOGLE_SAFETY_ICONS.family;
   return GOOGLE_SAFETY_ICONS.default;
 }
 

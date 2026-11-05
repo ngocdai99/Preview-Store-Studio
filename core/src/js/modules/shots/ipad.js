@@ -398,7 +398,7 @@ function validateIpadScreenshots(){
 
       if(tag){
         tag.style.display = 'inline-flex';
-        // 1. SAI RATIO LÀ ERROR (RED)
+        // 1. Invalid ratio is an ERROR (red)
         if(isSquare){
           tag.className = 'shot-dim-tag err';
           tag.textContent = `1:1 Square (${w}×${h})`;
@@ -409,7 +409,7 @@ function validateIpadScreenshots(){
           tag.className = 'shot-dim-tag err';
           tag.textContent = `Wrong Ratio (${w}×${h})`;
         }
-        // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+        // 2. Valid ratio with invalid filesize/dimensions is a WARNING (amber)
         else if(isOverSize){
           tag.className = 'shot-dim-tag warn';
           tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;

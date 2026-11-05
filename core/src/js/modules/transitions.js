@@ -584,7 +584,7 @@ function setStore(s, animate = true, preserveDual = false){
       if(previewCounterEl){
         previewCounterEl.style.display = 'inline-flex';
         previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-        previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+        previewCounterEl.title = 'Images appear on App Store product page';
       }
       counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
     } else {

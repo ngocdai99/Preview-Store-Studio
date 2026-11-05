@@ -3,14 +3,14 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root, [data-theme="dark"], html.dark {
-  --bg: #131413; /* Đen nền Supabase (Pure Dark Only) */
-  --card: #1D1E1D; /* Đen xám card/surface */
+  --bg: #131413; /* Dark surface background (Pure Dark Only) */
+  --card: #1D1E1D; /* Card/surface dark */
   --card-muted: #171817;
   --border: #282928;
   --border-subtle: #212221;
   --foreground: #f8fafc;
-  --muted: #989A99; /* Text xám */
-  --accent: #00D085; /* Xanh sáng */
+  --muted: #989A99; /* Muted text */
+  --accent: #00D085; /* Bright accent */
   --accent-hover: #26e099;
   --accent-light: rgba(0, 208, 133, 0.15);
   --accent-glow: rgba(0, 208, 133, 0.30);
@@ -39,7 +39,7 @@
   --purple-brand-hover: #26e099;
   --purple-brand-light: rgba(0, 208, 133, 0.15);
   --purple-brand-border: rgba(0, 208, 133, 0.35);
-  --icon-unselected: #C4C5C4; /* Màu icon unselected Supabase */
+  --icon-unselected: #C4C5C4; /* Unselected icon color */
   color-scheme: dark;
 }
 

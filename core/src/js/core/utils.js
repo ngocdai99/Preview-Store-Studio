@@ -349,13 +349,13 @@ function escapeHtml(str){
     .replace(/'/g, '&#39;');
 }
 
-// --- File & URL-Safe Slug Generator (Full Vietnamese & Accent Support) ---
+// --- File & URL-Safe Slug Generator (Full International Diacritics & Accent Support) ---
 /**
  * Normalizes app name or arbitrary text into a clean URL- and filesystem-safe slug.
- * Fully supports Vietnamese diacritics (including đ/Đ), accents, and special symbols.
+ * Fully supports international diacritics, accents, and special symbols.
  * 
  * Example:
- *   "AVN PMS-Sức khoẻ Gia Đình Việt" => "avn-pms-suc-khoe-gia-dinh-viet"
+ *   "TaskFlow - Smart Productivity App" => "taskflow-smart-productivity-app"
  * 
  * @param {string} text - Input text / App name
  * @param {string} [fallback='app'] - Fallback slug if result is empty

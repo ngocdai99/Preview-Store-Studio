@@ -472,7 +472,7 @@
             ratioEl.className = 'icon-metric-val err';
           }
         } else {
-          // Phone Screenshot - Sai ratio là ERROR (red)
+          // Phone Screenshot - Invalid ratio is an ERROR (red)
           if (isSq) {
             ratioEl.textContent = '1:1 Square';
             ratioEl.className = 'icon-metric-val err';
@@ -508,7 +508,7 @@
           sizeEl.textContent = `${kb} KB`;
           sizeEl.title = `${sizeBytes.toLocaleString('en-US')} bytes`;
           const isOverSize = sizeBytes > 8 * 1024 * 1024;
-          // Sai fileSize là warning
+          // Over fileSize limit is a warning
           sizeEl.className = 'icon-metric-val ' + (isOverSize ? 'warn' : 'ok');
         } else {
           sizeEl.textContent = 'Optimized';
@@ -661,7 +661,7 @@
         const MAX_PHONE_SHOT_BYTES = 8 * 1024 * 1024;
         const isGoogleSizeIssue = _activeModalStore === 'google' && (w < 320 || h < 320 || w > 3840 || h > 3840);
 
-        // 1. SAI RATIO LÀ ERROR (RED)
+        // 1. Invalid ratio is an ERROR (red)
         if (_activeModalStore === 'apple' && hasAlpha) {
           level = 'err';
           badgeText = 'Alpha detected · 100% Opaque required';
@@ -691,7 +691,7 @@
           badgeText = `Aspect Ratio Error: Non-portrait (${w}×${h} px)`;
           detailsHtml = '<p><strong>Aspect Ratio Error:</strong> This screenshot has a non-portrait aspect ratio. Phone screenshots must be portrait (9:16 or 9:19.5).</p><p class="icon-modal-warn-hint">Recommended resolution: ' + (_activeModalStore === 'apple' ? '1290×2796 px' : '1080×1920 px') + '.</p>';
         }
-        // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+        // 2. Valid ratio with invalid filesize/dimensions is a WARNING (amber)
         else if (sizeBytes > MAX_PHONE_SHOT_BYTES) {
           const mb = (sizeBytes / (1024 * 1024)).toFixed(1);
           level = 'warn';

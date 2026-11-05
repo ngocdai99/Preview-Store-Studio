@@ -133,7 +133,7 @@ function renderShots(){
     const col = document.createElement('div'); col.className = 'col';
     const head = document.createElement('div'); head.className = 'shot-row-head';
     const isAppPreview = store === 'apple' && i < 3;
-    const previewBadgeHtml = isAppPreview ? '<span class="shot-preview-pill" title="Ảnh sẽ xuất hiện trên App Store search/product page">App Preview</span>' : '';
+    const previewBadgeHtml = isAppPreview ? '<span class="shot-preview-pill" title="Image appears on App Store search/product page">App Preview</span>' : '';
     head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${previewBadgeHtml}`;
 
     const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
@@ -234,7 +234,7 @@ function validateScreenshots(){
     if(previewCounterEl){
       previewCounterEl.style.display = 'inline-flex';
       previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-      previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+      previewCounterEl.title = 'Images appear on App Store product page';
     }
     if(counterEl){
       counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
@@ -347,7 +347,7 @@ function validateScreenshots(){
 
         if(tag){
           tag.style.display = 'inline-flex';
-          // 1. SAI RATIO LÀ ERROR (RED)
+          // 1. Invalid ratio is an ERROR (red)
           if(isSquare){
             tag.className = 'shot-dim-tag err';
             tag.textContent = `1:1 Square (${w}×${h})`;
@@ -367,7 +367,7 @@ function validateScreenshots(){
             tag.className = 'shot-dim-tag err';
             tag.textContent = `Non-portrait (${w}×${h})`;
           }
-          // 2. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+          // 2. Valid ratio with invalid filesize/dimensions is a WARNING (amber)
           else if(isOverSize){
             tag.className = 'shot-dim-tag warn';
             tag.textContent = `>8 MB (${(shotSize/(1024*1024)).toFixed(1)} MB)`;
@@ -443,7 +443,7 @@ function validateScreenshots(){
           nonPhoneIndices.push(idx + 1);
         } else {
           portraitIndices.push(idx + 1);
-          // Đúng ratio portrait: kiểm tra fileSize & kích thước
+          // Valid portrait ratio: verify fileSize & dimensions
           if(isOverSize){
             overSizeIndices.push(idx + 1);
           }
@@ -470,7 +470,7 @@ function validateScreenshots(){
 
   function finalizeBadge(){
     const maxAllowed = store === 'apple' ? 10 : 8;
-    // 1. SAI RATIO LÀ ERROR (RED)
+    // 1. Invalid ratio is an ERROR (red)
     if(squareIndices.length > 0){
       const items = squareIndices.map(n => `#${n}`).join(', ');
       const noun = squareIndices.length > 1 ? 'Screenshots' : 'Screenshot';
@@ -518,7 +518,7 @@ function validateScreenshots(){
       badgeEl.innerHTML = `${SB_WARN}<span><strong>Non-standard Landscape:</strong> Screenshot ${items} is landscape with an unusual aspect ratio. Verify this matches a supported store dimension before submission.</span>`;
       badgeEl.style.display = 'flex';
     }
-    // 5. ĐÚNG RATIO MÀ SAI FILESIZE HOẶC SAI KÍCH THƯỚC MỚI WARNING (AMBER)
+    // 5. Valid ratio with invalid filesize/dimensions is a WARNING (amber)
     else if(overSizeIndices.length > 0){
       const items = overSizeIndices.map(n => `#${n}`).join(', ');
       const noun = overSizeIndices.length > 1 ? 'Screenshots' : 'Screenshot';
