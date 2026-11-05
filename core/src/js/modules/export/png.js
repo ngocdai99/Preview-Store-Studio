@@ -137,17 +137,44 @@ document.addEventListener('keydown', e => {
 
 // html2canvas can drop parts of SVG images (filters, glow). Rasterize SVG data-URI images to PNG first,
 // swap them in for the capture, and return a function that puts the originals back.
-async function rasterizeSvgImages(root, scale){
+async function rasterizeSvgImages(root, scale, zoom = 1){
   const swaps = [];
+  const safeZoom = (typeof zoom === 'number' && zoom > 0) ? zoom : 1;
   const imgs = [...root.querySelectorAll('img')].filter(i => /^data:image\/svg\+xml/i.test(i.currentSrc || i.src || ''));
   await Promise.all(imgs.map(async img => {
     try{
       const box = img.getBoundingClientRect();
-      let boxWidth = box.width || img.offsetWidth;
-      let boxHeight = box.height || img.offsetHeight;
+      let boxWidth = (box.width ? (box.width / safeZoom) : img.offsetWidth) || 0;
+      let boxHeight = (box.height ? (box.height / safeZoom) : img.offsetHeight) || 0;
+      const isLandscape = img.classList.contains('landscape-shot');
+      const isIpadShot = img.classList.contains('ipad-shot');
+      const isIpad = img.closest('.ipad');
+      const isDevLandscape = img.closest('.dev')?.classList.contains('landscape');
+
+      if (!boxWidth) {
+        if (isIpad) {
+          boxWidth = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
+        } else if (img.closest('.apple')) {
+          boxWidth = isLandscape ? 340 : 222;
+        } else if (img.closest('.google')) {
+          boxWidth = isLandscape ? 330 : 190;
+        }
+      }
+
       if (!boxHeight && boxWidth) {
-        const isLandscape = img.classList.contains('landscape-shot');
-        boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : Math.round(boxWidth * (996 / 460));
+        if (isIpad) {
+          if (isIpadShot) {
+            boxHeight = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
+          } else {
+            boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : (isDevLandscape ? 498 : 563);
+          }
+        } else if (img.closest('.apple')) {
+          boxHeight = isLandscape ? 191 : 481;
+        } else if (img.closest('.google')) {
+          boxHeight = isLandscape ? 186 : 412;
+        } else {
+          boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : Math.round(boxWidth * (996 / 460));
+        }
       }
       if(!boxWidth || !boxHeight) return;
       const original = img.src;
@@ -321,7 +348,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     if(document.fonts && document.fonts.ready){
       await document.fonts.ready.catch(() => {});
     }
-    restoreImages = await rasterizeSvgImages(target, scaleFactor);
+    restoreImages = await rasterizeSvgImages(target, scaleFactor, curZoom);
 
     let canvas = await html2canvas(target, {
       backgroundColor: null,
@@ -373,29 +400,50 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             scroll-snap-align: none !important;
             flex-shrink: 0 !important;
             max-width: none !important;
+            object-fit: cover !important;
           }
           .apple .gal img {
             width: 222px !important;
             height: 481px !important;
+            border-radius: 11px !important;
           }
           .apple .gal img.landscape-shot {
             width: 340px !important;
             height: 191px !important;
+            border-radius: 9px !important;
           }
           .google .gal img {
             width: 190px !important;
             height: 412px !important;
+            border-radius: 7px !important;
           }
           .google .gal img.landscape-shot {
             width: 330px !important;
             height: 186px !important;
+            border-radius: 7px !important;
           }
           .ipad-gal img {
+            flex: 0 0 260px !important;
             width: 260px !important;
+            height: 563px !important;
+            border-radius: 12px !important;
+          }
+          .ipad-gal img.ipad-shot {
             height: 347px !important;
           }
           .ipad-gal img.landscape-shot {
+            flex: 0 0 380px !important;
             width: 380px !important;
+            height: 285px !important;
+          }
+          .dev.ipad.landscape .ipad-gal img {
+            flex: 0 0 230px !important;
+            width: 230px !important;
+            height: 498px !important;
+          }
+          .dev.ipad.landscape .ipad-gal img.ipad-shot {
+            height: 307px !important;
+          }
             height: 285px !important;
           }
         `;
@@ -525,16 +573,33 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           img.style.scrollSnapAlign = 'none';
           img.style.flexShrink = '0';
           img.style.maxWidth = 'none';
+          img.style.objectFit = 'cover';
           const isLandscape = img.classList.contains('landscape-shot');
+          const isIpadShot = img.classList.contains('ipad-shot');
+          const isIpad = img.closest('.ipad');
           const isApple = img.closest('.apple');
           const isGoogle = img.closest('.google');
-          const isIpad = img.closest('.ipad');
-          if (isApple && !isIpad) {
+          const isDevLandscape = img.closest('.dev')?.classList.contains('landscape');
+
+          if (isIpad) {
+            const w = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
+            let h;
+            if (isIpadShot) {
+              h = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
+            } else {
+              h = isLandscape ? Math.round(w * (9 / 16)) : (isDevLandscape ? 498 : 563);
+            }
+            img.style.width = w + 'px';
+            img.style.height = h + 'px';
+            img.style.borderRadius = '12px';
+          } else if (isApple) {
             img.style.width = isLandscape ? '340px' : '222px';
             img.style.height = isLandscape ? '191px' : '481px';
+            img.style.borderRadius = isLandscape ? '9px' : '11px';
           } else if (isGoogle) {
             img.style.width = isLandscape ? '330px' : '190px';
             img.style.height = isLandscape ? '186px' : '412px';
+            img.style.borderRadius = '7px';
           }
         });
         // Ensure mockup text containers don't collapse whitespace between words

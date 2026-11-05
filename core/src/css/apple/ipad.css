@@ -117,10 +117,11 @@
 /* iPad Gallery & Platforms Support */
 .ipad-shots-sec{margin-bottom:20px}
 .ipad-gal{gap:14px}
-.ipad-gal img{flex:0 0 260px;width:260px;border-radius:12px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.12)}
-.ipad-gal img.ipad-shot{aspect-ratio:2048/2732}
-.ipad-gal img.landscape-shot{aspect-ratio:2732/2048;flex:0 0 380px;width:380px}
-.dev.ipad.landscape .ipad-gal img{flex:0 0 230px;width:230px}
+.ipad-gal img{flex:0 0 260px;width:260px;height:563px;aspect-ratio:460/996;border-radius:12px;box-shadow:0 0 0 1px var(--sp),0 6px 18px rgba(0,0,0,.12)}
+.ipad-gal img.ipad-shot{aspect-ratio:2048/2732;height:347px}
+.ipad-gal img.landscape-shot{aspect-ratio:2732/2048;height:285px;flex:0 0 380px;width:380px}
+.dev.ipad.landscape .ipad-gal img{flex:0 0 230px;width:230px;height:498px}
+.dev.ipad.landscape .ipad-gal img.ipad-shot{height:307px}
 
 .ipad-platforms-row{
   display:inline-flex;align-items:center;gap:8px;
