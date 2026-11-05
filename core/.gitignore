@@ -34,6 +34,7 @@ gumroad-*
 *gumroad*
 start_marketing.command
 *.command
+!start_dev.command
 
 # Build output
 core.html

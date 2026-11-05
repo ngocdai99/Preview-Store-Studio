@@ -14,7 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { resolveHtmlIncludes, resolveCssImports } = require('../build.js');
+const { resolveHtmlIncludes, resolveCssImports, CORE_JS_MODULES } = require('../build.js');
 const { minifyHtmlPage } = require('./minifier.js');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -105,37 +105,11 @@ function transformModuleForDemo(relPath, content) {
  */
 function getDemoBundledJs() {
   const jsDir = path.join(SRC_DIR, 'js');
-  const jsFiles = [
-    'core/utils.js',
-    'core/state.js',
-    'core/resizer.js',
-    'modules/demo-guard.js',
-    'modules/tour.js',
-    'modules/shots/icon.js',
-    'modules/shots/phone.js',
-    'modules/shots/ipad.js',
-    'modules/modal.js',
-    'google/feature-graphic.js',
-    'google/google.js',
-    'modules/form/categories.js',
-    'modules/form/privacy.js',
-    'modules/form/reviews.js',
-    'modules/form/age.js',
-    'modules/form/monetization.js',
-    'modules/form/sync.js',
-    'modules/transitions.js',
-    'apple/apple.js',
-    'modules/theme.js',
-    'modules/header.js',
-    'modules/presets.js',
-    'modules/export/storage.js',
-    'modules/export/clipboard.js',
-    'modules/export/markdown.js',
-    'modules/export/json.js',
-    'modules/export/png.js',
-    'modules/store-import.js',
-    'main.js'
-  ];
+  // Inherit CORE_JS_MODULES single source of truth and insert demo-guard.js after core/resizer.js
+  const jsFiles = CORE_JS_MODULES.slice();
+  const resizerIdx = jsFiles.indexOf('core/resizer.js');
+  const insertIdx = resizerIdx >= 0 ? resizerIdx + 1 : 3;
+  jsFiles.splice(insertIdx, 0, 'modules/demo-guard.js');
 
   const contents = jsFiles.map(f => {
     const header = `/* =========================================================================\n   Module: src/js/${f}\n   ========================================================================= */`;

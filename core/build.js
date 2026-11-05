@@ -98,40 +98,45 @@ function stripDemoBlocks(code) {
 }
 
 /**
+ * Core JavaScript Modules in strict dependency order (Single Source of Truth)
+ */
+const CORE_JS_MODULES = [
+  'core/utils.js',
+  'core/state.js',
+  'core/resizer.js',
+  'modules/tour.js',
+  'modules/shots/icon.js',
+  'modules/shots/phone.js',
+  'modules/shots/ipad.js',
+  'modules/modal.js',
+  'google/feature-graphic.js',
+  'google/google.js',
+  'modules/form/categories.js',
+  'modules/form/privacy.js',
+  'modules/form/reviews.js',
+  'modules/form/age.js',
+  'modules/form/monetization.js',
+  'modules/form/sync.js',
+  'modules/transitions.js',
+  'apple/apple.js',
+  'modules/theme.js',
+  'modules/header.js',
+  'modules/presets.js',
+  'modules/export/storage.js',
+  'modules/export/clipboard.js',
+  'modules/export/markdown.js',
+  'modules/export/json.js',
+  'modules/export/png.js',
+  'modules/store-import.js',
+  'main.js'
+];
+
+/**
  * Bundles all JavaScript modules in strict dependency order
  */
 function getBundledJs() {
   const jsDir = path.join(SRC_DIR, 'js');
-  const jsFiles = [
-    'core/utils.js',
-    'core/state.js',
-    'core/resizer.js',
-    'modules/tour.js',
-    'modules/shots/icon.js',
-    'modules/shots/phone.js',
-    'modules/shots/ipad.js',
-    'modules/modal.js',
-    'google/feature-graphic.js',
-    'google/google.js',
-    'modules/form/categories.js',
-    'modules/form/privacy.js',
-    'modules/form/reviews.js',
-    'modules/form/age.js',
-    'modules/form/monetization.js',
-    'modules/form/sync.js',
-    'modules/transitions.js',
-    'apple/apple.js',
-    'modules/theme.js',
-    'modules/header.js',
-    'modules/presets.js',
-    'modules/export/storage.js',
-    'modules/export/clipboard.js',
-    'modules/export/markdown.js',
-    'modules/export/json.js',
-    'modules/export/png.js',
-    'modules/store-import.js',
-    'main.js'
-  ];
+  const jsFiles = CORE_JS_MODULES;
 
   const allExist = jsFiles.every(f => fs.existsSync(path.join(jsDir, f)));
   if (allExist) {
@@ -267,7 +272,14 @@ function buildAll() {
 }
 
 // Export for dev.js and release.js
-module.exports = { build, buildAll, resolveHtmlIncludes, resolveCssImports, getBundledJs };
+module.exports = {
+  build,
+  buildAll,
+  resolveHtmlIncludes,
+  resolveCssImports,
+  getBundledJs,
+  CORE_JS_MODULES
+};
 
 // Command Line Execution
 if (require.main === module) {

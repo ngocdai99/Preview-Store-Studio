@@ -14,7 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-const { build } = require('./build.js');
+const { build, CORE_JS_MODULES } = require('./build.js');
 const { buildAllDocs } = require('./scripts/build-docs-html.js');
 
 const ROOT_DIR = __dirname;
@@ -184,15 +184,35 @@ function runRelease() {
     'AGENCY_MARKETING_FAQ.html',
     'start_dev.command'
   ].forEach(f => {
-    const src = fs.existsSync(path.join(ROOT_DIR, f))
-      ? path.join(ROOT_DIR, f)
-      : path.join(ROOT_DIR, 'package', f);
+    let src = path.join(ROOT_DIR, f);
+    if (!fs.existsSync(src)) src = path.join(ROOT_DIR, 'docs', f);
+    if (!fs.existsSync(src)) src = path.join(ROOT_DIR, 'package', f);
     if (fs.existsSync(src)) fs.copyFileSync(src, path.join(proDir, f));
   });
 
-  // Copy pristine commercial build.js and dev.js from package/ (zero demo references)
-  fs.copyFileSync(path.join(ROOT_DIR, 'package', 'build.js'), path.join(proDir, 'build.js'));
-  fs.copyFileSync(path.join(ROOT_DIR, 'package', 'dev.js'), path.join(proDir, 'dev.js'));
+  // Copy and dynamically synchronize customer build.js and dev.js from scripts/templates/
+  const buildTemplateSrc = fs.existsSync(path.join(ROOT_DIR, 'scripts', 'templates', 'customer-build.js'))
+    ? path.join(ROOT_DIR, 'scripts', 'templates', 'customer-build.js')
+    : path.join(ROOT_DIR, 'package', 'build.js');
+  let customerBuild = fs.readFileSync(buildTemplateSrc, 'utf8');
+  if (Array.isArray(CORE_JS_MODULES)) {
+    customerBuild = customerBuild.replace(
+      /\/\* __CORE_JS_MODULES__ \*\/[\s\S]*?\];/,
+      `/* __CORE_JS_MODULES__ */ ${JSON.stringify(CORE_JS_MODULES, null, 2)};`
+    );
+  }
+  fs.writeFileSync(path.join(proDir, 'build.js'), customerBuild, 'utf8');
+
+  const devTemplateSrc = fs.existsSync(path.join(ROOT_DIR, 'scripts', 'templates', 'customer-dev.js'))
+    ? path.join(ROOT_DIR, 'scripts', 'templates', 'customer-dev.js')
+    : path.join(ROOT_DIR, 'package', 'dev.js');
+  fs.copyFileSync(devTemplateSrc, path.join(proDir, 'dev.js'));
+
+  // Keep package/ synced if it exists
+  if (fs.existsSync(path.join(ROOT_DIR, 'package'))) {
+    fs.writeFileSync(path.join(ROOT_DIR, 'package', 'build.js'), customerBuild, 'utf8');
+    fs.copyFileSync(devTemplateSrc, path.join(ROOT_DIR, 'package', 'dev.js'));
+  }
 
   // Generate clean customer package.json with ONLY customer commands: dev and build
   const proPkg = {

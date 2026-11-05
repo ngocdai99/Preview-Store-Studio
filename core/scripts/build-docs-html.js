@@ -903,6 +903,7 @@ function buildDocHtml({ title, subtitle, badge, mdFile, outFile, docType }) {
 </body>
 </html>`;
 
+  fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, html, 'utf8');
   const sizeKb = (fs.statSync(outFile).size / 1024).toFixed(1);
   console.log(`  [OK] Generated: ${outFile} (${sizeKb} KB)`);
@@ -922,14 +923,19 @@ function buildAllDocs() {
     : path.join(ROOT_DIR, 'TEST_CASES.md');
 
   // 1. Marketing & Agency FAQ (English)
+  const faqOut = path.join(ROOT_DIR, 'docs', 'AGENCY_MARKETING_FAQ.html');
   buildDocHtml({
     title: 'Store Preview Studio — Agency & Marketing App Store Guide',
     subtitle: 'App Store Connect & Google Play release rules, character limits, asset specs & handoff workflows.',
     badge: 'Marketing & ASO Guide',
     mdFile: faqMd,
-    outFile: path.join(ROOT_DIR, 'package', 'AGENCY_MARKETING_FAQ.html'),
+    outFile: faqOut,
     docType: 'faq'
   });
+  // Also sync to package/ for backward compatibility
+  const pkgFaqOut = path.join(ROOT_DIR, 'package', 'AGENCY_MARKETING_FAQ.html');
+  fs.mkdirSync(path.dirname(pkgFaqOut), { recursive: true });
+  fs.copyFileSync(faqOut, pkgFaqOut);
 
   // 2. Comprehensive Test Cases (English)
   buildDocHtml({

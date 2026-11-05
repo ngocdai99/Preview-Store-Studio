@@ -4439,6 +4439,38 @@ assert(storageJsSrc60.includes('exportJSON()'), 'storage.js provides JSON backup
 assert(dropdownHtmlSrc60.includes('accept=".json,application/json"'), 'export-dropdown.html accepts both .json extension and application/json MIME');
 
 // ---------------------------------------------------------------------
+// [SUITE 61]: Dual Pipeline Architecture & Git-Tracked Release Templates Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 61]: Dual Pipeline Architecture & Git-Tracked Release Templates Verification');
+
+const rootBuild = require('../build.js');
+assert(Array.isArray(rootBuild.CORE_JS_MODULES), 'build.js exports CORE_JS_MODULES array as single source of truth');
+assert(rootBuild.CORE_JS_MODULES.length === 28, 'CORE_JS_MODULES contains exactly 28 modules');
+
+rootBuild.CORE_JS_MODULES.forEach(modPath => {
+  const fullPath = path.join(ROOT_DIR, 'src', 'js', modPath);
+  assert(fs.existsSync(fullPath), `Module file exists on disk: src/js/${modPath}`);
+});
+
+const customerBuildTemplate = path.join(ROOT_DIR, 'scripts', 'templates', 'customer-build.js');
+const customerDevTemplate = path.join(ROOT_DIR, 'scripts', 'templates', 'customer-dev.js');
+assert(fs.existsSync(customerBuildTemplate), 'Git-tracked customer-build.js template exists');
+assert(fs.existsSync(customerDevTemplate), 'Git-tracked customer-dev.js template exists');
+
+// Verify templates compile cleanly with Node.js
+const customerBuildSrc = fs.readFileSync(customerBuildTemplate, 'utf8');
+assert(!customerBuildSrc.includes('stripDemoBlocks'), 'customer-build.js has zero internal demo/paywall references');
+assert(customerBuildSrc.includes('CORE_JS_MODULES'), 'customer-build.js declares CORE_JS_MODULES');
+
+const releaseJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'release.js'), 'utf8');
+assert(releaseJsSrc.includes("scripts', 'templates', 'customer-build.js"), 'release.js uses git-tracked templates');
+assert(releaseJsSrc.includes('CORE_JS_MODULES'), 'release.js synchronizes CORE_JS_MODULES into customer build');
+
+const gitignoreSrc = fs.readFileSync(path.join(ROOT_DIR, '.gitignore'), 'utf8');
+assert(gitignoreSrc.includes('!start_dev.command'), '.gitignore preserves start_dev.command tracking');
+assert(fs.existsSync(path.join(ROOT_DIR, 'start_dev.command')), 'start_dev.command exists in root directory');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {
