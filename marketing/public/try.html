@@ -559,7 +559,7 @@ Pay once on Gumroad, own forever. No subscriptions, no cloud dependencies.</text
     • Drag ⠿ handle to reorder.
   </p>
   <div class="shot-counter-row" style="display:flex;justify-content:flex-end;gap:12px;margin-bottom:8px;flex-wrap:wrap">
-    <span class="cc" id="appPreviewCounter" style="display:none" title="Ảnh sẽ xuất hiện trên app store">0 of 3 App Previews</span>
+    <span class="cc" id="appPreviewCounter" style="display:none" title="Images will appear on App Store product page">0 of 3 App Previews</span>
     <span class="cc" id="shotCounter">0 of 10 App Screenshots</span>
   </div>
   <div class="sl" id="slist"></div>
@@ -8136,7 +8136,7 @@ r.appendChild(thumbWrap);
 const col = document.createElement('div'); col.className = 'col';
 const head = document.createElement('div'); head.className = 'shot-row-head';
 const isAppPreview = store === 'apple' && i < 3;
-const previewBadgeHtml = isAppPreview ? '<span class="shot-preview-pill" title="Ảnh sẽ xuất hiện trên App Store search/product page">App Preview</span>' : '';
+const previewBadgeHtml = isAppPreview ? '<span class="shot-preview-pill" title="Image appears on App Store search/product page">App Preview</span>' : '';
 head.innerHTML = `<span class="shot-row-title">#${i + 1}</span>${previewBadgeHtml}`;
 const metaLine = document.createElement('div'); metaLine.className = 'shot-meta-line';
 metaLine.innerHTML = `<span class="shot-dim-tag" id="shotDimTag_${i}" style="display:none"></span>`;
@@ -8229,7 +8229,7 @@ const appPreviewCount = Math.min(validCount, 3);
 if(previewCounterEl){
 previewCounterEl.style.display = 'inline-flex';
 previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+previewCounterEl.title = 'Images appear on App Store product page';
 }
 if(counterEl){
 counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
@@ -10850,11 +10850,11 @@ default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-line
 };
 function getGoogleSafetyIcon(text){
 const t = text.toLowerCase();
-if(/share|third part|chia sẻ/.test(t)) return GOOGLE_SAFETY_ICONS.share;
-if(/collect|thu thập/.test(t)) return GOOGLE_SAFETY_ICONS.collect;
-if(/encrypt|transit|security|ssl|mã hóa/.test(t)) return GOOGLE_SAFETY_ICONS.encrypt;
-if(/delet|remove|xoá|xóa/.test(t)) return GOOGLE_SAFETY_ICONS.delete;
-if(/famil|child|kid|trẻ em|gia đình/.test(t)) return GOOGLE_SAFETY_ICONS.family;
+if(/share|third part/.test(t)) return GOOGLE_SAFETY_ICONS.share;
+if(/collect/.test(t)) return GOOGLE_SAFETY_ICONS.collect;
+if(/encrypt|transit|security|ssl/.test(t)) return GOOGLE_SAFETY_ICONS.encrypt;
+if(/delet|remove/.test(t)) return GOOGLE_SAFETY_ICONS.delete;
+if(/famil|child|kid/.test(t)) return GOOGLE_SAFETY_ICONS.family;
 return GOOGLE_SAFETY_ICONS.default;
 }
 function parsePrivItems(str){
@@ -12539,7 +12539,7 @@ const appPreviewCount = Math.min(validCount, 3);
 if(previewCounterEl){
 previewCounterEl.style.display = 'inline-flex';
 previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-previewCounterEl.title = 'Ảnh sẽ xuất hiện trên app store';
+previewCounterEl.title = 'Images appear on App Store product page';
 }
 counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
 } else {

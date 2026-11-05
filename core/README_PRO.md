@@ -38,9 +38,7 @@ store-preview-studio-pro-v1.0/
 │   ├── zenmind-meditation-template.json
 │   ├── education-language-template.json
 │   └── fitness-tracker-template.json
-├── Store_Preview_Studio_Test_Checklist.xlsx # Excel pre-flight client sign-off sheet
 ├── AGENCY_MARKETING_FAQ.html                # 16-topic ASO & store rules guide
-├── TEST_CASES.html                          # QA test specifications
 ├── README.md                                # This reference manual
 └── LICENSE.txt                              # Team & Agency Commercial License
 ```
@@ -55,7 +53,7 @@ store-preview-studio-pro-v1.0/
 * **Compliance Checks**: Icon alpha transparency scanner (ITMS-90717) with 1-click auto-flatten, screenshot dimension validator, strict grapheme character counters (`Intl.Segmenter`).
 * **Export Options**: Ultra HD 4K mockups (PNG), complete ZIP package, `LISTING_METADATA.md` developer handoff report.
 * **Data Tools**: Import/export JSON workspace presets, 1-click Live App Store Cloner.
-* **Agency Toolkit**: Excel pre-flight checklist and interactive 16-topic ASO FAQ guide for client sign-off.
+* **Agency Toolkit**: Interactive 16-topic ASO & store compliance FAQ guide (`AGENCY_MARKETING_FAQ.html`) for client handoff and team onboarding.
 
 ---
 

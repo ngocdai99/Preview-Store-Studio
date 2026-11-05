@@ -95,8 +95,6 @@ store-preview-studio-pro-v1.0/
 ├── store_preview_studio.html              # Main standalone offline application (Full 6 Presets)
 ├── README.md                              # Documentation & user guide
 ├── AGENCY_MARKETING_FAQ.html              # Interactive 16-question ASO & store release guide
-├── TEST_CASES.html                        # Comprehensive 19-module QA test specification
-├── Store_Preview_Studio_Test_Checklist.xlsx # Interactive QA spreadsheet checklist
 ├── LICENSE.txt                            # Commercial team & agency license
 ├── build.js / dev.js                      # Asset compiler & live dev server
 ├── src/                                   # Full modular source code

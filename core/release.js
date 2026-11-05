@@ -4,7 +4,7 @@
  * 
  * Generates delivery ZIP packages:
  *   - Plus Edition ($29): Full 6 Presets, Minified HTML, Docs
- *   - Pro Edition ($39): Full 6 Presets, Full src/, build.js, dev.js, Agency QA Toolkit
+ *   - Pro Edition ($39): Full 6 Presets, Full src/, build.js, dev.js, Agency Playbook
  * 
  * Usage:
  *   npm run release
@@ -178,12 +178,10 @@ function runRelease() {
     : path.join(ROOT_DIR, 'README.md');
   fs.copyFileSync(proReadme, path.join(proDir, 'README.md'));
 
-  // Copy documentation, Agency FAQ HTML, QA Test Cases HTML, Excel Checklist, and launch script
+  // Copy documentation, Agency FAQ HTML, and launch script
   [
     'LICENSE.txt',
     'AGENCY_MARKETING_FAQ.html',
-    'Store_Preview_Studio_Test_Checklist.xlsx',
-    'TEST_CASES.html',
     'start_dev.command'
   ].forEach(f => {
     const src = fs.existsSync(path.join(ROOT_DIR, f))
@@ -248,7 +246,16 @@ function runRelease() {
     const proKb = (fs.statSync(proZipPath).size / 1024).toFixed(1);
     console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightCyan}Pro Edition ($39)${c.reset} ${c.dim}(${proKb} KB)${c.reset}`);
     console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${proZipPath}${c.reset}`);
-    console.log(`    ${c.gray}Package:${c.reset} All 6 Presets · Full Modular Source · Dev Server · QA Toolkit\n`);
+    console.log(`    ${c.gray}Package:${c.reset} All 6 Presets · Full Modular Source · Dev Server · Agency Playbook\n`);
+
+    // Clean up legacy files from root unpacked pro folder if present
+    const rootProDir = path.join(ROOT_DIR, proName);
+    if (fs.existsSync(rootProDir)) {
+      ['Store_Preview_Studio_Test_Checklist.xlsx', 'TEST_CASES.html'].forEach(f => {
+        const p = path.join(rootProDir, f);
+        if (fs.existsSync(p)) fs.unlinkSync(p);
+      });
+    }
 
     console.log(`${c.bold}${c.brightGreen}All release packages created successfully and ready to publish!${c.reset}\n`);
   } catch (e) {
