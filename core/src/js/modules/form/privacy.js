@@ -137,6 +137,11 @@ function updatePrivacyModeUI() {
   const notLinked = ($('f-priv-notlinked') && $('f-priv-notlinked').value !== undefined) ? $('f-priv-notlinked').value.trim() : '';
   const isNone = (linked === '' && notLinked === '');
 
+  const seg = $('privacyModeSeg');
+  if (seg) {
+    seg.dataset.active = isNone ? 'none' : 'collected';
+  }
+
   const btnNone = $('privBtnNone');
   const btnCol = $('privBtnCollected');
   const bannerTitle = $('privacyStatusLabel');
@@ -145,11 +150,11 @@ function updatePrivacyModeUI() {
 
   if (btnNone) {
     btnNone.classList.toggle('active', isNone);
-    btnNone.setAttribute('aria-checked', isNone ? 'true' : 'false');
+    btnNone.setAttribute('aria-selected', isNone ? 'true' : 'false');
   }
   if (btnCol) {
     btnCol.classList.toggle('active', !isNone);
-    btnCol.setAttribute('aria-checked', !isNone ? 'true' : 'false');
+    btnCol.setAttribute('aria-selected', !isNone ? 'true' : 'false');
   }
   if (bannerTitle) {
     bannerTitle.textContent = isNone ? 'Profile: Data Not Collected' : 'Profile: Data Collected';
