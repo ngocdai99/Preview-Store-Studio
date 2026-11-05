@@ -3755,7 +3755,7 @@ asyncSuites.push((async () => {
   const devJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'dev.js'), 'utf8');
   assert(devJsSrc.includes("pathname === '/try'") && devJsSrc.includes("pathname === '/try.html'"), 'dev.js handles /try and /try.html endpoints');
   assert(devJsSrc.includes('Core Studio:') && devJsSrc.includes('Try Demo:'), 'dev.js logs both Core and Try URLs on port 3000');
-  assert(devJsSrc.includes('openTryCmd') && devJsSrc.includes('openCoreCmd'), 'dev.js automatically launches both Core and Try in browser');
+  assert(devJsSrc.includes('openCoreCmd'), 'dev.js automatically launches Core Studio in browser');
 
   const rootPkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, '../package.json'), 'utf8'));
   assert(rootPkg.scripts.dev === 'npm --prefix core run dev', 'root package.json dev script starts core dev server');

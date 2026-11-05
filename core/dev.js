@@ -242,19 +242,12 @@ function startServer(port) {
     console.log('------------------------------------------------------');
     console.log('Nhấn Ctrl + C để dừng server.\n');
 
-    // Auto open in browser: open Core Studio and Try Demo tabs
+    // Auto open in browser: open Core Studio (localhost:3000)
     const openCoreCmd = process.platform === 'darwin' ? `open "${coreUrl}"`
       : process.platform === 'win32' ? `start "${coreUrl}"`
       : `xdg-open "${coreUrl}"`;
-    const openTryCmd = process.platform === 'darwin' ? `open "${tryUrl}"`
-      : process.platform === 'win32' ? `start "${tryUrl}"`
-      : `xdg-open "${tryUrl}"`;
 
-    exec(openCoreCmd, () => {
-      setTimeout(() => {
-        exec(openTryCmd, () => {});
-      }, 400);
-    });
+    exec(openCoreCmd, () => {});
 
     // Initial build for both Core and Try
     const res = build();
