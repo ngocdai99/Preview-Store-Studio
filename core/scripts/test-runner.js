@@ -3631,9 +3631,11 @@ asyncSuites.push((async () => {
   const googleHeaderCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/google/header.css'), 'utf8');
   assert(googleHeaderCss.includes('.g-name{') && googleHeaderCss.includes('white-space:normal'), '.g-name specifies white-space:normal to preserve word boundaries');
   assert(googleHeaderCss.includes('.g-dev{') && googleHeaderCss.includes('white-space:normal'), '.g-dev specifies white-space:normal to preserve word boundaries');
+  assert(googleHeaderCss.includes('word-spacing:0.01px'), '.g-name/.g-dev specify word-spacing:0.01px to prevent space collapse under CSS zoom in Blink/Gecko');
 
   const appleHeroCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/apple/hero.css'), 'utf8');
   assert(appleHeroCss.includes('.a-name{') && appleHeroCss.includes('white-space:normal'), '.a-name specifies white-space:normal to preserve word boundaries');
+  assert(appleHeroCss.includes('word-spacing:0.01px'), '.a-name specifies word-spacing:0.01px to prevent space collapse under CSS zoom in Blink/Gecko');
 
   // 2. exportPNG in onclone injects style rules that override -webkit-box multi-line clamp layouts during capture
   const exportPngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
