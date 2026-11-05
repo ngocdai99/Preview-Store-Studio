@@ -4,7 +4,7 @@
 ---
 
 ## 🚀 Quick Start
-1. Double-click **`store_preview_studio.html`** to open in any modern web browser (Chrome, Safari, Brave, Edge, Arc, Firefox).
+1. Double-click **`store_preview_studio.html`** to open in any modern web browser (Chrome, Safari, Firefox).
 2. **Zero installation** — No Node.js, npm, or terminal required.
 3. **100% Private & Client-Side** — Runs locally in your browser with zero tracking, zero telemetry, and no cloud accounts required.
 4. **Using Presets** — Switch between 6 built-in templates directly from the top **Preset** menu, or import/export `.json` files from the `presets/` folder to save and restore your projects.

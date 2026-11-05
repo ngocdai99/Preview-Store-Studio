@@ -6,7 +6,7 @@
 ## 🚀 Quick Start
 
 ### 1. Standalone Use
-* Double-click **`store_preview_studio.html`** to run the pre-compiled studio immediately in any modern browser (Chrome, Safari, Brave, Edge, Arc, Firefox).
+* Double-click **`store_preview_studio.html`** to run the pre-compiled studio immediately in any modern browser (Chrome, Safari, Firefox).
 * Switch between 6 built-in templates from the top **Preset** menu, or import/export `.json` workspace files from the `presets/` folder for client reviews.
 
 ### 2. Developer & Customization Mode

@@ -1,13 +1,13 @@
 # Store Preview Studio
 ### Commercial-Grade Dual-Store Preview & Metadata Optimization Suite
 
-> **The standalone, zero-server studio for Mobile Developers, ASO Specialists, Game Studios, and Digital Agencies to preview, validate, and export pixel-perfect App Store and Google Play listings.**
+> **The standalone, zero-server studio for Mobile Developers, ASO Specialists, Game Studios, and Digital Agencies to preview, validate, and export curated App Store and Google Play listings.**
 
 ---
 
 ## Quick Start
 
-1. Open **`core.html`** (or `store_preview_studio.html`) in **Brave Browser** (or any modern web browser: Brave, Safari, Edge, Chrome, Firefox).
+1. Open **`core.html`** (or `store_preview_studio.html`) in any modern web browser (Chrome, Safari, Firefox).
    - Or run via terminal: `open core.html`
 2. **Zero installation required** — no Node.js, no Docker, and no server configuration when simply using the studio.
 3. Everything runs **100% Client-Side** with zero tracking and zero telemetry. Your confidential metadata, pre-release screenshots, and strategy remain strictly private on your machine.
