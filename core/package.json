@@ -20,7 +20,7 @@
     "build:try": "node scripts/build-try.js",
     "watch:try": "node scripts/build-try.js --watch",
     "deploy": "npx --yes surge docs preview-studio-app-vi.surge.sh",
-    "deploy:cf": "node scripts/build-marketing.js && node scripts/build-marketing-vi.js && npx wrangler pages deploy cloudflare --project-name store-preview-studio",
+    "deploy:cf": "node scripts/build-try.js && npm --prefix ../marketing run build && npx wrangler pages deploy ../marketing/out --project-name store-preview-studio",
     "test": "node scripts/test-runner.js"
   },
   "keywords": [
