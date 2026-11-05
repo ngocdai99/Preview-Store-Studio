@@ -44,8 +44,8 @@ function exportJSON(){
     supportsIpad: SUPPORTS_IPAD,
     ipadShots: IPAD_SHOTS,
     ipadFitMode: IPAD_FIT_MODE || 'cover',
-    tab7Shots: TABS.tab7.map(i => i.src),
-    tab10Shots: TABS.tab10.map(i => i.src),
+    tab7Shots: (TABS.tab7 || []).map(i => (i && i.src) || (typeof i === 'string' ? i : '')),
+    tab10Shots: (TABS.tab10 || []).map(i => (i && i.src) || (typeof i === 'string' ? i : '')),
     stats: (typeof statsToObject === 'function') ? statsToObject() : {}
   };
   const jsonStr = JSON.stringify(config, null, 2);
@@ -241,7 +241,12 @@ function parseAndApplyJSON(jsonString, opts = {}){
   }
   if(data.stats){ applyStatsFromObject(data.stats); syncStatInputs(); renderStats(); }
 
-  if(typeof data.supportsIpad === 'boolean' && typeof setSupportsIpad === 'function') setSupportsIpad(data.supportsIpad);
+  const ipadSupportVal = (typeof data.supportsIpad === 'boolean')
+    ? data.supportsIpad
+    : ((typeof data.isUniversal === 'boolean')
+      ? data.isUniversal
+      : (Array.isArray(data.ipadShots) && data.ipadShots.length > 0));
+  if(typeof setSupportsIpad === 'function') setSupportsIpad(ipadSupportVal);
   if(data.ipadFitMode === 'cover' || data.ipadFitMode === 'contain'){
     IPAD_FIT_MODE = data.ipadFitMode;
     if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
@@ -289,11 +294,14 @@ if($('optImportJSON')){
 }
 if($('jsonFileInput')){
   $('jsonFileInput').onchange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files && e.target.files[0];
     if(!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       parseAndApplyJSON(reader.result);
+    };
+    reader.onerror = () => {
+      showToast('Failed to read file from disk', 'warn');
     };
     reader.readAsText(file);
     e.target.value = '';

@@ -60,9 +60,36 @@ ${wn}
 
 =====================================================`;
 
-  navigator.clipboard.writeText(text).then(()=>{
-    showToast('Store metadata copied to clipboard!', 'ok');
-  }).catch(()=>{
-    showToast('Clipboard access denied, check permissions', 'warn');
-  });
+  function fallbackCopyText(str){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = str;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '-9999px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if(success){
+        showToast('Store metadata copied to clipboard!', 'ok');
+      } else {
+        showToast('Clipboard access denied, check permissions', 'warn');
+      }
+    } catch(err){
+      showToast('Clipboard access denied, check permissions', 'warn');
+    }
+  }
+
+  if(navigator.clipboard && typeof navigator.clipboard.writeText === 'function'){
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast('Store metadata copied to clipboard!', 'ok');
+    }).catch(()=>{
+      fallbackCopyText(text);
+    });
+  } else {
+    fallbackCopyText(text);
+  }
 }

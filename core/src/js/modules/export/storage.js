@@ -798,7 +798,10 @@ if(optResetAll){
       resetFactoryStorage,
       'Reset All Data?',
       'Clear all stored data and reload to clean state.',
-      'Reset'
+      'Reset',
+      () => {
+        if(typeof exportJSON === 'function') exportJSON();
+      }
     );
   };
 }

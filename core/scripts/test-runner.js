@@ -4412,7 +4412,25 @@ assert(ipadJsSrc59.includes("compatNotice.style.display = SUPPORTS_IPAD ? 'none'
 assert(ipadHeroHtmlSrc59.includes('id="ipadCompatNotice"'), 'ipad-hero.html contains #ipadCompatNotice container');
 assert(ipadGalleryHtmlSrc59.includes('class="ipad-plat-tablet"') && ipadGalleryHtmlSrc59.includes('class="ipad-plat-label"'), 'ipad-gallery.html contains tablet icon and platform label');
 
+// ---------------------------------------------------------------------
+// Suite 60: Menu Actions Reliability & Latent Edge Case Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 60]: Menu Actions Reliability & Latent Edge Case Verification');
 
+const clipboardJsSrc60 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'clipboard.js'), 'utf8');
+const jsonExportJsSrc60 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'json.js'), 'utf8');
+const pngExportJsSrc60 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
+const storageJsSrc60 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'storage.js'), 'utf8');
+const dropdownHtmlSrc60 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'header', 'export-dropdown.html'), 'utf8');
+
+assert(clipboardJsSrc60.includes('fallbackCopyText'), 'clipboard.js provides fallback copy mechanism for environments lacking navigator.clipboard');
+assert(clipboardJsSrc60.includes("document.execCommand('copy')"), 'clipboard.js falls back to document.execCommand copy');
+assert(jsonExportJsSrc60.includes('ipadSupportVal'), 'json.js handles backward-compatible iPad destination restoration');
+assert(jsonExportJsSrc60.includes('reader.onerror'), 'json.js handles FileReader.onerror gracefully without silent failure');
+assert(jsonExportJsSrc60.includes('(TABS.tab7 || []).map'), 'json.js safely maps tab7Shots without producing undefined elements');
+assert(pngExportJsSrc60.includes("$$('.menu').forEach(m => m.classList.remove('show'))"), 'png.js dismisses export dropdown menu when opening modal');
+assert(storageJsSrc60.includes('exportJSON()'), 'storage.js provides JSON backup callback in reset confirmation dialog');
+assert(dropdownHtmlSrc60.includes('accept=".json,application/json"'), 'export-dropdown.html accepts both .json extension and application/json MIME');
 
 // ---------------------------------------------------------------------
 // Summary Report

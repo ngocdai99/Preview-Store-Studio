@@ -237,7 +237,7 @@ var r=function(A,e){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Arr
     </button>
   </div>
 </div>
-<input type="file" id="jsonFileInput" accept=".json" hidden>
+<input type="file" id="jsonFileInput" accept=".json,application/json" hidden>
   </div>
   <div class="preset-banner" id="presetBanner" style="display: none;">
     <div class="preset-banner-info">
@@ -14319,7 +14319,10 @@ showResetConfirmModal(
 resetFactoryStorage,
 'Reset All Data?',
 'Clear all stored data and reload to clean state.',
-'Reset'
+'Reset',
+() => {
+if(typeof exportJSON === 'function') exportJSON();
+}
 );
 };
 }
@@ -14351,11 +14354,14 @@ if($('jsonFileInput')) $('jsonFileInput').click();
 }
 if($('jsonFileInput')){
 $('jsonFileInput').onchange = (e) => {
-const file = e.target.files[0];
+const file = e.target.files && e.target.files[0];
 if(!file) return;
 const reader = new FileReader();
 reader.onload = () => {
 parseAndApplyJSON(reader.result);
+};
+reader.onerror = () => {
+showToast('Failed to read file from disk', 'warn');
 };
 reader.readAsText(file);
 e.target.value = '';
@@ -14458,6 +14464,7 @@ localStorage.setItem(EXPORT_PREFS_KEY, JSON.stringify(exportPrefs));
 }
 function openExportModal() {
 if (!exportModal) return;
+if (typeof $$ === 'function') $$('.menu').forEach(m => m.classList.remove('show'));
 syncExportModalUI();
 exportModal.classList.add('open');
 exportModal.setAttribute('aria-hidden', 'false');

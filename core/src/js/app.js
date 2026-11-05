@@ -11750,7 +11750,10 @@ if(optResetAll){
       resetFactoryStorage,
       'Reset All Data?',
       'Clear all stored data and reload to clean state.',
-      'Reset'
+      'Reset',
+      () => {
+        if(typeof exportJSON === 'function') exportJSON();
+      }
     );
   };
 }
@@ -11817,11 +11820,38 @@ ${wn}
 
 =====================================================`;
 
-  navigator.clipboard.writeText(text).then(()=>{
-    showToast('Store metadata copied to clipboard!', 'ok');
-  }).catch(()=>{
-    showToast('Clipboard access denied, check permissions', 'warn');
-  });
+  function fallbackCopyText(str){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = str;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '-9999px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if(success){
+        showToast('Store metadata copied to clipboard!', 'ok');
+      } else {
+        showToast('Clipboard access denied, check permissions', 'warn');
+      }
+    } catch(err){
+      showToast('Clipboard access denied, check permissions', 'warn');
+    }
+  }
+
+  if(navigator.clipboard && typeof navigator.clipboard.writeText === 'function'){
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast('Store metadata copied to clipboard!', 'ok');
+    }).catch(()=>{
+      fallbackCopyText(text);
+    });
+  } else {
+    fallbackCopyText(text);
+  }
 }
 
 
@@ -11948,8 +11978,8 @@ function exportJSON(){
     supportsIpad: SUPPORTS_IPAD,
     ipadShots: IPAD_SHOTS,
     ipadFitMode: IPAD_FIT_MODE || 'cover',
-    tab7Shots: TABS.tab7.map(i => i.src),
-    tab10Shots: TABS.tab10.map(i => i.src),
+    tab7Shots: (TABS.tab7 || []).map(i => (i && i.src) || (typeof i === 'string' ? i : '')),
+    tab10Shots: (TABS.tab10 || []).map(i => (i && i.src) || (typeof i === 'string' ? i : '')),
     stats: (typeof statsToObject === 'function') ? statsToObject() : {}
   };
   const jsonStr = JSON.stringify(config, null, 2);
@@ -12141,7 +12171,12 @@ function parseAndApplyJSON(jsonString, opts = {}){
   }
   if(data.stats){ applyStatsFromObject(data.stats); syncStatInputs(); renderStats(); }
 
-  if(typeof data.supportsIpad === 'boolean' && typeof setSupportsIpad === 'function') setSupportsIpad(data.supportsIpad);
+  const ipadSupportVal = (typeof data.supportsIpad === 'boolean')
+    ? data.supportsIpad
+    : ((typeof data.isUniversal === 'boolean')
+      ? data.isUniversal
+      : (Array.isArray(data.ipadShots) && data.ipadShots.length > 0));
+  if(typeof setSupportsIpad === 'function') setSupportsIpad(ipadSupportVal);
   if(data.ipadFitMode === 'cover' || data.ipadFitMode === 'contain'){
     IPAD_FIT_MODE = data.ipadFitMode;
     if($('f-ipad-fit-mode')) $('f-ipad-fit-mode').value = IPAD_FIT_MODE;
@@ -12185,11 +12220,14 @@ if($('optImportJSON')){
 }
 if($('jsonFileInput')){
   $('jsonFileInput').onchange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files && e.target.files[0];
     if(!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       parseAndApplyJSON(reader.result);
+    };
+    reader.onerror = () => {
+      showToast('Failed to read file from disk', 'warn');
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -12309,6 +12347,7 @@ function saveExportPrefs() {
 
 function openExportModal() {
   if (!exportModal) return;
+  if (typeof $$ === 'function') $$('.menu').forEach(m => m.classList.remove('show'));
   syncExportModalUI();
   exportModal.classList.add('open');
   exportModal.setAttribute('aria-hidden', 'false');

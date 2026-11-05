@@ -56,6 +56,7 @@ function saveExportPrefs() {
 
 function openExportModal() {
   if (!exportModal) return;
+  if (typeof $$ === 'function') $$('.menu').forEach(m => m.classList.remove('show'));
   syncExportModalUI();
   exportModal.classList.add('open');
   exportModal.setAttribute('aria-hidden', 'false');
