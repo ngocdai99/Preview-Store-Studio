@@ -4382,6 +4382,8 @@ console.log('\n[SUITE 58]: Privacy Mode Tabview Focus Linking Verification');
 const privacyJsSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'privacy.js'), 'utf8');
 const syncJsSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'sync.js'), 'utf8');
 const focusLinkCssSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'stage', 'focus-link.css'), 'utf8');
+const privacyCardHtmlSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'privacy-card.html'), 'utf8');
+const panelCssSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'editor', 'panel.css'), 'utf8');
 
 assert(privacyJsSrc58.includes("if (typeof flashField === 'function') flashField('privacy');"), 'privacy.js triggers flashField("privacy") on privacy mode change');
 assert(privacyJsSrc58.includes("if (typeof setFieldFocus === 'function') setFieldFocus('privacy', true);"), 'privacy.js triggers setFieldFocus("privacy", true) on privacy mode change');
@@ -4390,6 +4392,9 @@ assert(syncJsSrc58.includes('#privacyModeSeg, #privBtnNone, #privBtnCollected, .
 assert(syncJsSrc58.includes(".stage [data-apple-priv-wrap] .pc"), 'sync.js targets individual Apple privacy cards when resolving privacy targets');
 assert(focusLinkCssSrc58.includes('[data-apple-priv-wrap].hl-target,') && focusLinkCssSrc58.includes('[data-apple-priv-wrap] .pc.hl-target'), 'focus-link.css provides 16px rounded gold outline for Apple privacy cards');
 assert(bundledHtml.includes('id="privacyModeSeg"') && bundledHtml.includes('id="privBtnNone"') && bundledHtml.includes('id="privBtnCollected"'), 'bundledHtml includes privacy mode tabview controls');
+assert(!privacyCardHtmlSrc58.includes('pcb-action') && !privacyCardHtmlSrc58.includes('Inspect &rarr;'), 'privacy-card.html removes heavy inspect button');
+assert(privacyCardHtmlSrc58.includes('id="privacyStatusLabel"') && privacyCardHtmlSrc58.includes('class="pcb-sub"'), 'privacy-card.html preserves clean profile title and description text');
+assert(panelCssSrc58.includes('.privacy-compact-box {') && panelCssSrc58.includes('background: transparent !important'), 'panel.css styles privacy info text cleanly without outer card background or border');
 
 
 
