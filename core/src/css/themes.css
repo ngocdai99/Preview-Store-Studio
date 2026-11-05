@@ -150,6 +150,7 @@
 :root[data-ui=light] .tag{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);color:#64748b}
 :root[data-ui=light] .tag.a{color:#0071e3;background:rgba(0,113,227,.1);border-color:rgba(0,113,227,.24);box-shadow:none}
 :root[data-ui=light] .tag.g{color:#01875f;background:rgba(1,135,95,.1);border-color:rgba(1,135,95,.24);box-shadow:none}
+:root[data-ui=light] .tag.mockup{color:#d97706;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.28);box-shadow:none}
 :root[data-ui=light] input::placeholder,:root[data-ui=light] textarea::placeholder{color:#a1a1a6}
 :root[data-ui=light] input:focus,:root[data-ui=light] textarea:focus{background:#fff}
 :root[data-ui=light] input:disabled{color:var(--mut);background:#f5f5f7}
