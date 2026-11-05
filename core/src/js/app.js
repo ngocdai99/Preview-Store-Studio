@@ -1071,7 +1071,8 @@ function renderStats(){
 
   const hasRating = !!(STATS.rating && STATS.rating.trim() && STATS.rating.trim() !== '0');
   $$('[data-gmet-rating]').forEach(e => { e.style.display = hasRating ? '' : 'none'; });
-  $$('[data-gmet-size]').forEach(e => { e.style.display = hasRating ? 'none' : ''; });
+  $$('.dev:not(.gtab7) [data-gmet-size]').forEach(e => { e.style.display = hasRating ? 'none' : ''; });
+  $$('.dev.gtab7 [data-gmet-size]').forEach(e => { e.style.display = 'flex'; });
 
   const iapVal = STATS.iap || 'iap';
   const hasIap = (iapVal === 'iap' || iapVal === 'ads_iap');
@@ -8424,7 +8425,7 @@ function getFieldMockupTargets(key) {
     case 'size':
     case 'st-size': {
       const raw = $$('.stage [data-stat="size"]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .gt10-met-item small, .gt10-met-dl-size, .ipad-info-val, .a-info b') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, [data-gmet-size] b, [data-gmet-size], .gt10-met-item small, .gt10-met-dl-size, .ipad-info-val, .a-info b') || el)));
     }
     case 'age':
     case 'st-age': {
@@ -12398,6 +12399,25 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 270px !important;
             width: auto !important;
           }
+          .g-dl-icon, .gt10-dl-icon, [data-gmet-size] svg {
+            width: 16px !important;
+            height: 16px !important;
+            display: block !important;
+          }
+          .phone.google[data-theme=dark] .g-dl-icon,
+          .phone.google[data-theme=dark] .gt10-dl-icon,
+          .phone.google[data-theme=dark] [data-gmet-size] svg,
+          .dev.gtab7 .phone.google[data-theme=dark] [data-gmet-size] svg {
+            stroke: #e8eaed !important;
+            color: #e8eaed !important;
+          }
+          .phone.google[data-theme=light] .g-dl-icon,
+          .phone.google[data-theme=light] .gt10-dl-icon,
+          .phone.google[data-theme=light] [data-gmet-size] svg,
+          .dev.gtab7 .phone.google[data-theme=light] [data-gmet-size] svg {
+            stroke: #202124 !important;
+            color: #202124 !important;
+          }
         `;
         clonedDoc.head.appendChild(btnStyle);
 
@@ -12596,26 +12616,31 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.querySelectorAll('svg').forEach(svg => {
           const comp = win.getComputedStyle(svg);
           const compColor = comp.color || '#000000';
-          svg.style.color = compColor;
+          const strokeVal = (svg.getAttribute('stroke') === 'currentColor') ? compColor : (svg.getAttribute('stroke') || comp.stroke || compColor);
+          const fillVal = (svg.getAttribute('fill') === 'currentColor') ? compColor : (svg.getAttribute('fill') || comp.fill);
 
-          if (svg.getAttribute('stroke') === 'currentColor') {
-            svg.setAttribute('stroke', compColor);
+          svg.style.color = compColor;
+          if (svg.getAttribute('stroke') === 'currentColor' || !svg.getAttribute('stroke')) {
+            svg.setAttribute('stroke', strokeVal);
           }
           if (svg.getAttribute('fill') === 'currentColor') {
-            svg.setAttribute('fill', compColor);
+            svg.setAttribute('fill', fillVal);
           }
 
           if (!svg.getAttribute('stroke-width') && comp.strokeWidth && comp.strokeWidth !== 'none' && comp.strokeWidth !== '0px') {
             svg.setAttribute('stroke-width', comp.strokeWidth.replace('px', ''));
           }
 
-          // Bake explicit currentColor resolution on children if specified
-          svg.querySelectorAll('*').forEach(child => {
-            if (child.getAttribute('stroke') === 'currentColor') {
-              child.setAttribute('stroke', compColor);
+          // Bake explicit stroke and fill on children to ensure WebKit/Blink SVG image serializer doesn't drop inherited stroke
+          svg.querySelectorAll('path, polyline, line, polygon, circle, rect, ellipse').forEach(child => {
+            if (child.getAttribute('stroke') === 'currentColor' || (!child.getAttribute('stroke') && strokeVal && strokeVal !== 'none')) {
+              child.setAttribute('stroke', strokeVal);
             }
             if (child.getAttribute('fill') === 'currentColor') {
-              child.setAttribute('fill', compColor);
+              child.setAttribute('fill', fillVal);
+            }
+            if (!child.getAttribute('stroke-width') && svg.getAttribute('stroke-width')) {
+              child.setAttribute('stroke-width', svg.getAttribute('stroke-width'));
             }
           });
         });

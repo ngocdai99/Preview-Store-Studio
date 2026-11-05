@@ -1011,6 +1011,24 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
 .dev.gtab7 .g-met .st:first-child { display: contents; }
 .dev.gtab7 [data-gmet-rating] { display: flex !important; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; border-right: 1px solid var(--sp); padding: 0 4px; }
 .dev.gtab7 [data-gmet-size] { display: flex !important; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; border-right: 1px solid var(--sp); padding: 0 4px; }
+.dev.gtab7 [data-gmet-size] b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  margin-bottom: 2px;
+  color: var(--t);
+}
+.dev.gtab7 [data-gmet-size] svg,
+.g-met [data-gmet-size] svg,
+.g-dl-icon {
+  width: 16px;
+  height: 16px;
+  stroke: var(--t);
+  color: var(--t);
+  display: block;
+  flex-shrink: 0;
+}
 
 /* ==========================================================================
    TABLET ACTION ROW · WISHLIST BUTTON (Tab7 + Tab10)

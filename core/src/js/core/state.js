@@ -37,7 +37,8 @@ function renderStats(){
 
   const hasRating = !!(STATS.rating && STATS.rating.trim() && STATS.rating.trim() !== '0');
   $$('[data-gmet-rating]').forEach(e => { e.style.display = hasRating ? '' : 'none'; });
-  $$('[data-gmet-size]').forEach(e => { e.style.display = hasRating ? 'none' : ''; });
+  $$('.dev:not(.gtab7) [data-gmet-size]').forEach(e => { e.style.display = hasRating ? 'none' : ''; });
+  $$('.dev.gtab7 [data-gmet-size]').forEach(e => { e.style.display = 'flex'; });
 
   const iapVal = STATS.iap || 'iap';
   const hasIap = (iapVal === 'iap' || iapVal === 'ads_iap');

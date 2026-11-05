@@ -4325,6 +4325,22 @@ assert(googleJsCode2.includes("addBtn.disabled = atLimit"), 'google.js disables 
 
 assert(bundledHtml.includes(".add:disabled, .add[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}"), 'CSS defines disabled state for add buttons');
 
+console.log('\n[SUITE 56]: Google Play Tablet Metrics Download Icon Verification');
+
+const metricsHtmlSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'google', 'sections', 'metrics.html'), 'utf8');
+const tabletCssSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'tablets.css'), 'utf8');
+const frameCssSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'frame.css'), 'utf8');
+const pngExportSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
+const stateCode56 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'core', 'state.js'), 'utf8');
+
+assert(metricsHtmlSrc.includes('<b>\n        <svg class="g-dl-icon"'), 'metrics.html wraps g-dl-icon SVG in <b> tag matching other metric columns');
+assert(tabletCssSrc.includes('.dev.gtab7 [data-gmet-size] b'), 'tablets.css provides explicit flex centering for tab7 size metric bold element');
+assert(tabletCssSrc.includes('.g-dl-icon'), 'tablets.css provides explicit sizing and theme stroke/color for .g-dl-icon');
+assert(frameCssSrc.includes('.phone.google{') && frameCssSrc.includes('color:var(--t)'), 'frame.css sets color:var(--t) on phone.google so currentColor inherits mockup theme');
+assert(pngExportSrc.includes('.g-dl-icon, .gt10-dl-icon, [data-gmet-size] svg'), 'png.js includes explicit dimensions and theme stroke colors in export onclone stylesheet');
+assert(pngExportSrc.includes("svg.querySelectorAll('path, polyline, line, polygon, circle, rect, ellipse')"), 'png.js bakes explicit stroke and fill on SVG child shapes for detached data-URI serialization');
+assert(stateCode56.includes("$$('.dev.gtab7 [data-gmet-size]').forEach(e => { e.style.display = 'flex'; });"), 'state.js ensures tab7 size metric remains displayed as flex');
+
 
 
 // ---------------------------------------------------------------------

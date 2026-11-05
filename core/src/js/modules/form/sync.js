@@ -172,7 +172,7 @@ function getFieldMockupTargets(key) {
     case 'size':
     case 'st-size': {
       const raw = $$('.stage [data-stat="size"]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .gt10-met-item small, .gt10-met-dl-size, .ipad-info-val, .a-info b') || el)));
+      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, [data-gmet-size] b, [data-gmet-size], .gt10-met-item small, .gt10-met-dl-size, .ipad-info-val, .a-info b') || el)));
     }
     case 'age':
     case 'st-age': {
