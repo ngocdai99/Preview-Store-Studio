@@ -4398,6 +4398,20 @@ assert(!privacyCardHtmlSrc58.includes('pcb-action') && !privacyCardHtmlSrc58.inc
 assert(privacyCardHtmlSrc58.includes('id="privacyStatusLabel"') && privacyCardHtmlSrc58.includes('class="pcb-sub"'), 'privacy-card.html preserves clean profile title and description text');
 assert(panelCssSrc58.includes('.privacy-compact-box {') && panelCssSrc58.includes('background: transparent !important'), 'panel.css styles privacy info text cleanly without outer card background or border');
 
+console.log('\n[SUITE 59]: iPad Destination Toggle Device Mockup Reflection Verification');
+
+const ipadJsSrc59 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'ipad.js'), 'utf8');
+const ipadHeroHtmlSrc59 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'ipad-hero.html'), 'utf8');
+const ipadGalleryHtmlSrc59 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'ipad-gallery.html'), 'utf8');
+
+assert(ipadJsSrc59.includes("$$('.ipad-platforms-row').forEach"), 'ipad.js updates .ipad-platforms-row elements on destination change');
+assert(ipadJsSrc59.includes("tabletIco.style.display = SUPPORTS_IPAD ? '' : 'none'"), 'ipad.js hides tablet icon in platform row when iPad support is unchecked');
+assert(ipadJsSrc59.includes("label.textContent = SUPPORTS_IPAD ? 'iPad, iPhone' : 'iPhone'"), 'ipad.js changes platform label from "iPad, iPhone" to "iPhone" when unchecked');
+assert(ipadJsSrc59.includes("const hasDedicatedIpadShots = SUPPORTS_IPAD && validIpadShots.length > 0;"), 'ipad.js checks SUPPORTS_IPAD before selecting dedicated iPad screenshots');
+assert(ipadJsSrc59.includes("compatNotice.style.display = SUPPORTS_IPAD ? 'none' : 'inline-flex'"), 'ipad.js shows Designed for iPhone notice when iPad support is unchecked');
+assert(ipadHeroHtmlSrc59.includes('id="ipadCompatNotice"'), 'ipad-hero.html contains #ipadCompatNotice container');
+assert(ipadGalleryHtmlSrc59.includes('class="ipad-plat-tablet"') && ipadGalleryHtmlSrc59.includes('class="ipad-plat-label"'), 'ipad-gallery.html contains tablet icon and platform label');
+
 
 
 // ---------------------------------------------------------------------

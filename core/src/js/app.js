@@ -5116,6 +5116,22 @@ function setSupportsIpad(val){
     if(label) label.textContent = SUPPORTS_IPAD ? 'iPhone, iPad' : 'iPhone';
   });
 
+  $$('.ipad-platforms-row').forEach(row => {
+    const tabletIco = row.querySelector('.ipad-plat-tablet');
+    const label = row.querySelector('.ipad-plat-label');
+    if(tabletIco) tabletIco.style.display = SUPPORTS_IPAD ? '' : 'none';
+    if(label) label.textContent = SUPPORTS_IPAD ? 'iPad, iPhone' : 'iPhone';
+  });
+
+  const compatNotice = $('ipadCompatNotice');
+  if(compatNotice) compatNotice.style.display = SUPPORTS_IPAD ? 'none' : 'inline-flex';
+
+  const ipadCompatVal = $('ipadCompatVal');
+  if(ipadCompatVal) ipadCompatVal.textContent = SUPPORTS_IPAD ? 'Works on this iPad' : 'Designed for iPhone';
+
+  const iphoneCompatVal = $('iphoneCompatVal');
+  if(iphoneCompatVal) iphoneCompatVal.textContent = SUPPORTS_IPAD ? 'Works on iPhone, iPad (iOS 16.0+)' : 'Works on this iPhone (iOS 16.0+)';
+
   renderIpadShots();
   validateScreenshots();
 }
@@ -5127,8 +5143,8 @@ function renderIpadShots(){
   const validIpadShots = IPAD_SHOTS.filter(s => s && s.trim());
   const validPhoneShots = (SHOTS || []).filter(s => typeof s === 'string' && s.trim());
 
-  // Prioritize dedicated iPad screenshots if present, otherwise fallback to Phone screenshots
-  const hasDedicatedIpadShots = validIpadShots.length > 0;
+  // Prioritize dedicated iPad screenshots if present AND SUPPORTS_IPAD is enabled, otherwise fallback to Phone screenshots
+  const hasDedicatedIpadShots = SUPPORTS_IPAD && validIpadShots.length > 0;
   const effectiveShots = hasDedicatedIpadShots ? validIpadShots : validPhoneShots;
 
   // Update iPad Mockup Carousel
