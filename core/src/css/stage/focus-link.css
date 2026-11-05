@@ -56,6 +56,7 @@ img.hl-target {
 }
 
 /* Apple Privacy Cards */
+[data-apple-priv-wrap].hl-target,
 [data-apple-priv-wrap] .pc.hl-target {
   border-radius: 16px !important;
   outline: 2px solid #f59e0b !important;
@@ -64,6 +65,7 @@ img.hl-target {
   background-color: rgba(245, 158, 11, 0.1) !important;
 }
 
+[data-apple-priv-wrap].hl-flash,
 [data-apple-priv-wrap] .pc.hl-flash {
   border-radius: 16px !important;
 }

@@ -136,8 +136,11 @@ function getFieldMockupTargets(key) {
       return $$('.stage [data-icon]');
     case 'shots':
       return $$('.stage .gal, .stage [data-shots]');
-    case 'privacy':
-      return $$('.stage [data-google-safety], .stage [data-apple-priv-wrap]');
+    case 'privacy': {
+      const applePcs = $$('.stage [data-apple-priv-wrap] .pc');
+      const appleTargets = applePcs.length ? applePcs : $$('.stage [data-apple-priv-wrap]');
+      return [...$$('.stage [data-google-safety]'), ...appleTargets];
+    }
     case 'priv-google':
       return $$('.stage [data-google-safety]');
     case 'priv-linked':
@@ -200,9 +203,12 @@ function setFieldFocus(key, shouldScroll = true) {
   if (!key) return;
 
   // Auto-expand containing card if it is currently collapsed & mark it selected
-  const editorInput = $('f-' + key) || $(key);
+  let editorInput = $('f-' + key) || $(key);
+  if (!editorInput && key === 'privacy') {
+    editorInput = $('privacyCard') || $('privacyModeSeg');
+  }
   if (editorInput) {
-    const parentCard = editorInput.closest('.card');
+    const parentCard = editorInput.closest('.card') || (editorInput.classList.contains('card') ? editorInput : null);
     if (parentCard) {
       if (parentCard.classList.contains('collapsed')) {
         parentCard.classList.remove('collapsed');
@@ -388,6 +394,22 @@ function initFieldFocusLinking() {
     el.addEventListener('click', () => setFieldFocus('st-iap', true));
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('st-iap', true);
+    });
+  });
+
+  // Privacy disclosure mode tabview interaction zones
+  const privZones = $$('#privacyModeSeg, #privBtnNone, #privBtnCollected, .priv-seg-btn');
+  privZones.forEach(el => {
+    el.addEventListener('focus', () => {
+      if (typeof flashField === 'function') flashField('privacy');
+      setFieldFocus('privacy', true);
+    });
+    el.addEventListener('click', () => {
+      if (typeof flashField === 'function') flashField('privacy');
+      setFieldFocus('privacy', true);
+    });
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('privacy', true);
     });
   });
 

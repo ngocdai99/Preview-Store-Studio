@@ -4377,6 +4377,20 @@ assert(monetizationJsSrc.includes('if (typeof closeCustomCat === \'function\') c
 assert(syncJsSrc57.includes('#customIapTrigger, #customIapSearch, .custom-iap-trigger'), 'sync.js includes custom monetization dropdown interaction zones');
 assert(bundledHtml.includes('id="customIapWrap"') && bundledHtml.includes('id="customIapTrigger"'), 'bundledHtml includes custom monetization dropdown markup');
 
+console.log('\n[SUITE 58]: Privacy Mode Tabview Focus Linking Verification');
+
+const privacyJsSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'privacy.js'), 'utf8');
+const syncJsSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'sync.js'), 'utf8');
+const focusLinkCssSrc58 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'stage', 'focus-link.css'), 'utf8');
+
+assert(privacyJsSrc58.includes("if (typeof flashField === 'function') flashField('privacy');"), 'privacy.js triggers flashField("privacy") on privacy mode change');
+assert(privacyJsSrc58.includes("if (typeof setFieldFocus === 'function') setFieldFocus('privacy', true);"), 'privacy.js triggers setFieldFocus("privacy", true) on privacy mode change');
+assert(privacyJsSrc58.includes("const seg = $('privacyModeSeg');") && privacyJsSrc58.includes("seg.addEventListener('click'"), 'privacy.js attaches click listener on privacyModeSeg container');
+assert(syncJsSrc58.includes('#privacyModeSeg, #privBtnNone, #privBtnCollected, .priv-seg-btn'), 'sync.js registers privacy mode tabview interaction zones');
+assert(syncJsSrc58.includes(".stage [data-apple-priv-wrap] .pc"), 'sync.js targets individual Apple privacy cards when resolving privacy targets');
+assert(focusLinkCssSrc58.includes('[data-apple-priv-wrap].hl-target,') && focusLinkCssSrc58.includes('[data-apple-priv-wrap] .pc.hl-target'), 'focus-link.css provides 16px rounded gold outline for Apple privacy cards');
+assert(bundledHtml.includes('id="privacyModeSeg"') && bundledHtml.includes('id="privBtnNone"') && bundledHtml.includes('id="privBtnCollected"'), 'bundledHtml includes privacy mode tabview controls');
+
 
 
 // ---------------------------------------------------------------------

@@ -196,17 +196,37 @@ function setPrivacyMode(mode) {
   }
 
   renderPrivacy();
+  if (typeof updatePrivacyModeUI === 'function') updatePrivacyModeUI();
   if (typeof debouncedSave === 'function') debouncedSave();
+  if (typeof flashField === 'function') flashField('privacy');
+  if (typeof setFieldFocus === 'function') setFieldFocus('privacy', true);
 }
 
 function initPrivacyModeControls() {
+  const seg = $('privacyModeSeg');
   const btnNone = $('privBtnNone');
   const btnCol = $('privBtnCollected');
   if (btnNone) {
-    btnNone.onclick = () => setPrivacyMode('none');
+    btnNone.onclick = (e) => {
+      if (e) e.stopPropagation();
+      setPrivacyMode('none');
+      if (typeof flashField === 'function') flashField('privacy');
+      if (typeof setFieldFocus === 'function') setFieldFocus('privacy', true);
+    };
   }
   if (btnCol) {
-    btnCol.onclick = () => setPrivacyMode('collected');
+    btnCol.onclick = (e) => {
+      if (e) e.stopPropagation();
+      setPrivacyMode('collected');
+      if (typeof flashField === 'function') flashField('privacy');
+      if (typeof setFieldFocus === 'function') setFieldFocus('privacy', true);
+    };
+  }
+  if (seg) {
+    seg.addEventListener('click', () => {
+      if (typeof flashField === 'function') flashField('privacy');
+      if (typeof setFieldFocus === 'function') setFieldFocus('privacy', true);
+    });
   }
 }
 
