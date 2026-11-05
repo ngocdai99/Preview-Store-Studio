@@ -135,6 +135,35 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// Helper to guarantee all images inside a DOM tree are completely loaded & decoded before canvas rasterization
+async function waitForAllImages(container){
+  if(!container) return;
+  const imgs = Array.from(container.querySelectorAll('img'));
+  if(!imgs.length) return;
+  await Promise.all(imgs.map(img => {
+    if(img.complete && img.naturalWidth > 0) return Promise.resolve();
+    if(typeof img.decode === 'function'){
+      return img.decode()
+        .then(() => {
+          if(img.naturalWidth > 0) return;
+          return new Promise(res => setTimeout(res, 40));
+        })
+        .catch(() => new Promise(res => {
+          if(img.complete && img.naturalWidth > 0) return res();
+          img.onload = () => res();
+          img.onerror = () => res();
+          setTimeout(res, 250);
+        }));
+    }
+    return new Promise(res => {
+      if(img.complete && img.naturalWidth > 0) return res();
+      img.onload = () => res();
+      img.onerror = () => res();
+      setTimeout(res, 400);
+    });
+  }));
+}
+
 // html2canvas can drop parts of SVG images (filters, glow). Rasterize SVG data-URI images to PNG first,
 // swap them in for the capture, and return a function that puts the originals back.
 async function rasterizeSvgImages(root, scale, zoom = 1){
@@ -149,34 +178,13 @@ async function rasterizeSvgImages(root, scale, zoom = 1){
       const isLandscape = img.classList.contains('landscape-shot');
       const isIpadShot = img.classList.contains('ipad-shot');
       const isIpad = img.closest('.ipad');
+      const isGtab10 = img.closest('.gtab10, #dev-tab10');
+      const isGtab7 = img.closest('.gtab7, #dev-tab7');
+      const isApple = img.closest('.apple');
+      const isGoogle = img.closest('.google');
       const isDevLandscape = img.closest('.dev')?.classList.contains('landscape');
+      const isTabPortrait = img.closest('.dev')?.classList.contains('portrait');
 
-      if (!boxWidth) {
-        if (isIpad) {
-          boxWidth = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
-        } else if (img.closest('.apple')) {
-          boxWidth = isLandscape ? 340 : 222;
-        } else if (img.closest('.google')) {
-          boxWidth = isLandscape ? 330 : 190;
-        }
-      }
-
-      if (!boxHeight && boxWidth) {
-        if (isIpad) {
-          if (isIpadShot) {
-            boxHeight = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
-          } else {
-            boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : (isDevLandscape ? 498 : 563);
-          }
-        } else if (img.closest('.apple')) {
-          boxHeight = isLandscape ? 191 : 481;
-        } else if (img.closest('.google')) {
-          boxHeight = isLandscape ? 186 : 412;
-        } else {
-          boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : Math.round(boxWidth * (996 / 460));
-        }
-      }
-      if(!boxWidth || !boxHeight) return;
       const original = img.src;
       let svgText = '';
       const commaIdx = original.indexOf(',');
@@ -190,13 +198,52 @@ async function rasterizeSvgImages(root, scale, zoom = 1){
         }
       }
       const vb = svgText.match(/viewBox\s*=\s*["']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*["']/);
-      const vw = vb ? parseFloat(vb[1]) : boxWidth, vh = vb ? parseFloat(vb[2]) : boxHeight;
+      const vw = vb ? parseFloat(vb[1]) : 0;
+      const vh = vb ? parseFloat(vb[2]) : 0;
+      const svgAspect = (vw > 0 && vh > 0) ? (vw / vh) : 0;
+
+      // If one dimension is available from layout/CSS, deduce the missing dimension via aspect ratio
+      if (boxHeight > 0 && !boxWidth) {
+        boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+      } else if (boxWidth > 0 && !boxHeight) {
+        boxHeight = Math.round(boxWidth / (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+      }
+
+      // If both dimensions are zero (e.g. unrendered or offscreen in cloned context), provide standard fallbacks
+      if (!boxWidth || !boxHeight) {
+        if (isIpad) {
+          boxWidth = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
+          if (isIpadShot) {
+            boxHeight = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
+          } else {
+            boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : (isDevLandscape ? 498 : 563);
+          }
+        } else if (isGtab10) {
+          boxHeight = isTabPortrait ? 320 : 240;
+          boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+        } else if (isGtab7) {
+          boxHeight = isTabPortrait ? 270 : 175;
+          boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+        } else if (isApple) {
+          boxWidth = isLandscape ? 340 : 222;
+          boxHeight = isLandscape ? 191 : 481;
+        } else if (isGoogle) {
+          boxWidth = isLandscape ? 330 : 190;
+          boxHeight = isLandscape ? 186 : 412;
+        } else {
+          boxWidth = 200;
+          boxHeight = Math.round(boxWidth / (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+        }
+      }
+      if(!boxWidth || !boxHeight) return;
+
       const tmp = new Image();
       const safeSrc = typeof ensureSvgDimensions === 'function' ? ensureSvgDimensions(original) : original;
       await new Promise((res, rej) => { tmp.onload = res; tmp.onerror = rej; tmp.src = safeSrc; });
       // 1) draw the vector at its own aspect ratio
-      const k = Math.max(boxWidth * scale / vw, boxHeight * scale / vh);
-      const sw = Math.max(1, Math.round(vw * k)), sh = Math.max(1, Math.round(vh * k));
+      const refW = vw || boxWidth, refH = vh || boxHeight;
+      const k = Math.max(boxWidth * scale / refW, boxHeight * scale / refH);
+      const sw = Math.max(1, Math.round(refW * k)), sh = Math.max(1, Math.round(refH * k));
       const c1 = document.createElement('canvas'); c1.width = sw; c1.height = sh;
       c1.getContext('2d').drawImage(tmp, 0, 0, sw, sh);
       // 2) crop to the element box like object-fit: cover
@@ -349,6 +396,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       await document.fonts.ready.catch(() => {});
     }
     restoreImages = await rasterizeSvgImages(target, scaleFactor, curZoom);
+    await waitForAllImages(target);
+    await new Promise(r => requestAnimationFrame(() => setTimeout(r, 60)));
 
     let canvas = await html2canvas(target, {
       backgroundColor: null,
@@ -363,7 +412,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       useCORS: true,
       allowTaint: true,
       logging: false,
-      onclone: (clonedDoc, clonedEl) => {
+      onclone: async (clonedDoc, clonedEl) => {
         // Reset stage scroll if present
         const clonedStage = clonedDoc.querySelector('.stage');
         if(clonedStage){
@@ -444,7 +493,24 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           .dev.ipad.landscape .ipad-gal img.ipad-shot {
             height: 307px !important;
           }
+          .dev.ipad.landscape .ipad-gal img.landscape-shot {
+            flex: 0 0 380px !important;
+            width: 380px !important;
             height: 285px !important;
+          }
+          .dev.gtab10 #galTab10 img {
+            height: 240px !important;
+            border-radius: 12px !important;
+          }
+          .dev.gtab10.portrait #galTab10 img {
+            height: 320px !important;
+          }
+          .dev.gtab7 .gt-gal img {
+            height: 175px !important;
+            border-radius: 7px !important;
+          }
+          .dev.gtab7.portrait .gt-gal img {
+            height: 270px !important;
           }
         `;
         clonedDoc.head.appendChild(btnStyle);
@@ -577,9 +643,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           const isLandscape = img.classList.contains('landscape-shot');
           const isIpadShot = img.classList.contains('ipad-shot');
           const isIpad = img.closest('.ipad');
+          const isGtab10 = img.closest('.gtab10, #dev-tab10');
+          const isGtab7 = img.closest('.gtab7, #dev-tab7');
           const isApple = img.closest('.apple');
           const isGoogle = img.closest('.google');
           const isDevLandscape = img.closest('.dev')?.classList.contains('landscape');
+          const isTabPortrait = img.closest('.dev')?.classList.contains('portrait');
 
           if (isIpad) {
             const w = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
@@ -592,6 +661,20 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             img.style.width = w + 'px';
             img.style.height = h + 'px';
             img.style.borderRadius = '12px';
+          } else if (isGtab10) {
+            const h = isTabPortrait ? 320 : 240;
+            const ratio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : (isLandscape ? (16 / 9) : (460 / 996));
+            const w = Math.round(h * ratio);
+            img.style.width = w + 'px';
+            img.style.height = h + 'px';
+            img.style.borderRadius = '12px';
+          } else if (isGtab7) {
+            const h = isTabPortrait ? 270 : 175;
+            const ratio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : (isLandscape ? (16 / 9) : (460 / 996));
+            const w = Math.round(h * ratio);
+            img.style.width = w + 'px';
+            img.style.height = h + 'px';
+            img.style.borderRadius = '7px';
           } else if (isApple) {
             img.style.width = isLandscape ? '340px' : '222px';
             img.style.height = isLandscape ? '191px' : '481px';
@@ -660,6 +743,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.outline = 'none';
           el.style.boxShadow = 'none';
         });
+
+        // Crucial: Wait for all images in the cloned document to complete decoding
+        // before html2canvas parses the DOM tree, guaranteeing intrinsicWidth/Height are positive.
+        await waitForAllImages(clonedEl);
+        await new Promise(r => setTimeout(r, 60));
       }
     });
     if(EXPORT_WM && !opts.transparent) canvas = addMockupNote(canvas, scaleFactor);
