@@ -35,10 +35,10 @@ If you are customizing the modular source code in `src/`:
 
 ## Key Features
 
-### 1. Dual-Store Multi-Device & Landscape Simulation
-- Seamless 1-click toggle between **Apple App Store (iOS 18 HIG)** and **Google Play Store (Material Design 3)**.
+### 1. Dual-Store & Multi-Device Simulation
+- Seamless 1-click toggle between **Apple App Store** and **Google Play Store** across Phone & Tablet screens.
 - **5 Hardware Form Factors**: iPhone, iPad, Android Phone, 7-inch Tablet, and 10-inch Tablet.
-- **Portrait & Landscape Game Mode**: Rotate phones and tablets to preview landscape mobile games, with automatic 16:9 widescreen screenshot detection.
+- **Adaptive Screenshot Formatting**: Automatic 16:9 widescreen screenshot detection and adaptive carousel presentation for games and media apps.
 - Toggle between **Light Mode** and **Dark Mode** for both the studio UI and the device mockups.
 
 ### 2. Real-time App Icon, Screenshot & Character Limit Validators
@@ -56,7 +56,7 @@ If you are customizing the modular source code in `src/`:
 - **Illustrative Metrics Control**: Edit or hide sample ratings, review counts, chart ranks, download tiers, and app size before client handoff.
 
 ### 4. 1-Click Export & Handoff Pipeline (100% Offline)
-- **Ultra-HD Mockup Export (PNG)**: Capture pixel-perfect **3x Ultra-HD**, **3x Screen-Only (Frameless)**, or **2x Retina** PNG mockups completely offline (`html2canvas` bundled inline).
+- **Ultra-HD Mockup Export (PNG)**: Capture high-resolution **3x Ultra-HD**, **3x Screen-Only (Frameless)**, or **2x Retina** PNG mockups completely offline (`html2canvas` bundled inline).
 - **Export Markdown (`LISTING_METADATA.md`)**: Generates a complete submission report including character compliance tables, graphic asset checklists, App Privacy & Data Safety declarations, and Fastlane CLI paths.
 - **Export & Import JSON Config (v2.1.0)**: Save and restore full workspace states via button or drag-and-drop with strict schema validation and UTF-8 BOM handling.
 - **1-Click Copy All Text**: Copy all listing text, privacy declarations, and store badges to your clipboard.

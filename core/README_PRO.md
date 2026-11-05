@@ -48,8 +48,9 @@ store-preview-studio-pro-v1.0/
 ## ⚡ Core Capabilities
 * **Full Source Code**: Modular HTML/CSS/JS architecture ready for custom frames, branding, or internal agency extensions.
 * **White-Label Ready**: Easily swap brand name and logo in `src/components/header/brand.html`.
-* **Dual-Store Simulation**: Apple App Store (iOS 18 HIG) & Google Play Store (Material Design 3) across Phone & Tablet viewports.
-* **View Modes**: Dual-phone side-by-side comparison, search feed, portrait & landscape game mode.
+* **Dual-Store Simulation**: Apple App Store & Google Play Store across Phone & Tablet viewports.
+* **View Modes**: Product Detail page, Search Results feed, and Dual-phone side-by-side comparison.
+* **Media Formatting**: Adaptive portrait and 16:9 widescreen landscape screenshot carousels.
 * **Compliance Checks**: Icon alpha transparency scanner (ITMS-90717) with 1-click auto-flatten, screenshot dimension validator, strict grapheme character counters (`Intl.Segmenter`).
 * **Export Options**: Ultra HD 4K mockups (PNG), complete ZIP package, `LISTING_METADATA.md` developer handoff report.
 * **Data Tools**: Import/export JSON workspace presets, 1-click Live App Store Cloner.
