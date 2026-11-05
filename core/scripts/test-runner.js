@@ -4341,6 +4341,42 @@ assert(pngExportSrc.includes('.g-dl-icon, .gt10-dl-icon, [data-gmet-size] svg'),
 assert(pngExportSrc.includes("svg.querySelectorAll('path, polyline, line, polygon, circle, rect, ellipse')"), 'png.js bakes explicit stroke and fill on SVG child shapes for detached data-URI serialization');
 assert(stateCode56.includes("$$('.dev.gtab7 [data-gmet-size]').forEach(e => { e.style.display = 'flex'; });"), 'state.js ensures tab7 size metric remains displayed as flex');
 
+console.log('\n[SUITE 57]: Custom Monetization Badge Dropdown Verification');
+
+const metricsCardHtmlSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'editor', 'metrics-card.html'), 'utf8');
+const monetizationJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'monetization.js'), 'utf8');
+const monetizationCssSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'editor', 'monetization-picker.css'), 'utf8');
+const editorCssSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'editor.css'), 'utf8');
+const categoriesJsSrc57 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'categories.js'), 'utf8');
+const ageJsSrc57 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'age.js'), 'utf8');
+const syncJsSrc57 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'sync.js'), 'utf8');
+
+assert(metricsCardHtmlSrc.includes('id="customIapWrap"'), 'metrics-card.html contains #customIapWrap wrapper');
+assert(metricsCardHtmlSrc.includes('id="customIapTrigger"'), 'metrics-card.html contains #customIapTrigger button');
+assert(metricsCardHtmlSrc.includes('id="customIapVal"'), 'metrics-card.html contains #customIapVal display element');
+assert(metricsCardHtmlSrc.includes('id="customIapMenu"'), 'metrics-card.html contains #customIapMenu dropdown listbox');
+assert(metricsCardHtmlSrc.includes('id="customIapSearch"'), 'metrics-card.html contains #customIapSearch search input');
+assert(metricsCardHtmlSrc.includes('id="customIapOptions"'), 'metrics-card.html contains #customIapOptions list container');
+assert(metricsCardHtmlSrc.includes('id="f-st-iap"') && metricsCardHtmlSrc.includes('style="display:none"'), 'metrics-card.html preserves hidden #f-st-iap select for backward compatibility');
+
+assert(editorCssSrc.includes('@import "editor/monetization-picker.css";'), 'editor.css imports monetization-picker.css');
+assert(monetizationCssSrc.includes('.custom-iap-wrap') && monetizationCssSrc.includes('.custom-iap-menu'), 'monetization-picker.css styles custom dropdown elements');
+assert(monetizationCssSrc.includes(':root[data-ui=light] .custom-iap-trigger'), 'monetization-picker.css includes light mode theme overrides');
+
+assert(monetizationJsSrc.includes('const MONETIZATION_OPTIONS = ['), 'monetization.js defines MONETIZATION_OPTIONS array');
+assert(monetizationJsSrc.includes("val: 'iap'") && monetizationJsSrc.includes("val: 'ads_iap'") && monetizationJsSrc.includes("val: 'ads'") && monetizationJsSrc.includes("val: 'free'"), 'monetization.js includes all 4 standard options');
+assert(monetizationJsSrc.includes('function syncIapUI()'), 'monetization.js defines syncIapUI');
+assert(monetizationJsSrc.includes('function openCustomIap()'), 'monetization.js defines openCustomIap');
+assert(monetizationJsSrc.includes('function closeCustomIap()'), 'monetization.js defines closeCustomIap');
+assert(monetizationJsSrc.includes('function selectIapFromUI(iapVal)'), 'monetization.js defines selectIapFromUI');
+assert(monetizationJsSrc.includes('function renderCustomIapOptions('), 'monetization.js defines renderCustomIapOptions');
+
+assert(categoriesJsSrc57.includes('if (typeof closeCustomIap === \'function\') closeCustomIap();'), 'categories.js closes custom monetization dropdown on category open');
+assert(ageJsSrc57.includes('if (typeof closeCustomIap === \'function\') closeCustomIap();'), 'age.js closes custom monetization dropdown on age rating open');
+assert(monetizationJsSrc.includes('if (typeof closeCustomCat === \'function\') closeCustomCat();') && monetizationJsSrc.includes('if (typeof closeCustomAge === \'function\') closeCustomAge();'), 'monetization.js closes category and age dropdowns on open');
+assert(syncJsSrc57.includes('#customIapTrigger, #customIapSearch, .custom-iap-trigger'), 'sync.js includes custom monetization dropdown interaction zones');
+assert(bundledHtml.includes('id="customIapWrap"') && bundledHtml.includes('id="customIapTrigger"'), 'bundledHtml includes custom monetization dropdown markup');
+
 
 
 // ---------------------------------------------------------------------

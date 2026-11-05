@@ -34,6 +34,7 @@ Object.entries(STAT_INPUTS).forEach(([k,id]) => {
   const onStatChange = () => {
     STATS[k] = el.value.trim();
     if (k === 'age' && typeof syncAgeUI === 'function') syncAgeUI();
+    if (k === 'iap' && typeof syncIapUI === 'function') syncIapUI();
     renderStats();
     debouncedSave();
   };

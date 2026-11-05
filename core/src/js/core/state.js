@@ -63,6 +63,7 @@ function syncStatInputs(){
   const wm = $('f-st-wm');
   if(wm) wm.checked = EXPORT_WM;
   if(typeof syncAgeUI === 'function') syncAgeUI();
+  if(typeof syncIapUI === 'function') syncIapUI();
 }
 function applyStatsFromObject(o){
   if(!o || typeof o !== 'object') return;

@@ -36,8 +36,9 @@ function openCustomAge() {
   const searchInput = $('customAgeSearch');
   if (!wrap) return;
 
-  // Close category dropdown if open
+  // Close category and monetization dropdowns if open
   if (typeof closeCustomCat === 'function') closeCustomCat();
+  if (typeof closeCustomIap === 'function') closeCustomIap();
 
   wrap.classList.add('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');

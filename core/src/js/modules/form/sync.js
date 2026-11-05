@@ -324,14 +324,16 @@ function initFieldFocusLinking() {
   // Entire field group click delegation: clicking label or field box highlights on device
   $$('.editor .fg').forEach(fg => {
     fg.addEventListener('click', (e) => {
-      if (e.target.closest('#customCatMenu')) return;
-      const targetInput = fg.querySelector('input:not([type=hidden]), textarea, select, #customCatTrigger');
+      if (e.target.closest('#customCatMenu, #customAgeMenu, #customIapMenu')) return;
+      const targetInput = fg.querySelector('input:not([type=hidden]), textarea, select, #customCatTrigger, #customAgeTrigger, #customIapTrigger');
       if (!targetInput) return;
       let key = '';
       const rawId = targetInput.id || '';
       if (rawId.startsWith('f-')) key = rawId.replace('f-', '');
       else if (rawId.startsWith('sw-')) key = 'privacy';
       else if (targetInput.id === 'customCatTrigger' || rawId.includes('cat')) key = 'cat';
+      else if (targetInput.id === 'customAgeTrigger' || rawId.includes('age')) key = 'st-age';
+      else if (targetInput.id === 'customIapTrigger' || rawId.includes('iap')) key = 'st-iap';
       if (key.startsWith('cat')) key = 'cat';
       if (key) {
         setFieldFocus(key, true);
@@ -366,6 +368,26 @@ function initFieldFocusLinking() {
     el.addEventListener('click', () => setFieldFocus('cat', true));
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('cat', true);
+    });
+  });
+
+  // Custom Age dropdown trigger and search interaction zones
+  const ageZones = $$('#customAgeTrigger, #customAgeSearch, .custom-age-trigger');
+  ageZones.forEach(el => {
+    el.addEventListener('focus', () => setFieldFocus('st-age', true));
+    el.addEventListener('click', () => setFieldFocus('st-age', true));
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('st-age', true);
+    });
+  });
+
+  // Custom Monetization dropdown trigger and search interaction zones
+  const iapZones = $$('#customIapTrigger, #customIapSearch, .custom-iap-trigger');
+  iapZones.forEach(el => {
+    el.addEventListener('focus', () => setFieldFocus('st-iap', true));
+    el.addEventListener('click', () => setFieldFocus('st-iap', true));
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('st-iap', true);
     });
   });
 

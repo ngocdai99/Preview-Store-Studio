@@ -198,6 +198,7 @@ function getBundledJs(options = {}) {
     'modules/form/privacy.js',
     'modules/form/reviews.js',
     'modules/form/age.js',
+    'modules/form/monetization.js',
     'modules/form/sync.js',
     'modules/transitions.js',
     'apple/apple.js',
