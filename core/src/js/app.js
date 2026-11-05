@@ -7005,18 +7005,29 @@ function renderTablets(){
       L.appendChild(r);
     });
 
-    // Live preview gallery inside the tablet mockup (prioritize dedicated tablet screenshots, fallback to phone screenshots)
+    // Live preview gallery inside the tablet mockup
+    // Priority: 1) dedicated shots for this size  2) shots from the other tablet size  3) phone shots
     const phoneShots = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS) ? SHOTS : [])
       .filter(s => typeof s === 'string' && s.trim());
+    const otherKey = key === 'tab7' ? 'tab10' : 'tab7';
+    const otherTabShots = (TABS[otherKey] || []).filter(i => i && i.src).map(i => i.src);
     const hasDedicatedTabShots = valid.length > 0;
-    const effectiveShots = hasDedicatedTabShots ? valid.map(it => it.src) : phoneShots;
+    const hasCrossTabShots = !hasDedicatedTabShots && otherTabShots.length > 0;
+    const effectiveShots = hasDedicatedTabShots
+      ? valid.map(it => it.src)
+      : (otherTabShots.length > 0 ? otherTabShots : phoneShots);
 
     const g = $(c.gal);
     if(g){
       g.innerHTML = '';
       if(effectiveShots.length){
         effectiveShots.forEach((src, i) => {
-          const img = mk(src, (hasDedicatedTabShots ? `${c.name} Screenshot ` : 'Phone Screenshot ') + (i + 1));
+          const label = hasDedicatedTabShots
+            ? `${c.name} Screenshot ${i + 1}`
+            : hasCrossTabShots
+              ? `${TAB_CFG[otherKey].name} Screenshot ${i + 1}`
+              : `Phone Screenshot ${i + 1}`;
+          const img = mk(src, label);
           if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
           g.appendChild(img);
         });
@@ -7029,7 +7040,12 @@ function renderTablets(){
       sg.innerHTML = '';
       if(effectiveShots.length){
         effectiveShots.slice(0, 3).forEach((src, i) => {
-          const img = mk(src, (hasDedicatedTabShots ? `${c.name} Result ` : 'Phone Result ') + (i + 1));
+          const label = hasDedicatedTabShots
+            ? `${c.name} Result ${i + 1}`
+            : hasCrossTabShots
+              ? `${TAB_CFG[otherKey].name} Result ${i + 1}`
+              : `Phone Result ${i + 1}`;
+          const img = mk(src, label);
           if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
           sg.appendChild(img);
         });

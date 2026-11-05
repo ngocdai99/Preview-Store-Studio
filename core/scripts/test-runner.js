@@ -2400,7 +2400,9 @@ const phoneJsCode = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 
 
 assert(phoneJsCode.includes("if(typeof renderTablets === 'function') renderTablets();"), 'renderShots triggers renderTablets to synchronize phone screenshots fallback to tablet mockups');
 assert(googleJsCode.includes('hasDedicatedTabShots = valid.length > 0'), 'renderTablets detects presence of dedicated tablet screenshots');
-assert(googleJsCode.includes('const effectiveShots = hasDedicatedTabShots ? valid.map(it => it.src) : phoneShots;'), 'renderTablets resolves effectiveShots falling back to phoneShots when no dedicated tablet screenshots are present');
+assert(googleJsCode.includes('hasCrossTabShots = !hasDedicatedTabShots && otherTabShots.length > 0'), 'renderTablets detects cross-tablet fallback (other size has shots)');
+assert(googleJsCode.includes("otherKey = key === 'tab7' ? 'tab10' : 'tab7'"), 'renderTablets computes the other tablet key for cross-tablet fallback');
+assert(googleJsCode.includes('otherTabShots.length > 0 ? otherTabShots : phoneShots'), 'renderTablets resolves effectiveShots: dedicated → cross-tablet → phone fallback');
 
 // 3. Functional behavior simulation in VM sandbox
 const tabSandbox = {
@@ -2465,6 +2467,13 @@ const tabSandbox = {
       set innerHTML(v) { this._innerHTML = v; if (!v) this.children = []; },
       get innerHTML() { return this._innerHTML; },
       appendChild(c) { this.children.push(c); return c; }
+    },
+    srchTab10: {
+      _innerHTML: '',
+      children: [],
+      set innerHTML(v) { this._innerHTML = v; if (!v) this.children = []; },
+      get innerHTML() { return this._innerHTML; },
+      appendChild(c) { this.children.push(c); return c; }
     }
   },
   $(id) { return tabSandbox.elements[id] || null; },
@@ -2503,17 +2512,33 @@ assert(tabSandbox.elements.galTab7.children[0].src === 'data:image/png;base64,ph
 assert(tabSandbox.elements.galTab7.children[0].classList.contains('tab-fallback-shot'), 'Fallback screenshot has tab-fallback-shot class applied');
 assert(tabSandbox.elements.galTab10.children.length === 3, '10-inch tablet gallery renders 3 fallback phone screenshots');
 
-// Case 2: Dedicated tablet screenshot uploaded for 7-inch tablet
+// Case 2: Dedicated tablet screenshot uploaded for 7-inch tablet only
+// → 7-inch shows its own shot; 10-inch shows cross-tablet fallback (tab7 shot), not phone
 tabSandbox.TABS.tab7 = [{ src: 'data:image/png;base64,tab7_custom1', meta: { w: 1920, h: 1080 } }];
 tabSandbox.elements.galTab7.children = [];
+tabSandbox.elements.galTab10.children = [];
+tabSandbox.SHOTS = ['data:image/png;base64,phone1', 'data:image/png;base64,phone2', 'data:image/png;base64,phone3'];
 tabSandbox.renderTablets();
 assert(tabSandbox.elements.galTab7.children.length === 1, '7-inch tablet gallery prioritizes dedicated tablet screenshot over phone screenshots');
 assert(tabSandbox.elements.galTab7.children[0].src === 'data:image/png;base64,tab7_custom1', '7-inch tablet gallery displays dedicated screenshot');
 assert(!tabSandbox.elements.galTab7.children[0].classList.contains('tab-fallback-shot'), 'Dedicated screenshot does not have tab-fallback-shot class');
-assert(tabSandbox.elements.galTab10.children.length === 3, '10-inch tablet still uses phone fallback while empty');
+assert(tabSandbox.elements.galTab10.children.length === 1, '10-inch tablet cross-tablet fallback: shows tab7 shot when tab10 slot is empty');
+assert(tabSandbox.elements.galTab10.children[0].src === 'data:image/png;base64,tab7_custom1', '10-inch tablet cross-tablet fallback displays tab7 screenshot (not phone)');
+assert(tabSandbox.elements.galTab10.children[0].classList.contains('tab-fallback-shot'), '10-inch cross-tablet fallback screenshot has tab-fallback-shot class');
+
+// Case 2b: Both tablet sizes have dedicated shots → each shows its own
+tabSandbox.TABS.tab7 = [{ src: 'data:image/png;base64,tab7_custom1', meta: { w: 1920, h: 1080 } }];
+tabSandbox.TABS.tab10 = [{ src: 'data:image/png;base64,tab10_custom1', meta: { w: 1920, h: 1080 } }];
+tabSandbox.elements.galTab7.children = [];
+tabSandbox.elements.galTab10.children = [];
+tabSandbox.renderTablets();
+assert(tabSandbox.elements.galTab7.children[0].src === 'data:image/png;base64,tab7_custom1', 'When both sizes have shots: 7-inch shows its own dedicated screenshot');
+assert(tabSandbox.elements.galTab10.children[0].src === 'data:image/png;base64,tab10_custom1', 'When both sizes have shots: 10-inch shows its own dedicated screenshot');
+assert(!tabSandbox.elements.galTab10.children[0].classList.contains('tab-fallback-shot'), 'No fallback class when 10-inch has dedicated screenshots');
 
 // Case 3: Both dedicated and phone screenshots are empty -> renders placeholders
 tabSandbox.TABS.tab7 = [];
+tabSandbox.TABS.tab10 = [];
 tabSandbox.SHOTS = [];
 tabSandbox.elements.galTab7.children = [];
 tabSandbox.renderTablets();
