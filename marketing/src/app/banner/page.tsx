@@ -297,7 +297,7 @@ export default function BannerStudioPage() {
       document.body.removeChild(a);
     } catch (err) {
       console.error("Export banner error:", err);
-      alert("Không thể chụp banner: " + (err as Error).message);
+      alert("Failed to capture banner: " + (err as Error).message);
     } finally {
       setIsExporting(false);
     }
@@ -545,7 +545,7 @@ export default function BannerStudioPage() {
                     className="accent-[#00D085] cursor-pointer"
                   />
                   <label htmlFor="showLogoCheckbox" className="text-xs text-white font-medium cursor-pointer">
-                    Hiển thị Logo
+                    Show Logo
                   </label>
                 </div>
               </div>
@@ -561,7 +561,7 @@ export default function BannerStudioPage() {
                         : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
                     }`}
                   >
-                    Cạnh tiêu đề
+                    Inline with title
                   </button>
                   <button
                     type="button"
@@ -572,7 +572,7 @@ export default function BannerStudioPage() {
                         : "bg-white/[0.04] border-white/5 text-[#989A99] hover:text-white"
                     }`}
                   >
-                    Nằm phía trên
+                    Stacked above
                   </button>
                 </div>
               )}
@@ -650,29 +650,29 @@ export default function BannerStudioPage() {
             {/* Thumbnail Footer Inputs */}
             <div className="space-y-2.5 pt-1 border-t border-white/5">
               <div>
-                <span className="text-[11px] text-[#989A99] mb-1 block">Footer Trái (Thumbnail)</span>
+                <span className="text-[11px] text-[#989A99] mb-1 block">Left Footer (Thumbnail)</span>
                 <input
                   type="text"
                   value={footerLeft}
                   onChange={(e) => setFooterLeft(e.target.value)}
-                  placeholder="VD: Ultra HD 4K Export"
+                  placeholder="e.g. Ultra HD 4K Export"
                   className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
                 />
               </div>
 
               <div>
-                <span className="text-[11px] text-[#989A99] mb-1 block">Footer Phải (Thumbnail)</span>
+                <span className="text-[11px] text-[#989A99] mb-1 block">Right Footer (Thumbnail)</span>
                 <input
                   type="text"
                   value={footerRight}
                   onChange={(e) => setFooterRight(e.target.value)}
-                  placeholder="VD: PAY ONCE · OWN FOREVER"
+                  placeholder="e.g. PAY ONCE · OWN FOREVER"
                   className="w-full text-xs bg-[#121312] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-[#00D085]"
                 />
               </div>
 
               <div>
-                <span className="text-[11px] text-[#989A99] mb-1 block">Style nút Footer Phải</span>
+                <span className="text-[11px] text-[#989A99] mb-1 block">Right Footer Button Style</span>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -702,7 +702,7 @@ export default function BannerStudioPage() {
 
             {/* Feature Layout Selector */}
             <div className="flex items-center justify-between pb-1">
-              <span className="text-[11px] text-[#989A99] font-medium">Bố cục tính năng</span>
+              <span className="text-[11px] text-[#989A99] font-medium">Feature Layout</span>
               <div className="flex gap-1.5">
                 <button
                   type="button"
@@ -713,7 +713,7 @@ export default function BannerStudioPage() {
                       : "bg-white/5 text-[#989A99] hover:text-white"
                   }`}
                 >
-                  4 Mục (Dãn thoáng)
+                  4 Items (Relaxed)
                 </button>
                 <button
                   type="button"
@@ -724,7 +724,7 @@ export default function BannerStudioPage() {
                       : "bg-white/5 text-[#989A99] hover:text-white"
                   }`}
                 >
-                  5 Mục (Đầy đủ)
+                  5 Items (Complete)
                 </button>
               </div>
             </div>
@@ -904,7 +904,7 @@ export default function BannerStudioPage() {
               <Eye className="w-4 h-4 text-[#00D085]" />
               <span>Canvas Live Viewport: <strong>{aspectMode === "cover" ? "1280 × 720 px (16:9)" : "600 × 600 px (1:1)"}</strong></span>
             </div>
-            <span>Độ phân giải xuất ảnh: <strong>2x / 3x Retina</strong></span>
+            <span>Export Resolution: <strong>2x / 3x Retina</strong></span>
           </div>
 
           {/* Viewport Scroll Wrapper */}

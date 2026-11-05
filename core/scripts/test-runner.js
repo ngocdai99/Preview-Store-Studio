@@ -3627,28 +3627,23 @@ asyncSuites.push((async () => {
 asyncSuites.push((async () => {
   console.log('\n[SUITE 50]: Mockup Title Word-Spacing & html2canvas Whitespace Preservation Verification');
 
-  // 1. Google Play and Apple headers specify white-space: normal to prevent whitespace collapse in Blink & Gecko
+  // 1. Google Play phone container uses system-ui font stack to eliminate synthetic bold mismatch
+  const googleFrameCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/google/frame.css'), 'utf8');
+  assert(googleFrameCss.includes("system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"), '.phone.google uses system-ui font stack');
+
+  // 2. Google Play header specifies font-weight:700 to match Apple and avoid faux bold width discrepancies
   const googleHeaderCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/google/header.css'), 'utf8');
-  assert(googleHeaderCss.includes('.g-name{') && googleHeaderCss.includes('white-space:normal'), '.g-name specifies white-space:normal to preserve word boundaries');
-  assert(googleHeaderCss.includes('.g-dev{') && googleHeaderCss.includes('white-space:normal'), '.g-dev specifies white-space:normal to preserve word boundaries');
-  assert(googleHeaderCss.includes('word-spacing:0.01px'), '.g-name/.g-dev specify word-spacing:0.01px to prevent space collapse under CSS zoom in Blink/Gecko');
+  assert(googleHeaderCss.includes('.g-name{') && googleHeaderCss.includes('font-weight:700'), '.g-name specifies font-weight:700');
 
-  const appleHeroCss = fs.readFileSync(path.join(ROOT_DIR, 'src/css/apple/hero.css'), 'utf8');
-  assert(appleHeroCss.includes('.a-name{') && appleHeroCss.includes('white-space:normal'), '.a-name specifies white-space:normal to preserve word boundaries');
-  assert(appleHeroCss.includes('word-spacing:0.01px'), '.a-name specifies word-spacing:0.01px to prevent space collapse under CSS zoom in Blink/Gecko');
-
-  // 2. exportPNG in onclone injects style rules that override -webkit-box multi-line clamp layouts during capture
+  // 3. exportPNG places offscreen container at in-bounds coordinates to prevent subpixel Range distortion
   const exportPngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
-  assert(exportPngSrc.includes('.g-name, .a-name, .g-dev, .a-sub') && exportPngSrc.includes('display: block !important'), 'exportPNG overrides -webkit-box with display: block in clonedDoc');
-  assert(exportPngSrc.includes('white-space: pre-wrap !important'), 'exportPNG enforces white-space: pre-wrap in clonedDoc style');
-  assert(exportPngSrc.includes('word-spacing: normal !important'), 'exportPNG enforces natural word-spacing: normal in clonedDoc style');
+  assert(exportPngSrc.includes('position:fixed;left:0;top:0;'), 'exportPNG places offscreen wrap at left:0;top:0;');
+  assert(exportPngSrc.includes('clonedDoc.fonts.add(f)'), 'exportPNG synchronizes document fonts into cloned document');
 
-  // 3. exportPNG sets inline style overrides on cloned element nodes for guaranteed precedence
-  assert(exportPngSrc.includes("el.style.display = 'block'") && exportPngSrc.includes("el.style.whiteSpace = 'pre-wrap'") && exportPngSrc.includes("el.style.wordSpacing = 'normal'"), 'exportPNG sets inline style display: block, whiteSpace: pre-wrap and wordSpacing: normal on cloned text nodes');
-
-  // 4. Bundled core.html contains both CSS and JS fixes
-  assert(bundledHtml.includes('white-space:normal') && bundledHtml.includes('.g-name{'), 'Bundled application has white-space:normal on .g-name');
-  assert(bundledHtml.includes('display: block !important') && bundledHtml.includes('white-space: pre-wrap !important'), 'Bundled application has exportPNG whitespace and -webkit-box override rules');
+  // 4. Bundled core.html contains clean Google frame font stack and font sync
+  const bundledHtml = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
+  assert(bundledHtml.includes("system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"), 'Bundled application contains system-ui font stack on Google phone');
+  assert(bundledHtml.includes('position:fixed;left:0;top:0;'), 'Bundled application contains in-bounds offscreen coordinates');
 })());
 
 // ---------------------------------------------------------------------

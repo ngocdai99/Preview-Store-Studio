@@ -12685,7 +12685,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     // Create an unzoomed offscreen clone so html2canvas initializes layout bounds at true 1x scale
     // and keeps the live screen DOM completely untouched (zero visual jitter, flicker or collapse).
     offscreenWrap = document.createElement('div');
-    offscreenWrap.style.cssText = 'position:fixed;left:-99999px;top:0;opacity:0;pointer-events:none;z-index:-99999;';
+    offscreenWrap.style.cssText = `position:fixed;left:0;top:0;width:${w + padX * 2}px;height:${h}px;opacity:0.001;pointer-events:none;z-index:-99999;overflow:hidden;`;
     const cloneTarget = target.cloneNode(true);
     cloneTarget.style.zoom = '1';
     cloneTarget.style.transform = 'none';
@@ -12715,6 +12715,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       allowTaint: true,
       logging: false,
       onclone: async (clonedDoc, clonedEl) => {
+        // Sync document fonts to cloned iframe document to guarantee accurate text metrics
+        if(document.fonts && clonedDoc.fonts){
+          try{
+            document.fonts.forEach(f => clonedDoc.fonts.add(f));
+          }catch(_){}
+        }
+
         // Reset stage scroll if present
         const clonedStage = clonedDoc.querySelector('.stage');
         if(clonedStage){
@@ -12723,22 +12730,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         }
 
         // Hide CSS pseudo-element buttons so html2canvas renders explicit hardware button nodes cleanly
-        // and override -webkit-box multi-line clamp layouts. In WebKit/Blink (macOS), html2canvas range client rect
-        // calculation inside display: -webkit-box collapses whitespace between words, squishing words together.
         const btnStyle = clonedDoc.createElement('style');
         btnStyle.textContent = `
           .dev::before, .dev::after { display: none !important; }
-          .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
-          .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name,
-          [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"] {
-            display: block !important;
-            -webkit-line-clamp: unset !important;
-            -webkit-box-orient: unset !important;
-            white-space: pre-wrap !important;
-            word-break: normal !important;
-            word-spacing: normal !important;
-            letter-spacing: normal !important;
-          }
           /* Firefox & html2canvas horizontal screenshot gallery fixes:
              Disable scroll-snap and overflow-x on .gal so html2canvas doesn't drop partially clipped images */
           .gal, [data-shots="gal"], [data-shots="shots"], [data-shots="gp-search"], [data-shots="ipad-gal"], [data-shots="ipad-shots"] {
@@ -12949,10 +12943,6 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             }
           }
         });
-        // Natural letter spacing in cloned export
-        clonedEl.querySelectorAll('*').forEach(el => {
-          el.style.letterSpacing = 'normal';
-        });
         // Crucial: Wait for all images in the cloned document to complete decoding first
         await waitForAllImages(clonedEl);
 
@@ -13019,16 +13009,6 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             img.style.borderRadius = '7px';
           }
         });
-        // Ensure mockup text containers don't collapse whitespace between words
-        clonedEl.querySelectorAll('.g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title, .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name, [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"]').forEach(el => {
-          el.style.display = 'block';
-          el.style.webkitLineClamp = 'unset';
-          el.style.webkitBoxOrient = 'unset';
-          el.style.whiteSpace = 'pre-wrap';
-          el.style.wordBreak = 'normal';
-          el.style.wordSpacing = 'normal';
-          el.style.letterSpacing = 'normal';
-        });
         // Ensure SVG elements retain accurate computed stroke, fill, stroke-width and color
         // when serialized to detached data-URI SVG images by html2canvas (Safari / WebKit)
         const win = clonedDoc.defaultView || window;
@@ -13074,6 +13054,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.verticalAlign = 'middle';
           el.style.boxSizing = 'border-box';
           el.style.padding = '0';
+        });
+
+        // Ensure tooltip info icon retains clean margin and baseline alignment in html2canvas
+        clonedEl.querySelectorAll('.g-info-ico').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.width = '10px';
+          el.style.height = '10px';
+          el.style.marginLeft = '3px';
+          el.style.verticalAlign = '-2px';
         });
 
         // Strip focus highlight from export capture

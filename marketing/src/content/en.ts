@@ -284,7 +284,7 @@ export const en = {
         id: "store-review-policy",
         topic: "Store Review Policy",
         question:
-          "Can Store Preview Studio guarantee that my app will pass App Store or Google Play review?",
+          "Does Store Preview Studio ensure my app will pass App Store or Google Play review?",
         answer:
           "No, and no software tool on the market can. Store Preview Studio gives you realistic visual mockups and catches mechanical formatting mistakes (such as wrong icon dimensions, transparent alpha channels on iOS, or invalid screenshot aspect ratios). However, final app approval is determined entirely by the official Apple and Google review teams based on your compiled code, privacy policies, and store guidelines.",
       },

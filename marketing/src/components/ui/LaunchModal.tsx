@@ -221,7 +221,7 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
                 </div>
                 <div>
                   <div className="text-[13px] font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                    Guaranteed Launch Price
+                    Early Bird Launch Price
                   </div>
                   <div className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-normal mt-0.5">
                     Lock in {tierPrice} one-time pricing before it increases to regular{" "}

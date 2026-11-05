@@ -70,10 +70,23 @@ Không được sử dụng bất kỳ từ ngữ nào mang tính cam kết ch�
 
 ---
 
-## 5. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
+## 5. Quy tắc giới hạn thời gian gỡ lỗi & Chống lặp vô nghĩa (10-Minute Debug Cap & Solution Re-evaluation)
+
+Để tránh lãng phí thời gian, sa đà vào các vòng lặp đo đạc/debug ngầm hoặc xử lý triệu chứng ở ngọn thay vì gốc rễ:
+
+* **Ngưỡng kích hoạt:** Khi một vấn đề kỹ thuật/bug được phân tích, điều tra hoặc thử nghiệm quá **10 phút** (hoặc sau tối đa 2-3 lần thử mà không ra kết quả thực tế):
+* **Hành động bắt buộc:**
+  1. **Dừng ngay lập tức (Immediate Stop):** Lập tức dừng toàn bộ các tiến trình command chạy nền, script thử nghiệm, và các chuỗi giả định phức tạp.
+  2. **Nhìn lại giải pháp (Step Back & Re-evaluate):** Đặt lại câu hỏi về giả định gốc rễ: *Có đang chữa triệu chứng thay vì căn nguyên không? Vấn đề này có thể giải quyết dứt điểm bằng cách đơn giản, trực diện hơn ở tầng nào?*
+  3. **Báo cáo và tham vấn người dùng:** Trình bày ngắn gọn, thẳng thắn lý do chưa thành công, điểm bế tắc kỹ thuật và hướng tiếp cận căn cơ mới. Không để phiên làm việc trôi đi trong im lặng với các lệnh debug kéo dài.
+
+---
+
+## 6. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
 
 Mỗi khi agent cập nhật copy, metadata, tour steps, hoặc landing page:
 1. [ ] Đã quét và loại bỏ toàn bộ `pixel-perfect`, `production-ready`, `zero server lock-in`, `with confidence` chưa?
 2. [ ] Các tên thiết bị có đang ở dạng generic (`iPhone`, `iPad`, `Android phone`, `Android tablet`) chứ không gắn model đời máy không?
 3. [ ] Các icon/hình ảnh đại diện store có phải là custom/neutral không vi phạm bản quyền logo chính thức của Apple/Google không?
 4. [ ] Quota hệ thống còn trên mức an toàn (> 2%), nếu chạm ngưỡng ≤ 2% đã thực hiện quy trình dừng an toàn và chuyển trạng thái `HOLD` chưa?
+5. [ ] Nếu điều tra lỗi kỹ thuật: đã tuân thủ ngưỡng tối đa 10 phút, dừng lại nhìn lại giải pháp nếu không có kết quả chưa?
