@@ -54,9 +54,26 @@ Không được sử dụng bất kỳ từ ngữ nào mang tính cam kết ch�
 
 ---
 
-## 4. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
+## 4. Quy tắc ngưỡng Quota & Trạng thái Giữ (2% Quota Limit & Hold State)
+
+Để đảm bảo an toàn toàn vẹn dữ liệu, tránh việc bị ngắt kết nối đột ngột giữa chừng làm hỏng file, gãy luồng xử lý hoặc mất bối cảnh:
+
+* **Ngưỡng kích hoạt:** Khi phát hiện giới hạn quota (token, context window, rate-limit, hoặc API limit) chỉ còn **≤ 2%**:
+* **Hành động bắt buộc:**
+  1. **Dừng ngay lập tức (Immediate Stop):** Lập tức dừng thực thi mọi tác vụ mới, không tiếp tục gọi thêm các chuỗi lệnh command hoặc tool call phức tạp.
+  2. **Ghi nhận nhật ký (Log State):** Ghi chép chi tiết vào nhật ký phiên làm việc về:
+     - Thời điểm chạm ngưỡng quota (≤ 2%).
+     - Tác vụ vừa hoàn tất và kết quả đạt được.
+     - Các hạng mục còn dở dang kèm điểm dừng an toàn (safe checkpoint).
+  3. **Chuyển trạng thái HOLD:** Thiết lập trạng thái làm việc sang **`HOLD`** (Tạm dừng an toàn).
+  4. **Báo cáo người dùng:** Thông báo ngắn gọn và trực tiếp cho người dùng biết hệ thống đã chủ động chuyển sang trạng thái `HOLD` để bảo vệ phiên làm việc, kèm các bước tiếp theo khi quota được phục hồi.
+
+---
+
+## 5. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
 
 Mỗi khi agent cập nhật copy, metadata, tour steps, hoặc landing page:
 1. [ ] Đã quét và loại bỏ toàn bộ `pixel-perfect`, `production-ready`, `zero server lock-in`, `with confidence` chưa?
 2. [ ] Các tên thiết bị có đang ở dạng generic (`iPhone`, `iPad`, `Android phone`, `Android tablet`) chứ không gắn model đời máy không?
 3. [ ] Các icon/hình ảnh đại diện store có phải là custom/neutral không vi phạm bản quyền logo chính thức của Apple/Google không?
+4. [ ] Quota hệ thống còn trên mức an toàn (> 2%), nếu chạm ngưỡng ≤ 2% đã thực hiện quy trình dừng an toàn và chuyển trạng thái `HOLD` chưa?
