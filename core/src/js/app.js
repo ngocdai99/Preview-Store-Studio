@@ -12676,16 +12676,32 @@ async function exportPNG(scaleFactor = 2, opts = {}){
   }
   const padX = opts.frameless ? 0 : 8;
 
-  let restoreImages = () => {};
+  let offscreenWrap = null;
   try{
     if(document.fonts && document.fonts.ready){
       await document.fonts.ready.catch(() => {});
     }
-    restoreImages = await rasterizeSvgImages(target, scaleFactor, curZoom);
-    await waitForAllImages(target);
+
+    // Create an unzoomed offscreen clone so html2canvas initializes layout bounds at true 1x scale
+    // and keeps the live screen DOM completely untouched (zero visual jitter, flicker or collapse).
+    offscreenWrap = document.createElement('div');
+    offscreenWrap.style.cssText = 'position:fixed;left:-99999px;top:0;opacity:0;pointer-events:none;z-index:-99999;';
+    const cloneTarget = target.cloneNode(true);
+    cloneTarget.style.zoom = '1';
+    cloneTarget.style.transform = 'none';
+    cloneTarget.querySelectorAll('.dev').forEach(d => {
+      d.style.zoom = '1';
+      d.style.transform = 'none';
+    });
+    offscreenWrap.appendChild(cloneTarget);
+    document.body.appendChild(offscreenWrap);
+
+    // Rasterize SVGs exclusively on the offscreen clone without mutating live DOM images
+    await rasterizeSvgImages(cloneTarget, scaleFactor, 1);
+    await waitForAllImages(cloneTarget);
     await new Promise(r => requestAnimationFrame(() => setTimeout(r, 60)));
 
-    let canvas = await html2canvas(target, {
+    let canvas = await html2canvas(cloneTarget, {
       backgroundColor: null,
       scale: scaleFactor,
       x: -padX,
@@ -12721,7 +12737,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             white-space: pre-wrap !important;
             word-break: normal !important;
             word-spacing: normal !important;
-            letter-spacing: 0px !important;
+            letter-spacing: normal !important;
           }
           /* Firefox & html2canvas horizontal screenshot gallery fixes:
              Disable scroll-snap and overflow-x on .gal so html2canvas doesn't drop partially clipped images */
@@ -12933,9 +12949,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             }
           }
         });
-        // Prevent html2canvas from splitting words into per-character fillText calls when letter-spacing != 0
+        // Natural letter spacing in cloned export
         clonedEl.querySelectorAll('*').forEach(el => {
-          el.style.letterSpacing = '0px';
+          el.style.letterSpacing = 'normal';
         });
         // Crucial: Wait for all images in the cloned document to complete decoding first
         await waitForAllImages(clonedEl);
@@ -13011,7 +13027,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordBreak = 'normal';
           el.style.wordSpacing = 'normal';
-          el.style.letterSpacing = '0px';
+          el.style.letterSpacing = 'normal';
         });
         // Ensure SVG elements retain accurate computed stroke, fill, stroke-width and color
         // when serialized to detached data-URI SVG images by html2canvas (Safari / WebKit)
@@ -13116,7 +13132,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     console.error('Export PNG failed:', err);
     showToast('Failed to generate image: ' + err.message, 'warn', 4000);
   }finally{
-    restoreImages();
+    if(offscreenWrap){
+      offscreenWrap.remove();
+    }
     isExporting = false;
   }
 }
