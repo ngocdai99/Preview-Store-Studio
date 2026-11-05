@@ -180,8 +180,8 @@ async function rasterizeSvgImages(root, scale, zoom = 1){
       const isIpad = img.closest('.ipad');
       const isGtab10 = img.closest('.gtab10, #dev-tab10');
       const isGtab7 = img.closest('.gtab7, #dev-tab7');
-      const isApple = img.closest('.apple');
-      const isGoogle = img.closest('.google');
+      const isApple = img.closest('.apple') && !isIpad;
+      const isGoogle = img.closest('.google') && !isGtab10 && !isGtab7;
       const isDevLandscape = img.closest('.dev')?.classList.contains('landscape');
       const isTabPortrait = img.closest('.dev')?.classList.contains('portrait');
 
@@ -202,35 +202,33 @@ async function rasterizeSvgImages(root, scale, zoom = 1){
       const vh = vb ? parseFloat(vb[2]) : 0;
       const svgAspect = (vw > 0 && vh > 0) ? (vw / vh) : 0;
 
-      // If one dimension is available from layout/CSS, deduce the missing dimension via aspect ratio
-      if (boxHeight > 0 && !boxWidth) {
+      // Ensure box dimensions strictly preserve the SVG aspect ratio or intended device ratio
+      if (isGtab10) {
+        boxHeight = isTabPortrait ? 320 : 240;
         boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
-      } else if (boxWidth > 0 && !boxHeight) {
-        boxHeight = Math.round(boxWidth / (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
-      }
-
-      // If both dimensions are zero (e.g. unrendered or offscreen in cloned context), provide standard fallbacks
-      if (!boxWidth || !boxHeight) {
-        if (isIpad) {
-          boxWidth = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
-          if (isIpadShot) {
-            boxHeight = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
-          } else {
-            boxHeight = isLandscape ? Math.round(boxWidth * (9 / 16)) : (isDevLandscape ? 498 : 563);
-          }
-        } else if (isGtab10) {
-          boxHeight = isTabPortrait ? 320 : 240;
-          boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
-        } else if (isGtab7) {
-          boxHeight = isTabPortrait ? 270 : 175;
-          boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
-        } else if (isApple) {
-          boxWidth = isLandscape ? 340 : 222;
-          boxHeight = isLandscape ? 191 : 481;
-        } else if (isGoogle) {
-          boxWidth = isLandscape ? 330 : 190;
-          boxHeight = isLandscape ? 186 : 412;
+      } else if (isGtab7) {
+        boxHeight = isTabPortrait ? 270 : 175;
+        boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+      } else if (isIpad) {
+        if (isIpadShot) {
+          boxHeight = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
+          boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (4 / 3) : (3 / 4))));
         } else {
+          boxWidth = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
+          boxHeight = Math.round(boxWidth / (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+        }
+      } else if (isApple) {
+        boxWidth = isLandscape ? 340 : 222;
+        boxHeight = isLandscape ? 191 : 481;
+      } else if (isGoogle) {
+        boxWidth = isLandscape ? 330 : 190;
+        boxHeight = isLandscape ? 186 : 412;
+      } else {
+        if (boxHeight > 0 && !boxWidth) {
+          boxWidth = Math.round(boxHeight * (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+        } else if (boxWidth > 0 && !boxHeight) {
+          boxHeight = Math.round(boxWidth / (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
+        } else if (!boxWidth || !boxHeight) {
           boxWidth = 200;
           boxHeight = Math.round(boxWidth / (svgAspect || (isLandscape ? (16 / 9) : (460 / 996))));
         }
@@ -461,12 +459,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 191px !important;
             border-radius: 9px !important;
           }
-          .google .gal img {
+          #dev-phone .gal img, .dev.google:not(.gtab) .gal img {
             width: 190px !important;
             height: 412px !important;
             border-radius: 7px !important;
           }
-          .google .gal img.landscape-shot {
+          #dev-phone .gal img.landscape-shot, .dev.google:not(.gtab) .gal img.landscape-shot {
             width: 330px !important;
             height: 186px !important;
             border-radius: 7px !important;
@@ -500,17 +498,21 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           }
           .dev.gtab10 #galTab10 img {
             height: 240px !important;
+            width: auto !important;
             border-radius: 12px !important;
           }
           .dev.gtab10.portrait #galTab10 img {
             height: 320px !important;
+            width: auto !important;
           }
           .dev.gtab7 .gt-gal img {
             height: 175px !important;
+            width: auto !important;
             border-radius: 7px !important;
           }
           .dev.gtab7.portrait .gt-gal img {
             height: 270px !important;
+            width: auto !important;
           }
         `;
         clonedDoc.head.appendChild(btnStyle);
@@ -628,7 +630,10 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.querySelectorAll('*').forEach(el => {
           el.style.letterSpacing = '0px';
         });
-        // Ensure screenshot carousels and images are fully visible and explicitly sized in Firefox
+        // Crucial: Wait for all images in the cloned document to complete decoding first
+        await waitForAllImages(clonedEl);
+
+        // Ensure screenshot carousels and images are fully visible and explicitly sized in Firefox & WebKit
         clonedEl.querySelectorAll('.gal, [data-shots]').forEach(gal => {
           gal.scrollLeft = 0;
           gal.style.scrollSnapType = 'none';
@@ -645,43 +650,49 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           const isIpad = img.closest('.ipad');
           const isGtab10 = img.closest('.gtab10, #dev-tab10');
           const isGtab7 = img.closest('.gtab7, #dev-tab7');
-          const isApple = img.closest('.apple');
-          const isGoogle = img.closest('.google');
+          const isApple = img.closest('.apple') && !isIpad;
+          const isGoogle = img.closest('.google') && !isGtab10 && !isGtab7;
           const isDevLandscape = img.closest('.dev')?.classList.contains('landscape');
           const isTabPortrait = img.closest('.dev')?.classList.contains('portrait');
 
+          const ratio = (img.naturalWidth && img.naturalHeight)
+            ? (img.naturalWidth / img.naturalHeight)
+            : (isLandscape ? (16 / 9) : (460 / 996));
+
           if (isIpad) {
-            const w = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
-            let h;
             if (isIpadShot) {
-              h = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
+              const h = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
+              const w = Math.round(h * (img.naturalWidth && img.naturalHeight ? ratio : (isLandscape ? (4 / 3) : (3 / 4))));
+              img.style.setProperty('width', w + 'px', 'important');
+              img.style.setProperty('height', h + 'px', 'important');
             } else {
-              h = isLandscape ? Math.round(w * (9 / 16)) : (isDevLandscape ? 498 : 563);
+              const w = isLandscape ? 380 : (isDevLandscape ? 230 : 260);
+              const h = Math.round(w / ratio);
+              img.style.setProperty('width', w + 'px', 'important');
+              img.style.setProperty('height', h + 'px', 'important');
             }
-            img.style.width = w + 'px';
-            img.style.height = h + 'px';
             img.style.borderRadius = '12px';
           } else if (isGtab10) {
             const h = isTabPortrait ? 320 : 240;
-            const ratio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : (isLandscape ? (16 / 9) : (460 / 996));
             const w = Math.round(h * ratio);
-            img.style.width = w + 'px';
-            img.style.height = h + 'px';
+            img.style.setProperty('width', w + 'px', 'important');
+            img.style.setProperty('height', h + 'px', 'important');
             img.style.borderRadius = '12px';
           } else if (isGtab7) {
             const h = isTabPortrait ? 270 : 175;
-            const ratio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : (isLandscape ? (16 / 9) : (460 / 996));
             const w = Math.round(h * ratio);
-            img.style.width = w + 'px';
-            img.style.height = h + 'px';
+            img.style.setProperty('width', w + 'px', 'important');
+            img.style.setProperty('height', h + 'px', 'important');
             img.style.borderRadius = '7px';
           } else if (isApple) {
-            img.style.width = isLandscape ? '340px' : '222px';
-            img.style.height = isLandscape ? '191px' : '481px';
-            img.style.borderRadius = isLandscape ? '9px' : '11px';
+            const isShotLandscape = isLandscape || ratio > 1.15;
+            img.style.setProperty('width', (isShotLandscape ? 340 : 222) + 'px', 'important');
+            img.style.setProperty('height', (isShotLandscape ? 191 : 481) + 'px', 'important');
+            img.style.borderRadius = isShotLandscape ? '9px' : '11px';
           } else if (isGoogle) {
-            img.style.width = isLandscape ? '330px' : '190px';
-            img.style.height = isLandscape ? '186px' : '412px';
+            const isShotLandscape = isLandscape || ratio > 1.15;
+            img.style.setProperty('width', (isShotLandscape ? 330 : 190) + 'px', 'important');
+            img.style.setProperty('height', (isShotLandscape ? 186 : 412) + 'px', 'important');
             img.style.borderRadius = '7px';
           }
         });
@@ -744,9 +755,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.boxShadow = 'none';
         });
 
-        // Crucial: Wait for all images in the cloned document to complete decoding
-        // before html2canvas parses the DOM tree, guaranteeing intrinsicWidth/Height are positive.
-        await waitForAllImages(clonedEl);
+        // Settle layout in cloned iframe before parsing
         await new Promise(r => setTimeout(r, 60));
       }
     });
