@@ -123,40 +123,53 @@ if (localStorage.getItem('sps_sidebar_collapsed') === '1') {
 updateSidebarButtonState();
 
 // Drag & drop image files onto screenshot editor card
-const slistArea = $('slist').parentElement;
-slistArea.addEventListener('dragover',e=>{e.preventDefault()});
-slistArea.addEventListener('drop',e=>{
-  const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
-  if(files.length){
-    e.preventDefault();
-    e.stopPropagation();
-    let validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
-    if(!validFiles.length) return;
-    if(typeof isDemoMode === 'function' && isDemoMode()){
-      const currentUploaded = (window._demoScreenshotUploadCount || 0);
-      if(currentUploaded >= 2){
-        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+const slistArea = $('slist') ? $('slist').parentElement : null;
+if(slistArea){
+  slistArea.addEventListener('dragover',e=>{e.preventDefault()});
+  slistArea.addEventListener('drop',e=>{
+    const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
+    if(files.length){
+      e.preventDefault();
+      e.stopPropagation();
+      let validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'Screenshot'));
+      if(!validFiles.length) return;
+      const maxAllowed = (typeof store !== 'undefined' && store === 'apple') ? 10 : 8;
+      const currentCount = typeof SHOTS !== 'undefined' ? SHOTS.length : 0;
+      const room = maxAllowed - currentCount;
+      if(room <= 0){
+        showToast(`${store === 'apple' ? 'App Store' : 'Google Play'} allows up to ${maxAllowed} screenshots`, 'warn');
         return;
       }
-      const allowedCount = Math.min(validFiles.length, 2 - currentUploaded);
-      if(allowedCount < validFiles.length && typeof requireFullVersion === 'function'){
-        requireFullVersion('upload-shots');
+      if(validFiles.length > room){
+        validFiles = validFiles.slice(0, room);
+        showToast(`Only ${room} more fit (max ${maxAllowed}) — extra files skipped`, 'warn');
       }
-      validFiles = validFiles.slice(0, allowedCount);
-      window._demoScreenshotUploadCount = currentUploaded + allowedCount;
-    }
-    let loaded=0;
-    validFiles.forEach(f=>{
-      readFile(f,d=>{
-        SHOTS.push(d);
-        loaded++;
-        if(loaded===validFiles.length){
-          renderShots();
-          saveState();
-          showToast(`Added ${validFiles.length} screenshot(s)!`, 'ok');
+      if(typeof isDemoMode === 'function' && isDemoMode()){
+        const currentUploaded = (window._demoScreenshotUploadCount || 0);
+        if(currentUploaded >= 2){
+          if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+          return;
         }
+        const allowedCount = Math.min(validFiles.length, 2 - currentUploaded);
+        if(allowedCount < validFiles.length && typeof requireFullVersion === 'function'){
+          requireFullVersion('upload-shots');
+        }
+        validFiles = validFiles.slice(0, allowedCount);
+        window._demoScreenshotUploadCount = currentUploaded + allowedCount;
+      }
+      let loaded=0;
+      validFiles.forEach(f=>{
+        readFile(f,d=>{
+          SHOTS.push(d);
+          loaded++;
+          if(loaded===validFiles.length){
+            renderShots();
+            saveState();
+            showToast(`Added ${validFiles.length} screenshot(s)!`, 'ok');
+          }
+        });
       });
-    });
-  }
-});
+    }
+  });
+}
 

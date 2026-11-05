@@ -296,6 +296,16 @@ function validateIpadScreenshots(){
     counterEl.textContent = `${validCount} / 10 screenshots`;
     counterEl.className = 'cc' + (validCount > 10 ? ' err' : '');
   }
+  const addBtn = $('addIpadShot');
+  if(addBtn){
+    const atLimit = (typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10;
+    addBtn.disabled = atLimit;
+    if(atLimit){
+      addBtn.title = 'iPad allows a maximum of 10 screenshots';
+    } else {
+      addBtn.removeAttribute('title');
+    }
+  }
   const badgeEl = $('ipadShotStatusBadge');
   if(!badgeEl) return;
 
@@ -451,6 +461,10 @@ if(addIpadShot){
       if(typeof requireFullVersion === 'function') requireFullVersion('ipad-screenshots');
       return;
     }
+    if((typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10){
+      showToast('iPad allows up to 10 screenshots', 'warn');
+      return;
+    }
     if(!SUPPORTS_IPAD) setSupportsIpad(true);
     IPAD_SHOTS.push('');
     renderIpadShots();
@@ -465,6 +479,11 @@ if(ipadShotFile){
   ipadShotFile.onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    if(ipadPick < 0 && (typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10){
+      showToast('iPad allows up to 10 screenshots', 'warn');
+      e.target.value = '';
+      return;
+    }
     if(typeof isDemoMode === 'function' && isDemoMode()){
       const currentUploaded = (window._demoScreenshotUploadCount || 0);
       if(currentUploaded >= 2){
@@ -488,4 +507,42 @@ if(ipadShotFile){
     });
     e.target.value = '';
   };
+}
+
+// Drag & drop image files onto iPad screenshot editor card
+const ipadSlistArea = $('ipadSlist') ? $('ipadSlist').parentElement : null;
+if(ipadSlistArea){
+  ipadSlistArea.addEventListener('dragover', e => e.preventDefault());
+  ipadSlistArea.addEventListener('drop', e => {
+    const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+    if(files.length){
+      e.preventDefault();
+      e.stopPropagation();
+      let validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'iPad screenshot'));
+      if(!validFiles.length) return;
+      const currentCount = typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0;
+      const room = 10 - currentCount;
+      if(room <= 0){
+        showToast('iPad allows up to 10 screenshots', 'warn');
+        return;
+      }
+      if(validFiles.length > room){
+        validFiles = validFiles.slice(0, room);
+        showToast(`Only ${room} more fit (max 10) — extra files skipped`, 'warn');
+      }
+      if(!SUPPORTS_IPAD) setSupportsIpad(true);
+      let loaded = 0;
+      validFiles.forEach(f => {
+        readFile(f, d => {
+          IPAD_SHOTS.push(d);
+          loaded++;
+          if(loaded === validFiles.length){
+            renderIpadShots();
+            saveState();
+            showToast(`Added ${validFiles.length} iPad screenshot(s)!`, 'ok');
+          }
+        });
+      });
+    }
+  });
 }

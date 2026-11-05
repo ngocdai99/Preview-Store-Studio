@@ -285,6 +285,7 @@ body[data-ui-store="google"] .shot-preview-pill {
   transform:none !important;
 }
 .add:hover{border-color:rgba(255,255,255,.45);color:#fff;background:rgba(255,255,255,.04);transform:none !important}
+.add:disabled, .add[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
 .hint{font-size:11px;color:var(--mut);line-height:1.5}
 
 /* Screenshot Status Badge in Editor */

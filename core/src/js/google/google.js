@@ -98,6 +98,14 @@ function renderTablets(){
     ce.textContent = `${valid.length} / ${MAX_TAB} screenshots`;
     ce.className = 'cc' + (valid.length > MAX_TAB ? ' err' : '');
 
+    const addBtn = $(c.add);
+    if(addBtn){
+      const atLimit = items.length >= MAX_TAB;
+      addBtn.disabled = atLimit;
+      if(atLimit) addBtn.title = `${c.name} tablets allow a maximum of ${MAX_TAB} screenshots`;
+      else addBtn.removeAttribute('title');
+    }
+
     const be = $(c.badge);
     if(!valid.length){
       be.style.display = 'none';

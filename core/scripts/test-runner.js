@@ -4305,6 +4305,26 @@ assert(phoneJsSrc.includes("tag.className = 'shot-dim-tag warn';\n            ta
 assert(bundledCore.includes("App Store Rejection Risk: 1:1 Square"), 'Bundled core.html contains App Store Rejection Risk square evaluation');
 assert(bundledTry.includes("App Store Rejection Risk: 1:1 Square"), 'Bundled try.html contains App Store Rejection Risk square evaluation');
 
+// ---------------------------------------------------------------------
+// [SUITE 55]: Screenshot Slot Limits & Button Enforcement
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 55]: Screenshot Slot Limits & Button Enforcement');
+
+const ipadJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'shots', 'ipad.js'), 'utf8');
+const googleJsCode2 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'google', 'google.js'), 'utf8');
+
+assert(phoneJsSrc.includes("if((typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed)"), 'phone.js blocks adding screenshot slot when maxAllowed limit is reached');
+assert(phoneJsSrc.includes("addBtn.disabled = atLimit"), 'phone.js disables addShot button when at screenshot limit');
+assert(phoneJsSrc.includes("pick < 0 && (typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed"), 'phone.js blocks file upload from creating slots beyond maxAllowed');
+
+assert(ipadJsSrc.includes("if((typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10)"), 'ipad.js blocks adding iPad screenshot slot when max 10 limit is reached');
+assert(ipadJsSrc.includes("addBtn.disabled = atLimit"), 'ipad.js disables addIpadShot button when at 10 screenshots limit');
+assert(ipadJsSrc.includes("ipadPick < 0 && (typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10"), 'ipad.js blocks file upload from creating slots beyond 10');
+
+assert(googleJsCode2.includes("addBtn.disabled = atLimit"), 'google.js disables tablet add buttons when at MAX_TAB limit');
+
+assert(bundledHtml.includes(".add:disabled, .add[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}"), 'CSS defines disabled state for add buttons');
+
 
 
 // ---------------------------------------------------------------------

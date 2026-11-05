@@ -219,6 +219,16 @@ function validateScreenshots(){
 
   const counterEl = $('shotCounter');
   const previewCounterEl = $('appPreviewCounter');
+  const addBtn = $('addShot');
+  if(addBtn){
+    const atLimit = (typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed;
+    addBtn.disabled = atLimit;
+    if(atLimit){
+      addBtn.title = `${store === 'apple' ? 'App Store' : 'Google Play'} allows a maximum of ${maxAllowed} screenshots`;
+    } else {
+      addBtn.removeAttribute('title');
+    }
+  }
   if(store === 'apple'){
     const appPreviewCount = Math.min(validCount, 3);
     if(previewCounterEl){
@@ -536,6 +546,12 @@ if($('shotFile')){
   $('shotFile').onchange = e => {
     const f = e.target.files[0];
     if(!f) return;
+    const maxAllowed = (typeof store !== 'undefined' && store === 'apple') ? 10 : 8;
+    if(pick < 0 && (typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed){
+      showToast(`${store === 'apple' ? 'App Store' : 'Google Play'} allows up to ${maxAllowed} screenshots`, 'warn');
+      e.target.value = '';
+      return;
+    }
     if(typeof isDemoMode === 'function' && isDemoMode()){
       const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
       if(pick < 0 && (SHOTS.length >= 2 || currentValid >= 2)){
@@ -562,6 +578,11 @@ if($('shotFile')){
 
 if($('addShot')){
   $('addShot').onclick = () => {
+    const maxAllowed = (typeof store !== 'undefined' && store === 'apple') ? 10 : 8;
+    if((typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed){
+      showToast(`${store === 'apple' ? 'App Store' : 'Google Play'} allows up to ${maxAllowed} screenshots`, 'warn');
+      return;
+    }
     if(typeof isDemoMode === 'function' && isDemoMode()){
       const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
       if(SHOTS.length >= 2 || currentValid >= 2){

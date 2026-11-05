@@ -594,6 +594,13 @@ function setStore(s, animate = true, preserveDual = false){
       counterEl.textContent = `${validCount} of ${maxAllowed} screenshots`;
     }
     counterEl.className = 'cc' + (validCount > 0 && validCount < minRequired ? ' warn' : validCount > maxAllowed ? ' err' : '');
+    const addBtn = $('addShot');
+    if(addBtn){
+      const atLimit = SHOTS.length >= maxAllowed;
+      addBtn.disabled = atLimit;
+      if(atLimit) addBtn.title = `${s === 'apple' ? 'App Store' : 'Google Play'} allows a maximum of ${maxAllowed} screenshots`;
+      else addBtn.removeAttribute('title');
+    }
   }
 
   if(fromMode === toMode){
