@@ -12714,14 +12714,20 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     offscreenWrap.appendChild(cloneTarget);
     document.body.appendChild(offscreenWrap);
 
-    // Ensure iPad search results main app card retains its second skeleton slot if only 1 shot is present
-    cloneTarget.querySelectorAll('.ipad-sr-media, [data-shots="ipad-shots"]').forEach(c => {
-      if (c.children.length === 1) {
-        const sk = document.createElement('div');
-        sk.className = 'ipad-skel-shot';
-        c.appendChild(sk);
-      }
-    });
+    // Ensure iPad search results competitor cards display exactly 1 skeleton slot when app has landscape orientation
+    const isLandscapeIpad = cloneTarget.querySelector('.ipad-search-view.has-landscape, .ipad-sr-media.has-landscape, [data-shots="ipad-shots"].has-landscape, .ipad-sr-shot.landscape-shot');
+    if (isLandscapeIpad) {
+      cloneTarget.querySelectorAll('.ipad-search-view').forEach(v => v.classList.add('has-landscape'));
+      cloneTarget.querySelectorAll('.ipad-sr-skel-shots').forEach(shots => {
+        shots.style.gridTemplateColumns = '1fr';
+        const skels = shots.querySelectorAll('.ipad-skel-shot');
+        skels.forEach((sk, idx) => {
+          if (idx >= 1) {
+            sk.remove();
+          }
+        });
+      });
+    }
 
     // Rasterize SVGs exclusively on the offscreen clone without mutating live DOM images
     await rasterizeSvgImages(cloneTarget, scaleFactor, 1);
@@ -13079,6 +13085,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           .ipad-search-view:has(.has-landscape) .ipad-sr-skel-shots {
             grid-template-columns: 1fr !important;
           }
+          .ipad-search-view.has-landscape .ipad-sr-skel-shots .ipad-skel-shot:nth-child(n+2) {
+            display: none !important;
+          }
           .dev.ipad:not(.landscape) .ipad-sr-media img,
           .dev.ipad:not(.landscape) [data-shots="ipad-shots"] img,
           .dev.ipad:not(.landscape) .ipad-skel-shot {
@@ -13426,14 +13435,20 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           });
         });
 
-        // Ensure iPad search results main app card retains its second skeleton slot if only 1 shot is present
-        clonedEl.querySelectorAll('.ipad-sr-media, [data-shots="ipad-shots"]').forEach(c => {
-          if (c.children.length === 1) {
-            const sk = clonedDoc.createElement('div');
-            sk.className = 'ipad-skel-shot';
-            c.appendChild(sk);
-          }
-        });
+        // Ensure iPad search results competitor cards display exactly 1 skeleton slot when app has landscape orientation
+        const isLandscapeIpadCloned = clonedEl.querySelector('.ipad-search-view.has-landscape, .ipad-sr-media.has-landscape, [data-shots="ipad-shots"].has-landscape, .ipad-sr-shot.landscape-shot');
+        if (isLandscapeIpadCloned) {
+          clonedEl.querySelectorAll('.ipad-search-view').forEach(v => v.classList.add('has-landscape'));
+          clonedEl.querySelectorAll('.ipad-sr-skel-shots').forEach(shots => {
+            shots.style.gridTemplateColumns = '1fr';
+            const skels = shots.querySelectorAll('.ipad-skel-shot');
+            skels.forEach((sk, idx) => {
+              if (idx >= 1) {
+                sk.remove();
+              }
+            });
+          });
+        }
 
         // Ensure Google Play age rating badge retains centered text & tight box
         clonedEl.querySelectorAll('.g-age-badge, [data-age-google-badge]').forEach(el => {
