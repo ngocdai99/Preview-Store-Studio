@@ -294,7 +294,7 @@
   stroke: var(--s);
   display: inline-block;
   vertical-align: middle;
-  margin-top: -0.5px;
+  margin-top: -1.5px;
 }
 
 .sr-dev [data-b="dev"] {

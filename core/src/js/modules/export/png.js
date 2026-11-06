@@ -453,7 +453,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         btnStyle.textContent = `
           .dev::before, .dev::after { display: none !important; }
           .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
-          .sr-title, .sr-subtitle, .sr-category, .sr-dev, .sr-meta-line, .sr-search-query,
+          .sr-title, .sr-subtitle, .sr-category, .sr-search-query,
           .ipad-sr-app-title, .ipad-sr-app-sub, .ipad-search-query, .ipad-floating-title,
           .gp-search-query-text, .gp-search-card-name, .gp-search-card-meta, .g-meta, .iap,
           [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]) {
@@ -504,6 +504,24 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             vertical-align: middle !important;
             margin-top: -0.5px !important;
             flex-shrink: 0 !important;
+          }
+          .sr-dev {
+            display: inline-flex !important;
+            align-items: center !important;
+            line-height: 1 !important;
+            gap: 5px !important;
+          }
+          .sr-dev-icon {
+            width: 13px !important;
+            height: 13px !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+            margin-top: 1px !important;
+            flex-shrink: 0 !important;
+          }
+          .sr-dev [data-b="dev"] {
+            display: inline-block !important;
+            line-height: 1 !important;
           }
           .phone.apple:not(.ipad) .a-met > div {
             height: 48px !important;
@@ -1064,7 +1082,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
         // Skip metrics elements (.a-met, .ipad-met, .g-met) so their strict height and clamping are never compromised
-        clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .sr-dev, .gp-search-card-name, .gp-search-card-meta, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
+        clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .gp-search-card-meta, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
           if (el.closest('.a-met, .ipad-met, .g-met')) return;
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordSpacing = '0.1px';
@@ -1143,6 +1161,26 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
         clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats .gp-stat-rating, .dev.gtab .gt10-item-stats .gp-stat-rating').forEach(el => {
           el.style.marginTop = '0';
+        });
+
+        // Enforce vertical centering for Apple search developer icon in export
+        clonedEl.querySelectorAll('.sr-dev').forEach(el => {
+          el.style.display = 'inline-flex';
+          el.style.alignItems = 'center';
+          el.style.lineHeight = '1';
+          el.style.gap = '5px';
+        });
+        clonedEl.querySelectorAll('.sr-dev-icon').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
+          el.style.width = '13px';
+          el.style.height = '13px';
+          el.style.marginTop = '1px';
+          el.style.flexShrink = '0';
+        });
+        clonedEl.querySelectorAll('.sr-dev [data-b="dev"]').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.lineHeight = '1';
         });
 
         // Strip focus highlight from export capture
