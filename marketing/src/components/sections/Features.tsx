@@ -1771,13 +1771,13 @@ function ComplianceCard() {
                 <div className="flex-1 min-w-0">
                   <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                     <span className="text-emerald-500 flex items-center gap-1">
-                      <Check className="w-3.5 h-3.5" /> Target Dimensions Verified
+                      <Check className="w-3.5 h-3.5" /> Resolution &amp; File Size Verified
                     </span>
                   </div>
                   <div className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                     {resolutionMode === "1024"
-                      ? "1024 × 1024 px master icon for App Store Connect"
-                      : "512 × 512 px store icon for Google Play Console"}
+                      ? "1024 × 1024 px · 380 KB (Store limit: Max 1024 KB)"
+                      : "512 × 512 px · 190 KB (Store limit: Max 1024 KB)"}
                   </div>
                 </div>
               </div>
