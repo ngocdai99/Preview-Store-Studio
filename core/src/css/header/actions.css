@@ -367,28 +367,33 @@
   flex-shrink: 0;
 }
 
-/* Badge for unselected pill: subtle dark rounded badge */
+/* Badge for unselected pill: soft rounded pill badge */
 .ms-pill.custom.has-draft small,
 .ms-pill small {
-  color: #989A99;
+  color: #e2e8f0;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 1.5px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 1.5px 7px;
   border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  font-size: 10.5px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
   transition: all .2s ease;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
-/* Badge for selected pill: subtle light rounded badge */
+/* Badge for selected pill: subtle soft rounded badge */
 .ms-pill.custom.on small,
 .ms-pill.custom.has-draft.on small,
 .ms-pill.on small {
   color: #475569 !important;
-  background: rgba(0, 0, 0, 0.07) !important;
-  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
 }
 
 /* Close button for unselected pill (bare X icon, no background container) */
@@ -526,17 +531,21 @@
 
 :root[data-ui=light] .ms-pill.custom small,
 :root[data-ui=light] .ms-pill.custom.has-draft small {
-  color: #64748b;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  color: #475569;
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  font-weight: 500;
+  text-transform: none;
 }
 
 :root[data-ui=light] .ms-pill.custom.on small,
 :root[data-ui=light] .ms-pill.custom.has-draft.on small,
 :root[data-ui=light] .ms-pill.on small {
-  color: #006636 !important;
-  background: rgba(0, 208, 133, 0.12) !important;
-  border: 1px solid rgba(0, 208, 133, 0.28) !important;
+  color: var(--brand-primary, #006636) !important;
+  background: rgba(0, 102, 54, 0.08) !important;
+  border: 1px solid rgba(0, 102, 54, 0.18) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
 }
 
 :root[data-ui=light] .ms-pill-reset-btn {
@@ -582,8 +591,10 @@
 
 :root[data-ui=light] #btnPresetPill.on small {
   color: #7e22ce !important;
-  background: rgba(168, 85, 247, 0.12) !important;
-  border: 1px solid rgba(168, 85, 247, 0.28) !important;
+  background: rgba(168, 85, 247, 0.08) !important;
+  border: 1px solid rgba(168, 85, 247, 0.2) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
 }
 
 #btnPresets {
