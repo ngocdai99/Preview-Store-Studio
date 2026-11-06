@@ -12976,6 +12976,45 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       } catch (_) {}
     });
 
+    // Truncate overflowing search card title / subtitle with ellipsis to match live preview DOM
+    const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name';
+    const liveSearchEls = target.querySelectorAll(searchEllipsisSelectors);
+    const cloneSearchEls = cloneTarget.querySelectorAll(searchEllipsisSelectors);
+    liveSearchEls.forEach((liveEl, idx) => {
+      const cloneEl = cloneSearchEls[idx];
+      if (!liveEl || !cloneEl) return;
+      const availWidth = liveEl.clientWidth || cloneEl.clientWidth || (cloneEl.parentElement ? cloneEl.parentElement.clientWidth : 0);
+      const isOverflowing = (liveEl.scrollWidth > liveEl.clientWidth) || (cloneEl.scrollWidth > availWidth);
+      if (availWidth > 0 && isOverflowing) {
+        const fullText = (liveEl.textContent || cloneEl.textContent || '').trim();
+        if (!fullText) return;
+        try {
+          const comp = window.getComputedStyle(liveEl);
+          const cv = document.createElement('canvas');
+          const ctx = cv.getContext('2d');
+          if (ctx) {
+            ctx.font = `${comp.fontWeight || '400'} ${comp.fontSize || '12.5px'} ${comp.fontFamily || 'system-ui'}`;
+            const ellipsis = '...';
+            const targetWidth = availWidth - 2;
+            let low = 0, high = fullText.length, best = '';
+            while (low <= high) {
+              const mid = Math.floor((low + high) / 2);
+              const candidate = fullText.slice(0, mid).trimEnd() + ellipsis;
+              if (ctx.measureText(candidate).width <= targetWidth) {
+                best = candidate;
+                low = mid + 1;
+              } else {
+                high = mid - 1;
+              }
+            }
+            if (best) {
+              cloneEl.textContent = best;
+            }
+          }
+        } catch (_) {}
+      }
+    });
+
     // Rasterize SVGs exclusively on the offscreen clone without mutating live DOM images
     await rasterizeSvgImages(cloneTarget, scaleFactor, 1);
     await waitForAllImages(cloneTarget);
@@ -13019,10 +13058,10 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         btnStyle.textContent = `
           .dev::before, .dev::after { display: none !important; }
           .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
-          .sr-title, .sr-subtitle, .sr-category, .sr-search-query,
-          .ipad-sr-app-title, .ipad-sr-app-sub, .ipad-search-query, .ipad-floating-title,
-          .gp-search-query-text, .gp-search-card-name, .g-meta, .iap,
-          [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]):not(.gp-search-card-meta [data-b]):not(.gt7-app-meta [data-b]):not(.gt10-item-meta [data-b]) {
+          .sr-category, .sr-search-query,
+          .ipad-search-query, .ipad-floating-title,
+          .gp-search-query-text, .g-meta, .iap,
+          [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]):not(.gp-search-card-meta [data-b]):not(.gt7-app-meta [data-b]):not(.gt10-item-meta [data-b]):not(.ipad-sr-card-info [data-b]):not(.sr-info [data-b]):not(.gp-search-card-info [data-b]) {
             -webkit-line-clamp: unset !important;
             -webkit-box-orient: unset !important;
             white-space: pre-wrap !important;
@@ -13031,6 +13070,16 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             letter-spacing: 0.01px !important;
             overflow: visible !important;
             text-overflow: clip !important;
+          }
+          .ipad-sr-app-title, .ipad-sr-app-sub,
+          .sr-title, .sr-subtitle,
+          .gp-search-card-name {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            word-break: normal !important;
+            word-spacing: normal !important;
+            letter-spacing: normal !important;
           }
           .a-met, .ipad-met, .g-met {
             align-items: center !important;
@@ -13762,14 +13811,21 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
 
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
-        // Skip metrics elements (.a-met, .ipad-met, .g-met) so their strict height and clamping are never compromised
+        // Skip metrics elements and search card titles/subtitles so their strict single-line clamping is never compromised
         clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
-          if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-meta')) return;
+          if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-meta, .ipad-sr-card-info, .sr-info, .gp-search-card-info')) return;
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordSpacing = '0.1px';
           el.style.letterSpacing = '0.01px';
           el.style.overflow = 'visible';
           el.style.textOverflow = 'clip';
+        });
+
+        // Enforce clean single-line truncation for search card titles and subtitles in export
+        clonedEl.querySelectorAll('.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name').forEach(el => {
+          el.style.whiteSpace = 'nowrap';
+          el.style.overflow = 'hidden';
+          el.style.textOverflow = 'ellipsis';
         });
 
         // Enforce clamped metrics developer name and clean single-line labels in export
