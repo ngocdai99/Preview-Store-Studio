@@ -380,6 +380,10 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   font-size: 11px;
   color: var(--s);
   margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  line-height: 1;
 }
 .dev.gtab10 .gt10-item-status svg {
   color: var(--g);
@@ -902,12 +906,35 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   font-size: 11px;
   color: var(--s);
   margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  line-height: 1;
 }
 .dev.gtab .gp-stat-rating {
-  margin-right: 12px;
+  margin-right: 0;
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5px;
+  line-height: 1;
+}
+.dev.gtab .gp-stat-rating [data-stat="rating"] {
+  line-height: 1;
+  display: inline-block;
 }
 .dev.gtab .gp-star-ico {
-  margin-top: -1.5px;
+  margin-top: 0;
+  width: 9.5px;
+  height: 9.5px;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.dev.gtab .gt7-app-stats [data-stat="size"],
+.dev.gtab .gt10-item-stats [data-stat="size"] {
+  line-height: 1;
+  display: inline-block;
 }
 .dev.gtab7 .gt7-app-btn {
   height: 28px;

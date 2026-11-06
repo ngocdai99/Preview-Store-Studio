@@ -519,6 +519,34 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             text-overflow: ellipsis !important;
             display: inline-block !important;
           }
+          .dev.gtab .gt7-app-stats,
+          .dev.gtab .gt10-item-stats {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            line-height: 1 !important;
+          }
+          .dev.gtab .gp-stat-rating {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 2.5px !important;
+            margin-top: 0 !important;
+            margin-right: 0 !important;
+            line-height: 1 !important;
+          }
+          .dev.gtab .gp-star-ico {
+            width: 9.5px !important;
+            height: 9.5px !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+            margin-top: 0 !important;
+            flex-shrink: 0 !important;
+          }
+          .dev.gtab .gt7-app-stats [data-stat="size"],
+          .dev.gtab .gt10-item-stats [data-stat="size"] {
+            line-height: 1 !important;
+            display: inline-block !important;
+          }
           .sr-dev {
             display: inline-flex !important;
             align-items: center !important;
@@ -1185,10 +1213,28 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats, .dev.gtab .gt10-item-stats').forEach(el => {
           el.style.display = 'flex';
           el.style.alignItems = 'center';
-          el.style.gap = '4px';
+          el.style.gap = '12px';
+          el.style.lineHeight = '1';
         });
-        clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats .gp-stat-rating, .dev.gtab .gt10-item-stats .gp-stat-rating').forEach(el => {
+        clonedEl.querySelectorAll('.dev.gtab .gp-stat-rating').forEach(el => {
+          el.style.display = 'inline-flex';
+          el.style.alignItems = 'center';
+          el.style.gap = '2.5px';
           el.style.marginTop = '0';
+          el.style.marginRight = '0';
+          el.style.lineHeight = '1';
+        });
+        clonedEl.querySelectorAll('.dev.gtab .gp-star-ico').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
+          el.style.width = '9.5px';
+          el.style.height = '9.5px';
+          el.style.marginTop = '0';
+          el.style.flexShrink = '0';
+        });
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats [data-stat="size"], .dev.gtab .gt10-item-stats [data-stat="size"]').forEach(el => {
+          el.style.lineHeight = '1';
+          el.style.display = 'inline-block';
         });
 
         // Enforce vertical centering for Apple search developer icon in export
