@@ -211,7 +211,7 @@
   color: #EDEDED;
   padding: 4px 10px 4px 4px;
   border-radius: 999px;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 12.5px;
   line-height: 1;
   cursor: pointer;
@@ -236,7 +236,7 @@
   max-height: 34px;
   box-sizing: border-box;
   line-height: 1;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .ms-pill.custom:hover {
@@ -256,6 +256,7 @@
   max-height: 34px;
   box-sizing: border-box;
   line-height: 1;
+  font-weight: 500;
   min-width: 0;
   flex-shrink: 1;
 }
@@ -264,6 +265,7 @@
 #draftBtnTitle {
   display: inline-block;
   vertical-align: middle;
+  font-weight: 500;
   max-width: 260px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -456,7 +458,7 @@
   background: #ffffff !important;
   border: 1px solid rgba(0, 208, 133, 0.5) !important;
   color: #0f172a !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
   height: 34px !important;
   min-height: 34px !important;
   max-height: 34px !important;
