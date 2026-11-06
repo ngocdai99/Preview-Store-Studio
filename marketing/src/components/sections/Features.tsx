@@ -1698,7 +1698,7 @@ function ComplianceCard() {
                   <span>{ratioMode === "phone" ? "1290 × 2796 px (19.5:9 standard)" : "2048 × 2732 px (4:3 standard)"}</span>
                 </span>
                 <span className="text-[9.5px] font-mono text-slate-400 shrink-0 ml-1">
-                  STORE COMPLIANT
+                  STORE SPEC
                 </span>
               </div>
 
