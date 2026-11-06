@@ -931,6 +931,9 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   vertical-align: middle;
   flex-shrink: 0;
 }
+.dev.gtab7 .gp-star-ico {
+  margin-top: -1.5px;
+}
 .dev.gtab .gt7-app-stats [data-stat="size"],
 .dev.gtab .gt10-item-stats [data-stat="size"] {
   line-height: 1;

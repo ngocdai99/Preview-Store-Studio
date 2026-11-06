@@ -542,6 +542,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             margin-top: 2px !important;
             flex-shrink: 0 !important;
           }
+          .dev.gtab7 .gp-star-ico {
+            margin-top: 0 !important;
+          }
           .dev.gtab .gt7-app-stats [data-stat="size"],
           .dev.gtab .gt10-item-stats [data-stat="size"] {
             line-height: 1 !important;
@@ -1231,6 +1234,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '9.5px';
           el.style.marginTop = '2px';
           el.style.flexShrink = '0';
+        });
+        clonedEl.querySelectorAll('.dev.gtab7 .gp-star-ico').forEach(el => {
+          el.style.marginTop = '0';
         });
         clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats [data-stat="size"], .dev.gtab .gt10-item-stats [data-stat="size"]').forEach(el => {
           el.style.lineHeight = '1';
