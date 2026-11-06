@@ -10,8 +10,6 @@ import {
   Copy,
   Sparkles,
   RefreshCw,
-  AlertTriangle,
-  XCircle,
   Download,
   FileText,
   Package,
@@ -1638,14 +1636,14 @@ function ComplianceCard() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <div className="text-[12px] font-bold text-slate-900 dark:text-white">
                     {alphaMode === "solid" ? (
-                      <span className="text-emerald-500 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Solid Background Verified
+                      <span className="text-emerald-500">
+                        Solid Background Verified
                       </span>
                     ) : (
-                      <span className="text-rose-500 flex items-center gap-1">
-                        <XCircle className="w-3.5 h-3.5" /> Transparent Background Detected
+                      <span className="text-rose-500">
+                        Transparent Background Detected
                       </span>
                     )}
                   </div>
@@ -1714,14 +1712,14 @@ function ComplianceCard() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <div className="text-[12px] font-bold text-slate-900 dark:text-white">
                     {ratioMode === "square" ? (
-                      <span className="text-emerald-500 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Perfect 1:1 Square Ratio
+                      <span className="text-emerald-500">
+                        Perfect 1:1 Square Ratio
                       </span>
                     ) : (
-                      <span className="text-rose-500 flex items-center gap-1">
-                        <XCircle className="w-3.5 h-3.5" /> Non-Square Ratio Detected
+                      <span className="text-rose-500">
+                        Non-Square Ratio Detected
                       </span>
                     )}
                   </div>
@@ -1790,14 +1788,14 @@ function ComplianceCard() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <div className="text-[12px] font-bold text-slate-900 dark:text-white">
                     {resolutionMode === "1024" ? (
-                      <span className="text-emerald-500 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Resolution &amp; File Size Verified
+                      <span className="text-emerald-500">
+                        Resolution &amp; File Size Verified
                       </span>
                     ) : (
-                      <span className="text-amber-500 flex items-center gap-1">
-                        <AlertTriangle className="w-3.5 h-3.5" /> Low Resolution Detected
+                      <span className="text-amber-500">
+                        Low Resolution Detected
                       </span>
                     )}
                   </div>
