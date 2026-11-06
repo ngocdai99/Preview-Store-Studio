@@ -499,6 +499,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             ctx.font = `${comp.fontWeight || '400'} ${comp.fontSize || '12.5px'} ${comp.fontFamily || 'system-ui'}`;
             const ellipsis = '...';
             const targetWidth = availWidth - 2;
+            if (ctx.measureText(fullText).width <= targetWidth) {
+              return;
+            }
             let low = 0, high = fullText.length, best = '';
             while (low <= high) {
               const mid = Math.floor((low + high) / 2);

@@ -305,7 +305,9 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
      ```javascript
      const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name, .gt10-item-title, .gt10-item-sub, .gt7-app-name';
      ```
-   - Đo chiều rộng thực tế `liveEl.clientWidth` trên Live DOM. Nếu phần tử bị tràn (`scrollWidth > clientWidth` hoặc `measureText > targetWidth`), áp dụng binary search để tìm chuỗi con dài nhất vừa vặn với `targetWidth = availWidth - 2` rồi nối thêm `...`.
+   - Đo chiều rộng thực tế `liveEl.clientWidth` trên Live DOM.
+   - **Bắt buộc có guard check:** Kiểm tra `if (ctx.measureText(fullText).width <= targetWidth) return;` để đảm bảo chuỗi ngắn (như `"5 Phút Thuộc Bài"`) còn khoảng trống không bao giờ bị chèn thêm dấu `...` vô lý.
+   - Nếu chuỗi thực sự dài vượt quá `targetWidth`, áp dụng binary search để tìm chuỗi con dài nhất vừa vặn với `targetWidth = availWidth - 2` rồi nối thêm `...`.
    - Gán chuỗi đã cắt trực tiếp vào `cloneEl.textContent`. Lúc này `html2canvas` chỉ việc vẽ 1 chuỗi đơn đã cắt sẵn kèm `...`, đảm bảo 100% khớp với canvas.
 2. **Loại trừ tường minh khỏi quy tắc ép `pre-wrap`:**
    - Trong `btnStyle.textContent` của `png.js`:
