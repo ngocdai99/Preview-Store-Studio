@@ -223,15 +223,26 @@
   background: #007a41 !important;
   border-color: #209d70 !important;
   color: #ffffff !important;
-  transform: translateY(-0.5px);
+  transform: none !important;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.28), 0 2px 6px rgba(0, 0, 0, 0.3) !important;
 }
 
 .ms-pill.tour-btn:active {
   background: #005a30 !important;
   border-color: #166e4e !important;
-  transform: translateY(0.5px);
+  transform: none !important;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Tour Launch Button when relocated into Header Right */
+.right .ms-pill.tour-btn,
+.ms-pill.tour-btn.in-header {
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  padding: 0 11px !important;
+  font-size: 11.5px !important;
+  margin: 0 !important;
 }
 
 /* Light Theme Overrides */

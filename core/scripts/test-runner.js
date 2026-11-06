@@ -3843,6 +3843,18 @@ asyncSuites.push((async () => {
   const rootPkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, '../package.json'), 'utf8'));
   assert(rootPkg.scripts.dev === 'npm --prefix core run dev', 'root package.json dev script starts core dev server');
   assert(rootPkg.scripts.start === 'npm --prefix core run dev', 'root package.json start script starts core dev server');
+
+  // 11. Guided Tour Button: Compass Icon, Zero TranslateY & Relocation to Header Next to Theme Toggle
+  const wsBarSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/components/workspace-bar.html'), 'utf8');
+  assert(wsBarSrc.includes('circle cx="12" cy="12" r="10"') && !wsBarSrc.includes('polygon points="12 2 15.09'), 'Tour button uses clean compass icon instead of star');
+
+  const tourCssSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/css/modals/tour.css'), 'utf8');
+  assert(tourCssSrc.includes('.ms-pill.tour-btn:hover') && tourCssSrc.includes('transform: none !important;'), 'Tour button removes translateY on hover and active');
+  assert(tourCssSrc.includes('.right .ms-pill.tour-btn') || tourCssSrc.includes('.ms-pill.tour-btn.in-header'), 'Tour button has header right positioning styles');
+
+  const tourModuleSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/tour.js'), 'utf8');
+  assert(tourModuleSrc.includes('function relocateTourButton()') && tourModuleSrc.includes('sps_tour_completed'), 'tour.js defines relocateTourButton based on sps_tour_completed');
+  assert(tourModuleSrc.includes('headerRight.insertBefore(btn, btnUi)'), 'tour.js relocates Tour button next to Page Theme toggle button');
 })());
 
 // ---------------------------------------------------------------------

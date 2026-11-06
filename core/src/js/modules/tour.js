@@ -233,6 +233,40 @@ function startTour(stepIndex = 0) {
   window.addEventListener('resize', handleTourResize);
 }
 
+function relocateTourButton() {
+  const btn = $('btnStartTour');
+  const btnUi = $('btnUi');
+  const headerRight = document.querySelector('header .right');
+  if (!btn || !headerRight) return;
+  if ($('btnStartTour2') || $('btnStartTour3') || $('btnStartTour4')) return;
+
+  try {
+    const completed = localStorage.getItem('sps_tour_completed') === 'true';
+    if (completed) {
+      if (btnUi && btnUi.parentNode === headerRight) {
+        if (btn.nextElementSibling !== btnUi || btn.parentNode !== headerRight) {
+          headerRight.insertBefore(btn, btnUi);
+          btn.classList.add('in-header');
+        }
+      } else if (btn.parentNode !== headerRight) {
+        headerRight.appendChild(btn);
+        btn.classList.add('in-header');
+      }
+    } else {
+      const navMain = document.querySelector('.workspace-nav-main');
+      const presetPill = $('btnPresetPill');
+      if (navMain && btn.parentNode !== navMain) {
+        btn.classList.remove('in-header');
+        if (presetPill && presetPill.parentNode === navMain) {
+          navMain.insertBefore(btn, presetPill);
+        } else {
+          navMain.appendChild(btn);
+        }
+      }
+    }
+  } catch (_) {}
+}
+
 function endTour() {
   currentTourStep = -1;
   document.removeEventListener('keydown', handleTourKeydown);
@@ -249,6 +283,7 @@ function endTour() {
   try {
     localStorage.setItem('sps_tour_completed', 'true');
   } catch (_) {}
+  relocateTourButton();
 }
 
 function handleTourKeydown(e) {
@@ -278,10 +313,11 @@ function handleTourResize() {
 }
 
 function initTour() {
-  const btn = $('btnStartTour');
-  if (btn) {
+  $$('#btnStartTour, #btnStartTour2, #btnStartTour3, #btnStartTour4, .tour-btn').forEach(btn => {
     btn.onclick = () => startTour(0);
-  }
+  });
+
+  relocateTourButton();
 
   // If in demo mode and first time visiting, auto-offer tour after brief delay
   if (typeof isDemoMode === 'function' && isDemoMode()) {
