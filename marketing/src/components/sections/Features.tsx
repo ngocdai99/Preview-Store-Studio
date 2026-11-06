@@ -1782,7 +1782,7 @@ function ComplianceCard() {
                   className={`w-11 h-11 rounded-xl border flex items-center justify-center font-mono text-[10px] font-bold transition-all duration-300 shrink-0 ${
                     resolutionMode === "1024"
                       ? "border-emerald-500/50 bg-[#0b0c0e] text-emerald-400"
-                      : "border-rose-500/40 bg-[#181510] text-rose-400"
+                      : "border-amber-500/40 bg-[#181510] text-amber-400"
                   }`}
                 >
                   {resolutionMode === "1024" ? "1024" : "256"}
@@ -1795,7 +1795,7 @@ function ComplianceCard() {
                         <Check className="w-3.5 h-3.5" /> Resolution &amp; File Size Verified
                       </span>
                     ) : (
-                      <span className="text-rose-500 flex items-center gap-1">
+                      <span className="text-amber-500 flex items-center gap-1">
                         <AlertTriangle className="w-3.5 h-3.5" /> Low Resolution Detected
                       </span>
                     )}
@@ -1804,7 +1804,7 @@ function ComplianceCard() {
                     className={`text-[10.5px] mt-0.5 truncate ${
                       resolutionMode === "1024"
                         ? "text-slate-500 dark:text-slate-400"
-                        : "text-rose-500/90 dark:text-rose-400"
+                        : "text-amber-500/90 dark:text-amber-400"
                     }`}
                   >
                     {resolutionMode === "1024"
