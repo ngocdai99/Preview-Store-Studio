@@ -143,6 +143,38 @@ body.sps-demo-mode #btnPresetPill .ms-pill-reset-btn,
   pointer-events: none;
 }
 
+/* Gated Form Fields & Upload Buttons in Demo Mode */
+.demo-disabled-input,
+input.demo-disabled-input,
+textarea.demo-disabled-input {
+  opacity: 0.65 !important;
+  cursor: pointer !important;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #989a99 !important;
+}
+
+:root[data-ui="light"] .demo-disabled-input,
+:root[data-ui="light"] input.demo-disabled-input,
+:root[data-ui="light"] textarea.demo-disabled-input {
+  opacity: 0.75 !important;
+  cursor: pointer !important;
+  pointer-events: none;
+  background: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+.ico-wrap.demo-disabled-dropzone {
+  cursor: pointer !important;
+}
+
+.mini.demo-disabled-btn {
+  opacity: 0.55 !important;
+  cursor: pointer !important;
+}
+
 /* Light Mode Overrides */
 [data-ui="light"] .demo-upgrade-badge {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%), #006636;

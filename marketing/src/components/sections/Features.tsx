@@ -14,10 +14,11 @@ import {
 } from "lucide-react";
 
 // ============================================================================
-// CARD 1: REALISTIC MODERN DEVICE FRAMES (Interactive Device Stage)
+// SHARED DEVICE HARDWARE & STATUS BAR HELPERS
 // ============================================================================
-function DeviceFramesCard() {
-  const [device, setDevice] = useState<"phone" | "tablet">("phone");
+
+// Hook to keep device clocks synchronized in real time
+function useDeviceTime() {
   const [timeString, setTimeString] = useState("9:41");
 
   useEffect(() => {
@@ -31,6 +32,81 @@ function DeviceFramesCard() {
     const interval = setInterval(updateTime, 10000);
     return () => clearInterval(interval);
   }, []);
+
+  return timeString;
+}
+
+// Reusable iPad / Tablet Status Bar
+function IPadStatusBar({ timeString }: { timeString?: string }) {
+  const defaultTime = useDeviceTime();
+  const time = timeString ?? defaultTime;
+
+  return (
+    <div className="w-full h-4 px-1 mb-2 sm:mb-2.5 flex items-center justify-between select-none shrink-0 text-white z-20">
+      <span className="text-[9.5px] font-semibold text-white tracking-tight">
+        {time}
+      </span>
+      <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+      <div className="flex items-center gap-1.5 text-white">
+        {/* Wi-Fi Icon */}
+        <svg className="w-2.5 h-2 text-white" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M8 9.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" />
+          <path d="M4.5 7.5a5 5 0 0 1 7 0 .8.8 0 0 1-1.1 1.1 3.4 3.4 0 0 0-4.8 0 .8.8 0 1 1-1.1-1.1z" />
+          <path d="M2 4.5a8.5 8.5 0 0 1 12 0 .8.8 0 0 1-1.1 1.1 6.9 6.9 0 0 0-9.8 0 .8.8 0 1 1-1.1-1.1z" />
+        </svg>
+        {/* Battery with Nub */}
+        <div className="flex items-center">
+          <div className="w-3.5 h-2 rounded-[2px] border border-white p-[0.8px] flex items-center">
+            <div className="w-full h-full rounded-[0.8px] bg-white" />
+          </div>
+          <div className="w-[0.8px] h-1 rounded-r-[0.5px] bg-white ml-[0.5px]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Reusable iPad Mockup Hardware Frame (shared across Card 1 & Card 2)
+interface IPadMockupFrameProps {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+  timeString?: string;
+}
+
+function IPadMockupFrame({
+  children,
+  className = "",
+  style,
+  timeString,
+}: IPadMockupFrameProps) {
+  return (
+    <div
+      className={`relative w-[285px] sm:w-[315px] h-[392px] sm:h-[412px] rounded-[32px] p-[6px] border border-[#3e4046] bg-[#25262a] shadow-[0_12px_32px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300 ${className}`}
+      style={style}
+    >
+      {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}
+      <div className="absolute -top-[4px] right-[30px] w-[26px] h-[3px] rounded-t-sm bg-[#363840]" />
+      <div className="absolute -right-[4px] top-[32px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
+      <div className="absolute -right-[4px] top-[52px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
+
+      {/* Screen Inner (Portrait iPad) */}
+      <div className="w-full h-full rounded-[26px] pt-1.5 px-3 pb-3 sm:px-3.5 sm:pb-3.5 bg-black text-white flex flex-col justify-between">
+        <IPadStatusBar timeString={timeString} />
+        {children}
+        {/* Tablet Home Bar */}
+        <div className="w-24 h-1 rounded-full mx-auto mt-1.5 bg-white/30 shrink-0" />
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// CARD 1: REALISTIC MODERN DEVICE FRAMES (Interactive Device Stage)
+// ============================================================================
+function DeviceFramesCard() {
+  const [device, setDevice] = useState<"phone" | "tablet">("phone");
+  const timeString = useDeviceTime();
 
   return (
     <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-2 lg:col-span-6">
@@ -127,7 +203,7 @@ function DeviceFramesCard() {
             {/* Screen Inner (Portrait 19.5:9 Authentic iOS App Store) */}
             <div className="w-full h-full rounded-[38px] overflow-hidden pt-1.5 px-3 pb-3 bg-black text-white flex flex-col justify-between">
               {/* iOS Status Bar with Pure Black Dynamic Island */}
-              <div className="w-full h-6 px-1 flex items-center justify-between select-none shrink-0 text-white z-20">
+              <div className="w-full h-6 px-1 mb-2 sm:mb-2.5 flex items-center justify-between select-none shrink-0 text-white z-20">
                 {/* Left: Current Local Time */}
                 <div className="w-11 text-left pl-0.5">
                   <span className="text-[10px] font-semibold tracking-tight text-white font-sans">
@@ -186,7 +262,7 @@ function DeviceFramesCard() {
                   <div className="mt-1">
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-normal text-[9.5px] tracking-wide shadow-sm transition-all cursor-pointer"
+                      className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
                     >
                       GET
                     </button>
@@ -444,39 +520,8 @@ function DeviceFramesCard() {
               : "opacity-0 scale-[0.88] -translate-y-3 pointer-events-none"
           }`}
         >
-          <div className="relative w-[285px] sm:w-[315px] h-[392px] sm:h-[412px] rounded-[32px] p-[6px] border border-[#3e4046] bg-[#25262a] shadow-[0_12px_32px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300">
-            {/* Top Power Button */}
-            <div className="absolute -top-[4px] right-[30px] w-[26px] h-[3px] rounded-t-sm bg-[#363840]" />
-            {/* Right Volume Buttons */}
-            <div className="absolute -right-[4px] top-[32px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
-            <div className="absolute -right-[4px] top-[52px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
-
-            {/* Screen Inner (Portrait iPad) */}
-            <div className="w-full h-full rounded-[26px] pt-1.5 px-3 pb-3 sm:px-3.5 sm:pb-3.5 bg-black text-white flex flex-col justify-between">
-              {/* iPad Top Status Bar */}
-              <div className="w-full h-4 px-1 flex items-center justify-between select-none shrink-0 text-white z-20">
-                <span className="text-[9.5px] font-semibold text-white tracking-tight">
-                  {timeString}
-                </span>
-                <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                <div className="flex items-center gap-1.5 text-white">
-                  {/* Wi-Fi Icon */}
-                  <svg className="w-2.5 h-2 text-white" viewBox="0 0 16 12" fill="currentColor">
-                    <path d="M8 9.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" />
-                    <path d="M4.5 7.5a5 5 0 0 1 7 0 .8.8 0 0 1-1.1 1.1 3.4 3.4 0 0 0-4.8 0 .8.8 0 1 1-1.1-1.1z" />
-                    <path d="M2 4.5a8.5 8.5 0 0 1 12 0 .8.8 0 0 1-1.1 1.1 6.9 6.9 0 0 0-9.8 0 .8.8 0 1 1-1.1-1.1z" />
-                  </svg>
-                  {/* Battery */}
-                  <div className="flex items-center">
-                    <div className="w-3.5 h-2 rounded-[2px] border border-white p-[0.8px] flex items-center">
-                      <div className="w-full h-full rounded-[0.8px] bg-white" />
-                    </div>
-                    <div className="w-[0.8px] h-1 rounded-r-[0.5px] bg-white ml-[0.5px]" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
+          <IPadMockupFrame timeString={timeString}>
+            {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
               <div className="flex items-start gap-3 mt-0.5">
                 <div className="shrink-0 rounded-[13px] shadow-sm overflow-hidden">
                   <BrandIcon
@@ -495,7 +540,7 @@ function DeviceFramesCard() {
                   <div className="mt-1">
                     <button
                       type="button"
-                      className="px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-normal text-[9.5px] tracking-wide shadow-sm transition-colors cursor-pointer"
+                      className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
                     >
                       GET
                     </button>
@@ -740,10 +785,7 @@ function DeviceFramesCard() {
                 </div>
               </div>
 
-              {/* Tablet Home Bar */}
-              <div className="w-24 h-1 rounded-full mx-auto mt-1.5 bg-white/30 shrink-0" />
-            </div>
-          </div>
+          </IPadMockupFrame>
         </div>
       </div>
       </div>
@@ -765,7 +807,7 @@ function StorePresetsCard() {
       rating: "4.8 ★",
       ratingCount: "145K Ratings",
       age: "12+",
-      developer: "OmniArcade Games Ltd.",
+      developer: "Kai DevLabs",
       gradient: "from-[#05050b] via-[#1e0b2e] to-[#7928ca]",
       icon: (
         <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
@@ -801,7 +843,7 @@ function StorePresetsCard() {
       rating: "4.9 ★",
       ratingCount: "82K Ratings",
       age: "4+",
-      developer: "ZenMind Studio",
+      developer: "Kai DevLabs",
       gradient: "from-[#05140e] via-[#0c2319] to-[#059669]",
       icon: (
         <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
@@ -841,7 +883,7 @@ function StorePresetsCard() {
       rating: "4.9 ★",
       ratingCount: "24.6K Ratings",
       age: "4+",
-      developer: "PulseFit Health Lab",
+      developer: "Kai DevLabs",
       gradient: "from-[#ff6b35] via-[#ea580c] to-[#ffc107]",
       icon: (
         <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
@@ -926,8 +968,7 @@ function StorePresetsCard() {
         className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none"
         style={{ perspective: "1200px" }}
       >
-        <div
-          className="relative w-[285px] sm:w-[315px] h-[392px] sm:h-[412px] rounded-[32px] p-[6px] border border-[#3e4046] bg-[#25262a] shadow-[0_12px_32px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)]"
+        <IPadMockupFrame
           style={{
             transform: isFlipping ? "rotateY(90deg) scale(0.93)" : "rotateY(0deg) scale(1)",
             transformStyle: "preserve-3d",
@@ -938,20 +979,7 @@ function StorePresetsCard() {
             willChange: "transform, opacity",
           }}
         >
-          {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}
-          {/* Top: Power / Sleep Button */}
-          <div className="absolute -top-[4px] right-[30px] w-[26px] h-[3px] rounded-t-sm bg-[#363840]" />
-          {/* Right: Volume Up */}
-          <div className="absolute -right-[4px] top-[32px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
-          {/* Right: Volume Down */}
-          <div className="absolute -right-[4px] top-[52px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
-
-          {/* Screen Inner (Portrait iPad) */}
-          <div className="w-full h-full rounded-[26px] p-3 sm:p-3.5 bg-black text-white flex flex-col justify-between">
-            {/* Front Camera Dot */}
-            <div className="w-1.5 h-1.5 rounded-full bg-white/20 mx-auto shrink-0" />
-
-            {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
+          {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
             <div className="flex items-start gap-3 mt-0.5">
               <div className="w-[46px] h-[46px] shrink-0 rounded-[12px] shadow-md overflow-hidden border border-white/10 transition-all duration-300">
                 {current.icon}
@@ -966,7 +994,7 @@ function StorePresetsCard() {
                 <div className="mt-1">
                   <button
                     type="button"
-                    className="px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-normal text-[9.5px] tracking-wide shadow-sm transition-colors cursor-pointer"
+                    className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
                   >
                     GET
                   </button>
@@ -1500,10 +1528,7 @@ function StorePresetsCard() {
               )}
             </div>
 
-              {/* Tablet Home Bar */}
-              <div className="w-24 h-1 rounded-full mx-auto mt-1.5 bg-white/30 shrink-0" />
-            </div>
-          </div>
+          </IPadMockupFrame>
         </div>
       </div>
     );

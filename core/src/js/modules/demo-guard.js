@@ -70,6 +70,16 @@ const DEMO_PAYWALL_CONFIGS = {
     desc: 'Upload, inspect, and validate 1024×500 px promotional graphics required for Google Play store featuring, promo video banners, and Google Ads.',
     mainFeature: '1024×500 px Feature Graphic validator and real-time live preview'
   },
+  'upload-icon': {
+    title: 'Unlock Custom App Icon Upload',
+    desc: 'Upload, validate, and inspect your master 1024×1024 or 512×512 app icons with automated transparency audits, squircle masks, and retina previews.',
+    mainFeature: 'Master App Icon uploader & store pre-flight compliance audit'
+  },
+  'edit-metadata': {
+    title: 'Unlock Custom Metadata Editing',
+    desc: 'Customize your App Name, Subtitles, Developer info, What\'s New notes, and Full Descriptions with real-time character limit audits in Full Studio.',
+    mainFeature: 'Full store listing metadata editor & character validation'
+  },
   'default': {
     title: 'Unlock Full Studio',
     desc: 'A standalone workspace to design, preview, and export store-ready listings.',
@@ -129,6 +139,14 @@ const MINI_STUDIO_TOAST_MAP = {
   'feature-graphic': {
     title: 'Feature Graphic (1024×500)',
     desc: 'Upload and inspect Google Play promotional graphics required for store featuring.'
+  },
+  'upload-icon': {
+    title: 'Custom App Icon Upload',
+    desc: 'Upload your own master app icon with compliance audits in Plus & Pro Edition.'
+  },
+  'edit-metadata': {
+    title: 'Listing Metadata Editing',
+    desc: 'App Name, Subtitle, Developer & Descriptions are editable in Plus & Pro Edition.'
   },
   'default': {
     title: 'Exclusive Feature',
@@ -689,6 +707,87 @@ function initDemoGuard() {
         });
       }
     });
+
+    // 6. Gated Metadata Input Fields (Disable inputs & intercept clicks without spamming Buy badges)
+    const lockedFieldIds = ['f-name', 'f-sub', 'f-dev', 'f-short', 'f-promo', 'f-new', 'f-desc'];
+    lockedFieldIds.forEach(id => {
+      const el = $(id);
+      if (el) {
+        el.disabled = true;
+        el.classList.add('demo-disabled-input');
+        el.setAttribute('title', 'Editable in Plus & Pro Edition');
+        
+        const fg = el.closest('.fg');
+        if (fg) {
+          fg.style.cursor = 'pointer';
+          fg.addEventListener('click', e => {
+            // Allow info tip buttons inside the label row to open their guidelines
+            if (e.target.closest('.info-tip-btn, .tag')) return;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            requireFullVersion('edit-metadata');
+          }, true);
+        }
+      }
+    });
+
+    // 7. Gated App Icon Upload (Disable upload button & intercept icon slot clicks)
+    const icoUpBtn = $('icoUp');
+    if (icoUpBtn) {
+      icoUpBtn.disabled = true;
+      icoUpBtn.classList.add('disabled', 'demo-disabled-btn');
+      icoUpBtn.setAttribute('title', 'Custom app icon upload is included in Plus & Pro Edition');
+      const icoUpParent = icoUpBtn.parentElement;
+      if (icoUpParent) {
+        icoUpParent.addEventListener('click', e => {
+          if (e.target.closest('#icoInspect, .info-tip-btn')) return;
+          if (e.target.closest('#icoUp')) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            requireFullVersion('upload-icon');
+          }
+        }, true);
+      }
+    }
+
+    const icoDropZone = $('icoDropZone');
+    if (icoDropZone) {
+      icoDropZone.classList.add('demo-disabled-dropzone');
+      icoDropZone.setAttribute('title', 'Custom app icon upload is included in Plus & Pro Edition');
+      icoDropZone.addEventListener('click', e => {
+        if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        requireFullVersion('upload-icon');
+      }, true);
+
+      icoDropZone.addEventListener('dragover', e => {
+        const dt = e.dataTransfer;
+        if (dt && Array.from(dt.types || []).includes('Files')) {
+          e.preventDefault();
+        }
+      }, true);
+
+      icoDropZone.addEventListener('drop', e => {
+        const files = e.dataTransfer && e.dataTransfer.files;
+        if (files && files.length > 0) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          requireFullVersion('upload-icon');
+        }
+      }, true);
+    }
+
+    const icoFile = $('icoFile');
+    if (icoFile) {
+      icoFile.disabled = true;
+      icoFile.addEventListener('change', e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        icoFile.value = '';
+        requireFullVersion('upload-icon');
+      }, true);
+    }
   }
 }
 
