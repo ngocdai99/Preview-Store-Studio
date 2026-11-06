@@ -346,12 +346,13 @@ if($('optResetDefault')){
           idbDelete(STORAGE_KEY);
         }
         if(typeof resetStats === 'function') resetStats();
-        loadPreset('none');
-        CURRENT_PRESET_KEY = 'draft';
+        CURRENT_PRESET_KEY = 'studio';
+        CURRENT_ACTIVE_PRESET = 'studio';
+        loadPreset('studio');
         if(typeof updatePresetBanner === 'function') updatePresetBanner();
         if(typeof updateDraftPill === 'function') updateDraftPill();
         if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
-        showToast('Draft cleared and reset.', 'ok');
+        showToast('Reset to original Studio preset.', 'ok');
       }
     }, 'Reset App Draft?', 'This will clear your customized app icon, name, and descriptions. Your current draft cannot be recovered.', 'Reset', () => {
       if(typeof exportJSON === 'function') exportJSON();

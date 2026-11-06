@@ -119,12 +119,18 @@ if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
 
 if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
   try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
-  CURRENT_PRESET_KEY = 'draft';
-  loadPreset('none');
-  IS_CUSTOM_ICON = false;
-  if(typeof userDraft !== 'undefined' && userDraft){
-    userDraft.isCustomIcon = false;
-    userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+  isPresetModified = false;
+  userDraft = null;
+  CURRENT_PRESET_KEY = 'studio';
+  CURRENT_ACTIVE_PRESET = 'studio';
+  restoring = true;
+  try{
+    loadPreset('studio');
+    if(typeof toggleDualPhone === 'function'){
+      toggleDualPhone(true);
+    }
+  }finally{
+    restoring = false;
   }
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
   CURRENT_PRESET_KEY = 'draft';

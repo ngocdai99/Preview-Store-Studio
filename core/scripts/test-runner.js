@@ -4486,6 +4486,10 @@ assert(jsonExportJsSrc60.includes('reader.onerror'), 'json.js handles FileReader
 assert(jsonExportJsSrc60.includes('(TABS.tab7 || []).map'), 'json.js safely maps tab7Shots without producing undefined elements');
 assert(pngExportJsSrc60.includes("$$('.menu').forEach(m => m.classList.remove('show'))"), 'png.js dismisses export dropdown menu when opening modal');
 assert(storageJsSrc60.includes('exportJSON()'), 'storage.js provides JSON backup callback in reset confirmation dialog');
+assert(!storageJsSrc60.includes("'Blank Template'"), 'storage.js never generates non-existent Blank Template pill');
+assert(storageJsSrc60.includes("loadPreset('studio')"), 'storage.js resets to original Studio preset');
+const mainJsSrc60 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'main.js'), 'utf8');
+assert(mainJsSrc60.includes("sessionStorage.getItem('sps_reset_to_blank')") && mainJsSrc60.includes("loadPreset('studio')"), 'main.js boots directly into Studio preset on factory reset');
 assert(dropdownHtmlSrc60.includes('accept=".json,application/json"'), 'export-dropdown.html accepts both .json extension and application/json MIME');
 
 // ---------------------------------------------------------------------

@@ -474,16 +474,16 @@ function updateDraftPill(){
   const hasDraft = hasUserDraft();
 
   const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft');
-  const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' ? CURRENT_ACTIVE_PRESET : null);
+  const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none') ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' && CURRENT_ACTIVE_PRESET !== 'none' ? CURRENT_ACTIVE_PRESET : null);
 
   if(presetPill){
-    if(!activePresetKey){
+    if(!activePresetKey || activePresetKey === 'none'){
       presetPill.style.display = 'none';
       presetPill.classList.remove('on');
     } else {
       const p = (typeof PRESETS !== 'undefined') ? PRESETS[activePresetKey] : null;
       const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activePresetKey]) ? PRESET_ICONS[activePresetKey] : (p ? p.icon : BLANK_ICON);
-      const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey === 'none' ? 'Blank Template' : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1))));
+      const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1)));
       const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
 
       presetPill.style.display = 'inline-flex';
@@ -744,11 +744,16 @@ async function resetFactoryStorage(){
   try{ if(typeof localStorage !== 'undefined') localStorage.clear(); }catch(_){}
   try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
 
-  // Mark sessionStorage so after reload it boots into clean draft with dashed placeholder app icon
+  // Mark sessionStorage so after reload it boots into original Studio preset
   try{ if(typeof sessionStorage !== 'undefined') sessionStorage.setItem('sps_reset_to_blank', '1'); }catch(_){}
 
-  // In-memory reset to default dual phone + detail view
+  // In-memory reset to default Studio preset + dual phone + detail view
   try{
+    isPresetModified = false;
+    userDraft = null;
+    CURRENT_PRESET_KEY = 'studio';
+    CURRENT_ACTIVE_PRESET = 'studio';
+    if(typeof loadPreset === 'function') loadPreset('studio');
     document.body.dataset.dual = 'true';
     appleDevice = 'dual';
     googleDevice = 'dual';

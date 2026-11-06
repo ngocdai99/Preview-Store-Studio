@@ -13686,8 +13686,13 @@ CURRENT_ACTIVE_PRESET = null;
 if(CURRENT_PRESET_KEY !== 'draft'){
 if(typeof hasUserDraft === 'function' && hasUserDraft()){
 loadPreset('draft');
+CURRENT_ACTIVE_PRESET = null;
 } else {
 loadPreset('none');
+CURRENT_ACTIVE_PRESET = null;
+if(typeof updateDraftPill === 'function') updateDraftPill();
+if(typeof updatePresetBanner === 'function') updatePresetBanner();
+if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
 }
 } else {
 if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -14122,15 +14127,15 @@ const draftPill = $('btnDraft');
 const presetPill = $('btnPresetPill');
 const hasDraft = hasUserDraft();
 const isViewingPreset = (CURRENT_PRESET_KEY !== 'draft');
-const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY) ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' ? CURRENT_ACTIVE_PRESET : null);
+const activePresetKey = (CURRENT_PRESET_KEY !== 'draft' && CURRENT_PRESET_KEY && CURRENT_PRESET_KEY !== 'none') ? CURRENT_PRESET_KEY : (typeof CURRENT_ACTIVE_PRESET !== 'undefined' && CURRENT_ACTIVE_PRESET && CURRENT_ACTIVE_PRESET !== 'draft' && CURRENT_ACTIVE_PRESET !== 'none' ? CURRENT_ACTIVE_PRESET : null);
 if(presetPill){
-if(!activePresetKey){
+if(!activePresetKey || activePresetKey === 'none'){
 presetPill.style.display = 'none';
 presetPill.classList.remove('on');
 } else {
 const p = (typeof PRESETS !== 'undefined') ? PRESETS[activePresetKey] : null;
 const pIcon = (typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[activePresetKey]) ? PRESET_ICONS[activePresetKey] : (p ? p.icon : BLANK_ICON);
-const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey === 'none' ? 'Blank Template' : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1))));
+const pName = p ? p.name : (activePresetKey === 'imported' ? (($('f-name') && $('f-name').value.trim()) || 'Imported App') : (activePresetKey.charAt(0).toUpperCase() + activePresetKey.slice(1)));
 const dispName = typeof clampGraphemes === 'function' ? clampGraphemes(pName, 26) : pName;
 presetPill.style.display = 'inline-flex';
 presetPill.classList.toggle('on', isViewingPreset);
@@ -14347,6 +14352,11 @@ try{ if(typeof localStorage !== 'undefined') localStorage.clear(); }catch(_){}
 try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
 try{ if(typeof sessionStorage !== 'undefined') sessionStorage.setItem('sps_reset_to_blank', '1'); }catch(_){}
 try{
+isPresetModified = false;
+userDraft = null;
+CURRENT_PRESET_KEY = 'studio';
+CURRENT_ACTIVE_PRESET = 'studio';
+if(typeof loadPreset === 'function') loadPreset('studio');
 document.body.dataset.dual = 'true';
 appleDevice = 'dual';
 googleDevice = 'dual';
@@ -14476,12 +14486,13 @@ idbDelete(DRAFT_STORAGE_KEY);
 idbDelete(STORAGE_KEY);
 }
 if(typeof resetStats === 'function') resetStats();
-loadPreset('none');
-CURRENT_PRESET_KEY = 'draft';
+CURRENT_PRESET_KEY = 'studio';
+CURRENT_ACTIVE_PRESET = 'studio';
+loadPreset('studio');
 if(typeof updatePresetBanner === 'function') updatePresetBanner();
 if(typeof updateDraftPill === 'function') updateDraftPill();
 if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
-showToast('Draft cleared and reset.', 'ok');
+showToast('Reset to original Studio preset.', 'ok');
 }
 }, 'Reset App Draft?', 'This will clear your customized app icon, name, and descriptions. Your current draft cannot be recovered.', 'Reset', () => {
 if(typeof exportJSON === 'function') exportJSON();
@@ -16538,12 +16549,18 @@ $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== sto
 if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
 if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
 try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
-CURRENT_PRESET_KEY = 'draft';
-loadPreset('none');
-IS_CUSTOM_ICON = false;
-if(typeof userDraft !== 'undefined' && userDraft){
-userDraft.isCustomIcon = false;
-userDraft.icon = (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+isPresetModified = false;
+userDraft = null;
+CURRENT_PRESET_KEY = 'studio';
+CURRENT_ACTIVE_PRESET = 'studio';
+restoring = true;
+try{
+loadPreset('studio');
+if(typeof toggleDualPhone === 'function'){
+toggleDualPhone(true);
+}
+}finally{
+restoring = false;
 }
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
 CURRENT_PRESET_KEY = 'draft';

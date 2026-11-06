@@ -394,8 +394,13 @@ function closePresetPill(){
   if(CURRENT_PRESET_KEY !== 'draft'){
     if(typeof hasUserDraft === 'function' && hasUserDraft()){
       loadPreset('draft');
+      CURRENT_ACTIVE_PRESET = null;
     } else {
       loadPreset('none');
+      CURRENT_ACTIVE_PRESET = null;
+      if(typeof updateDraftPill === 'function') updateDraftPill();
+      if(typeof updatePresetBanner === 'function') updatePresetBanner();
+      if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
     }
   } else {
     if(typeof updateDraftPill === 'function') updateDraftPill();
