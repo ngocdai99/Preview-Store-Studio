@@ -1573,7 +1573,7 @@ function ComplianceCard() {
             ariaLabel="Asset inspection tabs"
             options={[
               { value: "transparency", label: "Icon Background" },
-              { value: "resolution", label: "Resolution & Size" },
+              { value: "resolution", label: "Resolution" },
               { value: "ratio", label: "Aspect Ratio" },
             ]}
           />
@@ -1719,7 +1719,7 @@ function ComplianceCard() {
                   <div className="text-[12px] font-medium text-slate-900 dark:text-white">
                     {resolutionMode === "1024" ? (
                       <span className="text-emerald-500">
-                        Resolution &amp; File Size Verified
+                        Resolution Verified
                       </span>
                     ) : (
                       <span className="text-amber-500">
