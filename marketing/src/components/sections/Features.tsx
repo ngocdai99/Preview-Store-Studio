@@ -243,9 +243,22 @@ function DeviceFramesCard() {
 // CARD 2: CURATED STORE PRESETS (Interactive Core Presets Stage)
 // ============================================================================
 function StorePresetsCard() {
-  const [activePreset, setActivePreset] = useState<"taskflow" | "pulsefit" | "zenmind">("taskflow");
+  const [activePreset, setActivePreset] = useState<"zenmind" | "taskflow" | "pulsefit">("zenmind");
+  const [flipDegree, setFlipDegree] = useState(0);
+  const [isFlipping, setIsFlipping] = useState(false);
 
   const presets = {
+    zenmind: {
+      name: "ZenMind: Sleep & Calm",
+      subtitle: "Guided breathwork & sound",
+      category: "Wellness",
+      rating: "4.9 ★",
+      ratingCount: "82K Ratings",
+      age: "4+",
+      developer: "ZenMind Studio",
+      gradient: "from-purple-500 to-rose-500",
+      letter: "Z",
+    },
     taskflow: {
       name: "TaskFlow: Habit Planner",
       subtitle: "Build habits & boost focus",
@@ -268,17 +281,21 @@ function StorePresetsCard() {
       gradient: "from-emerald-500 to-teal-600",
       letter: "P",
     },
-    zenmind: {
-      name: "ZenMind: Sleep & Calm",
-      subtitle: "Guided breathwork & sound",
-      category: "Wellness",
-      rating: "4.9 ★",
-      ratingCount: "82K Ratings",
-      age: "4+",
-      developer: "ZenMind Studio",
-      gradient: "from-purple-500 to-rose-500",
-      letter: "Z",
-    },
+  };
+
+  const handleSelectPreset = (key: "zenmind" | "taskflow" | "pulsefit") => {
+    if (key === activePreset) return;
+    setFlipDegree((prev) => prev + 360);
+    setIsFlipping(true);
+
+    // Halfway through the 360-degree rotation (260ms), update the preset data
+    setTimeout(() => {
+      setActivePreset(key);
+    }, 260);
+
+    setTimeout(() => {
+      setIsFlipping(false);
+    }, 550);
   };
 
   const current = presets[activePreset];
@@ -304,20 +321,20 @@ function StorePresetsCard() {
 
         {/* 3 Preset Switcher Buttons */}
         <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#141514] border border-slate-200/90 dark:border-[#282928] shadow-sm shrink-0 self-start sm:self-center">
-          {(["taskflow", "pulsefit", "zenmind"] as const).map((key) => {
+          {(["zenmind", "taskflow", "pulsefit"] as const).map((key) => {
             const isActive = activePreset === key;
             return (
               <button
                 key={key}
                 type="button"
-                onClick={() => setActivePreset(key)}
+                onClick={() => handleSelectPreset(key)}
                 className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all duration-150 cursor-pointer ${
                   isActive
                     ? "bg-[var(--btn-white-bg,#EFF1F0)] text-[var(--btn-white-text,#252625)] shadow-sm font-bold"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/[0.06]"
                 }`}
               >
-                {key === "taskflow" ? "TaskFlow" : key === "pulsefit" ? "PulseFit" : "ZenMind"}
+                {key === "zenmind" ? "ZenMind" : key === "taskflow" ? "TaskFlow" : "PulseFit"}
               </button>
             );
           })}
@@ -329,8 +346,19 @@ function StorePresetsCard() {
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute w-[360px] h-[360px] rounded-full bg-amber-500/10 blur-[80px] pointer-events-none" />
 
-        <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-4">
-          <div className="relative w-[265px] sm:w-[285px] rounded-[48px] p-[8px] border border-[#363840] bg-[#1e1f23] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),inset_0_1px_1px_rgba(255,255,255,0.18)] transition-all duration-300">
+        <div
+          className="relative w-full h-full flex items-center justify-center p-3 sm:p-4"
+          style={{ perspective: "1200px" }}
+        >
+          <div
+            className="relative w-[265px] sm:w-[285px] rounded-[48px] p-[8px] border border-[#363840] bg-[#1e1f23] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),inset_0_1px_1px_rgba(255,255,255,0.18)]"
+            style={{
+              transform: `rotateY(${flipDegree}deg) scale(${isFlipping ? 0.92 : 1})`,
+              transformStyle: "preserve-3d",
+              transition: "transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1)",
+              willChange: "transform",
+            }}
+          >
             {/* Outer Physical Hardware Buttons */}
             <div className="absolute -left-[4px] top-[60px] w-[3px] h-[16px] rounded-l-sm bg-[#363840]" />
             <div className="absolute -left-[4px] top-[84px] w-[3px] h-[30px] rounded-l-sm bg-[#363840]" />

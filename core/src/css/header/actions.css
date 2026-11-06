@@ -164,7 +164,7 @@
   background: #242624;
   border-color: rgba(255, 255, 255, 0.18);
   color: #ffffff;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: none !important;
   transform: none !important;
 }
 
@@ -187,7 +187,7 @@
   background: #f8fafc;
   border-color: rgba(0, 0, 0, 0.2);
   color: #0f172a;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: none !important;
   transform: none !important;
 }
 
@@ -245,6 +245,7 @@
   background: #222322;
   border-color: #383A38;
   color: #ffffff;
+  box-shadow: none !important;
 }
 
 .ms-pill.custom.has-draft {
@@ -279,6 +280,7 @@
   background: #222322;
   border-color: #383A38;
   color: #ffffff;
+  box-shadow: none !important;
 }
 
 /* Selected State: White Button (Matches Marketing White Button Tokens) */
@@ -302,6 +304,7 @@
   background: #E1E3E2 !important;
   color: #252625 !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: none !important;
 }
 
 .ms-pill.custom.on:active,
@@ -315,6 +318,11 @@
 #btnPresetPill {
   position: relative;
   overflow: hidden;
+}
+
+#btnDraft:hover,
+#btnPresetPill:hover {
+  box-shadow: none !important;
 }
 
 #btnDraft::before,
@@ -489,7 +497,7 @@
   background: #ffffff;
   border-color: rgba(15, 23, 42, 0.16);
   color: #0f172a;
-  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: none !important;
 }
 
 :root[data-ui=light] .ms-pill.custom.on,
@@ -513,7 +521,7 @@
   background: #ffffff !important;
   border-color: rgba(0, 208, 133, 0.75) !important;
   color: #000000 !important;
-  box-shadow: 0 3px 12px rgba(0, 208, 133, 0.22), 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+  box-shadow: none !important;
 }
 
 :root[data-ui=light] .ms-pill.custom small,
@@ -569,7 +577,7 @@
 
 :root[data-ui=light] #btnPresetPill.on:hover {
   border-color: rgba(168, 85, 247, 0.7) !important;
-  box-shadow: 0 3px 12px rgba(168, 85, 247, 0.22), 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+  box-shadow: none !important;
 }
 
 :root[data-ui=light] #btnPresetPill.on small {
