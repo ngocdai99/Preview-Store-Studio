@@ -57,7 +57,7 @@ export function ExportCard() {
           </h3>
         </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Export transparent 3x Retina PNG mockups, developer markdown (LISTING_METADATA.md), or full project backups (.json).
+          Export 3x Retina PNG mockups, listing metadata, full project backups,...
         </p>
 
         {/* Tab Switcher with Sliding Pill */}
