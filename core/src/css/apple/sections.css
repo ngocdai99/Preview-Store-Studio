@@ -283,13 +283,26 @@
   text-overflow: ellipsis;
   flex: 1;
   min-width: 0;
+  line-height: 1;
 }
 
 .sr-dev-icon {
   width: 13px;
   height: 13px;
   flex-shrink: 0;
+  color: var(--s);
   stroke: var(--s);
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -0.5px;
+}
+
+.sr-dev [data-b="dev"] {
+  line-height: 1;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Search Screenshots */

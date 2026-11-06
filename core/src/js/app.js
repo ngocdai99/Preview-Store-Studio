@@ -8655,7 +8655,9 @@ function update(){
   const emailVal = ($('f-email') && $('f-email').value.trim()) || 'support@domain.com';
   const phoneVal = ($('f-phone') && $('f-phone').value.trim()) || '+1 800-555-0199';
   const addrVal = ($('f-addr') && $('f-addr').value.trim()) || 'Vietnam';
-  $$('[data-b="dev"]').forEach(e=>e.textContent=devVal);
+  const srDevVal = devVal.length > 20 ? devVal.slice(0, 20).trimEnd() + ' ...' : devVal;
+  $$('.sr-dev [data-b="dev"]').forEach(e=>e.textContent=srDevVal);
+  $$('[data-b="dev"]:not(.sr-dev [data-b="dev"])').forEach(e=>e.textContent=devVal);
   $$('[data-b="cat"]').forEach(e=>{
     const isGoogle = !!e.closest('.dev.google, .dev.gtab');
     e.textContent = (isGoogle ? googleCatVal : appleCatVal) || catVal;
