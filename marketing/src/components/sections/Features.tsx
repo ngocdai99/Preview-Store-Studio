@@ -1545,7 +1545,7 @@ function ComplianceCard() {
   const [tab, setTab] = useState<"transparency" | "ratio" | "resolution">("transparency");
   const [alphaMode, setAlphaMode] = useState<"solid" | "alpha">("solid");
   const [ratioMode, setRatioMode] = useState<"square" | "distorted">("square");
-  const [resolutionMode, setResolutionMode] = useState<"1024" | "512">("1024");
+  const [resolutionMode, setResolutionMode] = useState<"1024" | "lowres">("1024");
 
   return (
     <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
@@ -1624,12 +1624,12 @@ function ComplianceCard() {
                   className={`w-11 h-11 rounded-xl border flex items-center justify-center font-black text-lg transition-all duration-300 shrink-0 ${
                     alphaMode === "solid"
                       ? "bg-[#0b0c0e] border-emerald-500/50"
-                      : "bg-[#121312] dark:bg-[#141514] [background-image:radial-gradient(circle,rgba(255,255,255,0.15)_1.2px,transparent_1.2px)] [background-size:8px_8px] border-amber-500/40"
+                      : "bg-[#121312] dark:bg-[#141514] [background-image:radial-gradient(circle,rgba(255,255,255,0.15)_1.2px,transparent_1.2px)] [background-size:8px_8px] border-rose-500/40"
                   }`}
                 >
                   <span
                     className={`text-base select-none ${
-                      alphaMode === "solid" ? "text-emerald-400" : "text-amber-400"
+                      alphaMode === "solid" ? "text-emerald-400" : "text-rose-400"
                     }`}
                   >
                     ★
@@ -1643,12 +1643,18 @@ function ComplianceCard() {
                         <Check className="w-3.5 h-3.5" /> Solid Background Verified
                       </span>
                     ) : (
-                      <span className="text-amber-500 flex items-center gap-1">
+                      <span className="text-rose-500 flex items-center gap-1">
                         <AlertTriangle className="w-3.5 h-3.5" /> Transparent Background Detected
                       </span>
                     )}
                   </div>
-                  <div className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                  <div
+                    className={`text-[10.5px] mt-0.5 truncate ${
+                      alphaMode === "solid"
+                        ? "text-slate-500 dark:text-slate-400"
+                        : "text-rose-500/90 dark:text-rose-400"
+                    }`}
+                  >
                     {alphaMode === "solid"
                       ? "100% opaque background · Complies with store guidelines"
                       : "Alpha channel detected · Stores require opaque icons"}
@@ -1700,7 +1706,7 @@ function ComplianceCard() {
                   className={`h-11 rounded-xl border flex items-center justify-center font-mono text-[11px] font-bold transition-all duration-300 shrink-0 ${
                     ratioMode === "square"
                       ? "w-11 bg-[#0b0c0e] border-emerald-500/50 text-emerald-400"
-                      : "w-14 bg-[#181510] border-amber-500/40 text-amber-400"
+                      : "w-14 bg-[#181510] border-rose-500/40 text-rose-400"
                   }`}
                 >
                   {ratioMode === "square" ? "1:1" : "4:3"}
@@ -1713,12 +1719,18 @@ function ComplianceCard() {
                         <Check className="w-3.5 h-3.5" /> Perfect 1:1 Square Ratio
                       </span>
                     ) : (
-                      <span className="text-amber-500 flex items-center gap-1">
+                      <span className="text-rose-500 flex items-center gap-1">
                         <AlertTriangle className="w-3.5 h-3.5" /> Non-Square Ratio Detected
                       </span>
                     )}
                   </div>
-                  <div className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                  <div
+                    className={`text-[10.5px] mt-0.5 truncate ${
+                      ratioMode === "square"
+                        ? "text-slate-500 dark:text-slate-400"
+                        : "text-rose-500/90 dark:text-rose-400"
+                    }`}
+                  >
                     {ratioMode === "square"
                       ? "Width and height are identical (1.00) · No image distortion"
                       : "Aspect ratio is 1.33:1 · Required: 1:1 square"}
@@ -1742,42 +1754,62 @@ function ComplianceCard() {
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    iOS
+                    1024 × 1024 px
                   </button>
                   <button
                     type="button"
-                    onClick={() => setResolutionMode("512")}
+                    onClick={() => setResolutionMode("lowres")}
                     className={`px-2.5 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      resolutionMode === "512"
+                      resolutionMode === "lowres"
                         ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    Android
+                    Low-Res (256 × 256)
                   </button>
                 </div>
 
-                <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
-                  {resolutionMode === "1024" ? "1024 PX" : "512 PX"}
-                </span>
+                {resolutionMode === "1024" && (
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
+                    1024 PX
+                  </span>
+                )}
               </div>
 
               {/* Simulated Icon & Dimension Readout */}
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl border border-emerald-500/50 bg-[#0b0c0e] flex items-center justify-center font-mono text-[10px] font-bold text-emerald-400 shrink-0">
-                  {resolutionMode === "1024" ? "1024" : "512"}
+                <div
+                  className={`w-11 h-11 rounded-xl border flex items-center justify-center font-mono text-[10px] font-bold transition-all duration-300 shrink-0 ${
+                    resolutionMode === "1024"
+                      ? "border-emerald-500/50 bg-[#0b0c0e] text-emerald-400"
+                      : "border-rose-500/40 bg-[#181510] text-rose-400"
+                  }`}
+                >
+                  {resolutionMode === "1024" ? "1024" : "256"}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span className="text-emerald-500 flex items-center gap-1">
-                      <Check className="w-3.5 h-3.5" /> Resolution &amp; File Size Verified
-                    </span>
+                    {resolutionMode === "1024" ? (
+                      <span className="text-emerald-500 flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> Resolution &amp; File Size Verified
+                      </span>
+                    ) : (
+                      <span className="text-rose-500 flex items-center gap-1">
+                        <AlertTriangle className="w-3.5 h-3.5" /> Low Resolution Detected
+                      </span>
+                    )}
                   </div>
-                  <div className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                  <div
+                    className={`text-[10.5px] mt-0.5 truncate ${
+                      resolutionMode === "1024"
+                        ? "text-slate-500 dark:text-slate-400"
+                        : "text-rose-500/90 dark:text-rose-400"
+                    }`}
+                  >
                     {resolutionMode === "1024"
                       ? "1024 × 1024 px · 380 KB (Store limit: Max 1024 KB)"
-                      : "512 × 512 px · 190 KB (Store limit: Max 1024 KB)"}
+                      : "256 × 256 px · Required: 1024 × 1024 px master icon"}
                   </div>
                 </div>
               </div>
