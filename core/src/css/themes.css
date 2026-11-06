@@ -565,7 +565,7 @@
 
 /* Category dropdowns (per store) */
 select.fsel{
-  width:100%;min-width:0;box-sizing:border-box;text-overflow:ellipsis;background-color:var(--card, #1D1E1D);border:1px solid var(--line);border-radius:11px;padding:9px 32px 9px 12px;color:#f8fafc;
+  width:100%;min-width:0;box-sizing:border-box;text-overflow:ellipsis;background-color:#171817;border:1px solid var(--line);border-radius:11px;padding:9px 32px 9px 12px;color:#f8fafc;
   font-family:inherit;font-size:13px;line-height:1.55;cursor:pointer;appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238593b2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
   background-repeat:no-repeat;background-position:right 12px center;transition:border-color .25s,background-color .25s;
@@ -573,13 +573,13 @@ select.fsel{
 }
 select.fsel:hover{
   border-color:rgba(255,255,255,0.16);
-  background-color:#242524;
+  background-color:#171817;
 }
 select.fsel:focus{
   outline:0;
   border-color:var(--ac);
   box-shadow:none !important;
-  background-color:var(--card, #1D1E1D);
+  background-color:#131413;
 }
 select.fsel option,select.fsel optgroup{background:#1D1E1D;color:#f8fafc}
 body[data-store=apple] #f-cat-google{display:none}
