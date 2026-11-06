@@ -1982,11 +1982,11 @@ function ExportCard() {
                 <button
                   type="button"
                   onClick={handleDownloadPng}
-                  className="btn-white w-full py-1.5 px-2 text-[11px]"
+                  className="btn-dark w-full py-1.5 px-2 text-[11px]"
                 >
                   {downloadedPng ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" /> Downloaded!
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Downloaded!
                     </>
                   ) : (
                     <>
@@ -2036,11 +2036,11 @@ function ExportCard() {
                 <button
                   type="button"
                   onClick={handleDownloadMd}
-                  className="btn-white w-full py-1.5 px-2 text-[11px]"
+                  className="btn-dark w-full py-1.5 px-2 text-[11px]"
                 >
                   {downloadedMd ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" /> Downloaded!
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Downloaded!
                     </>
                   ) : (
                     <>

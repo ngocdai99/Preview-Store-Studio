@@ -36,8 +36,8 @@ const DEMO_PAYWALL_CONFIGS = {
     mainFeature: 'Instant App Store cloning from any public URL or ID'
   },
   'upload-shots': {
-    title: 'Custom Screenshot Upload Limit',
-    desc: 'Demo mode allows uploading up to 2 custom screenshots for testing. Upgrade to Full Studio to upload up to 10 screenshots per device, iPad layouts, and persistent local storage.',
+    title: 'Unlock Custom Screenshot Uploads',
+    desc: 'Demo mode is for previewing curated presets and imported apps. Upgrade to Full Studio to upload custom screenshots, manage multi-device galleries, and export deliverables.',
     mainFeature: 'Full 10-screenshot gallery per device with offline persistence'
   },
   'phone-screenshots': {
@@ -118,8 +118,8 @@ const MINI_STUDIO_TOAST_MAP = {
     desc: 'Clone live Apple App Store listings by URL or ID in seconds.'
   },
   'upload-shots': {
-    title: 'Custom Upload Limit',
-    desc: 'Demo mode allows up to 2 custom screenshot uploads. Full Version supports up to 10 screenshots per device.'
+    title: 'Custom Screenshot Upload',
+    desc: 'Upload custom screenshots and manage multi-device galleries in Full Studio.'
   },
   'phone-screenshots': {
     title: 'Phone Screenshots Gallery',
@@ -604,37 +604,51 @@ function initDemoGuard() {
         headerRight.insertBefore(badge, headerRight.firstChild);
       }
 
-      // Intercept upload and add slot triggers when at limit
+      // Intercept upload and add slot triggers on Phone Screenshots card
       shotsCard.addEventListener('click', e => {
         if (e.target.closest('.card-header, .info-tip-btn, .shot-remove-btn, .shot-inspect-btn')) return;
         const addBtn = e.target.closest('#addShot');
         if (addBtn) {
-          const currentValid = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length : 0;
-          const currentCount = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.length : 0;
-          if (currentCount >= 2 || currentValid >= 2) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            const isImportedLargeGallery = currentCount > 2 || currentValid > 2;
-            requireFullVersion('upload-shots', {
-              toast: isImportedLargeGallery ? {
-                title: 'Screenshot Limit Reached',
-                desc: 'Demo mode previews imported apps. Upgrade to Full Studio to add or upload up to 10 screenshots.'
-              } : undefined
-            });
-            return;
-          }
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          requireFullVersion('upload-shots');
+          return;
         }
-        const isUploadTrigger = e.target.closest('.shot-upload-btn');
+        const isUploadTrigger = e.target.closest('.shot-upload-btn, .shot-thumb-wrap.is-placeholder');
         if (isUploadTrigger) {
-          const currentValid = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length : 0;
-          const currentCount = (typeof SHOTS !== 'undefined' && Array.isArray(SHOTS)) ? SHOTS.length : 0;
-          if (currentCount >= 2 && currentValid >= 2) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            requireFullVersion('upload-shots');
-          }
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          requireFullVersion('upload-shots');
+          return;
         }
       }, true);
+
+      // Intercept file drag-and-drop on Phone Screenshots card
+      shotsCard.addEventListener('dragover', e => {
+        const dt = e.dataTransfer;
+        if (dt && Array.from(dt.types || []).includes('Files')) {
+          e.preventDefault();
+        }
+      }, true);
+
+      shotsCard.addEventListener('drop', e => {
+        const files = e.dataTransfer && e.dataTransfer.files;
+        if (files && files.length > 0) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          requireFullVersion('upload-shots');
+        }
+      }, true);
+
+      // Intercept file input as failsafe
+      const shotFileInput = $('shotFile');
+      if (shotFileInput) {
+        shotFileInput.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          requireFullVersion('upload-shots');
+        }, true);
+      }
     }
 
     // Gated Editor Form Cards: Allow normal expand/collapse, but intercept and block uploads

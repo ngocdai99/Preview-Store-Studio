@@ -96,6 +96,10 @@ function renderShots(){
       ov.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
       thumbWrap.appendChild(ov);
       thumbWrap.onclick = () => {
+        if(typeof isDemoMode === 'function' && isDemoMode()){
+          if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+          return;
+        }
         if(typeof canUpload === 'function' && !canUpload(1000)) return;
         pick = i;
         const fi = $('shotFile');
@@ -151,7 +155,15 @@ function renderShots(){
     if(!hasImg){
       inspectBtn.classList.add('disabled');
     }
-    upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
+    upBtn.onclick = () => {
+      if(typeof isDemoMode === 'function' && isDemoMode()){
+        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+        return;
+      }
+      if(typeof canUpload === 'function' && !canUpload(1000)) return;
+      pick = i;
+      $('shotFile').click();
+    };
     if(hasImg){
       inspectBtn.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
@@ -553,13 +565,10 @@ if($('shotFile')){
       return;
     }
     if(typeof isDemoMode === 'function' && isDemoMode()){
-      const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
-      if(pick < 0 && (SHOTS.length >= 2 || currentValid >= 2)){
-        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
-        e.target.value = '';
-        return;
-      }
-      window._demoScreenshotUploadCount = Math.max(0, currentValid) + 1;
+      window._demoScreenshotUploadCount = 0;
+      if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+      e.target.value = '';
+      return;
     }
     if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'Phone screenshot')){
       e.target.value = '';
@@ -578,25 +587,14 @@ if($('shotFile')){
 
 if($('addShot')){
   $('addShot').onclick = () => {
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+      return;
+    }
     const maxAllowed = (typeof store !== 'undefined' && store === 'apple') ? 10 : 8;
     if((typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed){
       showToast(`${store === 'apple' ? 'App Store' : 'Google Play'} allows up to ${maxAllowed} screenshots`, 'warn');
       return;
-    }
-    if(typeof isDemoMode === 'function' && isDemoMode()){
-      const currentValid = SHOTS.filter(s => s && typeof s === 'string' && s.trim()).length;
-      if(SHOTS.length >= 2 || currentValid >= 2){
-        if(typeof requireFullVersion === 'function') {
-          const isImportedLargeGallery = SHOTS.length > 2 || currentValid > 2;
-          requireFullVersion('upload-shots', {
-            toast: isImportedLargeGallery ? {
-              title: 'Screenshot Limit Reached',
-              desc: 'Demo mode previews imported apps. Upgrade to Full Studio to add or upload up to 10 screenshots.'
-            } : undefined
-          });
-        }
-        return;
-      }
     }
     SHOTS.push('');
     renderShots();

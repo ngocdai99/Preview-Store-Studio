@@ -4686,7 +4686,11 @@ function renderShots(){
     if(!hasImg){
       inspectBtn.classList.add('disabled');
     }
-    upBtn.onclick = () => { if(typeof canUpload === 'function' && !canUpload(1000)) return; pick = i; $('shotFile').click(); };
+    upBtn.onclick = () => {
+      if(typeof canUpload === 'function' && !canUpload(1000)) return;
+      pick = i;
+      $('shotFile').click();
+    };
     if(hasImg){
       inspectBtn.onclick = () => {
         if(typeof openImageDetailModal === 'function'){

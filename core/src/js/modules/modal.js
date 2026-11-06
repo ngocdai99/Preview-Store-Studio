@@ -926,10 +926,27 @@
     const fileInput = $('msIconModalInput') || $('imageDetailModalInput');
     if (uploadBtn && fileInput) {
       uploadBtn.addEventListener('click', e => {
+        if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+          e.preventDefault();
+          e.stopPropagation();
+          if (typeof requireFullVersion === 'function') {
+            requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+          }
+          return;
+        }
         e.stopPropagation();
         fileInput.click();
       });
       fileInput.addEventListener('change', e => {
+        if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+          e.preventDefault();
+          e.stopPropagation();
+          e.target.value = '';
+          if (typeof requireFullVersion === 'function') {
+            requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+          }
+          return;
+        }
         if (e.target.files && e.target.files[0]) {
           handleFileReplacement(e.target.files[0]);
         }
@@ -946,6 +963,12 @@
       e.stopPropagation();
       if (artContainer) artContainer.classList.remove('drag-over');
       if (modalCanvas) modalCanvas.classList.remove('drag-over');
+      if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+        if (typeof requireFullVersion === 'function') {
+          requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+        }
+        return;
+      }
       const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
       if (file) {
         handleFileReplacement(file);

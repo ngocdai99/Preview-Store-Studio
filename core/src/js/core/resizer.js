@@ -145,17 +145,9 @@ if(slistArea){
         showToast(`Only ${room} more fit (max ${maxAllowed}) — extra files skipped`, 'warn');
       }
       if(typeof isDemoMode === 'function' && isDemoMode()){
-        const currentUploaded = (window._demoScreenshotUploadCount || 0);
-        if(currentUploaded >= 2){
-          if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
-          return;
-        }
-        const allowedCount = Math.min(validFiles.length, 2 - currentUploaded);
-        if(allowedCount < validFiles.length && typeof requireFullVersion === 'function'){
-          requireFullVersion('upload-shots');
-        }
-        validFiles = validFiles.slice(0, allowedCount);
-        window._demoScreenshotUploadCount = currentUploaded + allowedCount;
+        window._demoScreenshotUploadCount = 0;
+        if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+        return;
       }
       let loaded=0;
       validFiles.forEach(f=>{
