@@ -272,27 +272,27 @@ body.sps-demo-mode #menuExport .mi-ico svg {
 }
 
 body.sps-demo-mode #menuExport #optResetAllData .mi-ico {
-  background: rgba(244, 63, 94, 0.12) !important;
-  border-color: rgba(244, 63, 94, 0.25) !important;
-  color: #fb7185 !important;
+  background: rgba(56, 189, 248, 0.12) !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+  color: #38bdf8 !important;
 }
 
 body.sps-demo-mode #menuExport #optResetAllData:hover .mi-ico {
-  background: rgba(244, 63, 94, 0.22) !important;
-  border-color: rgba(244, 63, 94, 0.45) !important;
-  color: #fda4af !important;
+  background: rgba(56, 189, 248, 0.22) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  color: #7dd3fc !important;
 }
 
 :root[data-ui="light"] body.sps-demo-mode #menuExport #optResetAllData .mi-ico {
-  background: rgba(225, 29, 72, 0.08) !important;
-  border-color: rgba(225, 29, 72, 0.22) !important;
-  color: #e11d48 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+  border-color: rgba(2, 132, 199, 0.22) !important;
+  color: #0284c7 !important;
 }
 
 :root[data-ui="light"] body.sps-demo-mode #menuExport #optResetAllData:hover .mi-ico {
-  background: rgba(225, 29, 72, 0.15) !important;
-  border-color: rgba(225, 29, 72, 0.35) !important;
-  color: #be123c !important;
+  background: rgba(2, 132, 199, 0.15) !important;
+  border-color: rgba(2, 132, 199, 0.35) !important;
+  color: #0369a1 !important;
 }
 
 body.sps-demo-mode #menuExport .mi-t {
