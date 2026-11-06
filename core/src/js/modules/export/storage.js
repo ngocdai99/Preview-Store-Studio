@@ -740,8 +740,21 @@ async function resetFactoryStorage(){
     });
   }
 
-  // 3. Wipe all LocalStorage & SessionStorage
-  try{ if(typeof localStorage !== 'undefined') localStorage.clear(); }catch(_){}
+  // Gracefully dismiss tour if currently open
+  try{ if(typeof endTour === 'function') endTour(); }catch(_){}
+
+  // 3. Wipe all LocalStorage & SessionStorage (preserving tour completed state so tour never resets)
+  try{
+    if(typeof localStorage !== 'undefined'){
+      const tourCompleted = localStorage.getItem('sps_tour_completed');
+      localStorage.clear();
+      if(tourCompleted !== null){
+        localStorage.setItem('sps_tour_completed', tourCompleted);
+      } else {
+        localStorage.setItem('sps_tour_completed', 'true');
+      }
+    }
+  }catch(_){}
   try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
 
   // Mark sessionStorage so after reload it boots into original Studio preset

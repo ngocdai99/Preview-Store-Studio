@@ -14391,7 +14391,18 @@ resolve(false);
 }
 });
 }
-try{ if(typeof localStorage !== 'undefined') localStorage.clear(); }catch(_){}
+try{ if(typeof endTour === 'function') endTour(); }catch(_){}
+try{
+if(typeof localStorage !== 'undefined'){
+const tourCompleted = localStorage.getItem('sps_tour_completed');
+localStorage.clear();
+if(tourCompleted !== null){
+localStorage.setItem('sps_tour_completed', tourCompleted);
+} else {
+localStorage.setItem('sps_tour_completed', 'true');
+}
+}
+}catch(_){}
 try{ if(typeof sessionStorage !== 'undefined') sessionStorage.clear(); }catch(_){}
 try{ if(typeof sessionStorage !== 'undefined') sessionStorage.setItem('sps_reset_to_blank', '1'); }catch(_){}
 try{

@@ -2955,6 +2955,7 @@ assert(bundledHtml.includes('indexedDB.deleteDatabase'), 'resetFactoryStorage in
 assert(bundledHtml.includes('localStorage.clear()'), 'resetFactoryStorage clears all localStorage keys');
 assert(bundledHtml.includes('sessionStorage.clear()'), 'resetFactoryStorage clears all sessionStorage keys');
 assert(bundledHtml.includes('window.location.reload()'), 'resetFactoryStorage reloads window to restore clean installation state');
+assert(bundledHtml.includes("localStorage.setItem('sps_tour_completed'"), 'resetFactoryStorage preserves tour completed state without resetting tour');
 
 // 3. Functional Simulation of Factory Storage Reset
 let mockStorage39 = {
@@ -2962,19 +2963,23 @@ let mockStorage39 = {
   store_preview_studio_state: '{"form":{"name":"Custom App"}}',
   store_preview_studio_ui: 'dark',
   sps_editor_w: '520',
-  sps_sidebar_collapsed: '0'
+  sps_sidebar_collapsed: '0',
+  sps_tour_completed: 'true'
 };
 let mockIdbDeleted39 = false;
 let mockReloadTriggered39 = false;
 
 function sim39ResetFactoryStorage() {
   mockIdbDeleted39 = true;
+  const tour = mockStorage39.sps_tour_completed;
   mockStorage39 = {};
+  if (tour) mockStorage39.sps_tour_completed = tour;
   mockReloadTriggered39 = true;
 }
 
 sim39ResetFactoryStorage();
-assert(Object.keys(mockStorage39).length === 0, 'All localStorage items wiped during factory reset');
+assert(mockStorage39.sps_tour_completed === 'true', 'sps_tour_completed is preserved during factory reset');
+assert(!mockStorage39.sps_core_user_draft, 'User draft is wiped during factory reset');
 assert(mockIdbDeleted39 === true, 'IndexedDB database deleted during factory reset');
 assert(mockReloadTriggered39 === true, 'Page reload triggered to bootstrap pristine initial state');
 
