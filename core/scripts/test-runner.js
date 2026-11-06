@@ -4464,6 +4464,9 @@ assert(ipadJsSrc59.includes("const hasDedicatedIpadShots = SUPPORTS_IPAD && vali
 assert(ipadJsSrc59.includes("compatNotice.style.display = SUPPORTS_IPAD ? 'none' : 'inline-flex'"), 'ipad.js shows Designed for iPhone notice when iPad support is unchecked');
 assert(ipadHeroHtmlSrc59.includes('id="ipadCompatNotice"'), 'ipad-hero.html contains #ipadCompatNotice container');
 assert(ipadGalleryHtmlSrc59.includes('class="ipad-plat-tablet"') && ipadGalleryHtmlSrc59.includes('class="ipad-plat-label"'), 'ipad-gallery.html contains tablet icon and platform label');
+assert(syncJsSrc58.includes("case 'dest-ipad':") && syncJsSrc58.includes(".stage .a-platforms-badge, .stage .ipad-platforms-row"), 'sync.js targets .a-platforms-badge and .ipad-platforms-row for dest-ipad focus');
+assert(syncJsSrc58.includes("#destTileIpad, #destTileIphone"), 'sync.js registers Supported Devices click interaction zones');
+assert(focusLinkCssSrc58.includes('.a-platforms-badge.hl-target') && focusLinkCssSrc58.includes('.ipad-platforms-row.hl-target'), 'focus-link.css provides gold outline for platform badge lines');
 
 // ---------------------------------------------------------------------
 // Suite 60: Menu Actions Reliability & Latent Edge Case Verification

@@ -139,11 +139,20 @@
 .dev.ipad.landscape .ipad-gal img{flex:0 0 230px;width:230px;height:498px}
 .dev.ipad.landscape .ipad-gal img.ipad-shot{height:307px}
 
+.ipad-platforms-wrap{
+  width:100%;
+  margin-top:14px;
+  padding:6px 0 16px;
+  display:flex;
+  align-items:center;
+}
 .ipad-platforms-row{
   display:inline-flex;align-items:center;gap:8px;
-  margin-top:14px;padding:6px 0 16px;
   font-size:13.5px;font-weight:600;color:var(--s);
-  cursor:pointer;user-select:none;width:100%;
+  cursor:pointer;user-select:none;width:fit-content;
+  border-radius:6px;
+  padding:2px 6px;
+  margin:-2px -6px;
 }
 .ipad-plat-icons{display:inline-flex;align-items:center;gap:4px;color:var(--s)}
 .ipad-plat-tablet{width:16px;height:16px}

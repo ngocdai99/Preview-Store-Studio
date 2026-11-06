@@ -387,18 +387,26 @@
 }
 
 /* Apple Platforms Badge */
+.a-platforms-badge-wrap{
+  width:100%;
+  margin-top:14px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--sp);
+  display:flex;
+  align-items:center;
+}
 .a-platforms-badge{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  margin-top:14px;
-  padding-bottom:12px;
   font-size:13.5px;
   font-weight:600;
   color:var(--t);
   letter-spacing:-.1px;
-  border-bottom:1px solid var(--sp);
-  width:100%;
+  width:fit-content;
+  border-radius:6px;
+  padding:2px 6px;
+  margin:-2px -6px;
 }
 .a-plat-ico{
   width:16px;

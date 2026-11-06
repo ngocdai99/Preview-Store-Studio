@@ -5557,6 +5557,8 @@ const fDestIpad = $('f-dest-ipad');
 if(fDestIpad){
   fDestIpad.onchange = (e) => {
     setSupportsIpad(e.target.checked);
+    if(typeof setFieldFocus === 'function') setFieldFocus('dest-ipad', true);
+    if(typeof flashField === 'function') flashField('dest-ipad');
     saveState();
   };
 }
@@ -8723,6 +8725,14 @@ function getFieldMockupTargets(key) {
       return $$('.stage [data-b="addr"]');
     case 'icon':
       return $$('.stage [data-icon]');
+    case 'dest-ipad':
+    case 'dest-iphone':
+    case 'destTileIpad':
+    case 'destTileIphone':
+    case 'f-dest-ipad':
+    case 'dest':
+    case 'platforms':
+      return $$('.stage .a-platforms-badge, .stage .ipad-platforms-row');
     case 'shots':
       return $$('.stage .gal, .stage [data-shots]');
     case 'privacy': {
@@ -8983,6 +8993,22 @@ function initFieldFocusLinking() {
     el.addEventListener('click', () => setFieldFocus('st-iap', true));
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('st-iap', true);
+    });
+  });
+
+  // Supported Devices interaction zones (iPhone & iPad checkboxes)
+  const destZones = $$('#destTileIpad, #destTileIphone, #f-dest-ipad, #f-dest-iphone');
+  destZones.forEach(el => {
+    el.addEventListener('focus', () => {
+      if (typeof flashField === 'function') flashField('dest-ipad');
+      setFieldFocus('dest-ipad', true);
+    });
+    el.addEventListener('click', () => {
+      if (typeof flashField === 'function') flashField('dest-ipad');
+      setFieldFocus('dest-ipad', true);
+    });
+    el.addEventListener('mouseenter', () => {
+      if (!activeFieldFocusKey) setFieldFocus('dest-ipad', true);
     });
   });
 

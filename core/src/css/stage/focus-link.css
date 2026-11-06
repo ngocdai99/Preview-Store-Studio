@@ -113,6 +113,21 @@ img.hl-target {
   border-radius: 6px !important;
 }
 
+/* Apple Platforms Support (iPhone & iPad): highlight "iPhone, iPad" badge line */
+.a-platforms-badge.hl-target,
+.ipad-platforms-row.hl-target {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+  outline: 2px solid #f59e0b !important;
+  outline-offset: 2px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+}
+
+.a-platforms-badge.hl-flash,
+.ipad-platforms-row.hl-flash {
+  border-radius: 6px !important;
+}
+
 /* Sample Metrics & Badges Focus Highlight Styling */
 .a-met b.hl-target,
 .ipad-metrics b.hl-target,

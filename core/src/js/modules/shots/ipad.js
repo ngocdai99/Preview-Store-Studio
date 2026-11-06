@@ -466,6 +466,8 @@ const fDestIpad = $('f-dest-ipad');
 if(fDestIpad){
   fDestIpad.onchange = (e) => {
     setSupportsIpad(e.target.checked);
+    if(typeof setFieldFocus === 'function') setFieldFocus('dest-ipad', true);
+    if(typeof flashField === 'function') flashField('dest-ipad');
     saveState();
   };
 }
