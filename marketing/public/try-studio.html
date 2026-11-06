@@ -9481,6 +9481,33 @@ inspectModalAsset(pngDataUrl, null);
 if (imgEl && _activeModalAsset) imgEl.src = _activeModalAsset;
 inspectModalAsset(_activeModalAsset, opts.file);
 }
+} else if (typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
+let targetW = 1290, targetH = 2796;
+if (_activeModalType === 'ipad') {
+targetW = 2048; targetH = 2732;
+} else if (_activeModalType === 'tablet') {
+targetW = 1600; targetH = 2560;
+} else if (_activeModalStore === 'google') {
+targetW = 1080; targetH = 1920;
+}
+const vbMatch = _activeModalAsset.match(/viewBox\s*=\s*['"]\s*0\s+0\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*['"]/i);
+if (vbMatch) {
+const vbW = parseFloat(vbMatch[1]);
+const vbH = parseFloat(vbMatch[2]);
+if (vbW > vbH && targetH > targetW) {
+const tmp = targetW; targetW = targetH; targetH = tmp;
+}
+}
+if (typeof rasterizeSvgToDimensions === 'function') {
+rasterizeSvgToDimensions(_activeModalAsset, targetW, targetH, pngDataUrl => {
+_activeModalAsset = pngDataUrl;
+if (imgEl) imgEl.src = pngDataUrl;
+inspectModalAsset(pngDataUrl, null);
+});
+} else {
+if (imgEl && _activeModalAsset) imgEl.src = _activeModalAsset;
+inspectModalAsset(_activeModalAsset, opts.file);
+}
 } else {
 if (imgEl && _activeModalAsset) {
 imgEl.src = _activeModalAsset;
@@ -9583,14 +9610,27 @@ const isExtremeRatio = isLandscape && ((w / h > 2.5) || (w / h < 1.5 && !isStand
 let hasAlpha = false;
 let hasPreRoundedCorners = false;
 try {
+const isIcon = _activeModalType === 'icon';
+const maxCanvasDim = 64;
+let cW = maxCanvasDim, cH = maxCanvasDim;
+if (!isIcon) {
+if (w >= h) {
+cW = maxCanvasDim;
+cH = Math.max(1, Math.round(maxCanvasDim * (h / w)));
+} else {
+cW = Math.max(1, Math.round(maxCanvasDim * (w / h)));
+cH = maxCanvasDim;
+}
+}
 const c = document.createElement('canvas');
-c.width = 64; c.height = 64;
+c.width = cW; c.height = cH;
 const ctx = c.getContext('2d');
-ctx.drawImage(img, 0, 0, 64, 64);
-const data = ctx.getImageData(0, 0, 64, 64).data;
+ctx.drawImage(img, 0, 0, cW, cH);
+const data = ctx.getImageData(0, 0, cW, cH).data;
 for (let i = 3; i < data.length; i += 4) {
 if (data[i] < 250) { hasAlpha = true; break; }
 }
+if (isIcon) {
 const cornerIdx = [
 (0 * 64 + 0) * 4 + 3,
 (0 * 64 + 63) * 4 + 3,
@@ -9598,6 +9638,7 @@ const cornerIdx = [
 (63 * 64 + 63) * 4 + 3
 ];
 hasPreRoundedCorners = cornerIdx.some(idx => data[idx] < 200);
+}
 } catch (e) {}
 if (dimEl) {
 dimEl.textContent = `${w} × ${h} px`;

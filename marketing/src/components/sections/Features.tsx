@@ -1544,9 +1544,9 @@ function StorePresetsCard() {
 function ComplianceCard() {
   const [tab, setTab] = useState<"transparency" | "ratio" | "resolution">("transparency");
   const [flattened, setFlattened] = useState(false);
-  const [ratioMode, setRatioMode] = useState<"phone" | "tablet">("phone");
+  const [ratioMode, setRatioMode] = useState<"icon" | "screenshot">("icon");
   const [ratioAligned, setRatioAligned] = useState(false);
-  const [resolutionMode, setResolutionMode] = useState<"3x" | "2x">("3x");
+  const [resolutionMode, setResolutionMode] = useState<"1024" | "512">("1024");
   const [resolutionVerified, setResolutionVerified] = useState(false);
 
   const handleAlignRatio = () => {
@@ -1580,7 +1580,7 @@ function ComplianceCard() {
           </h3>
         </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Pre-flight inspection for app icon transparency, screenshot aspect ratios, and store resolutions.
+          Pre-flight inspection for icon alpha transparency, 1:1 square ratio, and standard store dimensions (1024×1024 / 512×512).
         </p>
 
         {/* Tab Switcher with Sliding Pill (Symmetrical with Card 04) */}
@@ -1629,7 +1629,7 @@ function ComplianceCard() {
                     )}
                   </div>
                   <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-                    {flattened ? "Non-transparent background verified" : "App Store requires a solid, non-transparent icon"}
+                    {flattened ? "Non-transparent background verified (0% alpha)" : "App stores require a solid, non-transparent icon (no alpha)"}
                   </div>
                 </div>
               </div>
@@ -1644,7 +1644,7 @@ function ComplianceCard() {
                   {flattened ? (
                     <>
                       <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Re-test Transparent Warning</span>
+                      <span>Re-test Transparent Alpha Warning</span>
                     </>
                   ) : (
                     <>
@@ -1664,30 +1664,30 @@ function ComplianceCard() {
                 <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
                   <button
                     type="button"
-                    onClick={() => setRatioMode("phone")}
+                    onClick={() => setRatioMode("icon")}
                     className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      ratioMode === "phone"
+                      ratioMode === "icon"
                         ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    Phone (19.5:9 / 16:9)
+                    App Icon (1:1)
                   </button>
                   <button
                     type="button"
-                    onClick={() => setRatioMode("tablet")}
+                    onClick={() => setRatioMode("screenshot")}
                     className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      ratioMode === "tablet"
+                      ratioMode === "screenshot"
                         ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    Tablet (4:3)
+                    Screenshots (19.5:9 / 16:9)
                   </button>
                 </div>
 
                 <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
-                  MATCHED
+                  {ratioMode === "icon" ? "1:1 SQUARE" : "MATCHED"}
                 </span>
               </div>
 
@@ -1695,7 +1695,11 @@ function ComplianceCard() {
               <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center justify-between text-[10.5px]">
                 <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium truncate">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                  <span>{ratioMode === "phone" ? "1290 × 2796 px (19.5:9 standard)" : "2048 × 2732 px (4:3 standard)"}</span>
+                  <span>
+                    {ratioMode === "icon"
+                      ? "1:1 Square (1.00) · Uniform bounds without stretching"
+                      : "19.5:9 Viewport · Standard phone screenshot ratio"}
+                  </span>
                 </span>
                 <span className="text-[9.5px] font-mono text-slate-400 shrink-0 ml-1">
                   STORE SPEC
@@ -1712,12 +1716,12 @@ function ComplianceCard() {
                   {ratioAligned ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Ratio Verified &amp; Aligned!</span>
+                      <span>{ratioMode === "icon" ? "Square 1:1 Verified!" : "Ratio Aligned!"}</span>
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                      <span>Auto-Align Screenshot Dimensions</span>
+                      <span>{ratioMode === "icon" ? "Auto-Crop to 1:1 Square" : "Auto-Align Screenshot Ratio"}</span>
                     </>
                   )}
                 </button>
@@ -1732,30 +1736,30 @@ function ComplianceCard() {
                 <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
                   <button
                     type="button"
-                    onClick={() => setResolutionMode("3x")}
+                    onClick={() => setResolutionMode("1024")}
                     className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      resolutionMode === "3x"
+                      resolutionMode === "1024"
                         ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    3x Ultra HD (Retina)
+                    1024 × 1024 px (iOS Icon)
                   </button>
                   <button
                     type="button"
-                    onClick={() => setResolutionMode("2x")}
+                    onClick={() => setResolutionMode("512")}
                     className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      resolutionMode === "2x"
+                      resolutionMode === "512"
                         ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    2x HD (Standard)
+                    512 × 512 px (Android Icon)
                   </button>
                 </div>
 
                 <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
-                  VERIFIED
+                  {resolutionMode === "1024" ? "1024 PX" : "512 PX"}
                 </span>
               </div>
 
@@ -1763,10 +1767,14 @@ function ComplianceCard() {
               <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center justify-between text-[10.5px]">
                 <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium truncate">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                  <span>{resolutionMode === "3x" ? "3x DPI Output · Zero compression blur" : "2x DPI Output · Compact file size"}</span>
+                  <span>
+                    {resolutionMode === "1024"
+                      ? "1024 × 1024 px · App Store Master Icon standard"
+                      : "512 × 512 px · Google Play Store Icon standard"}
+                  </span>
                 </span>
                 <span className="text-[9.5px] font-mono text-slate-400 shrink-0 ml-1">
-                  HIGH-RES
+                  STORE SPEC
                 </span>
               </div>
 
@@ -1780,12 +1788,12 @@ function ComplianceCard() {
                   {resolutionVerified ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Store Resolution Verified!</span>
+                      <span>{resolutionMode === "1024" ? "1024 × 1024 px Verified!" : "512 × 512 px Verified!"}</span>
                     </>
                   ) : (
                     <>
                       <Check className="w-3.5 h-3.5 text-teal-400" />
-                      <span>Check Dimensions &amp; Retina Density</span>
+                      <span>{resolutionMode === "1024" ? "Fit 1024 × 1024 Master Dimensions" : "Fit 512 × 512 Store Dimensions"}</span>
                     </>
                   )}
                 </button>
