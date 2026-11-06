@@ -27,7 +27,7 @@ export function ComplianceCard() {
           </h3>
         </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels on iOS, ...).
+          Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels, ...).
         </p>
 
         {/* Tab Switcher with Sliding Pill (Symmetrical with Card 04) */}
