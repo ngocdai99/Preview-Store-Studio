@@ -245,15 +245,25 @@
 .gp-stat-rating {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 2.5px;
   font-weight: 500;
   color: var(--t);
+  line-height: 1;
+}
+
+.gp-stat-rating [data-stat="rating"] {
+  line-height: 1;
+  display: inline-block;
 }
 
 .gp-star-ico {
-  width: 10px;
-  height: 10px;
+  width: 9.5px;
+  height: 9.5px;
   fill: currentColor;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 1.5px;
+  flex-shrink: 0;
 }
 
 .gp-stat-dl {

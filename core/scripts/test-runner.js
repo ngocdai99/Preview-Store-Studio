@@ -684,10 +684,12 @@ assert(googleHeaderCss.includes('.g-met [data-gmet-rating] b{display:inline-flex
 
 const googleSearchCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'search.css'), 'utf8');
 assert(googleSearchCss.includes('.gp-search-action-btn') && googleSearchCss.includes('width: 24px;') && googleSearchCss.includes('height: 32px;') && googleSearchCss.includes('border-radius: 12px;'), 'Search result arrow button container is styled as a compact vertical ellipse');
+assert(googleSearchCss.includes('.gp-stat-rating') && googleSearchCss.includes('.gp-star-ico') && googleSearchCss.includes('margin-top: 1.5px;'), 'Search result rating star is vertically centered with margin-top offset');
 
 const pngExportJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
 assert(pngExportJs.includes('const padY = opts.frameless ? 0 : 8;'), 'png.js includes padY for top/bottom button preservation during export');
 assert(pngExportJs.includes('.g-met [data-gmet-rating] b') && pngExportJs.includes('.g-star-ico'), 'png.js enforces vertical centering for Google Play rating star in export');
+assert(pngExportJs.includes('.gp-stat-rating') && pngExportJs.includes('.gp-star-ico'), 'png.js enforces vertical centering for search result rating star in export');
 assert(pngExportJs.includes("addBtn('top', { right: 65 }, 52, true);"), 'png.js synthesizes Top Button for iPad export');
 assert(pngExportJs.includes("addBtn('right', 55, 34);") && pngExportJs.includes("addBtn('right', 99, 34);"), 'png.js synthesizes two Volume buttons on right edge for iPad export');
 assert(pngExportJs.includes("addBtn('top', { left: 48 }, 34, true);") && pngExportJs.includes("addBtn('top', { left: 92 }, 34, true);"), 'png.js synthesizes two Volume buttons on top edge for tablet export');

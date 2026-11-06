@@ -485,6 +485,24 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             flex-shrink: 0 !important;
             margin-top: -0.5px !important;
           }
+          .gp-stat-rating {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 2.5px !important;
+            line-height: 1 !important;
+          }
+          .gp-stat-rating [data-stat="rating"] {
+            line-height: 1 !important;
+            display: inline-block !important;
+          }
+          .gp-star-ico {
+            width: 9.5px !important;
+            height: 9.5px !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+            margin-top: 1.5px !important;
+            flex-shrink: 0 !important;
+          }
           .phone.apple:not(.ipad) .a-met > div {
             height: 48px !important;
             max-height: 48px !important;
@@ -1093,6 +1111,26 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '11px';
           el.style.flexShrink = '0';
           el.style.marginTop = '-0.5px';
+        });
+
+        // Enforce vertical centering for Google Play search card rating star in export
+        clonedEl.querySelectorAll('.gp-stat-rating').forEach(el => {
+          el.style.display = 'inline-flex';
+          el.style.alignItems = 'center';
+          el.style.gap = '2.5px';
+          el.style.lineHeight = '1';
+        });
+        clonedEl.querySelectorAll('.gp-stat-rating [data-stat="rating"]').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.lineHeight = '1';
+        });
+        clonedEl.querySelectorAll('.gp-star-ico').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
+          el.style.width = '9.5px';
+          el.style.height = '9.5px';
+          el.style.marginTop = '1.5px';
+          el.style.flexShrink = '0';
         });
 
         // Strip focus highlight from export capture
