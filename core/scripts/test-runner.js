@@ -1975,6 +1975,7 @@ assert(bundledHtml.includes('id="customCatVal"') && bundledHtml.includes('id="cu
 assert(bundledHtml.includes('id="customCatSearch"') && bundledHtml.includes('id="customCatOptions"'), 'Custom category search input and options container exist in bundled HTML');
 assert(bundledHtml.includes('.custom-cat-trigger') && bundledHtml.includes('.custom-cat-menu') && bundledHtml.includes('.custom-cat-option'), 'Custom category CSS classes exist in bundled CSS');
 assert(bundledHtml.includes(':root[data-ui=light] .custom-cat-trigger') && bundledHtml.includes(':root[data-ui=light] .custom-cat-menu'), 'Custom category provides authentic light theme adaptation');
+assert(bundledHtml.includes('class="custom-cat-icon"') && bundledHtml.includes('body[data-ui-store="google"] .custom-cat-icon'), 'Custom category dropdown includes category icon with store-adaptive color');
 assert(/<label>Category\s*<span class="tag a"[^>]*>APPLE<\/span>\s*<span class="tag g"[^>]*>GOOGLE<\/span><\/label>/.test(bundledHtml), 'Category field label displays both APPLE and GOOGLE badges');
 assert(bundledHtml.includes("setFieldFocus('cat', true)"), 'Focusing custom category dropdown triggers setFieldFocus to highlight category on device');
 assert(bundledHtml.includes('.ipad-cat-pill.hl-target') && bundledHtml.includes('.a-met [data-b="cat"].hl-target'), 'Category focus highlight styles cover iPhone, iPad, and Google Play mockups');

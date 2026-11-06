@@ -53,9 +53,15 @@
 }
 
 .custom-iap-icon {
-  color: var(--ac);
+  color: #38bdf8;
   flex-shrink: 0;
-  opacity: 0.9;
+  opacity: 0.95;
+  transition: color .2s ease;
+}
+
+body[data-ui-store="google"] .custom-iap-icon,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .custom-iap-icon {
+  color: #34d399;
 }
 
 .custom-iap-val {
@@ -265,6 +271,15 @@
 
 :root[data-ui=light] .custom-iap-val {
   color: #1d1d1f;
+}
+
+:root[data-ui=light] .custom-iap-icon {
+  color: #0071e3;
+}
+
+:root[data-ui=light] body[data-ui-store="google"] .custom-iap-icon,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .custom-iap-icon {
+  color: #059669;
 }
 
 :root[data-ui=light] .custom-iap-menu {

@@ -53,9 +53,15 @@
 }
 
 .custom-age-icon {
-  color: var(--ac);
+  color: #38bdf8;
   flex-shrink: 0;
-  opacity: 0.9;
+  opacity: 0.95;
+  transition: color .2s ease;
+}
+
+body[data-ui-store="google"] .custom-age-icon,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .custom-age-icon {
+  color: #34d399;
 }
 
 .custom-age-val {
@@ -274,6 +280,15 @@
 
 :root[data-ui=light] .custom-age-val {
   color: #1d1d1f;
+}
+
+:root[data-ui=light] .custom-age-icon {
+  color: #0071e3;
+}
+
+:root[data-ui=light] body[data-ui-store="google"] .custom-age-icon,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .custom-age-icon {
+  color: #059669;
 }
 
 :root[data-ui=light] .custom-age-menu {
