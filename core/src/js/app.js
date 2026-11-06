@@ -3068,6 +3068,7 @@ let CUSTOM_ICON_1024 = '';
 let CUSTOM_ICON_512 = '';
 let CURRENT_PRESET_KEY = 'studio';
 let CURRENT_ACTIVE_PRESET = 'studio';
+let CURRENT_APP_ID = '';
 let IS_CUSTOM_ICON = false;
 let IS_CUSTOM_FEATURE = false;
 let FEATURE_GRAPHIC = STUDIO_FEATURE;
@@ -11149,6 +11150,11 @@ function sanitizeStateForLocalStorage(state){
 function applyStateObject(s){
   if(!s || typeof s !== 'object') return false;
 
+  if(s.appId || s.appleId){
+    CURRENT_APP_ID = String(s.appId || s.appleId);
+    if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+  }
+
   const targetStore = s.store || store;
 
   // 1. Restore App Icon state FIRST so no intermediate wrong-icon renders happen
@@ -11319,6 +11325,8 @@ function getCurrentStateObject(){
     tab10Shots: TABS.tab10.map(i => i.src),
     reviews: REVIEWS,
     stats: (typeof statsToObject === 'function') ? statsToObject() : {},
+    appId: (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : (userDraft && userDraft.appId ? userDraft.appId : '')),
+    appleId: (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : (userDraft && (userDraft.appId || userDraft.appleId) ? (userDraft.appId || userDraft.appleId) : '')),
     isCustomized: true
   };
 }
@@ -11363,7 +11371,15 @@ function getDraftDisplayName(){
 // Asks before an import replaces a draft that holds real work.
 // Calls onProceed immediately when there is nothing to lose; Cancel simply never calls it,
 // so the draft stays untouched.
-function confirmReplaceDraft(incomingName, onProceed){
+function confirmReplaceDraft(incomingName, onProceed, incomingAppId){
+  const incId = incomingAppId || (typeof CURRENT_INCOMING_APP_ID !== 'undefined' ? CURRENT_INCOMING_APP_ID : '');
+  const currentAppId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+    ? String(CURRENT_APP_ID).trim()
+    : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+  if(incId && currentAppId && String(incId).trim() === currentAppId){
+    onProceed();
+    return false;
+  }
   if(typeof hasLiveUserContent === 'function' && hasLiveUserContent() && typeof showResetConfirmModal === 'function'){
     const currentName = getDraftDisplayName();
     const incName = ((incomingName || '').trim() || 'Untitled');
@@ -11524,6 +11540,8 @@ function initDraftFromCurrentPreset(){
 
 function resetDraftWorkspace(){
   isPresetModified = false;
+  CURRENT_APP_ID = '';
+  if(typeof window !== 'undefined') window.CURRENT_APP_ID = '';
   const prevActivePreset = CURRENT_ACTIVE_PRESET;
 
   // 1. Clear file inputs and iPad support
@@ -12261,9 +12279,10 @@ function parseAndApplyJSON(jsonString, opts = {}){
   // Nothing has been written to the UI or storage yet, so Cancel leaves the draft untouched.
   if(!opts.skipDraftGuard && typeof confirmReplaceDraft === 'function'){
     let applied = false;
+    const incomingId = data && (data.appId || data.appleId || '');
     const asked = confirmReplaceDraft(mapped.name, () => {
       applied = parseAndApplyJSON(data, { skipDraftGuard: true });
-    });
+    }, incomingId);
     return asked ? false : applied;
   }
 
@@ -14046,7 +14065,13 @@ function normalizeAppleApp(item) {
 
   const bundleDomain = item.bundleId ? item.bundleId.split('.').slice(1, 3).reverse().join('.') : 'app.com';
 
+  const trackId = item.trackId ? String(item.trackId) : '';
+  const bundleId = item.bundleId || '';
+
   return {
+    appId: trackId,
+    appleId: trackId,
+    bundleId: bundleId,
     platform: 'apple',
     store: 'apple',
     appleDevice: 'iphone',
@@ -14208,6 +14233,11 @@ async function fetchStoreAppData(target) {
  */
 function applyImportedStoreApp(state) {
   if (!state) return false;
+
+  if (state.appId || state.appleId) {
+    CURRENT_APP_ID = String(state.appId || state.appleId);
+    if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+  }
 
   CURRENT_PRESET_KEY = 'draft';
   isPresetModified = false;
@@ -14555,6 +14585,31 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
     const apply = () => {
       applyImportedStoreApp(importedState);
     };
+
+    const targetAppId = String(target.id || (importedState && (importedState.appId || importedState.appleId)) || '').trim();
+    const currentAppId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+      ? String(CURRENT_APP_ID).trim()
+      : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+
+    const isSameAppId = !!(targetAppId && currentAppId && targetAppId === currentAppId);
+
+    // If same app ID, apply immediately without prompting confirmation modal
+    if (isSameAppId) {
+      apply();
+      return;
+    }
+
+    // Auto-imported from URL on default initial workspace: apply directly without modal
+    if (isAutoFromUrl) {
+      const currentName = (typeof getDraftDisplayName === 'function') ? getDraftDisplayName() : '';
+      const isDefaultPresetDraft = !currentName || currentName === 'Store Preview Studio' || currentName === 'Untitled' || (typeof hasLiveUserContent === 'function' && !hasLiveUserContent());
+      if (isDefaultPresetDraft) {
+        apply();
+        return;
+      }
+    }
+
+    if (typeof window !== 'undefined') window.CURRENT_INCOMING_APP_ID = targetAppId;
 
     // Cloning replaces the draft: ask first when it holds real work (Cancel keeps it untouched).
     if (typeof confirmReplaceDraft === 'function') {

@@ -52,6 +52,11 @@ function sanitizeStateForLocalStorage(state){
 function applyStateObject(s){
   if(!s || typeof s !== 'object') return false;
 
+  if(s.appId || s.appleId){
+    CURRENT_APP_ID = String(s.appId || s.appleId);
+    if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+  }
+
   const targetStore = s.store || store;
 
   // 1. Restore App Icon state FIRST so no intermediate wrong-icon renders happen
@@ -222,6 +227,8 @@ function getCurrentStateObject(){
     tab10Shots: TABS.tab10.map(i => i.src),
     reviews: REVIEWS,
     stats: (typeof statsToObject === 'function') ? statsToObject() : {},
+    appId: (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : (userDraft && userDraft.appId ? userDraft.appId : '')),
+    appleId: (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : (userDraft && (userDraft.appId || userDraft.appleId) ? (userDraft.appId || userDraft.appleId) : '')),
     isCustomized: true
   };
 }
@@ -266,7 +273,15 @@ function getDraftDisplayName(){
 // Asks before an import replaces a draft that holds real work.
 // Calls onProceed immediately when there is nothing to lose; Cancel simply never calls it,
 // so the draft stays untouched.
-function confirmReplaceDraft(incomingName, onProceed){
+function confirmReplaceDraft(incomingName, onProceed, incomingAppId){
+  const incId = incomingAppId || (typeof CURRENT_INCOMING_APP_ID !== 'undefined' ? CURRENT_INCOMING_APP_ID : '');
+  const currentAppId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+    ? String(CURRENT_APP_ID).trim()
+    : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+  if(incId && currentAppId && String(incId).trim() === currentAppId){
+    onProceed();
+    return false;
+  }
   if(typeof hasLiveUserContent === 'function' && hasLiveUserContent() && typeof showResetConfirmModal === 'function'){
     const currentName = getDraftDisplayName();
     const incName = ((incomingName || '').trim() || 'Untitled');
@@ -430,6 +445,8 @@ function initDraftFromCurrentPreset(){
 
 function resetDraftWorkspace(){
   isPresetModified = false;
+  CURRENT_APP_ID = '';
+  if(typeof window !== 'undefined') window.CURRENT_APP_ID = '';
   const prevActivePreset = CURRENT_ACTIVE_PRESET;
 
   // 1. Clear file inputs and iPad support

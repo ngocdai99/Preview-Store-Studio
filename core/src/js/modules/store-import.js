@@ -107,7 +107,13 @@ function normalizeAppleApp(item) {
 
   const bundleDomain = item.bundleId ? item.bundleId.split('.').slice(1, 3).reverse().join('.') : 'app.com';
 
+  const trackId = item.trackId ? String(item.trackId) : '';
+  const bundleId = item.bundleId || '';
+
   return {
+    appId: trackId,
+    appleId: trackId,
+    bundleId: bundleId,
     platform: 'apple',
     store: 'apple',
     appleDevice: 'iphone',
@@ -269,6 +275,11 @@ async function fetchStoreAppData(target) {
  */
 function applyImportedStoreApp(state) {
   if (!state) return false;
+
+  if (state.appId || state.appleId) {
+    CURRENT_APP_ID = String(state.appId || state.appleId);
+    if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+  }
 
   CURRENT_PRESET_KEY = 'draft';
   isPresetModified = false;
@@ -624,6 +635,31 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
     const apply = () => {
       applyImportedStoreApp(importedState);
     };
+
+    const targetAppId = String(target.id || (importedState && (importedState.appId || importedState.appleId)) || '').trim();
+    const currentAppId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+      ? String(CURRENT_APP_ID).trim()
+      : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+
+    const isSameAppId = !!(targetAppId && currentAppId && targetAppId === currentAppId);
+
+    // If same app ID, apply immediately without prompting confirmation modal
+    if (isSameAppId) {
+      apply();
+      return;
+    }
+
+    // Auto-imported from URL on default initial workspace: apply directly without modal
+    if (isAutoFromUrl) {
+      const currentName = (typeof getDraftDisplayName === 'function') ? getDraftDisplayName() : '';
+      const isDefaultPresetDraft = !currentName || currentName === 'Store Preview Studio' || currentName === 'Untitled' || (typeof hasLiveUserContent === 'function' && !hasLiveUserContent());
+      if (isDefaultPresetDraft) {
+        apply();
+        return;
+      }
+    }
+
+    if (typeof window !== 'undefined') window.CURRENT_INCOMING_APP_ID = targetAppId;
 
     // Cloning replaces the draft: ask first when it holds real work (Cancel keeps it untouched).
     if (typeof confirmReplaceDraft === 'function') {

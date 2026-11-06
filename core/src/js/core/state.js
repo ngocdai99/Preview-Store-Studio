@@ -2034,6 +2034,7 @@ let CUSTOM_ICON_1024 = '';
 let CUSTOM_ICON_512 = '';
 let CURRENT_PRESET_KEY = 'studio';
 let CURRENT_ACTIVE_PRESET = 'studio';
+let CURRENT_APP_ID = '';
 let IS_CUSTOM_ICON = false;
 let IS_CUSTOM_FEATURE = false;
 let FEATURE_GRAPHIC = STUDIO_FEATURE;

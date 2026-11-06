@@ -140,9 +140,10 @@ function parseAndApplyJSON(jsonString, opts = {}){
   // Nothing has been written to the UI or storage yet, so Cancel leaves the draft untouched.
   if(!opts.skipDraftGuard && typeof confirmReplaceDraft === 'function'){
     let applied = false;
+    const incomingId = data && (data.appId || data.appleId || '');
     const asked = confirmReplaceDraft(mapped.name, () => {
       applied = parseAndApplyJSON(data, { skipDraftGuard: true });
-    });
+    }, incomingId);
     return asked ? false : applied;
   }
 

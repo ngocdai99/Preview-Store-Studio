@@ -6184,6 +6184,7 @@ let CUSTOM_ICON_1024 = '';
 let CUSTOM_ICON_512 = '';
 let CURRENT_PRESET_KEY = 'studio';
 let CURRENT_ACTIVE_PRESET = 'studio';
+let CURRENT_APP_ID = '';
 let IS_CUSTOM_ICON = false;
 let IS_CUSTOM_FEATURE = false;
 let FEATURE_GRAPHIC = STUDIO_FEATURE;
@@ -14059,6 +14060,10 @@ return clean;
 }
 function applyStateObject(s){
 if(!s || typeof s !== 'object') return false;
+if(s.appId || s.appleId){
+CURRENT_APP_ID = String(s.appId || s.appleId);
+if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+}
 const targetStore = s.store || store;
 if(s.icon1024) CUSTOM_ICON_1024 = s.icon1024;
 else if(s.iconApple) CUSTOM_ICON_1024 = s.iconApple;
@@ -14222,6 +14227,8 @@ tab7Shots: TABS.tab7.map(i => i.src),
 tab10Shots: TABS.tab10.map(i => i.src),
 reviews: REVIEWS,
 stats: (typeof statsToObject === 'function') ? statsToObject() : {},
+appId: (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : (userDraft && userDraft.appId ? userDraft.appId : '')),
+appleId: (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : (userDraft && (userDraft.appId || userDraft.appleId) ? (userDraft.appId || userDraft.appleId) : '')),
 isCustomized: true
 };
 }
@@ -14254,7 +14261,15 @@ try{ src = getCurrentStateObject(); }catch(_){}
 const name = (src && src.form && src.form.name) ? String(src.form.name).trim() : '';
 return name || 'Untitled';
 }
-function confirmReplaceDraft(incomingName, onProceed){
+function confirmReplaceDraft(incomingName, onProceed, incomingAppId){
+const incId = incomingAppId || (typeof CURRENT_INCOMING_APP_ID !== 'undefined' ? CURRENT_INCOMING_APP_ID : '');
+const currentAppId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+? String(CURRENT_APP_ID).trim()
+: ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+if(incId && currentAppId && String(incId).trim() === currentAppId){
+onProceed();
+return false;
+}
 if(typeof hasLiveUserContent === 'function' && hasLiveUserContent() && typeof showResetConfirmModal === 'function'){
 const currentName = getDraftDisplayName();
 const incName = ((incomingName || '').trim() || 'Untitled');
@@ -14360,6 +14375,8 @@ updatePresetMenuSelection();
 }
 function resetDraftWorkspace(){
 isPresetModified = false;
+CURRENT_APP_ID = '';
+if(typeof window !== 'undefined') window.CURRENT_APP_ID = '';
 const prevActivePreset = CURRENT_ACTIVE_PRESET;
 ['icoFile', 'featureFile', 'shotFile', 'ipadShotFile', 'tab7File', 'tab10File'].forEach(id => {
 const el = $(id);
@@ -16221,7 +16238,12 @@ const cleanDesc = (item.description || '').replace(/[\r\n]+/g, ' ').trim();
 const firstSentence = cleanDesc.split(/[.!?]\s+/)[0];
 const shortDesc = (firstSentence && firstSentence.length <= 80) ? firstSentence : cleanDesc.slice(0, 80);
 const bundleDomain = item.bundleId ? item.bundleId.split('.').slice(1, 3).reverse().join('.') : 'app.com';
+const trackId = item.trackId ? String(item.trackId) : '';
+const bundleId = item.bundleId || '';
 return {
+appId: trackId,
+appleId: trackId,
+bundleId: bundleId,
 platform: 'apple',
 store: 'apple',
 appleDevice: 'iphone',
@@ -16350,6 +16372,10 @@ return await fetchAppleAppData(target.id, target.country);
 }
 function applyImportedStoreApp(state) {
 if (!state) return false;
+if (state.appId || state.appleId) {
+CURRENT_APP_ID = String(state.appId || state.appleId);
+if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+}
 CURRENT_PRESET_KEY = 'draft';
 isPresetModified = false;
 if (state.icon1024) CUSTOM_ICON_1024 = state.icon1024;
@@ -16630,6 +16656,24 @@ closeStoreImportModal();
 const apply = () => {
 applyImportedStoreApp(importedState);
 };
+const targetAppId = String(target.id || (importedState && (importedState.appId || importedState.appleId)) || '').trim();
+const currentAppId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+? String(CURRENT_APP_ID).trim()
+: ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+const isSameAppId = !!(targetAppId && currentAppId && targetAppId === currentAppId);
+if (isSameAppId) {
+apply();
+return;
+}
+if (isAutoFromUrl) {
+const currentName = (typeof getDraftDisplayName === 'function') ? getDraftDisplayName() : '';
+const isDefaultPresetDraft = !currentName || currentName === 'Store Preview Studio' || currentName === 'Untitled' || (typeof hasLiveUserContent === 'function' && !hasLiveUserContent());
+if (isDefaultPresetDraft) {
+apply();
+return;
+}
+}
+if (typeof window !== 'undefined') window.CURRENT_INCOMING_APP_ID = targetAppId;
 if (typeof confirmReplaceDraft === 'function') {
 const importedName = (importedState && importedState.form && importedState.form.name) || '';
 confirmReplaceDraft(importedName, apply);

@@ -3660,6 +3660,12 @@ asyncSuites.push((async () => {
   g.calls.modal.onConfirm();
   assert(proceeded === 1, 'Confirming runs the import exactly once');
 
+  // Same App ID: bypasses the dialog even when draft has content
+  g = makeGuardEnv({ userDraft: { form: { name: 'Spotify' }, appId: '324684580', shots: [] }, key: 'draft' });
+  proceeded = 0;
+  asked = g.sandbox.__confirm('Spotify', () => { proceeded++; }, '324684580');
+  assert(asked === false && proceeded === 1 && g.calls.modal === null, 'Matching app ID: import proceeds immediately without confirmation dialog');
+
   // Editing the draft right now (still inside the 300ms debounce window)
   g = makeGuardEnv({ userDraft: null, key: 'draft', live: { form: { name: 'Duolingo' }, shots: [] } });
   proceeded = 0;
