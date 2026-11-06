@@ -552,6 +552,8 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   vertical-align: middle !important;
   margin-left: 0 !important;
   margin-top: 2px !important;
+  position: relative !important;
+  top: 0.5px !important;
   color: currentColor;
 }
 .dev.gtab10 .gt10-age-badge {
@@ -940,6 +942,8 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
 .gt7-app-stats .gp-star-ico,
 .gt10-item-stats .gp-star-ico {
   margin-top: 0 !important;
+  position: relative !important;
+  top: 0.5px !important;
   width: 12px !important;
   height: 12px !important;
   min-width: 12px !important;
@@ -949,7 +953,11 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   flex-shrink: 0 !important;
 }
 
-/* Safari / WebKit isolation: compensates for WebKit subpixel SVG scaling & font ascent delta */
+/* Safari / WebKit isolation: keeps Safari aligned at top: 0 */
+.is-safari .dev.gtab10 .gt10-star {
+  top: 0 !important;
+}
+
 .is-safari .dev.gtab .gp-star-ico,
 .is-safari .dev.gtab7 .gp-star-ico,
 .is-safari .dev.gtab10 .gp-star-ico,
@@ -961,9 +969,13 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   min-height: 13px !important;
   transform: translateY(0.5px) !important;
   margin-top: 0 !important;
+  top: 0 !important;
 }
 
 @supports (-webkit-hyphens: none) {
+  .dev.gtab10 .gt10-star {
+    top: 0 !important;
+  }
   .dev.gtab .gp-star-ico,
   .dev.gtab7 .gp-star-ico,
   .dev.gtab10 .gp-star-ico,
@@ -975,6 +987,7 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
     min-height: 13px !important;
     transform: translateY(0.5px) !important;
     margin-top: 0 !important;
+    top: 0 !important;
   }
 }
 .dev.gtab .gt7-app-stats [data-stat="size"],

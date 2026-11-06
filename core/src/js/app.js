@@ -13156,6 +13156,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             flex-shrink: 0 !important;
             margin-left: 0 !important;
             margin-top: 2px !important;
+            position: relative !important;
+            top: 0.5px !important;
+          }
+          @supports (-webkit-hyphens: none) {
+            .gt10-star,
+            .dev.gtab10 .gt10-star,
+            .gt10-header-metrics .gt10-star {
+              top: 0 !important;
+            }
           }
           .g-info-ico, .gt10-info-ico {
             display: inline-block !important;
@@ -13999,6 +14008,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.flexShrink = '0';
           el.style.marginTop = '-1.5px';
         });
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || typeof win.ApplePaySession === 'function';
         clonedEl.querySelectorAll('.gt10-star, .dev.gtab10 .gt10-star, .gt10-header-metrics .gt10-star').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
@@ -14007,6 +14017,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.flexShrink = '0';
           el.style.marginLeft = '0';
           el.style.marginTop = '2px';
+          el.style.position = 'relative';
+          el.style.top = isSafari ? '0' : '0.5px';
         });
 
         // Enforce vertical centering for Google Play search card rating star in export
