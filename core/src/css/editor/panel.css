@@ -329,92 +329,126 @@ body.sidebar-collapsed .editor-resizer{
   color: #64748b;
 }
 
-/* Privacy Mode Tabview (Apple-style Segmented Control) */
+/* Privacy Mode Buttons (Matching Supported Devices UI) */
 .privacy-mode-seg {
   position: relative;
   display: flex;
-  background: #171817;
-  border: 1px solid #282928;
-  border-radius: 10px;
-  padding: 3px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
   box-sizing: border-box;
 }
 
 .priv-seg-pill {
-  position: absolute;
-  top: 3px;
-  bottom: 3px;
-  left: 3px;
-  width: calc(50% - 3px);
-  border-radius: 7px;
-  background: #252625;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.privacy-mode-seg[data-active="collected"] .priv-seg-pill {
-  transform: translateX(100%);
+  display: none !important;
 }
 
 .priv-seg-btn {
-  position: relative;
-  z-index: 2;
-  flex: 1;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6.5px 10px;
-  border-radius: 7px;
-  border: 0;
-  background: transparent;
-  color: #94a3b8;
-  font-size: 11.5px;
-  font-weight: 600;
+  gap: 7px;
+  padding: 6px 12px 6px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 10px;
   cursor: pointer;
-  transition: color 0.18s ease;
   user-select: none;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+  max-width: 100%;
+  flex: 0 0 auto;
   box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mut);
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.priv-seg-btn svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+  color: var(--mut);
+  transition: color .2s ease;
 }
 
 .priv-seg-btn:hover:not(.active) {
+  border-color: var(--line-hi);
+  background: rgba(255, 255, 255, 0.06);
   color: #f1f5f9;
 }
 
 .priv-seg-btn.active {
+  border-color: var(--line);
+  background: rgba(0, 113, 227, 0.14);
   color: #ffffff;
-  font-weight: 700;
+  box-shadow: none;
 }
 
-/* Light mode Tabview */
+.priv-seg-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 3.5px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(180deg, #38bdf8, #0071e3);
+}
+
+.priv-seg-btn.active svg {
+  color: #38bdf8;
+}
+
+/* Light mode */
 :root[data-ui=light] .privacy-mode-seg {
-  background: #eef2f6;
-  border-color: rgba(15, 23, 42, 0.08);
-  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
-}
-
-:root[data-ui=light] .priv-seg-pill {
-  background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 :root[data-ui=light] .priv-seg-btn {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #64748b;
+}
+
+:root[data-ui=light] .priv-seg-btn svg {
   color: #64748b;
 }
 
 :root[data-ui=light] .priv-seg-btn:hover:not(.active) {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #0f172a;
+}
+
+:root[data-ui=light] .priv-seg-btn:hover:not(.active) svg {
   color: #0f172a;
 }
 
 :root[data-ui=light] .priv-seg-btn.active {
+  background: rgba(0, 113, 227, 0.08);
+  border-color: rgba(0, 0, 0, 0.1);
   color: #0f172a;
-  font-weight: 700;
+  box-shadow: none;
+}
+
+:root[data-ui=light] .priv-seg-btn.active::before {
+  background: #0071e3;
+}
+
+:root[data-ui=light] .priv-seg-btn.active svg {
+  color: #0071e3;
 }
 
 
