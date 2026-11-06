@@ -410,6 +410,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     offscreenWrap.appendChild(cloneTarget);
     document.body.appendChild(offscreenWrap);
 
+    // Ensure iPad search results main app card retains its second skeleton slot if only 1 shot is present
+    cloneTarget.querySelectorAll('.ipad-sr-media, [data-shots="ipad-shots"]').forEach(c => {
+      if (c.children.length === 1) {
+        const sk = document.createElement('div');
+        sk.className = 'ipad-skel-shot';
+        c.appendChild(sk);
+      }
+    });
+
     // Rasterize SVGs exclusively on the offscreen clone without mutating live DOM images
     await rasterizeSvgImages(cloneTarget, scaleFactor, 1);
     await waitForAllImages(cloneTarget);
@@ -1111,6 +1120,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
               child.setAttribute('stroke-width', svg.getAttribute('stroke-width'));
             }
           });
+        });
+
+        // Ensure iPad search results main app card retains its second skeleton slot if only 1 shot is present
+        clonedEl.querySelectorAll('.ipad-sr-media, [data-shots="ipad-shots"]').forEach(c => {
+          if (c.children.length === 1) {
+            const sk = clonedDoc.createElement('div');
+            sk.className = 'ipad-skel-shot';
+            c.appendChild(sk);
+          }
         });
 
         // Ensure Google Play age rating badge retains centered text & tight box

@@ -14823,6 +14823,13 @@ d.style.transform = 'none';
 });
 offscreenWrap.appendChild(cloneTarget);
 document.body.appendChild(offscreenWrap);
+cloneTarget.querySelectorAll('.ipad-sr-media, [data-shots="ipad-shots"]').forEach(c => {
+if (c.children.length === 1) {
+const sk = document.createElement('div');
+sk.className = 'ipad-skel-shot';
+c.appendChild(sk);
+}
+});
 await rasterizeSvgImages(cloneTarget, scaleFactor, 1);
 await waitForAllImages(cloneTarget);
 await new Promise(r => requestAnimationFrame(() => setTimeout(r, 60)));
@@ -15488,6 +15495,13 @@ if (!child.getAttribute('stroke-width') && svg.getAttribute('stroke-width')) {
 child.setAttribute('stroke-width', svg.getAttribute('stroke-width'));
 }
 });
+});
+clonedEl.querySelectorAll('.ipad-sr-media, [data-shots="ipad-shots"]').forEach(c => {
+if (c.children.length === 1) {
+const sk = clonedDoc.createElement('div');
+sk.className = 'ipad-skel-shot';
+c.appendChild(sk);
+}
 });
 clonedEl.querySelectorAll('.g-age-badge, [data-age-google-badge]').forEach(el => {
 el.style.display = 'inline-block';
