@@ -348,11 +348,17 @@ body.sidebar-collapsed .editor-resizer{
   display: none !important;
 }
 
+/* ---------- UNIFIED TILE BUTTON COMPONENT (.tile-btn) ---------- */
+/* Shared by Supported Devices (.dest-tile) and App Privacy (.priv-seg-btn) */
+.tile-btn,
+.dest-tile,
 .priv-seg-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 12px 6px 12px;
+  gap: 8px;
+  min-height: 38px;
+  height: 38px;
+  padding: 0 14px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -364,7 +370,7 @@ body.sidebar-collapsed .editor-resizer{
   max-width: 100%;
   flex: 0 0 auto;
   box-sizing: border-box;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
   color: var(--mut);
   line-height: 1.2;
@@ -372,15 +378,20 @@ body.sidebar-collapsed .editor-resizer{
   transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
 
-.priv-seg-btn svg {
-  width: 14px;
-  height: 14px;
+.tile-btn svg,
+.dest-tile svg,
+.priv-seg-btn svg,
+.dest-device-ico svg {
+  width: 15px;
+  height: 15px;
   display: block;
   flex-shrink: 0;
   color: var(--mut);
   transition: color .2s ease;
 }
 
+.tile-btn.active,
+.dest-tile.active,
 .priv-seg-btn.active {
   border-color: var(--line);
   background: rgba(0, 113, 227, 0.14);
@@ -388,34 +399,58 @@ body.sidebar-collapsed .editor-resizer{
   box-shadow: none;
 }
 
+.tile-btn.active::before,
+.dest-tile.active::before,
 .priv-seg-btn.active::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 5px;
-  bottom: 5px;
-  width: 3.5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
   border-radius: 0 2px 2px 0;
   background: linear-gradient(180deg, #38bdf8, #0071e3);
 }
 
-.priv-seg-btn.active svg {
+.tile-btn.active svg,
+.dest-tile.active svg,
+.priv-seg-btn.active svg,
+.dest-tile.active .dest-device-ico {
   color: #38bdf8;
 }
 
+.tile-btn.active .dest-name,
+.dest-tile.active .dest-name {
+  color: #ffffff;
+}
+
 /* Google Play Store active styling (Dark mode) */
+body[data-ui-store="google"] .tile-btn.active,
+body[data-ui-store="google"] .dest-tile.active,
 body[data-ui-store="google"] .priv-seg-btn.active,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .tile-btn.active,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active,
 body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active {
   background: rgba(5, 150, 105, 0.14);
 }
 
+body[data-ui-store="google"] .tile-btn.active::before,
+body[data-ui-store="google"] .dest-tile.active::before,
 body[data-ui-store="google"] .priv-seg-btn.active::before,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .tile-btn.active::before,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active::before,
 body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active::before {
   background: linear-gradient(180deg, #34d399, #059669);
 }
 
+body[data-ui-store="google"] .tile-btn.active svg,
+body[data-ui-store="google"] .dest-tile.active svg,
 body[data-ui-store="google"] .priv-seg-btn.active svg,
-body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active svg {
+body[data-ui-store="google"] .dest-tile.active .dest-device-ico,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .tile-btn.active svg,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active svg,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active svg,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active .dest-device-ico {
   color: #34d399;
 }
 
@@ -426,16 +461,23 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
   box-shadow: none;
 }
 
+:root[data-ui=light] .tile-btn,
+:root[data-ui=light] .dest-tile,
 :root[data-ui=light] .priv-seg-btn {
   background: #ffffff;
   border-color: rgba(0, 0, 0, 0.1);
   color: #64748b;
 }
 
-:root[data-ui=light] .priv-seg-btn svg {
+:root[data-ui=light] .tile-btn svg,
+:root[data-ui=light] .dest-tile svg,
+:root[data-ui=light] .priv-seg-btn svg,
+:root[data-ui=light] .dest-device-ico {
   color: #64748b;
 }
 
+:root[data-ui=light] .tile-btn.active,
+:root[data-ui=light] .dest-tile.active,
 :root[data-ui=light] .priv-seg-btn.active {
   background: rgba(0, 113, 227, 0.08);
   border-color: rgba(0, 0, 0, 0.1);
@@ -443,29 +485,55 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
   box-shadow: none;
 }
 
+:root[data-ui=light] .tile-btn.active::before,
+:root[data-ui=light] .dest-tile.active::before,
 :root[data-ui=light] .priv-seg-btn.active::before {
   background: #0071e3;
 }
 
-:root[data-ui=light] .priv-seg-btn.active svg {
+:root[data-ui=light] .tile-btn.active svg,
+:root[data-ui=light] .dest-tile.active svg,
+:root[data-ui=light] .priv-seg-btn.active svg,
+:root[data-ui=light] .dest-tile.active .dest-device-ico {
   color: #0071e3;
 }
 
+:root[data-ui=light] .dest-tile.active .dest-name {
+  color: #0f172a;
+}
+:root[data-ui=light] .dest-tile:not(.active) .dest-name {
+  color: #64748b;
+}
+
 /* Google Play Store active styling (Light mode) */
+:root[data-ui=light] body[data-ui-store="google"] .tile-btn.active,
+:root[data-ui=light] body[data-ui-store="google"] .dest-tile.active,
 :root[data-ui=light] body[data-ui-store="google"] .priv-seg-btn.active,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .tile-btn.active,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active,
 :root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active {
   background: rgba(5, 150, 105, 0.08);
   border-color: rgba(0, 0, 0, 0.1);
   color: #0f172a;
 }
 
+:root[data-ui=light] body[data-ui-store="google"] .tile-btn.active::before,
+:root[data-ui=light] body[data-ui-store="google"] .dest-tile.active::before,
 :root[data-ui=light] body[data-ui-store="google"] .priv-seg-btn.active::before,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .tile-btn.active::before,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active::before,
 :root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active::before {
   background: #059669;
 }
 
+:root[data-ui=light] body[data-ui-store="google"] .tile-btn.active svg,
+:root[data-ui=light] body[data-ui-store="google"] .dest-tile.active svg,
 :root[data-ui=light] body[data-ui-store="google"] .priv-seg-btn.active svg,
-:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active svg {
+:root[data-ui=light] body[data-ui-store="google"] .dest-tile.active .dest-device-ico,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .tile-btn.active svg,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active svg,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active svg,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active .dest-device-ico {
   color: #059669;
 }
 
