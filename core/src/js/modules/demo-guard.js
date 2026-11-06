@@ -75,6 +75,11 @@ const DEMO_PAYWALL_CONFIGS = {
     desc: 'Upload, validate, and inspect your master 1024×1024 or 512×512 app icons with automated transparency audits, squircle masks, and retina previews.',
     mainFeature: 'Master App Icon uploader & store pre-flight compliance audit'
   },
+  'custom-draft': {
+    title: 'Create Your Custom App Listing',
+    desc: 'Draft your own app listing from scratch with custom metadata, icon uploads, screenshot galleries, and high-resolution exports in Full Studio.',
+    mainFeature: 'Unlimited custom app drafts with local browser persistence'
+  },
   'edit-metadata': {
     title: 'Unlock Custom Metadata Editing',
     desc: 'Customize your App Name, Subtitles, Developer info, What\'s New notes, and Full Descriptions with real-time character limit audits in Full Studio.',
@@ -143,6 +148,10 @@ const MINI_STUDIO_TOAST_MAP = {
   'upload-icon': {
     title: 'Custom App Icon Upload',
     desc: 'Upload your own master app icon with compliance audits in Plus & Pro Edition.'
+  },
+  'custom-draft': {
+    title: 'Create Your Custom App',
+    desc: 'Drafting custom app listings is included in Plus & Pro Edition.'
   },
   'edit-metadata': {
     title: 'Listing Metadata Editing',
@@ -817,6 +826,26 @@ function initDemoGuard() {
         e.stopImmediatePropagation();
         icoFile.value = '';
         triggerIconPaywallAndHighlight();
+      }, true);
+    }
+
+    // 8. Gated "+ Your App" Custom Draft Button (Clickable, intercepted with toast)
+    const btnDraft = $('btnDraft');
+    if (btnDraft) {
+      btnDraft.addEventListener('click', e => {
+        if (e.target.closest('#msPillResetBtn')) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        requireFullVersion('custom-draft');
+      }, true);
+    }
+
+    const btnCopyPreset = $('btnCopyPresetToDraft');
+    if (btnCopyPreset) {
+      btnCopyPreset.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        requireFullVersion('custom-draft');
       }, true);
     }
   }

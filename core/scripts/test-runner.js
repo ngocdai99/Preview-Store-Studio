@@ -3799,6 +3799,7 @@ asyncSuites.push((async () => {
   assert(demoGuardSrc.includes('function requireFullVersion('), 'demo-guard.js exports requireFullVersion');
   assert(demoGuardSrc.includes('export-png') && demoGuardSrc.includes('export-copy') && demoGuardSrc.includes('export-markdown') && demoGuardSrc.includes('export-json') && demoGuardSrc.includes('store-import') && demoGuardSrc.includes('upload-shots') && demoGuardSrc.includes('upload-icon') && demoGuardSrc.includes('edit-metadata'), 'demo-guard.js defines all contextual paywall messages');
   assert(demoGuardSrc.includes('lockedFieldIds') && demoGuardSrc.includes('demo-disabled-input'), 'demo-guard.js disables metadata inputs in demo mode');
+  assert(demoGuardSrc.includes('custom-draft') && demoGuardSrc.includes('btnDraft'), 'demo-guard.js gates custom draft creation in demo mode');
 
   // 6. Verify 1-line gating hooks in export modules
   const pngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');
