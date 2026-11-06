@@ -323,6 +323,7 @@ body.sps-demo-mode #menuExport .mi-ico svg {
 body.sps-demo-mode #menuExport .menu-item:hover .mi-ico {
   color: #ffffff;
   border-color: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 body.sps-demo-mode #menuExport #optResetAllData .mi-ico {
@@ -332,9 +333,9 @@ body.sps-demo-mode #menuExport #optResetAllData .mi-ico {
 }
 
 body.sps-demo-mode #menuExport #optResetAllData:hover .mi-ico {
-  background: rgba(56, 189, 248, 0.16) !important;
-  border-color: rgba(56, 189, 248, 0.4) !important;
-  color: #38bdf8 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  color: #ffffff !important;
 }
 
 :root[data-ui="light"] body.sps-demo-mode #menuExport #optResetAllData .mi-ico {
@@ -344,9 +345,9 @@ body.sps-demo-mode #menuExport #optResetAllData:hover .mi-ico {
 }
 
 :root[data-ui="light"] body.sps-demo-mode #menuExport #optResetAllData:hover .mi-ico {
-  background: rgba(2, 132, 199, 0.12) !important;
-  border-color: rgba(2, 132, 199, 0.3) !important;
-  color: #0284c7 !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.20) !important;
+  color: #0f172a !important;
 }
 
 body.sps-demo-mode #menuExport .mi-t {
