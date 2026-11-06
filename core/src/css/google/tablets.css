@@ -369,13 +369,17 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
 .dev.gtab10 .gt10-item-sub span {
   display: inline !important;
 }
-.dev.gtab10 .gt10-item-status,
-.dev.gtab10 .gt10-item-stats {
+.dev.gtab10 .gt10-item-status {
   font-size: 11px;
   color: var(--s);
   display: flex;
   align-items: center;
   gap: 4px;
+}
+.dev.gtab10 .gt10-item-stats {
+  font-size: 11px;
+  color: var(--s);
+  margin-top: 2px;
 }
 .dev.gtab10 .gt10-item-status svg {
   color: var(--g);
@@ -898,6 +902,9 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   font-size: 11px;
   color: var(--s);
   margin-top: 2px;
+}
+.dev.gtab .gp-star-ico {
+  margin-top: -1.5px;
 }
 .dev.gtab7 .gt7-app-btn {
   height: 28px;

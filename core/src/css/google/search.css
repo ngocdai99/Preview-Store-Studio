@@ -263,7 +263,7 @@
   display: inline-block;
   vertical-align: middle;
   flex-shrink: 0;
-  margin: 0;
+  margin-top: -1.5px;
 }
 
 .gp-stat-dl {

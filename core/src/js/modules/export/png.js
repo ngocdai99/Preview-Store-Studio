@@ -502,7 +502,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 9.5px !important;
             display: inline-block !important;
             vertical-align: middle !important;
-            margin: 0 !important;
+            margin-top: -0.5px !important;
             flex-shrink: 0 !important;
           }
           .phone.apple:not(.ipad) .a-met > div {
@@ -1133,8 +1133,16 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.verticalAlign = 'middle';
           el.style.width = '9.5px';
           el.style.height = '9.5px';
-          el.style.margin = '0';
+          el.style.marginTop = '-0.5px';
           el.style.flexShrink = '0';
+        });
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats, .dev.gtab .gt10-item-stats').forEach(el => {
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.gap = '4px';
+        });
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats .gp-stat-rating, .dev.gtab .gt10-item-stats .gp-stat-rating').forEach(el => {
+          el.style.marginTop = '0';
         });
 
         // Strip focus highlight from export capture
