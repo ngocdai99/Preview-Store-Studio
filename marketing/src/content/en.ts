@@ -33,7 +33,7 @@ export const en = {
       href: "/try",
     },
     trustBadges: [
-      "100% Offline & Private",
+      "Offline & Private Workspace",
       "No Subscriptions",
       "Pay Once, Keep Forever",
     ],
@@ -93,7 +93,7 @@ export const en = {
     badColumnTitle: "Without Preview Studio",
     badColumnSubtitle: "Blind form fields, spreadsheets & fragmented drafts",
     goodColumnTitle: "With Preview Studio",
-    goodColumnSubtitle: "Interactive visual workspace · 100% Offline",
+    goodColumnSubtitle: "Interactive visual workspace · Offline & Private",
     beats: [
       {
         id: "beat-1",
@@ -153,7 +153,7 @@ export const en = {
             "Third-party SaaS tools charge recurring monthly fees and require cloud accounts just to preview marketing assets before launch.",
         },
         good: {
-          badge: "100% PRIVATE & OFFLINE",
+          badge: "PRIVATE & OFFLINE",
           title: "One-time purchase · Pay once, keep forever",
           description:
             "A self-contained HTML file running locally on your machine. No subscriptions, no cloud logins, and complete data privacy.",
@@ -201,7 +201,7 @@ export const en = {
     scopeNote: {
       coveredLabel: "What’s covered:",
       covered:
-        "100% of customer-facing store listings: titles, subtitles, descriptions, release notes, phone & tablet screenshots, app icons, age ratings, in-app purchase tags, and App Privacy & Data Safety cards across iOS and Android.",
+        "All customer-facing store listing fields: titles, subtitles, descriptions, release notes, phone & tablet screenshots, app icons, age ratings, in-app purchase tags, and App Privacy & Data Safety cards across iOS and Android.",
       notCoveredLabel: "What’s not covered:",
       notCovered:
         "It is a visual preview & metadata drafting studio — it does not compile or upload binary builds (.ipa/.aab) and does not require developer login access to App Store Connect or Google Play Console.",
@@ -226,7 +226,7 @@ export const en = {
           { text: "Smart Size & Icon Alpha Channel Detection" },
           { text: "Clean 4K Ultra HD Export", tag: "No Watermark" },
           { text: "Store Submission Markdown & JSON Presets", tag: "Dev Handoff" },
-          { text: "100% Private Offline Single-File Studio", tag: ".html" },
+          { text: "Private Offline Single-File Studio", tag: ".html" },
           { text: "Single-User Lifetime Commercial License" },
         ] as TierFeature[],
         cta: {
@@ -269,7 +269,7 @@ export const en = {
     story: [
       "Hi, I'm the creator behind Store Preview Studio.",
       "Like many of you, I got sick of paying $29/month to bloated SaaS platforms just to see how an app screenshot looks inside a phone frame. I also hated having to upload confidential, unreleased client screenshots to third-party servers.",
-      "That's why I built Store Preview Studio as a 100% offline, single-file HTML tool. Pay once, keep it forever, with zero server bills and zero tracking.",
+      "That's why I built Store Preview Studio as a private, single-file HTML tool. Pay once, keep it forever, directly in your browser with zero tracking.",
       "When you buy a license, you're directly supporting an independent craftsperson. If you ever have a question or need a new device frame, you won't get a robot ticket — you'll talk directly to the person who wrote the code.",
     ],
     signature: "Built with craftsmanship for mobile developers worldwide.",

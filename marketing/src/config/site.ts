@@ -12,7 +12,7 @@ export const siteConfig = {
   name: "Store Preview Studio",
   headline: en.hero.titleLead + " " + en.hero.titleAccent,
   description:
-    "The zero-server, 100% offline studio to design, preview, and validate Apple App Store & Google Play listings with realistic device mockups.",
+    "The browser-based, offline studio to design, preview, and prepare Apple App Store & Google Play listings with realistic device mockups.",
   url: "https://store-preview-studio.pages.dev",
   ogImage: "https://store-preview-studio.pages.dev/og-image.png?v=20261026-4k",
   gumroadUrl: "https://kaidevlabs.gumroad.com/l/store-preview-studio",

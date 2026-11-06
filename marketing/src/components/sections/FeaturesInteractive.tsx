@@ -519,7 +519,7 @@ function ComplianceCard() {
                 : "border-amber-500/30 bg-amber-500/10 text-amber-500"
             }`}
           >
-            {flattened ? "STORE COMPLIANT" : "REJECTION RISK"}
+            {flattened ? "ALPHA FLATTENED" : "ALPHA DETECTED"}
           </span>
         </div>
 
@@ -557,7 +557,7 @@ function ComplianceCard() {
                 )}
               </div>
               <div className="text-[10.5px] text-slate-500 mt-0.5">
-                {flattened ? "Ready for Xcode & Store Connect" : "Xcode rejection warning: ITMS-90717"}
+                {flattened ? "Export-ready RGB icon preview" : "Transparency notice: ITMS-90717"}
               </div>
             </div>
           </div>

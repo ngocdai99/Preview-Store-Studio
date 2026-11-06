@@ -23,7 +23,7 @@ export default function BannerStudioPage() {
   // Text configuration
   const [title, setTitle] = useState("Store Preview Studio");
   const [subtitle, setSubtitle] = useState("Dual-Store App Mockup & Metadata Studio");
-  const [badgeText, setBadgeText] = useState("100% Client-Side");
+  const [badgeText, setBadgeText] = useState("Client-Side Studio");
   const [badgeStyle, setBadgeStyle] = useState<"pills" | "neutral" | "dock">("pills");
   const [footerLeft, setFooterLeft] = useState("Ultra HD 4K Export");
   const [footerRight, setFooterRight] = useState("PAY ONCE · OWN FOREVER");
@@ -46,7 +46,7 @@ export default function BannerStudioPage() {
   const [feature2Title, setFeature2Title] = useState("1-Click App Cloner");
   const [feature2Desc, setFeature2Desc] = useState("Instant competitor metadata & screenshot importing");
   
-  const [feature3Title, setFeature3Title] = useState("Zero-Rejection Audit");
+  const [feature3Title, setFeature3Title] = useState("Compliance & Spec Audit");
   const [feature3Desc, setFeature3Desc] = useState("Auto-check text limits & icon alpha compliance");
   
   const [feature4Title, setFeature4Title] = useState("Ready-to-Publish Export");
@@ -319,7 +319,7 @@ export default function BannerStudioPage() {
   const resetDefaults = () => {
     setTitle("Store Preview Studio");
     setSubtitle("Dual-Store App Mockup & Metadata Studio");
-    setBadgeText("100% Client-Side");
+    setBadgeText("Client-Side Studio");
     setBadgeStyle("pills");
     setFooterLeft("Ultra HD 4K Export");
     setFooterRight("PAY ONCE · OWN FOREVER");
@@ -333,7 +333,7 @@ export default function BannerStudioPage() {
     setFeature1Desc("Side-by-side iOS & Android listings as you type");
     setFeature2Title("1-Click App Cloner");
     setFeature2Desc("Instant competitor metadata & screenshot importing");
-    setFeature3Title("Zero-Rejection Audit");
+    setFeature3Title("Compliance & Spec Audit");
     setFeature3Desc("Auto-check text limits & icon alpha channel compliance");
     setFeature4Title("4K Ultra HD Export");
     setFeature4Desc("Crisp 3x Retina mockups & LISTING_METADATA.md handoff");

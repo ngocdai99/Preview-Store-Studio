@@ -219,6 +219,8 @@
   user-select: none;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
 .ms-pill span {
@@ -306,6 +308,44 @@
 .ms-pill.custom.has-draft.on:active,
 .ms-pill.on:active {
   background: #D5D8D6 !important;
+}
+
+/* ---------- WORKSPACE PILL TOP ACCENT LINES (GREEN FOR DRAFT, PURPLE FOR PRESET) ---------- */
+#btnDraft,
+#btnPresetPill {
+  position: relative;
+  overflow: hidden;
+}
+
+#btnDraft::before,
+#btnPresetPill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Green top-edge accent line for Draft */
+#btnDraft::before {
+  background: linear-gradient(90deg, #00d289 0%, #00d289 35%, rgba(0, 210, 137, 0.55) 65%, transparent 100%);
+}
+
+/* Purple top-edge accent line for Preset */
+#btnPresetPill::before {
+  background: linear-gradient(90deg, #c084fc 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
+}
+
+/* Selected state (.on on dark UI): vibrant crisp contrast */
+#btnDraft.on::before {
+  background: linear-gradient(90deg, #00b875 0%, #00d289 35%, rgba(0, 210, 137, 0.55) 65%, transparent 100%);
+}
+
+#btnPresetPill.on::before {
+  background: linear-gradient(90deg, #9333ea 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
 }
 
 .ms-pill.custom.has-draft img,
@@ -511,6 +551,31 @@
 :root[data-ui=light] .ms-pill.custom.has-draft.on .ms-pill-reset-btn:hover,
 :root[data-ui=light] .ms-pill.on .ms-pill-reset-btn:hover {
   color: #0f172a !important;
+}
+
+/* Light mode top accent lines */
+:root[data-ui=light] #btnDraft::before {
+  background: linear-gradient(90deg, #059669 0%, #10b981 35%, rgba(16, 185, 129, 0.55) 65%, transparent 100%);
+}
+
+:root[data-ui=light] #btnPresetPill::before {
+  background: linear-gradient(90deg, #9333ea 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
+}
+
+:root[data-ui=light] #btnPresetPill.on {
+  border-color: rgba(168, 85, 247, 0.45) !important;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.16), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+}
+
+:root[data-ui=light] #btnPresetPill.on:hover {
+  border-color: rgba(168, 85, 247, 0.7) !important;
+  box-shadow: 0 3px 12px rgba(168, 85, 247, 0.22), 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+}
+
+:root[data-ui=light] #btnPresetPill.on small {
+  color: #7e22ce !important;
+  background: rgba(168, 85, 247, 0.12) !important;
+  border: 1px solid rgba(168, 85, 247, 0.28) !important;
 }
 
 #btnPresets {
