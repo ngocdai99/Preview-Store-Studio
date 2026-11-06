@@ -1636,7 +1636,7 @@ function ComplianceCard() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-bold text-slate-900 dark:text-white">
+                  <div className="text-[12px] font-medium text-slate-900 dark:text-white">
                     {alphaMode === "solid" ? (
                       <span className="text-emerald-500">
                         Solid Background Verified
@@ -1712,7 +1712,7 @@ function ComplianceCard() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-bold text-slate-900 dark:text-white">
+                  <div className="text-[12px] font-medium text-slate-900 dark:text-white">
                     {ratioMode === "square" ? (
                       <span className="text-emerald-500">
                         Perfect 1:1 Square Ratio
@@ -1788,7 +1788,7 @@ function ComplianceCard() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-bold text-slate-900 dark:text-white">
+                  <div className="text-[12px] font-medium text-slate-900 dark:text-white">
                     {resolutionMode === "1024" ? (
                       <span className="text-emerald-500">
                         Resolution &amp; File Size Verified
