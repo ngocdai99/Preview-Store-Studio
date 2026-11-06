@@ -13077,7 +13077,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             width: 9.5px !important;
             height: 9.5px !important;
             display: inline-block !important;
-            transform: translateY(-0.75px) !important;
+            vertical-align: middle !important;
+            margin-top: 1px !important;
+            transform: none !important;
             flex-shrink: 0 !important;
           }
           .gp-search-card-meta {
@@ -13827,9 +13829,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
         clonedEl.querySelectorAll('.gp-star-ico').forEach(el => {
           el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
           el.style.width = '9.5px';
           el.style.height = '9.5px';
-          el.style.transform = 'translateY(-0.75px)';
+          el.style.marginTop = '1px';
+          el.style.transform = 'none';
           el.style.flexShrink = '0';
         });
         clonedEl.querySelectorAll('.gp-search-card-meta').forEach(el => {

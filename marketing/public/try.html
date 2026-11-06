@@ -14284,7 +14284,9 @@ display: inline-block !important;
 width: 9.5px !important;
 height: 9.5px !important;
 display: inline-block !important;
-transform: translateY(-0.75px) !important;
+vertical-align: middle !important;
+margin-top: 1px !important;
+transform: none !important;
 flex-shrink: 0 !important;
 }
 .gp-search-card-meta {
@@ -14984,9 +14986,11 @@ el.style.lineHeight = '1';
 });
 clonedEl.querySelectorAll('.gp-star-ico').forEach(el => {
 el.style.display = 'inline-block';
+el.style.verticalAlign = 'middle';
 el.style.width = '9.5px';
 el.style.height = '9.5px';
-el.style.transform = 'translateY(-0.75px)';
+el.style.marginTop = '1px';
+el.style.transform = 'none';
 el.style.flexShrink = '0';
 });
 clonedEl.querySelectorAll('.gp-search-card-meta').forEach(el => {
