@@ -132,10 +132,12 @@ function buildTry() {
   // 1. Resolve HTML includes (all component paths like components/*.html)
   let html = resolveHtmlIncludes(raw, SRC_DIR);
 
-  // 2. Resolve CSS (Demo Mode includes demo-upgrade-modal.css)
+  // 2. Resolve CSS (Demo Mode includes demo-upgrade-modal.css, but strips iPad and Tablet CSS entirely)
   const cssPath = path.join(SRC_DIR, 'css', 'style.css');
   if (!fs.existsSync(cssPath)) throw new Error('Missing src/css/style.css');
-  const rawCss = fs.readFileSync(cssPath, 'utf8');
+  const rawCss = fs.readFileSync(cssPath, 'utf8')
+    .replace(/@import\s+["']apple\/ipad\.css["'];?/gi, '/* [Demo] apple/ipad.css omitted */')
+    .replace(/@import\s+["']google\/tablets\.css["'];?/gi, '/* [Demo] google/tablets.css omitted */');
   let css = resolveCssImports(rawCss, path.dirname(cssPath));
   const demoModalCssPath = path.join(SRC_DIR, 'css', 'modals', 'demo-upgrade-modal.css');
   if (fs.existsSync(demoModalCssPath)) {
