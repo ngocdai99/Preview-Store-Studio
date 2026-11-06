@@ -8,6 +8,14 @@ body.sps-demo-mode #btnPresetPill .ms-pill-reset-btn,
   display: none !important;
 }
 
+/* Demo Mode: Hide page theme toggle button on /try */
+body.sps-demo-mode #btnUi,
+body.sps-demo-mode .theme-toggle-btn,
+.sps-demo-mode #btnUi,
+.sps-demo-mode .theme-toggle-btn {
+  display: none !important;
+}
+
 .demo-upgrade-card {
   max-width: 520px;
   width: 92vw;
