@@ -231,7 +231,7 @@ export const en = {
         ] as TierFeature[],
         cta: {
           label: "Get Started",
-          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio?wanted=true&price=29",
+          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio",
         },
       },
       {
@@ -257,7 +257,7 @@ export const en = {
         ] as TierFeature[],
         cta: {
           label: "Get Started",
-          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio?wanted=true&price=39",
+          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio",
         },
       },
     ],
