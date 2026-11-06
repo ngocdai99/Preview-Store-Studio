@@ -176,7 +176,7 @@ function DeviceFramesCard() {
                         <span className="text-[8px] font-bold text-indigo-100 tracking-tight">Studio Canvas</span>
                       </div>
                       <span className="text-[6.5px] px-1.5 py-0.2 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-200 font-mono font-bold">
-                        4K · 60FPS
+                        HIGH-RES · 4K
                       </span>
                     </div>
 
@@ -216,20 +216,20 @@ function DeviceFramesCard() {
                         <g transform="translate(6, 12)">
                           <rect width="36" height="15" rx="3.5" fill="#101229" stroke="rgba(129,140,248,0.5)" strokeWidth="0.8" />
                           <circle cx="6" cy="7.5" r="2" fill="#818cf8" />
-                          <text x="11" y="9.5" fill="#e0e7ff" fontSize="5" fontWeight="bold" fontFamily="sans-serif">✦ Bezels</text>
+                          <text x="11" y="9.5" fill="#e0e7ff" fontSize="5" fontWeight="bold" fontFamily="sans-serif">✦ Mockups</text>
                         </g>
 
                         {/* Left Floating Format Tag */}
                         <g transform="translate(8, 32)">
                           <rect width="32" height="12" rx="3" fill="#141733" stroke="rgba(99,102,241,0.4)" strokeWidth="0.7" />
-                          <text x="16" y="8" textAnchor="middle" fill="#a5b4fc" fontSize="4.5" fontWeight="bold" fontFamily="monospace">19.5:9</text>
+                          <text x="16" y="8" textAnchor="middle" fill="#a5b4fc" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Phone</text>
                         </g>
 
-                        {/* Center Stage: Floating 3D Tilted Device Mockup */}
+                        {/* Center Stage: Floating 3D Device Mockup */}
                         <g transform="translate(56, 4)">
                           {/* Device Drop Shadow */}
                           <rect x="4" y="6" width="46" height="42" rx="7" fill="#000000" opacity="0.6" filter="blur(3px)" />
-                          {/* Outer Titanium Bezel */}
+                          {/* Outer Device Bezel */}
                           <rect width="48" height="44" rx="7" fill="#181a28" stroke="#818cf8" strokeWidth="1.2" />
                           {/* Screen Artwork */}
                           <rect x="2" y="2" width="44" height="40" rx="5.5" fill="url(#phoneScreenArt)" />
@@ -248,7 +248,7 @@ function DeviceFramesCard() {
                           <rect x="38" y="18" width="2.5" height="12" rx="1" fill="#ffffff" opacity="0.95" />
                           {/* Play button pill at bottom */}
                           <rect x="14" y="34" width="20" height="4" rx="2" fill="#ffffff" opacity="0.9" />
-                          {/* Transform Anchor Corner Markers */}
+                          {/* Corner Markers */}
                           <circle cx="0" cy="0" r="1.8" fill="#22d3ee" />
                           <circle cx="48" cy="0" r="1.8" fill="#22d3ee" />
                           <circle cx="0" cy="44" r="1.8" fill="#22d3ee" />
@@ -266,25 +266,25 @@ function DeviceFramesCard() {
                         {/* Right Floating Badge: Resolution Tag */}
                         <g transform="translate(116, 32)">
                           <rect width="36" height="12" rx="3" fill="#141733" stroke="rgba(34,211,238,0.4)" strokeWidth="0.7" />
-                          <text x="18" y="8" textAnchor="middle" fill="#67e8f9" fontSize="4.5" fontWeight="bold" fontFamily="monospace">4K UHD</text>
+                          <text x="18" y="8" textAnchor="middle" fill="#67e8f9" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">4K UHD</text>
                         </g>
                       </svg>
                     </div>
 
                     {/* Bottom Label */}
                     <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span className="font-medium text-slate-300">Live Stage Canvas</span>
-                      <span className="text-cyan-300 font-semibold">Real-Time Framing</span>
+                      <span className="font-medium text-slate-300">Custom Device Styling</span>
+                      <span className="text-cyan-300 font-semibold">Instant Preview</span>
                     </div>
                   </div>
 
-                  {/* Slide 2: Adaptive Device Fleet */}
+                  {/* Slide 2: Adaptive Device Formats */}
                   <div className="w-[165px] sm:w-[175px] h-[122px] sm:h-[128px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#031d16] via-[#082e22] to-[#02120d] border border-emerald-500/40 relative overflow-hidden shadow-lg">
                     {/* Top Bar */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
-                        <span className="text-[8px] font-bold text-emerald-100 tracking-tight">Adaptive Fleet</span>
+                        <span className="text-[8px] font-bold text-emerald-100 tracking-tight">Adaptive Layouts</span>
                       </div>
                       <span className="text-[6.5px] px-1.5 py-0.2 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 font-mono font-bold">
                         ALL SIZES
@@ -313,7 +313,7 @@ function DeviceFramesCard() {
                         {/* Background Atmospheric Glow */}
                         <ellipse cx="80" cy="27" rx="70" ry="22" fill="url(#auroraGlow)" />
 
-                        {/* Laser Synchronization Beam linking devices */}
+                        {/* Synchronization Connection linking devices */}
                         <path d="M 54 27 L 76 27" stroke="#34d399" strokeWidth="1.2" strokeDasharray="3 2" />
                         <circle cx="65" cy="27" r="3" fill="#10b981" />
                         <circle cx="65" cy="27" r="1.5" fill="#ffffff" />
@@ -329,7 +329,7 @@ function DeviceFramesCard() {
                           <rect x="4.5" y="17" width="19" height="10" rx="1.5" fill="#ffffff" opacity="0.3" />
                           <rect x="4.5" y="29" width="19" height="8" rx="1.5" fill="#ffffff" opacity="0.3" />
                           {/* Label below phone */}
-                          <text x="14" y="47" textAnchor="middle" fill="#a7f3d0" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Phone 6.7"</text>
+                          <text x="14" y="47" textAnchor="middle" fill="#a7f3d0" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Phone View</text>
                         </g>
 
                         {/* Right: Tablet Mockup Frame */}
@@ -344,15 +344,15 @@ function DeviceFramesCard() {
                           <rect x="36" y="7" width="16" height="15" rx="1.5" fill="#ffffff" opacity="0.4" />
                           <rect x="18" y="24" width="34" height="17" rx="1.5" fill="#ffffff" opacity="0.3" />
                           {/* Label below tablet */}
-                          <text x="29" y="49" textAnchor="middle" fill="#99f6e4" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Tablet 13"</text>
+                          <text x="29" y="49" textAnchor="middle" fill="#99f6e4" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Tablet View</text>
                         </g>
                       </svg>
                     </div>
 
                     {/* Bottom Label */}
                     <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span className="font-medium text-slate-300">Responsive Layouts</span>
-                      <span className="text-emerald-300 font-semibold">Standard Store Ratios</span>
+                      <span className="font-medium text-slate-300">Multi-Device Formats</span>
+                      <span className="text-emerald-300 font-semibold">Store Specifications</span>
                     </div>
                   </div>
 
@@ -362,7 +362,7 @@ function DeviceFramesCard() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse shadow-[0_0_6px_#e879f9]" />
-                        <span className="text-[8px] font-bold text-purple-100 tracking-tight">Store Package</span>
+                        <span className="text-[8px] font-bold text-purple-100 tracking-tight">Store Deliverables</span>
                       </div>
                       <span className="text-[6.5px] px-1.5 py-0.2 rounded-full bg-purple-500/30 border border-purple-400/30 text-purple-200 font-mono font-bold">
                         1-CLICK ZIP
@@ -397,31 +397,31 @@ function DeviceFramesCard() {
                           <rect width="36" height="18" rx="3.5" fill="#1f092e" stroke="#e879f9" strokeWidth="0.9" />
                           <rect x="3" y="3" width="10" height="12" rx="1.5" fill="url(#phoneScreen)" />
                           <text x="24" y="10" textAnchor="middle" fill="#fdf4ff" fontSize="4.8" fontWeight="bold" fontFamily="sans-serif">PNG 4K</text>
-                          <text x="24" y="15" textAnchor="middle" fill="#d8b4fe" fontSize="3.8" fontFamily="sans-serif">Screenshots</text>
+                          <text x="24" y="15" textAnchor="middle" fill="#d8b4fe" fontSize="3.8" fontFamily="sans-serif">Deliverables</text>
                         </g>
 
-                        {/* Right Floating Badge: Compliance Passed Shield */}
+                        {/* Right Floating Badge: Submission Checklist */}
                         <g transform="translate(116, 16)">
                           <rect width="36" height="20" rx="3.5" fill="#12251a" stroke="#34d399" strokeWidth="0.9" />
                           <circle cx="11" cy="10" r="4.5" fill="#059669" />
                           <path d="M 9 10 L 10.5 11.5 L 13.5 8.5" fill="none" stroke="#ffffff" strokeWidth="1" strokeLinecap="round" />
-                          <text x="24" y="10" textAnchor="middle" fill="#a7f3d0" fontSize="4.8" fontWeight="bold" fontFamily="sans-serif">PASSED</text>
-                          <text x="24" y="15" textAnchor="middle" fill="#6ee7b7" fontSize="3.8" fontFamily="sans-serif">ASO Ready</text>
+                          <text x="24" y="10" textAnchor="middle" fill="#a7f3d0" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">CHECKLIST</text>
+                          <text x="24" y="15" textAnchor="middle" fill="#6ee7b7" fontSize="3.8" fontFamily="sans-serif">Store Ready</text>
                         </g>
                       </svg>
                     </div>
 
                     {/* Bottom Label */}
                     <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span className="font-medium text-slate-300">In-Browser Privacy</span>
-                      <span className="text-purple-300 font-semibold">Stored locally</span>
+                      <span className="font-medium text-slate-300">Organized Folders</span>
+                      <span className="text-purple-300 font-semibold">Stored in browser</span>
                     </div>
                   </div>
                 </div>
 
-                {/* What's New Snippet below carousel */}
+                {/* Info Snippet below carousel */}
                 <div className="px-1.5 py-0.5 mt-0.5 rounded bg-white/[0.04] border border-white/5 flex items-center justify-between text-[6.5px] text-slate-400 shrink-0">
-                  <span className="font-semibold text-indigo-300">Live Stage Canvas · 4K</span>
+                  <span className="font-semibold text-indigo-300">Multi-Store Layouts · High-Res Assets</span>
                   <span>v2.4</span>
                 </div>
               </div>
@@ -497,99 +497,240 @@ function DeviceFramesCard() {
                   className="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none"
                   style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                 >
-                  {/* Screen 1: Dual-Store Live Studio Canvas */}
-                  <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#0c0a24] via-[#080918] to-black border border-indigo-500/35 relative overflow-hidden">
+                  {/* Slide 1: Studio Canvas (Clean, Visual, Spacious) */}
+                  <div className="w-[180px] sm:w-[195px] h-[132px] sm:h-[140px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#0c0a28] via-[#14113e] to-[#070516] border border-indigo-500/40 relative overflow-hidden shadow-lg">
+                    {/* Top Bar */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[8.5px] font-bold text-indigo-200">Dual-Store Canvas</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#22d3ee]" />
+                        <span className="text-[8.5px] font-bold text-indigo-100 tracking-tight">Studio Canvas</span>
                       </div>
-                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-300 font-mono font-bold">
-                        3x RETINA · 4K
+                      <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-200 font-mono font-bold">
+                        HIGH-RES · 4K
                       </span>
                     </div>
 
-                    {/* Center Studio Mockup Preview with Side-by-Side Frames */}
-                    <div className="flex items-center justify-between gap-3 my-auto px-1">
-                      {/* Left: Mini Phone Stage */}
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-7 h-11 rounded-[4px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
-                          <div className="w-1.5 h-0.5 rounded-full bg-white/40 mx-auto" />
-                          <div className="w-full h-7 rounded-[2px] bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500" />
-                        </div>
-                        <div className="space-y-0.5">
-                          <div className="text-[7.5px] text-white font-bold leading-none">Phone Preview</div>
-                          <div className="text-[6.5px] text-slate-400">1179 × 2556 px</div>
-                          <div className="text-[6px] text-emerald-400 font-semibold">Framed &amp; Screen-Only</div>
-                        </div>
-                      </div>
+                    {/* Rich Visual Mockup Art */}
+                    <div className="my-auto w-full h-16 relative flex items-center justify-center">
+                      <svg viewBox="0 0 170 56" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                          <linearGradient id="ipadCanvasGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.25" />
+                            <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.02" />
+                          </linearGradient>
+                          <linearGradient id="ipadScreenArt" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#6366f1" />
+                            <stop offset="45%" stopColor="#a855f7" />
+                            <stop offset="100%" stopColor="#ec4899" />
+                          </linearGradient>
+                        </defs>
 
-                      {/* Right: Mini Tablet Stage */}
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-9 h-11 rounded-[5px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
-                          <div className="w-2.5 h-0.5 rounded-full bg-white/40 mx-auto" />
-                          <div className="w-full h-7 rounded-[2.5px] bg-gradient-to-br from-purple-500 to-indigo-600" />
-                        </div>
-                        <div className="space-y-0.5">
-                          <div className="text-[7.5px] text-white font-bold leading-none">Tablet Preview</div>
-                          <div className="text-[6.5px] text-slate-400">2048 × 2732 px</div>
-                          <div className="text-[6px] text-indigo-300 font-semibold">Native App Ratio</div>
-                        </div>
-                      </div>
+                        {/* Dot Grid */}
+                        {[22, 50, 120, 148].map((x, idx) => (
+                          <g key={idx}>
+                            <circle cx={x} cy="10" r="0.8" fill="#818cf8" opacity="0.3" />
+                            <circle cx={x} cy="28" r="0.8" fill="#818cf8" opacity="0.3" />
+                            <circle cx={x} cy="46" r="0.8" fill="#818cf8" opacity="0.3" />
+                          </g>
+                        ))}
+
+                        {/* Ground Ellipse */}
+                        <ellipse cx="85" cy="48" rx="60" ry="7" fill="url(#ipadCanvasGrad)" />
+
+                        {/* Floating Layer Tag (Left) */}
+                        <g transform="translate(10, 14)">
+                          <rect width="38" height="15" rx="3.5" fill="#101229" stroke="rgba(129,140,248,0.5)" strokeWidth="0.8" />
+                          <circle cx="7" cy="7.5" r="2.2" fill="#818cf8" />
+                          <text x="12" y="9.5" fill="#e0e7ff" fontSize="5" fontWeight="bold" fontFamily="sans-serif">✦ Mockups</text>
+                        </g>
+
+                        {/* Floating Format Pill (Left Bottom) */}
+                        <g transform="translate(14, 34)">
+                          <rect width="32" height="12" rx="3" fill="#141733" stroke="rgba(99,102,241,0.4)" strokeWidth="0.7" />
+                          <text x="16" y="8" textAnchor="middle" fill="#a5b4fc" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Tablet View</text>
+                        </g>
+
+                        {/* Center Stage: Floating Mockup Device */}
+                        <g transform="translate(61, 5)">
+                          {/* Device Drop Shadow */}
+                          <rect x="4" y="6" width="48" height="42" rx="7" fill="#000000" opacity="0.55" />
+                          {/* Device Frame */}
+                          <rect width="48" height="44" rx="7" fill="#181a28" stroke="#818cf8" strokeWidth="1.2" />
+                          {/* Screen Artwork */}
+                          <rect x="2" y="2" width="44" height="40" rx="5.5" fill="url(#ipadScreenArt)" />
+                          {/* Top indicator dot */}
+                          <circle cx="24" cy="4" r="1" fill="#ffffff" opacity="0.7" />
+                          {/* Visualizer bars */}
+                          <rect x="8" y="15" width="2.8" height="15" rx="1.2" fill="#ffffff" opacity="0.95" />
+                          <rect x="13.5" y="11" width="2.8" height="19" rx="1.2" fill="#ffffff" opacity="0.95" />
+                          <rect x="19" y="18" width="2.8" height="12" rx="1.2" fill="#ffffff" opacity="0.95" />
+                          <rect x="24.5" y="13" width="2.8" height="17" rx="1.2" fill="#ffffff" opacity="0.95" />
+                          <rect x="30" y="20" width="2.8" height="10" rx="1.2" fill="#ffffff" opacity="0.95" />
+                          <rect x="35.5" y="12" width="2.8" height="18" rx="1.2" fill="#ffffff" opacity="0.95" />
+                          {/* Bottom Control Bar */}
+                          <rect x="14" y="34" width="20" height="4" rx="2" fill="#ffffff" opacity="0.9" />
+                        </g>
+
+                        {/* Floating Swatch Palette (Right) */}
+                        <g transform="translate(122, 14)">
+                          <rect width="38" height="15" rx="3.5" fill="#101229" stroke="rgba(129,140,248,0.5)" strokeWidth="0.8" />
+                          <circle cx="8" cy="7.5" r="2.2" fill="#00D085" />
+                          <circle cx="15" cy="7.5" r="2.2" fill="#22d3ee" />
+                          <circle cx="22" cy="7.5" r="2.2" fill="#a855f7" />
+                          <circle cx="29" cy="7.5" r="2.2" fill="#f43f5e" />
+                        </g>
+
+                        {/* Floating Resolution Tag (Right Bottom) */}
+                        <g transform="translate(124, 34)">
+                          <rect width="32" height="12" rx="3" fill="#141733" stroke="rgba(34,211,238,0.4)" strokeWidth="0.7" />
+                          <text x="16" y="8" textAnchor="middle" fill="#67e8f9" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">4K UHD</text>
+                        </g>
+                      </svg>
                     </div>
 
+                    {/* Footer */}
                     <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span>Live Stage Canvas</span>
-                      <span className="text-indigo-400 font-semibold">Dual-Store Viewports</span>
+                      <span className="font-medium text-slate-300">Custom Device Styling</span>
+                      <span className="text-cyan-300 font-semibold">Instant Preview</span>
                     </div>
                   </div>
 
-                  {/* Screen 2: Pre-Flight Compliance & 1-Click Package */}
-                  <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#1a0822] via-[#0e0514] to-black border border-purple-500/35 relative overflow-hidden">
+                  {/* Slide 2: Multi-Device Formats (Spacious, Clear, Non-Technical) */}
+                  <div className="w-[180px] sm:w-[195px] h-[132px] sm:h-[140px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#061816] via-[#0b2823] to-[#04100e] border border-emerald-500/40 relative overflow-hidden shadow-lg">
+                    {/* Top Bar */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[8.5px] font-bold text-purple-200">Pre-Flight Compliance</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
+                        <span className="text-[8.5px] font-bold text-emerald-100 tracking-tight">Adaptive Layouts</span>
                       </div>
-                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
-                        100% PASSED ✓
+                      <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 font-mono font-bold">
+                        ALL SIZES
                       </span>
                     </div>
 
-                    {/* Split View: Left Audit Specs, Right Export ZIP Badge */}
-                    <div className="flex items-center justify-between gap-2.5 my-auto px-1">
-                      <div className="flex-1 space-y-1">
-                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
-                          <span className="text-slate-300">App Title &amp; Subtitle Specs</span>
-                          <span className="text-emerald-400 font-bold">Valid ✓</span>
-                        </div>
-                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
-                          <span className="text-slate-300">Master Icon 1024 (Opaque)</span>
-                          <span className="text-cyan-400 font-bold">Compliant ✓</span>
-                        </div>
-                      </div>
+                    {/* Dual Formats Showcase SVG */}
+                    <div className="my-auto w-full h-16 relative flex items-center justify-center">
+                      <svg viewBox="0 0 170 56" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                          <linearGradient id="ipadPhoneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#10b981" />
+                            <stop offset="50%" stopColor="#059669" />
+                            <stop offset="100%" stopColor="#047857" />
+                          </linearGradient>
+                          <linearGradient id="ipadTabletGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#14b8a6" />
+                            <stop offset="50%" stopColor="#0d9488" />
+                            <stop offset="100%" stopColor="#0f766e" />
+                          </linearGradient>
+                          <radialGradient id="ipadGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stopColor="#34d399" stopOpacity="0.25" />
+                            <stop offset="100%" stopColor="#031d16" stopOpacity="0" />
+                          </radialGradient>
+                        </defs>
 
-                      <div className="w-20 rounded-lg p-1.5 bg-purple-950/60 border border-purple-500/30 flex flex-col justify-between text-center shrink-0">
-                        <span className="text-[7px] text-white font-mono font-bold truncate">store-bundle.zip</span>
-                        <div className="flex justify-center gap-1 my-0.5">
-                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">PNG</span>
-                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">ZIP</span>
-                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">MD</span>
-                        </div>
-                        <span className="text-[6px] text-emerald-400 font-bold">1-Click Export</span>
-                      </div>
+                        {/* Background Glow */}
+                        <ellipse cx="85" cy="28" rx="75" ry="24" fill="url(#ipadGlow)" />
+
+                        {/* Sync Connecting Beam */}
+                        <path d="M 58 28 L 84 28" stroke="#34d399" strokeWidth="1.2" strokeDasharray="3 2" />
+                        <circle cx="71" cy="28" r="3" fill="#10b981" />
+                        <circle cx="71" cy="28" r="1.5" fill="#ffffff" />
+
+                        {/* Left: Phone View Frame */}
+                        <g transform="translate(26, 6)">
+                          <rect width="28" height="42" rx="5" fill="#081813" stroke="#34d399" strokeWidth="1.2" />
+                          <rect x="2" y="2" width="24" height="38" rx="4" fill="url(#ipadPhoneGrad)" />
+                          <rect x="9" y="3.5" width="10" height="2" rx="1" fill="#04140f" />
+                          <rect x="4.5" y="8" width="19" height="7" rx="1.5" fill="#ffffff" opacity="0.85" />
+                          <rect x="4.5" y="17" width="19" height="10" rx="1.5" fill="#ffffff" opacity="0.3" />
+                          <rect x="4.5" y="29" width="19" height="8" rx="1.5" fill="#ffffff" opacity="0.3" />
+                          <text x="14" y="47" textAnchor="middle" fill="#a7f3d0" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Phone View</text>
+                        </g>
+
+                        {/* Right: Tablet View Frame */}
+                        <g transform="translate(86, 4)">
+                          <rect width="58" height="46" rx="5.5" fill="#081813" stroke="#2dd4bf" strokeWidth="1.2" />
+                          <rect x="2" y="2" width="54" height="42" rx="4.5" fill="url(#ipadTabletGrad)" />
+                          <circle cx="29" cy="3.5" r="1" fill="#ffffff" opacity="0.7" />
+                          <rect x="4" y="7" width="12" height="34" rx="1.5" fill="#ffffff" opacity="0.25" />
+                          <rect x="18" y="7" width="16" height="15" rx="1.5" fill="#ffffff" opacity="0.85" />
+                          <rect x="36" y="7" width="16" height="15" rx="1.5" fill="#ffffff" opacity="0.4" />
+                          <rect x="18" y="24" width="34" height="17" rx="1.5" fill="#ffffff" opacity="0.3" />
+                          <text x="29" y="49" textAnchor="middle" fill="#99f6e4" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Tablet View</text>
+                        </g>
+                      </svg>
                     </div>
 
+                    {/* Footer */}
                     <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span>In-Browser Privacy</span>
-                      <span className="text-purple-400 font-semibold">Stored locally in your browser</span>
+                      <span className="font-medium text-slate-300">Multi-Device Formats</span>
+                      <span className="text-emerald-300 font-semibold">Store Specifications</span>
+                    </div>
+                  </div>
+
+                  {/* Slide 3: Store Deliverables (Spacious, Zero Overpromising) */}
+                  <div className="w-[180px] sm:w-[195px] h-[132px] sm:h-[140px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#1c0828] via-[#2d0d3e] to-[#0e0314] border border-purple-500/40 relative overflow-hidden shadow-lg">
+                    {/* Top Bar */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse shadow-[0_0_6px_#e879f9]" />
+                        <span className="text-[8.5px] font-bold text-purple-100 tracking-tight">Store Deliverables</span>
+                      </div>
+                      <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-purple-500/30 border border-purple-400/30 text-purple-200 font-mono font-bold">
+                        1-CLICK ZIP
+                      </span>
+                    </div>
+
+                    {/* Deliverables Package SVG */}
+                    <div className="my-auto w-full h-16 relative flex items-center justify-center">
+                      <svg viewBox="0 0 170 56" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                        {/* Sparkles */}
+                        <path d="M 24 10 L 25.5 13 L 28 14.5 L 25.5 16 L 24 19 L 22.5 16 L 20 14.5 L 22.5 13 Z" fill="#fde047" opacity="0.8" />
+                        <path d="M 148 40 L 149 42 L 151 43 L 149 44 L 148 46 L 147 44 L 145 43 L 147 42 Z" fill="#22d3ee" opacity="0.8" />
+
+                        {/* Central Export Package Vault */}
+                        <g transform="translate(57, 11)">
+                          <rect width="56" height="34" rx="5" fill="#190724" stroke="#c084fc" strokeWidth="1.2" />
+                          <path d="M 4 0 L 18 0 L 22 4 L 52 4 L 52 0" fill="none" stroke="#e879f9" strokeWidth="1" />
+                          <text x="28" y="14" textAnchor="middle" fill="#ffffff" fontSize="5.5" fontWeight="bold" fontFamily="monospace">store-bundle.zip</text>
+                          <rect x="6" y="19" width="12" height="7" rx="1.5" fill="rgba(192,132,252,0.3)" stroke="#c084fc" strokeWidth="0.6" />
+                          <text x="12" y="24" textAnchor="middle" fill="#f3e8ff" fontSize="4.2" fontWeight="bold" fontFamily="monospace">PNG</text>
+                          <rect x="22" y="19" width="12" height="7" rx="1.5" fill="rgba(192,132,252,0.3)" stroke="#c084fc" strokeWidth="0.6" />
+                          <text x="28" y="24" textAnchor="middle" fill="#f3e8ff" fontSize="4.2" fontWeight="bold" fontFamily="monospace">ZIP</text>
+                          <rect x="38" y="19" width="12" height="7" rx="1.5" fill="rgba(192,132,252,0.3)" stroke="#c084fc" strokeWidth="0.6" />
+                          <text x="44" y="24" textAnchor="middle" fill="#f3e8ff" fontSize="4.2" fontWeight="bold" fontFamily="monospace">MD</text>
+                        </g>
+
+                        {/* Left Floating Asset Card: High-Res Deliverables */}
+                        <g transform="translate(10, 18)">
+                          <rect width="40" height="19" rx="3.5" fill="#1f092e" stroke="#e879f9" strokeWidth="0.9" />
+                          <rect x="3.5" y="3.5" width="11" height="12" rx="1.5" fill="#6366f1" />
+                          <text x="26" y="10.5" textAnchor="middle" fill="#fdf4ff" fontSize="4.8" fontWeight="bold" fontFamily="sans-serif">PNG 4K</text>
+                          <text x="26" y="15.5" textAnchor="middle" fill="#d8b4fe" fontSize="3.8" fontFamily="sans-serif">Deliverables</text>
+                        </g>
+
+                        {/* Right Floating Badge: Submission Checklist */}
+                        <g transform="translate(120, 17)">
+                          <rect width="40" height="20" rx="3.5" fill="#12251a" stroke="#34d399" strokeWidth="0.9" />
+                          <circle cx="11" cy="10" r="4.5" fill="#059669" />
+                          <path d="M 9 10 L 10.5 11.5 L 13.5 8.5" fill="none" stroke="#ffffff" strokeWidth="1" strokeLinecap="round" />
+                          <text x="26" y="10" textAnchor="middle" fill="#a7f3d0" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">CHECKLIST</text>
+                          <text x="26" y="15.5" textAnchor="middle" fill="#6ee7b7" fontSize="3.8" fontFamily="sans-serif">Store Ready</text>
+                        </g>
+                      </svg>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span className="font-medium text-slate-300">Organized Folders</span>
+                      <span className="text-purple-300 font-semibold">Stored in browser</span>
                     </div>
                   </div>
                 </div>
 
                 {/* What's New Snippet below screenshots */}
                 <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
-                  <span className="font-semibold text-indigo-300">Universal Canvas · 4K Stage</span>
+                  <span className="font-semibold text-indigo-300">Multi-Store Layouts · High-Res Assets</span>
                   <span>v2.4 · 65 MB</span>
                 </div>
               </div>
