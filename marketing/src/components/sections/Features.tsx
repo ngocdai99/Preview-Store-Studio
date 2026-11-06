@@ -1629,12 +1629,12 @@ function ComplianceCard() {
                 <div
                   className={`w-11 h-11 rounded-xl border flex items-center justify-center font-black text-lg transition-all duration-300 shrink-0 ${
                     alphaMode === "solid"
-                      ? "bg-[#0b0c0e] border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
-                      : "bg-[#121312] dark:bg-[#141514] [background-image:radial-gradient(circle,rgba(255,255,255,0.15)_1.2px,transparent_1.2px)] [background-size:8px_8px] border-amber-500/40 shadow-sm"
+                      ? "bg-[#0b0c0e] border-emerald-500/50"
+                      : "bg-[#121312] dark:bg-[#141514] [background-image:radial-gradient(circle,rgba(255,255,255,0.15)_1.2px,transparent_1.2px)] [background-size:8px_8px] border-amber-500/40"
                   }`}
                 >
                   <span
-                    className={`text-base drop-shadow-sm select-none ${
+                    className={`text-base select-none ${
                       alphaMode === "solid" ? "text-emerald-400" : "text-amber-400"
                     }`}
                   >
@@ -1719,8 +1719,8 @@ function ComplianceCard() {
                 <div
                   className={`h-11 rounded-xl border flex items-center justify-center font-mono text-[11px] font-bold transition-all duration-300 shrink-0 ${
                     ratioMode === "square"
-                      ? "w-11 bg-[#0b0c0e] border-emerald-500/50 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
-                      : "w-14 bg-[#181510] border-amber-500/40 text-amber-400 shadow-sm"
+                      ? "w-11 bg-[#0b0c0e] border-emerald-500/50 text-emerald-400"
+                      : "w-14 bg-[#181510] border-amber-500/40 text-amber-400"
                   }`}
                 >
                   {ratioMode === "square" ? "1:1" : "4:3"}
@@ -1798,7 +1798,7 @@ function ComplianceCard() {
 
               {/* Simulated Icon & Dimension Readout */}
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl border border-emerald-500/50 bg-[#0b0c0e] flex items-center justify-center font-mono text-[10px] font-bold text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)] shrink-0">
+                <div className="w-11 h-11 rounded-xl border border-emerald-500/50 bg-[#0b0c0e] flex items-center justify-center font-mono text-[10px] font-bold text-emerald-400 shrink-0">
                   {resolutionMode === "1024" ? "1024" : "512"}
                 </div>
 
