@@ -5189,7 +5189,7 @@ function renderIpadShots(){
       c.classList.toggle('has-landscape', isLandscapeUrl);
       if (searchView) searchView.classList.toggle('has-landscape', isLandscapeUrl);
 
-      const count = isLandscapeUrl ? 1 : Math.min(2, valid.length);
+      const count = Math.min(2, valid.length);
       for (let i = 0; i < count; i++) {
         const s = valid[i];
         const img = mk(s || (typeof PH_IPAD !== 'undefined' ? PH_IPAD : PH), 'Result ' + (i + 1));
@@ -5205,7 +5205,7 @@ function renderIpadShots(){
             if (searchView) searchView.classList.add('has-landscape');
             this.classList.add('landscape-shot');
             this.classList.remove('portrait-shot');
-            while (c.children.length > 1) {
+            while (c.children.length > 2) {
               c.removeChild(c.lastChild);
             }
           } else if (this.naturalHeight > this.naturalWidth * 1.15 && c.classList.contains('has-landscape')) {
@@ -5218,10 +5218,13 @@ function renderIpadShots(){
         c.appendChild(img);
       }
 
-      if (!isLandscapeUrl && valid.length === 1) {
-        const sk = document.createElement('div');
-        sk.className = 'ipad-skel-shot';
-        c.appendChild(sk);
+      if (valid.length === 1) {
+        let sk = c.querySelector('.ipad-skel-shot');
+        if (!sk) {
+          sk = document.createElement('div');
+          sk.className = 'ipad-skel-shot';
+          c.appendChild(sk);
+        }
       }
     }
   });
