@@ -343,6 +343,13 @@ function applyImportedStoreApp(state) {
   if (typeof syncAllVtPills === 'function') syncAllVtPills();
   if (typeof fit === 'function') fit();
 
+  const targetId = state.appId || state.appleId || (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : '');
+  if (targetId && typeof sessionStorage !== 'undefined') {
+    try {
+      sessionStorage.setItem('sps_store_app_' + targetId, JSON.stringify(userDraft || state));
+    } catch (_) {}
+  }
+
   const appName = state.form && state.form.name ? state.form.name : 'App';
   if (typeof showToast === 'function') {
     showToast('Imported ' + appName + ' from App Store successfully');
@@ -825,6 +832,16 @@ function checkAndLoadStoreParams() {
     }
 
     if (target) {
+      const cleanTargetId = target.id ? String(target.id).trim() : '';
+      const currentActiveId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+        ? String(CURRENT_APP_ID).trim()
+        : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+
+      // If the app is already loaded in draft (e.g. from cache on reload), skip redundant re-fetch
+      if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft') {
+        return;
+      }
+
       if (typeof isDemoMode === 'function' && isDemoMode()) {
         const demoInput = $('storeImportInput');
         if (demoInput) demoInput.value = appid || url;

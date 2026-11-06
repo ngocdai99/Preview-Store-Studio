@@ -115,7 +115,41 @@ document.body.dataset.googleDevice = 'phone';
 if (typeof setStore === 'function') setStore('apple', false, true);
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
 
+// Check if URL specifies an incoming app to auto-load
+let initialUrlAppId = null;
+try {
+  let searchStr = (window.location && window.location.search) ? window.location.search : '';
+  if (!searchStr || searchStr === '?embed=true' || searchStr === '?embed=1' || searchStr === '?embed=true&') {
+    if (window.parent && window.parent !== window) {
+      try {
+        const parentSearch = window.parent.location.search;
+        if (parentSearch) searchStr = parentSearch;
+      } catch (_) {}
+    }
+  }
+  if (searchStr) {
+    const sp = new URLSearchParams(searchStr);
+    const rawId = sp.get('appid') || sp.get('apple') || sp.get('app_id') || sp.get('apple_id') || sp.get('id') || sp.get('app');
+    if (rawId) initialUrlAppId = rawId.replace(/^id/i, '').trim();
+  }
+} catch (_) {}
+
 if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
+
+// If URL has appid, try restoring from sessionStorage cache for instant reload without network latency
+if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
+  try {
+    const cachedRaw = sessionStorage.getItem('sps_store_app_' + initialUrlAppId);
+    if (cachedRaw) {
+      const cachedState = JSON.parse(cachedRaw);
+      if (cachedState && typeof cachedState === 'object') {
+        userDraft = cachedState;
+        CURRENT_APP_ID = initialUrlAppId;
+        if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+      }
+    }
+  } catch (_) {}
+}
 
 if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
   try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
@@ -132,9 +166,17 @@ if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to
   }finally{
     restoring = false;
   }
+} else if(initialUrlAppId && userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
+  CURRENT_PRESET_KEY = 'draft';
+  loadPreset('draft');
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
   CURRENT_PRESET_KEY = 'draft';
   loadPreset('draft');
+} else if(initialUrlAppId){
+  // URL has an app ID: stay in draft mode with clean slate so studio preset is never loaded or flashed
+  CURRENT_PRESET_KEY = 'draft';
+  loadPreset('none');
+  CURRENT_PRESET_KEY = 'draft';
 } else if(!loadState()){
   restoring = true;
   try{

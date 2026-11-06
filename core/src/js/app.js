@@ -11565,6 +11565,15 @@ function resetDraftWorkspace(){
   try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
+  if(typeof sessionStorage !== 'undefined'){
+    try{
+      sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+      for(let i = sessionStorage.length - 1; i >= 0; i--){
+        const k = sessionStorage.key(i);
+        if(k && k.startsWith('sps_store_app_')) sessionStorage.removeItem(k);
+      }
+    }catch(_){}
+  }
   if(typeof idbDelete === 'function'){
     idbDelete(DRAFT_STORAGE_KEY);
     idbDelete(STORAGE_KEY);
@@ -14301,6 +14310,13 @@ function applyImportedStoreApp(state) {
   if (typeof syncAllVtPills === 'function') syncAllVtPills();
   if (typeof fit === 'function') fit();
 
+  const targetId = state.appId || state.appleId || (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : '');
+  if (targetId && typeof sessionStorage !== 'undefined') {
+    try {
+      sessionStorage.setItem('sps_store_app_' + targetId, JSON.stringify(userDraft || state));
+    } catch (_) {}
+  }
+
   const appName = state.form && state.form.name ? state.form.name : 'App';
   if (typeof showToast === 'function') {
     showToast('Imported ' + appName + ' from App Store successfully');
@@ -14775,6 +14791,16 @@ function checkAndLoadStoreParams() {
     }
 
     if (target) {
+      const cleanTargetId = target.id ? String(target.id).trim() : '';
+      const currentActiveId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
+        ? String(CURRENT_APP_ID).trim()
+        : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
+
+      // If the app is already loaded in draft (e.g. from cache on reload), skip redundant re-fetch
+      if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft') {
+        return;
+      }
+
       openStoreImportModal();
       const input = $('storeImportInput');
       if (input) input.value = appid || url;
@@ -14946,7 +14972,41 @@ document.body.dataset.googleDevice = 'phone';
 if (typeof setStore === 'function') setStore('apple', false, true);
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
 
+// Check if URL specifies an incoming app to auto-load
+let initialUrlAppId = null;
+try {
+  let searchStr = (window.location && window.location.search) ? window.location.search : '';
+  if (!searchStr || searchStr === '?embed=true' || searchStr === '?embed=1' || searchStr === '?embed=true&') {
+    if (window.parent && window.parent !== window) {
+      try {
+        const parentSearch = window.parent.location.search;
+        if (parentSearch) searchStr = parentSearch;
+      } catch (_) {}
+    }
+  }
+  if (searchStr) {
+    const sp = new URLSearchParams(searchStr);
+    const rawId = sp.get('appid') || sp.get('apple') || sp.get('app_id') || sp.get('apple_id') || sp.get('id') || sp.get('app');
+    if (rawId) initialUrlAppId = rawId.replace(/^id/i, '').trim();
+  }
+} catch (_) {}
+
 if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
+
+// If URL has appid, try restoring from sessionStorage cache for instant reload without network latency
+if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
+  try {
+    const cachedRaw = sessionStorage.getItem('sps_store_app_' + initialUrlAppId);
+    if (cachedRaw) {
+      const cachedState = JSON.parse(cachedRaw);
+      if (cachedState && typeof cachedState === 'object') {
+        userDraft = cachedState;
+        CURRENT_APP_ID = initialUrlAppId;
+        if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+      }
+    }
+  } catch (_) {}
+}
 
 if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
   try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
@@ -14963,9 +15023,17 @@ if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to
   }finally{
     restoring = false;
   }
+} else if(initialUrlAppId && userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
+  CURRENT_PRESET_KEY = 'draft';
+  loadPreset('draft');
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
   CURRENT_PRESET_KEY = 'draft';
   loadPreset('draft');
+} else if(initialUrlAppId){
+  // URL has an app ID: stay in draft mode with clean slate so studio preset is never loaded or flashed
+  CURRENT_PRESET_KEY = 'draft';
+  loadPreset('none');
+  CURRENT_PRESET_KEY = 'draft';
 } else if(!loadState()){
   restoring = true;
   try{

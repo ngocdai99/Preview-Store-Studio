@@ -342,6 +342,11 @@ function notifyStorageNotPersisted(){
 // Resolves true when a FULL (non-sanitized) copy of the draft was persisted somewhere.
 function saveDraftToStorage(){
   if(typeof isDemoMode === 'function' && isDemoMode()){
+    if(userDraft && typeof sessionStorage !== 'undefined'){
+      try{
+        sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(sanitizeStateForLocalStorage(userDraft)));
+      }catch(_){}
+    }
     return Promise.resolve(true);
   }
   if(!userDraft) return Promise.resolve(true);
@@ -374,6 +379,20 @@ function saveDraftToStorage(){
 
 function loadDraftFromStorage(){
   try{
+    if(typeof isDemoMode === 'function' && isDemoMode() && typeof sessionStorage !== 'undefined'){
+      const rawDemo = sessionStorage.getItem(DRAFT_STORAGE_KEY);
+      if(rawDemo){
+        const parsedDemo = JSON.parse(rawDemo);
+        if(parsedDemo && typeof parsedDemo === 'object'){
+          userDraft = parsedDemo;
+          if(userDraft.appId || userDraft.appleId){
+            CURRENT_APP_ID = String(userDraft.appId || userDraft.appleId);
+            if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+          }
+          return;
+        }
+      }
+    }
     if(typeof localStorage !== 'undefined'){
       const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
       if(raw){
@@ -470,6 +489,15 @@ function resetDraftWorkspace(){
   try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
+  if(typeof sessionStorage !== 'undefined'){
+    try{
+      sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+      for(let i = sessionStorage.length - 1; i >= 0; i--){
+        const k = sessionStorage.key(i);
+        if(k && k.startsWith('sps_store_app_')) sessionStorage.removeItem(k);
+      }
+    }catch(_){}
+  }
   if(typeof idbDelete === 'function'){
     idbDelete(DRAFT_STORAGE_KEY);
     idbDelete(STORAGE_KEY);
