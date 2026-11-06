@@ -1617,15 +1617,11 @@ function ComplianceCard() {
                   </button>
                 </div>
 
-                <span
-                  className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold ${
-                    alphaMode === "solid"
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "bg-amber-500/15 text-amber-400"
-                  }`}
-                >
-                  {alphaMode === "solid" ? "0% ALPHA" : "FLAGGED"}
-                </span>
+                {alphaMode === "solid" && (
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-400">
+                    0% ALPHA
+                  </span>
+                )}
               </div>
 
               {/* Simulated Icon & Inspection Readout */}
@@ -1711,15 +1707,11 @@ function ComplianceCard() {
                   </button>
                 </div>
 
-                <span
-                  className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold ${
-                    ratioMode === "square"
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "bg-amber-500/15 text-amber-400"
-                  }`}
-                >
-                  {ratioMode === "square" ? "1:1 SQUARE" : "FLAGGED"}
-                </span>
+                {ratioMode === "square" && (
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-400">
+                    1:1 SQUARE
+                  </span>
+                )}
               </div>
 
               {/* Simulated Icon & Ratio Readout */}
@@ -1749,7 +1741,7 @@ function ComplianceCard() {
                   <div className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                     {ratioMode === "square"
                       ? "Width and height are identical (1.00) · No image distortion"
-                      : "Aspect ratio is 1.33:1 · Store grids will squish or crop icon"}
+                      : "Aspect ratio is 1.33:1 · Required: 1:1 square"}
                   </div>
                 </div>
               </div>
