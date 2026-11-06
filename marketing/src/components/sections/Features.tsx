@@ -1587,7 +1587,7 @@ function ComplianceCard() {
         </div>
 
         {/* Interactive Visual Canvas matching Card 04 Height */}
-        <div className="rounded-xl bg-slate-100 dark:bg-[#141514] border border-slate-200/80 dark:border-white/[0.06] p-3 min-h-[142px] flex flex-col justify-between">
+        <div className="rounded-xl bg-slate-100 dark:bg-[#141514] border border-slate-200/80 dark:border-white/[0.06] p-3 min-h-[142px] flex flex-col justify-center">
           {tab === "transparency" && (
             <div className="space-y-2.5">
               {/* Test selector buttons */}
@@ -1661,20 +1661,6 @@ function ComplianceCard() {
                   </div>
                 </div>
               </div>
-
-              {/* Compliance specification pill */}
-              <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center gap-1.5 text-[10.5px]">
-                <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                    alphaMode === "solid" ? "bg-emerald-400" : "bg-amber-400"
-                  }`}
-                />
-                <span className="text-slate-700 dark:text-slate-300 font-medium truncate">
-                  {alphaMode === "solid"
-                    ? "App Store & Google Play reject icons with transparent cutouts"
-                    : "Action needed: Save icon with opaque background (remove alpha)"}
-                </span>
-              </div>
             </div>
           )}
 
@@ -1745,20 +1731,6 @@ function ComplianceCard() {
                   </div>
                 </div>
               </div>
-
-              {/* Ratio summary pill */}
-              <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center gap-1.5 text-[10.5px]">
-                <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                    ratioMode === "square" ? "bg-emerald-400" : "bg-amber-400"
-                  }`}
-                />
-                <span className="text-slate-700 dark:text-slate-300 font-medium truncate">
-                  {ratioMode === "square"
-                    ? "Standard app icon requirement: Equal width and height"
-                    : "Action needed: Provide image with exact 1:1 square dimensions"}
-                </span>
-              </div>
             </div>
           )}
 
@@ -1814,16 +1786,6 @@ function ComplianceCard() {
                       : "512 × 512 px store icon for Google Play Console"}
                   </div>
                 </div>
-              </div>
-
-              {/* Resolution summary pill */}
-              <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center gap-1.5 text-[10.5px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                <span className="text-slate-700 dark:text-slate-300 font-medium truncate">
-                  {resolutionMode === "1024"
-                    ? "App Store master icon spec: Exactly 1024 × 1024 px"
-                    : "Google Play store icon spec: Exactly 512 × 512 px"}
-                </span>
               </div>
             </div>
           )}
