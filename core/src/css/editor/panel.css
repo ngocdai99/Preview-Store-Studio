@@ -276,13 +276,13 @@ body.sidebar-collapsed .editor-resizer{
 .privacy-compact-box {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 6px 2px 2px;
+  gap: 2px;
+  padding: 1px 2px 0;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   user-select: text;
-  margin-top: 4px;
+  margin-top: 0;
 }
 .pcb-left {
   display: flex;
@@ -336,7 +336,7 @@ body.sidebar-collapsed .editor-resizer{
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   background: transparent;
   border: none;
   padding: 0;
