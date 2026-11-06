@@ -118,12 +118,13 @@
   margin-top:1px;
 }
 .dest-tag-req{
-  font-size:8.5px;
-  font-weight:700;
-  padding:1px 5px;
-  border-radius:3px;
-  background:rgba(255,255,255,0.08);
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.05em;
   color:var(--mut);
+  background:transparent;
+  padding:0;
+  border:none;
   white-space:nowrap;
 }
 .dest-tag-opt{
@@ -181,6 +182,7 @@
 :root[data-ui=light] .dest-tile:not(.active) .dest-name{color:#64748b}
 :root[data-ui=light] .dest-tile.active .dest-name{color:#0f172a}
 :root[data-ui=light] .dest-tag-opt{color:#0071e3;background:transparent}
+:root[data-ui=light] .dest-tag-req{color:#64748b;background:transparent}
 :root[data-ui=light] .dest-desc-bar{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
 :root[data-ui=light] .dest-desc-bar.active-universal{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
 :root[data-ui=light] .dest-desc-bar strong{color:#0f172a}
