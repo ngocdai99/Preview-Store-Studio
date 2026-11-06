@@ -1,8 +1,8 @@
 # SRS: Export Engine & Cross-Browser Troubleshooting Playbook
 
 > **Mã tài liệu:** `SRS_EXPORT_CROSS_BROWSER_TROUBLESHOOTING`  
-> **Phiên bản:** `1.0.0`  
-> **Cập nhật lần cuối:** `2026-11-06`  
+> **Phiên bản:** `1.1.0`  
+> **Cập nhật lần cuối:** `2026-11-07`  
 > **Phạm vi áp dụng:** Bộ engine xuất ảnh PNG/ZIP (`core/src/js/modules/export/`), các thành phần mockup đa nền tảng (`core/src/components/mockups/`), và các quy chuẩn layout DOM/CSS.
 
 ---
@@ -271,6 +271,109 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
      ```javascript
      if (el.closest('.a-met, .ipad-met, .g-met')) return;
      ```
+
+---
+
+### Case 6: Lỗi Ellipsis Cắt Chuỗi Search Card Bị Vỡ Thành Nhiều Dòng Trên Bản Xuất PNG (Single-Line Truncation & Multi-Line Wrap Divergence)
+
+#### Triệu chứng thực tế
+- Trên **Live Canvas (Preview DOM)**:
+  - Tên ứng dụng, tên công ty / nhà phát triển hoặc dòng phụ đề dài được trình duyệt tự động cắt gọn gàng trên 1 dòng đơn kèm dấu ba chấm `...` theo CSS `text-overflow: ellipsis; white-space: nowrap; overflow: hidden;` (ví dụ: `TAM TRI LUC TRAINING JOINT STO...` hoặc `Official Social Networking A...`).
+- Trên **Bản xuất PNG (`exportPNG` / html2canvas)**:
+  - Dòng text bị rớt xuống thành 2 dòng, text bung full độ dài (ví dụ: `TAM TRI LUC TRAINING` ở dòng 1 và `JOINT STOCK COMPANY` ở dòng 2).
+  - Dấu chấm phân cách và category (`• Education`) bị đẩy dạt sang mép phải hoặc nhảy hàng bậc thang.
+  - Hoàn toàn biến mất ký tự ba chấm `...` so với màn hình canvas ban đầu.
+
+#### Cơ chế tầng sâu (Root Cause)
+1. **html2canvas không tự sinh ra ký tự glyph `...` (Ellipsis Fallback Bug):**
+   - html2canvas là canvas rasterizer duyệt qua các text node của DOM tree và đo tọa độ qua `Range.getClientRects()`. Khi gặp `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;`, thư viện **không có logic vẽ glyph `...` độc lập**.
+   - Thay vào đó, html2canvas vẽ toàn bộ chuỗi text tràn ra ngoài biên hoặc cắt cụt (clip) nham nhở các nét chữ mà không có dấu ba chấm.
+2. **Xung đột `white-space: pre-wrap !important` trên các phần tử `[data-b]`:**
+   - Để xử lý lỗi dính chữ (Case 1), engine xuất ảnh inject style:
+     ```css
+     [data-b]:not(...) { white-space: pre-wrap !important; overflow: visible !important; }
+     ```
+   - Nếu các thẻ con `[data-b="dev"]` hoặc `[data-b="cat"]` bên trong card tìm kiếm (như `.gt10-item-sub [data-b]`, `.gt7-app-meta [data-b]`, `.ipad-sr-card-info [data-b]`) không được loại trừ tường minh trong selector `:not(...)` hoặc trong vòng lặp inline style (`el.closest(...)`), chúng sẽ bị ép `white-space: pre-wrap !important`.
+   - Kết quả: Khi gặp khoảng trắng giữa các từ, chuỗi dài tự động bẻ dòng (wrap) thành 2-3 dòng thay vì giữ trên 1 dòng duy nhất.
+3. **Xung đột cấu trúc Flexbox và CSS Text-Overflow:**
+   - Khi container chứa text (ví dụ `.gt10-item-sub`) bị gán `display: flex !important`, các thẻ con `<span>` và text node ` &bull; ` trở thành các flex items tách biệt.
+   - Thuộc tính `text-overflow: ellipsis` trên flex container **vô hiệu hóa** với các flex items con. Trình duyệt chỉ cắt ellipsis đúng khi container là `display: block` và các thẻ con bên trong là `display: inline`.
+
+#### Hướng dẫn khắc phục triệt để (Standard Solution)
+1. **Engine đo và cắt chuỗi tiền xử lý bằng Canvas 2D (`searchEllipsisSelectors`):**
+   - Trước khi html2canvas tiến hành rasterize `cloneTarget`, thực hiện đo đạc chuỗi và gán trực tiếp chuỗi đã cắt kèm `...` trên các selector:
+     ```javascript
+     const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name, .gt10-item-title, .gt10-item-sub, .gt7-app-name';
+     ```
+   - Đo chiều rộng thực tế `liveEl.clientWidth` trên Live DOM. Nếu phần tử bị tràn (`scrollWidth > clientWidth` hoặc `measureText > targetWidth`), áp dụng binary search để tìm chuỗi con dài nhất vừa vặn với `targetWidth = availWidth - 2` rồi nối thêm `...`.
+   - Gán chuỗi đã cắt trực tiếp vào `cloneEl.textContent`. Lúc này `html2canvas` chỉ việc vẽ 1 chuỗi đơn đã cắt sẵn kèm `...`, đảm bảo 100% khớp với canvas.
+2. **Loại trừ tường minh khỏi quy tắc ép `pre-wrap`:**
+   - Trong `btnStyle.textContent` của `png.js`:
+     ```css
+     [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]):not(.gp-search-card-meta [data-b]):not(.gt7-app-meta [data-b]):not(.gt10-item-sub [data-b]):not(.gt10-item-meta [data-b]):not(.ipad-sr-card-info [data-b]):not(.sr-info [data-b]):not(.gp-search-card-info [data-b]) { ... }
+     ```
+   - Trong vòng lặp inline style duyệt `[data-b]`:
+     ```javascript
+     if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-sub, .gt10-item-meta, .ipad-sr-card-info, .sr-info, .gp-search-card-info')) return;
+     ```
+3. **Đảm bảo Display Block & Inline Flow cho Subtitle:**
+   - Trong `tablets.css` và `png.js`:
+     ```css
+     .dev.gtab .gt10-item-sub {
+       display: block !important;
+       white-space: nowrap !important;
+       overflow: hidden !important;
+       text-overflow: ellipsis !important;
+       line-height: 1.2 !important;
+     }
+     .dev.gtab .gt10-item-sub span {
+       display: inline !important;
+       white-space: nowrap !important;
+     }
+     ```
+
+---
+
+### Case 7: Lỗi Nút Bấm Firefox Gecko (`<button>` nsButtonBoxFrame) Lệch Vị Trí & Trôi Chữ Ngang Dọc
+
+#### Triệu chứng thực tế
+- Trên **Google Chrome / Apple Safari**: Nút "Install" trên tablet 7-inch hoặc card tìm kiếm hiển thị căn giữa chuẩn xác cả ngang lẫn dọc.
+- Trên **Mozilla Firefox**:
+  - Khung nút bị xô lệch vị trí so với hàng icon và skeleton card.
+  - Chữ "Install" bên trong nút pill bị đẩy dạt sang phải (khoảng cách lề trái ~41px so với lề phải ~17px) và tụt xuống dưới ~2.5px.
+
+#### Cơ chế tầng sâu (Root Cause)
+- Trình duyệt Firefox (Gecko engine) bao bọc thẻ `<button>` bằng một frame render nội bộ gọi là `nsButtonBoxFrame`.
+- Khi kết hợp thẻ `<button>` với `display: inline-flex` hoặc `display: flex`, thư viện `html2canvas` tính toán vị trí text node thông qua `Range.getClientRects()`.
+- Trên Firefox, các chỉ số bounding box của Gecko internal button frame bị **cộng dồn hai lần** (double offset calculation), dẫn đến chữ bên trong bị trôi lệch sang phải và xuống đáy nút.
+
+#### Hướng dẫn khắc phục triệt để (Standard Solution)
+1. **Chuyển đổi `<button>` thành `<div>` trên bản sao `cloneTarget` trước khi render:**
+   - Trước khi html2canvas phân tích DOM, chuyển đổi toàn bộ thẻ `<button>` thành `<div>` có `role="button"`:
+     ```javascript
+     cloneTarget.querySelectorAll('button.gt7-app-btn').forEach(btn => {
+       const div = document.createElement('div');
+       div.className = btn.className;
+       div.textContent = btn.textContent;
+       div.setAttribute('role', 'button');
+       btn.replaceWith(div);
+     });
+     ```
+2. **Căn giữa bằng Text-Align & Line-Height truyền thống:**
+   - Áp dụng các thuộc tính CSS chuẩn mực, độc lập với engine nút bấm:
+     ```css
+     .dev.gtab .gt7-app-btn {
+       display: inline-block !important;
+       text-align: center !important;
+       line-height: 26px !important;
+       height: 28px !important;
+       padding: 0 14px !important;
+       box-sizing: border-box !important;
+       vertical-align: middle !important;
+       flex-shrink: 0 !important;
+     }
+     ```
+   - Nhờ chuyển sang thẻ `<div>` và sử dụng `text-align: center; line-height: 26px;`, Gecko hoàn toàn không kích hoạt `nsButtonBoxFrame`, mang lại kết quả căn giữa đối xứng hoàn hảo trên cả Firefox, Chrome và Safari.
 
 ---
 

@@ -12987,7 +12987,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     });
 
     // Truncate overflowing search card title / subtitle with ellipsis to match live preview DOM
-    const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name';
+    const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name, .gt10-item-title, .gt10-item-sub, .gt7-app-name';
     const liveSearchEls = target.querySelectorAll(searchEllipsisSelectors);
     const cloneSearchEls = cloneTarget.querySelectorAll(searchEllipsisSelectors);
     liveSearchEls.forEach((liveEl, idx) => {
@@ -13071,7 +13071,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           .sr-category, .sr-search-query,
           .ipad-search-query, .ipad-floating-title,
           .gp-search-query-text, .g-meta, .iap,
-          [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]):not(.gp-search-card-meta [data-b]):not(.gt7-app-meta [data-b]):not(.gt10-item-meta [data-b]):not(.ipad-sr-card-info [data-b]):not(.sr-info [data-b]):not(.gp-search-card-info [data-b]) {
+          [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]):not(.gp-search-card-meta [data-b]):not(.gt7-app-meta [data-b]):not(.gt10-item-sub [data-b]):not(.gt10-item-meta [data-b]):not(.ipad-sr-card-info [data-b]):not(.sr-info [data-b]):not(.gp-search-card-info [data-b]) {
             -webkit-line-clamp: unset !important;
             -webkit-box-orient: unset !important;
             white-space: pre-wrap !important;
@@ -13151,14 +13151,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             text-overflow: ellipsis !important;
             max-width: 100% !important;
           }
-          .gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-meta [data-b="dev"] {
+          .gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-sub [data-b="dev"], .gt10-item-meta [data-b="dev"] {
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
             display: inline-block !important;
           }
-          .dev.gtab .gt7-app-meta,
-          .dev.gtab .gt10-item-sub {
+          .dev.gtab .gt7-app-meta {
             display: flex !important;
             align-items: center !important;
             gap: 4px !important;
@@ -13168,9 +13167,24 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             line-height: 1.2 !important;
           }
           .dev.gtab .gt7-app-meta [data-b="dev"],
-          .dev.gtab .gt7-app-meta [data-b="cat"],
+          .dev.gtab .gt7-app-meta [data-b="cat"] {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: inline !important;
+            line-height: inherit !important;
+            vertical-align: baseline !important;
+          }
+          .dev.gtab .gt10-item-sub {
+            display: block !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            line-height: 1.2 !important;
+          }
           .dev.gtab .gt10-item-sub [data-b="dev"],
-          .dev.gtab .gt10-item-sub [data-b="cat"] {
+          .dev.gtab .gt10-item-sub [data-b="cat"],
+          .dev.gtab .gt10-item-sub span {
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
@@ -13859,7 +13873,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
         // Skip metrics elements and search card titles/subtitles so their strict single-line clamping is never compromised
         clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
-          if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-meta, .ipad-sr-card-info, .sr-info, .gp-search-card-info')) return;
+          if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-sub, .gt10-item-meta, .ipad-sr-card-info, .sr-info, .gp-search-card-info')) return;
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordSpacing = '0.1px';
           el.style.letterSpacing = '0.01px';
@@ -13868,7 +13882,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
 
         // Enforce clean single-line truncation for search card titles and subtitles in export
-        clonedEl.querySelectorAll('.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name').forEach(el => {
+        clonedEl.querySelectorAll('.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name, .gt10-item-title, .gt10-item-sub, .gt7-app-name').forEach(el => {
           el.style.whiteSpace = 'nowrap';
           el.style.overflow = 'hidden';
           el.style.textOverflow = 'ellipsis';
@@ -13958,18 +13972,31 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.verticalAlign = 'middle';
           el.style.flexShrink = '0';
         });
-        clonedEl.querySelectorAll('.dev.gtab .gt7-app-meta, .dev.gtab .gt10-item-sub').forEach(el => {
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-meta').forEach(el => {
           el.style.display = 'flex';
           el.style.alignItems = 'center';
           el.style.gap = '4px';
           el.style.lineHeight = '1.2';
         });
-        clonedEl.querySelectorAll('.dev.gtab .gt7-app-meta [data-b="dev"], .dev.gtab .gt7-app-meta [data-b="cat"], .dev.gtab .gt10-item-sub [data-b="dev"], .dev.gtab .gt10-item-sub [data-b="cat"]').forEach(el => {
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-meta [data-b="dev"], .dev.gtab .gt7-app-meta [data-b="cat"]').forEach(el => {
           el.style.display = 'inline';
           el.style.lineHeight = 'inherit';
           el.style.verticalAlign = 'baseline';
         });
-        clonedEl.querySelectorAll('.gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-meta [data-b="dev"]').forEach(el => {
+        clonedEl.querySelectorAll('.dev.gtab .gt10-item-sub').forEach(el => {
+          el.style.display = 'block';
+          el.style.whiteSpace = 'nowrap';
+          el.style.overflow = 'hidden';
+          el.style.textOverflow = 'ellipsis';
+          el.style.lineHeight = '1.2';
+        });
+        clonedEl.querySelectorAll('.dev.gtab .gt10-item-sub [data-b="dev"], .dev.gtab .gt10-item-sub [data-b="cat"], .dev.gtab .gt10-item-sub span').forEach(el => {
+          el.style.display = 'inline';
+          el.style.whiteSpace = 'nowrap';
+          el.style.lineHeight = 'inherit';
+          el.style.verticalAlign = 'baseline';
+        });
+        clonedEl.querySelectorAll('.gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-sub [data-b="dev"], .gt10-item-meta [data-b="dev"]').forEach(el => {
           el.style.whiteSpace = 'nowrap';
           el.style.overflow = 'hidden';
           el.style.textOverflow = 'ellipsis';
