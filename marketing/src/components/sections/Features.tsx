@@ -1541,10 +1541,10 @@ function StorePresetsCard() {
 // CARD 3: SMART GUIDELINES & ASSET CHECK (Interactive Inspection Hub)
 // ============================================================================
 function ComplianceCard() {
-  const [tab, setTab] = useState<"transparency" | "ratio" | "resolution">("transparency");
+  const [tab, setTab] = useState<"transparency" | "resolution" | "ratio">("transparency");
   const [alphaMode, setAlphaMode] = useState<"solid" | "alpha">("solid");
-  const [ratioMode, setRatioMode] = useState<"square" | "distorted">("square");
-  const [resolutionMode, setResolutionMode] = useState<"1024" | "lowres">("1024");
+  const [resolutionMode, setResolutionMode] = useState<"lowres" | "1024">("lowres");
+  const [ratioMode, setRatioMode] = useState<"distorted" | "square">("distorted");
 
   return (
     <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
@@ -1568,13 +1568,13 @@ function ComplianceCard() {
         <div className="my-3.5">
           <SlidingTabs
             value={tab}
-            onChange={(val) => setTab(val as "transparency" | "ratio" | "resolution")}
+            onChange={(val) => setTab(val as "transparency" | "resolution" | "ratio")}
             className="w-full"
             ariaLabel="Asset inspection tabs"
             options={[
               { value: "transparency", label: "Icon Background" },
-              { value: "ratio", label: "Aspect Ratio" },
               { value: "resolution", label: "Resolution & Size" },
+              { value: "ratio", label: "Aspect Ratio" },
             ]}
           />
         </div>
@@ -1663,98 +1663,11 @@ function ComplianceCard() {
             </div>
           )}
 
-          {tab === "ratio" && (
-            <div className="space-y-2.5">
-              {/* Ratio test selector buttons */}
-              <div className="flex items-center justify-between text-[11px]">
-                <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
-                  <button
-                    type="button"
-                    onClick={() => setRatioMode("square")}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      ratioMode === "square"
-                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    1:1 Square (1024×1024)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRatioMode("distorted")}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      ratioMode === "distorted"
-                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    Non-Square (4:3 Rect)
-                  </button>
-                </div>
-
-                {ratioMode === "square" && (
-                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-400">
-                    1:1 SQUARE
-                  </span>
-                )}
-              </div>
-
-              {/* Simulated Icon & Ratio Readout */}
-              <div className="flex items-center gap-3">
-                <div
-                  className={`h-11 rounded-xl border flex items-center justify-center font-mono text-[11px] font-bold transition-all duration-300 shrink-0 ${
-                    ratioMode === "square"
-                      ? "w-11 bg-[#0b0c0e] border-emerald-500/50 text-emerald-400"
-                      : "w-14 bg-[#181510] border-rose-500/40 text-rose-400"
-                  }`}
-                >
-                  {ratioMode === "square" ? "1:1" : "4:3"}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-medium text-slate-900 dark:text-white">
-                    {ratioMode === "square" ? (
-                      <span className="text-emerald-500">
-                        Perfect 1:1 Square Ratio
-                      </span>
-                    ) : (
-                      <span className="text-rose-500">
-                        Non-Square Ratio Detected
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    className={`text-[10.5px] mt-0.5 truncate ${
-                      ratioMode === "square"
-                        ? "text-slate-500 dark:text-slate-400"
-                        : "text-rose-500/90 dark:text-rose-400"
-                    }`}
-                  >
-                    {ratioMode === "square"
-                      ? "Width and height are identical (1.00) · No image distortion"
-                      : "Aspect ratio is 1.33:1 · Required: 1:1 square"}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {tab === "resolution" && (
             <div className="space-y-2.5">
               {/* Resolution selector buttons */}
               <div className="flex items-center justify-between text-[11px]">
                 <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
-                  <button
-                    type="button"
-                    onClick={() => setResolutionMode("1024")}
-                    className={`px-2.5 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      resolutionMode === "1024"
-                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    1024 × 1024 px
-                  </button>
                   <button
                     type="button"
                     onClick={() => setResolutionMode("lowres")}
@@ -1766,13 +1679,28 @@ function ComplianceCard() {
                   >
                     Low-Res (256 × 256)
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setResolutionMode("1024")}
+                    className={`px-2.5 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                      resolutionMode === "1024"
+                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    1024 × 1024 px
+                  </button>
                 </div>
 
-                {resolutionMode === "1024" && (
-                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
-                    1024 PX
-                  </span>
-                )}
+                <span
+                  className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold ${
+                    resolutionMode === "lowres"
+                      ? "bg-amber-500/15 text-amber-400"
+                      : "bg-emerald-500/15 text-emerald-400"
+                  }`}
+                >
+                  {resolutionMode === "lowres" ? "256 PX" : "1024 PX"}
+                </span>
               </div>
 
               {/* Simulated Icon & Dimension Readout */}
@@ -1809,6 +1737,86 @@ function ComplianceCard() {
                     {resolutionMode === "1024"
                       ? "1024 × 1024 px · 380 KB (Store limit: Max 1024 KB)"
                       : "256 × 256 px · Required: 1024 × 1024 px master icon"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {tab === "ratio" && (
+            <div className="space-y-2.5">
+              {/* Ratio test selector buttons */}
+              <div className="flex items-center justify-between text-[11px]">
+                <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setRatioMode("distorted")}
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                      ratioMode === "distorted"
+                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    Non-Square (4:3 Rect)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRatioMode("square")}
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                      ratioMode === "square"
+                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    1:1 Square (1024×1024)
+                  </button>
+                </div>
+
+                <span
+                  className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold ${
+                    ratioMode === "distorted"
+                      ? "bg-rose-500/15 text-rose-400"
+                      : "bg-emerald-500/15 text-emerald-400"
+                  }`}
+                >
+                  {ratioMode === "distorted" ? "4:3 RECT" : "1:1 SQUARE"}
+                </span>
+              </div>
+
+              {/* Simulated Icon & Ratio Readout */}
+              <div className="flex items-center gap-3">
+                <div
+                  className={`h-11 rounded-xl border flex items-center justify-center font-mono text-[11px] font-bold transition-all duration-300 shrink-0 ${
+                    ratioMode === "square"
+                      ? "w-11 bg-[#0b0c0e] border-emerald-500/50 text-emerald-400"
+                      : "w-14 bg-[#181510] border-rose-500/40 text-rose-400"
+                  }`}
+                >
+                  {ratioMode === "square" ? "1:1" : "4:3"}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="text-[12px] font-medium text-slate-900 dark:text-white">
+                    {ratioMode === "square" ? (
+                      <span className="text-emerald-500">
+                        Perfect 1:1 Square Ratio
+                      </span>
+                    ) : (
+                      <span className="text-rose-500">
+                        Non-Square Ratio Detected
+                      </span>
+                    )}
+                  </div>
+                  <div
+                    className={`text-[10.5px] mt-0.5 truncate ${
+                      ratioMode === "square"
+                        ? "text-slate-500 dark:text-slate-400"
+                        : "text-rose-500/90 dark:text-rose-400"
+                    }`}
+                  >
+                    {ratioMode === "square"
+                      ? "Width and height are identical (1.00) · No image distortion"
+                      : "Aspect ratio is 1.33:1 · Required: 1:1 square"}
                   </div>
                 </div>
               </div>
