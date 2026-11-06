@@ -262,8 +262,8 @@
   fill: currentColor;
   display: inline-block;
   vertical-align: middle;
-  margin-top: 1.5px;
   flex-shrink: 0;
+  margin: 0;
 }
 
 .gp-stat-dl {

@@ -500,7 +500,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 9.5px !important;
             display: inline-block !important;
             vertical-align: middle !important;
-            margin-top: 1.5px !important;
+            margin: 0 !important;
             flex-shrink: 0 !important;
           }
           .phone.apple:not(.ipad) .a-met > div {
@@ -1129,7 +1129,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.verticalAlign = 'middle';
           el.style.width = '9.5px';
           el.style.height = '9.5px';
-          el.style.marginTop = '1.5px';
+          el.style.margin = '0';
           el.style.flexShrink = '0';
         });
 
