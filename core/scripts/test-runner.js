@@ -4554,6 +4554,21 @@ assert(customerBuildSrc.includes('CORE_JS_MODULES'), 'customer-build.js declares
 const releaseJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'release.js'), 'utf8');
 assert(releaseJsSrc.includes("scripts', 'templates', 'customer-build.js"), 'release.js uses git-tracked templates');
 assert(releaseJsSrc.includes('CORE_JS_MODULES'), 'release.js synchronizes CORE_JS_MODULES into customer build');
+assert(releaseJsSrc.includes('stripDemoBlocks'), 'release.js defines stripDemoBlocks to scrub all demo/paywall logic');
+assert(releaseJsSrc.includes("entry.name === 'demo-guard.js'"), 'release.js strictly excludes demo-guard.js from commercial packages');
+
+// Commercial Readme & Copy Quality Checks
+const plusReadme = fs.readFileSync(path.join(ROOT_DIR, 'README_PLUS.md'), 'utf8');
+const proReadme = fs.readFileSync(path.join(ROOT_DIR, 'README_PRO.md'), 'utf8');
+const vnRegex = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
+assert(!vnRegex.test(plusReadme), 'README_PLUS.md is strictly English (zero Vietnamese characters)');
+assert(!vnRegex.test(proReadme), 'README_PRO.md is strictly English (zero Vietnamese characters)');
+
+const forbiddenTerms = [/pixel-?perfect/i, /production-?ready/i, /with confidence/i, /zero server lock-in/i, /100% guaranteed/i, /flawless/i];
+forbiddenTerms.forEach(term => {
+  assert(!term.test(plusReadme), `README_PLUS.md does not contain forbidden overpromising term: ${term}`);
+  assert(!term.test(proReadme), `README_PRO.md does not contain forbidden overpromising term: ${term}`);
+});
 
 const gitignoreSrc = fs.readFileSync(path.join(ROOT_DIR, '.gitignore'), 'utf8');
 assert(gitignoreSrc.includes('!start_dev.command'), '.gitignore preserves start_dev.command tracking');

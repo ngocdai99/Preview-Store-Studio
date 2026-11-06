@@ -12,6 +12,7 @@
     "build": "npm --prefix core run build && npm --prefix core run build:try",
     "build:core": "npm --prefix core run build",
     "build:marketing": "npm --prefix marketing run build",
+    "release": "npm --prefix core run release",
     "generate:og": "python3 core/scripts/generate-og-image.py",
     "check:og": "python3 core/scripts/generate-og-image.py --check-only",
     "deploy:landing": "npm --prefix core run build:try && npm --prefix marketing run build && npx wrangler pages deploy marketing/out --project-name store-preview-studio",
