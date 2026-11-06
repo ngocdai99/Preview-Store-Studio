@@ -155,6 +155,56 @@ function normalizeAppleApp(item) {
 }
 
 /**
+ * JSONP fallback for Apple App Store API when direct fetch & proxy are unavailable or blocked by CORS
+ * @param {string} appId
+ * @param {string} [country]
+ * @returns {Promise<object>}
+ */
+function fetchAppleAppViaJsonp(appId, country) {
+  return new Promise((resolve, reject) => {
+    if (typeof document === 'undefined') {
+      return reject(new Error('JSONP requires a browser environment'));
+    }
+    const callbackName = '__appleAppJsonp_' + Math.random().toString(36).slice(2, 9) + '_' + Date.now();
+    const query = 'id=' + encodeURIComponent(appId) + (country ? '&country=' + encodeURIComponent(country) : '') + '&callback=' + callbackName;
+    const script = document.createElement('script');
+    script.src = 'https://itunes.apple.com/lookup?' + query;
+    script.async = true;
+
+    const timeoutId = setTimeout(() => {
+      cleanup();
+      reject(new Error('Connection to Apple App Store timed out (JSONP)'));
+    }, 15000);
+
+    function cleanup() {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try {
+        delete window[callbackName];
+      } catch (_) {
+        window[callbackName] = undefined;
+      }
+    }
+
+    window[callbackName] = (data) => {
+      cleanup();
+      if (!data || !data.resultCount || !data.results || !data.results.length) {
+        reject(new Error('App not found on Apple App Store (ID: ' + appId + ')'));
+        return;
+      }
+      resolve(normalizeAppleApp(data.results[0]));
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('Failed to load app data from Apple App Store via JSONP'));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+/**
  * Fetches Apple App Store data via official iTunes API (Native CORS enabled)
  * @param {string} appId 
  * @param {string} country 
@@ -172,13 +222,27 @@ async function fetchAppleAppData(appId, country) {
       res = await fetch(proxyUrl);
       if (!res.ok) throw new Error('Proxy returned ' + res.status);
     } catch (_) {
-      res = await fetch(directUrl);
+      try {
+        res = await fetch(directUrl);
+      } catch (err) {
+        return await fetchAppleAppViaJsonp(appId, country);
+      }
     }
   } else {
-    res = await fetch(directUrl);
+    try {
+      res = await fetch(directUrl);
+    } catch (_) {
+      return await fetchAppleAppViaJsonp(appId, country);
+    }
   }
 
-  if (!res.ok) throw new Error('Apple App Store returned status ' + res.status);
+  if (!res.ok) {
+    try {
+      return await fetchAppleAppViaJsonp(appId, country);
+    } catch (_) {
+      throw new Error('Apple App Store returned status ' + res.status);
+    }
+  }
   const data = await res.json();
   if (!data || !data.resultCount || !data.results || !data.results.length) {
     throw new Error('App not found on Apple App Store (ID: ' + appId + ')');
@@ -701,9 +765,19 @@ function initStoreImportEvents() {
  * Checks URL parameters on page load and auto-imports if present with user confirmation
  */
 function checkAndLoadStoreParams() {
-  if (typeof window === 'undefined' || !window.location || !window.location.search) return;
+  if (typeof window === 'undefined') return;
+  let searchStr = (window.location && window.location.search) ? window.location.search : '';
+  if (!searchStr || searchStr === '?embed=true' || searchStr === '?embed=1' || searchStr === '?embed=true&') {
+    if (window.parent && window.parent !== window) {
+      try {
+        const parentSearch = window.parent.location.search;
+        if (parentSearch) searchStr = parentSearch;
+      } catch (_) {}
+    }
+  }
+  if (!searchStr) return;
   try {
-    const sp = new URLSearchParams(window.location.search);
+    const sp = new URLSearchParams(searchStr);
     const appid = sp.get('appid') || sp.get('apple') || sp.get('app_id') || sp.get('apple_id') || sp.get('id') || sp.get('app');
     const url = sp.get('url') || sp.get('store_url') || sp.get('link') || sp.get('itunes');
 
@@ -743,6 +817,7 @@ if (typeof window !== 'undefined') {
   window.parseStoreInput = parseStoreInput;
   window.normalizeAppleApp = normalizeAppleApp;
   window.fetchAppleAppData = fetchAppleAppData;
+  window.fetchAppleAppViaJsonp = fetchAppleAppViaJsonp;
   window.fetchStoreAppData = fetchStoreAppData;
   window.applyImportedStoreApp = applyImportedStoreApp;
   window.openStoreImportModal = openStoreImportModal;
@@ -758,6 +833,7 @@ if (typeof module !== 'undefined' && module.exports) {
     parseStoreInput,
     normalizeAppleApp,
     fetchAppleAppData,
+    fetchAppleAppViaJsonp,
     fetchStoreAppData,
     applyImportedStoreApp,
     isNetworkOnline,
