@@ -94,7 +94,7 @@ export function SlidingTabs<T extends string>({
                 : "text-slate-500 dark:text-[var(--muted,#989A99)] hover:text-slate-800 dark:hover:text-[#f8fafc]"
             }`}
           >
-            <span className="flex items-center justify-center gap-1.5 text-center leading-tight max-w-full">
+            <span className="flex items-center justify-center gap-1.5 text-center leading-tight whitespace-nowrap">
               {opt.icon && (
                 <span className="shrink-0 flex items-center justify-center">
                   {opt.icon}

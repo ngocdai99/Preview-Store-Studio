@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SlidingTabs } from "@/components/ui/SlidingTabs";
+import { FeatureCard } from "./FeatureCard";
 
 // ============================================================================
 // CARD 3: SMART GUIDELINES & ASSET CHECK (Interactive Inspection Hub)
@@ -13,25 +14,17 @@ export function ComplianceCard() {
   const [ratioMode, setRatioMode] = useState<"distorted" | "square">("distorted");
 
   return (
-    <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
-      {/* Top hairline accent line (Pricing style) */}
-      <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r from-sky-400 via-blue-500 to-transparent" />
-
+    <FeatureCard
+      number="03"
+      title="Smart Guidelines & Asset Check"
+      description="Validation checks catch formatting mistakes such as transparent alpha, low resolutions, and aspect ratio mismatches."
+      accentGradient="from-sky-400 via-blue-500 to-transparent"
+      badgeColorClass="border-sky-500/40 text-sky-600 dark:text-sky-400"
+      className="col-span-1 md:col-span-1 lg:col-span-6"
+    >
       <div className="relative z-10">
-        <div className="flex items-baseline gap-2">
-          <span className="text-[12px] font-mono font-bold tracking-wider text-sky-600 dark:text-sky-400 shrink-0">
-            03
-          </span>
-          <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Smart Guidelines &amp; Asset Check
-          </h3>
-        </div>
-        <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Validation checks catch formatting mistakes such as transparent alpha, low resolutions, and aspect ratio mismatches.
-        </p>
-
         {/* Tab Switcher with Sliding Pill (Symmetrical with Card 04) */}
-        <div className="my-3.5">
+        <div className="mb-3.5">
           <SlidingTabs
             value={tab}
             onChange={(val) => setTab(val as "transparency" | "resolution" | "ratio")}
@@ -266,6 +259,6 @@ export function ComplianceCard() {
           )}
         </div>
       </div>
-    </div>
+    </FeatureCard>
   );
 }

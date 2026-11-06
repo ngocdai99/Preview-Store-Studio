@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { SlidingTabs } from "@/components/ui/SlidingTabs";
+import { FeatureCard } from "./FeatureCard";
 import { StoreMetricsRibbon } from "@/components/ui/StoreMetricsRibbon";
 import { IPadMockupFrame } from "./DeviceHardwareHelpers";
 import { ZenmindPresetMockup } from "./ZenmindPresetMockup";
@@ -138,46 +139,31 @@ export function StorePresetsCard() {
   const current = presets[activePreset];
 
   return (
-    <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-2 lg:col-span-6">
-      {/* Top hairline accent line */}
-      <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r from-amber-400 via-amber-500 to-transparent" />
-
-      {/* Top Header & Preset Switcher Buttons */}
-      <div className="relative z-30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2 sm:mb-2.5">
-        <div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-[12px] font-mono font-bold tracking-wider text-amber-600 dark:text-amber-400 shrink-0">
-              02
-            </span>
-            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Curated Store Presets
-            </h3>
-          </div>
-          <p className="mt-0.5 text-[12.5px] sm:text-[13px] text-slate-600 dark:text-slate-400 max-w-sm leading-normal">
-            Explore sample listings across diverse app categories.
-          </p>
-        </div>
-
-        {/* 3 Preset Switcher Sliding Tabs */}
-        <div className="shrink-0 self-start sm:self-center">
-          <SlidingTabs
-            value={activePreset}
-            onChange={(val) => handleSelectPreset(val as "cyberstrike" | "pulsefit" | "zenmind")}
-            options={[
-              { value: "cyberstrike", label: "Games" },
-              { value: "pulsefit", label: "Health" },
-              { value: "zenmind", label: "Wellness" },
-            ]}
-            className="w-[270px] sm:w-[290px]"
-            size="sm"
-            ariaLabel="Preset selector tabs"
-          />
-        </div>
-      </div>
-
+    <FeatureCard
+      number="02"
+      title="Curated Store Presets"
+      description="Explore sample listings across diverse app categories."
+      accentGradient="from-amber-400 via-amber-500 to-transparent"
+      badgeColorClass="border-amber-500/40 text-amber-600 dark:text-amber-400"
+      className="col-span-1 md:col-span-2 lg:col-span-6"
+      headerRight={
+        <SlidingTabs
+          value={activePreset}
+          onChange={(val) => handleSelectPreset(val as "cyberstrike" | "pulsefit" | "zenmind")}
+          options={[
+            { value: "cyberstrike", label: "Games" },
+            { value: "pulsefit", label: "Health" },
+            { value: "zenmind", label: "Wellness" },
+          ]}
+          className="w-[270px] sm:w-[290px] shrink-0"
+          size="sm"
+          ariaLabel="Preset selector tabs"
+        />
+      }
+    >
       {/* Simulated Live Stage with Device Frame */}
       <div
-        className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none"
+        className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-[24px]"
         style={{ perspective: "1200px" }}
       >
         <IPadMockupFrame
@@ -266,6 +252,6 @@ export function StorePresetsCard() {
           </div>
         </IPadMockupFrame>
       </div>
-    </div>
+    </FeatureCard>
   );
 }

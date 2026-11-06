@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, Copy, Download, FileText, Package, Upload } from "lucide-react";
 import { SlidingTabs } from "@/components/ui/SlidingTabs";
+import { FeatureCard } from "./FeatureCard";
 
 // ============================================================================
 // CARD 4: EXPORT DELIVERABLES & BACKUP (Real Application Actions)
@@ -43,25 +44,17 @@ export function ExportCard() {
   };
 
   return (
-    <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
-      {/* Top hairline accent line (Pricing style) */}
-      <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r from-purple-400 via-purple-500 to-transparent" />
-
+    <FeatureCard
+      number="04"
+      title="Export Deliverables & Project Backup"
+      description="Export 3x Retina PNG mockups, listing metadata, and full project backups."
+      accentGradient="from-purple-400 via-purple-500 to-transparent"
+      badgeColorClass="border-purple-500/40 text-purple-600 dark:text-purple-400"
+      className="col-span-1 md:col-span-1 lg:col-span-6"
+    >
       <div className="relative z-10">
-        <div className="flex items-baseline gap-2">
-          <span className="text-[12px] font-mono font-bold tracking-wider text-purple-600 dark:text-purple-400 shrink-0">
-            04
-          </span>
-          <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Export Deliverables &amp; Project Backup
-          </h3>
-        </div>
-        <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Export 3x Retina PNG mockups, listing metadata, and full project backups.
-        </p>
-
         {/* Tab Switcher with Sliding Pill */}
-        <div className="my-3.5">
+        <div className="mb-3.5">
           <SlidingTabs
             value={tab}
             onChange={(val) => setTab(val as "png" | "md" | "json")}
@@ -282,6 +275,6 @@ export function ExportCard() {
           )}
         </div>
       </div>
-    </div>
+    </FeatureCard>
   );
 }
