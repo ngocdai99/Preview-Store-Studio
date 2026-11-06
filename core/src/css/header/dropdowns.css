@@ -442,6 +442,25 @@
   font-weight: 750;
 }
 
+#menuExport .menu-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--mut);
+  padding: 6px 10px 3px;
+  user-select: none;
+}
+
+#menuExport .menu-label:first-child {
+  padding-top: 3px;
+}
+
+:root[data-ui=light] #menuExport .menu-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
 /* Sparkle Icon for Templates Trigger */
 .mi-ico-sparkle {
   display: inline-flex;

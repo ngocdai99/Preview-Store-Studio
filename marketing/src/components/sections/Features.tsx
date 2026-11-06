@@ -333,80 +333,123 @@ function DeviceFramesCard() {
 // CARD 2: CURATED STORE PRESETS (Interactive Core Presets Stage)
 // ============================================================================
 function StorePresetsCard() {
-  const [activePreset, setActivePreset] = useState<"zenmind" | "taskflow" | "pulsefit">("zenmind");
+  const [activePreset, setActivePreset] = useState<"zenmind" | "pulsefit" | "cyberstrike">("zenmind");
   const [isFlipping, setIsFlipping] = useState(false);
 
   const presets = {
     zenmind: {
-      name: "ZenMind: Sleep & Calm",
-      subtitle: "Guided breathwork & sound",
-      category: "Wellness",
+      name: "ZenMind: Meditation & Sleep",
+      subtitle: "Guided breathwork & calm sound",
+      category: "Health & Fitness",
       rating: "4.9 ★",
       ratingCount: "82K Ratings",
       age: "4+",
       developer: "ZenMind Studio",
-      gradient: "from-purple-600 via-fuchsia-500 to-rose-500",
+      gradient: "from-[#05140e] via-[#0c2319] to-[#059669]",
       icon: (
-        <svg viewBox="0 0 100 100" className="w-8 h-8 text-white drop-shadow-sm" fill="none">
-          {/* Crescent Moon */}
-          <path d="M 50 18 A 8 8 0 0 0 57 26 A 10 10 0 1 1 48 18 Z" fill="#fde68a" opacity="0.95" />
-          {/* Lotus Petals */}
-          <path d="M 50 72 C 32 60 26 44 32 32 C 40 44 46 60 50 72 Z" fill="white" opacity="0.85" />
-          <path d="M 50 72 C 68 60 74 44 68 32 C 60 44 54 60 50 72 Z" fill="white" opacity="0.85" />
-          <path d="M 50 74 C 40 56 42 36 50 26 C 58 36 60 56 50 74 Z" fill="white" />
-          <circle cx="50" cy="62" r="3.5" fill="#fde68a" />
-        </svg>
-      ),
-    },
-    taskflow: {
-      name: "TaskFlow: Habit Planner",
-      subtitle: "Build habits & boost focus",
-      category: "Productivity",
-      rating: "4.9 ★",
-      ratingCount: "1.8K Ratings",
-      age: "4+",
-      developer: "FlowCraft Studio",
-      gradient: "from-sky-400 via-blue-600 to-indigo-600",
-      icon: (
-        <svg viewBox="0 0 100 100" className="w-8 h-8 text-white drop-shadow-sm" fill="none">
-          {/* Glowing habit progress ring */}
-          <circle cx="50" cy="50" r="32" stroke="rgba(255,255,255,0.3)" strokeWidth="5" strokeLinecap="round" />
-          <circle cx="50" cy="50" r="32" stroke="#e0f2fe" strokeWidth="5" strokeDasharray="130 80" strokeLinecap="round" />
-          {/* Bold Checkmark */}
-          <path d="M 37 51 L 46 60 L 65 41" stroke="#ffffff" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="71" cy="29" r="3.5" fill="#bae6fd" />
+        <svg viewBox="0 0 512 512" className="w-9 h-9 text-white drop-shadow-sm" fill="none">
+          <defs>
+            <linearGradient id="zmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#05140e" />
+              <stop offset="50%" stopColor="#0c2319" />
+              <stop offset="100%" stopColor="#143527" />
+            </linearGradient>
+            <linearGradient id="zmGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#6ee7b7" />
+              <stop offset="50%" stopColor="#34d399" />
+              <stop offset="100%" stopColor="#059669" />
+            </linearGradient>
+          </defs>
+          <rect width="512" height="512" rx="115" fill="url(#zmBg)" />
+          <circle cx="256" cy="256" r="175" fill="none" stroke="rgba(52,211,153,0.3)" strokeWidth="4" />
+          <g transform="translate(256, 160)">
+            <path d="M 0 -45 A 36 36 0 0 0 32 -10 A 42 42 0 1 1 -5 -45 Z" fill="#fde68a" />
+            <circle cx="15" cy="-28" r="3" fill="#ffffff" opacity="0.8" />
+          </g>
+          <g transform="translate(256, 300)">
+            <path d="M 0 20 C -70 10 -115 -25 -100 -70 C -75 -65 -35 -20 0 20 Z" fill="url(#zmGreen)" opacity="0.75" />
+            <path d="M 0 20 C 70 10 115 -25 100 -70 C 75 -65 35 -20 0 20 Z" fill="url(#zmGreen)" opacity="0.75" />
+            <path d="M 0 20 C -55 -15 -80 -70 -50 -105 C -35 -80 -10 -25 0 20 Z" fill="url(#zmGreen)" opacity="0.9" />
+            <path d="M 0 20 C 55 -15 80 -70 50 -105 C 35 -80 10 -25 0 20 Z" fill="url(#zmGreen)" opacity="0.9" />
+            <path d="M 0 20 C -35 -35 -35 -105 0 -130 C 35 -105 35 -35 0 20 Z" fill="#ffffff" opacity="0.95" />
+            <circle cx="0" cy="-20" r="12" fill="#fde68a" />
+          </g>
         </svg>
       ),
     },
     pulsefit: {
-      name: "PulseFit: Workout Tracker",
+      name: "PulseFit: Workout & Fitness",
       subtitle: "HIIT, gym plans & meal log",
       category: "Health & Fitness",
-      rating: "4.8 ★",
+      rating: "4.9 ★",
       ratingCount: "24.6K Ratings",
       age: "4+",
-      developer: "PulseFit Health",
-      gradient: "from-emerald-400 via-teal-500 to-cyan-400",
+      developer: "PulseFit Health Lab",
+      gradient: "from-[#ff6b35] via-[#ea580c] to-[#ffc107]",
       icon: (
-        <svg viewBox="0 0 100 100" className="w-8 h-8 text-white drop-shadow-sm" fill="none">
-          {/* Fitness Ring */}
-          <circle cx="50" cy="50" r="32" stroke="rgba(255,255,255,0.25)" strokeWidth="4.5" strokeLinecap="round" />
-          <circle cx="50" cy="50" r="32" stroke="#a7f3d0" strokeWidth="4.5" strokeDasharray="140 70" strokeLinecap="round" />
-          {/* Heart ECG Pulse Wave */}
-          <path
-            d="M 24 50 L 36 50 L 41 36 L 48 66 L 54 40 L 60 56 L 65 50 L 76 50"
-            stroke="#ffffff"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle cx="41" cy="36" r="2.5" fill="#fde68a" />
+        <svg viewBox="0 0 512 512" className="w-9 h-9 text-white drop-shadow-sm" fill="none">
+          <defs>
+            <linearGradient id="pfitBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#080e18" />
+              <stop offset="50%" stopColor="#0f1b2d" />
+              <stop offset="100%" stopColor="#16273f" />
+            </linearGradient>
+            <linearGradient id="pfG" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ff6b35" />
+              <stop offset="50%" stopColor="#ff8c42" />
+              <stop offset="100%" stopColor="#ffc107" />
+            </linearGradient>
+          </defs>
+          <rect width="512" height="512" rx="115" fill="url(#pfitBg)" />
+          <circle cx="256" cy="256" r="165" fill="none" stroke="url(#pfG)" strokeWidth="22" strokeDasharray="500 200" strokeLinecap="round" opacity="0.4" />
+          <rect x="96" y="224" width="24" height="64" rx="8" fill="url(#pfG)" opacity="0.9" />
+          <rect x="128" y="206" width="28" height="100" rx="10" fill="url(#pfG)" />
+          <rect x="356" y="206" width="28" height="100" rx="10" fill="url(#pfG)" />
+          <rect x="392" y="224" width="24" height="64" rx="8" fill="url(#pfG)" opacity="0.9" />
+          <path d="M120 256 L180 256 L205 185 L240 335 L272 205 L300 285 L325 256 L392 256" fill="none" stroke="#fff" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="205" cy="185" r="9" fill="#ffc107" />
+        </svg>
+      ),
+    },
+    cyberstrike: {
+      name: "CyberStrike: 2088 Cyber RPG",
+      subtitle: "Open-world sci-fi action RPG",
+      category: "Role Playing",
+      rating: "4.8 ★",
+      ratingCount: "145K Ratings",
+      age: "12+",
+      developer: "OmniArcade Games Ltd.",
+      gradient: "from-[#05050b] via-[#1e0b2e] to-[#7928ca]",
+      icon: (
+        <svg viewBox="0 0 512 512" className="w-9 h-9 text-white drop-shadow-sm" fill="none">
+          <defs>
+            <linearGradient id="cbg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#05050b" />
+              <stop offset="40%" stopColor="#0f0e1c" />
+              <stop offset="100%" stopColor="#1e0b2e" />
+            </linearGradient>
+            <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#00f5ff" />
+              <stop offset="100%" stopColor="#0077fe" />
+            </linearGradient>
+            <linearGradient id="neonPink" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#ff007f" />
+              <stop offset="100%" stopColor="#7928ca" />
+            </linearGradient>
+          </defs>
+          <rect width="512" height="512" rx="115" fill="url(#cbg)" />
+          <path d="M40 120 L120 120 L160 160 M472 120 L392 120 L352 160 M40 392 L120 392 L160 352 M472 392 L392 392 L352 352" stroke="#00f5ff" strokeWidth="4" fill="none" opacity="0.3" />
+          <path d="M160 170 L352 170 L382 250 L322 360 L190 360 L130 250 Z" fill="#131422" stroke="url(#neonCyan)" strokeWidth="10" />
+          <polygon points="175,230 337,230 315,268 197,268" fill="url(#neonPink)" />
+          <line x1="160" y1="249" x2="352" y2="249" stroke="#ffffff" strokeWidth="5" />
+          <polygon points="170,165 140,90 200,140" fill="url(#neonPink)" />
+          <polygon points="342,165 372,90 312,140" fill="url(#neonPink)" />
         </svg>
       ),
     },
   };
 
-  const handleSelectPreset = (key: "zenmind" | "taskflow" | "pulsefit") => {
+  const handleSelectPreset = (key: "zenmind" | "pulsefit" | "cyberstrike") => {
     if (key === activePreset || isFlipping) return;
     setIsFlipping(true);
 
@@ -444,13 +487,13 @@ function StorePresetsCard() {
         <div className="shrink-0 self-start sm:self-center">
           <SlidingTabs
             value={activePreset}
-            onChange={(val) => handleSelectPreset(val as "zenmind" | "taskflow" | "pulsefit")}
+            onChange={(val) => handleSelectPreset(val as "zenmind" | "pulsefit" | "cyberstrike")}
             options={[
               { value: "zenmind", label: "ZenMind" },
-              { value: "taskflow", label: "TaskFlow" },
               { value: "pulsefit", label: "PulseFit" },
+              { value: "cyberstrike", label: "CyberStrike" },
             ]}
-            className="w-[240px] sm:w-[260px]"
+            className="w-[270px] sm:w-[290px]"
             size="sm"
             ariaLabel="Preset selector tabs"
           />
@@ -520,91 +563,48 @@ function StorePresetsCard() {
                 developerName={current.developer}
               />
 
-              {/* Tablet Screenshot Gallery (Dynamic Real App UI) */}
+              {/* Tablet Screenshot Gallery (Dynamic Real App UI aligned with Core) */}
               <div className="grid grid-cols-2 gap-2.5 select-none">
                 {activePreset === "zenmind" && (
                   <>
-                    {/* ZenMind Screen 1: Sleep Stories */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-purple-950 via-[#181126] to-black border border-purple-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* ZenMind Screen 1: Daily Guided Meditation */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#064e3b]/90 via-[#0c2319] to-black border border-emerald-500/25 relative overflow-hidden transition-all duration-300">
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-purple-200">Sleep Stories</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-medium">45 min · Rain</span>
+                        <span className="text-[8.5px] font-bold text-emerald-200">Daily Meditation</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-medium">15 Min Practice</span>
                       </div>
                       <div className="flex items-center gap-2 my-auto">
-                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-700 flex items-center justify-center shrink-0 shadow">
-                          <span className="text-[14px]">🌙</span>
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center shrink-0 shadow">
+                          <span className="text-[14px]">🧘‍♀️</span>
                         </div>
                         <div className="flex-1 min-w-0 space-y-1">
-                          <div className="text-[7.5px] text-white font-medium truncate">Night Rain on Leaves</div>
-                          <div className="flex items-center gap-0.5 h-3">
-                            {[40, 75, 55, 90, 60, 85, 45, 70, 50, 80, 65, 40].map((h, i) => (
-                              <div
-                                key={i}
-                                className="w-1 bg-purple-400/80 rounded-full"
-                                style={{ height: `${h}%` }}
-                              />
-                            ))}
+                          <div className="text-[7.5px] text-white font-medium truncate">Morning Gratitude &amp; Focus</div>
+                          <div className="text-[6.5px] text-emerald-300/80">Voice: Sarah Jenkins</div>
+                          <div className="flex items-center gap-1 text-[6px] text-slate-400">
+                            <span>08:42</span>
+                            <div className="flex-1 h-1 rounded-full bg-emerald-500/20 overflow-hidden">
+                              <div className="w-[58%] h-full bg-emerald-400 rounded-full" />
+                            </div>
+                            <span>15:00</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* ZenMind Screen 2: Deep Breathwork */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-fuchsia-950 via-[#1d1222] to-black border border-fuchsia-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* ZenMind Screen 2: 3D Binaural Soundscapes */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#042f2e]/90 via-[#0a1e16] to-black border border-teal-500/25 relative overflow-hidden transition-all duration-300">
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-fuchsia-200">Box Breathing</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-300 font-medium">Inhale 4s</span>
+                        <span className="text-[8.5px] font-bold text-teal-200">3D Soundscapes</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-medium">432 Hz Solfeggio</span>
                       </div>
                       <div className="flex items-center gap-2.5 my-auto">
-                        <div className="w-9 h-9 rounded-full border-2 border-fuchsia-400/60 flex items-center justify-center shrink-0 shadow-inner">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-fuchsia-500 to-rose-500 flex items-center justify-center">
-                            <span className="text-[7px] text-white font-bold">4s</span>
-                          </div>
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-700 to-emerald-900 flex items-center justify-center shrink-0 shadow">
+                          <span className="text-[14px]">🌧️</span>
                         </div>
                         <div className="flex-1 min-w-0 space-y-0.5">
-                          <div className="text-[7.5px] text-white font-medium">Mindful Reset</div>
-                          <div className="text-[6.5px] text-slate-400">Calm heart &amp; mind</div>
-                          <div className="text-[6.5px] text-emerald-400 font-semibold">Streak: 12 Days</div>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {activePreset === "taskflow" && (
-                  <>
-                    {/* TaskFlow Screen 1: Daily Habits */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-sky-950 via-[#0d1c2d] to-black border border-sky-500/25 relative overflow-hidden transition-all duration-300">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-sky-200">Daily Habits</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-medium">3 of 4 Done</span>
-                      </div>
-                      <div className="space-y-1 my-auto">
-                        <div className="flex items-center gap-1.5 p-1 rounded bg-white/5 border border-white/5 text-[7px] text-slate-200">
-                          <span className="text-emerald-400 font-bold">✓</span>
-                          <span className="truncate">Deep Work Sprint (2h)</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 p-1 rounded bg-white/5 border border-white/5 text-[7px] text-slate-200">
-                          <span className="text-sky-400 font-bold">✓</span>
-                          <span className="truncate">Design System Review</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* TaskFlow Screen 2: Focus Sprint Timer */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-blue-950 via-[#101931] to-black border border-blue-500/25 relative overflow-hidden transition-all duration-300">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-blue-200">Focus Timer</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-medium">Pomodoro</span>
-                      </div>
-                      <div className="flex items-center gap-2.5 my-auto">
-                        <div className="w-9 h-9 rounded-full border-2 border-blue-400/50 flex items-center justify-center shrink-0">
-                          <span className="text-[8.5px] font-extrabold text-blue-300 font-mono">25:00</span>
-                        </div>
-                        <div className="flex-1 min-w-0 space-y-0.5">
-                          <div className="text-[7.5px] text-white font-medium">Zero Distractions</div>
-                          <div className="text-[6.5px] text-slate-400">Done: 6 sessions</div>
-                          <div className="text-[6.5px] text-emerald-400 font-semibold">+150 XP today</div>
+                          <div className="text-[7.5px] text-white font-medium">Soft Rain on Skylight (75%)</div>
+                          <div className="text-[6.5px] text-slate-400">Delta Sleep Induction (2.5 Hz)</div>
+                          <div className="text-[6.5px] text-emerald-400 font-semibold">🌙 45m Auto-fade</div>
                         </div>
                       </div>
                     </div>
@@ -613,46 +613,84 @@ function StorePresetsCard() {
 
                 {activePreset === "pulsefit" && (
                   <>
-                    {/* PulseFit Screen 1: Activity Rings */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-emerald-950 via-[#0e2118] to-black border border-emerald-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* PulseFit Screen 1: Workout & Set Logger */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#431407]/90 via-[#180d09] to-black border border-orange-500/25 relative overflow-hidden transition-all duration-300">
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-emerald-200">Activity Rings</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-medium">Goal 92%</span>
+                        <span className="text-[8.5px] font-bold text-orange-200">Set Logger</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-medium">Rest 01:45</span>
                       </div>
-                      <div className="flex items-center gap-2.5 my-auto">
-                        {/* Concentric rings */}
-                        <div className="relative w-9 h-9 shrink-0 flex items-center justify-center">
-                          <div className="absolute inset-0 rounded-full border-2 border-rose-500/80" />
-                          <div className="absolute inset-1 rounded-full border-2 border-emerald-400" />
-                          <div className="absolute inset-2 rounded-full border-2 border-cyan-400" />
+                      <div className="space-y-1 my-auto">
+                        <div className="text-[7.5px] text-white font-medium flex items-center justify-between">
+                          <span>🏋️ Barbell Bench Press</span>
+                          <span className="text-orange-400 font-bold">Set 3/4</span>
                         </div>
-                        <div className="flex-1 min-w-0 space-y-0.5">
-                          <div className="text-[7.5px] text-white font-medium">640 / 700 kcal</div>
-                          <div className="text-[6.5px] text-emerald-300 font-medium">42 mins Exercise</div>
-                          <div className="text-[6.5px] text-cyan-300">10 / 12 Stand hrs</div>
+                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[7px]">
+                          <span className="text-slate-300">Active: 100 kg × 8 reps</span>
+                          <span className="text-emerald-400 font-bold">✓ Logged</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* PulseFit Screen 2: Heart & Cardio */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-teal-950 via-[#0c1f1c] to-black border border-teal-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* PulseFit Screen 2: Cardiac Metrics */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1e1b4b]/80 via-[#0f172a] to-black border border-amber-500/25 relative overflow-hidden transition-all duration-300">
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-teal-200">Heart Rate</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-medium">138 BPM</span>
+                        <span className="text-[8.5px] font-bold text-amber-200">Cardiac Metrics</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-medium">Zone 4 (Hard)</span>
+                      </div>
+                      <div className="flex items-center gap-2.5 my-auto">
+                        <div className="w-9 h-9 rounded-full border-2 border-orange-500/70 flex items-center justify-center shrink-0 shadow-inner">
+                          <span className="text-[8.5px] font-extrabold text-amber-300 font-mono">154</span>
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-0.5">
+                          <div className="text-[7.5px] text-white font-medium">BPM · Active Heart Rate</div>
+                          <div className="text-[6.5px] text-orange-300 font-medium">🔥 520 kcal burned</div>
+                          <div className="text-[6.5px] text-cyan-300">⌚ Apple Watch &amp; Wear OS</div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {activePreset === "cyberstrike" && (
+                  <>
+                    {/* CyberStrike Screen 1: Next-Gen Open World */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1e0b2e]/90 via-[#0d071a] to-black border border-cyan-500/30 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-cyan-300 tracking-wider">NEO-SHINJUKU</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono font-bold">2088 RPG</span>
                       </div>
                       <div className="my-auto space-y-1">
-                        <svg className="w-full h-6 text-emerald-400" viewBox="0 0 100 30" fill="none">
-                          <path
-                            d="M 0 15 L 20 15 L 26 8 L 32 24 L 38 4 L 44 26 L 50 15 L 70 15 L 76 8 L 82 22 L 88 15 L 100 15"
-                            stroke="currentColor"
-                            strokeWidth="2.2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        <div className="flex items-center justify-between text-[6.5px] text-slate-400">
-                          <span>Cardio Zone 3</span>
-                          <span className="text-emerald-400 font-semibold">Peak 162 BPM</span>
+                        <div className="text-[7.5px] text-white font-semibold flex items-center justify-between">
+                          <span>⚔️ Legendary Cyber-Blade</span>
+                          <span className="text-cyan-400 font-mono text-[7px]">LVL 75</span>
+                        </div>
+                        <div className="space-y-0.5">
+                          <div className="flex justify-between text-[6px] text-slate-400 font-mono">
+                            <span>HP 4,850 / 5,200</span>
+                            <span className="text-cyan-400">SHIELD 100%</span>
+                          </div>
+                          <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
+                            <div className="w-[93%] h-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 rounded-full" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* CyberStrike Screen 2: High-Speed Combat */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#2a0820]/90 via-[#140612] to-black border border-pink-500/30 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-pink-300 tracking-wider">HACK &amp; SLASH</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-pink-500/20 text-pink-300 font-mono font-bold">120 FPS</span>
+                      </div>
+                      <div className="flex items-center gap-2 my-auto">
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-pink-600 via-fuchsia-600 to-cyan-500 flex flex-col items-center justify-center shrink-0 shadow text-center p-0.5">
+                          <span className="text-[8px] font-black text-white font-mono leading-none">142</span>
+                          <span className="text-[5px] text-cyan-100 font-bold uppercase">Combo</span>
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-0.5">
+                          <div className="text-[7.5px] text-cyan-300 font-mono font-extrabold truncate">CRITICAL STRIKE! +380%</div>
+                          <div className="text-[6.5px] text-slate-300 font-mono">CRIT 98,420 DMG</div>
+                          <div className="text-[6.5px] text-fuchsia-400 font-bold">⚡ PARRY! Fluid Aerial Combo</div>
                         </div>
                       </div>
                     </div>
