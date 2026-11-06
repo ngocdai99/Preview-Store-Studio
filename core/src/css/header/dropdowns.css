@@ -206,9 +206,13 @@
   flex-shrink: 0;
 }
 
+.preset-banner-text {
+  font-weight: 500;
+}
+
 .preset-banner-text strong {
-  color: #fef3c7;
-  font-weight: 700;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 :root[data-ui=light] .preset-banner {
@@ -222,7 +226,8 @@
 }
 
 :root[data-ui=light] .preset-banner-text strong {
-  color: #92400e;
+  color: #1d1d1f;
+  font-weight: 500;
 }
 
 /* Preset Banner Action Buttons (Copy Preset to Draft / Return to Draft) */
