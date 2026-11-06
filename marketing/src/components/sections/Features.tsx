@@ -1823,12 +1823,10 @@ function ExportCard() {
                 </span>
               </div>
 
-              {/* Document Preview Snippet */}
-              <div className="p-2 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 font-mono text-[10px] space-y-0.5 text-slate-600 dark:text-slate-300">
-                <div className="text-purple-400 font-bold"># Complete Store Listing Document</div>
-                <div className="truncate text-slate-400">- Title: Store Preview Studio (20/30)</div>
-                <div className="truncate text-slate-400">- Subtitle: Mockup Studio Pro (17/30)</div>
-              </div>
+              {/* Just clean text, no container */}
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-normal py-0.5">
+                Complete store listing document with titles, subtitles, descriptions &amp; keywords.
+              </p>
 
               {/* Action Buttons: Copy to Clipboard & Download .md */}
               <div className="grid grid-cols-2 gap-2 pt-0.5">
@@ -1879,16 +1877,10 @@ function ExportCard() {
                 </span>
               </div>
 
-              {/* Description Snippet directly from Image 2 */}
-              <div className="p-2 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 text-[10.5px] flex items-center justify-between">
-                <div>
-                  <div className="text-slate-800 dark:text-slate-200 font-medium">Save full backup of text, images &amp; settings</div>
-                  <div className="text-[9.5px] text-slate-400 mt-0.5">Stored locally in your browser</div>
-                </div>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 font-bold shrink-0">
-                  PORTABLE
-                </span>
-              </div>
+              {/* Just clean text, no container */}
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-normal py-0.5">
+                Save full backup of text, images &amp; settings locally in your browser.
+              </p>
 
               {/* Action Buttons: Import Preview & Export Project File */}
               <div className="grid grid-cols-2 gap-2 pt-0.5">
