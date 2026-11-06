@@ -497,6 +497,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       btn.replaceWith(div);
     });
 
+    // Remove hidden galleries inside search views (e.g. #srchTab7) so screenshot carousels never leak into tablet search exports
+    cloneTarget.querySelectorAll('#srchTab7, .gt7-search-view #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots]').forEach(el => el.remove());
+
     // Truncate overflowing search card title / subtitle with ellipsis to match live preview DOM
     const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name, .gt10-item-title, .gt10-item-sub, .gt7-app-name';
     const liveSearchEls = target.querySelectorAll(searchEllipsisSelectors);
@@ -835,11 +838,14 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             white-space: nowrap !important;
           }
           /* Horizontal Screenshot Galleries */
-          .gal, [data-shots="gal"], [data-shots="ipad-gal"] {
+          .gal:not(#srchTab7):not([data-v="search"] .gal), [data-shots="gal"], [data-shots="ipad-gal"] {
             display: flex !important;
             scroll-snap-type: none !important;
             overflow: visible !important;
             overflow-x: visible !important;
+          }
+          #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots] {
+            display: none !important;
           }
           .apple .gal img {
             width: 222px !important;
@@ -1174,8 +1180,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Crucial: Wait for all images in the cloned document to complete decoding first
         await waitForAllImages(clonedEl);
 
+        // Remove hidden search view galleries (e.g. #srchTab7) from the cloned document
+        clonedDoc.querySelectorAll('#srchTab7, .gt7-search-view #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots]').forEach(el => el.remove());
+
         // Ensure screenshot carousels and images are fully visible and explicitly sized in Firefox & WebKit
         clonedEl.querySelectorAll('.gal, [data-shots]').forEach(gal => {
+          if (gal.id === 'srchTab7' || gal.closest('[data-v="search"]')) {
+            gal.style.display = 'none';
+            return;
+          }
           gal.scrollLeft = 0;
           gal.style.scrollSnapType = 'none';
           gal.style.overflow = 'visible';

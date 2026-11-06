@@ -433,6 +433,51 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
 
 ---
 
+### Case 9: Lỗi Rò Rỉ Khung Screenshots Vào Màn Hình Tìm Kiếm Tablet 7" (Hidden Search Gallery Leak Bug)
+
+#### Triệu chứng thực tế
+- Trên **Live Canvas (Preview DOM)**: Chế độ xem Search Results của Google Play Tablet 7" hiển thị bình thường (lưới 2 cột gồm card app chính và các skeleton cards).
+- Trên **Bản xuất PNG (`exportPNG`)**: Ở đáy màn hình tìm kiếm xuất hiện một hàng ảnh screenshots (3 ảnh ngang/dọc) nằm lơ lửng đè lên đáy giao diện tìm kiếm.
+
+#### Cơ chế tầng sâu (Root Cause)
+1. **Phần tử ẩn tàn dư trong cấu trúc DOM:**
+   - Trong markup của Tablet 7-inch (`core/src/components/mockups/google/tab7.html`), bên trong `<div data-v="search" class="gt7-search-view">` có chứa phần tử:
+     ```html
+     <div class="gal gt-gal" id="srchTab7" style="display:none"></div>
+     ```
+   - Hàm `renderTablets()` trong mã nguồn nạp các ảnh screenshot vào `#srchTab7`. Trên giao diện thường, phần tử này ẩn nhờ `style="display:none"`.
+2. **Quy tắc `.gal { display: flex !important }` ghi đè thuộc tính ẩn:**
+   - Trong `btnStyle.textContent` của `png.js`, quy tắc mở rộng carousel screenshot:
+     ```css
+     .gal, [data-shots="gal"], [data-shots="ipad-gal"] { display: flex !important; }
+     ```
+   - Do có `!important`, quy tắc này đè bẹp hoàn toàn `style="display:none"` của `#srchTab7`.
+   - Kết quả: Thẻ `#srchTab7` bị kích hoạt thành `display: flex !important` ngay trong view search đang kích hoạt, phơi bày toàn bộ ảnh screenshots ra đáy màn hình.
+
+#### Hướng dẫn khắc phục triệt để (Standard Solution)
+1. **Xóa bỏ các gallery ẩn trong search view trên `cloneTarget`:**
+   - Trước khi đo đạc và render, xóa hoàn toàn phần tử `#srchTab7`:
+     ```javascript
+     cloneTarget.querySelectorAll('#srchTab7, .gt7-search-view #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots]').forEach(el => el.remove());
+     ```
+2. **Cập nhật quy tắc CSS inject không áp dụng cho gallery trong Search View:**
+   - Trong `btnStyle.textContent`:
+     ```css
+     .gal:not(#srchTab7):not([data-v="search"] .gal), [data-shots="gal"], [data-shots="ipad-gal"] {
+       display: flex !important;
+       scroll-snap-type: none !important;
+       overflow: visible !important;
+       overflow-x: visible !important;
+     }
+     #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots] {
+       display: none !important;
+     }
+     ```
+3. **Dọn dẹp trong `onclone(clonedDoc)`:**
+   - Xóa bỏ triệt để và gán `style.display = 'none'` cho bất kỳ gallery nào nằm trong `[data-v="search"]`.
+
+---
+
 ## 4. Bảng Tra cứu Nhanh Thông số Viewport & Screenshots
 
 | Màn hình / Thiết bị | Vị trí View | Thuộc tính DOM | Kích thước ảnh Dọc (Portrait) | Kích thước ảnh Ngang (Landscape) |
