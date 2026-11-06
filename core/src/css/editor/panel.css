@@ -365,7 +365,7 @@ body.sidebar-collapsed .editor-resizer{
   flex: 0 0 auto;
   box-sizing: border-box;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--mut);
   line-height: 1.2;
   white-space: nowrap;
