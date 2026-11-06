@@ -3644,6 +3644,11 @@ asyncSuites.push((async () => {
   const bundledHtml = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
   assert(bundledHtml.includes("system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"), 'Bundled application contains system-ui font stack on Google phone');
   assert(bundledHtml.includes('position:fixed;left:0;top:0;'), 'Bundled application contains in-bounds offscreen coordinates');
+
+  // 5. Search Result screenshots maintain 3-column proportional aspect ratio (no vertical stretching to 481px/412px)
+  assert(exportPngSrc.includes('isSearch'), 'exportPNG distinguishes search screenshots from main scrollable gallery');
+  assert(exportPngSrc.includes('.sr-shots img, .sr-shots .sr-skel-shot') && exportPngSrc.includes('104px !important;'), 'exportPNG constrains search screenshot width to 104px in 3-column layout');
+  assert(exportPngSrc.includes('word-spacing: 0.1px !important;') && exportPngSrc.includes('letter-spacing: 0.01px !important;'), 'exportPNG applies micro text-spacing to preserve whitespace in Firefox Gecko engine');
 })());
 
 // ---------------------------------------------------------------------

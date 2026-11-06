@@ -14839,14 +14839,26 @@ const btnStyle = clonedDoc.createElement('style');
 btnStyle.textContent = `
 .dev::before, .dev::after { display: none !important; }
 .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
-.sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name,
-[data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"] {
-display: block !important;
+.sr-title, .sr-subtitle, .sr-category, .sr-dev, .sr-meta-line, .sr-search-query,
+.ipad-sr-app-title, .ipad-sr-app-sub, .ipad-search-query, .ipad-floating-title,
+.gp-search-query-text, .gp-search-card-name, .gp-search-card-meta, .g-meta, .iap,
+[data-b] {
 -webkit-line-clamp: unset !important;
 -webkit-box-orient: unset !important;
 white-space: pre-wrap !important;
 word-break: normal !important;
-word-spacing: normal !important;
+word-spacing: 0.1px !important;
+letter-spacing: 0.01px !important;
+overflow: visible !important;
+text-overflow: clip !important;
+}
+.g-name, .a-name, .g-dev, .ipad-name, .ipad-sub {
+display: block !important;
+}
+.sr-meta-line, .gp-search-card-meta {
+display: flex !important;
+align-items: center !important;
+flex-wrap: nowrap !important;
 }
 .ipad-compat-notice {
 display: inline-flex !important;
@@ -14857,22 +14869,20 @@ word-spacing: normal !important;
 .ipad-compat-notice span {
 white-space: nowrap !important;
 }
-.gal, [data-shots="gal"], [data-shots="shots"], [data-shots="gp-search"], [data-shots="ipad-gal"], [data-shots="ipad-shots"] {
+.gal, [data-shots="gal"], [data-shots="ipad-gal"] {
 display: flex !important;
 scroll-snap-type: none !important;
 overflow: visible !important;
 overflow-x: visible !important;
 }
-.gal img, [data-shots] img {
-scroll-snap-align: none !important;
-flex-shrink: 0 !important;
-max-width: none !important;
-object-fit: cover !important;
-}
 .apple .gal img {
 width: 222px !important;
 height: 481px !important;
 border-radius: 11px !important;
+scroll-snap-align: none !important;
+flex-shrink: 0 !important;
+max-width: none !important;
+object-fit: cover !important;
 }
 .apple .gal img.landscape-shot {
 width: 340px !important;
@@ -14883,6 +14893,10 @@ border-radius: 9px !important;
 width: 190px !important;
 height: 412px !important;
 border-radius: 7px !important;
+scroll-snap-align: none !important;
+flex-shrink: 0 !important;
+max-width: none !important;
+object-fit: cover !important;
 }
 #dev-phone .gal img.landscape-shot, .dev.google:not(.gtab) .gal img.landscape-shot {
 width: 330px !important;
@@ -14894,6 +14908,10 @@ flex: 0 0 260px !important;
 width: 260px !important;
 height: 563px !important;
 border-radius: 12px !important;
+scroll-snap-align: none !important;
+flex-shrink: 0 !important;
+max-width: none !important;
+object-fit: cover !important;
 }
 .ipad-gal img.ipad-shot {
 height: 347px !important;
@@ -14915,6 +14933,66 @@ height: 307px !important;
 flex: 0 0 380px !important;
 width: 380px !important;
 height: 285px !important;
+}
+.sr-shots, [data-shots="shots"] {
+display: flex !important;
+gap: 8px !important;
+width: 100% !important;
+box-sizing: border-box !important;
+}
+.sr-shots img, .sr-shots .sr-skel-shot, [data-shots="shots"] img {
+width: 104px !important;
+height: 225px !important;
+max-width: 104px !important;
+flex: 0 0 104px !important;
+border-radius: 12px !important;
+object-fit: cover !important;
+}
+.sr-shots img.landscape-shot, [data-shots="shots"] img.landscape-shot {
+width: 328px !important;
+height: 185px !important;
+max-width: 328px !important;
+flex: 0 0 328px !important;
+}
+.gp-search-shots, [data-shots="gp-search"] {
+display: flex !important;
+gap: 8px !important;
+width: 100% !important;
+margin-top: 12px !important;
+box-sizing: border-box !important;
+}
+.gp-search-shots img, .gp-search-shots .gp-skel-shot, [data-shots="gp-search"] img {
+width: 104px !important;
+height: 220px !important;
+max-width: 104px !important;
+flex: 0 0 104px !important;
+border-radius: 10px !important;
+object-fit: cover !important;
+}
+.gp-search-shots img.landscape-shot, [data-shots="gp-search"] img.landscape-shot {
+width: 328px !important;
+height: 185px !important;
+max-width: 328px !important;
+flex: 0 0 328px !important;
+}
+.ipad-sr-media, [data-shots="ipad-shots"] {
+display: grid !important;
+grid-template-columns: 1fr 1fr !important;
+gap: 8px !important;
+width: 100% !important;
+}
+.ipad-sr-media.has-landscape, [data-shots="ipad-shots"].has-landscape {
+grid-template-columns: 1fr !important;
+}
+.ipad-sr-media img, [data-shots="ipad-shots"] img {
+width: 166px !important;
+height: 221px !important;
+border-radius: 10px !important;
+object-fit: cover !important;
+}
+.ipad-sr-media img.landscape-shot, [data-shots="ipad-shots"] img.landscape-shot {
+width: 340px !important;
+height: 255px !important;
 }
 .dev.gtab10 #galTab10 img {
 height: 240px !important;
@@ -15082,6 +15160,36 @@ const isTabPortrait = img.closest('.dev')?.classList.contains('portrait');
 const ratio = (img.naturalWidth && img.naturalHeight)
 ? (img.naturalWidth / img.naturalHeight)
 : (isLandscape ? (16 / 9) : (460 / 996));
+if (isSearch) {
+const isAppleSearch = img.closest('.sr-shots, [data-shots="shots"]');
+const isGoogleSearch = img.closest('.gp-search-shots, [data-shots="gp-search"]');
+const isIpadSearch = img.closest('.ipad-sr-media, [data-shots="ipad-shots"]');
+const isShotLandscape = isLandscape || ratio > 1.15;
+if (isAppleSearch) {
+const w = isShotLandscape ? 328 : 104;
+const h = isShotLandscape ? 185 : 225;
+img.style.setProperty('width', w + 'px', 'important');
+img.style.setProperty('height', h + 'px', 'important');
+img.style.setProperty('max-width', w + 'px', 'important');
+img.style.flex = `0 0 ${w}px`;
+img.style.borderRadius = '12px';
+} else if (isGoogleSearch) {
+const w = isShotLandscape ? 328 : 104;
+const h = isShotLandscape ? 185 : 220;
+img.style.setProperty('width', w + 'px', 'important');
+img.style.setProperty('height', h + 'px', 'important');
+img.style.setProperty('max-width', w + 'px', 'important');
+img.style.flex = `0 0 ${w}px`;
+img.style.borderRadius = '10px';
+} else if (isIpadSearch) {
+const w = isShotLandscape ? 340 : 166;
+const h = isShotLandscape ? 255 : 221;
+img.style.setProperty('width', w + 'px', 'important');
+img.style.setProperty('height', h + 'px', 'important');
+img.style.borderRadius = '10px';
+}
+return;
+}
 if (isIpad) {
 if (isIpadShot) {
 const h = isLandscape ? 285 : (isDevLandscape ? 307 : 347);
@@ -15163,6 +15271,13 @@ el.style.width = '10px';
 el.style.height = '10px';
 el.style.marginLeft = '3px';
 el.style.verticalAlign = '-2px';
+});
+clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .sr-dev, .gp-search-card-name, .gp-search-card-meta, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
+el.style.whiteSpace = 'pre-wrap';
+el.style.wordSpacing = '0.1px';
+el.style.letterSpacing = '0.01px';
+el.style.overflow = 'visible';
+el.style.textOverflow = 'clip';
 });
 clonedDoc.querySelectorAll('.hl-target, .hl-flash').forEach(el => {
 el.classList.remove('hl-target', 'hl-flash');
