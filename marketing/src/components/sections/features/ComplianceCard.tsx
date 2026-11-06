@@ -38,9 +38,9 @@ export function ComplianceCard() {
             className="w-full"
             ariaLabel="Asset inspection tabs"
             options={[
-              { value: "transparency", label: "Icon Background" },
+              { value: "transparency", label: "Alpha" },
               { value: "resolution", label: "Resolution" },
-              { value: "ratio", label: "Aspect Ratio" },
+              { value: "ratio", label: "Ratio" },
             ]}
           />
         </div>
@@ -78,7 +78,7 @@ export function ComplianceCard() {
 
                 {alphaMode === "solid" && (
                   <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-400">
-                    0% ALPHA
+                    0% alpha
                   </span>
                 )}
               </div>
@@ -152,14 +152,8 @@ export function ComplianceCard() {
                   </button>
                 </div>
 
-                <span
-                  className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold ${
-                    resolutionMode === "lowres"
-                      ? "bg-amber-500/15 text-amber-400"
-                      : "bg-emerald-500/15 text-emerald-400"
-                  }`}
-                >
-                  {resolutionMode === "lowres" ? "256 PX" : "1024 PX"}
+                <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-400">
+                  1024px
                 </span>
               </div>
 
@@ -233,7 +227,7 @@ export function ComplianceCard() {
                       : "bg-emerald-500/15 text-emerald-400"
                   }`}
                 >
-                  {ratioMode === "distorted" ? "4:3 RECT" : "1:1 SQUARE"}
+                  {ratioMode === "distorted" ? "4:3 rect" : "1:1 square"}
                 </span>
               </div>
 
