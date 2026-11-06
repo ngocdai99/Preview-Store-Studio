@@ -455,26 +455,30 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
    - Kết quả: Thẻ `#srchTab7` bị kích hoạt thành `display: flex !important` ngay trong view search đang kích hoạt, phơi bày toàn bộ ảnh screenshots ra đáy màn hình.
 
 #### Hướng dẫn khắc phục triệt để (Standard Solution)
-1. **Xóa bỏ các gallery ẩn trong search view trên `cloneTarget`:**
-   - Trước khi đo đạc và render, xóa hoàn toàn phần tử `#srchTab7`:
+1. **Xóa bỏ đúng phần tử `#srchTab7` trên `cloneTarget`:**
+   - **Lưu ý tối quan trọng:** Tuyệt đối không dùng selector rộng như `[data-v="search"] [data-shots]` hay `[data-v="search"] .gal`, bởi vì các view tìm kiếm của iPad (`data-shots="ipad-shots"`), iPhone (`data-shots="shots"`) và Google Play Phone (`data-shots="gp-search"`) đều chứa screenshot hợp lệ nằm bên trong `[data-v="search"]`. Dùng selector rộng sẽ làm biến mất toàn bộ screenshot của các nền tảng này!
+   - Chỉ nhắm mục tiêu đích danh vào phần tử tàn dư:
      ```javascript
-     cloneTarget.querySelectorAll('#srchTab7, .gt7-search-view #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots]').forEach(el => el.remove());
+     cloneTarget.querySelectorAll('#srchTab7').forEach(el => el.remove());
      ```
-2. **Cập nhật quy tắc CSS inject không áp dụng cho gallery trong Search View:**
+2. **Cập nhật quy tắc CSS inject loại trừ `#srchTab7`:**
    - Trong `btnStyle.textContent`:
      ```css
-     .gal:not(#srchTab7):not([data-v="search"] .gal), [data-shots="gal"], [data-shots="ipad-gal"] {
+     .gal:not(#srchTab7), [data-shots="gal"], [data-shots="ipad-gal"] {
        display: flex !important;
        scroll-snap-type: none !important;
        overflow: visible !important;
        overflow-x: visible !important;
      }
-     #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots] {
+     #srchTab7 {
        display: none !important;
      }
      ```
 3. **Dọn dẹp trong `onclone(clonedDoc)`:**
-   - Xóa bỏ triệt để và gán `style.display = 'none'` cho bất kỳ gallery nào nằm trong `[data-v="search"]`.
+   - Xóa bỏ triệt để và gán `style.display = 'none'` cho phần tử `#srchTab7`:
+     ```javascript
+     clonedDoc.querySelectorAll('#srchTab7').forEach(el => el.remove());
+     ```
 
 ---
 

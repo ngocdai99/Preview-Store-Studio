@@ -13004,8 +13004,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       btn.replaceWith(div);
     });
 
-    // Remove hidden galleries inside search views (e.g. #srchTab7) so screenshot carousels never leak into tablet search exports
-    cloneTarget.querySelectorAll('#srchTab7, .gt7-search-view #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots]').forEach(el => el.remove());
+    // Remove hidden gallery inside tablet 7 search view (#srchTab7) so screenshot carousels never leak into tablet search exports
+    cloneTarget.querySelectorAll('#srchTab7').forEach(el => el.remove());
 
     // Truncate overflowing search card title / subtitle with ellipsis to match live preview DOM
     const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name, .gt10-item-title, .gt10-item-sub, .gt7-app-name';
@@ -13107,13 +13107,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           }
           .ipad-sr-app-title, .ipad-sr-app-sub,
           .sr-title, .sr-subtitle,
-          .gp-search-card-name {
+          .gp-search-card-name,
+          .gt10-item-title, .gt10-item-sub,
+          .gt7-app-name {
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
             word-break: normal !important;
-            word-spacing: normal !important;
-            letter-spacing: normal !important;
+            word-spacing: 0.1px !important;
+            letter-spacing: 0.01px !important;
           }
           .a-met, .ipad-met, .g-met {
             align-items: center !important;
@@ -13345,13 +13347,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             white-space: nowrap !important;
           }
           /* Horizontal Screenshot Galleries */
-          .gal:not(#srchTab7):not([data-v="search"] .gal), [data-shots="gal"], [data-shots="ipad-gal"] {
+          .gal:not(#srchTab7), [data-shots="gal"], [data-shots="ipad-gal"] {
             display: flex !important;
             scroll-snap-type: none !important;
             overflow: visible !important;
             overflow-x: visible !important;
           }
-          #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots] {
+          #srchTab7 {
             display: none !important;
           }
           .apple .gal img {
@@ -13687,12 +13689,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Crucial: Wait for all images in the cloned document to complete decoding first
         await waitForAllImages(clonedEl);
 
-        // Remove hidden search view galleries (e.g. #srchTab7) from the cloned document
-        clonedDoc.querySelectorAll('#srchTab7, .gt7-search-view #srchTab7, [data-v="search"] .gal, [data-v="search"] [data-shots]').forEach(el => el.remove());
+        // Remove hidden search view gallery #srchTab7 from the cloned document
+        clonedDoc.querySelectorAll('#srchTab7').forEach(el => el.remove());
 
         // Ensure screenshot carousels and images are fully visible and explicitly sized in Firefox & WebKit
         clonedEl.querySelectorAll('.gal, [data-shots]').forEach(gal => {
-          if (gal.id === 'srchTab7' || gal.closest('[data-v="search"]')) {
+          if (gal.id === 'srchTab7') {
             gal.style.display = 'none';
             return;
           }
@@ -13923,6 +13925,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.whiteSpace = 'nowrap';
           el.style.overflow = 'hidden';
           el.style.textOverflow = 'ellipsis';
+          el.style.wordSpacing = '0.1px';
+          el.style.letterSpacing = '0.01px';
         });
 
         // Enforce clamped metrics developer name and clean single-line labels in export
