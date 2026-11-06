@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { Sparkles, Info } from "lucide-react";
-import { LaunchModal } from "@/components/ui/LaunchModal";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 
 export function Pricing() {
   const { pricing } = siteConfig;
-  const [selectedTier, setSelectedTier] = useState<"plus" | "pro" | null>(null);
 
   return (
     <section id="pricing" className="py-20 border-t border-border bg-background transition-colors">
@@ -139,7 +136,9 @@ export function Pricing() {
               {/* Buy CTA */}
               {tier.isPopular ? (
                 <PrimaryButton
-                  onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
+                  href={tier.cta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   fontSize="15px"
                   fontWeight={700}
                   className="w-full h-12 rounded-xl sm:rounded-2xl tracking-[-0.01em]"
@@ -148,7 +147,9 @@ export function Pricing() {
                 </PrimaryButton>
               ) : (
                 <SecondaryButton
-                  onClick={() => setSelectedTier(tier.id as "plus" | "pro")}
+                  href={tier.cta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   fontSize="15px"
                   fontWeight={700}
                   className="w-full h-12 rounded-xl sm:rounded-2xl tracking-[-0.01em]"
@@ -206,15 +207,6 @@ export function Pricing() {
           </div>
         </div>
       </div>
-
-      {/* Early Bird Launch Modal */}
-      {selectedTier !== null && (
-        <LaunchModal
-          isOpen={true}
-          onClose={() => setSelectedTier(null)}
-          tierId={selectedTier}
-        />
-      )}
     </section>
   );
 }
