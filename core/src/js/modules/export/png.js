@@ -469,6 +469,22 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           .a-met, .ipad-met, .g-met {
             align-items: center !important;
           }
+          .g-met [data-gmet-rating] b {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 2.5px !important;
+            height: 20px !important;
+            line-height: 1 !important;
+          }
+          .g-star-ico {
+            display: inline-block !important;
+            vertical-align: middle !important;
+            width: 11px !important;
+            height: 11px !important;
+            flex-shrink: 0 !important;
+            margin-top: -0.5px !important;
+          }
           .phone.apple:not(.ipad) .a-met > div {
             height: 48px !important;
             max-height: 48px !important;
@@ -1059,6 +1075,24 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.justifyContent = 'center';
           el.style.alignItems = 'center';
           el.style.width = '100%';
+        });
+
+        // Enforce vertical centering for Google Play rating star in export
+        clonedEl.querySelectorAll('.g-met [data-gmet-rating] b').forEach(el => {
+          el.style.display = 'inline-flex';
+          el.style.alignItems = 'center';
+          el.style.justifyContent = 'center';
+          el.style.gap = '2.5px';
+          el.style.height = '20px';
+          el.style.lineHeight = '1';
+        });
+        clonedEl.querySelectorAll('.g-star-ico').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
+          el.style.width = '11px';
+          el.style.height = '11px';
+          el.style.flexShrink = '0';
+          el.style.marginTop = '-0.5px';
         });
 
         // Strip focus highlight from export capture

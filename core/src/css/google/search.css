@@ -201,11 +201,11 @@
 .gp-skel-line.w-80 { width: 80%; }
 
 .gp-skel-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 24px;
+  height: 32px;
+  border-radius: 12px;
   background: var(--sf);
-  border: 1px solid var(--sp);
+  border: 0;
   flex-shrink: 0;
 }
 
@@ -268,23 +268,24 @@
 }
 
 .gp-search-action-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 24px;
+  height: 32px;
+  border-radius: 12px;
   background: var(--sf);
-  border: 1px solid var(--sp);
+  border: 0;
   color: var(--s);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   cursor: pointer;
+  padding: 0;
   transition: all 0.15s ease;
 }
 
 .gp-search-action-btn svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
 
