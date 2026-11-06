@@ -12976,6 +12976,16 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       } catch (_) {}
     });
 
+    // Convert tablet search Install button from <button> to <div> on cloneTarget
+    // to eliminate Firefox Gecko nsButtonBoxFrame text offset and button baseline quirks
+    cloneTarget.querySelectorAll('button.gt7-app-btn').forEach(btn => {
+      const div = document.createElement('div');
+      div.className = btn.className;
+      div.textContent = btn.textContent;
+      div.setAttribute('role', 'button');
+      btn.replaceWith(div);
+    });
+
     // Truncate overflowing search card title / subtitle with ellipsis to match live preview DOM
     const searchEllipsisSelectors = '.ipad-sr-app-title, .ipad-sr-app-sub, .sr-title, .sr-subtitle, .gp-search-card-name';
     const liveSearchEls = target.querySelectorAll(searchEllipsisSelectors);
@@ -13098,7 +13108,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             width: 11px !important;
             height: 11px !important;
             flex-shrink: 0 !important;
-            margin-top: 1.5px !important;
+            margin-top: -1.5px !important;
           }
           .g-info-ico {
             display: inline-block !important;
@@ -13123,11 +13133,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             display: inline-block !important;
           }
           .gp-star-ico {
-            width: 9.5px !important;
-            height: 9.5px !important;
+            width: 12px !important;
+            height: 12px !important;
+            min-width: 12px !important;
+            min-height: 12px !important;
             display: inline-block !important;
             vertical-align: middle !important;
-            margin-top: 1px !important;
+            margin-top: 0 !important;
             transform: none !important;
             flex-shrink: 0 !important;
           }
@@ -13145,6 +13157,37 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             text-overflow: ellipsis !important;
             display: inline-block !important;
           }
+          .dev.gtab .gt7-app-meta,
+          .dev.gtab .gt10-item-sub {
+            display: flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            line-height: 1.2 !important;
+          }
+          .dev.gtab .gt7-app-meta [data-b="dev"],
+          .dev.gtab .gt7-app-meta [data-b="cat"],
+          .dev.gtab .gt10-item-sub [data-b="dev"],
+          .dev.gtab .gt10-item-sub [data-b="cat"] {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: inline !important;
+            line-height: inherit !important;
+            vertical-align: baseline !important;
+          }
+          .dev.gtab .gt7-app-btn {
+            display: inline-block !important;
+            text-align: center !important;
+            line-height: 26px !important;
+            height: 28px !important;
+            padding: 0 14px !important;
+            box-sizing: border-box !important;
+            vertical-align: middle !important;
+            flex-shrink: 0 !important;
+          }
           .dev.gtab .gt7-app-stats,
           .dev.gtab .gt10-item-stats {
             display: flex !important;
@@ -13160,16 +13203,19 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             margin-right: 0 !important;
             line-height: 1 !important;
           }
-          .dev.gtab .gp-star-ico {
-            width: 9.5px !important;
-            height: 9.5px !important;
+          .dev.gtab .gp-star-ico,
+          .dev.gtab7 .gp-star-ico,
+          .dev.gtab10 .gp-star-ico,
+          .gt7-app-stats .gp-star-ico,
+          .gt10-item-stats .gp-star-ico {
+            width: 12px !important;
+            height: 12px !important;
+            min-width: 12px !important;
+            min-height: 12px !important;
             display: inline-block !important;
             vertical-align: middle !important;
-            margin-top: 2px !important;
-            flex-shrink: 0 !important;
-          }
-          .dev.gtab7 .gp-star-ico {
             margin-top: 0 !important;
+            flex-shrink: 0 !important;
           }
           .dev.gtab .gt7-app-stats [data-stat="size"],
           .dev.gtab .gt10-item-stats [data-stat="size"] {
@@ -13867,7 +13913,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.width = '11px';
           el.style.height = '11px';
           el.style.flexShrink = '0';
-          el.style.marginTop = '1.5px';
+          el.style.marginTop = '-1.5px';
         });
 
         // Enforce vertical centering for Google Play search card rating star in export
@@ -13886,9 +13932,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         clonedEl.querySelectorAll('.gp-star-ico').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
-          el.style.width = '9.5px';
-          el.style.height = '9.5px';
-          el.style.marginTop = '1px';
+          el.style.width = '12px';
+          el.style.height = '12px';
+          el.style.minWidth = '12px';
+          el.style.minHeight = '12px';
+          el.style.marginTop = '0';
           el.style.transform = 'none';
           el.style.flexShrink = '0';
         });
@@ -13900,11 +13948,31 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.textOverflow = 'ellipsis';
           el.style.maxWidth = '100%';
         });
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-btn').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.textAlign = 'center';
+          el.style.lineHeight = '26px';
+          el.style.height = '28px';
+          el.style.padding = '0 14px';
+          el.style.boxSizing = 'border-box';
+          el.style.verticalAlign = 'middle';
+          el.style.flexShrink = '0';
+        });
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-meta, .dev.gtab .gt10-item-sub').forEach(el => {
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.gap = '4px';
+          el.style.lineHeight = '1.2';
+        });
+        clonedEl.querySelectorAll('.dev.gtab .gt7-app-meta [data-b="dev"], .dev.gtab .gt7-app-meta [data-b="cat"], .dev.gtab .gt10-item-sub [data-b="dev"], .dev.gtab .gt10-item-sub [data-b="cat"]').forEach(el => {
+          el.style.display = 'inline';
+          el.style.lineHeight = 'inherit';
+          el.style.verticalAlign = 'baseline';
+        });
         clonedEl.querySelectorAll('.gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-meta [data-b="dev"]').forEach(el => {
           el.style.whiteSpace = 'nowrap';
           el.style.overflow = 'hidden';
           el.style.textOverflow = 'ellipsis';
-          el.style.display = 'inline-block';
         });
         clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats, .dev.gtab .gt10-item-stats').forEach(el => {
           el.style.display = 'flex';
@@ -13920,16 +13988,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.marginRight = '0';
           el.style.lineHeight = '1';
         });
-        clonedEl.querySelectorAll('.dev.gtab .gp-star-ico').forEach(el => {
+        clonedEl.querySelectorAll('.dev.gtab .gp-star-ico, .dev.gtab7 .gp-star-ico, .dev.gtab10 .gp-star-ico, .gt7-app-stats .gp-star-ico, .gt10-item-stats .gp-star-ico').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
-          el.style.width = '9.5px';
-          el.style.height = '9.5px';
-          el.style.marginTop = '2px';
-          el.style.flexShrink = '0';
-        });
-        clonedEl.querySelectorAll('.dev.gtab7 .gp-star-ico').forEach(el => {
+          el.style.width = '12px';
+          el.style.height = '12px';
+          el.style.minWidth = '12px';
+          el.style.minHeight = '12px';
           el.style.marginTop = '0';
+          el.style.flexShrink = '0';
         });
         clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats [data-stat="size"], .dev.gtab .gt10-item-stats [data-stat="size"]').forEach(el => {
           el.style.lineHeight = '1';

@@ -10,6 +10,7 @@
 <script src="lib/html2canvas.min.js"></script>
 <script>
 try{document.documentElement.dataset.ui = localStorage.getItem("store_preview_studio_ui") || "light";}catch(e){document.documentElement.dataset.ui="light";}
+if(/^((?!chrome|android).)*safari/i.test(navigator.userAgent)){document.documentElement.classList.add('is-safari');}
 </script>
 <link rel="stylesheet" href="css/style.css">
 </head>

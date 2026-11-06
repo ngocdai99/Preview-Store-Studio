@@ -4423,6 +4423,7 @@ const stateCode56 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'core', 'st
 
 assert(metricsHtmlSrc.includes('<b>\n        <svg class="g-dl-icon"'), 'metrics.html wraps g-dl-icon SVG in <b> tag matching other metric columns');
 assert(tabletCssSrc.includes('.dev.gtab7 [data-gmet-size] b'), 'tablets.css provides explicit flex centering for tab7 size metric bold element');
+assert(tabletCssSrc.includes('.dev.gtab7 .gp-star-ico') && tabletCssSrc.includes('margin-top: 0;'), 'tablets.css centers star icon on tab7 search results with margin-top: 0');
 assert(tabletCssSrc.includes('.g-dl-icon'), 'tablets.css provides explicit sizing and theme stroke/color for .g-dl-icon');
 assert(frameCssSrc.includes('.phone.google{') && frameCssSrc.includes('color:var(--t)'), 'frame.css sets color:var(--t) on phone.google so currentColor inherits mockup theme');
 assert(pngExportSrc.includes('.g-dl-icon, .gt10-dl-icon, [data-gmet-size] svg'), 'png.js includes explicit dimensions and theme stroke colors in export onclone stylesheet');

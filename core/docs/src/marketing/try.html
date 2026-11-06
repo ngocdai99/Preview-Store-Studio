@@ -25,6 +25,7 @@ try{
   const savedDevTheme = localStorage.getItem("store_preview_studio_device_theme") || "dark";
   document.documentElement.dataset.deviceTheme = savedDevTheme;
 }catch(_){}
+if(/^((?!chrome|android).)*safari/i.test(navigator.userAgent)){document.documentElement.classList.add('is-safari');}
 </script>
 <!-- Microsoft Clarity Analytics -->
 <script type="text/javascript">
