@@ -12790,6 +12790,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             align-items: center !important;
             gap: 2.5px !important;
             line-height: 1 !important;
+            color: var(--s) !important;
+            margin-top: 1.5px !important;
           }
           .gp-stat-rating [data-stat="rating"] {
             line-height: 1 !important;
@@ -13419,6 +13421,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.alignItems = 'center';
           el.style.gap = '2.5px';
           el.style.lineHeight = '1';
+          el.style.color = 'var(--s)';
+          el.style.marginTop = '1.5px';
         });
         clonedEl.querySelectorAll('.gp-stat-rating [data-stat="rating"]').forEach(el => {
           el.style.display = 'inline-block';

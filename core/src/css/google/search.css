@@ -246,9 +246,9 @@
   display: inline-flex;
   align-items: center;
   gap: 2.5px;
-  font-weight: 500;
-  color: var(--t);
+  color: var(--s);
   line-height: 1;
+  margin-top: 1.5px;
 }
 
 .gp-stat-rating [data-stat="rating"] {
