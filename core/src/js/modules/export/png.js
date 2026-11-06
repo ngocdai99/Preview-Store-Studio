@@ -648,7 +648,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 11px !important;
             flex-shrink: 0 !important;
             margin-left: 0 !important;
-            margin-top: 2px !important;
+            margin-top: 0 !important;
             position: relative !important;
             top: 0.5px !important;
           }
@@ -1509,7 +1509,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '11px';
           el.style.flexShrink = '0';
           el.style.marginLeft = '0';
-          el.style.marginTop = '2px';
+          el.style.marginTop = '0';
           el.style.position = 'relative';
           el.style.top = isSafari ? '0' : '0.5px';
         });

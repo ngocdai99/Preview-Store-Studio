@@ -551,7 +551,7 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   display: inline-block !important;
   vertical-align: middle !important;
   margin-left: 0 !important;
-  margin-top: 2px !important;
+  margin-top: 0 !important;
   position: relative !important;
   top: 0.5px !important;
   color: currentColor;
