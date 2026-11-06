@@ -148,17 +148,72 @@ function DeviceFramesCard() {
                 {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
                 <StoreMetricsRibbon theme="dark" />
 
-                {/* Screenshot Skeleton Carousel (Subtle & Deep Tone) */}
+                {/* Screenshot Carousel (Vibrant App Store Showcase) */}
                 <div className="flex gap-2 overflow-hidden px-0.5 pb-1 select-none">
-                  {[0, 1, 2].map((idx) => (
-                    <div
-                      key={idx}
-                      className="w-20 h-24 rounded-[10px] p-2 flex flex-col justify-between shrink-0 bg-[#121312] border border-white/[0.04]"
-                    >
-                      <div className="w-full h-12 rounded-md bg-black/60" />
-                      <div className="w-10 h-1.5 rounded-full mx-auto bg-black/50" />
+                  {/* Screen 1: Realtime Preview */}
+                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-indigo-950 via-[#131422] to-black border border-indigo-500/20 shadow-inner relative overflow-hidden">
+                    <div className="absolute -top-3 -right-3 w-10 h-10 bg-indigo-500/20 rounded-full blur-sm" />
+                    <div>
+                      <div className="text-[7.5px] font-bold text-indigo-300 tracking-tight leading-none">Instant Preview</div>
+                      <div className="text-[6px] text-slate-400 mt-0.5">Live store canvas</div>
                     </div>
-                  ))}
+                    {/* Mini Phone Graphic */}
+                    <div className="my-auto w-10 h-11 mx-auto rounded-[6px] border border-indigo-400/40 bg-indigo-950/60 p-0.5 flex flex-col justify-between shadow-sm">
+                      <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
+                      <div className="w-full h-6 rounded-[3px] bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <span className="text-[6px] font-bold text-white">4K</span>
+                      </div>
+                      <div className="w-4 h-0.5 rounded-full bg-white/30 mx-auto" />
+                    </div>
+                    <div className="text-[6.5px] text-center font-medium text-indigo-200/90 bg-indigo-900/40 py-0.5 rounded-[3px]">
+                      Ultra-HD
+                    </div>
+                  </div>
+
+                  {/* Screen 2: Multi-Device */}
+                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-emerald-950 via-[#0e1f18] to-black border border-emerald-500/20 shadow-inner relative overflow-hidden">
+                    <div className="absolute -top-3 -right-3 w-10 h-10 bg-emerald-500/20 rounded-full blur-sm" />
+                    <div>
+                      <div className="text-[7.5px] font-bold text-emerald-300 tracking-tight leading-none">All Formats</div>
+                      <div className="text-[6px] text-slate-400 mt-0.5">Phone &amp; tablet</div>
+                    </div>
+                    {/* Mini Devices Graphic */}
+                    <div className="my-auto flex items-end justify-center gap-1">
+                      <div className="w-6 h-9 rounded-[4px] border border-emerald-400/40 bg-emerald-950/60 p-0.5 flex flex-col justify-between">
+                        <div className="w-2 h-0.5 rounded-full bg-white/40 mx-auto" />
+                        <div className="w-full h-5 rounded-[2px] bg-gradient-to-br from-emerald-500 to-teal-600" />
+                      </div>
+                      <div className="w-8 h-11 rounded-[5px] border border-emerald-400/40 bg-emerald-950/60 p-0.5 flex flex-col justify-between">
+                        <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
+                        <div className="w-full h-7 rounded-[3px] bg-gradient-to-br from-teal-500 to-cyan-600" />
+                      </div>
+                    </div>
+                    <div className="text-[6.5px] text-center font-medium text-emerald-200/90 bg-emerald-900/40 py-0.5 rounded-[3px]">
+                      Adaptive
+                    </div>
+                  </div>
+
+                  {/* Screen 3: 1-Click Export */}
+                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-purple-950 via-[#1b1227] to-black border border-purple-500/20 shadow-inner relative overflow-hidden">
+                    <div className="absolute -top-3 -right-3 w-10 h-10 bg-purple-500/20 rounded-full blur-sm" />
+                    <div>
+                      <div className="text-[7.5px] font-bold text-purple-300 tracking-tight leading-none">ZIP &amp; Handoff</div>
+                      <div className="text-[6px] text-slate-400 mt-0.5">Developer ready</div>
+                    </div>
+                    {/* Mini Package Graphic */}
+                    <div className="my-auto text-center">
+                      <div className="w-8 h-8 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center shadow-sm">
+                        <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="text-[6.5px] text-center font-medium text-purple-200/90 bg-purple-900/40 py-0.5 rounded-[3px]">
+                      1-Click ZIP
+                    </div>
+                  </div>
                 </div>
 
                 {/* iOS Home Indicator Bar */}
@@ -218,17 +273,50 @@ function DeviceFramesCard() {
                 {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
                 <StoreMetricsRibbon theme="dark" />
 
-                {/* Tablet Screenshot Skeleton Gallery (Subtle & Deep Tone) */}
+                {/* Tablet Screenshot Gallery (Vibrant Mini App Screens) */}
                 <div className="grid grid-cols-2 gap-2.5 select-none">
-                  {[0, 1].map((idx) => (
-                    <div
-                      key={idx}
-                      className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-[#121312] border border-white/[0.04]"
-                    >
-                      <div className="w-full h-13 rounded-lg bg-black/60" />
-                      <div className="w-16 h-1.5 rounded-full bg-black/50" />
+                  {/* Screen 1: Canvas Studio */}
+                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-indigo-950/80 via-[#141527] to-black border border-indigo-500/25 relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[8.5px] font-bold text-indigo-300">Live Stage Canvas</span>
+                      <span className="text-[7px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-semibold">4K Retina</span>
                     </div>
-                  ))}
+                    <div className="flex items-center gap-2 my-auto">
+                      <div className="w-10 h-11 rounded-[6px] border border-indigo-400/40 bg-indigo-950 p-0.5 flex flex-col justify-between shadow">
+                        <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
+                        <div className="w-full h-7 rounded-[3px] bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" />
+                      </div>
+                      <div className="flex-1 space-y-1">
+                        <div className="text-[7.5px] text-white font-medium">Framed &amp; Frameless</div>
+                        <div className="text-[6.5px] text-slate-400">Realistic bezels &amp; metrics</div>
+                        <div className="w-full h-1 rounded-full bg-indigo-500/30 overflow-hidden">
+                          <div className="w-3/4 h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Screen 2: Export Package */}
+                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-purple-950/80 via-[#1b1328] to-black border border-purple-500/25 relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[8.5px] font-bold text-purple-300">Handoff Deliverables</span>
+                      <span className="text-[7px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-semibold">ZIP + MD</span>
+                    </div>
+                    <div className="flex items-center gap-2.5 my-auto">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center shrink-0 shadow">
+                        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                      </div>
+                      <div className="flex-1 min-w-0 space-y-0.5">
+                        <div className="text-[7.5px] text-white font-mono font-bold truncate">store-bundle.zip</div>
+                        <div className="text-[6.5px] text-slate-400">PNGs, screens &amp; metadata</div>
+                        <div className="text-[6.5px] text-emerald-400 font-semibold">✓ Ready to submit</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Tablet Home Bar */}
@@ -432,17 +520,144 @@ function StorePresetsCard() {
                 developerName={current.developer}
               />
 
-              {/* Tablet Screenshot Skeleton Gallery (2-column grid) */}
+              {/* Tablet Screenshot Gallery (Dynamic Real App UI) */}
               <div className="grid grid-cols-2 gap-2.5 select-none">
-                {[0, 1].map((idx) => (
-                  <div
-                    key={idx}
-                    className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-[#121312] border border-white/[0.04]"
-                  >
-                    <div className="w-full h-13 rounded-lg bg-black/60" />
-                    <div className="w-16 h-1.5 rounded-full bg-black/50" />
-                  </div>
-                ))}
+                {activePreset === "zenmind" && (
+                  <>
+                    {/* ZenMind Screen 1: Sleep Stories */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-purple-950 via-[#181126] to-black border border-purple-500/25 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-purple-200">Sleep Stories</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-medium">45 min · Rain</span>
+                      </div>
+                      <div className="flex items-center gap-2 my-auto">
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-700 flex items-center justify-center shrink-0 shadow">
+                          <span className="text-[14px]">🌙</span>
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="text-[7.5px] text-white font-medium truncate">Night Rain on Leaves</div>
+                          <div className="flex items-center gap-0.5 h-3">
+                            {[40, 75, 55, 90, 60, 85, 45, 70, 50, 80, 65, 40].map((h, i) => (
+                              <div
+                                key={i}
+                                className="w-1 bg-purple-400/80 rounded-full"
+                                style={{ height: `${h}%` }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* ZenMind Screen 2: Deep Breathwork */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-fuchsia-950 via-[#1d1222] to-black border border-fuchsia-500/25 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-fuchsia-200">Box Breathing</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-300 font-medium">Inhale 4s</span>
+                      </div>
+                      <div className="flex items-center gap-2.5 my-auto">
+                        <div className="w-9 h-9 rounded-full border-2 border-fuchsia-400/60 flex items-center justify-center shrink-0 shadow-inner">
+                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-fuchsia-500 to-rose-500 flex items-center justify-center">
+                            <span className="text-[7px] text-white font-bold">4s</span>
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-0.5">
+                          <div className="text-[7.5px] text-white font-medium">Mindful Reset</div>
+                          <div className="text-[6.5px] text-slate-400">Calm heart &amp; mind</div>
+                          <div className="text-[6.5px] text-emerald-400 font-semibold">Streak: 12 Days</div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {activePreset === "taskflow" && (
+                  <>
+                    {/* TaskFlow Screen 1: Daily Habits */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-sky-950 via-[#0d1c2d] to-black border border-sky-500/25 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-sky-200">Daily Habits</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-medium">3 of 4 Done</span>
+                      </div>
+                      <div className="space-y-1 my-auto">
+                        <div className="flex items-center gap-1.5 p-1 rounded bg-white/5 border border-white/5 text-[7px] text-slate-200">
+                          <span className="text-emerald-400 font-bold">✓</span>
+                          <span className="truncate">Deep Work Sprint (2h)</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 p-1 rounded bg-white/5 border border-white/5 text-[7px] text-slate-200">
+                          <span className="text-sky-400 font-bold">✓</span>
+                          <span className="truncate">Design System Review</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* TaskFlow Screen 2: Focus Sprint Timer */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-blue-950 via-[#101931] to-black border border-blue-500/25 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-blue-200">Focus Timer</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-medium">Pomodoro</span>
+                      </div>
+                      <div className="flex items-center gap-2.5 my-auto">
+                        <div className="w-9 h-9 rounded-full border-2 border-blue-400/50 flex items-center justify-center shrink-0">
+                          <span className="text-[8.5px] font-extrabold text-blue-300 font-mono">25:00</span>
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-0.5">
+                          <div className="text-[7.5px] text-white font-medium">Zero Distractions</div>
+                          <div className="text-[6.5px] text-slate-400">Done: 6 sessions</div>
+                          <div className="text-[6.5px] text-emerald-400 font-semibold">+150 XP today</div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {activePreset === "pulsefit" && (
+                  <>
+                    {/* PulseFit Screen 1: Activity Rings */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-emerald-950 via-[#0e2118] to-black border border-emerald-500/25 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-emerald-200">Activity Rings</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-medium">Goal 92%</span>
+                      </div>
+                      <div className="flex items-center gap-2.5 my-auto">
+                        {/* Concentric rings */}
+                        <div className="relative w-9 h-9 shrink-0 flex items-center justify-center">
+                          <div className="absolute inset-0 rounded-full border-2 border-rose-500/80" />
+                          <div className="absolute inset-1 rounded-full border-2 border-emerald-400" />
+                          <div className="absolute inset-2 rounded-full border-2 border-cyan-400" />
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-0.5">
+                          <div className="text-[7.5px] text-white font-medium">640 / 700 kcal</div>
+                          <div className="text-[6.5px] text-emerald-300 font-medium">42 mins Exercise</div>
+                          <div className="text-[6.5px] text-cyan-300">10 / 12 Stand hrs</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* PulseFit Screen 2: Heart & Cardio */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-teal-950 via-[#0c1f1c] to-black border border-teal-500/25 relative overflow-hidden transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8.5px] font-bold text-teal-200">Heart Rate</span>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-medium">138 BPM</span>
+                      </div>
+                      <div className="my-auto space-y-1">
+                        <svg className="w-full h-6 text-emerald-400" viewBox="0 0 100 30" fill="none">
+                          <path
+                            d="M 0 15 L 20 15 L 26 8 L 32 24 L 38 4 L 44 26 L 50 15 L 70 15 L 76 8 L 82 22 L 88 15 L 100 15"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        <div className="flex items-center justify-between text-[6.5px] text-slate-400">
+                          <span>Cardio Zone 3</span>
+                          <span className="text-emerald-400 font-semibold">Peak 162 BPM</span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Tablet Home Bar */}
