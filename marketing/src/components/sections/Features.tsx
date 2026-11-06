@@ -11,6 +11,7 @@ import {
   Sparkles,
   RefreshCw,
   AlertTriangle,
+  XCircle,
   Download,
   FileText,
   Package,
@@ -1644,7 +1645,7 @@ function ComplianceCard() {
                       </span>
                     ) : (
                       <span className="text-rose-500 flex items-center gap-1">
-                        <AlertTriangle className="w-3.5 h-3.5" /> Transparent Background Detected
+                        <XCircle className="w-3.5 h-3.5" /> Transparent Background Detected
                       </span>
                     )}
                   </div>
@@ -1720,7 +1721,7 @@ function ComplianceCard() {
                       </span>
                     ) : (
                       <span className="text-rose-500 flex items-center gap-1">
-                        <AlertTriangle className="w-3.5 h-3.5" /> Non-Square Ratio Detected
+                        <XCircle className="w-3.5 h-3.5" /> Non-Square Ratio Detected
                       </span>
                     )}
                   </div>
