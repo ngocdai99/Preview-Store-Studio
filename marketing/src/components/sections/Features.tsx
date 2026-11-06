@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { siteConfig } from "@/config/site";
 import { SlidingTabs } from "@/components/ui/SlidingTabs";
 import { BrandIcon } from "@/components/ui/BrandIcon";
@@ -18,6 +18,19 @@ import {
 // ============================================================================
 function DeviceFramesCard() {
   const [device, setDevice] = useState<"phone" | "tablet">("phone");
+  const [timeString, setTimeString] = useState("9:41");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      setTimeString(`${hours}:${minutes}`);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-2 lg:col-span-6">
@@ -112,11 +125,44 @@ function DeviceFramesCard() {
             <div className="absolute -right-[4px] top-[102px] w-[3px] h-[40px] rounded-r-sm bg-[#363840]" />
 
             {/* Screen Inner (Portrait 19.5:9 Authentic iOS App Store) */}
-            <div className="w-full h-full rounded-[38px] overflow-hidden p-3 bg-black text-white flex flex-col justify-between">
-              {/* Dynamic Island Centered */}
-              <div className="w-16 h-3.5 rounded-full bg-[#0d0e12] border border-white/10 mx-auto flex items-center justify-between px-2 shrink-0">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#1b1c24] border border-white/15" />
-                <div className="w-1 h-1 rounded-full bg-emerald-500/80" />
+            <div className="w-full h-full rounded-[38px] overflow-hidden pt-1.5 px-3 pb-3 bg-black text-white flex flex-col justify-between">
+              {/* iOS Status Bar with Pure Black Dynamic Island */}
+              <div className="w-full h-6 px-1 flex items-center justify-between select-none shrink-0 text-white z-20">
+                {/* Left: Current Local Time */}
+                <div className="w-11 text-left pl-0.5">
+                  <span className="text-[10px] font-semibold tracking-tight text-white font-sans">
+                    {timeString}
+                  </span>
+                </div>
+
+                {/* Center: Dynamic Island (Pure Solid Black Capsule, NO colored dots) */}
+                <div className="w-[58px] sm:w-[62px] h-[17px] rounded-full bg-black shadow-sm shrink-0" />
+
+                {/* Right: Cellular Signal + Wi-Fi + Battery */}
+                <div className="w-11 flex items-center justify-end gap-1 text-white">
+                  {/* Cellular Signal Bars (4 bars) */}
+                  <svg className="w-3.5 h-2.5 text-white" viewBox="0 0 17 12" fill="currentColor">
+                    <rect x="1" y="8.5" width="2.5" height="3.5" rx="0.6" />
+                    <rect x="5" y="6" width="2.5" height="6" rx="0.6" />
+                    <rect x="9" y="3.5" width="2.5" height="8.5" rx="0.6" />
+                    <rect x="13" y="1" width="2.5" height="11" rx="0.6" />
+                  </svg>
+
+                  {/* Wi-Fi Icon */}
+                  <svg className="w-3 h-2.5 text-white" viewBox="0 0 16 12" fill="currentColor">
+                    <path d="M8 9.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" />
+                    <path d="M4.5 7.5a5 5 0 0 1 7 0 .8.8 0 0 1-1.1 1.1 3.4 3.4 0 0 0-4.8 0 .8.8 0 1 1-1.1-1.1z" />
+                    <path d="M2 4.5a8.5 8.5 0 0 1 12 0 .8.8 0 0 1-1.1 1.1 6.9 6.9 0 0 0-9.8 0 .8.8 0 1 1-1.1-1.1z" />
+                  </svg>
+
+                  {/* Battery Icon with Nub */}
+                  <div className="flex items-center">
+                    <div className="w-4 h-2 rounded-[2.5px] border border-white p-[0.8px] flex items-center">
+                      <div className="w-full h-full rounded-[1px] bg-white" />
+                    </div>
+                    <div className="w-[0.8px] h-1 rounded-r-[0.5px] bg-white ml-[0.5px]" />
+                  </div>
+                </div>
               </div>
 
               {/* App Detail Header: Brand Icon, Name, Subtitle, Blue GET Button */}
@@ -149,7 +195,7 @@ function DeviceFramesCard() {
               </div>
 
               {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
-              <StoreMetricsRibbon theme="dark" className="my-1 py-1" />
+              <StoreMetricsRibbon theme="dark" developerName="Kai DevLabs" className="my-1 py-1" />
 
               {/* Landscape Screenshots Carousel Section */}
               <div className="flex-1 flex flex-col justify-center min-h-0">
@@ -406,9 +452,29 @@ function DeviceFramesCard() {
             <div className="absolute -right-[4px] top-[52px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
 
             {/* Screen Inner (Portrait iPad) */}
-            <div className="w-full h-full rounded-[26px] p-3 sm:p-3.5 bg-black text-white flex flex-col justify-between">
-              {/* Front Camera Dot */}
-              <div className="w-1.5 h-1.5 rounded-full bg-white/20 mx-auto shrink-0" />
+            <div className="w-full h-full rounded-[26px] pt-1.5 px-3 pb-3 sm:px-3.5 sm:pb-3.5 bg-black text-white flex flex-col justify-between">
+              {/* iPad Top Status Bar */}
+              <div className="w-full h-4 px-1 flex items-center justify-between select-none shrink-0 text-white z-20">
+                <span className="text-[9.5px] font-semibold text-white tracking-tight">
+                  {timeString}
+                </span>
+                <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                <div className="flex items-center gap-1.5 text-white">
+                  {/* Wi-Fi Icon */}
+                  <svg className="w-2.5 h-2 text-white" viewBox="0 0 16 12" fill="currentColor">
+                    <path d="M8 9.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" />
+                    <path d="M4.5 7.5a5 5 0 0 1 7 0 .8.8 0 0 1-1.1 1.1 3.4 3.4 0 0 0-4.8 0 .8.8 0 1 1-1.1-1.1z" />
+                    <path d="M2 4.5a8.5 8.5 0 0 1 12 0 .8.8 0 0 1-1.1 1.1 6.9 6.9 0 0 0-9.8 0 .8.8 0 1 1-1.1-1.1z" />
+                  </svg>
+                  {/* Battery */}
+                  <div className="flex items-center">
+                    <div className="w-3.5 h-2 rounded-[2px] border border-white p-[0.8px] flex items-center">
+                      <div className="w-full h-full rounded-[0.8px] bg-white" />
+                    </div>
+                    <div className="w-[0.8px] h-1 rounded-r-[0.5px] bg-white ml-[0.5px]" />
+                  </div>
+                </div>
+              </div>
 
               {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
               <div className="flex items-start gap-3 mt-0.5">
@@ -438,7 +504,7 @@ function DeviceFramesCard() {
               </div>
 
               {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
-              <StoreMetricsRibbon theme="dark" className="my-1 py-1" />
+              <StoreMetricsRibbon theme="dark" developerName="Kai DevLabs" className="my-1 py-1" />
 
               {/* Portrait Tablet Screenshot Carousel (Authentic Horizontal Scroll) */}
               <div className="flex-1 flex flex-col justify-center min-h-0 my-1">
@@ -545,14 +611,15 @@ function DeviceFramesCard() {
                   </div>
 
                   {/* Slide 2: Adaptive Layouts (SRS Proportions: Phone 19.5:9 & Tablet 4:3) */}
-                  <div className="w-[168px] h-[126px] aspect-[4/3] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#061816] via-[#0b2823] to-[#04100e] border border-emerald-500/40 relative overflow-hidden shadow-lg">
+                  {/* Slide 2: Adaptive Layouts (SRS Proportions: Phone 19.5:9 & Tablet 4:3) */}
+                  <div className="w-[168px] h-[126px] aspect-[4/3] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#0b0e22] via-[#101533] to-[#070914] border border-sky-500/35 relative overflow-hidden shadow-lg">
                     {/* Top Bar */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
-                        <span className="text-[8px] font-bold text-emerald-100 tracking-tight">Adaptive Layouts</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse shadow-[0_0_6px_#38bdf8]" />
+                        <span className="text-[8px] font-bold text-sky-100 tracking-tight">Adaptive Layouts</span>
                       </div>
-                      <span className="text-[6px] px-1.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 font-mono font-bold">
+                      <span className="text-[6px] px-1.5 py-0.5 rounded-full bg-sky-500/20 border border-sky-400/30 text-sky-200 font-mono font-bold">
                         ALL SIZES
                       </span>
                     </div>
@@ -561,44 +628,43 @@ function DeviceFramesCard() {
                     <div className="my-auto w-full h-15 relative flex items-center justify-center">
                       <svg viewBox="0 0 160 50" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
                         <defs>
-                          <linearGradient id="ipadPhoneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#10b981" />
-                            <stop offset="50%" stopColor="#059669" />
-                            <stop offset="100%" stopColor="#047857" />
-                          </linearGradient>
-                          <linearGradient id="ipadTabletGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#14b8a6" />
-                            <stop offset="50%" stopColor="#0d9488" />
-                            <stop offset="100%" stopColor="#0f766e" />
+                          <linearGradient id="ipadResponsiveHero" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#6366f1" />
+                            <stop offset="50%" stopColor="#a855f7" />
+                            <stop offset="100%" stopColor="#ec4899" />
                           </linearGradient>
                         </defs>
 
-                        {/* Sync Connecting Beam */}
-                        <path d="M 46 22 L 80 22" stroke="#34d399" strokeWidth="1" strokeDasharray="2.5 1.5" />
-                        <circle cx="63" cy="22" r="2.5" fill="#10b981" />
+                        {/* Sync Connection Beam */}
+                        <path d="M 46 22 L 80 22" stroke="#38bdf8" strokeWidth="1" strokeDasharray="3 2" />
+                        <circle cx="63" cy="22" r="2.5" fill="#38bdf8" />
                         <circle cx="63" cy="22" r="1.2" fill="#ffffff" />
 
                         {/* Left: Phone View Frame (True 19.5:9: w=20, h=42) */}
                         <g transform="translate(24, 1)">
-                          <rect width="20" height="42" rx="3.5" fill="#081813" stroke="#34d399" strokeWidth="1" />
-                          <rect x="1.5" y="1.5" width="17" height="39" rx="2.5" fill="url(#ipadPhoneGrad)" />
-                          <rect x="6.5" y="2.5" width="7" height="1.6" rx="0.8" fill="#04140f" />
-                          <rect x="3" y="6" width="14" height="5" rx="1" fill="#ffffff" opacity="0.85" />
-                          <rect x="3" y="13" width="14" height="8" rx="1" fill="#ffffff" opacity="0.3" />
-                          <rect x="3" y="23" width="14" height="8" rx="1" fill="#ffffff" opacity="0.3" />
-                          <text x="10" y="47.5" textAnchor="middle" fill="#a7f3d0" fontSize="4.2" fontWeight="bold" fontFamily="sans-serif">Phone (19.5:9)</text>
+                          <rect width="20" height="42" rx="3.5" fill="#141724" stroke="#475569" strokeWidth="1" />
+                          <rect x="1.5" y="1.5" width="17" height="39" rx="2.5" fill="#090b12" />
+                          <rect x="6.5" y="2.5" width="7" height="1.6" rx="0.8" fill="#000000" />
+                          <rect x="3" y="6" width="14" height="4" rx="0.8" fill="#1e2238" />
+                          <rect x="3" y="12" width="14" height="10" rx="1.5" fill="url(#ipadResponsiveHero)" />
+                          <rect x="3" y="24" width="14" height="6" rx="1" fill="#ffffff" opacity="0.18" />
+                          <rect x="3" y="32" width="14" height="5" rx="1" fill="#ffffff" opacity="0.1" />
+                          <text x="10" y="47.5" textAnchor="middle" fill="#94a3b8" fontSize="4.2" fontWeight="bold" fontFamily="sans-serif">Phone View</text>
                         </g>
 
                         {/* Right: Tablet View Frame (True 4:3: w=48, h=36) */}
                         <g transform="translate(82, 4)">
-                          <rect width="48" height="36" rx="4" fill="#081813" stroke="#2dd4bf" strokeWidth="1" />
-                          <rect x="1.5" y="1.5" width="45" height="33" rx="3" fill="url(#ipadTabletGrad)" />
-                          <circle cx="24" cy="2.5" r="0.8" fill="#ffffff" opacity="0.7" />
-                          <rect x="3" y="5" width="10" height="26" rx="1" fill="#ffffff" opacity="0.25" />
-                          <rect x="15" y="5" width="13" height="12" rx="1" fill="#ffffff" opacity="0.85" />
-                          <rect x="30" y="5" width="14" height="12" rx="1" fill="#ffffff" opacity="0.4" />
-                          <rect x="15" y="19" width="29" height="12" rx="1" fill="#ffffff" opacity="0.3" />
-                          <text x="24" y="44.5" textAnchor="middle" fill="#99f6e4" fontSize="4.2" fontWeight="bold" fontFamily="sans-serif">Tablet (4:3)</text>
+                          <rect width="48" height="36" rx="4" fill="#161928" stroke="#475569" strokeWidth="1" />
+                          <rect x="1.5" y="1.5" width="45" height="33" rx="3" fill="#090b12" />
+                          <circle cx="24" cy="2.5" r="0.8" fill="#475569" />
+                          <rect x="3" y="5" width="9" height="26" rx="1" fill="#141829" />
+                          <circle cx="7.5" cy="8.5" r="1.2" fill="#38bdf8" />
+                          <circle cx="7.5" cy="13" r="1.2" fill="#a855f7" />
+                          <circle cx="7.5" cy="17.5" r="1.2" fill="#ec4899" />
+                          <rect x="14" y="5" width="31" height="11" rx="1.5" fill="url(#ipadResponsiveHero)" />
+                          <rect x="14" y="18" width="14.5" height="13" rx="1" fill="#ffffff" opacity="0.18" />
+                          <rect x="30.5" y="18" width="14.5" height="13" rx="1" fill="#ffffff" opacity="0.1" />
+                          <text x="24" y="44.5" textAnchor="middle" fill="#94a3b8" fontSize="4.2" fontWeight="bold" fontFamily="sans-serif">Tablet View</text>
                         </g>
                       </svg>
                     </div>
@@ -606,10 +672,9 @@ function DeviceFramesCard() {
                     {/* Footer */}
                     <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
                       <span className="font-medium text-slate-300">Multi-Device Formats</span>
-                      <span className="text-emerald-300 font-semibold">Store Specifications</span>
+                      <span className="text-sky-300 font-semibold">Store Specifications</span>
                     </div>
                   </div>
-
                   {/* Slide 3: Store Deliverables (Exact 4:3, Zero Collision, Zero Overpromising) */}
                   <div className="w-[168px] h-[126px] aspect-[4/3] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#1c0828] via-[#2d0d3e] to-[#0e0314] border border-purple-500/40 relative overflow-hidden shadow-lg">
                     {/* Top Bar */}

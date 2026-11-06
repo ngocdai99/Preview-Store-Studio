@@ -22,7 +22,7 @@ export function StoreMetricsRibbon({
   rating = "4.9 ★",
   ratingCount = "1.8K Ratings",
   age = "4+",
-  developerName = "Store Mockup Pro",
+  developerName = "Kai DevLabs",
 }: StoreMetricsRibbonProps) {
   const isDark = theme === "dark";
 
@@ -37,14 +37,14 @@ export function StoreMetricsRibbon({
       {/* Column 1: Ratings */}
       <div className="flex flex-col items-center justify-center px-1">
         <span
-          className={`text-[12.5px] font-bold leading-tight ${
+          className={`text-[10px] font-bold leading-tight ${
             isDark ? "text-white" : "text-slate-900"
           }`}
         >
           {rating}
         </span>
         <span
-          className={`text-[8.5px] mt-0.5 leading-tight ${
+          className={`text-[7.5px] mt-0.5 leading-tight ${
             isDark ? "text-slate-400" : "text-slate-500"
           }`}
         >
@@ -55,14 +55,14 @@ export function StoreMetricsRibbon({
       {/* Column 2: Age */}
       <div className="flex flex-col items-center justify-center px-1">
         <span
-          className={`text-[12.5px] font-bold leading-tight ${
+          className={`text-[10px] font-bold leading-tight ${
             isDark ? "text-white" : "text-slate-900"
           }`}
         >
           {age}
         </span>
         <span
-          className={`text-[8.5px] mt-0.5 leading-tight ${
+          className={`text-[7.5px] mt-0.5 leading-tight ${
             isDark ? "text-slate-400" : "text-slate-500"
           }`}
         >
@@ -73,13 +73,13 @@ export function StoreMetricsRibbon({
       {/* Column 3: Developer */}
       <div className="flex flex-col items-center justify-center px-1">
         <div
-          className={`h-4 flex items-center justify-center ${
+          className={`h-3.5 flex items-center justify-center ${
             isDark ? "text-slate-300" : "text-slate-700"
           }`}
         >
           <svg
-            width="15"
-            height="15"
+            width="13"
+            height="13"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -93,7 +93,7 @@ export function StoreMetricsRibbon({
           </svg>
         </div>
         <span
-          className={`text-[8.5px] mt-0.5 leading-tight truncate max-w-[85px] ${
+          className={`text-[7.5px] mt-0.5 leading-tight truncate max-w-[85px] ${
             isDark ? "text-slate-400" : "text-slate-500"
           }`}
         >

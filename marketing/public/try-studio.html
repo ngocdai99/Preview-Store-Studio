@@ -142,6 +142,21 @@ var r=function(A,e){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Arr
       </svg>
       <span>Tour</span>
     </button>
+    <script>try {
+if (localStorage.getItem('sps_tour_completed') === 'true') {
+var _b = document.getElementById('btnStartTour');
+var _hr = document.querySelector('header .right');
+var _ui = document.getElementById('btnUi');
+if (_b && _hr) {
+if (_ui && _ui.parentNode === _hr) {
+_hr.insertBefore(_b, _ui);
+} else {
+_hr.appendChild(_b);
+}
+_b.classList.add('in-header');
+}
+}
+} catch (_) {}</script>
     <button type="button" class="ms-pill custom has-draft on" id="btnPresetPill" title="Currently viewing preset template">
       <img alt="" id="presetBtnThumb" src="">
       <span id="presetBtnTitle">Store Preview Studio</span>
