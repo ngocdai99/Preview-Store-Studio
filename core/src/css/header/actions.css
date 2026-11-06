@@ -288,9 +288,7 @@
 .ms-pill.custom.has-draft.on,
 .ms-pill.on {
   background: #EFF1F0 !important;
-  background-clip: padding-box !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  border-top-color: transparent !important;
   color: #252625 !important;
   height: 34px !important;
   min-height: 34px !important;
@@ -304,10 +302,8 @@
 .ms-pill.custom.has-draft.on:hover,
 .ms-pill.on:hover {
   background: #E1E3E2 !important;
-  background-clip: padding-box !important;
   color: #252625 !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
-  border-top-color: transparent !important;
   box-shadow: none !important;
 }
 
@@ -322,7 +318,6 @@
 #btnPresetPill {
   position: relative;
   overflow: hidden;
-  overflow-clip-margin: border-box;
 }
 
 #btnDraft:hover,
@@ -334,7 +329,7 @@
 #btnPresetPill::before {
   content: '';
   position: absolute;
-  top: -1px;
+  top: 0;
   left: 0;
   right: 0;
   height: 2px;
@@ -344,11 +339,11 @@
   transition: opacity 0.2s ease;
 }
 
-/* Luminous purple top-edge accent line: Marks SELECTED pill (.on) */
+/* Luminous purple top-edge accent line: Marks SELECTED pill (.on) against white surface */
 #btnDraft.on::before,
 #btnPresetPill.on::before {
   opacity: 1;
-  background: linear-gradient(90deg, #c084fc 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
+  background: linear-gradient(90deg, #9333ea 0%, #a855f7 35%, rgba(168, 85, 247, 0.5) 65%, transparent 100%);
 }
 
 .ms-pill.custom.has-draft img,
@@ -569,14 +564,7 @@
 :root[data-ui=light] #btnDraft::before,
 :root[data-ui=light] #btnPresetPill::before {
   opacity: 0;
-  top: -1px;
-}
-
-:root[data-ui=light] .ms-pill.custom.on,
-:root[data-ui=light] .ms-pill.custom.has-draft.on,
-:root[data-ui=light] .ms-pill.on {
-  border-top-color: transparent !important;
-  background-clip: padding-box !important;
+  top: 0;
 }
 
 :root[data-ui=light] #btnDraft.on::before,

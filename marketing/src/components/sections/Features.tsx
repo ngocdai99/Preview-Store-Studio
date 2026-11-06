@@ -91,7 +91,7 @@ function DeviceFramesCard() {
       </div>
 
       {/* Simulated Live Stage (Visual Interactive Mockup without wrapper container) */}
-      <div className="relative z-10 w-full h-[265px] sm:h-[275px] flex items-center justify-center select-none">
+      <div className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none">
         {/* Phone Mockup Frame (Realistic Hardware Bezel & Authentic App Store Product Page) */}
         <div
           className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
@@ -100,295 +100,363 @@ function DeviceFramesCard() {
               : "opacity-0 scale-[0.88] translate-y-3 pointer-events-none"
           }`}
         >
-          <div className="relative w-[265px] sm:w-[285px] rounded-[48px] p-[8px] border border-[#363840] bg-[#1e1f23] shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300">
-              {/* Outer Physical Hardware Buttons */}
-              {/* Left: Action Button */}
-              <div className="absolute -left-[4px] top-[60px] w-[3px] h-[16px] rounded-l-sm bg-[#363840]" />
-              {/* Left: Volume Up */}
-              <div className="absolute -left-[4px] top-[84px] w-[3px] h-[30px] rounded-l-sm bg-[#363840]" />
-              {/* Left: Volume Down */}
-              <div className="absolute -left-[4px] top-[122px] w-[3px] h-[30px] rounded-l-sm bg-[#363840]" />
-              {/* Right: Side / Power Button */}
-              <div className="absolute -right-[4px] top-[92px] w-[3px] h-[44px] rounded-r-sm bg-[#363840]" />
+          <div className="relative w-[212px] sm:w-[226px] h-[392px] sm:h-[412px] rounded-[44px] p-[6px] border border-[#363840] bg-[#1e1f23] shadow-[0_16px_36px_-6px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.18)] transition-all duration-300">
+            {/* Outer Physical Hardware Buttons */}
+            {/* Left: Action Button */}
+            <div className="absolute -left-[4px] top-[68px] w-[3px] h-[16px] rounded-l-sm bg-[#363840]" />
+            {/* Left: Volume Up */}
+            <div className="absolute -left-[4px] top-[94px] w-[3px] h-[28px] rounded-l-sm bg-[#363840]" />
+            {/* Left: Volume Down */}
+            <div className="absolute -left-[4px] top-[130px] w-[3px] h-[28px] rounded-l-sm bg-[#363840]" />
+            {/* Right: Side / Power Button */}
+            <div className="absolute -right-[4px] top-[102px] w-[3px] h-[40px] rounded-r-sm bg-[#363840]" />
 
-              {/* Screen Inner */}
-              <div className="w-full rounded-[40px] overflow-hidden p-3.5 bg-black text-white">
-                {/* App Detail Header: Brand Icon, Name, Subtitle, Apple Blue GET Button */}
-                <div className="flex items-start gap-3">
-                  {/* Official Brand Icon with 3D Interlocking K */}
-                  <div className="shrink-0 rounded-[15px] shadow-md overflow-hidden">
-                    <BrandIcon
-                      withBadge
-                      size={52}
-                      className="w-[52px] h-[52px]"
-                    />
-                  </div>
-
-                  {/* App Info & Action Button */}
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-[12.5px] sm:text-[13px] font-extrabold tracking-tight leading-tight text-white">
-                      Store Preview Studio
-                    </h4>
-                    <p className="text-[10.5px] sm:text-[11px] leading-tight font-medium text-slate-400">
-                      Mockup Studio Pro
-                    </p>
-
-                    {/* Blue Apple GET Button (No top margin) */}
-                    <div>
-                      <button
-                        type="button"
-                        className="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-normal text-[10px] tracking-wide shadow-sm transition-all cursor-pointer"
-                      >
-                        GET
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
-                <StoreMetricsRibbon theme="dark" />
-
-                {/* Screenshot Carousel (Vibrant App Store Showcase) */}
-                <div className="flex gap-2 overflow-hidden px-0.5 pb-1 select-none">
-                  {/* Screen 1: Realtime Preview Studio */}
-                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-[#120f30] via-[#090b1e] to-black border border-indigo-500/35 shadow-inner relative overflow-hidden">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[7px] font-bold text-indigo-300 font-mono tracking-tight">CANVAS 4K</span>
-                      <span className="text-[5.5px] px-1 py-0.2 rounded bg-indigo-500/25 text-indigo-200 font-semibold">ULTRA-HD</span>
-                    </div>
-
-                    {/* Realistic Mini Phone Bezel with Art Preview */}
-                    <div className="my-auto w-11 h-12 mx-auto rounded-[7px] border border-indigo-400/50 bg-[#0d0e1c] p-0.5 flex flex-col justify-between shadow-lg relative">
-                      <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
-                      <div className="w-full h-8 rounded-[4px] bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 p-1 flex flex-col justify-between overflow-hidden relative">
-                        <div className="text-[5px] font-extrabold text-white leading-none">Music Pro</div>
-                        <div className="flex items-center gap-0.5 h-2">
-                          {[30, 70, 50, 90, 60, 80, 45].map((h, i) => (
-                            <div key={i} className="flex-1 bg-white/80 rounded-full" style={{ height: `${h}%` }} />
-                          ))}
-                        </div>
-                      </div>
-                      <div className="w-4 h-0.5 rounded-full bg-white/30 mx-auto" />
-                    </div>
-
-                    <div className="text-[6px] text-center font-semibold text-indigo-200/90 bg-indigo-900/40 py-0.5 rounded-[3px] border border-indigo-500/20">
-                      Realistic Bezels
-                    </div>
-                  </div>
-
-                  {/* Screen 2: Responsive Multi-Device */}
-                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-[#051f18] via-[#061713] to-black border border-emerald-500/35 shadow-inner relative overflow-hidden">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[7px] font-bold text-emerald-300 font-mono tracking-tight">DEVICES</span>
-                      <span className="text-[5.5px] px-1 py-0.2 rounded bg-emerald-500/25 text-emerald-200 font-semibold">ALL SIZES</span>
-                    </div>
-
-                    {/* Duo Device Staging */}
-                    <div className="my-auto flex items-end justify-center gap-1">
-                      {/* Phone */}
-                      <div className="w-6 h-10 rounded-[5px] border border-emerald-400/50 bg-[#071612] p-0.5 flex flex-col justify-between shadow">
-                        <div className="w-2 h-0.5 rounded-full bg-white/40 mx-auto" />
-                        <div className="w-full h-6 rounded-[2px] bg-gradient-to-br from-emerald-500 to-teal-600 p-0.5">
-                          <div className="w-2.5 h-1 rounded-xs bg-white/60" />
-                        </div>
-                      </div>
-                      {/* Tablet */}
-                      <div className="w-8 h-12 rounded-[6px] border border-teal-400/50 bg-[#081a16] p-0.5 flex flex-col justify-between shadow">
-                        <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
-                        <div className="w-full h-8 rounded-[3px] bg-gradient-to-br from-teal-500 to-cyan-600 p-0.5">
-                          <div className="w-3.5 h-1.5 rounded-xs bg-white/60" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-[6px] text-center font-semibold text-emerald-200/90 bg-emerald-900/40 py-0.5 rounded-[3px] border border-emerald-500/20">
-                      Phone &amp; Tablet
-                    </div>
-                  </div>
-
-                  {/* Screen 3: ASO Pre-Flight Audit */}
-                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-[#230925] via-[#130615] to-black border border-fuchsia-500/35 shadow-inner relative overflow-hidden">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[7px] font-bold text-fuchsia-300 font-mono tracking-tight">PRE-FLIGHT</span>
-                      <span className="text-[5.5px] px-1 py-0.2 rounded bg-fuchsia-500/25 text-fuchsia-200 font-semibold">100% OK</span>
-                    </div>
-
-                    {/* Store Audit Inspector Checklist */}
-                    <div className="my-auto space-y-1 px-0.5">
-                      <div className="flex items-center justify-between text-[6px] px-1 py-0.5 rounded bg-white/5 border border-white/5">
-                        <span className="text-slate-300 truncate">Title Limit</span>
-                        <span className="text-emerald-400 font-bold">20/30 ✓</span>
-                      </div>
-                      <div className="flex items-center justify-between text-[6px] px-1 py-0.5 rounded bg-white/5 border border-white/5">
-                        <span className="text-slate-300 truncate">Icon Opaque</span>
-                        <span className="text-cyan-400 font-bold">1024 ✓</span>
-                      </div>
-                    </div>
-
-                    <div className="text-[6px] text-center font-semibold text-fuchsia-200/90 bg-fuchsia-900/40 py-0.5 rounded-[3px] border border-fuchsia-500/20">
-                      1-Click Export
-                    </div>
-                  </div>
-                </div>
-
-                {/* iOS Home Indicator Bar */}
-                <div className="w-20 h-1 rounded-full mx-auto mt-1.5 bg-white/30" />
+            {/* Screen Inner (Portrait 19.5:9 Authentic iOS App Store) */}
+            <div className="w-full h-full rounded-[38px] overflow-hidden p-3 bg-black text-white flex flex-col justify-between">
+              {/* Dynamic Island Centered */}
+              <div className="w-16 h-3.5 rounded-full bg-[#0d0e12] border border-white/10 mx-auto flex items-center justify-between px-2 shrink-0">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#1b1c24] border border-white/15" />
+                <div className="w-1 h-1 rounded-full bg-emerald-500/80" />
               </div>
-            </div>
-          </div>
 
-          {/* Tablet Mockup Frame */}
-          <div
-            className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
-              device === "tablet"
-                ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 scale-[0.88] -translate-y-3 pointer-events-none"
-            }`}
-          >
-            <div className="relative w-[340px] sm:w-[410px] rounded-[30px] p-[7px] border border-[#3e4046] bg-[#25262a] shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300">
-              {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}
-              {/* Top: Power / Sleep Button */}
-              <div className="absolute -top-[4px] right-[36px] sm:right-[44px] w-[30px] sm:w-[34px] h-[3px] rounded-t-sm bg-[#363840]" />
-              {/* Right: Volume Up */}
-              <div className="absolute -right-[4px] top-[26px] sm:top-[28px] w-[3px] h-[16px] sm:h-[18px] rounded-r-sm bg-[#363840]" />
-              {/* Right: Volume Down */}
-              <div className="absolute -right-[4px] top-[46px] sm:top-[50px] w-[3px] h-[16px] sm:h-[18px] rounded-r-sm bg-[#363840]" />
-
-              {/* Screen Inner */}
-              <div className="w-full rounded-[24px] p-3.5 bg-black text-white">
-                {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
-                <div className="pb-2">
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 rounded-[15px] shadow-sm overflow-hidden">
-                      <BrandIcon
-                        withBadge
-                        size={58}
-                        className="w-[58px] h-[58px]"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[12px] font-bold leading-tight text-white">
-                        Store Preview Studio
-                      </div>
-                      <div className="text-[10.5px] text-slate-400">
-                        Mockup Studio Pro
-                      </div>
-                      <div>
-                        <button
-                          type="button"
-                          className="px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-normal text-[10px] tracking-wide shadow-sm transition-colors cursor-pointer"
-                        >
-                          GET
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+              {/* App Detail Header: Brand Icon, Name, Subtitle, Blue GET Button */}
+              <div className="flex items-start gap-2.5 mt-1">
+                <div className="shrink-0 rounded-[12px] shadow-sm overflow-hidden">
+                  <BrandIcon
+                    withBadge
+                    size={44}
+                    className="w-[44px] h-[44px]"
+                  />
                 </div>
 
-                {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
-                <StoreMetricsRibbon theme="dark" />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-[11.5px] sm:text-[12px] font-extrabold tracking-tight leading-tight text-white truncate">
+                    Store Preview Studio
+                  </h4>
+                  <p className="text-[9.5px] sm:text-[10px] leading-tight font-medium text-slate-400 truncate">
+                    Mockup Studio Pro
+                  </p>
 
-                {/* Tablet Screenshot Gallery (Vibrant Mini App Screens) */}
-                <div className="grid grid-cols-2 gap-2.5 select-none">
-                  {/* Screen 1: Canvas Studio */}
-                  {/* Screen 1: Dual-Store Live Studio Canvas */}
-                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#0c0a24] via-[#080918] to-black border border-indigo-500/35 relative overflow-hidden">
+                  <div className="mt-1">
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-normal text-[9.5px] tracking-wide shadow-sm transition-all cursor-pointer"
+                    >
+                      GET
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
+              <StoreMetricsRibbon theme="dark" className="my-1 py-1" />
+
+              {/* Landscape Screenshots Carousel Section */}
+              <div className="flex-1 flex flex-col justify-center min-h-0">
+                <div className="flex items-center justify-between px-0.5 mb-1">
+                  <span className="text-[7.5px] font-bold text-slate-400 uppercase tracking-wider">
+                    Preview
+                  </span>
+                  <span className="text-[6.5px] text-slate-500 font-mono">
+                    Swipe ↔
+                  </span>
+                </div>
+
+                {/* Horizontal Scroll Carousel for Landscape Cards */}
+                <div className="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none">
+                  {/* Slide 1: Live Canvas Studio */}
+                  <div className="w-[155px] sm:w-[165px] h-[112px] sm:h-[118px] rounded-xl p-2 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#0c0a26] via-[#141238] to-[#070614] border border-indigo-500/35 relative overflow-hidden">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[8.5px] font-bold text-indigo-200">Dual-Store Canvas</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                      <div className="flex items-center gap-1">
+                        <span className="text-[7.5px] font-bold text-indigo-200">Canvas Studio</span>
+                        <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
                       </div>
-                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-300 font-mono font-bold">
-                        3x RETINA · 4K
+                      <span className="text-[6px] px-1 py-0.2 rounded-full bg-indigo-500/25 text-indigo-300 font-mono font-bold">
+                        4K · 60FPS
                       </span>
                     </div>
 
-                    {/* Center Studio Mockup Preview with Side-by-Side Frames */}
-                    <div className="flex items-center justify-between gap-3 my-auto px-1">
-                      {/* Left: Mini Phone Stage */}
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-7 h-11 rounded-[5px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
-                          <div className="w-2 h-0.5 rounded-full bg-white/40 mx-auto" />
-                          <div className="w-full h-7 rounded-[2px] bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500" />
-                        </div>
-                        <div className="space-y-0.5">
-                          <div className="text-[7px] text-white font-bold leading-none">Phone Preview</div>
-                          <div className="text-[6px] text-slate-400">1179 × 2556 px</div>
-                          <div className="text-[6px] text-emerald-400 font-semibold">Framed &amp; Screen-Only</div>
-                        </div>
-                      </div>
-
-                      {/* Right: Mini Tablet Stage */}
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-10 h-11 rounded-[6px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
-                          <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
-                          <div className="w-full h-7 rounded-[3px] bg-gradient-to-br from-purple-500 to-indigo-600" />
-                        </div>
-                        <div className="space-y-0.5">
-                          <div className="text-[7px] text-white font-bold leading-none">Tablet Preview</div>
-                          <div className="text-[6px] text-slate-400">2048 × 2732 px</div>
-                          <div className="text-[6px] text-indigo-300 font-semibold">Native App Ratio</div>
-                        </div>
-                      </div>
+                    {/* Canvas Stage SVG Graphic */}
+                    <div className="my-auto w-full h-11 relative">
+                      <svg viewBox="0 0 140 44" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                          <linearGradient id="cGrid" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.4" />
+                            <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.05" />
+                          </linearGradient>
+                          <linearGradient id="artGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#6366f1" />
+                            <stop offset="50%" stopColor="#a855f7" />
+                            <stop offset="100%" stopColor="#ec4899" />
+                          </linearGradient>
+                        </defs>
+                        {/* Perspective Studio Grid */}
+                        <line x1="20" y1="40" x2="50" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
+                        <line x1="45" y1="40" x2="65" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
+                        <line x1="95" y1="40" x2="75" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
+                        <line x1="120" y1="40" x2="90" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
+                        <ellipse cx="70" cy="36" rx="48" ry="6" fill="url(#cGrid)" />
+                        {/* Floating Device Screen Art */}
+                        <rect x="42" y="6" width="56" height="30" rx="4" fill="#0f1122" stroke="rgba(129,140,248,0.5)" strokeWidth="1" />
+                        <rect x="44" y="8" width="52" height="26" rx="3" fill="url(#artGrad)" />
+                        {/* Top bar inside preview */}
+                        <rect x="47" y="11" width="18" height="2" rx="1" fill="#ffffff" opacity="0.8" />
+                        <circle cx="91" cy="12" r="1.5" fill="#ffffff" opacity="0.8" />
+                        {/* Artwork Equalizer Bars */}
+                        <rect x="48" y="18" width="3" height="12" rx="1" fill="#ffffff" opacity="0.9" />
+                        <rect x="53" y="15" width="3" height="15" rx="1" fill="#ffffff" opacity="0.9" />
+                        <rect x="58" y="21" width="3" height="9" rx="1" fill="#ffffff" opacity="0.9" />
+                        <rect x="63" y="17" width="3" height="13" rx="1" fill="#ffffff" opacity="0.9" />
+                        <rect x="68" y="23" width="3" height="7" rx="1" fill="#ffffff" opacity="0.9" />
+                        <rect x="73" y="16" width="3" height="14" rx="1" fill="#ffffff" opacity="0.9" />
+                      </svg>
                     </div>
 
                     <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
                       <span>Live Stage Canvas</span>
-                      <span className="text-indigo-400 font-semibold">Simultaneous Dual-Store Viewports</span>
+                      <span className="text-indigo-300 font-semibold">Framed Bezels</span>
                     </div>
                   </div>
 
-                  {/* Screen 2: Pre-Flight ASO Compliance & 1-Click Package */}
-                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1a0822] via-[#0e0514] to-black border border-purple-500/35 relative overflow-hidden">
+                  {/* Slide 2: Adaptive Multi-Device */}
+                  <div className="w-[155px] sm:w-[165px] h-[112px] sm:h-[118px] rounded-xl p-2 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#031d16] via-[#082a20] to-[#02110d] border border-emerald-500/35 relative overflow-hidden">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[8.5px] font-bold text-purple-200">Pre-Flight Compliance</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      <div className="flex items-center gap-1">
+                        <span className="text-[7.5px] font-bold text-emerald-200">Adaptive Devices</span>
+                        <span className="w-1 h-1 rounded-full bg-emerald-400" />
                       </div>
-                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
-                        100% PASSED ✓
+                      <span className="text-[6px] px-1 py-0.2 rounded-full bg-emerald-500/25 text-emerald-300 font-mono font-bold">
+                        ALL SIZES
                       </span>
                     </div>
 
-                    {/* Split View: Left Audit Specs, Right Export ZIP Badge */}
-                    <div className="flex items-center justify-between gap-2.5 my-auto px-1">
-                      {/* Left: Audit Specs */}
-                      <div className="flex-1 space-y-1">
-                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
-                          <span className="text-slate-300">App Title: 20/30 Chars</span>
-                          <span className="text-emerald-400 font-bold">Valid ✓</span>
-                        </div>
-                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
-                          <span className="text-slate-300">Master Icon 1024 (Opaque)</span>
-                          <span className="text-cyan-400 font-bold">Compliant ✓</span>
-                        </div>
-                      </div>
+                    {/* Duo Devices SVG Graphic */}
+                    <div className="my-auto w-full h-11 relative flex items-center justify-center">
+                      <svg viewBox="0 0 140 44" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                          <linearGradient id="phoneG" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#10b981" />
+                            <stop offset="100%" stopColor="#0d9488" />
+                          </linearGradient>
+                          <linearGradient id="tabG" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#14b8a6" />
+                            <stop offset="100%" stopColor="#06b6d4" />
+                          </linearGradient>
+                        </defs>
+                        {/* Connecting sync beam */}
+                        <line x1="58" y1="22" x2="82" y2="22" stroke="rgba(52,211,153,0.4)" strokeWidth="1" strokeDasharray="2 2" />
+                        <circle cx="70" cy="22" r="2" fill="#34d399" />
+                        {/* Phone Silhouette */}
+                        <rect x="40" y="6" width="18" height="32" rx="3.5" fill="#071914" stroke="rgba(52,211,153,0.6)" strokeWidth="1" />
+                        <rect x="42" y="8" width="14" height="28" rx="2" fill="url(#phoneG)" />
+                        <line x1="46" y1="10" x2="52" y2="10" stroke="#ffffff" strokeWidth="0.8" opacity="0.8" />
+                        {/* Tablet Silhouette */}
+                        <rect x="82" y="4" width="28" height="36" rx="4" fill="#071914" stroke="rgba(20,184,166,0.6)" strokeWidth="1" />
+                        <rect x="84" y="6" width="24" height="32" rx="2.5" fill="url(#tabG)" />
+                        <line x1="93" y1="8" x2="99" y2="8" stroke="#ffffff" strokeWidth="0.8" opacity="0.8" />
+                      </svg>
+                    </div>
 
-                      {/* Right: Export Bundle Badge */}
-                      <div className="w-20 rounded-lg p-1.5 bg-purple-950/60 border border-purple-500/30 flex flex-col justify-between text-center">
-                        <span className="text-[7px] text-white font-mono font-bold truncate">store-bundle.zip</span>
-                        <div className="flex justify-center gap-1 my-0.5">
-                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">PNG</span>
-                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">ZIP</span>
-                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">MD</span>
-                        </div>
-                        <span className="text-[6px] text-emerald-400 font-bold">1-Click Export</span>
+                    <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span>Phone &amp; Tablet</span>
+                      <span className="text-emerald-300 font-semibold">Standard Ratios</span>
+                    </div>
+                  </div>
+
+                  {/* Slide 3: 1-Click Store Deliverables */}
+                  <div className="w-[155px] sm:w-[165px] h-[112px] sm:h-[118px] rounded-xl p-2 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#1c0828] via-[#290d3a] to-[#0d0313] border border-purple-500/35 relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <span className="text-[7.5px] font-bold text-purple-200">Store Package</span>
+                        <span className="w-1 h-1 rounded-full bg-fuchsia-400" />
                       </div>
+                      <span className="text-[6px] px-1 py-0.2 rounded-full bg-purple-500/25 text-purple-300 font-mono font-bold">
+                        1-CLICK ZIP
+                      </span>
+                    </div>
+
+                    {/* Deliverables ZIP Package SVG */}
+                    <div className="my-auto w-full h-11 relative flex items-center justify-center">
+                      <svg viewBox="0 0 140 44" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                        {/* Central Folder Container */}
+                        <rect x="42" y="8" width="56" height="28" rx="4" fill="#1b0a26" stroke="rgba(192,132,252,0.6)" strokeWidth="1" />
+                        {/* Zipped tab top */}
+                        <path d="M 46 8 L 56 8 L 60 12 L 94 12 L 94 8" fill="none" stroke="rgba(192,132,252,0.4)" strokeWidth="0.8" />
+                        {/* Format badges inside */}
+                        <rect x="47" y="16" width="13" height="7" rx="1.5" fill="rgba(168,85,247,0.3)" stroke="rgba(192,132,252,0.5)" strokeWidth="0.6" />
+                        <text x="53.5" y="21" textAnchor="middle" fill="#f3e8ff" fontSize="4.5" fontWeight="bold" fontFamily="monospace">PNG</text>
+                        <rect x="63" y="16" width="13" height="7" rx="1.5" fill="rgba(168,85,247,0.3)" stroke="rgba(192,132,252,0.5)" strokeWidth="0.6" />
+                        <text x="69.5" y="21" textAnchor="middle" fill="#f3e8ff" fontSize="4.5" fontWeight="bold" fontFamily="monospace">ZIP</text>
+                        <rect x="79" y="16" width="13" height="7" rx="1.5" fill="rgba(168,85,247,0.3)" stroke="rgba(192,132,252,0.5)" strokeWidth="0.6" />
+                        <text x="85.5" y="21" textAnchor="middle" fill="#f3e8ff" fontSize="4.5" fontWeight="bold" fontFamily="monospace">MD</text>
+                        {/* Checkmark verification */}
+                        <circle cx="70" cy="30" r="3.5" fill="#10b981" />
+                        <path d="M 68.5 30 L 69.8 31.2 L 72 29" fill="none" stroke="#ffffff" strokeWidth="0.8" strokeLinecap="round" />
+                      </svg>
                     </div>
 
                     <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
                       <span>In-Browser Privacy</span>
-                      <span className="text-purple-400 font-semibold">Stored locally in your browser</span>
+                      <span className="text-purple-300 font-semibold">Ready to Ship</span>
                     </div>
                   </div>
                 </div>
-
-                {/* Tablet Home Bar */}
-                <div className="w-24 h-1 rounded-full mx-auto mt-2.5 bg-white/30" />
               </div>
+
+              {/* iOS Home Indicator Bar */}
+              <div className="w-20 h-1 rounded-full mx-auto mt-1 bg-white/35 shrink-0" />
             </div>
           </div>
         </div>
+
+        {/* Tablet Mockup Frame (Portrait iPad) */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
+            device === "tablet"
+              ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 scale-[0.88] -translate-y-3 pointer-events-none"
+          }`}
+        >
+          <div className="relative w-[285px] sm:w-[315px] h-[392px] sm:h-[412px] rounded-[32px] p-[6px] border border-[#3e4046] bg-[#25262a] shadow-[0_12px_32px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300">
+            {/* Top Power Button */}
+            <div className="absolute -top-[4px] right-[30px] w-[26px] h-[3px] rounded-t-sm bg-[#363840]" />
+            {/* Right Volume Buttons */}
+            <div className="absolute -right-[4px] top-[32px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
+            <div className="absolute -right-[4px] top-[52px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
+
+            {/* Screen Inner (Portrait iPad) */}
+            <div className="w-full h-full rounded-[26px] p-3 sm:p-3.5 bg-black text-white flex flex-col justify-between">
+              {/* Front Camera Dot */}
+              <div className="w-1.5 h-1.5 rounded-full bg-white/20 mx-auto shrink-0" />
+
+              {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
+              <div className="flex items-start gap-3 mt-0.5">
+                <div className="shrink-0 rounded-[13px] shadow-sm overflow-hidden">
+                  <BrandIcon
+                    withBadge
+                    size={46}
+                    className="w-[46px] h-[46px]"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[12px] font-bold leading-tight text-white truncate">
+                    Store Preview Studio
+                  </div>
+                  <div className="text-[10px] text-slate-400 truncate">
+                    Mockup Studio Pro
+                  </div>
+                  <div className="mt-1">
+                    <button
+                      type="button"
+                      className="px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-normal text-[9.5px] tracking-wide shadow-sm transition-colors cursor-pointer"
+                    >
+                      GET
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
+              <StoreMetricsRibbon theme="dark" className="my-1 py-1" />
+
+              {/* Portrait Tablet Screenshot Stack (2 Full-Width Landscape Cards) */}
+              <div className="flex flex-col gap-2 select-none flex-1 justify-center min-h-0">
+                {/* Screen 1: Dual-Store Live Studio Canvas */}
+                <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#0c0a24] via-[#080918] to-black border border-indigo-500/35 relative overflow-hidden">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[8.5px] font-bold text-indigo-200">Dual-Store Canvas</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                    </div>
+                    <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-300 font-mono font-bold">
+                      3x RETINA · 4K
+                    </span>
+                  </div>
+
+                  {/* Center Studio Mockup Preview with Side-by-Side Frames */}
+                  <div className="flex items-center justify-between gap-3 my-auto px-1">
+                    {/* Left: Mini Phone Stage */}
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-6 h-9 rounded-[4px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
+                        <div className="w-1.5 h-0.5 rounded-full bg-white/40 mx-auto" />
+                        <div className="w-full h-5 rounded-[2px] bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <div className="text-[7.5px] text-white font-bold leading-none">Phone Preview</div>
+                        <div className="text-[6.5px] text-slate-400">1179 × 2556 px</div>
+                        <div className="text-[6px] text-emerald-400 font-semibold">Framed &amp; Screen-Only</div>
+                      </div>
+                    </div>
+
+                    {/* Right: Mini Tablet Stage */}
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-8 h-9 rounded-[5px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
+                        <div className="w-2 h-0.5 rounded-full bg-white/40 mx-auto" />
+                        <div className="w-full h-5 rounded-[2.5px] bg-gradient-to-br from-purple-500 to-indigo-600" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <div className="text-[7.5px] text-white font-bold leading-none">Tablet Preview</div>
+                        <div className="text-[6.5px] text-slate-400">2048 × 2732 px</div>
+                        <div className="text-[6px] text-indigo-300 font-semibold">Native App Ratio</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                    <span>Live Stage Canvas</span>
+                    <span className="text-indigo-400 font-semibold">Dual-Store Viewports</span>
+                  </div>
+                </div>
+
+                {/* Screen 2: Pre-Flight Compliance & 1-Click Package */}
+                <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1a0822] via-[#0e0514] to-black border border-purple-500/35 relative overflow-hidden">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[8.5px] font-bold text-purple-200">Pre-Flight Compliance</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    </div>
+                    <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
+                      100% PASSED ✓
+                    </span>
+                  </div>
+
+                  {/* Split View: Left Audit Specs, Right Export ZIP Badge */}
+                  <div className="flex items-center justify-between gap-2.5 my-auto px-1">
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
+                        <span className="text-slate-300">App Title &amp; Subtitle Specs</span>
+                        <span className="text-emerald-400 font-bold">Valid ✓</span>
+                      </div>
+                      <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
+                        <span className="text-slate-300">Master Icon 1024 (Opaque)</span>
+                        <span className="text-cyan-400 font-bold">Compliant ✓</span>
+                      </div>
+                    </div>
+
+                    <div className="w-20 rounded-lg p-1.5 bg-purple-950/60 border border-purple-500/30 flex flex-col justify-between text-center shrink-0">
+                      <span className="text-[7px] text-white font-mono font-bold truncate">store-bundle.zip</span>
+                      <div className="flex justify-center gap-1 my-0.5">
+                        <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">PNG</span>
+                        <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">ZIP</span>
+                        <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">MD</span>
+                      </div>
+                      <span className="text-[6px] text-emerald-400 font-bold">1-Click Export</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                    <span>In-Browser Privacy</span>
+                    <span className="text-purple-400 font-semibold">Stored locally in your browser</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tablet Home Bar */}
+              <div className="w-24 h-1 rounded-full mx-auto mt-1.5 bg-white/30 shrink-0" />
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     );
   }
@@ -566,71 +634,73 @@ function StorePresetsCard() {
 
       {/* Simulated Live Stage with Device Frame (without inner container wrapper) */}
       <div
-        className="relative z-10 w-full h-[265px] sm:h-[275px] flex items-center justify-center select-none"
+        className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none"
         style={{ perspective: "1200px" }}
       >
         <div
-          className="relative w-[340px] sm:w-[410px] rounded-[30px] p-[7px] border border-[#3e4046] bg-[#25262a] shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)]"
-            style={{
-              transform: isFlipping ? "rotateY(90deg) scale(0.93)" : "rotateY(0deg) scale(1)",
-              transformStyle: "preserve-3d",
-              transition: isFlipping
-                ? "transform 0.18s cubic-bezier(0.4, 0, 1, 1), opacity 0.18s ease-in"
-                : "transform 0.22s cubic-bezier(0, 0, 0.2, 1), opacity 0.22s ease-out",
-              opacity: isFlipping ? 0.7 : 1,
-              willChange: "transform, opacity",
-            }}
-          >
-            {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}
-            {/* Top: Power / Sleep Button */}
-            <div className="absolute -top-[4px] right-[36px] sm:right-[44px] w-[30px] sm:w-[34px] h-[3px] rounded-t-sm bg-[#363840]" />
-            {/* Right: Volume Up */}
-            <div className="absolute -right-[4px] top-[26px] sm:top-[28px] w-[3px] h-[16px] sm:h-[18px] rounded-r-sm bg-[#363840]" />
-            {/* Right: Volume Down */}
-            <div className="absolute -right-[4px] top-[46px] sm:top-[50px] w-[3px] h-[16px] sm:h-[18px] rounded-r-sm bg-[#363840]" />
+          className="relative w-[285px] sm:w-[315px] h-[392px] sm:h-[412px] rounded-[32px] p-[6px] border border-[#3e4046] bg-[#25262a] shadow-[0_12px_32px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)]"
+          style={{
+            transform: isFlipping ? "rotateY(90deg) scale(0.93)" : "rotateY(0deg) scale(1)",
+            transformStyle: "preserve-3d",
+            transition: isFlipping
+              ? "transform 0.18s cubic-bezier(0.4, 0, 1, 1), opacity 0.18s ease-in"
+              : "transform 0.22s cubic-bezier(0, 0, 0.2, 1), opacity 0.22s ease-out",
+            opacity: isFlipping ? 0.7 : 1,
+            willChange: "transform, opacity",
+          }}
+        >
+          {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}
+          {/* Top: Power / Sleep Button */}
+          <div className="absolute -top-[4px] right-[30px] w-[26px] h-[3px] rounded-t-sm bg-[#363840]" />
+          {/* Right: Volume Up */}
+          <div className="absolute -right-[4px] top-[32px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
+          {/* Right: Volume Down */}
+          <div className="absolute -right-[4px] top-[52px] w-[3px] h-[16px] rounded-r-sm bg-[#363840]" />
 
-            {/* Screen Inner */}
-            <div className="w-full rounded-[24px] p-3.5 bg-black text-white">
-              {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
-              <div className="pb-2">
-                <div className="flex items-start gap-3">
-                  <div className="w-[58px] h-[58px] shrink-0 rounded-[15px] shadow-md overflow-hidden border border-white/10 transition-all duration-300">
-                    {current.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[12px] font-bold leading-tight text-white truncate transition-all duration-200">
-                      {current.name}
-                    </div>
-                    <div className="text-[10.5px] text-slate-400 truncate transition-all duration-200">
-                      {current.subtitle}
-                    </div>
-                    <div>
-                      <button
-                        type="button"
-                        className="px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-normal text-[10px] tracking-wide shadow-sm transition-colors cursor-pointer"
-                      >
-                        GET
-                      </button>
-                    </div>
-                  </div>
+          {/* Screen Inner (Portrait iPad) */}
+          <div className="w-full h-full rounded-[26px] p-3 sm:p-3.5 bg-black text-white flex flex-col justify-between">
+            {/* Front Camera Dot */}
+            <div className="w-1.5 h-1.5 rounded-full bg-white/20 mx-auto shrink-0" />
+
+            {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
+            <div className="flex items-start gap-3 mt-0.5">
+              <div className="w-[46px] h-[46px] shrink-0 rounded-[12px] shadow-md overflow-hidden border border-white/10 transition-all duration-300">
+                {current.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[12px] font-bold leading-tight text-white truncate transition-all duration-200">
+                  {current.name}
+                </div>
+                <div className="text-[10px] text-slate-400 truncate transition-all duration-200">
+                  {current.subtitle}
+                </div>
+                <div className="mt-1">
+                  <button
+                    type="button"
+                    className="px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-normal text-[9.5px] tracking-wide shadow-sm transition-colors cursor-pointer"
+                  >
+                    GET
+                  </button>
                 </div>
               </div>
+            </div>
 
-              {/* Store Metrics Ribbon (Tablet 3-Column) */}
-              <StoreMetricsRibbon
-                theme="dark"
-                rating={current.rating}
-                ratingCount={current.ratingCount}
-                age={current.age}
-                developerName={current.developer}
-              />
+            {/* Store Metrics Ribbon (Tablet 3-Column) */}
+            <StoreMetricsRibbon
+              theme="dark"
+              rating={current.rating}
+              ratingCount={current.ratingCount}
+              age={current.age}
+              developerName={current.developer}
+              className="my-1 py-1"
+            />
 
-              {/* Tablet Screenshot Gallery (Dynamic Real App UI aligned with Core) */}
-              <div className="grid grid-cols-2 gap-2.5 select-none">
+            {/* Tablet Screenshot Gallery (2 Stacked Full-Width Landscape Cards) */}
+            <div className="flex flex-col gap-2 select-none flex-1 justify-center min-h-0">
                 {activePreset === "zenmind" && (
                   <>
                     {/* ZenMind Screen 1: Mindful Paced Breathing Halo */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#031d15] via-[#082e22] to-black border border-emerald-500/35 relative overflow-hidden transition-all duration-300">
+                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#031d15] via-[#082e22] to-black border border-emerald-500/35 relative overflow-hidden transition-all duration-300">
                       {/* Top Header */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -694,7 +764,7 @@ function StorePresetsCard() {
                     </div>
 
                     {/* ZenMind Screen 2: 3D Binaural Soundscape & Waveform Mixer */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#021f24] via-[#06292b] to-black border border-teal-500/35 relative overflow-hidden transition-all duration-300">
+                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#021f24] via-[#06292b] to-black border border-teal-500/35 relative overflow-hidden transition-all duration-300">
                       {/* Top Header */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -781,7 +851,7 @@ function StorePresetsCard() {
                 {activePreset === "pulsefit" && (
                   <>
                     {/* PulseFit Screen 1: Weekly Volume & Hypertrophy Bar Chart */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#2a0e05] via-[#140804] to-black border border-orange-500/30 relative overflow-hidden transition-all duration-300">
+                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#2a0e05] via-[#140804] to-black border border-orange-500/30 relative overflow-hidden transition-all duration-300">
                       {/* Top Header */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -837,7 +907,7 @@ function StorePresetsCard() {
                     </div>
 
                     {/* PulseFit Screen 2: Cardiac Zones & Real-time Waveform Area Chart */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#17071e] via-[#0d0414] to-black border border-rose-500/30 relative overflow-hidden transition-all duration-300">
+                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#17071e] via-[#0d0414] to-black border border-rose-500/30 relative overflow-hidden transition-all duration-300">
                       {/* Top Header & Zones Pips */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -915,7 +985,7 @@ function StorePresetsCard() {
                 {activePreset === "cyberstrike" && (
                   <>
                     {/* CyberStrike Screen 1: Open World Action RPG */}
-                    <div className="h-24 rounded-xl relative overflow-hidden bg-[#060714] border border-cyan-500/40 shadow-inner select-none transition-all duration-300">
+                    <div className="h-[96px] sm:h-[102px] rounded-xl relative overflow-hidden bg-[#060714] border border-cyan-500/40 shadow-inner select-none transition-all duration-300">
                       {/* Atmospheric Cyber Background SVG */}
                       <svg viewBox="0 0 180 96" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                         <defs>
@@ -1003,7 +1073,7 @@ function StorePresetsCard() {
                     </div>
 
                     {/* CyberStrike Screen 2: Boss Battle & Combat Slash */}
-                    <div className="h-24 rounded-xl relative overflow-hidden bg-[#0a0410] border border-pink-500/40 shadow-inner select-none transition-all duration-300">
+                    <div className="h-[96px] sm:h-[102px] rounded-xl relative overflow-hidden bg-[#0a0410] border border-pink-500/40 shadow-inner select-none transition-all duration-300">
                       {/* Atmospheric Combat Arena Background SVG */}
                       <svg viewBox="0 0 180 96" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                         <defs>
@@ -1108,7 +1178,7 @@ function StorePresetsCard() {
               </div>
 
               {/* Tablet Home Bar */}
-              <div className="w-24 h-1 rounded-full mx-auto mt-2.5 bg-white/30" />
+              <div className="w-24 h-1 rounded-full mx-auto mt-1.5 bg-white/30 shrink-0" />
             </div>
           </div>
         </div>
