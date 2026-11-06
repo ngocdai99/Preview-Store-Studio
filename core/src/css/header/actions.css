@@ -499,7 +499,7 @@
 :root[data-ui=light] .ms-pill.custom.has-draft.on,
 :root[data-ui=light] .ms-pill.on {
   background: #ffffff !important;
-  border: 1px solid rgba(0, 208, 133, 0.5) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
   color: #0f172a !important;
   font-weight: 500 !important;
   height: 34px !important;
@@ -507,14 +507,14 @@
   max-height: 34px !important;
   box-sizing: border-box !important;
   line-height: 1 !important;
-  box-shadow: 0 2px 8px rgba(0, 208, 133, 0.16), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
 }
 
 :root[data-ui=light] .ms-pill.custom.on:hover,
 :root[data-ui=light] .ms-pill.custom.has-draft.on:hover,
 :root[data-ui=light] .ms-pill.on:hover {
   background: #ffffff !important;
-  border-color: rgba(0, 208, 133, 0.75) !important;
+  border-color: rgba(15, 23, 42, 0.22) !important;
   color: #000000 !important;
   box-shadow: none !important;
 }

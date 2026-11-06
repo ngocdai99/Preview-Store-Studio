@@ -441,3 +441,15 @@ html.dark .announcement-arrow {
     box-shadow: 0 0 12px rgba(0, 208, 133, 1);
   }
 }
+
+/* Hide scrollbar utility for clean mobile carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}

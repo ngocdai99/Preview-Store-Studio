@@ -163,143 +163,266 @@ function DeviceFramesCard() {
                 </div>
 
                 {/* Horizontal Scroll Carousel for Landscape Cards */}
-                <div className="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none">
+                <div
+                  className="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none"
+                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                >
                   {/* Slide 1: Live Canvas Studio */}
-                  <div className="w-[155px] sm:w-[165px] h-[112px] sm:h-[118px] rounded-xl p-2 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#0c0a26] via-[#141238] to-[#070614] border border-indigo-500/35 relative overflow-hidden">
+                  <div className="w-[165px] sm:w-[175px] h-[122px] sm:h-[128px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#0c0a28] via-[#14113e] to-[#070516] border border-indigo-500/40 relative overflow-hidden shadow-lg">
+                    {/* Top Bar */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        <span className="text-[7.5px] font-bold text-indigo-200">Canvas Studio</span>
-                        <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#22d3ee]" />
+                        <span className="text-[8px] font-bold text-indigo-100 tracking-tight">Studio Canvas</span>
                       </div>
-                      <span className="text-[6px] px-1 py-0.2 rounded-full bg-indigo-500/25 text-indigo-300 font-mono font-bold">
+                      <span className="text-[6.5px] px-1.5 py-0.2 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-200 font-mono font-bold">
                         4K · 60FPS
                       </span>
                     </div>
 
-                    {/* Canvas Stage SVG Graphic */}
-                    <div className="my-auto w-full h-11 relative">
-                      <svg viewBox="0 0 140 44" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                    {/* Rich Studio Workspace Graphic SVG */}
+                    <div className="my-auto w-full h-15 relative">
+                      <svg viewBox="0 0 160 54" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
                         <defs>
-                          <linearGradient id="cGrid" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.4" />
-                            <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.05" />
+                          <linearGradient id="studioGrid" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.3" />
+                            <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.02" />
                           </linearGradient>
-                          <linearGradient id="artGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <linearGradient id="phoneScreenArt" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stopColor="#6366f1" />
-                            <stop offset="50%" stopColor="#a855f7" />
+                            <stop offset="40%" stopColor="#a855f7" />
                             <stop offset="100%" stopColor="#ec4899" />
                           </linearGradient>
+                          <linearGradient id="glowRing" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#00D085" />
+                            <stop offset="50%" stopColor="#22d3ee" />
+                            <stop offset="100%" stopColor="#a855f7" />
+                          </linearGradient>
                         </defs>
-                        {/* Perspective Studio Grid */}
-                        <line x1="20" y1="40" x2="50" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
-                        <line x1="45" y1="40" x2="65" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
-                        <line x1="95" y1="40" x2="75" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
-                        <line x1="120" y1="40" x2="90" y2="10" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8" />
-                        <ellipse cx="70" cy="36" rx="48" ry="6" fill="url(#cGrid)" />
-                        {/* Floating Device Screen Art */}
-                        <rect x="42" y="6" width="56" height="30" rx="4" fill="#0f1122" stroke="rgba(129,140,248,0.5)" strokeWidth="1" />
-                        <rect x="44" y="8" width="52" height="26" rx="3" fill="url(#artGrad)" />
-                        {/* Top bar inside preview */}
-                        <rect x="47" y="11" width="18" height="2" rx="1" fill="#ffffff" opacity="0.8" />
-                        <circle cx="91" cy="12" r="1.5" fill="#ffffff" opacity="0.8" />
-                        {/* Artwork Equalizer Bars */}
-                        <rect x="48" y="18" width="3" height="12" rx="1" fill="#ffffff" opacity="0.9" />
-                        <rect x="53" y="15" width="3" height="15" rx="1" fill="#ffffff" opacity="0.9" />
-                        <rect x="58" y="21" width="3" height="9" rx="1" fill="#ffffff" opacity="0.9" />
-                        <rect x="63" y="17" width="3" height="13" rx="1" fill="#ffffff" opacity="0.9" />
-                        <rect x="68" y="23" width="3" height="7" rx="1" fill="#ffffff" opacity="0.9" />
-                        <rect x="73" y="16" width="3" height="14" rx="1" fill="#ffffff" opacity="0.9" />
+
+                        {/* Subtle Canvas Dot Grid */}
+                        {[20, 45, 115, 140].map((x, idx) => (
+                          <g key={idx}>
+                            <circle cx={x} cy="10" r="0.8" fill="#818cf8" opacity="0.35" />
+                            <circle cx={x} cy="26" r="0.8" fill="#818cf8" opacity="0.35" />
+                            <circle cx={x} cy="42" r="0.8" fill="#818cf8" opacity="0.35" />
+                          </g>
+                        ))}
+
+                        {/* Perspective Stage Ground Ellipse */}
+                        <ellipse cx="80" cy="46" rx="55" ry="7" fill="url(#studioGrid)" />
+
+                        {/* Left Floating Tool Badge: Layer Inspector */}
+                        <g transform="translate(6, 12)">
+                          <rect width="36" height="15" rx="3.5" fill="#101229" stroke="rgba(129,140,248,0.5)" strokeWidth="0.8" />
+                          <circle cx="6" cy="7.5" r="2" fill="#818cf8" />
+                          <text x="11" y="9.5" fill="#e0e7ff" fontSize="5" fontWeight="bold" fontFamily="sans-serif">✦ Bezels</text>
+                        </g>
+
+                        {/* Left Floating Format Tag */}
+                        <g transform="translate(8, 32)">
+                          <rect width="32" height="12" rx="3" fill="#141733" stroke="rgba(99,102,241,0.4)" strokeWidth="0.7" />
+                          <text x="16" y="8" textAnchor="middle" fill="#a5b4fc" fontSize="4.5" fontWeight="bold" fontFamily="monospace">19.5:9</text>
+                        </g>
+
+                        {/* Center Stage: Floating 3D Tilted Device Mockup */}
+                        <g transform="translate(56, 4)">
+                          {/* Device Drop Shadow */}
+                          <rect x="4" y="6" width="46" height="42" rx="7" fill="#000000" opacity="0.6" filter="blur(3px)" />
+                          {/* Outer Titanium Bezel */}
+                          <rect width="48" height="44" rx="7" fill="#181a28" stroke="#818cf8" strokeWidth="1.2" />
+                          {/* Screen Artwork */}
+                          <rect x="2" y="2" width="44" height="40" rx="5.5" fill="url(#phoneScreenArt)" />
+                          {/* Dynamic Island on Mockup */}
+                          <rect x="18" y="3.5" width="12" height="2.5" rx="1.2" fill="#0c0d18" />
+                          {/* App Artwork UI Content: Equalizer & Track */}
+                          <rect x="6" y="8" width="16" height="2" rx="1" fill="#ffffff" opacity="0.85" />
+                          <circle cx="38" cy="9" r="2" fill="#ffffff" opacity="0.9" />
+                          {/* Sound wave bars */}
+                          <rect x="8" y="16" width="2.5" height="14" rx="1" fill="#ffffff" opacity="0.95" />
+                          <rect x="13" y="13" width="2.5" height="18" rx="1" fill="#ffffff" opacity="0.95" />
+                          <rect x="18" y="19" width="2.5" height="11" rx="1" fill="#ffffff" opacity="0.95" />
+                          <rect x="23" y="15" width="2.5" height="16" rx="1" fill="#ffffff" opacity="0.95" />
+                          <rect x="28" y="21" width="2.5" height="9" rx="1" fill="#ffffff" opacity="0.95" />
+                          <rect x="33" y="14" width="2.5" height="17" rx="1" fill="#ffffff" opacity="0.95" />
+                          <rect x="38" y="18" width="2.5" height="12" rx="1" fill="#ffffff" opacity="0.95" />
+                          {/* Play button pill at bottom */}
+                          <rect x="14" y="34" width="20" height="4" rx="2" fill="#ffffff" opacity="0.9" />
+                          {/* Transform Anchor Corner Markers */}
+                          <circle cx="0" cy="0" r="1.8" fill="#22d3ee" />
+                          <circle cx="48" cy="0" r="1.8" fill="#22d3ee" />
+                          <circle cx="0" cy="44" r="1.8" fill="#22d3ee" />
+                          <circle cx="48" cy="44" r="1.8" fill="#22d3ee" />
+                        </g>
+
+                        {/* Right Floating Palette: Swatch Ring */}
+                        <g transform="translate(116, 12)">
+                          <rect width="36" height="15" rx="3.5" fill="#101229" stroke="rgba(129,140,248,0.5)" strokeWidth="0.8" />
+                          <circle cx="8" cy="7.5" r="2.5" fill="#00D085" />
+                          <circle cx="16" cy="7.5" r="2.5" fill="#ec4899" />
+                          <circle cx="24" cy="7.5" r="2.5" fill="#6366f1" />
+                        </g>
+
+                        {/* Right Floating Badge: Resolution Tag */}
+                        <g transform="translate(116, 32)">
+                          <rect width="36" height="12" rx="3" fill="#141733" stroke="rgba(34,211,238,0.4)" strokeWidth="0.7" />
+                          <text x="18" y="8" textAnchor="middle" fill="#67e8f9" fontSize="4.5" fontWeight="bold" fontFamily="monospace">4K UHD</text>
+                        </g>
                       </svg>
                     </div>
 
-                    <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span>Live Stage Canvas</span>
-                      <span className="text-indigo-300 font-semibold">Framed Bezels</span>
+                    {/* Bottom Label */}
+                    <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span className="font-medium text-slate-300">Live Stage Canvas</span>
+                      <span className="text-cyan-300 font-semibold">Real-Time Framing</span>
                     </div>
                   </div>
 
-                  {/* Slide 2: Adaptive Multi-Device */}
-                  <div className="w-[155px] sm:w-[165px] h-[112px] sm:h-[118px] rounded-xl p-2 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#031d16] via-[#082a20] to-[#02110d] border border-emerald-500/35 relative overflow-hidden">
+                  {/* Slide 2: Adaptive Device Fleet */}
+                  <div className="w-[165px] sm:w-[175px] h-[122px] sm:h-[128px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#031d16] via-[#082e22] to-[#02120d] border border-emerald-500/40 relative overflow-hidden shadow-lg">
+                    {/* Top Bar */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        <span className="text-[7.5px] font-bold text-emerald-200">Adaptive Devices</span>
-                        <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
+                        <span className="text-[8px] font-bold text-emerald-100 tracking-tight">Adaptive Fleet</span>
                       </div>
-                      <span className="text-[6px] px-1 py-0.2 rounded-full bg-emerald-500/25 text-emerald-300 font-mono font-bold">
+                      <span className="text-[6.5px] px-1.5 py-0.2 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 font-mono font-bold">
                         ALL SIZES
                       </span>
                     </div>
 
                     {/* Duo Devices SVG Graphic */}
-                    <div className="my-auto w-full h-11 relative flex items-center justify-center">
-                      <svg viewBox="0 0 140 44" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                    <div className="my-auto w-full h-15 relative flex items-center justify-center">
+                      <svg viewBox="0 0 160 54" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
                         <defs>
-                          <linearGradient id="phoneG" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <linearGradient id="phoneScreen" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stopColor="#10b981" />
-                            <stop offset="100%" stopColor="#0d9488" />
+                            <stop offset="100%" stopColor="#047857" />
                           </linearGradient>
-                          <linearGradient id="tabG" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <linearGradient id="tabletScreen" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stopColor="#14b8a6" />
-                            <stop offset="100%" stopColor="#06b6d4" />
+                            <stop offset="50%" stopColor="#0d9488" />
+                            <stop offset="100%" stopColor="#0f766e" />
                           </linearGradient>
+                          <radialGradient id="auroraGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stopColor="#34d399" stopOpacity="0.25" />
+                            <stop offset="100%" stopColor="#031d16" stopOpacity="0" />
+                          </radialGradient>
                         </defs>
-                        {/* Connecting sync beam */}
-                        <line x1="58" y1="22" x2="82" y2="22" stroke="rgba(52,211,153,0.4)" strokeWidth="1" strokeDasharray="2 2" />
-                        <circle cx="70" cy="22" r="2" fill="#34d399" />
-                        {/* Phone Silhouette */}
-                        <rect x="40" y="6" width="18" height="32" rx="3.5" fill="#071914" stroke="rgba(52,211,153,0.6)" strokeWidth="1" />
-                        <rect x="42" y="8" width="14" height="28" rx="2" fill="url(#phoneG)" />
-                        <line x1="46" y1="10" x2="52" y2="10" stroke="#ffffff" strokeWidth="0.8" opacity="0.8" />
-                        {/* Tablet Silhouette */}
-                        <rect x="82" y="4" width="28" height="36" rx="4" fill="#071914" stroke="rgba(20,184,166,0.6)" strokeWidth="1" />
-                        <rect x="84" y="6" width="24" height="32" rx="2.5" fill="url(#tabG)" />
-                        <line x1="93" y1="8" x2="99" y2="8" stroke="#ffffff" strokeWidth="0.8" opacity="0.8" />
+
+                        {/* Background Atmospheric Glow */}
+                        <ellipse cx="80" cy="27" rx="70" ry="22" fill="url(#auroraGlow)" />
+
+                        {/* Laser Synchronization Beam linking devices */}
+                        <path d="M 54 27 L 76 27" stroke="#34d399" strokeWidth="1.2" strokeDasharray="3 2" />
+                        <circle cx="65" cy="27" r="3" fill="#10b981" />
+                        <circle cx="65" cy="27" r="1.5" fill="#ffffff" />
+
+                        {/* Left: Phone Mockup Frame */}
+                        <g transform="translate(24, 6)">
+                          <rect width="28" height="42" rx="5" fill="#081813" stroke="#34d399" strokeWidth="1.2" />
+                          <rect x="2" y="2" width="24" height="38" rx="4" fill="url(#phoneScreen)" />
+                          {/* Dynamic Island */}
+                          <rect x="9" y="3.5" width="10" height="2" rx="1" fill="#04140f" />
+                          {/* Responsive UI Card layout */}
+                          <rect x="4.5" y="8" width="19" height="7" rx="1.5" fill="#ffffff" opacity="0.85" />
+                          <rect x="4.5" y="17" width="19" height="10" rx="1.5" fill="#ffffff" opacity="0.3" />
+                          <rect x="4.5" y="29" width="19" height="8" rx="1.5" fill="#ffffff" opacity="0.3" />
+                          {/* Label below phone */}
+                          <text x="14" y="47" textAnchor="middle" fill="#a7f3d0" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Phone 6.7"</text>
+                        </g>
+
+                        {/* Right: Tablet Mockup Frame */}
+                        <g transform="translate(78, 4)">
+                          <rect width="58" height="46" rx="5.5" fill="#081813" stroke="#2dd4bf" strokeWidth="1.2" />
+                          <rect x="2" y="2" width="54" height="42" rx="4.5" fill="url(#tabletScreen)" />
+                          {/* Front Camera dot */}
+                          <circle cx="29" cy="3.5" r="1" fill="#ffffff" opacity="0.7" />
+                          {/* Responsive Tablet Split View: Sidebar + 2-col cards */}
+                          <rect x="4" y="7" width="12" height="34" rx="1.5" fill="#ffffff" opacity="0.25" />
+                          <rect x="18" y="7" width="16" height="15" rx="1.5" fill="#ffffff" opacity="0.85" />
+                          <rect x="36" y="7" width="16" height="15" rx="1.5" fill="#ffffff" opacity="0.4" />
+                          <rect x="18" y="24" width="34" height="17" rx="1.5" fill="#ffffff" opacity="0.3" />
+                          {/* Label below tablet */}
+                          <text x="29" y="49" textAnchor="middle" fill="#99f6e4" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">Tablet 13"</text>
+                        </g>
                       </svg>
                     </div>
 
-                    <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span>Phone &amp; Tablet</span>
-                      <span className="text-emerald-300 font-semibold">Standard Ratios</span>
+                    {/* Bottom Label */}
+                    <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span className="font-medium text-slate-300">Responsive Layouts</span>
+                      <span className="text-emerald-300 font-semibold">Standard Store Ratios</span>
                     </div>
                   </div>
 
                   {/* Slide 3: 1-Click Store Deliverables */}
-                  <div className="w-[155px] sm:w-[165px] h-[112px] sm:h-[118px] rounded-xl p-2 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#1c0828] via-[#290d3a] to-[#0d0313] border border-purple-500/35 relative overflow-hidden">
+                  <div className="w-[165px] sm:w-[175px] h-[122px] sm:h-[128px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#1c0828] via-[#2d0d3e] to-[#0e0314] border border-purple-500/40 relative overflow-hidden shadow-lg">
+                    {/* Top Bar */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        <span className="text-[7.5px] font-bold text-purple-200">Store Package</span>
-                        <span className="w-1 h-1 rounded-full bg-fuchsia-400" />
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse shadow-[0_0_6px_#e879f9]" />
+                        <span className="text-[8px] font-bold text-purple-100 tracking-tight">Store Package</span>
                       </div>
-                      <span className="text-[6px] px-1 py-0.2 rounded-full bg-purple-500/25 text-purple-300 font-mono font-bold">
+                      <span className="text-[6.5px] px-1.5 py-0.2 rounded-full bg-purple-500/30 border border-purple-400/30 text-purple-200 font-mono font-bold">
                         1-CLICK ZIP
                       </span>
                     </div>
 
-                    {/* Deliverables ZIP Package SVG */}
-                    <div className="my-auto w-full h-11 relative flex items-center justify-center">
-                      <svg viewBox="0 0 140 44" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
-                        {/* Central Folder Container */}
-                        <rect x="42" y="8" width="56" height="28" rx="4" fill="#1b0a26" stroke="rgba(192,132,252,0.6)" strokeWidth="1" />
-                        {/* Zipped tab top */}
-                        <path d="M 46 8 L 56 8 L 60 12 L 94 12 L 94 8" fill="none" stroke="rgba(192,132,252,0.4)" strokeWidth="0.8" />
-                        {/* Format badges inside */}
-                        <rect x="47" y="16" width="13" height="7" rx="1.5" fill="rgba(168,85,247,0.3)" stroke="rgba(192,132,252,0.5)" strokeWidth="0.6" />
-                        <text x="53.5" y="21" textAnchor="middle" fill="#f3e8ff" fontSize="4.5" fontWeight="bold" fontFamily="monospace">PNG</text>
-                        <rect x="63" y="16" width="13" height="7" rx="1.5" fill="rgba(168,85,247,0.3)" stroke="rgba(192,132,252,0.5)" strokeWidth="0.6" />
-                        <text x="69.5" y="21" textAnchor="middle" fill="#f3e8ff" fontSize="4.5" fontWeight="bold" fontFamily="monospace">ZIP</text>
-                        <rect x="79" y="16" width="13" height="7" rx="1.5" fill="rgba(168,85,247,0.3)" stroke="rgba(192,132,252,0.5)" strokeWidth="0.6" />
-                        <text x="85.5" y="21" textAnchor="middle" fill="#f3e8ff" fontSize="4.5" fontWeight="bold" fontFamily="monospace">MD</text>
-                        {/* Checkmark verification */}
-                        <circle cx="70" cy="30" r="3.5" fill="#10b981" />
-                        <path d="M 68.5 30 L 69.8 31.2 L 72 29" fill="none" stroke="#ffffff" strokeWidth="0.8" strokeLinecap="round" />
+                    {/* Deliverables ZIP Chest & Floating Assets SVG */}
+                    <div className="my-auto w-full h-15 relative flex items-center justify-center">
+                      <svg viewBox="0 0 160 54" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                        {/* Sparkles */}
+                        <path d="M 22 10 L 23.5 13 L 26 14.5 L 23.5 16 L 22 19 L 20.5 16 L 18 14.5 L 20.5 13 Z" fill="#fde047" opacity="0.8" />
+                        <path d="M 142 38 L 143 40 L 145 41 L 143 42 L 142 44 L 141 42 L 139 41 L 141 40 Z" fill="#22d3ee" opacity="0.8" />
+
+                        {/* Central Export Package Vault */}
+                        <g transform="translate(52, 10)">
+                          <rect width="56" height="34" rx="5" fill="#190724" stroke="#c084fc" strokeWidth="1.2" />
+                          {/* Folder Tab Top */}
+                          <path d="M 4 0 L 18 0 L 22 4 L 52 4 L 52 0" fill="none" stroke="#e879f9" strokeWidth="1" />
+                          {/* Archive Name */}
+                          <text x="28" y="14" textAnchor="middle" fill="#ffffff" fontSize="5.5" fontWeight="bold" fontFamily="monospace">store-bundle.zip</text>
+                          {/* Format Chips inside */}
+                          <rect x="6" y="19" width="12" height="7" rx="1.5" fill="rgba(192,132,252,0.3)" stroke="#c084fc" strokeWidth="0.6" />
+                          <text x="12" y="24" textAnchor="middle" fill="#f3e8ff" fontSize="4.2" fontWeight="bold" fontFamily="monospace">PNG</text>
+                          <rect x="22" y="19" width="12" height="7" rx="1.5" fill="rgba(192,132,252,0.3)" stroke="#c084fc" strokeWidth="0.6" />
+                          <text x="28" y="24" textAnchor="middle" fill="#f3e8ff" fontSize="4.2" fontWeight="bold" fontFamily="monospace">ZIP</text>
+                          <rect x="38" y="19" width="12" height="7" rx="1.5" fill="rgba(192,132,252,0.3)" stroke="#c084fc" strokeWidth="0.6" />
+                          <text x="44" y="24" textAnchor="middle" fill="#f3e8ff" fontSize="4.2" fontWeight="bold" fontFamily="monospace">MD</text>
+                        </g>
+
+                        {/* Left Floating Asset Card: 4K Preview Badge */}
+                        <g transform="translate(8, 18)">
+                          <rect width="36" height="18" rx="3.5" fill="#1f092e" stroke="#e879f9" strokeWidth="0.9" />
+                          <rect x="3" y="3" width="10" height="12" rx="1.5" fill="url(#phoneScreen)" />
+                          <text x="24" y="10" textAnchor="middle" fill="#fdf4ff" fontSize="4.8" fontWeight="bold" fontFamily="sans-serif">PNG 4K</text>
+                          <text x="24" y="15" textAnchor="middle" fill="#d8b4fe" fontSize="3.8" fontFamily="sans-serif">Screenshots</text>
+                        </g>
+
+                        {/* Right Floating Badge: Compliance Passed Shield */}
+                        <g transform="translate(116, 16)">
+                          <rect width="36" height="20" rx="3.5" fill="#12251a" stroke="#34d399" strokeWidth="0.9" />
+                          <circle cx="11" cy="10" r="4.5" fill="#059669" />
+                          <path d="M 9 10 L 10.5 11.5 L 13.5 8.5" fill="none" stroke="#ffffff" strokeWidth="1" strokeLinecap="round" />
+                          <text x="24" y="10" textAnchor="middle" fill="#a7f3d0" fontSize="4.8" fontWeight="bold" fontFamily="sans-serif">PASSED</text>
+                          <text x="24" y="15" textAnchor="middle" fill="#6ee7b7" fontSize="3.8" fontFamily="sans-serif">ASO Ready</text>
+                        </g>
                       </svg>
                     </div>
 
-                    <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
-                      <span>In-Browser Privacy</span>
-                      <span className="text-purple-300 font-semibold">Ready to Ship</span>
+                    {/* Bottom Label */}
+                    <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span className="font-medium text-slate-300">In-Browser Privacy</span>
+                      <span className="text-purple-300 font-semibold">Stored locally</span>
                     </div>
                   </div>
+                </div>
+
+                {/* What's New Snippet below carousel */}
+                <div className="px-1.5 py-0.5 mt-0.5 rounded bg-white/[0.04] border border-white/5 flex items-center justify-between text-[6.5px] text-slate-400 shrink-0">
+                  <span className="font-semibold text-indigo-300">Live Stage Canvas · 4K</span>
+                  <span>v2.4</span>
                 </div>
               </div>
 
@@ -359,95 +482,115 @@ function DeviceFramesCard() {
               {/* Store Metrics Ribbon (App Store Authentic 3-Column) */}
               <StoreMetricsRibbon theme="dark" className="my-1 py-1" />
 
-              {/* Portrait Tablet Screenshot Stack (2 Full-Width Landscape Cards) */}
-              <div className="flex flex-col gap-2 select-none flex-1 justify-center min-h-0">
-                {/* Screen 1: Dual-Store Live Studio Canvas */}
-                <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#0c0a24] via-[#080918] to-black border border-indigo-500/35 relative overflow-hidden">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[8.5px] font-bold text-indigo-200">Dual-Store Canvas</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+              {/* Portrait Tablet Screenshot Carousel (Authentic Horizontal Scroll) */}
+              <div className="flex-1 flex flex-col justify-center min-h-0 my-1">
+                <div className="flex items-center justify-between px-0.5 mb-1.5">
+                  <span className="text-[8px] font-bold text-slate-300 uppercase tracking-wider">
+                    Screenshots
+                  </span>
+                  <span className="text-[7px] text-slate-400 font-mono">
+                    Swipe ↔
+                  </span>
+                </div>
+
+                <div
+                  className="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none"
+                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                >
+                  {/* Screen 1: Dual-Store Live Studio Canvas */}
+                  <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#0c0a24] via-[#080918] to-black border border-indigo-500/35 relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[8.5px] font-bold text-indigo-200">Dual-Store Canvas</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                      </div>
+                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-300 font-mono font-bold">
+                        3x RETINA · 4K
+                      </span>
                     </div>
-                    <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-300 font-mono font-bold">
-                      3x RETINA · 4K
-                    </span>
+
+                    {/* Center Studio Mockup Preview with Side-by-Side Frames */}
+                    <div className="flex items-center justify-between gap-3 my-auto px-1">
+                      {/* Left: Mini Phone Stage */}
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-7 h-11 rounded-[4px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
+                          <div className="w-1.5 h-0.5 rounded-full bg-white/40 mx-auto" />
+                          <div className="w-full h-7 rounded-[2px] bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <div className="text-[7.5px] text-white font-bold leading-none">Phone Preview</div>
+                          <div className="text-[6.5px] text-slate-400">1179 × 2556 px</div>
+                          <div className="text-[6px] text-emerald-400 font-semibold">Framed &amp; Screen-Only</div>
+                        </div>
+                      </div>
+
+                      {/* Right: Mini Tablet Stage */}
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-9 h-11 rounded-[5px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
+                          <div className="w-2.5 h-0.5 rounded-full bg-white/40 mx-auto" />
+                          <div className="w-full h-7 rounded-[2.5px] bg-gradient-to-br from-purple-500 to-indigo-600" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <div className="text-[7.5px] text-white font-bold leading-none">Tablet Preview</div>
+                          <div className="text-[6.5px] text-slate-400">2048 × 2732 px</div>
+                          <div className="text-[6px] text-indigo-300 font-semibold">Native App Ratio</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span>Live Stage Canvas</span>
+                      <span className="text-indigo-400 font-semibold">Dual-Store Viewports</span>
+                    </div>
                   </div>
 
-                  {/* Center Studio Mockup Preview with Side-by-Side Frames */}
-                  <div className="flex items-center justify-between gap-3 my-auto px-1">
-                    {/* Left: Mini Phone Stage */}
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-6 h-9 rounded-[4px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
-                        <div className="w-1.5 h-0.5 rounded-full bg-white/40 mx-auto" />
-                        <div className="w-full h-5 rounded-[2px] bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500" />
+                  {/* Screen 2: Pre-Flight Compliance & 1-Click Package */}
+                  <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] rounded-xl p-2.5 flex flex-col justify-between shrink-0 bg-gradient-to-br from-[#1a0822] via-[#0e0514] to-black border border-purple-500/35 relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[8.5px] font-bold text-purple-200">Pre-Flight Compliance</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       </div>
-                      <div className="space-y-0.5">
-                        <div className="text-[7.5px] text-white font-bold leading-none">Phone Preview</div>
-                        <div className="text-[6.5px] text-slate-400">1179 × 2556 px</div>
-                        <div className="text-[6px] text-emerald-400 font-semibold">Framed &amp; Screen-Only</div>
+                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
+                        100% PASSED ✓
+                      </span>
+                    </div>
+
+                    {/* Split View: Left Audit Specs, Right Export ZIP Badge */}
+                    <div className="flex items-center justify-between gap-2.5 my-auto px-1">
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
+                          <span className="text-slate-300">App Title &amp; Subtitle Specs</span>
+                          <span className="text-emerald-400 font-bold">Valid ✓</span>
+                        </div>
+                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
+                          <span className="text-slate-300">Master Icon 1024 (Opaque)</span>
+                          <span className="text-cyan-400 font-bold">Compliant ✓</span>
+                        </div>
+                      </div>
+
+                      <div className="w-20 rounded-lg p-1.5 bg-purple-950/60 border border-purple-500/30 flex flex-col justify-between text-center shrink-0">
+                        <span className="text-[7px] text-white font-mono font-bold truncate">store-bundle.zip</span>
+                        <div className="flex justify-center gap-1 my-0.5">
+                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">PNG</span>
+                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">ZIP</span>
+                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">MD</span>
+                        </div>
+                        <span className="text-[6px] text-emerald-400 font-bold">1-Click Export</span>
                       </div>
                     </div>
 
-                    {/* Right: Mini Tablet Stage */}
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-8 h-9 rounded-[5px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
-                        <div className="w-2 h-0.5 rounded-full bg-white/40 mx-auto" />
-                        <div className="w-full h-5 rounded-[2.5px] bg-gradient-to-br from-purple-500 to-indigo-600" />
-                      </div>
-                      <div className="space-y-0.5">
-                        <div className="text-[7.5px] text-white font-bold leading-none">Tablet Preview</div>
-                        <div className="text-[6.5px] text-slate-400">2048 × 2732 px</div>
-                        <div className="text-[6px] text-indigo-300 font-semibold">Native App Ratio</div>
-                      </div>
+                    <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span>In-Browser Privacy</span>
+                      <span className="text-purple-400 font-semibold">Stored locally in your browser</span>
                     </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
-                    <span>Live Stage Canvas</span>
-                    <span className="text-indigo-400 font-semibold">Dual-Store Viewports</span>
                   </div>
                 </div>
 
-                {/* Screen 2: Pre-Flight Compliance & 1-Click Package */}
-                <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1a0822] via-[#0e0514] to-black border border-purple-500/35 relative overflow-hidden">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[8.5px] font-bold text-purple-200">Pre-Flight Compliance</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    </div>
-                    <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
-                      100% PASSED ✓
-                    </span>
-                  </div>
-
-                  {/* Split View: Left Audit Specs, Right Export ZIP Badge */}
-                  <div className="flex items-center justify-between gap-2.5 my-auto px-1">
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
-                        <span className="text-slate-300">App Title &amp; Subtitle Specs</span>
-                        <span className="text-emerald-400 font-bold">Valid ✓</span>
-                      </div>
-                      <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
-                        <span className="text-slate-300">Master Icon 1024 (Opaque)</span>
-                        <span className="text-cyan-400 font-bold">Compliant ✓</span>
-                      </div>
-                    </div>
-
-                    <div className="w-20 rounded-lg p-1.5 bg-purple-950/60 border border-purple-500/30 flex flex-col justify-between text-center shrink-0">
-                      <span className="text-[7px] text-white font-mono font-bold truncate">store-bundle.zip</span>
-                      <div className="flex justify-center gap-1 my-0.5">
-                        <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">PNG</span>
-                        <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">ZIP</span>
-                        <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">MD</span>
-                      </div>
-                      <span className="text-[6px] text-emerald-400 font-bold">1-Click Export</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[6.5px] text-slate-400 pt-0.5 border-t border-white/10">
-                    <span>In-Browser Privacy</span>
-                    <span className="text-purple-400 font-semibold">Stored locally in your browser</span>
-                  </div>
+                {/* What's New Snippet below screenshots */}
+                <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
+                  <span className="font-semibold text-indigo-300">Universal Canvas · 4K Stage</span>
+                  <span>v2.4 · 65 MB</span>
                 </div>
               </div>
 
@@ -695,12 +838,25 @@ function StorePresetsCard() {
               className="my-1 py-1"
             />
 
-            {/* Tablet Screenshot Gallery (2 Stacked Full-Width Landscape Cards) */}
-            <div className="flex flex-col gap-2 select-none flex-1 justify-center min-h-0">
+            {/* Tablet Screenshots Carousel (Authentic Horizontal Scroll) */}
+            <div className="flex-1 flex flex-col justify-center min-h-0 my-1">
+              <div className="flex items-center justify-between px-0.5 mb-1.5">
+                <span className="text-[8px] font-bold text-slate-300 uppercase tracking-wider">
+                  Screenshots
+                </span>
+                <span className="text-[7px] text-slate-400 font-mono">
+                  Swipe ↔
+                </span>
+              </div>
+
+              <div
+                className="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
                 {activePreset === "zenmind" && (
                   <>
                     {/* ZenMind Screen 1: Mindful Paced Breathing Halo */}
-                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#031d15] via-[#082e22] to-black border border-emerald-500/35 relative overflow-hidden transition-all duration-300">
+                    <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] shrink-0 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#031d15] via-[#082e22] to-black border border-emerald-500/35 relative overflow-hidden transition-all duration-300">
                       {/* Top Header */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -714,7 +870,7 @@ function StorePresetsCard() {
 
                       {/* Ethereal Glowing Breathing Halo SVG */}
                       <div className="relative my-auto flex items-center justify-center">
-                        <svg viewBox="0 0 160 42" className="w-full h-11" preserveAspectRatio="xMidYMid meet">
+                        <svg viewBox="0 0 160 42" className="w-full h-14" preserveAspectRatio="xMidYMid meet">
                           <defs>
                             <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
                               <stop offset="0%" stopColor="#34d399" stopOpacity="0.35" />
@@ -764,7 +920,7 @@ function StorePresetsCard() {
                     </div>
 
                     {/* ZenMind Screen 2: 3D Binaural Soundscape & Waveform Mixer */}
-                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#021f24] via-[#06292b] to-black border border-teal-500/35 relative overflow-hidden transition-all duration-300">
+                    <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] shrink-0 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#021f24] via-[#06292b] to-black border border-teal-500/35 relative overflow-hidden transition-all duration-300">
                       {/* Top Header */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -777,7 +933,7 @@ function StorePresetsCard() {
                       </div>
 
                       {/* Harmonic Fluid Sine Waves & Nature Sliders SVG */}
-                      <div className="relative my-auto h-11 w-full">
+                      <div className="relative my-auto h-14 w-full">
                         <svg viewBox="0 0 160 44" className="w-full h-full" preserveAspectRatio="none">
                           <defs>
                             <linearGradient id="waveCyan" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -851,7 +1007,7 @@ function StorePresetsCard() {
                 {activePreset === "pulsefit" && (
                   <>
                     {/* PulseFit Screen 1: Weekly Volume & Hypertrophy Bar Chart */}
-                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#2a0e05] via-[#140804] to-black border border-orange-500/30 relative overflow-hidden transition-all duration-300">
+                    <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] shrink-0 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#2a0e05] via-[#140804] to-black border border-orange-500/30 relative overflow-hidden transition-all duration-300">
                       {/* Top Header */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -867,7 +1023,7 @@ function StorePresetsCard() {
 
                       {/* 7-Day Vertical Bar Chart */}
                       <div className="my-auto px-1">
-                        <div className="h-9 flex items-end justify-between gap-1.5">
+                        <div className="h-12 flex items-end justify-between gap-1.5">
                           {[
                             { day: "M", val: 55, active: false },
                             { day: "T", val: 78, active: false },
@@ -907,7 +1063,7 @@ function StorePresetsCard() {
                     </div>
 
                     {/* PulseFit Screen 2: Cardiac Zones & Real-time Waveform Area Chart */}
-                    <div className="h-[96px] sm:h-[102px] rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#17071e] via-[#0d0414] to-black border border-rose-500/30 relative overflow-hidden transition-all duration-300">
+                    <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] shrink-0 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#17071e] via-[#0d0414] to-black border border-rose-500/30 relative overflow-hidden transition-all duration-300">
                       {/* Top Header & Zones Pips */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
@@ -925,7 +1081,7 @@ function StorePresetsCard() {
                       </div>
 
                       {/* Smooth Area Waveform Chart SVG */}
-                      <div className="relative my-auto h-10 w-full overflow-hidden">
+                      <div className="relative my-auto h-13 w-full overflow-hidden">
                         <svg viewBox="0 0 160 40" className="w-full h-full" preserveAspectRatio="none">
                           <defs>
                             <linearGradient id="hrAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -985,7 +1141,7 @@ function StorePresetsCard() {
                 {activePreset === "cyberstrike" && (
                   <>
                     {/* CyberStrike Screen 1: Open World Action RPG */}
-                    <div className="h-[96px] sm:h-[102px] rounded-xl relative overflow-hidden bg-[#060714] border border-cyan-500/40 shadow-inner select-none transition-all duration-300">
+                    <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] shrink-0 rounded-xl relative overflow-hidden bg-[#060714] border border-cyan-500/40 shadow-inner select-none transition-all duration-300">
                       {/* Atmospheric Cyber Background SVG */}
                       <svg viewBox="0 0 180 96" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                         <defs>
@@ -1073,7 +1229,7 @@ function StorePresetsCard() {
                     </div>
 
                     {/* CyberStrike Screen 2: Boss Battle & Combat Slash */}
-                    <div className="h-[96px] sm:h-[102px] rounded-xl relative overflow-hidden bg-[#0a0410] border border-pink-500/40 shadow-inner select-none transition-all duration-300">
+                    <div className="w-[205px] sm:w-[220px] h-[132px] sm:h-[140px] shrink-0 rounded-xl relative overflow-hidden bg-[#0a0410] border border-pink-500/40 shadow-inner select-none transition-all duration-300">
                       {/* Atmospheric Combat Arena Background SVG */}
                       <svg viewBox="0 0 180 96" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                         <defs>
@@ -1176,6 +1332,27 @@ function StorePresetsCard() {
                   </>
                 )}
               </div>
+
+              {/* Contextual App Info Snippet below carousel */}
+              {activePreset === "cyberstrike" && (
+                <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
+                  <span className="font-semibold text-cyan-300">Boss Update: Titan-Dreadnought</span>
+                  <span>v2.1 · 1.8 GB</span>
+                </div>
+              )}
+              {activePreset === "pulsefit" && (
+                <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
+                  <span className="font-semibold text-amber-300">Cardiac Zone 4 Real-Time Sync</span>
+                  <span>v3.4 · 142 MB</span>
+                </div>
+              )}
+              {activePreset === "zenmind" && (
+                <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
+                  <span className="font-semibold text-emerald-300">432Hz Solfeggio Rain Mix</span>
+                  <span>v4.0 · 98 MB</span>
+                </div>
+              )}
+            </div>
 
               {/* Tablet Home Bar */}
               <div className="w-24 h-1 rounded-full mx-auto mt-1.5 bg-white/30 shrink-0" />
