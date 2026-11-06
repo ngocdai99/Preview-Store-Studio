@@ -13144,7 +13144,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             width: 11px !important;
             height: 11px !important;
             flex-shrink: 0 !important;
-            margin-top: -1.5px !important;
+            margin-top: 0 !important;
           }
           .gt10-star,
           .dev.gtab10 .gt10-star,
@@ -13992,7 +13992,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.width = '11px';
           el.style.height = '11px';
           el.style.flexShrink = '0';
-          el.style.marginTop = '-1.5px';
+          el.style.marginTop = '0';
         });
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || typeof win.ApplePaySession === 'function';
         clonedEl.querySelectorAll('.gt10-star, .dev.gtab10 .gt10-star, .gt10-header-metrics .gt10-star').forEach(el => {

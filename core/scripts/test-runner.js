@@ -4576,6 +4576,10 @@ assert(tabletsCssSrc62.includes('margin-top: 0 !important;'), 'tablets.css cente
 assert(tabletsCssSrc62.includes('.dev.gtab7 .gt7-app-meta') && tabletsCssSrc62.includes('display: block;'), 'tablets.css renders .gt7-app-meta as block for unified single-line ellipsis');
 assert(pngJsSrc62.includes('.gt7-app-meta') && pngJsSrc62.includes('searchEllipsisSelectors'), 'png.js includes .gt7-app-meta in searchEllipsisSelectors');
 
+const headerCssSrc62 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'header.css'), 'utf8');
+assert(headerCssSrc62.includes('.g-met [data-gmet-rating] .g-star-ico{margin-top:0}'), 'header.css resets margin-top to 0 on .g-star-ico to center vertically');
+assert(pngJsSrc62.includes('.g-star-ico') && pngJsSrc62.includes('margin-top: 0 !important;'), 'png.js resets margin-top to 0 on .g-star-ico');
+
 // ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------

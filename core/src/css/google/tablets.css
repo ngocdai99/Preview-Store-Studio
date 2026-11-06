@@ -1131,6 +1131,22 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
 /* Show file size metric on tab7 as a separate column */
 .dev.gtab7 .g-met .st:first-child { display: contents; }
 .dev.gtab7 [data-gmet-rating] { display: flex !important; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; border-right: 1px solid var(--sp); padding: 0 4px; }
+.dev.gtab7 [data-gmet-rating] b {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2.5px !important;
+  height: 20px !important;
+  line-height: 1 !important;
+}
+.dev.gtab7 [data-gmet-rating] .g-star-ico {
+  margin-top: 0 !important;
+  width: 11px !important;
+  height: 11px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}
 .dev.gtab7 [data-gmet-size] { display: flex !important; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; border-right: 1px solid var(--sp); padding: 0 4px; }
 .dev.gtab7 [data-gmet-size] b {
   display: inline-flex;
