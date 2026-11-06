@@ -12719,6 +12719,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         if(document.fonts && clonedDoc.fonts){
           try{
             document.fonts.forEach(f => clonedDoc.fonts.add(f));
+            if(clonedDoc.fonts.ready){
+              await clonedDoc.fonts.ready;
+            }
           }catch(_){}
         }
 
@@ -12729,10 +12732,30 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           clonedStage.scrollLeft = 0;
         }
 
-        // Hide CSS pseudo-element buttons so html2canvas renders explicit hardware button nodes cleanly
+        // Hide CSS pseudo-element buttons and override -webkit-box multi-line clamps so html2canvas
+        // doesn't squish adjacent text or collapse whitespace across words during text metric measurement
         const btnStyle = clonedDoc.createElement('style');
         btnStyle.textContent = `
           .dev::before, .dev::after { display: none !important; }
+          .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
+          .sr-title, .sr-search-query, .ipad-sr-app-title, .ipad-search-query, .ipad-floating-title, .gp-search-query-text, .gp-search-card-name,
+          [data-b="name"], [data-b="sub"], [data-b="dev"], [data-b="short"], [data-b="promo"] {
+            display: block !important;
+            -webkit-line-clamp: unset !important;
+            -webkit-box-orient: unset !important;
+            white-space: pre-wrap !important;
+            word-break: normal !important;
+            word-spacing: normal !important;
+          }
+          .ipad-compat-notice {
+            display: inline-flex !important;
+            gap: 5px !important;
+            white-space: normal !important;
+            word-spacing: normal !important;
+          }
+          .ipad-compat-notice span {
+            white-space: nowrap !important;
+          }
           /* Firefox & html2canvas horizontal screenshot gallery fixes:
              Disable scroll-snap and overflow-x on .gal so html2canvas doesn't drop partially clipped images */
           .gal, [data-shots="gal"], [data-shots="shots"], [data-shots="gp-search"], [data-shots="ipad-gal"], [data-shots="ipad-shots"] {
