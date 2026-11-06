@@ -1824,7 +1824,7 @@ Pay once on Gumroad, own forever. No subscriptions, no cloud dependencies.</text
   </div>
   <div>
     <b><span class="g-age-badge" data-age-google-badge>E</span></b>
-    <small><span data-age-google-lbl>Everyone</span><svg class="g-info-ico" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7;flex-shrink:0;margin-left:3px;vertical-align:0;display:inline-block"><circle cx="12" cy="12" r="9.5" fill="none"></circle><line x1="12" y1="16" x2="12" y2="12"></line><circle cx="12" cy="8" r="0.8" fill="currentColor" stroke="none"></circle></svg></small>
+    <small><span data-age-google-lbl>Everyone</span><svg class="g-info-ico" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" overflow="visible" style="opacity:0.7;flex-shrink:0;margin-left:3px;vertical-align:0;display:inline-block;overflow:visible"><circle cx="12" cy="12" r="9.5" fill="none"></circle><line x1="12" y1="16" x2="12" y2="12"></line><circle cx="12" cy="8" r="0.8" fill="currentColor" stroke="none"></circle></svg></small>
   </div>
   <div class="st">
     <b><span class="sv" data-stat="dl">50K+</span></b>
@@ -2195,7 +2195,7 @@ Pay once on Gumroad, own forever. No subscriptions, no cloud dependencies.</text
   </div>
   <div>
     <b><span class="g-age-badge" data-age-google-badge>E</span></b>
-    <small><span data-age-google-lbl>Everyone</span><svg class="g-info-ico" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7;flex-shrink:0;margin-left:3px;vertical-align:0;display:inline-block"><circle cx="12" cy="12" r="9.5" fill="none"></circle><line x1="12" y1="16" x2="12" y2="12"></line><circle cx="12" cy="8" r="0.8" fill="currentColor" stroke="none"></circle></svg></small>
+    <small><span data-age-google-lbl>Everyone</span><svg class="g-info-ico" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" overflow="visible" style="opacity:0.7;flex-shrink:0;margin-left:3px;vertical-align:0;display:inline-block;overflow:visible"><circle cx="12" cy="12" r="9.5" fill="none"></circle><line x1="12" y1="16" x2="12" y2="12"></line><circle cx="12" cy="8" r="0.8" fill="currentColor" stroke="none"></circle></svg></small>
   </div>
   <div class="st">
     <b><span class="sv" data-stat="dl">50K+</span></b>
@@ -14836,6 +14836,43 @@ sk.remove();
 });
 });
 }
+cloneTarget.querySelectorAll('.g-info-ico').forEach(svg => {
+try {
+const comp = window.getComputedStyle(svg);
+const color = comp.color || '#8e8e93';
+const cv = document.createElement('canvas');
+cv.width = 40;
+cv.height = 40;
+const ctx = cv.getContext('2d');
+if (ctx) {
+ctx.strokeStyle = color;
+ctx.fillStyle = color;
+ctx.lineWidth = 3.6;
+ctx.lineCap = 'round';
+ctx.beginPath();
+ctx.arc(20, 20, 15.5, 0, Math.PI * 2);
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(20, 11.5, 2.2, 0, Math.PI * 2);
+ctx.fill();
+ctx.beginPath();
+ctx.moveTo(20, 17.5);
+ctx.lineTo(20, 27.5);
+ctx.stroke();
+const img = document.createElement('img');
+img.className = 'g-info-ico';
+img.src = cv.toDataURL('image/png');
+img.style.width = '10px';
+img.style.height = '10px';
+img.style.display = 'inline-block';
+img.style.verticalAlign = 'middle';
+img.style.marginLeft = '3px';
+img.style.marginTop = '1.5px';
+img.style.opacity = comp.opacity || '0.7';
+svg.replaceWith(img);
+}
+} catch (_) {}
+});
 await rasterizeSvgImages(cloneTarget, scaleFactor, 1);
 await waitForAllImages(cloneTarget);
 await new Promise(r => requestAnimationFrame(() => setTimeout(r, 60)));
@@ -14901,7 +14938,7 @@ vertical-align: middle !important;
 width: 11px !important;
 height: 11px !important;
 flex-shrink: 0 !important;
-margin-top: 0.5px !important;
+margin-top: 1.5px !important;
 }
 .g-info-ico {
 display: inline-block !important;
@@ -14910,7 +14947,8 @@ width: 10px !important;
 height: 10px !important;
 flex-shrink: 0 !important;
 margin-left: 3px !important;
-margin-top: 2px !important;
+margin-top: 1.5px !important;
+overflow: visible !important;
 }
 .gp-stat-rating {
 display: inline-flex !important;
@@ -15498,7 +15536,7 @@ if (child.getAttribute('stroke') === 'currentColor' || (!child.getAttribute('str
 child.setAttribute('stroke', strokeVal);
 }
 if (child.getAttribute('fill') === 'currentColor') {
-child.setAttribute('fill', fillVal);
+child.setAttribute('fill', compColor);
 }
 if (!child.getAttribute('stroke-width') && svg.getAttribute('stroke-width')) {
 child.setAttribute('stroke-width', svg.getAttribute('stroke-width'));
@@ -15528,13 +15566,50 @@ el.style.verticalAlign = 'middle';
 el.style.boxSizing = 'border-box';
 el.style.padding = '0';
 });
+clonedEl.querySelectorAll('svg.g-info-ico').forEach(svg => {
+try {
+const comp = win.getComputedStyle(svg);
+const color = comp.color || '#8e8e93';
+const cv = clonedDoc.createElement('canvas');
+cv.width = 40;
+cv.height = 40;
+const ctx = cv.getContext('2d');
+if (ctx) {
+ctx.strokeStyle = color;
+ctx.fillStyle = color;
+ctx.lineWidth = 3.6;
+ctx.lineCap = 'round';
+ctx.beginPath();
+ctx.arc(20, 20, 15.5, 0, Math.PI * 2);
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(20, 11.5, 2.2, 0, Math.PI * 2);
+ctx.fill();
+ctx.beginPath();
+ctx.moveTo(20, 17.5);
+ctx.lineTo(20, 27.5);
+ctx.stroke();
+const img = clonedDoc.createElement('img');
+img.className = 'g-info-ico';
+img.src = cv.toDataURL('image/png');
+img.style.width = '10px';
+img.style.height = '10px';
+img.style.display = 'inline-block';
+img.style.verticalAlign = 'middle';
+img.style.marginLeft = '3px';
+img.style.marginTop = '1.5px';
+img.style.opacity = comp.opacity || '0.7';
+svg.replaceWith(img);
+}
+} catch (_) {}
+});
 clonedEl.querySelectorAll('.g-info-ico').forEach(el => {
 el.style.display = 'inline-block';
 el.style.verticalAlign = 'middle';
 el.style.width = '10px';
 el.style.height = '10px';
 el.style.marginLeft = '3px';
-el.style.marginTop = '2px';
+el.style.marginTop = '1.5px';
 });
 clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
 if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-meta')) return;
@@ -15576,7 +15651,7 @@ el.style.verticalAlign = 'middle';
 el.style.width = '11px';
 el.style.height = '11px';
 el.style.flexShrink = '0';
-el.style.marginTop = '0.5px';
+el.style.marginTop = '1.5px';
 });
 clonedEl.querySelectorAll('.gp-stat-rating').forEach(el => {
 el.style.display = 'inline-flex';

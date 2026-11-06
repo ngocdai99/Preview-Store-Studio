@@ -425,6 +425,50 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       });
     }
 
+    // Convert Google Play info tooltip SVGs to sharp PNG images on cloneTarget to prevent
+    // Safari/WebKit XMLSerializer SVG clipping (where small SVGs lose parts of the stroke on export)
+    cloneTarget.querySelectorAll('.g-info-ico').forEach(svg => {
+      try {
+        const comp = window.getComputedStyle(svg);
+        const color = comp.color || '#8e8e93';
+        const cv = document.createElement('canvas');
+        cv.width = 40;
+        cv.height = 40;
+        const ctx = cv.getContext('2d');
+        if (ctx) {
+          ctx.strokeStyle = color;
+          ctx.fillStyle = color;
+          ctx.lineWidth = 3.6;
+          ctx.lineCap = 'round';
+          // Outer circle
+          ctx.beginPath();
+          ctx.arc(20, 20, 15.5, 0, Math.PI * 2);
+          ctx.stroke();
+          // Dot
+          ctx.beginPath();
+          ctx.arc(20, 11.5, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+          // Stem
+          ctx.beginPath();
+          ctx.moveTo(20, 17.5);
+          ctx.lineTo(20, 27.5);
+          ctx.stroke();
+
+          const img = document.createElement('img');
+          img.className = 'g-info-ico';
+          img.src = cv.toDataURL('image/png');
+          img.style.width = '10px';
+          img.style.height = '10px';
+          img.style.display = 'inline-block';
+          img.style.verticalAlign = 'middle';
+          img.style.marginLeft = '3px';
+          img.style.marginTop = '1.5px';
+          img.style.opacity = comp.opacity || '0.7';
+          svg.replaceWith(img);
+        }
+      } catch (_) {}
+    });
+
     // Rasterize SVGs exclusively on the offscreen clone without mutating live DOM images
     await rasterizeSvgImages(cloneTarget, scaleFactor, 1);
     await waitForAllImages(cloneTarget);
@@ -498,7 +542,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             width: 11px !important;
             height: 11px !important;
             flex-shrink: 0 !important;
-            margin-top: 0.5px !important;
+            margin-top: 1.5px !important;
           }
           .g-info-ico {
             display: inline-block !important;
@@ -507,7 +551,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 10px !important;
             flex-shrink: 0 !important;
             margin-left: 3px !important;
-            margin-top: 2px !important;
+            margin-top: 1.5px !important;
+            overflow: visible !important;
           }
           .gp-stat-rating {
             display: inline-flex !important;
@@ -1123,7 +1168,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
               child.setAttribute('stroke', strokeVal);
             }
             if (child.getAttribute('fill') === 'currentColor') {
-              child.setAttribute('fill', fillVal);
+              child.setAttribute('fill', compColor);
             }
             if (!child.getAttribute('stroke-width') && svg.getAttribute('stroke-width')) {
               child.setAttribute('stroke-width', svg.getAttribute('stroke-width'));
@@ -1158,14 +1203,54 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.padding = '0';
         });
 
-        // Ensure tooltip info icon retains clean margin and baseline alignment in html2canvas
+        // Ensure tooltip info icon is replaced with sharp PNG image if still SVG in clonedDoc
+        clonedEl.querySelectorAll('svg.g-info-ico').forEach(svg => {
+          try {
+            const comp = win.getComputedStyle(svg);
+            const color = comp.color || '#8e8e93';
+            const cv = clonedDoc.createElement('canvas');
+            cv.width = 40;
+            cv.height = 40;
+            const ctx = cv.getContext('2d');
+            if (ctx) {
+              ctx.strokeStyle = color;
+              ctx.fillStyle = color;
+              ctx.lineWidth = 3.6;
+              ctx.lineCap = 'round';
+              ctx.beginPath();
+              ctx.arc(20, 20, 15.5, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.arc(20, 11.5, 2.2, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.beginPath();
+              ctx.moveTo(20, 17.5);
+              ctx.lineTo(20, 27.5);
+              ctx.stroke();
+
+              const img = clonedDoc.createElement('img');
+              img.className = 'g-info-ico';
+              img.src = cv.toDataURL('image/png');
+              img.style.width = '10px';
+              img.style.height = '10px';
+              img.style.display = 'inline-block';
+              img.style.verticalAlign = 'middle';
+              img.style.marginLeft = '3px';
+              img.style.marginTop = '1.5px';
+              img.style.opacity = comp.opacity || '0.7';
+              svg.replaceWith(img);
+            }
+          } catch (_) {}
+        });
+
+        // Ensure tooltip info icon retains clean margin, baseline alignment and no clipping in html2canvas
         clonedEl.querySelectorAll('.g-info-ico').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
           el.style.width = '10px';
           el.style.height = '10px';
           el.style.marginLeft = '3px';
-          el.style.marginTop = '2px';
+          el.style.marginTop = '1.5px';
         });
 
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
@@ -1218,7 +1303,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.width = '11px';
           el.style.height = '11px';
           el.style.flexShrink = '0';
-          el.style.marginTop = '0.5px';
+          el.style.marginTop = '1.5px';
         });
 
         // Enforce vertical centering for Google Play search card rating star in export
