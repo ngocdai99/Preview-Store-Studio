@@ -15,25 +15,28 @@
   border-color:rgba(56,189,248,0.3);
 }
 .dest-grid{
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0, 1fr));
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
   gap:8px;
   margin-top:4px;
   width:100%;
   box-sizing:border-box;
 }
 .dest-tile{
-  display:flex;
+  display:inline-flex;
   align-items:center;
   gap:8px;
-  padding:8px 10px;
+  padding:6px 12px;
   background:rgba(255,255,255,0.03);
   border:1px solid var(--line);
   border-radius:10px;
   cursor:pointer;
   user-select:none;
   position:relative;
-  min-width:0;
+  width:fit-content;
+  max-width:100%;
+  flex:0 0 auto;
   box-sizing:border-box;
   transition:all .2s cubic-bezier(.2,.9,.3,1);
 }
@@ -106,7 +109,7 @@
   color:#0a84ff;
 }
 .dest-info{
-  flex:1;
+  flex:0 0 auto;
   min-width:0;
 }
 .dest-name{
@@ -115,9 +118,10 @@
   color:var(--tx);
   display:flex;
   align-items:center;
-  flex-wrap:wrap;
-  gap:4px;
+  flex-wrap:nowrap;
+  gap:6px;
   line-height:1.2;
+  white-space:nowrap;
 }
 .dest-sub{
   font-size:10px;
@@ -186,8 +190,8 @@
 :root[data-ui=light] .dest-desc-bar strong{color:#0f172a}
 
 @container editor (max-width: 360px) {
-  .dest-grid{grid-template-columns:1fr}
+  .dest-grid{gap:6px}
 }
 @media (max-width: 480px) {
-  .dest-grid{grid-template-columns:1fr}
+  .dest-grid{gap:6px}
 }
