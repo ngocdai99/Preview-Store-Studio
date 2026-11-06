@@ -3844,9 +3844,9 @@ asyncSuites.push((async () => {
   assert(rootPkg.scripts.dev === 'npm --prefix core run dev', 'root package.json dev script starts core dev server');
   assert(rootPkg.scripts.start === 'npm --prefix core run dev', 'root package.json start script starts core dev server');
 
-  // 11. Guided Tour Button: Compass Icon, Zero TranslateY & Relocation to Header Next to Theme Toggle
+  // 11. Guided Tour Button: Route Icon, Zero TranslateY & Relocation to Header Next to Theme Toggle
   const wsBarSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/components/workspace-bar.html'), 'utf8');
-  assert(wsBarSrc.includes('circle cx="12" cy="12" r="10"') && !wsBarSrc.includes('polygon points="12 2 15.09'), 'Tour button uses clean compass icon instead of star');
+  assert(wsBarSrc.includes('circle cx="6" cy="19" r="3"') && !wsBarSrc.includes('polygon points="12 2 15.09'), 'Tour button uses clean route icon instead of star');
 
   const tourCssSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/css/modals/tour.css'), 'utf8');
   assert(tourCssSrc.includes('.ms-pill.tour-btn:hover') && tourCssSrc.includes('transform: none !important;'), 'Tour button removes translateY on hover and active');

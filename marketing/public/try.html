@@ -134,35 +134,13 @@ var r=function(A,e){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Arr
     <button type="button" class="ms-pill custom" id="btnDraft" title="Start your custom app draft">
       <span id="draftBtnTitle">+ Your App</span>
     </button>
-    <button type="button" class="ms-pill tour-btn" id="btnStartTour" title="Option 1: Play Circle">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <polygon points="10 8 16 12 10 16 10 8"></polygon>
-      </svg>
-      <span>1. Tour</span>
-    </button>
-    <button type="button" class="ms-pill tour-btn" id="btnStartTour2" title="Option 2: Map">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
-        <line x1="8" y1="2" x2="8" y2="18"></line>
-        <line x1="16" y1="6" x2="16" y2="22"></line>
-      </svg>
-      <span>2. Tour</span>
-    </button>
-    <button type="button" class="ms-pill tour-btn" id="btnStartTour3" title="Option 3: Route">
+    <button type="button" class="ms-pill tour-btn" id="btnStartTour" title="Take a 30-second guided tour">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="6" cy="19" r="3"></circle>
         <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path>
         <circle cx="18" cy="5" r="3"></circle>
       </svg>
-      <span>3. Tour</span>
-    </button>
-    <button type="button" class="ms-pill tour-btn" id="btnStartTour4" title="Option 4: Map Pin">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-        <circle cx="12" cy="10" r="3"></circle>
-      </svg>
-      <span>4. Tour</span>
+      <span>Tour</span>
     </button>
     <button type="button" class="ms-pill custom has-draft on" id="btnPresetPill" title="Currently viewing preset template">
       <img alt="" id="presetBtnThumb" src="">
@@ -7540,7 +7518,6 @@ const btn = $('btnStartTour');
 const btnUi = $('btnUi');
 const headerRight = document.querySelector('header .right');
 if (!btn || !headerRight) return;
-if ($('btnStartTour2') || $('btnStartTour3') || $('btnStartTour4')) return;
 try {
 const completed = localStorage.getItem('sps_tour_completed') === 'true';
 if (completed) {
@@ -7608,9 +7585,10 @@ targetEl = document.querySelector(step.fallbackTarget);
 positionTourElements(targetEl);
 }
 function initTour() {
-$$('#btnStartTour, #btnStartTour2, #btnStartTour3, #btnStartTour4, .tour-btn').forEach(btn => {
+const btn = $('btnStartTour');
+if (btn) {
 btn.onclick = () => startTour(0);
-});
+}
 relocateTourButton();
 if (typeof isDemoMode === 'function' && isDemoMode()) {
 try {

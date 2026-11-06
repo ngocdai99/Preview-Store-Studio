@@ -238,7 +238,6 @@ function relocateTourButton() {
   const btnUi = $('btnUi');
   const headerRight = document.querySelector('header .right');
   if (!btn || !headerRight) return;
-  if ($('btnStartTour2') || $('btnStartTour3') || $('btnStartTour4')) return;
 
   try {
     const completed = localStorage.getItem('sps_tour_completed') === 'true';
@@ -313,9 +312,10 @@ function handleTourResize() {
 }
 
 function initTour() {
-  $$('#btnStartTour, #btnStartTour2, #btnStartTour3, #btnStartTour4, .tour-btn').forEach(btn => {
+  const btn = $('btnStartTour');
+  if (btn) {
     btn.onclick = () => startTour(0);
-  });
+  }
 
   relocateTourButton();
 
