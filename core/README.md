@@ -1,7 +1,7 @@
 # Store Preview Studio
 ### Commercial-Grade Dual-Store Preview & Metadata Optimization Suite
 
-> **The standalone, zero-server studio for Mobile Developers, ASO Specialists, Game Studios, and Digital Agencies to preview, validate, and export curated App Store and Google Play listings.**
+> **The standalone, browser-based studio for Mobile Developers, ASO Specialists, Game Studios, and Digital Agencies to preview, validate, and export curated App Store and Google Play listings.**
 
 ---
 
@@ -10,7 +10,7 @@
 1. Open **`core.html`** (or `store_preview_studio.html`) in any modern web browser (Chrome, Safari, Firefox).
    - Or run via terminal: `open core.html`
 2. **Zero installation required** — no Node.js, no Docker, and no server configuration when simply using the studio.
-3. Everything runs **100% Client-Side** with zero tracking and zero telemetry. Your confidential metadata, pre-release screenshots, and strategy remain strictly private on your machine.
+3. Everything runs **Client-Side** with zero tracking and zero telemetry. Your confidential metadata, pre-release screenshots, and strategy remain strictly private on your machine.
 
 ---
 
@@ -42,9 +42,9 @@ If you are customizing the modular source code in `src/`:
 - Toggle between **Light Mode** and **Dark Mode** for both the studio UI and the device mockups.
 
 ### 2. Real-time App Icon, Screenshot & Character Limit Validators
-- **App Icon Alpha & Dimension Scanner**: Uses `<canvas>` to detect alpha transparency (`alpha < 250`, which causes Xcode / App Store Connect rejection) and checks exact dimensions (`1024×1024 px` for iOS, `512×512 px` 1:1 for Google Play), featuring a **1-Click Auto-Flatten & Resize** button.
-- **Interactive Store Guidelines Tooltips**: Built-in reference popovers for **iOS App Icon & Xcode Asset Catalog (`Assets.xcassets`)** and **Google Play Feature Graphic (`1024×500 px`)**.
-- **Strict Grapheme Character Counter (`Intl.Segmenter`)**:
+- **App Icon Transparency & Dimension Scanner**: Automatically detects transparent alpha pixels that cause store rejection, and checks dimensions (1024×1024 px for iOS, 512×512 px for Google Play) with a **1-Click Auto-Flatten & Resize** button.
+- **Interactive Store Guidelines Tooltips**: Built-in reference popovers for **iOS App Icon Guidelines** and **Google Play Feature Graphic (`1024×500 px`)**.
+- **Emoji-Aware Character Counter (`Intl.Segmenter`)**:
   - **App Store**: App Name (30), Subtitle (30), Promotional Text (170), Description (4,000), Keywords (100).
   - **Google Play**: App Title (30), Short Description (80), Full Description (4,000).
   - Visual amber warning at ≥90% capacity and crimson shake animation (`shake-overlimit`) when limits are exceeded.
@@ -55,7 +55,7 @@ If you are customizing the modular source code in `src/`:
 - **Age Rating & Monetization Badges**: Switch between `4+ / Everyone (E)`, `9+ / E10+`, `12+ / Teen (T)`, `17+ / Mature (M)` and customize In-App Purchases / Contains Ads badges.
 - **Illustrative Metrics Control**: Edit or hide sample ratings, review counts, chart ranks, download tiers, and app size before client handoff.
 
-### 4. 1-Click Export & Handoff Pipeline (100% Offline)
+### 4. 1-Click Export & Handoff Pipeline (Offline)
 - **Ultra-HD Mockup Export (PNG)**: Capture high-resolution **3x Ultra-HD**, **3x Screen-Only (Frameless)**, or **2x Retina** PNG mockups completely offline (`html2canvas` bundled inline).
 - **Export Markdown (`LISTING_METADATA.md`)**: Generates a complete submission report including character compliance tables, graphic asset checklists, App Privacy & Data Safety declarations, and Fastlane CLI paths.
 - **Export & Import JSON Config (v2.1.0)**: Save and restore full workspace states via button or drag-and-drop with strict schema validation and UTF-8 BOM handling.

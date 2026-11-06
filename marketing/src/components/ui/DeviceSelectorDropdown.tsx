@@ -70,19 +70,14 @@ export function DeviceSelectorDropdown({
   onChange,
   options = DEFAULT_OPTIONS,
   className = "",
-  label = "iPhone / iPad",
+  label = "Select device",
 }: DeviceSelectorDropdownProps) {
   return (
     <div
       role="group"
       aria-label={label}
-      className={`rounded-xl bg-white dark:bg-[#141514] border border-slate-200/90 dark:border-[#282928] shadow-sm dark:shadow-[0_4px_16px_rgba(0,0,0,0.35)] py-1.5 px-1 w-[150px] sm:w-[160px] select-none shrink-0 ${className}`}
+      className={`rounded-xl bg-white dark:bg-[#141514] border border-slate-200/90 dark:border-[#282928] shadow-sm dark:shadow-[0_4px_16px_rgba(0,0,0,0.35)] p-1 w-[140px] sm:w-[150px] select-none shrink-0 ${className}`}
     >
-      {/* Category Header Label */}
-      <div className="px-2.5 pt-0.5 pb-1 text-[9.5px] font-bold uppercase tracking-wider text-slate-400 dark:text-[#64748b]">
-        {label}
-      </div>
-
       {/* Options List */}
       <div className="flex flex-col gap-0.5">
         {options.map((opt) => {

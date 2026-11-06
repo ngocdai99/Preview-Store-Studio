@@ -23,7 +23,7 @@ const SPS_TOUR_STEPS = [
     target: '#icoDropZone',
     fallbackTarget: '#f-name',
     title: 'Store Compliance & Icon Inspector',
-    desc: 'Audit your app icon for Apple ITMS-90717 alpha channel rejections, 1024×1024 / 512×512 sizing, and official squircle corner radii.'
+    desc: 'Audit your app icon for Apple alpha channel rejections, 1024×1024 / 512×512 sizing, and squircle corner radii.'
   },
   {
     target: '#workspaceExportDropdown',

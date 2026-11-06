@@ -682,10 +682,10 @@ function ExportCard() {
 
           {tab === "zip" && (
             <div className="space-y-1.5 text-[10.5px] font-mono text-slate-600 dark:text-slate-300">
-              <div className="font-bold text-purple-400">📦 store-preview-studio.zip</div>
-              <div className="pl-3">├── 📁 ios-screenshots/ (5)</div>
-              <div className="pl-3">├── 📁 android-screenshots/ (5)</div>
-              <div className="pl-3">└── 📄 LISTING_METADATA.md</div>
+              <div className="font-bold text-purple-400">📦 store-bundle.zip</div>
+              <div className="pl-3">├── 📁 phone-previews/</div>
+              <div className="pl-3">├── 📁 tablet-previews/</div>
+              <div className="pl-3">└── 📄 store-metadata.md</div>
             </div>
           )}
 

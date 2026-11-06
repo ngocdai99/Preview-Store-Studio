@@ -544,8 +544,8 @@
             detailsHtml = '<p>Apple App Store requires a 1:1 square icon (1024×1024 px).</p><p class="icon-modal-warn-hint">Please re-export a 1:1 square image from Figma, Sketch, or Photoshop.</p>';
           } else if (hasAlpha) {
             level = 'err';
-            badgeText = 'ITMS-90717: Alpha detected · 100% Opaque required';
-            detailsHtml = '<p>ITMS-90717 Error: Xcode and App Store Connect reject icons with alpha channels. The icon must be 100% opaque without transparency.</p><p class="icon-modal-warn-hint">Flatten background layers and export as PNG without an alpha channel.</p>';
+            badgeText = 'Alpha detected · Opaque icon required';
+            detailsHtml = '<p>Xcode and App Store Connect reject icons with alpha channels. The icon must be opaque without transparency.</p><p class="icon-modal-warn-hint">Flatten background layers and export as PNG without an alpha channel.</p>';
           } else if (isJpeg) {
             level = 'warn';
             badgeText = 'Not recommended: PNG preferred per store guidelines';

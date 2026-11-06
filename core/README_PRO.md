@@ -11,7 +11,7 @@
 
 ### 2. Developer & Customization Mode
 ```bash
-node dev.js        # Start SSE live-reload server on http://localhost:3000
+node dev.js        # Start local dev server with auto-refresh on http://localhost:3000
 node build.js      # Recompile src/ into store_preview_studio.html
 ```
 *(macOS users can also double-click **`start_dev.command`** in Finder).*
@@ -51,7 +51,7 @@ store-preview-studio-pro-v1.0/
 * **Dual-Store Simulation**: Apple App Store & Google Play Store across Phone & Tablet viewports.
 * **View Modes**: Product Detail page, Search Results feed, and Dual-phone side-by-side comparison.
 * **Media Formatting**: Adaptive portrait and 16:9 widescreen landscape screenshot carousels.
-* **Compliance Checks**: Icon alpha transparency scanner (ITMS-90717) with 1-click auto-flatten, screenshot dimension validator, strict grapheme character counters (`Intl.Segmenter`).
+* **Compliance Checks**: Icon transparency scanner with 1-click auto-flatten to opaque, screenshot dimension validator, emoji-aware character counters.
 * **Export Options**: Ultra HD 4K mockups (PNG), complete ZIP package, `LISTING_METADATA.md` developer handoff report.
 * **Data Tools**: Import/export JSON workspace presets, 1-click Live App Store Cloner.
 * **Agency Toolkit**: Interactive 16-topic ASO & store compliance FAQ guide (`AGENCY_MARKETING_FAQ.html`) for client handoff and team onboarding.

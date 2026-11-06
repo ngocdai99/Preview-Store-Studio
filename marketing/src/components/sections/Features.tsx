@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
 import { SlidingTabs } from "@/components/ui/SlidingTabs";
-import { DeviceSelectorDropdown } from "@/components/ui/DeviceSelectorDropdown";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 import { StoreMetricsRibbon } from "@/components/ui/StoreMetricsRibbon";
 import {
@@ -21,49 +20,87 @@ function DeviceFramesCard() {
   const [device, setDevice] = useState<"phone" | "tablet">("phone");
 
   return (
-    <div className="group relative rounded-[28px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-2 lg:col-span-6">
+    <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-2 lg:col-span-6">
       {/* Top hairline accent line (Pricing style) */}
       <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r from-[#00D085] via-emerald-400 to-transparent" />
 
       {/* Top Header & Interactive Switchers (z-30 to float comfortably over simulated stage) */}
-      <div className="relative z-30 flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+      <div className="relative z-30 flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-2 sm:mb-2.5">
         <div>
-          <span className="text-[12px] font-mono font-bold tracking-wider text-emerald-600 dark:text-[#00D085] block mb-1">
-            01
-          </span>
-          <h3 className="text-[20px] sm:text-[22px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Modern Device Frames
-          </h3>
-          <p className="mt-1 text-[13.5px] sm:text-[14px] text-slate-600 dark:text-slate-400 max-w-md leading-relaxed">
-            Switch between iPhone and iPad to preview your app with authentic store framing.
+          <div className="flex items-baseline gap-2">
+            <span className="text-[12px] font-mono font-bold tracking-wider text-emerald-600 dark:text-[#00D085] shrink-0">
+              01
+            </span>
+            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Modern Device Frames
+            </h3>
+          </div>
+          <p className="mt-0.5 text-[12.5px] sm:text-[13px] text-slate-600 dark:text-slate-400 max-w-sm leading-normal">
+            Adaptive device frames across multiple screen formats.
           </p>
         </div>
 
-        {/* Interactive Controls Bar: Direct Device Menu */}
+        {/* Interactive Controls Bar: Device Sliding Tabs */}
         <div className="relative z-40 self-start lg:self-center">
-          <DeviceSelectorDropdown
+          <SlidingTabs
             value={device}
-            onChange={setDevice}
+            onChange={(val) => setDevice(val as "phone" | "tablet")}
+            options={[
+              {
+                value: "phone",
+                label: "iPhone",
+                icon: (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-3.5 h-3.5"
+                  >
+                    <rect x="6" y="2" width="12" height="20" rx="2.5" />
+                    <line x1="10" y1="18" x2="14" y2="18" />
+                  </svg>
+                ),
+              },
+              {
+                value: "tablet",
+                label: "iPad",
+                icon: (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-3.5 h-3.5"
+                  >
+                    <rect x="4" y="2" width="16" height="20" rx="2.5" />
+                    <line x1="10" y1="18" x2="14" y2="18" />
+                  </svg>
+                ),
+              },
+            ]}
+            className="w-[170px] sm:w-[190px]"
+            size="sm"
+            ariaLabel="Device selector tabs"
           />
         </div>
       </div>
 
-      {/* Simulated Live Stage (Visual Interactive Mockup with Zero Layout Shift & Fluid Morph Animation) */}
-      <div className="relative z-10 w-full h-[370px] sm:h-[390px] rounded-2xl bg-gradient-to-b from-slate-100 to-slate-200/70 dark:from-[#111211] dark:to-[#0c0d0c] border border-slate-200/80 dark:border-white/[0.06] flex items-center justify-center overflow-hidden select-none">
-        {/* Subtle Ambient Radial Glow */}
-        <div className="absolute w-[360px] h-[360px] rounded-full bg-emerald-500/10 blur-[80px] pointer-events-none" />
-
-        {/* Morphing Stage Container - Zero Layout Shift */}
-        <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-4">
-          {/* Phone Mockup Frame (Realistic Hardware Bezel & Authentic App Store Product Page) */}
-          <div
-            className={`absolute transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
-              device === "phone"
-                ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 scale-[0.88] translate-y-3 pointer-events-none"
-            }`}
-          >
-            <div className="relative w-[265px] sm:w-[285px] rounded-[48px] p-[8px] border border-[#363840] bg-[#1e1f23] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),inset_0_1px_1px_rgba(255,255,255,0.18)] transition-all duration-300">
+      {/* Simulated Live Stage (Visual Interactive Mockup without wrapper container) */}
+      <div className="relative z-10 w-full h-[265px] sm:h-[275px] flex items-center justify-center select-none">
+        {/* Phone Mockup Frame (Realistic Hardware Bezel & Authentic App Store Product Page) */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
+            device === "phone"
+              ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 scale-[0.88] translate-y-3 pointer-events-none"
+          }`}
+        >
+          <div className="relative w-[265px] sm:w-[285px] rounded-[48px] p-[8px] border border-[#363840] bg-[#1e1f23] shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300">
               {/* Outer Physical Hardware Buttons */}
               {/* Left: Action Button */}
               <div className="absolute -left-[4px] top-[60px] w-[3px] h-[16px] rounded-l-sm bg-[#363840]" />
@@ -75,43 +112,9 @@ function DeviceFramesCard() {
               <div className="absolute -right-[4px] top-[92px] w-[3px] h-[44px] rounded-r-sm bg-[#363840]" />
 
               {/* Screen Inner */}
-              <div className="w-full rounded-[40px] overflow-hidden px-3 pt-2.5 pb-2.5 bg-black text-white">
-                {/* iOS Status Bar with Dynamic Island */}
-                <div className="flex items-center justify-between px-2 pt-0.5 pb-2 text-[11px] font-semibold">
-                  {/* Left: Clock */}
-                  <span className="tracking-tight text-[11px] font-bold opacity-90">4:31</span>
-
-                  {/* Center: Dynamic Island with Sensor Lens */}
-                  <div className="w-[78px] h-[20px] bg-black rounded-full flex items-center justify-end px-2 border border-black/80 dark:border-white/10 shadow-inner">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80 animate-pulse" />
-                  </div>
-
-                  {/* Right: Cellular, Wi-Fi & Battery Icons */}
-                  <div className="flex items-center gap-1 opacity-90">
-                    {/* Cellular */}
-                    <svg className="w-3.5 h-2.5" viewBox="0 0 17 12" fill="currentColor">
-                      <rect x="0.5" y="7.5" width="2.4" height="4.5" rx="0.8" />
-                      <rect x="4.8" y="5" width="2.4" height="7" rx="0.8" />
-                      <rect x="9.1" y="2.5" width="2.4" height="9.5" rx="0.8" />
-                      <rect x="13.4" y="0" width="2.4" height="12" rx="0.8" />
-                    </svg>
-                    {/* Wi-Fi */}
-                    <svg className="w-3.5 h-2.5" viewBox="0 0 16 12" fill="none">
-                      <path d="M1.5 4.3C5.2 1.0 10.8 1.0 14.5 4.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      <path d="M4.2 7.3C6.3 5.4 9.7 5.4 11.8 7.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      <circle cx="8" cy="10.7" r="1.25" fill="currentColor" />
-                    </svg>
-                    {/* Battery */}
-                    <svg className="w-4 h-2.5" viewBox="0 0 26 13" fill="currentColor">
-                      <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" strokeWidth="1.2" />
-                      <rect x="2" y="2" width="16" height="9" rx="2" />
-                      <rect x="23.8" y="4.5" width="1.4" height="4" rx="0.7" />
-                    </svg>
-                  </div>
-                </div>
-
+              <div className="w-full rounded-[40px] overflow-hidden p-3.5 bg-black text-white">
                 {/* App Detail Header: Brand Icon, Name, Subtitle, Apple Blue GET Button */}
-                <div className="px-1 pt-1.5 flex items-start gap-3">
+                <div className="flex items-start gap-3">
                   {/* Official Brand Icon with 3D Interlocking K */}
                   <div className="shrink-0 rounded-[15px] shadow-md overflow-hidden">
                     <BrandIcon
@@ -166,13 +169,13 @@ function DeviceFramesCard() {
 
           {/* Tablet Mockup Frame */}
           <div
-            className={`absolute transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
+            className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
               device === "tablet"
                 ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
                 : "opacity-0 scale-[0.88] -translate-y-3 pointer-events-none"
             }`}
           >
-            <div className="relative w-[340px] sm:w-[410px] rounded-[30px] p-[7px] border border-[#3e4046] bg-[#25262a] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all duration-300">
+            <div className="relative w-[340px] sm:w-[410px] rounded-[30px] p-[7px] border border-[#3e4046] bg-[#25262a] shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300">
               {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}
               {/* Top: Power / Sleep Button */}
               <div className="absolute -top-[4px] right-[36px] sm:right-[44px] w-[30px] sm:w-[34px] h-[3px] rounded-t-sm bg-[#363840]" />
@@ -235,16 +238,14 @@ function DeviceFramesCard() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 // ============================================================================
 // CARD 2: CURATED STORE PRESETS (Interactive Core Presets Stage)
 // ============================================================================
 function StorePresetsCard() {
   const [activePreset, setActivePreset] = useState<"zenmind" | "taskflow" | "pulsefit">("zenmind");
-  const [flipDegree, setFlipDegree] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
 
   const presets = {
@@ -256,8 +257,18 @@ function StorePresetsCard() {
       ratingCount: "82K Ratings",
       age: "4+",
       developer: "ZenMind Studio",
-      gradient: "from-purple-500 to-rose-500",
-      letter: "Z",
+      gradient: "from-purple-600 via-fuchsia-500 to-rose-500",
+      icon: (
+        <svg viewBox="0 0 100 100" className="w-8 h-8 text-white drop-shadow-sm" fill="none">
+          {/* Crescent Moon */}
+          <path d="M 50 18 A 8 8 0 0 0 57 26 A 10 10 0 1 1 48 18 Z" fill="#fde68a" opacity="0.95" />
+          {/* Lotus Petals */}
+          <path d="M 50 72 C 32 60 26 44 32 32 C 40 44 46 60 50 72 Z" fill="white" opacity="0.85" />
+          <path d="M 50 72 C 68 60 74 44 68 32 C 60 44 54 60 50 72 Z" fill="white" opacity="0.85" />
+          <path d="M 50 74 C 40 56 42 36 50 26 C 58 36 60 56 50 74 Z" fill="white" />
+          <circle cx="50" cy="62" r="3.5" fill="#fde68a" />
+        </svg>
+      ),
     },
     taskflow: {
       name: "TaskFlow: Habit Planner",
@@ -267,8 +278,17 @@ function StorePresetsCard() {
       ratingCount: "1.8K Ratings",
       age: "4+",
       developer: "FlowCraft Studio",
-      gradient: "from-blue-500 to-indigo-600",
-      letter: "T",
+      gradient: "from-sky-400 via-blue-600 to-indigo-600",
+      icon: (
+        <svg viewBox="0 0 100 100" className="w-8 h-8 text-white drop-shadow-sm" fill="none">
+          {/* Glowing habit progress ring */}
+          <circle cx="50" cy="50" r="32" stroke="rgba(255,255,255,0.3)" strokeWidth="5" strokeLinecap="round" />
+          <circle cx="50" cy="50" r="32" stroke="#e0f2fe" strokeWidth="5" strokeDasharray="130 80" strokeLinecap="round" />
+          {/* Bold Checkmark */}
+          <path d="M 37 51 L 46 60 L 65 41" stroke="#ffffff" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="71" cy="29" r="3.5" fill="#bae6fd" />
+        </svg>
+      ),
     },
     pulsefit: {
       name: "PulseFit: Workout Tracker",
@@ -278,151 +298,132 @@ function StorePresetsCard() {
       ratingCount: "24.6K Ratings",
       age: "4+",
       developer: "PulseFit Health",
-      gradient: "from-emerald-500 to-teal-600",
-      letter: "P",
+      gradient: "from-emerald-400 via-teal-500 to-cyan-400",
+      icon: (
+        <svg viewBox="0 0 100 100" className="w-8 h-8 text-white drop-shadow-sm" fill="none">
+          {/* Fitness Ring */}
+          <circle cx="50" cy="50" r="32" stroke="rgba(255,255,255,0.25)" strokeWidth="4.5" strokeLinecap="round" />
+          <circle cx="50" cy="50" r="32" stroke="#a7f3d0" strokeWidth="4.5" strokeDasharray="140 70" strokeLinecap="round" />
+          {/* Heart ECG Pulse Wave */}
+          <path
+            d="M 24 50 L 36 50 L 41 36 L 48 66 L 54 40 L 60 56 L 65 50 L 76 50"
+            stroke="#ffffff"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx="41" cy="36" r="2.5" fill="#fde68a" />
+        </svg>
+      ),
     },
   };
 
   const handleSelectPreset = (key: "zenmind" | "taskflow" | "pulsefit") => {
-    if (key === activePreset) return;
-    setFlipDegree((prev) => prev + 360);
+    if (key === activePreset || isFlipping) return;
     setIsFlipping(true);
 
-    // Halfway through the 360-degree rotation (260ms), update the preset data
+    // Half-turn: Turn 90deg edge-on, swap preset, then unfold back to 0deg
     setTimeout(() => {
       setActivePreset(key);
-    }, 260);
-
-    setTimeout(() => {
       setIsFlipping(false);
-    }, 550);
+    }, 180);
   };
 
   const current = presets[activePreset];
 
   return (
-    <div className="group relative rounded-[28px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-2 lg:col-span-6">
+    <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-2 lg:col-span-6">
       {/* Top hairline accent line (Pricing style) */}
       <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r from-amber-400 via-amber-500 to-transparent" />
 
       {/* Top Header & Preset Switcher Buttons */}
-      <div className="relative z-30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="relative z-30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2 sm:mb-2.5">
         <div>
-          <span className="text-[12px] font-mono font-bold tracking-wider text-amber-600 dark:text-amber-400 block mb-1">
-            02
-          </span>
-          <h3 className="text-[20px] sm:text-[22px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Curated Store Presets
-          </h3>
-          <p className="mt-1 text-[13.5px] sm:text-[14px] text-slate-600 dark:text-slate-400 max-w-md leading-relaxed">
-            Switch between ready-to-edit templates with authentic store metadata, ratings, and framing.
+          <div className="flex items-baseline gap-2">
+            <span className="text-[12px] font-mono font-bold tracking-wider text-amber-600 dark:text-amber-400 shrink-0">
+              02
+            </span>
+            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Curated Store Presets
+            </h3>
+          </div>
+          <p className="mt-0.5 text-[12.5px] sm:text-[13px] text-slate-600 dark:text-slate-400 max-w-sm leading-normal">
+            Explore sample presets with store metadata and ratings.
           </p>
         </div>
 
-        {/* 3 Preset Switcher Buttons */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#141514] border border-slate-200/90 dark:border-[#282928] shadow-sm shrink-0 self-start sm:self-center">
-          {(["zenmind", "taskflow", "pulsefit"] as const).map((key) => {
-            const isActive = activePreset === key;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => handleSelectPreset(key)}
-                className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all duration-150 cursor-pointer ${
-                  isActive
-                    ? "bg-[var(--btn-white-bg,#EFF1F0)] text-[var(--btn-white-text,#252625)] shadow-sm font-bold"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/[0.06]"
-                }`}
-              >
-                {key === "zenmind" ? "ZenMind" : key === "taskflow" ? "TaskFlow" : "PulseFit"}
-              </button>
-            );
-          })}
+        {/* 3 Preset Switcher Sliding Tabs */}
+        <div className="shrink-0 self-start sm:self-center">
+          <SlidingTabs
+            value={activePreset}
+            onChange={(val) => handleSelectPreset(val as "zenmind" | "taskflow" | "pulsefit")}
+            options={[
+              { value: "zenmind", label: "ZenMind" },
+              { value: "taskflow", label: "TaskFlow" },
+              { value: "pulsefit", label: "PulseFit" },
+            ]}
+            className="w-[240px] sm:w-[260px]"
+            size="sm"
+            ariaLabel="Preset selector tabs"
+          />
         </div>
       </div>
 
-      {/* Simulated Live Stage with Device Frame (Phone Mockup directly displaying preset data) */}
-      <div className="relative z-10 w-full h-[370px] sm:h-[390px] rounded-2xl bg-gradient-to-b from-slate-100 to-slate-200/70 dark:from-[#111211] dark:to-[#0c0d0c] border border-slate-200/80 dark:border-white/[0.06] flex items-center justify-center overflow-hidden select-none">
-        {/* Subtle Ambient Radial Glow */}
-        <div className="absolute w-[360px] h-[360px] rounded-full bg-amber-500/10 blur-[80px] pointer-events-none" />
-
+      {/* Simulated Live Stage with Device Frame (without inner container wrapper) */}
+      <div
+        className="relative z-10 w-full h-[265px] sm:h-[275px] flex items-center justify-center select-none"
+        style={{ perspective: "1200px" }}
+      >
         <div
-          className="relative w-full h-full flex items-center justify-center p-3 sm:p-4"
-          style={{ perspective: "1200px" }}
-        >
-          <div
-            className="relative w-[265px] sm:w-[285px] rounded-[48px] p-[8px] border border-[#363840] bg-[#1e1f23] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),inset_0_1px_1px_rgba(255,255,255,0.18)]"
+          className="relative w-[340px] sm:w-[410px] rounded-[30px] p-[7px] border border-[#3e4046] bg-[#25262a] shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)]"
             style={{
-              transform: `rotateY(${flipDegree}deg) scale(${isFlipping ? 0.92 : 1})`,
+              transform: isFlipping ? "rotateY(90deg) scale(0.93)" : "rotateY(0deg) scale(1)",
               transformStyle: "preserve-3d",
-              transition: "transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1)",
-              willChange: "transform",
+              transition: isFlipping
+                ? "transform 0.18s cubic-bezier(0.4, 0, 1, 1), opacity 0.18s ease-in"
+                : "transform 0.22s cubic-bezier(0, 0, 0.2, 1), opacity 0.22s ease-out",
+              opacity: isFlipping ? 0.7 : 1,
+              willChange: "transform, opacity",
             }}
           >
-            {/* Outer Physical Hardware Buttons */}
-            <div className="absolute -left-[4px] top-[60px] w-[3px] h-[16px] rounded-l-sm bg-[#363840]" />
-            <div className="absolute -left-[4px] top-[84px] w-[3px] h-[30px] rounded-l-sm bg-[#363840]" />
-            <div className="absolute -left-[4px] top-[122px] w-[3px] h-[30px] rounded-l-sm bg-[#363840]" />
-            <div className="absolute -right-[4px] top-[92px] w-[3px] h-[44px] rounded-r-sm bg-[#363840]" />
+            {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}
+            {/* Top: Power / Sleep Button */}
+            <div className="absolute -top-[4px] right-[36px] sm:right-[44px] w-[30px] sm:w-[34px] h-[3px] rounded-t-sm bg-[#363840]" />
+            {/* Right: Volume Up */}
+            <div className="absolute -right-[4px] top-[26px] sm:top-[28px] w-[3px] h-[16px] sm:h-[18px] rounded-r-sm bg-[#363840]" />
+            {/* Right: Volume Down */}
+            <div className="absolute -right-[4px] top-[46px] sm:top-[50px] w-[3px] h-[16px] sm:h-[18px] rounded-r-sm bg-[#363840]" />
 
             {/* Screen Inner */}
-            <div className="w-full rounded-[40px] overflow-hidden px-3 pt-2.5 pb-2.5 bg-black text-white">
-              {/* iOS Status Bar with Dynamic Island */}
-              <div className="flex items-center justify-between px-2 pt-0.5 pb-2 text-[11px] font-semibold">
-                <span className="tracking-tight text-[11px] font-bold opacity-90">9:41</span>
-                <div className="w-[78px] h-[20px] bg-black rounded-full flex items-center justify-end px-2 border border-black/80 dark:border-white/10 shadow-inner">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80 animate-pulse" />
-                </div>
-                <div className="flex items-center gap-1 opacity-90">
-                  <svg className="w-3.5 h-2.5" viewBox="0 0 17 12" fill="currentColor">
-                    <rect x="0.5" y="7.5" width="2.4" height="4.5" rx="0.8" />
-                    <rect x="4.8" y="5" width="2.4" height="7" rx="0.8" />
-                    <rect x="9.1" y="2.5" width="2.4" height="9.5" rx="0.8" />
-                    <rect x="13.4" y="0" width="2.4" height="12" rx="0.8" />
-                  </svg>
-                  <svg className="w-3.5 h-2.5" viewBox="0 0 16 12" fill="none">
-                    <path d="M1.5 4.3C5.2 1.0 10.8 1.0 14.5 4.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                    <path d="M4.2 7.3C6.3 5.4 9.7 5.4 11.8 7.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                    <circle cx="8" cy="10.7" r="1.25" fill="currentColor" />
-                  </svg>
-                  <svg className="w-4 h-2.5" viewBox="0 0 26 13" fill="currentColor">
-                    <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" strokeWidth="1.2" />
-                    <rect x="2" y="2" width="16" height="9" rx="2" />
-                    <rect x="23.8" y="4.5" width="1.4" height="4" rx="0.7" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* App Detail Header: Brand Icon, Name, Subtitle, Apple Blue GET Button */}
-              <div className="px-1 pt-1.5 flex items-start gap-3">
-                {/* Stylized Preset Icon */}
-                <div
-                  className={`w-[52px] h-[52px] shrink-0 rounded-[15px] bg-gradient-to-br ${current.gradient} flex items-center justify-center text-white font-black text-2xl shadow-md border border-white/15 transition-all duration-300`}
-                >
-                  {current.letter}
-                </div>
-
-                {/* App Info & Action Button */}
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-[12.5px] sm:text-[13px] font-extrabold tracking-tight leading-tight text-white truncate transition-all duration-200">
-                    {current.name}
-                  </h4>
-                  <p className="text-[10.5px] sm:text-[11px] leading-tight font-medium text-slate-400 truncate transition-all duration-200">
-                    {current.subtitle}
-                  </p>
-
-                  <div>
-                    <button
-                      type="button"
-                      className="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-normal text-[10px] tracking-wide shadow-sm transition-all cursor-pointer"
-                    >
-                      GET
-                    </button>
+            <div className="w-full rounded-[24px] p-3.5 bg-black text-white">
+              {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
+              <div className="pb-2">
+                <div className="flex items-start gap-3">
+                  <div
+                    className={`w-[58px] h-[58px] shrink-0 rounded-[15px] bg-gradient-to-br ${current.gradient} flex items-center justify-center text-white shadow-md border border-white/20 transition-all duration-300 overflow-hidden`}
+                  >
+                    {current.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] font-bold leading-tight text-white truncate transition-all duration-200">
+                      {current.name}
+                    </div>
+                    <div className="text-[10.5px] text-slate-400 truncate transition-all duration-200">
+                      {current.subtitle}
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        className="px-3 py-0.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-normal text-[10px] tracking-wide shadow-sm transition-colors cursor-pointer"
+                      >
+                        GET
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Store Metrics Ribbon with Preset-Specific Ratings & Developer */}
+              {/* Store Metrics Ribbon (Tablet 3-Column) */}
               <StoreMetricsRibbon
                 theme="dark"
                 rating={current.rating}
@@ -431,28 +432,27 @@ function StorePresetsCard() {
                 developerName={current.developer}
               />
 
-              {/* Screenshot Skeleton Carousel */}
-              <div className="flex gap-2 overflow-hidden px-0.5 pb-1 select-none">
-                {[0, 1, 2].map((idx) => (
+              {/* Tablet Screenshot Skeleton Gallery (2-column grid) */}
+              <div className="grid grid-cols-2 gap-2.5 select-none">
+                {[0, 1].map((idx) => (
                   <div
                     key={idx}
-                    className="w-20 h-24 rounded-[10px] p-2 flex flex-col justify-between shrink-0 bg-[#121312] border border-white/[0.04]"
+                    className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-[#121312] border border-white/[0.04]"
                   >
-                    <div className="w-full h-12 rounded-md bg-black/60" />
-                    <div className="w-10 h-1.5 rounded-full mx-auto bg-black/50" />
+                    <div className="w-full h-13 rounded-lg bg-black/60" />
+                    <div className="w-16 h-1.5 rounded-full bg-black/50" />
                   </div>
                 ))}
               </div>
 
-              {/* iOS Home Indicator Bar */}
-              <div className="w-20 h-1 rounded-full mx-auto mt-1.5 bg-white/30" />
+              {/* Tablet Home Bar */}
+              <div className="w-24 h-1 rounded-full mx-auto mt-2.5 bg-white/30" />
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 // ============================================================================
 // CARD 3: SMART SIZE & COMPLIANCE DETECTION (Interactive 1-Click Flatten)
@@ -461,7 +461,7 @@ function ComplianceCard() {
   const [flattened, setFlattened] = useState(false);
 
   return (
-    <div className="group relative rounded-[28px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
+    <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
       {/* Top hairline accent line (Pricing style) */}
       <div
         className={`absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r transition-all duration-300 ${
@@ -472,18 +472,20 @@ function ComplianceCard() {
       />
 
       <div className="relative z-10">
-        <span
-          className={`text-[12px] font-mono font-bold tracking-wider block mb-1 transition-colors ${
-            flattened
-              ? "text-emerald-600 dark:text-[#00D085]"
-              : "text-rose-500 dark:text-rose-400"
-          }`}
-        >
-          03
-        </span>
-        <h3 className="text-[19px] sm:text-[20px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Smart Size &amp; Compliance QA
-        </h3>
+        <div className="flex items-baseline gap-2">
+          <span
+            className={`text-[12px] font-mono font-bold tracking-wider shrink-0 transition-colors ${
+              flattened
+                ? "text-emerald-600 dark:text-[#00D085]"
+                : "text-rose-500 dark:text-rose-400"
+            }`}
+          >
+            03
+          </span>
+          <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Smart Size &amp; Compliance QA
+          </h3>
+        </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
           Automatically scans for invalid aspect ratios and illegal iOS app icon transparency (ITMS-90717).
         </p>
@@ -559,17 +561,19 @@ function ExportCard() {
   };
 
   return (
-    <div className="group relative rounded-[28px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
+    <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
       {/* Top hairline accent line (Pricing style) */}
       <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r from-purple-400 via-purple-500 to-transparent" />
 
       <div className="relative z-10">
-        <span className="text-[12px] font-mono font-bold tracking-wider text-purple-600 dark:text-purple-400 block mb-1">
-          04
-        </span>
-        <h3 className="text-[19px] sm:text-[20px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Multi-Format Export &amp; Dev Markdown
-        </h3>
+        <div className="flex items-baseline gap-2">
+          <span className="text-[12px] font-mono font-bold tracking-wider text-purple-600 dark:text-purple-400 shrink-0">
+            04
+          </span>
+          <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Multi-Format Export &amp; Dev Markdown
+          </h3>
+        </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
           Export 3x Ultra-HD PNG mockups, client-side ZIP bundles, or developer markdown handoffs.
         </p>
@@ -606,10 +610,10 @@ function ExportCard() {
 
           {tab === "zip" && (
             <div className="space-y-1.5 text-[10.5px] font-mono text-slate-600 dark:text-slate-300">
-              <div className="font-bold text-purple-400">📦 store-preview-studio.zip</div>
-              <div className="pl-3">├── 📁 ios-screenshots/ (5)</div>
-              <div className="pl-3">├── 📁 android-screenshots/ (5)</div>
-              <div className="pl-3">└── 📄 LISTING_METADATA.md</div>
+              <div className="font-bold text-purple-400">📦 store-bundle.zip</div>
+              <div className="pl-3">├── 📁 phone-previews/</div>
+              <div className="pl-3">├── 📁 tablet-previews/</div>
+              <div className="pl-3">└── 📄 store-metadata.md</div>
             </div>
           )}
 

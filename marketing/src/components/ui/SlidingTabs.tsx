@@ -46,8 +46,8 @@ export function SlidingTabs<T extends string>({
     normalizedOptions.findIndex((opt) => opt.value === value)
   );
 
-  const py = size === "sm" ? "py-1.5" : "py-2";
-  const fontSize = size === "sm" ? "text-[11.5px] sm:text-[12px]" : "text-[12.5px] sm:text-[13px]";
+  const py = size === "sm" ? "py-0.5 sm:py-1" : "py-1 sm:py-1.5";
+  const fontSize = size === "sm" ? "text-[11.5px] sm:text-[12px]" : "text-[12px] sm:text-[12.5px]";
 
   return (
     <div
@@ -63,16 +63,15 @@ export function SlidingTabs<T extends string>({
         - Exact 1/N width of the inner track: calc((100% - 8px) / N)
         - Absolute 4px inset from edges (matching p-1 = 4px)
         - Pure GPU transform: translateX(index * 100%)
-        - Adapts to 1-line or 2-line content automatically
+        - Smooth spring-like slide transition: 300ms cubic-bezier(0.25, 1, 0.5, 1)
       */}
       <div
         aria-hidden="true"
-        className="absolute top-1 bottom-1 rounded-lg bg-[var(--btn-white-bg,#EFF1F0)] shadow-sm pointer-events-none"
+        className="absolute top-1 bottom-1 rounded-lg bg-[var(--btn-white-bg,#EFF1F0)] shadow-sm pointer-events-none transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-transform"
         style={{
           left: "4px",
           width: `calc((100% - 8px) / ${count})`,
           transform: `translateX(${activeIndex * 100}%)`,
-          transition: "transform 200ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       />
 
@@ -87,9 +86,9 @@ export function SlidingTabs<T extends string>({
             tabIndex={isActive ? 0 : -1}
             type="button"
             onClick={() => onChange(opt.value)}
-            className={`relative z-10 w-full min-h-[34px] sm:min-h-[36px] ${py} px-1.5 sm:px-2 flex items-center justify-center text-center font-semibold ${fontSize} cursor-pointer transition-colors duration-150 ${
+            className={`relative z-10 w-full min-h-[28px] sm:min-h-[30px] ${py} px-1.5 sm:px-2 flex items-center justify-center text-center font-semibold ${fontSize} cursor-pointer transition-colors duration-150 ${
               isActive
-                ? "text-[var(--btn-white-text,#252625)]"
+                ? "text-[var(--btn-white-text,#252625)] font-bold"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
