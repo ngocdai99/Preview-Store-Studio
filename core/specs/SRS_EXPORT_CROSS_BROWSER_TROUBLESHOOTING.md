@@ -379,6 +379,60 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
 
 ---
 
+### Case 8: Lỗi Mất Thẻ Cha `.dev` Khi Xuất Ảnh Màn Hình Thuần Túy (Screen Only / Frameless CSS Selector Orphan Bug)
+
+#### Triệu chứng thực tế
+- Khi người dùng chọn **"Copy screen only"** hoặc **"Download screen only"** trên thiết bị Tablet 10-inch (hoặc Tablet 7-inch, iPad):
+  - Ảnh xuất ra bị vỡ vụn toàn bộ giao diện: một icon SVG (như icon Game Controller trên thanh Navigation Rail) bị phóng to cực đại choán hết 100% màn hình phía dưới status bar.
+  - Bố cục flexbox hai cột và master-detail của tablet biến mất, biến thành khối dọc lệch lạc.
+
+#### Cơ chế tầng sâu (Root Cause)
+1. **Cô lập thẻ con `.phone` khỏi thẻ cha `.dev`:**
+   - Khi `opts.frameless === true`, engine xuất ảnh ban đầu chỉ lấy phần tử màn hình:
+     ```javascript
+     const target = devToCapture.querySelector('.phone') || devToCapture;
+     const cloneTarget = target.cloneNode(true);
+     ```
+   - Thẻ `.phone` khi được clone sang `offscreenWrap` hoàn toàn bị tách rời khỏi thẻ cha `.dev.gtab10` (hoặc `.dev.gtab7`, `.dev.ipad`).
+2. **Mất toàn bộ Scoped CSS & CSS Custom Properties:**
+   - Trong hệ thống CSS, các biến kích thước màn hình `--sw: 1024px; --sh: 640px;` và hàng loạt selector định hình layout tablet (ví dụ `.dev.gtab10 .gt10-workspace`, `.dev.gtab10 .gt10-rail-icon svg { width: 20px; height: 20px; }`) đều bắt đầu bằng class `.dev.gtab10`.
+   - Khi mất thẻ cha `.dev.gtab10`:
+     - Thẻ `<svg>` của icon Navigation Rail không có width/height trong thuộc tính HTML, bị trình duyệt mở rộng ra 100% chiều rộng container.
+     - Layout flexbox `.gt10-workspace` mất `display: flex; height: calc(100% - 30px);`, biến thành `display: block` thông thường khiến icon SVG đầu tiên chiếm trọn toàn bộ canvas.
+
+#### Hướng dẫn khắc phục triệt để (Standard Solution)
+- **Bọc `cloneTarget` bằng `devWrap` ảo:**
+  - Khi xuất `opts.frameless && devToCapture !== target`, tạo một thẻ cha `devWrap` có đầy đủ class và `data-*` attributes của `devToCapture`:
+    ```javascript
+    if (opts.frameless && devToCapture && devToCapture !== target) {
+      const devWrap = document.createElement('div');
+      devWrap.className = devToCapture.className;
+      if (devToCapture.id) devWrap.id = 'clone-' + devToCapture.id;
+      Array.from(devToCapture.attributes).forEach(attr => {
+        if (attr.name.startsWith('data-')) {
+          devWrap.setAttribute(attr.name, attr.value);
+        }
+      });
+      devWrap.style.cssText = 'padding:0!important;margin:0!important;border:none!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;width:100%!important;height:100%!important;position:relative!important;';
+      devWrap.appendChild(cloneTarget);
+      offscreenWrap.appendChild(devWrap);
+    } else {
+      offscreenWrap.appendChild(cloneTarget);
+    }
+    ```
+  - Trong `clonedDoc`, xóa sạch padding, border, background và box-shadow trên `.dev` khi `opts.frameless`:
+    ```javascript
+    if(opts.frameless){
+      d.style.padding = '0';
+      d.style.background = 'none';
+      d.style.boxShadow = 'none';
+      d.style.border = 'none';
+    }
+    ```
+  - Nhờ đó, tất cả các selector `.dev.gtab10`, `.dev.gtab7`, `.dev.ipad` và các biến CSS `--sw, --sh` đều khớp chính xác 100%, bảo toàn nguyên vẹn mọi icon và layout hai cột khi xuất screen only.
+
+---
+
 ## 4. Bảng Tra cứu Nhanh Thông số Viewport & Screenshots
 
 | Màn hình / Thiết bị | Vị trí View | Thuộc tính DOM | Kích thước ảnh Dọc (Portrait) | Kích thước ảnh Ngang (Landscape) |

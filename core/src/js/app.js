@@ -12914,7 +12914,25 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       d.style.zoom = '1';
       d.style.transform = 'none';
     });
-    offscreenWrap.appendChild(cloneTarget);
+
+    // When exporting screen only (frameless), wrap cloneTarget (.phone) in a parent mirroring devToCapture (.dev)
+    // so all device-scoped CSS selectors (e.g. .dev.gtab10, .dev.gtab7, .dev.ipad) and CSS variables (--sw, --sh)
+    // remain fully matched and active during html2canvas rendering.
+    if (opts.frameless && devToCapture && devToCapture !== target) {
+      const devWrap = document.createElement('div');
+      devWrap.className = devToCapture.className;
+      if (devToCapture.id) devWrap.id = 'clone-' + devToCapture.id;
+      Array.from(devToCapture.attributes).forEach(attr => {
+        if (attr.name.startsWith('data-')) {
+          devWrap.setAttribute(attr.name, attr.value);
+        }
+      });
+      devWrap.style.cssText = 'padding:0!important;margin:0!important;border:none!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;width:100%!important;height:100%!important;position:relative!important;';
+      devWrap.appendChild(cloneTarget);
+      offscreenWrap.appendChild(devWrap);
+    } else {
+      offscreenWrap.appendChild(cloneTarget);
+    }
     document.body.appendChild(offscreenWrap);
 
     // Ensure iPad search results competitor cards display exactly 1 skeleton slot when app has landscape orientation
@@ -13548,12 +13566,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           d.style.zoom = '1';
           d.style.animation = 'none';
           d.style.transition = 'none';
-          if(isDual && opts.frameless){
+          if(opts.frameless){
             d.style.padding = '0';
             d.style.background = 'none';
             d.style.boxShadow = 'none';
-            d.style.width = 'auto';
-            d.style.height = 'auto';
+            d.style.border = 'none';
+            if(isDual){
+              d.style.width = 'auto';
+              d.style.height = 'auto';
+            }
           } else if(!opts.frameless && !d.classList.contains('landscape')){
             const addBtn = (side, offset, size, isHorizontal = false) => {
               const b = clonedDoc.createElement('div');
