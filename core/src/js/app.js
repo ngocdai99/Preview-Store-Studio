@@ -12741,7 +12741,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           .sr-title, .sr-subtitle, .sr-category, .sr-dev, .sr-meta-line, .sr-search-query,
           .ipad-sr-app-title, .ipad-sr-app-sub, .ipad-search-query, .ipad-floating-title,
           .gp-search-query-text, .gp-search-card-name, .gp-search-card-meta, .g-meta, .iap,
-          [data-b] {
+          [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]) {
             -webkit-line-clamp: unset !important;
             -webkit-box-orient: unset !important;
             white-space: pre-wrap !important;
@@ -12750,6 +12750,43 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             letter-spacing: 0.01px !important;
             overflow: visible !important;
             text-overflow: clip !important;
+          }
+          .a-met, .ipad-met, .g-met {
+            align-items: center !important;
+          }
+          .phone.apple:not(.ipad) .a-met > div {
+            height: 48px !important;
+            max-height: 48px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            overflow: hidden !important;
+            align-self: center !important;
+          }
+          .phone.ipad .a-met > div, .dev.landscape .phone.apple:not(.ipad) .a-met > div {
+            height: 54px !important;
+            max-height: 54px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            overflow: hidden !important;
+            align-self: center !important;
+          }
+          .a-met b[data-b="dev"] {
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            max-height: 26px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: normal !important;
+            line-height: 1.15 !important;
+            font-size: 11.5px !important;
+          }
+          .a-met i, .a-met small, .ipad-met i, .ipad-met small {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
           }
           .g-name, .a-name, .g-dev, .ipad-name, .ipad-sub {
             display: block !important;
@@ -13237,12 +13274,25 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
 
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
+        // Skip metrics elements (.a-met, .ipad-met, .g-met) so their strict height and clamping are never compromised
         clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .sr-dev, .gp-search-card-name, .gp-search-card-meta, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
+          if (el.closest('.a-met, .ipad-met, .g-met')) return;
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordSpacing = '0.1px';
           el.style.letterSpacing = '0.01px';
           el.style.overflow = 'visible';
           el.style.textOverflow = 'clip';
+        });
+
+        // Enforce clamped metrics developer name and clean single-line labels in export
+        clonedEl.querySelectorAll('.a-met b[data-b="dev"]').forEach(el => {
+          el.style.webkitLineClamp = '2';
+          el.style.webkitBoxOrient = 'vertical';
+          el.style.display = '-webkit-box';
+          el.style.overflow = 'hidden';
+          el.style.maxHeight = '26px';
+          el.style.whiteSpace = 'normal';
+          el.style.lineHeight = '1.15';
         });
 
         // Strip focus highlight from export capture

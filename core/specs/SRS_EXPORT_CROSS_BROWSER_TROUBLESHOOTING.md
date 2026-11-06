@@ -201,6 +201,79 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
 
 ---
 
+### Case 5: Lỗi Vỡ Chiều Cao Khung Metrics Ribbon (Vertical Padding Collapse / Flex Stretch Bug)
+
+#### Triệu chứng thực tế
+- Khi xuất PNG mockup iPhone (ví dụ import ứng dụng có tên công ty phát triển dài như `5 Phút Thuộc Bài`):
+  - Khung ribbon thông số Apple (`.a-met`) bị giãn nở chiều cao bất thường (lên tới ~120px-140px thay vì chuẩn ~72px).
+  - Các đường kẻ dọc phân cách (`border-right`) giữa `RATINGS`, `AGE`, `CHART` bị kéo dài xuống dưới, tạo ra một khoảng trống màu trắng khổng lồ (~60px-70px) ở bên dưới chữ.
+  - Viền dưới (`border-bottom`) của ribbon bị đẩy tụt xuống sát phần Preview screenshots.
+
+#### Cơ chế tầng sâu (Root Cause)
+1. **Sự can thiệp của selector toàn cục `[data-b]` trong `png.js`:**
+   - Để xử lý lỗi "dít chữ" trong html2canvas, `[data-b]` đã được thêm vào danh sách bỏ giới hạn dòng (`-webkit-line-clamp: unset !important; white-space: pre-wrap !important; overflow: visible !important;`).
+   - Tuy nhiên, trong thẻ Apple Metrics Ribbon (`.a-met`), item số 4 (DEVELOPER) chứa `<b data-b="dev">`.
+   - Khi import ứng dụng có tên nhà phát triển dài (ví dụ `CÔNG TY CỔ PHẦN ĐÀO TẠO TÂM TRÍ LỰC`), thẻ `b[data-b="dev"]` bị giải phóng line-clamp và tự động ngắt dòng thành 5–6 dòng văn bản trong cột hẹp ~105px.
+2. **Cơ chế `align-items: stretch` mặc định của CSS Flexbox:**
+   - `.a-met` là một flex container. Thuộc tính `align-items` mặc định là `stretch`.
+   - Do đó, khi item 4 (DEVELOPER nằm ở vị trí scroll bên phải) phình to lên ~115px, toàn bộ các item 1, 2, 3 (RATINGS, AGE, CHART) cũng bị ép co giãn chiều cao theo item cao nhất.
+   - Các đường kẻ `border-right` của từng `div` con kéo dài suốt chiều cao bị kéo giãn, tạo khoảng trống khổng lồ bên dưới nội dung.
+
+#### Cách xử lý triệt để
+1. **Cô lập selector `[data-b]` trong `png.js`:**
+   - Tuyệt đối không áp dụng unclamping bừa bãi vào ribbon thông số:
+     ```css
+     [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]) {
+       -webkit-line-clamp: unset !important;
+       -webkit-box-orient: unset !important;
+       white-space: pre-wrap !important;
+       overflow: visible !important;
+       text-overflow: clip !important;
+     }
+     ```
+2. **Khóa cứng chiều cao và căn chỉnh trong CSS (`metrics.css` & `png.js`):**
+   - Đặt `align-items: center` trên `.a-met`.
+   - Khóa chiều cao cố định và căn giữa theo trục dọc trên các item con:
+     ```css
+     .phone.apple:not(.ipad) .a-met > div {
+       height: 48px !important;
+       max-height: 48px !important;
+       display: flex !important;
+       flex-direction: column !important;
+       justify-content: center !important;
+       overflow: hidden !important;
+     }
+     .phone.ipad .a-met > div, .dev.landscape .phone.apple:not(.ipad) .a-met > div {
+       height: 54px !important;
+       max-height: 54px !important;
+       display: flex !important;
+       flex-direction: column !important;
+       justify-content: center !important;
+       overflow: hidden !important;
+     }
+     ```
+   - Ràng buộc nghiêm ngặt developer item tối đa 2 dòng:
+     ```css
+     .a-met b[data-b="dev"] {
+       font-size: 11.5px !important;
+       max-height: 26px !important;
+       display: -webkit-box !important;
+       -webkit-line-clamp: 2 !important;
+       -webkit-box-orient: vertical !important;
+       overflow: hidden !important;
+       text-overflow: ellipsis !important;
+       white-space: normal !important;
+       line-height: 1.15 !important;
+     }
+     ```
+3. **Trong hàm `onclone` JavaScript:**
+   - Bỏ qua các phần tử nằm trong `.a-met, .ipad-met, .g-met` khi duyệt vòng lặp chỉnh style inline:
+     ```javascript
+     if (el.closest('.a-met, .ipad-met, .g-met')) return;
+     ```
+
+---
+
 ## 4. Bảng Tra cứu Nhanh Thông số Viewport & Screenshots
 
 | Màn hình / Thiết bị | Vị trí View | Thuộc tính DOM | Kích thước ảnh Dọc (Portrait) | Kích thước ảnh Ngang (Landscape) |
