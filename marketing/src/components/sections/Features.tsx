@@ -1539,10 +1539,25 @@ function StorePresetsCard() {
   }
 
 // ============================================================================
-// CARD 3: SMART SIZE & COMPLIANCE DETECTION (Interactive 1-Click Flatten)
+// CARD 3: SMART GUIDELINES & ASSET CHECK (Interactive Inspection Hub)
 // ============================================================================
 function ComplianceCard() {
+  const [tab, setTab] = useState<"transparency" | "ratio" | "resolution">("transparency");
   const [flattened, setFlattened] = useState(false);
+  const [ratioMode, setRatioMode] = useState<"phone" | "tablet">("phone");
+  const [ratioAligned, setRatioAligned] = useState(false);
+  const [resolutionMode, setResolutionMode] = useState<"3x" | "2x">("3x");
+  const [resolutionVerified, setResolutionVerified] = useState(false);
+
+  const handleAlignRatio = () => {
+    setRatioAligned(true);
+    setTimeout(() => setRatioAligned(false), 1800);
+  };
+
+  const handleVerifyResolution = () => {
+    setResolutionVerified(true);
+    setTimeout(() => setResolutionVerified(false), 1800);
+  };
 
   return (
     <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
@@ -1551,19 +1566,13 @@ function ComplianceCard() {
         className={`absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r transition-all duration-300 ${
           flattened
             ? "from-[#00D085] via-emerald-400 to-transparent"
-            : "from-rose-400 via-rose-500 to-transparent"
+            : "from-amber-400 via-amber-500 to-transparent"
         }`}
       />
 
       <div className="relative z-10">
         <div className="flex items-baseline gap-2">
-          <span
-            className={`text-[12px] font-mono font-bold tracking-wider shrink-0 transition-colors ${
-              flattened
-                ? "text-emerald-600 dark:text-[#00D085]"
-                : "text-rose-500 dark:text-rose-400"
-            }`}
-          >
+          <span className="text-[12px] font-mono font-bold tracking-wider text-emerald-600 dark:text-[#00D085] shrink-0">
             03
           </span>
           <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -1571,61 +1580,218 @@ function ComplianceCard() {
           </h3>
         </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Automatically checks screenshot aspect ratios and detects transparent icon backgrounds before upload.
+          Pre-flight inspection for app icon transparency, screenshot aspect ratios, and store resolutions.
         </p>
 
-        {/* Interactive Scanner Box */}
-        <div className="my-4 p-3.5 rounded-xl bg-slate-100 dark:bg-[#141514] border border-slate-200/80 dark:border-white/[0.06]">
-          <div className="flex items-center gap-3 mb-3">
-            {/* Simulated Icon (Core Canvas Dot Grid with Subtle White Border vs Flattened) */}
-            <div
-              className={`w-14 h-14 rounded-2xl border flex items-center justify-center font-black text-xl transition-all duration-300 ${
-                flattened
-                  ? "bg-[#0b0c0e] border-emerald-500/50 shadow-[0_0_14px_rgba(16,185,129,0.2)]"
-                  : "bg-[#121312] dark:bg-[#141514] [background-image:radial-gradient(circle,rgba(255,255,255,0.15)_1.2px,transparent_1.2px)] [background-size:8px_8px] border-white/20 dark:border-white/15 shadow-sm"
-              }`}
-            >
-              <span className={`text-xl drop-shadow-sm select-none ${flattened ? "text-emerald-400" : "text-amber-400"}`}>
-                ★
-              </span>
-            </div>
+        {/* Tab Switcher with Sliding Pill (Symmetrical with Card 04) */}
+        <div className="my-3.5">
+          <SlidingTabs
+            value={tab}
+            onChange={(val) => setTab(val as "transparency" | "ratio" | "resolution")}
+            className="w-full"
+            ariaLabel="Asset inspection tabs"
+            options={[
+              { value: "transparency", label: "Icon Background" },
+              { value: "ratio", label: "Aspect Ratio" },
+              { value: "resolution", label: "Resolution & Size" },
+            ]}
+          />
+        </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                {flattened ? (
-                  <span className="text-emerald-500 flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" /> Solid Background Verified
+        {/* Interactive Visual Canvas matching Card 04 Height */}
+        <div className="rounded-xl bg-slate-100 dark:bg-[#141514] border border-slate-200/80 dark:border-white/[0.06] p-3 min-h-[142px] flex flex-col justify-center">
+          {tab === "transparency" && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                {/* Simulated Icon (Dot Grid when transparent vs Solid when filled) */}
+                <div
+                  className={`w-11 h-11 rounded-xl border flex items-center justify-center font-black text-lg transition-all duration-300 shrink-0 ${
+                    flattened
+                      ? "bg-[#0b0c0e] border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
+                      : "bg-[#121312] dark:bg-[#141514] [background-image:radial-gradient(circle,rgba(255,255,255,0.15)_1.2px,transparent_1.2px)] [background-size:8px_8px] border-white/20 dark:border-white/15 shadow-sm"
+                  }`}
+                >
+                  <span className={`text-base drop-shadow-sm select-none ${flattened ? "text-emerald-400" : "text-amber-400"}`}>
+                    ★
                   </span>
-                ) : (
-                  <span className="text-amber-500 flex items-center gap-1">
-                    <AlertTriangle className="w-3.5 h-3.5" /> Transparent Background Detected
-                  </span>
-                )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    {flattened ? (
+                      <span className="text-emerald-500 flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> Solid Background Verified
+                      </span>
+                    ) : (
+                      <span className="text-amber-500 flex items-center gap-1">
+                        <AlertTriangle className="w-3.5 h-3.5" /> Transparent Background Detected
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                    {flattened ? "Non-transparent background verified" : "App Store requires a solid, non-transparent icon"}
+                  </div>
+                </div>
               </div>
-              <div className="text-[10.5px] text-slate-500 mt-0.5">
-                {flattened ? "Non-transparent background verified" : "App Store requires a solid, non-transparent icon"}
+
+              {/* 1-Click Action Button */}
+              <div className="pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => setFlattened(!flattened)}
+                  className="w-full py-1.5 px-3 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-150 cursor-pointer bg-white dark:bg-[#1c1d1f] hover:bg-slate-50 dark:hover:bg-[#25262a] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/10 shadow-xs active:scale-[0.99]"
+                >
+                  {flattened ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+                      <span>Re-test Transparent Warning</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>1-Click Fill Solid Background</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* 1-Click Flatten Action Button (Using globals.css --card background) */}
-          <button
-            type="button"
-            onClick={() => setFlattened(!flattened)}
-            className="w-full py-2.5 px-4 rounded-xl text-[12.5px] font-semibold flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer bg-[var(--card,#1D1E1D)] hover:bg-[#252625] text-slate-200 dark:text-[#EDEDED] hover:text-white border border-slate-200/90 dark:border-[var(--border,#282928)] hover:border-slate-300 dark:hover:border-white/20 shadow-sm dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)] active:scale-[0.99]"
-          >
-            {flattened ? (
-              <>
-                <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
-                <span>Re-test Transparent Warning</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>1-Click Fill Solid Background</span>
-              </>
-            )}
-          </button>
+          {tab === "ratio" && (
+            <div className="space-y-2">
+              {/* Format selector buttons */}
+              <div className="flex items-center justify-between text-[11px]">
+                <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setRatioMode("phone")}
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                      ratioMode === "phone"
+                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    Phone (19.5:9 / 16:9)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRatioMode("tablet")}
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                      ratioMode === "tablet"
+                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    Tablet (4:3)
+                  </button>
+                </div>
+
+                <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
+                  MATCHED
+                </span>
+              </div>
+
+              {/* Ratio summary pill */}
+              <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center justify-between text-[10.5px]">
+                <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                  <span>{ratioMode === "phone" ? "1290 × 2796 px (19.5:9 standard)" : "2048 × 2732 px (4:3 standard)"}</span>
+                </span>
+                <span className="text-[9.5px] font-mono text-slate-400 shrink-0 ml-1">
+                  STORE COMPLIANT
+                </span>
+              </div>
+
+              {/* Action button */}
+              <div className="pt-0.5">
+                <button
+                  type="button"
+                  onClick={handleAlignRatio}
+                  className="w-full py-1.5 px-3 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-150 cursor-pointer bg-white dark:bg-[#1c1d1f] hover:bg-slate-50 dark:hover:bg-[#25262a] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/10 shadow-xs active:scale-[0.99]"
+                >
+                  {ratioAligned ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Ratio Verified &amp; Aligned!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                      <span>Auto-Align Screenshot Dimensions</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {tab === "resolution" && (
+            <div className="space-y-2">
+              {/* Resolution selector buttons */}
+              <div className="flex items-center justify-between text-[11px]">
+                <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => setResolutionMode("3x")}
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                      resolutionMode === "3x"
+                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    3x Ultra HD (Retina)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setResolutionMode("2x")}
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                      resolutionMode === "2x"
+                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    2x HD (Standard)
+                  </button>
+                </div>
+
+                <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
+                  VERIFIED
+                </span>
+              </div>
+
+              {/* Resolution summary pill */}
+              <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center justify-between text-[10.5px]">
+                <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                  <span>{resolutionMode === "3x" ? "3x DPI Output · Zero compression blur" : "2x DPI Output · Compact file size"}</span>
+                </span>
+                <span className="text-[9.5px] font-mono text-slate-400 shrink-0 ml-1">
+                  HIGH-RES
+                </span>
+              </div>
+
+              {/* Action button */}
+              <div className="pt-0.5">
+                <button
+                  type="button"
+                  onClick={handleVerifyResolution}
+                  className="w-full py-1.5 px-3 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-150 cursor-pointer bg-white dark:bg-[#1c1d1f] hover:bg-slate-50 dark:hover:bg-[#25262a] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/10 shadow-xs active:scale-[0.99]"
+                >
+                  {resolutionVerified ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Store Resolution Verified!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-teal-400" />
+                      <span>Check Dimensions &amp; Retina Density</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
