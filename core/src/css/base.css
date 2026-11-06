@@ -4,6 +4,8 @@
   --tx:#f8fafc;--mut:#989A99;--ac:#0a84ff;--ac2:#6a5cff;--glow:rgba(10,132,255,.28);
   --warn:#f59e0b;--warn-glow:rgba(245,158,11,.24);--err:#ef4444;--err-glow:rgba(239,68,68,.32);
   --succ:#10b981;
+  --brand-primary:#006636;--brand-primary-border:#1B845E;--brand-primary-hover:#007a41;--brand-primary-hover-border:#209d70;
+  --brand-secondary:#00D085;--brand-gradient:linear-gradient(135deg, #00D085 0%, #006636 100%);
 }
 body[data-store=google]{
   --ac:#00b37e;--ac2:#00a3ff;--glow:rgba(0,179,126,.28);

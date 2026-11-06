@@ -1726,7 +1726,7 @@ assert(bundledHtml.includes('applyImportedStoreApp') && bundledHtml.includes('us
 
 // Test 8: Workspace pill decorative top accent lines (Green for Draft, Purple for Preset)
 assert(bundledHtml.includes('#btnDraft::before') && bundledHtml.includes('#btnPresetPill::before'), 'Workspace bar defines decorative top accent line pseudo-elements for draft and preset pills');
-assert(bundledHtml.includes('#btnDraft::before') && (bundledHtml.includes('#00d289') || bundledHtml.includes('#00d186') || bundledHtml.includes('#059669')), 'Draft pill has luminous green top accent gradient');
+assert(bundledHtml.includes('#btnDraft::before') && (bundledHtml.includes('--brand-primary') || bundledHtml.includes('#006636') || bundledHtml.includes('#00d289') || bundledHtml.includes('#059669')), 'Draft pill uses brand-primary color from global CSS');
 assert(bundledHtml.includes('#btnPresetPill::before') && (bundledHtml.includes('#c084fc') || bundledHtml.includes('#a855f7') || bundledHtml.includes('#9333ea')), 'Preset pill has luminous purple top accent gradient');
 
 // ---------------------------------------------------------------------

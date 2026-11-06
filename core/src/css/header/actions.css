@@ -337,9 +337,9 @@
   z-index: 2;
 }
 
-/* Green top-edge accent line for Draft */
+/* Brand primary top-edge accent line for Draft */
 #btnDraft::before {
-  background: linear-gradient(90deg, #00d289 0%, #00d289 35%, rgba(0, 210, 137, 0.55) 65%, transparent 100%);
+  background: linear-gradient(90deg, var(--brand-primary, #006636) 0%, var(--brand-primary, #006636) 35%, rgba(0, 102, 54, 0.45) 65%, transparent 100%);
 }
 
 /* Purple top-edge accent line for Preset */
@@ -347,9 +347,9 @@
   background: linear-gradient(90deg, #c084fc 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
 }
 
-/* Selected state (.on on dark UI): vibrant crisp contrast */
+/* Selected state (.on on dark UI): brand primary contrast */
 #btnDraft.on::before {
-  background: linear-gradient(90deg, #00b875 0%, #00d289 35%, rgba(0, 210, 137, 0.55) 65%, transparent 100%);
+  background: linear-gradient(90deg, var(--brand-primary, #006636) 0%, var(--brand-primary, #006636) 35%, rgba(0, 102, 54, 0.45) 65%, transparent 100%);
 }
 
 #btnPresetPill.on::before {
@@ -563,7 +563,7 @@
 
 /* Light mode top accent lines */
 :root[data-ui=light] #btnDraft::before {
-  background: linear-gradient(90deg, #059669 0%, #10b981 35%, rgba(16, 185, 129, 0.55) 65%, transparent 100%);
+  background: linear-gradient(90deg, var(--brand-primary, #006636) 0%, var(--brand-primary, #006636) 35%, rgba(0, 102, 54, 0.45) 65%, transparent 100%);
 }
 
 :root[data-ui=light] #btnPresetPill::before {
