@@ -13076,6 +13076,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             ? (img.naturalWidth / img.naturalHeight)
             : (isLandscape ? (16 / 9) : (460 / 996));
 
+          const isSearch = img.closest('.sr-shots, .gp-search-shots, .ipad-sr-media, [data-shots="shots"], [data-shots="gp-search"], [data-shots="ipad-shots"]');
           if (isSearch) {
             const isAppleSearch = img.closest('.sr-shots, [data-shots="shots"]');
             const isGoogleSearch = img.closest('.gp-search-shots, [data-shots="gp-search"]');
