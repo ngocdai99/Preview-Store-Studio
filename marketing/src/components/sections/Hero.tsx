@@ -7,7 +7,7 @@ export function Hero() {
   const { hero } = siteConfig;
 
   return (
-    <section id="hero" className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden">
+    <section id="hero" className="relative pt-12 pb-10 md:pt-16 md:pb-14 overflow-hidden">
       {/* Background Soft Supabase Emerald Aurora Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-emerald-500/18 via-[#00D085]/14 to-[#006636]/22 blur-[130px] rounded-full pointer-events-none -z-10" />
 
