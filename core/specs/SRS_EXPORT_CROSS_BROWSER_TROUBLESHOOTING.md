@@ -585,6 +585,39 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
 3. **Bổ sung `.gt7-app-meta` vào `searchEllipsisSelectors`:**
    - Đảm bảo khi xuất ảnh PNG qua `exportPNG()`, dòng subtitle của Tablet 7 tự động được co giãn và đặt dấu `...` ở cuối chuỗi hiển thị khi chạm giới hạn nút Install, không bao giờ bị cắt chữ.
 
+### Case 12: Lỗi Mất Icon Developer Trên iPad & Biến Dạng Cong/Thẳng Đứng Xuyên Trình Duyệt (Apple iPad Developer Metric Icon Corruption & Canvas Rasterization)
+
+#### Triệu chứng thực tế
+- Trên **Safari WebKit**: Khi xuất PNG giao diện Apple iPad, tại cột thông số `DEVELOPER`, icon nhà phát triển (hình người trong khung vuông bo góc `person.crop.square`) bị biến mất hoàn toàn, để lại khoảng trống trắng bóc giữa chữ `DEVELOPER` và tên đơn vị phát hành.
+- Trên **Brave (Chromium/Blink)**: Icon bị cắt xén biến dạng thành một vòng cung tròn cong queo như dấu mở ngoặc đơn `(`.
+- Trên **Firefox (Gecko)**: Icon bị thu hẹp thành một vạch đứng đơn độc `|` và dòng ghi chú `Designed for iPhone · Not verified for iPadOS` bị dính cụm chữ thành `Designedfor iPhone · Not verifiedfor iPadOS`.
+
+#### Cơ chế tầng sâu (Root Cause)
+1. **Quá trình tuần tự hóa SVG phức hợp của `html2canvas`:**
+   - Icon Developer chứa cấu trúc SVG phức hợp kết hợp cả `stroke` và `fill` khác nhau trên các phần tử con:
+     - Thẻ `<rect x="3.5" y="3.5" width="17" height="17" rx="3.8">` có `stroke="currentColor"` và `fill="none"`.
+     - Thẻ `<circle cx="12" cy="9.8" r="2.4">` có `fill="currentColor"` và `stroke="none"`.
+     - Thẻ `<path d="M6.8 19.2c0-2.8 2.3-4.7 5.2-4.7s5.2 1.9 5.2 4.7z">` có `fill="currentColor"` và `stroke="none"`.
+   - `html2canvas` không thể vẽ trực tiếp các đường vector bo góc kết hợp fill/stroke phân mảnh của SVG mà phải tuần tự hóa toàn bộ cụm `<svg>` ra chuỗi Data URI (`data:image/svg+xml,...`) rồi nạp vào một `HTMLImageElement` trước khi vẽ lên canvas.
+   - Khi chạy trên Safari WebKit, cơ chế bảo mật context tách rời (detached context) chặn hoặc làm rơi nét stroke của thẻ `<rect>`.
+   - Trên Chromium/Blink (Brave), tỷ lệ nhân tỉ lệ (`scale: 2` hoặc `scale: 3`) làm sai lệch bounding box của thẻ `<rect rx="3.8">`, dẫn đến việc chỉ có một góc cung tròn bên trái được render (thành hình cong `(`).
+   - Trên Firefox Gecko, bộ phân tích SVG nội suy làm gãy đường bezier của người và chỉ hiển thị một cạnh bên phải của hình vuông (thành hình `|`).
+2. **Co cụm khoảng trắng Firefox trên `.ipad-compat-notice`:**
+   - Thẻ `.ipad-compat-notice` có các `<span>` không nằm trong danh sách selector áp dụng `word-spacing: 0.1px !important; letter-spacing: 0.01px !important;`, dẫn đến việc Firefox loại bỏ khoảng cách giữa `Designed for iPhone` thành `Designedfor iPhone`.
+
+#### Hướng dẫn khắc phục triệt để (Standard Solution)
+1. **Chuyển đổi Icon Developer sang Canvas 2D Rasterizer tương tự `.g-info-ico`:**
+   - Trong `png.js`, xây dựng hàm `rasterizeAppleDevIcon(svg, doc)`:
+     - Khởi tạo canvas kích thước 48x48 pixel với độ phân giải siêu nét (gấp đôi viewBox 24x24).
+     - Dùng trực tiếp bộ API Canvas 2D tiêu chuẩn của trình duyệt để vẽ:
+       - Hình chữ nhật bo góc `ctx.roundRect(7, 7, 34, 34, 7.6)` với `lineWidth = 3.6` và `ctx.stroke()`. Cung cấp hàm polyfill `arcTo` chuẩn cho mọi môi trường không có `roundRect`.
+       - Đầu hình tròn `ctx.arc(24, 19.6, 4.8, 0, Math.PI * 2)` với `ctx.fill()`.
+       - Thân và vai bằng `new Path2D('M6.8 19.2...')` kèm hàm fallback đường cong Bezier kép đối xứng tuyệt đối `ctx.bezierCurveTo()`.
+     - Xuất canvas thành ảnh `data:image/png;base64,...` và thay thế toàn bộ thẻ `<svg>` bằng thẻ `<img>` có kích thước chuẩn `20px × 20px`, `display: block; margin: 0 auto;`.
+   - Chạy bộ chuyển đổi này trên cả `cloneTarget` (trước khi html2canvas sao chép) và trong `onclone(clonedDoc)` (phòng hộ lớp hai).
+2. **Bảo vệ khoảng trắng cho `.ipad-compat-notice`:**
+   - Bổ sung `.ipad-compat-notice, .ipad-compat-notice span` vào quy tắc `word-spacing: 0.1px !important; letter-spacing: 0.01px !important;` trong `btnStyle` và `onclone`.
+
 ---
 
 ## 4. Bảng Tra cứu Nhanh Thông số Viewport & Screenshots

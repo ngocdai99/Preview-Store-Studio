@@ -12823,6 +12823,81 @@ function drawStudioWatermark(cv) {
   ctx.restore();
 }
 
+function drawAppleDevBodyFallback(ctx) {
+  ctx.beginPath();
+  ctx.moveTo(13.6, 38.4);
+  ctx.bezierCurveTo(13.6, 32.8, 18.2, 29.0, 24.0, 29.0);
+  ctx.bezierCurveTo(29.8, 29.0, 34.4, 32.8, 34.4, 38.4);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function rasterizeAppleDevIcon(svg, doc) {
+  try {
+    const win = (doc && doc.defaultView) || window;
+    const comp = win.getComputedStyle(svg);
+    const color = (comp.color && comp.color !== 'currentColor') ? comp.color : ((comp.stroke && comp.stroke !== 'currentColor') ? comp.stroke : '#5a5a5f');
+    const cv = (doc || document).createElement('canvas');
+    cv.width = 48;
+    cv.height = 48;
+    const ctx = cv.getContext('2d');
+    if (!ctx) return null;
+
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 3.6;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // 1. Outer rounded rect (x: 7, y: 7, w: 34, h: 34, r: 7.6)
+    ctx.beginPath();
+    if (typeof ctx.roundRect === 'function') {
+      ctx.roundRect(7, 7, 34, 34, 7.6);
+    } else {
+      const x = 7, y = 7, w = 34, h = 34, r = 7.6;
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+    ctx.stroke();
+
+    // 2. Head circle (cx: 24, cy: 19.6, r: 4.8)
+    ctx.beginPath();
+    ctx.arc(24, 19.6, 4.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 3. Body / shoulder arc
+    if (typeof Path2D !== 'undefined') {
+      try {
+        ctx.save();
+        ctx.scale(2, 2);
+        const p = new Path2D('M6.8 19.2c0-2.8 2.3-4.7 5.2-4.7s5.2 1.9 5.2 4.7z');
+        ctx.fill(p);
+        ctx.restore();
+      } catch (_) {
+        drawAppleDevBodyFallback(ctx);
+      }
+    } else {
+      drawAppleDevBodyFallback(ctx);
+    }
+
+    const img = (doc || document).createElement('img');
+    img.className = ((svg.getAttribute('class') || '') + ' a-met-dev-ico-img').trim();
+    img.src = cv.toDataURL('image/png');
+    img.style.width = '20px';
+    img.style.height = '20px';
+    img.style.display = 'block';
+    img.style.margin = '0 auto';
+    img.style.opacity = comp.opacity || '1';
+    return img;
+  } catch (_) {
+    return null;
+  }
+}
+
 async function exportPNG(scaleFactor = 2, opts = {}){
   if(typeof canDownload === 'function' && !canDownload(1000)) return;
   if(typeof scaleFactor !== 'number') scaleFactor = 3;
@@ -12992,6 +13067,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           svg.replaceWith(img);
         }
       } catch (_) {}
+    });
+
+    // Convert Apple developer metrics icon SVGs to sharp PNG images on cloneTarget to prevent
+    // WebKit/Gecko/Blink SVG image serializer clipping & distortion on html2canvas export
+    cloneTarget.querySelectorAll('.a-met-dev-ico svg, .ipad-met-dev-ico svg').forEach(svg => {
+      const img = rasterizeAppleDevIcon(svg, document);
+      if (img) svg.replaceWith(img);
     });
 
     // Convert tablet search Install button from <button> to <div> on cloneTarget
@@ -13331,7 +13413,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             align-items: center !important;
             width: 100% !important;
           }
-          .a-met-dev-ico svg, .ipad-met-dev-ico svg {
+          .a-met-dev-ico svg, .ipad-met-dev-ico svg,
+          .a-met-dev-ico img, .ipad-met-dev-ico img,
+          .a-met-dev-ico-img {
+            width: 20px !important;
+            height: 20px !important;
+            display: block !important;
             margin: 0 auto !important;
           }
           .a-met b[data-b="dev"] {
@@ -13364,12 +13451,16 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           }
           .ipad-compat-notice {
             display: inline-flex !important;
+            align-items: center !important;
             gap: 5px !important;
             white-space: normal !important;
-            word-spacing: normal !important;
+            word-spacing: 0.1px !important;
+            letter-spacing: 0.01px !important;
           }
           .ipad-compat-notice span {
             white-space: nowrap !important;
+            word-spacing: 0.1px !important;
+            letter-spacing: 0.01px !important;
           }
           /* Horizontal Screenshot Galleries */
           .gal:not(#srchTab7), [data-shots="gal"], [data-shots="ipad-gal"] {
@@ -13850,6 +13941,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             }
             if (child.getAttribute('fill') === 'currentColor') {
               child.setAttribute('fill', compColor);
+            } else if (!child.getAttribute('fill') && svg.getAttribute('fill')) {
+              child.setAttribute('fill', svg.getAttribute('fill'));
             }
             if (!child.getAttribute('stroke-width') && svg.getAttribute('stroke-width')) {
               child.setAttribute('stroke-width', svg.getAttribute('stroke-width'));
@@ -13934,6 +14027,18 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.marginTop = '1.5px';
         });
 
+        // Ensure Apple developer metrics icon SVGs are replaced with sharp PNG images if still SVG in clonedDoc
+        clonedEl.querySelectorAll('.a-met-dev-ico svg, .ipad-met-dev-ico svg').forEach(svg => {
+          const img = rasterizeAppleDevIcon(svg, clonedDoc);
+          if (img) svg.replaceWith(img);
+        });
+
+        // Ensure iPad compatibility notice preserves clean word-spacing in Firefox
+        clonedEl.querySelectorAll('.ipad-compat-notice, .ipad-compat-notice span').forEach(el => {
+          el.style.wordSpacing = '0.1px';
+          el.style.letterSpacing = '0.01px';
+        });
+
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
         // Skip metrics elements and search card titles/subtitles so their strict single-line clamping is never compromised
         clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .g-h, .g-h span, .gt10-sec-title, [data-b]').forEach(el => {
@@ -13976,6 +14081,12 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.justifyContent = 'center';
           el.style.alignItems = 'center';
           el.style.width = '100%';
+        });
+        clonedEl.querySelectorAll('.a-met-dev-ico img, .ipad-met-dev-ico img, .a-met-dev-ico-img').forEach(img => {
+          img.style.width = '20px';
+          img.style.height = '20px';
+          img.style.display = 'block';
+          img.style.margin = '0 auto';
         });
 
         // Enforce vertical centering for Google Play rating star in export

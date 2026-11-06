@@ -128,7 +128,7 @@
 .ipad-met div i{font-weight:400}
 .ipad-met div b{font-size:19px}
 .ipad-met-dev-ico{display:flex;align-items:center;justify-content:center;width:100%;height:20px}
-.ipad-met-dev-ico svg{width:20px;height:20px;stroke:currentColor;color:currentColor;display:block;margin:0 auto}
+.ipad-met-dev-ico svg,.ipad-met-dev-ico img{width:20px;height:20px;stroke:currentColor;color:currentColor;display:block;margin:0 auto}
 
 /* iPad Gallery & Platforms Support */
 .ipad-shots-sec{margin-bottom:20px}

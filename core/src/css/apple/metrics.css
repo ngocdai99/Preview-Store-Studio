@@ -11,4 +11,4 @@
 .a-met b[data-b="dev"]{font-size:11.5px;margin:2px 0 1px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.15;max-height:26px}
 .apple[data-theme=dark] .a-met b{color:#aeaeb2}.a-met i{font-style:normal;font-size:10px;font-weight:400;color:var(--s);display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .a-met-dev-ico{display:flex;align-items:center;justify-content:center;width:100%;height:20px;margin:2px 0 1px}
-.a-met-dev-ico svg{width:20px;height:20px;stroke:currentColor;color:currentColor;display:block;margin:0 auto}
+.a-met-dev-ico svg,.a-met-dev-ico img{width:20px;height:20px;stroke:currentColor;color:currentColor;display:block;margin:0 auto}

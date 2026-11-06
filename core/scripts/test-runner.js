@@ -4581,6 +4581,24 @@ assert(headerCssSrc62.includes('.g-met [data-gmet-rating] .g-star-ico{margin-top
 assert(pngJsSrc62.includes('.g-star-ico') && pngJsSrc62.includes('margin-top: 0 !important;'), 'png.js resets margin-top to 0 on .g-star-ico');
 
 // ---------------------------------------------------------------------
+// [SUITE 63]: Apple iPad Developer Metric Icon & Firefox Whitespace Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 63]: Apple iPad Developer Metric Icon & Firefox Whitespace Verification');
+
+const pngJsSrc63 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
+assert(pngJsSrc63.includes('function rasterizeAppleDevIcon'), 'png.js defines rasterizeAppleDevIcon to render developer icon to sharp PNG canvas');
+assert(pngJsSrc63.includes('function drawAppleDevBodyFallback'), 'png.js provides drawAppleDevBodyFallback for cross-environment canvas rendering');
+assert(pngJsSrc63.includes('.a-met-dev-ico svg, .ipad-met-dev-ico svg'), 'png.js queries Apple developer metric icons across iPhone and iPad');
+assert(pngJsSrc63.includes('.a-met-dev-ico-img'), 'png.js defines .a-met-dev-ico-img for rasterized developer metric image');
+assert(pngJsSrc63.includes('.ipad-compat-notice, .ipad-compat-notice span'), 'png.js protects iPad compatibility notice against Firefox whitespace collapse');
+
+const ipadCssSrc63 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'ipad.css'), 'utf8');
+assert(ipadCssSrc63.includes('.ipad-met-dev-ico svg,.ipad-met-dev-ico img'), 'ipad.css supports both svg and rasterized img for iPad developer icon');
+
+const appleMetricsCssSrc63 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'metrics.css'), 'utf8');
+assert(appleMetricsCssSrc63.includes('.a-met-dev-ico svg,.a-met-dev-ico img'), 'metrics.css supports both svg and rasterized img for iPhone developer icon');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {
