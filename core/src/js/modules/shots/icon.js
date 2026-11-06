@@ -123,7 +123,10 @@ function renderIcons(){
     } else if(i.closest('.phone.apple') || (store === 'apple' && !i.closest('.phone.google'))){
       targetIcon = (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON;
     }
-    i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(targetIcon, i):targetIcon);
+    const nextSrc = (typeof getDisplaySrc==='function'?getDisplaySrc(targetIcon, i):targetIcon);
+    if(i.getAttribute('src') !== nextSrc){
+      i.src = nextSrc;
+    }
   });
   validateAppIcon();
 }

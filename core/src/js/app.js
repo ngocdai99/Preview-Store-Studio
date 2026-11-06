@@ -4102,7 +4102,10 @@ function renderIcons(){
     } else if(i.closest('.phone.apple') || (store === 'apple' && !i.closest('.phone.google'))){
       targetIcon = (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON;
     }
-    i.src=(typeof getDisplaySrc==='function'?getDisplaySrc(targetIcon, i):targetIcon);
+    const nextSrc = (typeof getDisplaySrc==='function'?getDisplaySrc(targetIcon, i):targetIcon);
+    if(i.getAttribute('src') !== nextSrc){
+      i.src = nextSrc;
+    }
   });
   validateAppIcon();
 }
@@ -9851,7 +9854,10 @@ function setStore(s, animate = true, preserveDual = false){
 
       // Sync icon variant according to active store
       let iconChanged = false;
-      if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON){
+      if(typeof restoring !== 'undefined' && restoring){
+        // State restoration in progress: icon state is already explicitly set by applyStateObject.
+        // Do not overwrite or re-sync with preset icons!
+      } else if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON){
         if(s === 'google'){
           if(typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512 && ICON !== CUSTOM_ICON_512){
             ICON = CUSTOM_ICON_512;
@@ -9908,9 +9914,10 @@ function setStore(s, animate = true, preserveDual = false){
         }
       }
 
-      if(iconChanged && typeof renderIcons === 'function'){
+      const isRestoring = typeof restoring !== 'undefined' && restoring;
+      if(!isRestoring && iconChanged && typeof renderIcons === 'function'){
         renderIcons();
-      } else if(typeof validateAppIcon === 'function'){
+      } else if(!isRestoring && typeof validateAppIcon === 'function'){
         validateAppIcon();
       }
 
@@ -9921,7 +9928,7 @@ function setStore(s, animate = true, preserveDual = false){
       }
       if(typeof validateScreenshots === 'function') validateScreenshots();
       if(typeof validateTabletShots === 'function') validateTabletShots();
-      if(typeof renderShots === 'function') renderShots();
+      if(!isRestoring && typeof renderShots === 'function') renderShots();
     if(typeof saveState === 'function') saveState(false);
   };
 
@@ -11036,26 +11043,29 @@ if(btnDraft){
   btnDraft.onclick = () => {
     const ev = window.event;
     if(ev && ev.target && ev.target.closest && ev.target.closest('#msPillResetBtn')) return;
+    const hadDraft = (typeof hasUserDraft === 'function' && hasUserDraft()) || (typeof userDraft !== 'undefined' && !!userDraft);
     if(CURRENT_PRESET_KEY !== 'draft'){
       loadPreset('draft');
     }
-    // Automatically open Card 1 App Identity
-    const card = $('identityCard');
-    if(card){
-      card.classList.remove('collapsed');
-      $$('.card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      const editorEl = document.querySelector('.editor');
-      if(editorEl && typeof editorEl.scrollTo === 'function'){
-        editorEl.scrollTo({ top: 0, behavior: 'smooth' });
+    // Only auto-expand Card 1 App Identity when starting a fresh new draft (+ Your App)
+    if(!hadDraft){
+      const card = $('identityCard');
+      if(card){
+        card.classList.remove('collapsed');
+        $$('.card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        const editorEl = document.querySelector('.editor');
+        if(editorEl && typeof editorEl.scrollTo === 'function'){
+          editorEl.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
+      if(document.body && document.body.classList.contains('sidebar-collapsed')){
+        document.body.classList.remove('sidebar-collapsed');
+        try{ localStorage.setItem('sps_sidebar_collapsed', '0'); }catch(e){}
+      }
+      const nameInput = $('f-name');
+      if(nameInput) nameInput.focus({ preventScroll: true });
     }
-    if(document.body && document.body.classList.contains('sidebar-collapsed')){
-      document.body.classList.remove('sidebar-collapsed');
-      try{ localStorage.setItem('sps_sidebar_collapsed', '0'); }catch(e){}
-    }
-    const nameInput = $('f-name');
-    if(nameInput) nameInput.focus({ preventScroll: true });
   };
 }
 
@@ -11134,6 +11144,37 @@ function sanitizeStateForLocalStorage(state){
 
 function applyStateObject(s){
   if(!s || typeof s !== 'object') return false;
+
+  const targetStore = s.store || store;
+
+  // 1. Restore App Icon state FIRST so no intermediate wrong-icon renders happen
+  if(s.icon1024) CUSTOM_ICON_1024 = s.icon1024;
+  else if(s.iconApple) CUSTOM_ICON_1024 = s.iconApple;
+  else if(s.icon && targetStore === 'apple') CUSTOM_ICON_1024 = s.icon;
+
+  if(s.icon512) CUSTOM_ICON_512 = s.icon512;
+  else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
+  else if(s.icon && targetStore === 'google') CUSTOM_ICON_512 = s.icon;
+
+  if(s.icon){
+    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || s.icon.includes('blueprint')){
+      ICON = BLANK_ICON;
+      IS_CUSTOM_ICON = false;
+      CUSTOM_ICON_1024 = '';
+      CUSTOM_ICON_512 = '';
+    } else {
+      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
+      if(targetStore === 'google' && (CUSTOM_ICON_512 || s.icon512 || s.iconGoogle)){
+        ICON = CUSTOM_ICON_512 || s.icon512 || s.iconGoogle;
+      } else if(targetStore === 'apple' && (CUSTOM_ICON_1024 || s.icon1024 || s.iconApple)){
+        ICON = CUSTOM_ICON_1024 || s.icon1024 || s.iconApple;
+      } else {
+        ICON = s.icon;
+      }
+    }
+  }
+
+  // 2. Set Store and Devices without animation or icon interference
   const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
   if(s.store) setStore(s.store, false, isSavedDual);
   if(s.appleDevice) setAppleDevice(s.appleDevice, false);
@@ -11168,31 +11209,6 @@ function applyStateObject(s){
     }
     if(s.form.new !== undefined && $('f-new')) $('f-new').value = s.form.new;
     if(s.form.desc !== undefined && $('f-desc')) $('f-desc').value = s.form.desc;
-  }
-  if(s.icon1024) CUSTOM_ICON_1024 = s.icon1024;
-  else if(s.iconApple) CUSTOM_ICON_1024 = s.iconApple;
-  else if(s.icon && store === 'apple') CUSTOM_ICON_1024 = s.icon;
-
-  if(s.icon512) CUSTOM_ICON_512 = s.icon512;
-  else if(s.iconGoogle) CUSTOM_ICON_512 = s.iconGoogle;
-  else if(s.icon && store === 'google') CUSTOM_ICON_512 = s.icon;
-
-  if(s.icon){
-    if(s.icon === BLANK_ICON || s.icon.includes('bfd1fd') || s.icon.includes('d2c7fc') || s.icon.includes('c6-bg') || s.icon.includes('bp-bg') || s.icon.includes('blueprint')){
-      ICON = BLANK_ICON;
-      IS_CUSTOM_ICON = false;
-      CUSTOM_ICON_1024 = '';
-      CUSTOM_ICON_512 = '';
-    } else {
-      IS_CUSTOM_ICON = (s.isCustomIcon !== undefined) ? !!s.isCustomIcon : true;
-      if(store === 'google' && (CUSTOM_ICON_512 || s.icon512 || s.iconGoogle)){
-        ICON = CUSTOM_ICON_512 || s.icon512 || s.iconGoogle;
-      } else if(store === 'apple' && (CUSTOM_ICON_1024 || s.icon1024 || s.iconApple)){
-        ICON = CUSTOM_ICON_1024 || s.icon1024 || s.iconApple;
-      } else {
-        ICON = s.icon;
-      }
-    }
   }
   if(s.isCustomFeature !== undefined){
     IS_CUSTOM_FEATURE = !!s.isCustomFeature;
@@ -11569,19 +11585,31 @@ function updateDraftPill(){
       presetPill.style.display = 'inline-flex';
       presetPill.classList.toggle('on', isViewingPreset);
       presetPill.setAttribute('title', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
-      presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
-        '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
-        '<small id="presetBtnBadge">Preset</small>' +
-        '<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</span>';
 
-      const closeBtn = presetPill.querySelector('#presetPillCloseBtn');
-      if(closeBtn){
-        closeBtn.addEventListener('click', function(e){
-          e.stopPropagation();
-          if(typeof closePresetPill === 'function') closePresetPill();
-        });
+      const existingPresetThumb = presetPill.querySelector('#presetBtnThumb');
+      const existingPresetTitle = presetPill.querySelector('#presetBtnTitle');
+      if(existingPresetThumb && existingPresetTitle){
+        if(existingPresetThumb.getAttribute('src') !== pIcon){
+          existingPresetThumb.src = pIcon;
+        }
+        if(existingPresetTitle.textContent !== dispName){
+          existingPresetTitle.textContent = dispName;
+        }
+      } else {
+        presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
+          '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
+          '<small id="presetBtnBadge">Preset</small>' +
+          '<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</span>';
+
+        const closeBtn = presetPill.querySelector('#presetPillCloseBtn');
+        if(closeBtn){
+          closeBtn.addEventListener('click', function(e){
+            e.stopPropagation();
+            if(typeof closePresetPill === 'function') closePresetPill();
+          });
+        }
+
       }
-
     }
   }
 
@@ -11605,43 +11633,58 @@ function updateDraftPill(){
       iconSrc = ICON;
       userDraft.isCustomIcon = true;
       userDraft.icon = ICON;
+    } else if(userDraft.icon && !isLegacyIcon(userDraft.icon)){
+      iconSrc = userDraft.icon;
     } else if(CURRENT_PRESET_KEY === 'draft' && typeof PRESET_ICONS !== 'undefined' && PRESET_ICONS[CURRENT_PRESET_KEY] && CURRENT_PRESET_KEY !== 'none'){
       iconSrc = PRESET_ICONS[CURRENT_PRESET_KEY];
       if(!userDraft.isCustomIcon) userDraft.icon = iconSrc;
-    } else if(userDraft.icon && !isLegacyIcon(userDraft.icon)){
-      iconSrc = userDraft.icon;
     } else if(ICON && !isLegacyIcon(ICON) && CURRENT_PRESET_KEY === 'draft'){
       iconSrc = ICON;
     } else {
-      iconSrc = BLANK_ICON;
-      userDraft.icon = BLANK_ICON;
-      userDraft.isCustomIcon = false;
+      iconSrc = (userDraft.icon && !isLegacyIcon(userDraft.icon)) ? userDraft.icon : BLANK_ICON;
     }
 
     const f = userDraft.form || {};
     const appTitle = (f.name && f.name.trim()) ? (typeof clampGraphemes === 'function' ? clampGraphemes(f.name.trim(), 30) : f.name.trim()) : 'Your App';
 
     draftPill.setAttribute('title', appTitle + (CURRENT_PRESET_KEY === 'draft' ? ' (Active Workspace)' : ' (Saved Draft · Click to Return)'));
-    draftPill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
-      '<span id="draftBtnTitle">' + escapeHtml(appTitle) + '</span>' +
-      '<small id="draftBtnBadge">Draft</small>' +
-      '<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</span>';
 
-    const resetBtn = draftPill.querySelector('#msPillResetBtn');
-    if(resetBtn){
-      resetBtn.addEventListener('click', function(e){
-        e.stopPropagation();
-        showResetConfirmModal(function(){
-          resetDraftWorkspace();
+    const existingDraftThumb = draftPill.querySelector('#draftBtnThumb');
+    const existingDraftTitle = draftPill.querySelector('#draftBtnTitle');
+    if(existingDraftThumb && existingDraftTitle){
+      if(existingDraftThumb.getAttribute('src') !== iconSrc){
+        existingDraftThumb.src = iconSrc;
+      }
+      if(existingDraftTitle.textContent !== appTitle){
+        existingDraftTitle.textContent = appTitle;
+      }
+    } else {
+      draftPill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
+        '<span id="draftBtnTitle">' + escapeHtml(appTitle) + '</span>' +
+        '<small id="draftBtnBadge">Draft</small>' +
+        '<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</span>';
+
+      const resetBtn = draftPill.querySelector('#msPillResetBtn');
+      if(resetBtn){
+        resetBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          showResetConfirmModal(function(){
+            resetDraftWorkspace();
+          });
         });
-      });
+      }
     }
   } else {
     // No draft exists: show "+ Your App" pill on the left of preset pill
     draftPill.style.display = 'inline-flex';
     draftPill.classList.remove('has-draft');
     draftPill.classList.toggle('on', CURRENT_PRESET_KEY === 'draft');
-    draftPill.innerHTML = '<span id="draftBtnTitle">+ Your App</span>';
+    const existingDraftTitle = draftPill.querySelector('#draftBtnTitle');
+    if(existingDraftTitle && !draftPill.querySelector('#draftBtnThumb')){
+      if(existingDraftTitle.textContent !== '+ Your App') existingDraftTitle.textContent = '+ Your App';
+    } else {
+      draftPill.innerHTML = '<span id="draftBtnTitle">+ Your App</span>';
+    }
     draftPill.setAttribute('title', 'Start your custom app draft');
   }
 

@@ -677,7 +677,10 @@ function setStore(s, animate = true, preserveDual = false){
 
       // Sync icon variant according to active store
       let iconChanged = false;
-      if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON){
+      if(typeof restoring !== 'undefined' && restoring){
+        // State restoration in progress: icon state is already explicitly set by applyStateObject.
+        // Do not overwrite or re-sync with preset icons!
+      } else if(typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON){
         if(s === 'google'){
           if(typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512 && ICON !== CUSTOM_ICON_512){
             ICON = CUSTOM_ICON_512;
@@ -734,9 +737,10 @@ function setStore(s, animate = true, preserveDual = false){
         }
       }
 
-      if(iconChanged && typeof renderIcons === 'function'){
+      const isRestoring = typeof restoring !== 'undefined' && restoring;
+      if(!isRestoring && iconChanged && typeof renderIcons === 'function'){
         renderIcons();
-      } else if(typeof validateAppIcon === 'function'){
+      } else if(!isRestoring && typeof validateAppIcon === 'function'){
         validateAppIcon();
       }
 
@@ -747,7 +751,7 @@ function setStore(s, animate = true, preserveDual = false){
       }
       if(typeof validateScreenshots === 'function') validateScreenshots();
       if(typeof validateTabletShots === 'function') validateTabletShots();
-      if(typeof renderShots === 'function') renderShots();
+      if(!isRestoring && typeof renderShots === 'function') renderShots();
     if(typeof saveState === 'function') saveState(false);
   };
 

@@ -414,26 +414,29 @@ if(btnDraft){
   btnDraft.onclick = () => {
     const ev = window.event;
     if(ev && ev.target && ev.target.closest && ev.target.closest('#msPillResetBtn')) return;
+    const hadDraft = (typeof hasUserDraft === 'function' && hasUserDraft()) || (typeof userDraft !== 'undefined' && !!userDraft);
     if(CURRENT_PRESET_KEY !== 'draft'){
       loadPreset('draft');
     }
-    // Automatically open Card 1 App Identity
-    const card = $('identityCard');
-    if(card){
-      card.classList.remove('collapsed');
-      $$('.card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      const editorEl = document.querySelector('.editor');
-      if(editorEl && typeof editorEl.scrollTo === 'function'){
-        editorEl.scrollTo({ top: 0, behavior: 'smooth' });
+    // Only auto-expand Card 1 App Identity when starting a fresh new draft (+ Your App)
+    if(!hadDraft){
+      const card = $('identityCard');
+      if(card){
+        card.classList.remove('collapsed');
+        $$('.card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        const editorEl = document.querySelector('.editor');
+        if(editorEl && typeof editorEl.scrollTo === 'function'){
+          editorEl.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
+      if(document.body && document.body.classList.contains('sidebar-collapsed')){
+        document.body.classList.remove('sidebar-collapsed');
+        try{ localStorage.setItem('sps_sidebar_collapsed', '0'); }catch(e){}
+      }
+      const nameInput = $('f-name');
+      if(nameInput) nameInput.focus({ preventScroll: true });
     }
-    if(document.body && document.body.classList.contains('sidebar-collapsed')){
-      document.body.classList.remove('sidebar-collapsed');
-      try{ localStorage.setItem('sps_sidebar_collapsed', '0'); }catch(e){}
-    }
-    const nameInput = $('f-name');
-    if(nameInput) nameInput.focus({ preventScroll: true });
   };
 }
 
