@@ -1,10 +1,14 @@
 /* Store Preview Studio · Demo Upgrade Paywall Modal & Feature Gating Styles */
 
-/* Demo Mode: Remove close button on preset pill */
+/* Demo Mode: Remove close/reset button on both preset pill and draft pill */
 body.sps-demo-mode #presetPillCloseBtn,
 body.sps-demo-mode #btnPresetPill .ms-pill-reset-btn,
+body.sps-demo-mode #msPillResetBtn,
+body.sps-demo-mode #btnDraft .ms-pill-reset-btn,
 .sps-demo-mode #presetPillCloseBtn,
-.sps-demo-mode #btnPresetPill .ms-pill-reset-btn {
+.sps-demo-mode #btnPresetPill .ms-pill-reset-btn,
+.sps-demo-mode #msPillResetBtn,
+.sps-demo-mode #btnDraft .ms-pill-reset-btn {
   display: none !important;
 }
 

@@ -587,6 +587,11 @@ function updateDraftPill(){
         });
       }
     }
+
+    if(typeof isDemoMode === 'function' && isDemoMode()){
+      const resetBtn = draftPill.querySelector('#msPillResetBtn');
+      if(resetBtn) resetBtn.remove();
+    }
   } else {
     // No draft exists: show "+ Your App" pill on the left of preset pill
     draftPill.style.display = 'inline-flex';

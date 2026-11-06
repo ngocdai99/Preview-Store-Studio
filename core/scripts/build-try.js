@@ -163,8 +163,9 @@ function buildTry() {
     () => `<script>\n${js}\n</script>`
   );
 
-  // Demo Mode: Remove close button on preset pill from static markup
+  // Demo Mode: Remove close/reset buttons on preset pill and draft pill from static markup
   html = html.replace(/<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn"[^>]*>&times;<\/span>/gi, '');
+  html = html.replace(/<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn"[^>]*>&times;<\/span>/gi, '');
 
   // 6. Production Minification
   const minified = minifyHtmlPage(html);

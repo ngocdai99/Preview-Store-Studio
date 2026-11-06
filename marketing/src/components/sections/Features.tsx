@@ -1561,7 +1561,7 @@ function ComplianceCard() {
           </h3>
         </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Pre-flight inspection for icon alpha transparency, 1:1 square ratio, and standard store dimensions (1024×1024 / 512×512).
+          Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels on iOS, or file size limits).
         </p>
 
         {/* Tab Switcher with Sliding Pill (Symmetrical with Card 04) */}

@@ -11678,6 +11678,7 @@ function updateDraftPill(){
         });
       }
     }
+
   } else {
     // No draft exists: show "+ Your App" pill on the left of preset pill
     draftPill.style.display = 'inline-flex';
