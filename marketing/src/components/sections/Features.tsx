@@ -333,10 +333,46 @@ function DeviceFramesCard() {
 // CARD 2: CURATED STORE PRESETS (Interactive Core Presets Stage)
 // ============================================================================
 function StorePresetsCard() {
-  const [activePreset, setActivePreset] = useState<"zenmind" | "pulsefit" | "cyberstrike">("zenmind");
+  const [activePreset, setActivePreset] = useState<"cyberstrike" | "zenmind" | "pulsefit">("cyberstrike");
   const [isFlipping, setIsFlipping] = useState(false);
 
   const presets = {
+    cyberstrike: {
+      name: "CyberStrike: 2088 Cyber RPG",
+      subtitle: "Open-world sci-fi action RPG",
+      category: "Role Playing",
+      rating: "4.8 ★",
+      ratingCount: "145K Ratings",
+      age: "12+",
+      developer: "OmniArcade Games Ltd.",
+      gradient: "from-[#05050b] via-[#1e0b2e] to-[#7928ca]",
+      icon: (
+        <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
+          <defs>
+            <linearGradient id="cbg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#05050b" />
+              <stop offset="40%" stopColor="#0f0e1c" />
+              <stop offset="100%" stopColor="#1e0b2e" />
+            </linearGradient>
+            <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#00f5ff" />
+              <stop offset="100%" stopColor="#0077fe" />
+            </linearGradient>
+            <linearGradient id="neonPink" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#ff007f" />
+              <stop offset="100%" stopColor="#7928ca" />
+            </linearGradient>
+          </defs>
+          <rect width="512" height="512" rx="115" fill="url(#cbg)" />
+          <path d="M40 120 L120 120 L160 160 M472 120 L392 120 L352 160 M40 392 L120 392 L160 352 M472 392 L392 392 L352 352" stroke="#00f5ff" strokeWidth="4" fill="none" opacity="0.3" />
+          <path d="M160 170 L352 170 L382 250 L322 360 L190 360 L130 250 Z" fill="#131422" stroke="url(#neonCyan)" strokeWidth="10" />
+          <polygon points="175,230 337,230 315,268 197,268" fill="url(#neonPink)" />
+          <line x1="160" y1="249" x2="352" y2="249" stroke="#ffffff" strokeWidth="5" />
+          <polygon points="170,165 140,90 200,140" fill="url(#neonPink)" />
+          <polygon points="342,165 372,90 312,140" fill="url(#neonPink)" />
+        </svg>
+      ),
+    },
     zenmind: {
       name: "ZenMind: Meditation & Sleep",
       subtitle: "Guided breathwork & calm sound",
@@ -347,7 +383,7 @@ function StorePresetsCard() {
       developer: "ZenMind Studio",
       gradient: "from-[#05140e] via-[#0c2319] to-[#059669]",
       icon: (
-        <svg viewBox="0 0 512 512" className="w-9 h-9 text-white drop-shadow-sm" fill="none">
+        <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
           <defs>
             <linearGradient id="zmBg" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#05140e" />
@@ -387,7 +423,7 @@ function StorePresetsCard() {
       developer: "PulseFit Health Lab",
       gradient: "from-[#ff6b35] via-[#ea580c] to-[#ffc107]",
       icon: (
-        <svg viewBox="0 0 512 512" className="w-9 h-9 text-white drop-shadow-sm" fill="none">
+        <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
           <defs>
             <linearGradient id="pfitBg" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#080e18" />
@@ -411,45 +447,9 @@ function StorePresetsCard() {
         </svg>
       ),
     },
-    cyberstrike: {
-      name: "CyberStrike: 2088 Cyber RPG",
-      subtitle: "Open-world sci-fi action RPG",
-      category: "Role Playing",
-      rating: "4.8 ★",
-      ratingCount: "145K Ratings",
-      age: "12+",
-      developer: "OmniArcade Games Ltd.",
-      gradient: "from-[#05050b] via-[#1e0b2e] to-[#7928ca]",
-      icon: (
-        <svg viewBox="0 0 512 512" className="w-9 h-9 text-white drop-shadow-sm" fill="none">
-          <defs>
-            <linearGradient id="cbg" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#05050b" />
-              <stop offset="40%" stopColor="#0f0e1c" />
-              <stop offset="100%" stopColor="#1e0b2e" />
-            </linearGradient>
-            <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#00f5ff" />
-              <stop offset="100%" stopColor="#0077fe" />
-            </linearGradient>
-            <linearGradient id="neonPink" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ff007f" />
-              <stop offset="100%" stopColor="#7928ca" />
-            </linearGradient>
-          </defs>
-          <rect width="512" height="512" rx="115" fill="url(#cbg)" />
-          <path d="M40 120 L120 120 L160 160 M472 120 L392 120 L352 160 M40 392 L120 392 L160 352 M472 392 L392 392 L352 352" stroke="#00f5ff" strokeWidth="4" fill="none" opacity="0.3" />
-          <path d="M160 170 L352 170 L382 250 L322 360 L190 360 L130 250 Z" fill="#131422" stroke="url(#neonCyan)" strokeWidth="10" />
-          <polygon points="175,230 337,230 315,268 197,268" fill="url(#neonPink)" />
-          <line x1="160" y1="249" x2="352" y2="249" stroke="#ffffff" strokeWidth="5" />
-          <polygon points="170,165 140,90 200,140" fill="url(#neonPink)" />
-          <polygon points="342,165 372,90 312,140" fill="url(#neonPink)" />
-        </svg>
-      ),
-    },
   };
 
-  const handleSelectPreset = (key: "zenmind" | "pulsefit" | "cyberstrike") => {
+  const handleSelectPreset = (key: "cyberstrike" | "zenmind" | "pulsefit") => {
     if (key === activePreset || isFlipping) return;
     setIsFlipping(true);
 
@@ -479,19 +479,19 @@ function StorePresetsCard() {
             </h3>
           </div>
           <p className="mt-0.5 text-[12.5px] sm:text-[13px] text-slate-600 dark:text-slate-400 max-w-sm leading-normal">
-            Explore sample presets with store metadata and ratings.
+            Explore sample listings across diverse app categories.
           </p>
         </div>
 
-        {/* 3 Preset Switcher Sliding Tabs */}
+        {/* 3 Preset Switcher Sliding Tabs (Domain Categories) */}
         <div className="shrink-0 self-start sm:self-center">
           <SlidingTabs
             value={activePreset}
-            onChange={(val) => handleSelectPreset(val as "zenmind" | "pulsefit" | "cyberstrike")}
+            onChange={(val) => handleSelectPreset(val as "cyberstrike" | "pulsefit" | "zenmind")}
             options={[
-              { value: "zenmind", label: "ZenMind" },
-              { value: "pulsefit", label: "PulseFit" },
-              { value: "cyberstrike", label: "CyberStrike" },
+              { value: "cyberstrike", label: "Games" },
+              { value: "pulsefit", label: "Health Care" },
+              { value: "zenmind", label: "Wellness" },
             ]}
             className="w-[270px] sm:w-[290px]"
             size="sm"
@@ -530,9 +530,7 @@ function StorePresetsCard() {
               {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
               <div className="pb-2">
                 <div className="flex items-start gap-3">
-                  <div
-                    className={`w-[58px] h-[58px] shrink-0 rounded-[15px] bg-gradient-to-br ${current.gradient} flex items-center justify-center text-white shadow-md border border-white/20 transition-all duration-300 overflow-hidden`}
-                  >
+                  <div className="w-[58px] h-[58px] shrink-0 rounded-[15px] shadow-md overflow-hidden border border-white/10 transition-all duration-300">
                     {current.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -567,45 +565,150 @@ function StorePresetsCard() {
               <div className="grid grid-cols-2 gap-2.5 select-none">
                 {activePreset === "zenmind" && (
                   <>
-                    {/* ZenMind Screen 1: Daily Guided Meditation */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#064e3b]/90 via-[#0c2319] to-black border border-emerald-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* ZenMind Screen 1: Mindful Paced Breathing Halo */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#031d15] via-[#082e22] to-black border border-emerald-500/35 relative overflow-hidden transition-all duration-300">
+                      {/* Top Header */}
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-emerald-200">Daily Meditation</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-medium">15 Min Practice</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[8.5px] font-bold text-emerald-200">Mindful Breath</span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        </div>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold">
+                          4-7-8 PACED
+                        </span>
                       </div>
-                      <div className="flex items-center gap-2 my-auto">
-                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center shrink-0 shadow">
-                          <span className="text-[14px]">🧘‍♀️</span>
+
+                      {/* Ethereal Glowing Breathing Halo SVG */}
+                      <div className="relative my-auto flex items-center justify-center">
+                        <svg viewBox="0 0 160 42" className="w-full h-11" preserveAspectRatio="xMidYMid meet">
+                          <defs>
+                            <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
+                              <stop offset="0%" stopColor="#34d399" stopOpacity="0.35" />
+                              <stop offset="60%" stopColor="#059669" stopOpacity="0.1" />
+                              <stop offset="100%" stopColor="#05140e" stopOpacity="0" />
+                            </radialGradient>
+                            <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#a7f3d0" />
+                              <stop offset="100%" stopColor="#059669" />
+                            </linearGradient>
+                          </defs>
+
+                          {/* Atmospheric background glow */}
+                          <ellipse cx="80" cy="21" rx="60" ry="18" fill="url(#haloGrad)" />
+
+                          {/* Concentric Breathing Rings */}
+                          <ellipse cx="80" cy="21" rx="42" ry="16" fill="none" stroke="rgba(52,211,153,0.25)" strokeWidth="1" strokeDasharray="3 3" />
+                          <ellipse cx="80" cy="21" rx="30" ry="12" fill="none" stroke="url(#orbitGrad)" strokeWidth="1.8" />
+                          <ellipse cx="80" cy="21" rx="18" ry="8" fill="rgba(52,211,153,0.15)" stroke="#6ee7b7" strokeWidth="1.2" />
+
+                          {/* Orbiting glowing prana particles */}
+                          <circle cx="106" cy="17" r="2.5" fill="#fde68a" />
+                          <circle cx="106" cy="17" r="4.5" fill="#fde68a" opacity="0.4" />
+                          <circle cx="54" cy="25" r="1.8" fill="#a7f3d0" />
+
+                          {/* Center Text: Rhythm */}
+                          <text x="80" y="21" textAnchor="middle" dominantBaseline="central" fill="#ffffff" fontSize="9" fontWeight="800" fontFamily="monospace">
+                            4s
+                          </text>
+                        </svg>
+
+                        {/* Floating breath state cue */}
+                        <div className="absolute -bottom-1 inset-x-0 text-center">
+                          <span className="text-[6.5px] font-extrabold uppercase tracking-widest text-emerald-300 drop-shadow">
+                            INHALE · EXPAND
+                          </span>
                         </div>
-                        <div className="flex-1 min-w-0 space-y-1">
-                          <div className="text-[7.5px] text-white font-medium truncate">Morning Gratitude &amp; Focus</div>
-                          <div className="text-[6.5px] text-emerald-300/80">Voice: Sarah Jenkins</div>
-                          <div className="flex items-center gap-1 text-[6px] text-slate-400">
-                            <span>08:42</span>
-                            <div className="flex-1 h-1 rounded-full bg-emerald-500/20 overflow-hidden">
-                              <div className="w-[58%] h-full bg-emerald-400 rounded-full" />
-                            </div>
-                            <span>15:00</span>
-                          </div>
-                        </div>
+                      </div>
+
+                      {/* Bottom Footer Note */}
+                      <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
+                        <span className="flex items-center gap-1 text-emerald-400 font-semibold">
+                          🌿 14-Day Calm Streak
+                        </span>
+                        <span className="text-slate-400">Heart coherence: 94%</span>
                       </div>
                     </div>
 
-                    {/* ZenMind Screen 2: 3D Binaural Soundscapes */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#042f2e]/90 via-[#0a1e16] to-black border border-teal-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* ZenMind Screen 2: 3D Binaural Soundscape & Waveform Mixer */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#021f24] via-[#06292b] to-black border border-teal-500/35 relative overflow-hidden transition-all duration-300">
+                      {/* Top Header */}
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-teal-200">3D Soundscapes</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-medium">432 Hz Solfeggio</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[8.5px] font-bold text-teal-200">3D Soundscapes</span>
+                          <span className="text-[6.5px] text-amber-300">🌙</span>
+                        </div>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-mono font-bold">
+                          432 HZ SOLFEGGIO
+                        </span>
                       </div>
-                      <div className="flex items-center gap-2.5 my-auto">
-                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-700 to-emerald-900 flex items-center justify-center shrink-0 shadow">
-                          <span className="text-[14px]">🌧️</span>
+
+                      {/* Harmonic Fluid Sine Waves & Nature Sliders SVG */}
+                      <div className="relative my-auto h-11 w-full">
+                        <svg viewBox="0 0 160 44" className="w-full h-full" preserveAspectRatio="none">
+                          <defs>
+                            <linearGradient id="waveCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.2" />
+                              <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.9" />
+                              <stop offset="100%" stopColor="#a7f3d0" stopOpacity="0.3" />
+                            </linearGradient>
+                            <linearGradient id="waveEmerald" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stopColor="#059669" stopOpacity="0.2" />
+                              <stop offset="50%" stopColor="#34d399" stopOpacity="0.8" />
+                              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.2" />
+                            </linearGradient>
+                          </defs>
+
+                          {/* Crescent Moon in Night Sky */}
+                          <path d="M 148 6 A 6 6 0 0 0 154 12 A 7 7 0 1 1 146 6 Z" fill="#fde68a" opacity="0.9" />
+                          <circle cx="138" cy="8" r="0.8" fill="#ffffff" opacity="0.8" />
+                          <circle cx="128" cy="14" r="0.8" fill="#ffffff" opacity="0.6" />
+
+                          {/* Layer 1: Delta Wave (2.5 Hz) */}
+                          <path
+                            d="M 0 28 C 30 18, 50 36, 80 26 C 110 16, 130 32, 160 22"
+                            fill="none"
+                            stroke="url(#waveEmerald)"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                          />
+
+                          {/* Layer 2: Harmonic Solfeggio Wave */}
+                          <path
+                            d="M 0 20 C 25 32, 55 12, 85 24 C 115 34, 135 14, 160 26"
+                            fill="none"
+                            stroke="url(#waveCyan)"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                          />
+
+                          {/* Layer 3: Rain Ambient Ripples */}
+                          <path
+                            d="M 0 34 C 40 30, 70 38, 110 32 C 135 28, 150 34, 160 30"
+                            fill="none"
+                            stroke="rgba(167,243,208,0.3)"
+                            strokeWidth="1"
+                            strokeDasharray="2 3"
+                          />
+                        </svg>
+
+                        {/* Natural Sound Mix Channels Overlay */}
+                        <div className="absolute bottom-0 inset-x-0 flex items-center justify-between text-[6px] font-mono px-1">
+                          <span className="flex items-center gap-0.5 text-teal-300">
+                            🌧️ Rain 75%
+                          </span>
+                          <span className="flex items-center gap-0.5 text-emerald-300">
+                            🌲 Pines 50%
+                          </span>
+                          <span className="flex items-center gap-0.5 text-cyan-300">
+                            🧠 Delta 2.5Hz
+                          </span>
                         </div>
-                        <div className="flex-1 min-w-0 space-y-0.5">
-                          <div className="text-[7.5px] text-white font-medium">Soft Rain on Skylight (75%)</div>
-                          <div className="text-[6.5px] text-slate-400">Delta Sleep Induction (2.5 Hz)</div>
-                          <div className="text-[6.5px] text-emerald-400 font-semibold">🌙 45m Auto-fade</div>
-                        </div>
+                      </div>
+
+                      {/* Bottom Footer Note */}
+                      <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
+                        <span>Night Rain on Leaves</span>
+                        <span className="text-teal-400 font-semibold">Auto-fade 45m ⏱</span>
                       </div>
                     </div>
                   </>
@@ -613,39 +716,133 @@ function StorePresetsCard() {
 
                 {activePreset === "pulsefit" && (
                   <>
-                    {/* PulseFit Screen 1: Workout & Set Logger */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#431407]/90 via-[#180d09] to-black border border-orange-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* PulseFit Screen 1: Weekly Volume & Hypertrophy Bar Chart */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#2a0e05] via-[#140804] to-black border border-orange-500/30 relative overflow-hidden transition-all duration-300">
+                      {/* Top Header */}
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-orange-200">Set Logger</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-medium">Rest 01:45</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[8.5px] font-bold text-orange-200">Volume Load</span>
+                          <span className="text-[6.5px] text-emerald-400 font-semibold flex items-center gap-0.5">
+                            ↑ 18.4%
+                          </span>
+                        </div>
+                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-mono font-bold">
+                          12,480 KG
+                        </span>
                       </div>
-                      <div className="space-y-1 my-auto">
-                        <div className="text-[7.5px] text-white font-medium flex items-center justify-between">
-                          <span>🏋️ Barbell Bench Press</span>
-                          <span className="text-orange-400 font-bold">Set 3/4</span>
+
+                      {/* 7-Day Vertical Bar Chart */}
+                      <div className="my-auto px-1">
+                        <div className="h-9 flex items-end justify-between gap-1.5">
+                          {[
+                            { day: "M", val: 55, active: false },
+                            { day: "T", val: 78, active: false },
+                            { day: "W", val: 40, active: false },
+                            { day: "T", val: 96, active: true },
+                            { day: "F", val: 82, active: false },
+                            { day: "S", val: 65, active: false },
+                            { day: "S", val: 30, active: false },
+                          ].map((item, i) => (
+                            <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+                              <div
+                                className={`w-full rounded-t-[3px] transition-all duration-300 ${
+                                  item.active
+                                    ? "bg-gradient-to-t from-orange-600 via-amber-400 to-yellow-300 shadow-[0_0_8px_rgba(251,146,60,0.6)]"
+                                    : "bg-gradient-to-t from-orange-950/80 to-orange-500/40 hover:to-orange-400/60"
+                                }`}
+                                style={{ height: `${item.val}%` }}
+                              />
+                            </div>
+                          ))}
                         </div>
-                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[7px]">
-                          <span className="text-slate-300">Active: 100 kg × 8 reps</span>
-                          <span className="text-emerald-400 font-bold">✓ Logged</span>
+                        {/* Day Labels */}
+                        <div className="flex items-center justify-between text-[6px] font-mono text-slate-400 pt-1 border-t border-white/10">
+                          {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+                            <span key={i} className={`flex-1 text-center ${i === 3 ? "text-amber-300 font-bold" : ""}`}>
+                              {d}
+                            </span>
+                          ))}
                         </div>
+                      </div>
+
+                      {/* Bottom Footer Note */}
+                      <div className="flex items-center justify-between text-[6px] text-slate-400">
+                        <span>Progressive Overload</span>
+                        <span className="text-amber-400 font-semibold">Peak: Thursday (Legs)</span>
                       </div>
                     </div>
 
-                    {/* PulseFit Screen 2: Cardiac Metrics */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1e1b4b]/80 via-[#0f172a] to-black border border-amber-500/25 relative overflow-hidden transition-all duration-300">
+                    {/* PulseFit Screen 2: Cardiac Zones & Real-time Waveform Area Chart */}
+                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#17071e] via-[#0d0414] to-black border border-rose-500/30 relative overflow-hidden transition-all duration-300">
+                      {/* Top Header & Zones Pips */}
                       <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-amber-200">Cardiac Metrics</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-medium">Zone 4 (Hard)</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[8.5px] font-bold text-rose-200">Heart Rate Zones</span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                        </div>
+                        {/* Mini 5 Zones Distribution Bar */}
+                        <div className="flex items-center gap-0.5">
+                          <div className="w-2.5 h-1.5 rounded-xs bg-slate-700" title="Z1" />
+                          <div className="w-2.5 h-1.5 rounded-xs bg-blue-500/60" title="Z2" />
+                          <div className="w-3.5 h-1.5 rounded-xs bg-emerald-500/80" title="Z3" />
+                          <div className="w-5 h-1.5 rounded-xs bg-amber-500" title="Z4" />
+                          <div className="w-3 h-1.5 rounded-xs bg-rose-500 font-bold" title="Z5" />
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2.5 my-auto">
-                        <div className="w-9 h-9 rounded-full border-2 border-orange-500/70 flex items-center justify-center shrink-0 shadow-inner">
-                          <span className="text-[8.5px] font-extrabold text-amber-300 font-mono">154</span>
+
+                      {/* Smooth Area Waveform Chart SVG */}
+                      <div className="relative my-auto h-10 w-full overflow-hidden">
+                        <svg viewBox="0 0 160 40" className="w-full h-full" preserveAspectRatio="none">
+                          <defs>
+                            <linearGradient id="hrAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.45" />
+                              <stop offset="60%" stopColor="#fb923c" stopOpacity="0.2" />
+                              <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+                            </linearGradient>
+                            <linearGradient id="hrLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stopColor="#fb923c" />
+                              <stop offset="50%" stopColor="#f43f5e" />
+                              <stop offset="85%" stopColor="#e11d48" />
+                              <stop offset="100%" stopColor="#fb7185" />
+                            </linearGradient>
+                          </defs>
+
+                          {/* Horizontal Threshold Grid Lines */}
+                          <line x1="0" y1="12" x2="160" y2="12" stroke="rgba(255,255,255,0.08)" strokeDasharray="2 3" strokeWidth="0.8" />
+                          <line x1="0" y1="26" x2="160" y2="26" stroke="rgba(255,255,255,0.08)" strokeDasharray="2 3" strokeWidth="0.8" />
+
+                          {/* Gradient Fill under Area Curve */}
+                          <path
+                            d="M 0 35 Q 20 32 35 24 T 70 20 T 100 8 T 130 16 T 160 22 L 160 40 L 0 40 Z"
+                            fill="url(#hrAreaGrad)"
+                          />
+
+                          {/* Main Glowing ECG / HR Curve */}
+                          <path
+                            d="M 0 35 Q 20 32 35 24 T 70 20 T 100 8 T 130 16 T 160 22"
+                            fill="none"
+                            stroke="url(#hrLineGrad)"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+
+                          {/* Peak Pulse Highlight Dot */}
+                          <circle cx="100" cy="8" r="3" fill="#ffffff" />
+                          <circle cx="100" cy="8" r="5" fill="#f43f5e" opacity="0.4" />
+                        </svg>
+
+                        {/* Floating Peak HR Callout Pill */}
+                        <div className="absolute top-0 right-14 transform -translate-y-1">
+                          <span className="px-1 py-0.5 rounded bg-rose-500/90 text-white font-mono text-[6px] font-bold shadow">
+                            168 BPM
+                          </span>
                         </div>
-                        <div className="flex-1 min-w-0 space-y-0.5">
-                          <div className="text-[7.5px] text-white font-medium">BPM · Active Heart Rate</div>
-                          <div className="text-[6.5px] text-orange-300 font-medium">🔥 520 kcal burned</div>
-                          <div className="text-[6.5px] text-cyan-300">⌚ Apple Watch &amp; Wear OS</div>
-                        </div>
+                      </div>
+
+                      {/* Bottom Footer Note */}
+                      <div className="flex items-center justify-between text-[6px] text-slate-400">
+                        <span>Cardio Session: 42 mins</span>
+                        <span className="text-rose-400 font-semibold">Zone 4: 82% of workout</span>
                       </div>
                     </div>
                   </>
@@ -653,44 +850,192 @@ function StorePresetsCard() {
 
                 {activePreset === "cyberstrike" && (
                   <>
-                    {/* CyberStrike Screen 1: Next-Gen Open World */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1e0b2e]/90 via-[#0d071a] to-black border border-cyan-500/30 relative overflow-hidden transition-all duration-300">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-cyan-300 tracking-wider">NEO-SHINJUKU</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono font-bold">2088 RPG</span>
-                      </div>
-                      <div className="my-auto space-y-1">
-                        <div className="text-[7.5px] text-white font-semibold flex items-center justify-between">
-                          <span>⚔️ Legendary Cyber-Blade</span>
-                          <span className="text-cyan-400 font-mono text-[7px]">LVL 75</span>
+                    {/* CyberStrike Screen 1: Open World Action RPG */}
+                    <div className="h-24 rounded-xl relative overflow-hidden bg-[#060714] border border-cyan-500/40 shadow-inner select-none transition-all duration-300">
+                      {/* Atmospheric Cyber Background SVG */}
+                      <svg viewBox="0 0 180 96" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#1e0b36" />
+                            <stop offset="60%" stopColor="#0b081d" />
+                            <stop offset="100%" stopColor="#03040c" />
+                          </linearGradient>
+                          <linearGradient id="neonMoon" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#00f5ff" />
+                            <stop offset="100%" stopColor="#ff007f" />
+                          </linearGradient>
+                        </defs>
+                        <rect width="180" height="96" fill="url(#skyGrad)" />
+
+                        {/* Giant Neon Cyber Moon */}
+                        <circle cx="140" cy="30" r="20" fill="none" stroke="url(#neonMoon)" strokeWidth="2.5" opacity="0.6" />
+                        <circle cx="140" cy="30" r="26" fill="none" stroke="#00f5ff" strokeWidth="0.8" opacity="0.3" strokeDasharray="4 4" />
+
+                        {/* Distant Cyber Skyscraper Silhouettes */}
+                        <path d="M10 52 L25 52 L25 35 L40 35 L40 52 L55 52 L55 28 L72 28 L72 52 L85 52 L85 38 L105 38 L105 52 L125 52 L125 22 L145 22 L145 52 L165 52 L165 35 L175 35 L175 52 Z" fill="#0b0c1c" opacity="0.9" />
+                        {/* Skyscraper window neon lights */}
+                        <rect x="58" y="32" width="2" height="3" fill="#00f5ff" opacity="0.8" />
+                        <rect x="64" y="36" width="2" height="3" fill="#ff007f" opacity="0.8" />
+                        <rect x="128" y="26" width="2" height="4" fill="#00f5ff" opacity="0.9" />
+                        <rect x="136" y="30" width="2" height="4" fill="#ff007f" opacity="0.9" />
+
+                        {/* 3D Perspective Ground Grid (Synthwave Tron grid) */}
+                        <line x1="0" y1="54" x2="180" y2="54" stroke="#00f5ff" strokeWidth="1" opacity="0.7" />
+                        <line x1="0" y1="62" x2="180" y2="62" stroke="#00f5ff" strokeWidth="0.8" opacity="0.5" />
+                        <line x1="0" y1="72" x2="180" y2="72" stroke="#00f5ff" strokeWidth="0.7" opacity="0.35" />
+                        <line x1="0" y1="84" x2="180" y2="84" stroke="#00f5ff" strokeWidth="0.6" opacity="0.2" />
+                        {/* Perspective vanishing grid lines */}
+                        <line x1="90" y1="54" x2="10" y2="96" stroke="#00f5ff" strokeWidth="0.8" opacity="0.4" />
+                        <line x1="90" y1="54" x2="50" y2="96" stroke="#00f5ff" strokeWidth="0.8" opacity="0.4" />
+                        <line x1="90" y1="54" x2="90" y2="96" stroke="#00f5ff" strokeWidth="0.8" opacity="0.4" />
+                        <line x1="90" y1="54" x2="130" y2="96" stroke="#00f5ff" strokeWidth="0.8" opacity="0.4" />
+                        <line x1="90" y1="54" x2="170" y2="96" stroke="#00f5ff" strokeWidth="0.8" opacity="0.4" />
+
+                        {/* Hero Character Silhouette (Standing Cyber Warrior with Glowing Cyan Katana) */}
+                        <g transform="translate(85, 42)">
+                          {/* Glowing Energy Katana Blade */}
+                          <line x1="14" y1="36" x2="28" y2="12" stroke="#00f5ff" strokeWidth="3" strokeLinecap="round" />
+                          <line x1="14" y1="36" x2="28" y2="12" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" />
+                          {/* Warrior Body & Cloak Silhouette */}
+                          <path d="M0 38 L4 20 L2 14 L5 8 L9 8 L12 14 L10 20 L14 38 Z" fill="#04040a" />
+                          {/* Cybernetic glowing eye visor */}
+                          <line x1="6" y1="10" x2="10" y2="10" stroke="#ff007f" strokeWidth="1.5" strokeLinecap="round" />
+                        </g>
+                      </svg>
+
+                      {/* In-Game Mobile HUD Overlays */}
+                      {/* Top Bar: Player Stats & Location */}
+                      <div className="absolute top-1.5 left-2 right-2 flex items-center justify-between text-[6.5px] font-mono">
+                        <div className="flex items-center gap-1 bg-black/60 px-1.5 py-0.5 rounded border border-white/10">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="text-white font-bold">LV.88</span>
+                          <span className="text-cyan-400">NEO-SHINJUKU</span>
                         </div>
-                        <div className="space-y-0.5">
-                          <div className="flex justify-between text-[6px] text-slate-400 font-mono">
-                            <span>HP 4,850 / 5,200</span>
-                            <span className="text-cyan-400">SHIELD 100%</span>
-                          </div>
-                          <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-                            <div className="w-[93%] h-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 rounded-full" />
-                          </div>
+                        <span className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
+                          OPEN WORLD
+                        </span>
+                      </div>
+
+                      {/* Bottom In-Game Controls HUD */}
+                      {/* Virtual Joystick (Bottom Left) */}
+                      <div className="absolute bottom-1.5 left-2 flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full border border-cyan-400/40 bg-black/40 flex items-center justify-center">
+                          <div className="w-2.5 h-2.5 rounded-full bg-cyan-400/60 shadow" />
+                        </div>
+                      </div>
+
+                      {/* Action Ability Buttons (Bottom Right) */}
+                      <div className="absolute bottom-1.5 right-2 flex items-center gap-1">
+                        <div className="w-5 h-5 rounded-full bg-slate-900/80 border border-purple-500/50 flex items-center justify-center text-[7px] text-purple-300 shadow">
+                          💨
+                        </div>
+                        <div className="w-5 h-5 rounded-full bg-slate-900/80 border border-fuchsia-500/60 flex items-center justify-center text-[7px] text-fuchsia-300 shadow">
+                          ⚡
+                        </div>
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 border border-white/60 flex items-center justify-center text-[8px] text-white shadow-lg">
+                          ⚔️
                         </div>
                       </div>
                     </div>
 
-                    {/* CyberStrike Screen 2: High-Speed Combat */}
-                    <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#2a0820]/90 via-[#140612] to-black border border-pink-500/30 relative overflow-hidden transition-all duration-300">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[8.5px] font-bold text-pink-300 tracking-wider">HACK &amp; SLASH</span>
-                        <span className="text-[6.5px] px-1.5 py-0.5 rounded-full bg-pink-500/20 text-pink-300 font-mono font-bold">120 FPS</span>
-                      </div>
-                      <div className="flex items-center gap-2 my-auto">
-                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-pink-600 via-fuchsia-600 to-cyan-500 flex flex-col items-center justify-center shrink-0 shadow text-center p-0.5">
-                          <span className="text-[8px] font-black text-white font-mono leading-none">142</span>
-                          <span className="text-[5px] text-cyan-100 font-bold uppercase">Combo</span>
+                    {/* CyberStrike Screen 2: Boss Battle & Combat Slash */}
+                    <div className="h-24 rounded-xl relative overflow-hidden bg-[#0a0410] border border-pink-500/40 shadow-inner select-none transition-all duration-300">
+                      {/* Atmospheric Combat Arena Background SVG */}
+                      <svg viewBox="0 0 180 96" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id="arenaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#250522" />
+                            <stop offset="50%" stopColor="#0c0414" />
+                            <stop offset="100%" stopColor="#030108" />
+                          </linearGradient>
+                          <linearGradient id="neonSlash" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#00f5ff" />
+                            <stop offset="50%" stopColor="#ff007f" />
+                            <stop offset="100%" stopColor="#ffffff" />
+                          </linearGradient>
+                        </defs>
+                        <rect width="180" height="96" fill="url(#arenaGrad)" />
+
+                        {/* Ominous Giant Mech Boss Silhouette on Right */}
+                        <g transform="translate(130, 20)">
+                          <polygon points="10,42 35,25 45,68 5,68" fill="#14061a" opacity="0.9" />
+                          <polygon points="15,25 30,12 38,28" fill="#1b0825" />
+                          {/* Glowing Crimson Evil Eye */}
+                          <circle cx="24" cy="22" r="3.5" fill="#ff0055" />
+                          <circle cx="24" cy="22" r="1.5" fill="#ffffff" />
+                        </g>
+
+                        {/* GIANT COMBAT SLASH ARC (Dynamic Sword Trail cutting across screen) */}
+                        <path
+                          d="M 18 85 Q 85 18 160 36"
+                          fill="none"
+                          stroke="url(#neonSlash)"
+                          strokeWidth="5"
+                          strokeLinecap="round"
+                          opacity="0.95"
+                        />
+                        <path
+                          d="M 22 83 Q 85 20 155 35"
+                          fill="none"
+                          stroke="#ffffff"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+
+                        {/* Exploding Hit Sparks & Impact Bursts */}
+                        <g transform="translate(120, 34)">
+                          <line x1="0" y1="-8" x2="0" y2="8" stroke="#00f5ff" strokeWidth="2" />
+                          <line x1="-8" y1="0" x2="8" y2="0" stroke="#00f5ff" strokeWidth="2" />
+                          <line x1="-6" y1="-6" x2="6" y2="6" stroke="#ff007f" strokeWidth="2" />
+                          <line x1="-6" y1="6" x2="6" y2="-6" stroke="#ff007f" strokeWidth="2" />
+                          <circle cx="0" cy="0" r="3" fill="#ffffff" />
+                        </g>
+
+                        {/* Second smaller slash trail */}
+                        <path
+                          d="M 45 28 Q 95 62 145 72"
+                          fill="none"
+                          stroke="#00f5ff"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          opacity="0.7"
+                        />
+                      </svg>
+
+                      {/* Boss Health Bar (Top Center) */}
+                      <div className="absolute top-1.5 inset-x-3 flex flex-col gap-0.5">
+                        <div className="flex items-center justify-between text-[6.5px] font-mono font-bold">
+                          <span className="text-rose-400 flex items-center gap-1">
+                            <span>💀</span> BOSS: TITAN-DREADNOUGHT
+                          </span>
+                          <span className="text-slate-400 text-[6px]">PHASE 2</span>
                         </div>
-                        <div className="flex-1 min-w-0 space-y-0.5">
-                          <div className="text-[7.5px] text-cyan-300 font-mono font-extrabold truncate">CRITICAL STRIKE! +380%</div>
-                          <div className="text-[6.5px] text-slate-300 font-mono">CRIT 98,420 DMG</div>
-                          <div className="text-[6.5px] text-fuchsia-400 font-bold">⚡ PARRY! Fluid Aerial Combo</div>
+                        {/* Segmented Boss HP bar */}
+                        <div className="w-full h-1.5 rounded-full bg-slate-900 border border-rose-500/40 p-[1px] flex gap-0.5 overflow-hidden">
+                          <div className="w-[45%] h-full bg-gradient-to-r from-rose-500 to-amber-500 rounded-full" />
+                          <div className="w-[30%] h-full bg-gradient-to-r from-amber-500 to-rose-600 rounded-full" />
+                        </div>
+                      </div>
+
+                      {/* Combat Floating Damage Text & Combo Badge */}
+                      <div className="absolute top-7 left-3">
+                        <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-fuchsia-600/30 border border-fuchsia-500/50">
+                          <span className="text-[9.5px] font-black text-white font-mono leading-none">142</span>
+                          <span className="text-[5.5px] text-fuchsia-200 font-extrabold uppercase tracking-wider">COMBO</span>
+                        </div>
+                      </div>
+
+                      {/* Big Dramatic Critical Hit Text */}
+                      <div className="absolute bottom-2.5 left-9 transform -rotate-6">
+                        <div className="text-[11px] font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-pink-400 to-yellow-300 drop-shadow-[0_2px_8px_rgba(255,0,127,0.8)] font-mono leading-none">
+                          CRIT 98,420!
+                        </div>
+                      </div>
+
+                      {/* Parry / Perfect Evade Badge (Bottom Right) */}
+                      <div className="absolute bottom-2 right-2.5">
+                        <div className="px-1.5 py-0.5 rounded bg-cyan-500/30 border border-cyan-400 text-cyan-300 text-[7px] font-mono font-black tracking-wide shadow-lg">
+                          ⚡ PARRY!
                         </div>
                       </div>
                     </div>

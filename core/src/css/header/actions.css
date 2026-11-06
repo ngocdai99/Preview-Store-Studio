@@ -313,7 +313,7 @@
   background: #D5D8D6 !important;
 }
 
-/* ---------- WORKSPACE PILL TOP ACCENT LINES (GREEN FOR DRAFT, PURPLE FOR PRESET) ---------- */
+/* ---------- WORKSPACE PILL TOP ACCENT LINES (PURPLE FOR SELECTED PILL) ---------- */
 #btnDraft,
 #btnPresetPill {
   position: relative;
@@ -335,25 +335,15 @@
   height: 2px;
   pointer-events: none;
   z-index: 2;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Brand primary top-edge accent line for Draft */
-#btnDraft::before {
-  background: linear-gradient(90deg, var(--brand-primary, #006636) 0%, var(--brand-primary, #006636) 35%, rgba(0, 102, 54, 0.45) 65%, transparent 100%);
-}
-
-/* Purple top-edge accent line for Preset */
-#btnPresetPill::before {
-  background: linear-gradient(90deg, #c084fc 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
-}
-
-/* Selected state (.on on dark UI): brand primary contrast */
-#btnDraft.on::before {
-  background: linear-gradient(90deg, var(--brand-primary, #006636) 0%, var(--brand-primary, #006636) 35%, rgba(0, 102, 54, 0.45) 65%, transparent 100%);
-}
-
+/* Luminous purple top-edge accent line: Marks SELECTED pill (.on) */
+#btnDraft.on::before,
 #btnPresetPill.on::before {
-  background: linear-gradient(90deg, #9333ea 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
+  opacity: 1;
+  background: linear-gradient(90deg, #c084fc 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
 }
 
 .ms-pill.custom.has-draft img,
@@ -541,9 +531,9 @@
 :root[data-ui=light] .ms-pill.custom.on small,
 :root[data-ui=light] .ms-pill.custom.has-draft.on small,
 :root[data-ui=light] .ms-pill.on small {
-  color: var(--brand-primary, #006636) !important;
-  background: rgba(0, 102, 54, 0.08) !important;
-  border: 1px solid rgba(0, 102, 54, 0.18) !important;
+  color: #7e22ce !important;
+  background: rgba(168, 85, 247, 0.08) !important;
+  border: 1px solid rgba(168, 85, 247, 0.2) !important;
   font-weight: 500 !important;
   text-transform: none !important;
 }
@@ -570,12 +560,15 @@
   color: #0f172a !important;
 }
 
-/* Light mode top accent lines */
-:root[data-ui=light] #btnDraft::before {
-  background: linear-gradient(90deg, var(--brand-primary, #006636) 0%, var(--brand-primary, #006636) 35%, rgba(0, 102, 54, 0.45) 65%, transparent 100%);
+/* Light mode top accent lines (Active only on SELECTED pill) */
+:root[data-ui=light] #btnDraft::before,
+:root[data-ui=light] #btnPresetPill::before {
+  opacity: 0;
 }
 
-:root[data-ui=light] #btnPresetPill::before {
+:root[data-ui=light] #btnDraft.on::before,
+:root[data-ui=light] #btnPresetPill.on::before {
+  opacity: 1;
   background: linear-gradient(90deg, #9333ea 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
 }
 
