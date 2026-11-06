@@ -1567,11 +1567,11 @@ function ComplianceCard() {
             03
           </span>
           <h3 className="text-[16px] sm:text-[17px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Smart Size &amp; Compliance QA
+            Smart Guidelines &amp; Asset Check
           </h3>
         </div>
         <p className="mt-2 text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">
-          Automatically scans for invalid aspect ratios and illegal iOS app icon transparency (ITMS-90717).
+          Automatically checks screenshot aspect ratios and detects transparent icon backgrounds before upload.
         </p>
 
         {/* Interactive Scanner Box */}
@@ -1594,16 +1594,16 @@ function ComplianceCard() {
               <div className="text-[12px] font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                 {flattened ? (
                   <span className="text-emerald-500 flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" /> No Alpha Found
+                    <Check className="w-3.5 h-3.5" /> Solid Background Verified
                   </span>
                 ) : (
                   <span className="text-amber-500 flex items-center gap-1">
-                    <AlertTriangle className="w-3.5 h-3.5" /> Alpha Detected &lt;250
+                    <AlertTriangle className="w-3.5 h-3.5" /> Transparent Background Detected
                   </span>
                 )}
               </div>
               <div className="text-[10.5px] text-slate-500 mt-0.5">
-                {flattened ? "Export-ready RGB icon preview" : "Transparency notice: ITMS-90717"}
+                {flattened ? "Non-transparent background verified" : "App Store requires a solid, non-transparent icon"}
               </div>
             </div>
           </div>
@@ -1617,12 +1617,12 @@ function ComplianceCard() {
             {flattened ? (
               <>
                 <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
-                <span>Re-test Alpha Warning</span>
+                <span>Re-test Transparent Warning</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>1-Click Auto-Flatten</span>
+                <span>1-Click Fill Solid Background</span>
               </>
             )}
           </button>
