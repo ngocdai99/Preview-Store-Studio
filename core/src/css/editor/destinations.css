@@ -45,9 +45,9 @@
   background:rgba(255,255,255,0.06);
 }
 .dest-tile.active{
-  border-color:#0a84ff;
-  background:rgba(10,132,255,0.08);
-  box-shadow:0 0 12px rgba(10,132,255,0.15);
+  border-color:var(--line);
+  background:rgba(255,255,255,0.04);
+  box-shadow:none;
 }
 .dest-tile.locked{
   cursor:default;
@@ -184,7 +184,7 @@
 :root[data-ui=light] .dest-badge.universal{background:rgba(10,132,255,0.12);color:#0071e3;border-color:rgba(10,132,255,0.25)}
 :root[data-ui=light] .dest-tile{background:#fff;border-color:rgba(0,0,0,0.1)}
 :root[data-ui=light] .dest-tile:hover:not(.locked){background:#f8fafc;border-color:rgba(0,0,0,0.2)}
-:root[data-ui=light] .dest-tile.active{background:rgba(10,132,255,0.06);border-color:#0a84ff}
+:root[data-ui=light] .dest-tile.active{background:#fff;border-color:rgba(0,0,0,0.1);box-shadow:none}
 :root[data-ui=light] .dest-desc-bar{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
 :root[data-ui=light] .dest-desc-bar.active-universal{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
 :root[data-ui=light] .dest-desc-bar strong{color:#0f172a}
