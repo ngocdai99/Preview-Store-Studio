@@ -12787,7 +12787,16 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             width: 11px !important;
             height: 11px !important;
             flex-shrink: 0 !important;
-            margin-top: -1.5px !important;
+            margin-top: 0.5px !important;
+          }
+          .g-info-ico {
+            display: inline-block !important;
+            vertical-align: middle !important;
+            width: 10px !important;
+            height: 10px !important;
+            flex-shrink: 0 !important;
+            margin-left: 3px !important;
+            margin-top: 2px !important;
           }
           .gp-stat-rating {
             display: inline-flex !important;
@@ -13423,10 +13432,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Ensure tooltip info icon retains clean margin and baseline alignment in html2canvas
         clonedEl.querySelectorAll('.g-info-ico').forEach(el => {
           el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
           el.style.width = '10px';
           el.style.height = '10px';
           el.style.marginLeft = '3px';
-          el.style.verticalAlign = '-2px';
+          el.style.marginTop = '2px';
         });
 
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
@@ -13479,7 +13489,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.width = '11px';
           el.style.height = '11px';
           el.style.flexShrink = '0';
-          el.style.marginTop = '-1.5px';
+          el.style.marginTop = '0.5px';
         });
 
         // Enforce vertical centering for Google Play search card rating star in export

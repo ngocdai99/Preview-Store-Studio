@@ -14891,7 +14891,16 @@ vertical-align: middle !important;
 width: 11px !important;
 height: 11px !important;
 flex-shrink: 0 !important;
-margin-top: -1.5px !important;
+margin-top: 0.5px !important;
+}
+.g-info-ico {
+display: inline-block !important;
+vertical-align: middle !important;
+width: 10px !important;
+height: 10px !important;
+flex-shrink: 0 !important;
+margin-left: 3px !important;
+margin-top: 2px !important;
 }
 .gp-stat-rating {
 display: inline-flex !important;
@@ -15495,10 +15504,11 @@ el.style.padding = '0';
 });
 clonedEl.querySelectorAll('.g-info-ico').forEach(el => {
 el.style.display = 'inline-block';
+el.style.verticalAlign = 'middle';
 el.style.width = '10px';
 el.style.height = '10px';
 el.style.marginLeft = '3px';
-el.style.verticalAlign = '-2px';
+el.style.marginTop = '2px';
 });
 clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
 if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-meta')) return;
@@ -15540,7 +15550,7 @@ el.style.verticalAlign = 'middle';
 el.style.width = '11px';
 el.style.height = '11px';
 el.style.flexShrink = '0';
-el.style.marginTop = '-1.5px';
+el.style.marginTop = '0.5px';
 });
 clonedEl.querySelectorAll('.gp-stat-rating').forEach(el => {
 el.style.display = 'inline-flex';
