@@ -12843,7 +12843,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 9.5px !important;
             display: inline-block !important;
             vertical-align: middle !important;
-            margin-top: 0 !important;
+            margin-top: 2px !important;
             flex-shrink: 0 !important;
           }
           .dev.gtab .gt7-app-stats [data-stat="size"],
@@ -13533,7 +13533,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.verticalAlign = 'middle';
           el.style.width = '9.5px';
           el.style.height = '9.5px';
-          el.style.marginTop = '0';
+          el.style.marginTop = '2px';
           el.style.flexShrink = '0';
         });
         clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats [data-stat="size"], .dev.gtab .gt10-item-stats [data-stat="size"]').forEach(el => {
