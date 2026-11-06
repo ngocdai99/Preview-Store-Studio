@@ -684,7 +684,7 @@ assert(googleHeaderCss.includes('.g-met [data-gmet-rating] b{display:inline-flex
 
 const googleSearchCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'search.css'), 'utf8');
 assert(googleSearchCss.includes('.gp-search-action-btn') && googleSearchCss.includes('width: 24px;') && googleSearchCss.includes('height: 32px;') && googleSearchCss.includes('border-radius: 12px;'), 'Search result arrow button container is styled as a compact vertical ellipse');
-assert(googleSearchCss.includes('.gp-stat-rating') && googleSearchCss.includes('.gp-star-ico') && googleSearchCss.includes('color: var(--s);') && googleSearchCss.includes('margin-top: 1.5px;'), 'Search result rating text uses muted gray and is aligned with stats row');
+assert(googleSearchCss.includes('.gp-stat-rating') && googleSearchCss.includes('.gp-star-ico') && googleSearchCss.includes('color: var(--s);') && googleSearchCss.includes('margin-top: 0;'), 'Search result rating text uses muted gray and is aligned with stats row');
 
 const pngExportJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
 assert(pngExportJs.includes('const padY = opts.frameless ? 0 : 8;'), 'png.js includes padY for top/bottom button preservation during export');

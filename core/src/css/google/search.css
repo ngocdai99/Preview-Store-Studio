@@ -241,7 +241,8 @@
   gap: 8px;
   font-size: 11.5px;
   color: var(--s);
-  margin-top: 4px;
+  margin-top: 2.5px;
+  line-height: 1;
 }
 
 .gp-stat-rating {
@@ -250,7 +251,7 @@
   gap: 2.5px;
   color: var(--s);
   line-height: 1;
-  margin-top: 1.5px;
+  margin-top: 0;
 }
 
 .gp-stat-rating [data-stat="rating"] {
@@ -263,15 +264,21 @@
   height: 9.5px;
   fill: currentColor;
   display: inline-block;
-  vertical-align: middle;
   flex-shrink: 0;
-  margin-top: -1.5px;
+  transform: translateY(-0.75px);
+}
+
+.gp-stat-size {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .gp-stat-dl {
   display: inline-flex;
   align-items: center;
   gap: 3px;
+  line-height: 1;
 }
 
 .gp-dl-ico {

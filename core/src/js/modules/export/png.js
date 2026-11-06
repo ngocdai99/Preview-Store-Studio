@@ -560,7 +560,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             gap: 2.5px !important;
             line-height: 1 !important;
             color: var(--s) !important;
-            margin-top: 1.5px !important;
+            margin-top: 0 !important;
           }
           .gp-stat-rating [data-stat="rating"] {
             line-height: 1 !important;
@@ -570,8 +570,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             width: 9.5px !important;
             height: 9.5px !important;
             display: inline-block !important;
-            vertical-align: middle !important;
-            margin-top: 1.5px !important;
+            transform: translateY(-0.75px) !important;
             flex-shrink: 0 !important;
           }
           .gp-search-card-meta {
@@ -1313,7 +1312,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.gap = '2.5px';
           el.style.lineHeight = '1';
           el.style.color = 'var(--s)';
-          el.style.marginTop = '1.5px';
+          el.style.marginTop = '0';
         });
         clonedEl.querySelectorAll('.gp-stat-rating [data-stat="rating"]').forEach(el => {
           el.style.display = 'inline-block';
@@ -1321,10 +1320,9 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
         clonedEl.querySelectorAll('.gp-star-ico').forEach(el => {
           el.style.display = 'inline-block';
-          el.style.verticalAlign = 'middle';
           el.style.width = '9.5px';
           el.style.height = '9.5px';
-          el.style.marginTop = '1.5px';
+          el.style.transform = 'translateY(-0.75px)';
           el.style.flexShrink = '0';
         });
         clonedEl.querySelectorAll('.gp-search-card-meta').forEach(el => {
