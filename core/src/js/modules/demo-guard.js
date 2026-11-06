@@ -829,11 +829,17 @@ function initDemoGuard() {
       }, true);
     }
 
-    // 8. Gated "+ Your App" Custom Draft Button (Clickable, intercepted with toast)
+    // 8. Gated "+ Your App" Custom Draft Button (Intercept ONLY "+ Your App", allow viewing existing draft)
     const btnDraft = $('btnDraft');
     if (btnDraft) {
       btnDraft.addEventListener('click', e => {
         if (e.target.closest('#msPillResetBtn')) return;
+        // If user already has an active or saved draft (e.g. via ?appid=... or store import), allow viewing their draft
+        const hasDraft = (typeof hasUserDraft === 'function' && hasUserDraft()) ||
+                         (typeof userDraft !== 'undefined' && !!userDraft) ||
+                         btnDraft.classList.contains('has-draft');
+        if (hasDraft) return;
+
         e.preventDefault();
         e.stopImmediatePropagation();
         requireFullVersion('custom-draft');

@@ -7450,6 +7450,10 @@ const btnDraft = $('btnDraft');
 if (btnDraft) {
 btnDraft.addEventListener('click', e => {
 if (e.target.closest('#msPillResetBtn')) return;
+const hasDraft = (typeof hasUserDraft === 'function' && hasUserDraft()) ||
+(typeof userDraft !== 'undefined' && !!userDraft) ||
+btnDraft.classList.contains('has-draft');
+if (hasDraft) return;
 e.preventDefault();
 e.stopImmediatePropagation();
 requireFullVersion('custom-draft');
