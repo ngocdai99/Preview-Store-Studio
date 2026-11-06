@@ -150,68 +150,83 @@ function DeviceFramesCard() {
 
                 {/* Screenshot Carousel (Vibrant App Store Showcase) */}
                 <div className="flex gap-2 overflow-hidden px-0.5 pb-1 select-none">
-                  {/* Screen 1: Realtime Preview */}
-                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-indigo-950 via-[#131422] to-black border border-indigo-500/20 shadow-inner relative overflow-hidden">
-                    <div className="absolute -top-3 -right-3 w-10 h-10 bg-indigo-500/20 rounded-full blur-sm" />
-                    <div>
-                      <div className="text-[7.5px] font-bold text-indigo-300 tracking-tight leading-none">Instant Preview</div>
-                      <div className="text-[6px] text-slate-400 mt-0.5">Live store canvas</div>
+                  {/* Screen 1: Realtime Preview Studio */}
+                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-[#120f30] via-[#090b1e] to-black border border-indigo-500/35 shadow-inner relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[7px] font-bold text-indigo-300 font-mono tracking-tight">CANVAS 4K</span>
+                      <span className="text-[5.5px] px-1 py-0.2 rounded bg-indigo-500/25 text-indigo-200 font-semibold">ULTRA-HD</span>
                     </div>
-                    {/* Mini Phone Graphic */}
-                    <div className="my-auto w-10 h-11 mx-auto rounded-[6px] border border-indigo-400/40 bg-indigo-950/60 p-0.5 flex flex-col justify-between shadow-sm">
+
+                    {/* Realistic Mini Phone Bezel with Art Preview */}
+                    <div className="my-auto w-11 h-12 mx-auto rounded-[7px] border border-indigo-400/50 bg-[#0d0e1c] p-0.5 flex flex-col justify-between shadow-lg relative">
                       <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
-                      <div className="w-full h-6 rounded-[3px] bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-[6px] font-bold text-white">4K</span>
+                      <div className="w-full h-8 rounded-[4px] bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 p-1 flex flex-col justify-between overflow-hidden relative">
+                        <div className="text-[5px] font-extrabold text-white leading-none">Music Pro</div>
+                        <div className="flex items-center gap-0.5 h-2">
+                          {[30, 70, 50, 90, 60, 80, 45].map((h, i) => (
+                            <div key={i} className="flex-1 bg-white/80 rounded-full" style={{ height: `${h}%` }} />
+                          ))}
+                        </div>
                       </div>
                       <div className="w-4 h-0.5 rounded-full bg-white/30 mx-auto" />
                     </div>
-                    <div className="text-[6.5px] text-center font-medium text-indigo-200/90 bg-indigo-900/40 py-0.5 rounded-[3px]">
-                      Ultra-HD
+
+                    <div className="text-[6px] text-center font-semibold text-indigo-200/90 bg-indigo-900/40 py-0.5 rounded-[3px] border border-indigo-500/20">
+                      Realistic Bezels
                     </div>
                   </div>
 
-                  {/* Screen 2: Multi-Device */}
-                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-emerald-950 via-[#0e1f18] to-black border border-emerald-500/20 shadow-inner relative overflow-hidden">
-                    <div className="absolute -top-3 -right-3 w-10 h-10 bg-emerald-500/20 rounded-full blur-sm" />
-                    <div>
-                      <div className="text-[7.5px] font-bold text-emerald-300 tracking-tight leading-none">All Formats</div>
-                      <div className="text-[6px] text-slate-400 mt-0.5">Phone &amp; tablet</div>
+                  {/* Screen 2: Responsive Multi-Device */}
+                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-[#051f18] via-[#061713] to-black border border-emerald-500/35 shadow-inner relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[7px] font-bold text-emerald-300 font-mono tracking-tight">DEVICES</span>
+                      <span className="text-[5.5px] px-1 py-0.2 rounded bg-emerald-500/25 text-emerald-200 font-semibold">ALL SIZES</span>
                     </div>
-                    {/* Mini Devices Graphic */}
+
+                    {/* Duo Device Staging */}
                     <div className="my-auto flex items-end justify-center gap-1">
-                      <div className="w-6 h-9 rounded-[4px] border border-emerald-400/40 bg-emerald-950/60 p-0.5 flex flex-col justify-between">
+                      {/* Phone */}
+                      <div className="w-6 h-10 rounded-[5px] border border-emerald-400/50 bg-[#071612] p-0.5 flex flex-col justify-between shadow">
                         <div className="w-2 h-0.5 rounded-full bg-white/40 mx-auto" />
-                        <div className="w-full h-5 rounded-[2px] bg-gradient-to-br from-emerald-500 to-teal-600" />
+                        <div className="w-full h-6 rounded-[2px] bg-gradient-to-br from-emerald-500 to-teal-600 p-0.5">
+                          <div className="w-2.5 h-1 rounded-xs bg-white/60" />
+                        </div>
                       </div>
-                      <div className="w-8 h-11 rounded-[5px] border border-emerald-400/40 bg-emerald-950/60 p-0.5 flex flex-col justify-between">
+                      {/* Tablet */}
+                      <div className="w-8 h-12 rounded-[6px] border border-teal-400/50 bg-[#081a16] p-0.5 flex flex-col justify-between shadow">
                         <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
-                        <div className="w-full h-7 rounded-[3px] bg-gradient-to-br from-teal-500 to-cyan-600" />
+                        <div className="w-full h-8 rounded-[3px] bg-gradient-to-br from-teal-500 to-cyan-600 p-0.5">
+                          <div className="w-3.5 h-1.5 rounded-xs bg-white/60" />
+                        </div>
                       </div>
                     </div>
-                    <div className="text-[6.5px] text-center font-medium text-emerald-200/90 bg-emerald-900/40 py-0.5 rounded-[3px]">
-                      Adaptive
+
+                    <div className="text-[6px] text-center font-semibold text-emerald-200/90 bg-emerald-900/40 py-0.5 rounded-[3px] border border-emerald-500/20">
+                      Phone &amp; Tablet
                     </div>
                   </div>
 
-                  {/* Screen 3: 1-Click Export */}
-                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-purple-950 via-[#1b1227] to-black border border-purple-500/20 shadow-inner relative overflow-hidden">
-                    <div className="absolute -top-3 -right-3 w-10 h-10 bg-purple-500/20 rounded-full blur-sm" />
-                    <div>
-                      <div className="text-[7.5px] font-bold text-purple-300 tracking-tight leading-none">ZIP &amp; Handoff</div>
-                      <div className="text-[6px] text-slate-400 mt-0.5">Developer ready</div>
+                  {/* Screen 3: ASO Pre-Flight Audit */}
+                  <div className="w-20 h-24 rounded-[10px] p-1.5 flex flex-col justify-between shrink-0 bg-gradient-to-b from-[#230925] via-[#130615] to-black border border-fuchsia-500/35 shadow-inner relative overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[7px] font-bold text-fuchsia-300 font-mono tracking-tight">PRE-FLIGHT</span>
+                      <span className="text-[5.5px] px-1 py-0.2 rounded bg-fuchsia-500/25 text-fuchsia-200 font-semibold">100% OK</span>
                     </div>
-                    {/* Mini Package Graphic */}
-                    <div className="my-auto text-center">
-                      <div className="w-8 h-8 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center shadow-sm">
-                        <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
+
+                    {/* Store Audit Inspector Checklist */}
+                    <div className="my-auto space-y-1 px-0.5">
+                      <div className="flex items-center justify-between text-[6px] px-1 py-0.5 rounded bg-white/5 border border-white/5">
+                        <span className="text-slate-300 truncate">Title Limit</span>
+                        <span className="text-emerald-400 font-bold">20/30 ✓</span>
+                      </div>
+                      <div className="flex items-center justify-between text-[6px] px-1 py-0.5 rounded bg-white/5 border border-white/5">
+                        <span className="text-slate-300 truncate">Icon Opaque</span>
+                        <span className="text-cyan-400 font-bold">1024 ✓</span>
                       </div>
                     </div>
-                    <div className="text-[6.5px] text-center font-medium text-purple-200/90 bg-purple-900/40 py-0.5 rounded-[3px]">
-                      1-Click ZIP
+
+                    <div className="text-[6px] text-center font-semibold text-fuchsia-200/90 bg-fuchsia-900/40 py-0.5 rounded-[3px] border border-fuchsia-500/20">
+                      1-Click Export
                     </div>
                   </div>
                 </div>
@@ -276,45 +291,94 @@ function DeviceFramesCard() {
                 {/* Tablet Screenshot Gallery (Vibrant Mini App Screens) */}
                 <div className="grid grid-cols-2 gap-2.5 select-none">
                   {/* Screen 1: Canvas Studio */}
-                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-indigo-950/80 via-[#141527] to-black border border-indigo-500/25 relative overflow-hidden">
+                  {/* Screen 1: Dual-Store Live Studio Canvas */}
+                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#0c0a24] via-[#080918] to-black border border-indigo-500/35 relative overflow-hidden">
                     <div className="flex items-center justify-between">
-                      <span className="text-[8.5px] font-bold text-indigo-300">Live Stage Canvas</span>
-                      <span className="text-[7px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-semibold">4K Retina</span>
-                    </div>
-                    <div className="flex items-center gap-2 my-auto">
-                      <div className="w-10 h-11 rounded-[6px] border border-indigo-400/40 bg-indigo-950 p-0.5 flex flex-col justify-between shadow">
-                        <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
-                        <div className="w-full h-7 rounded-[3px] bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" />
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[8.5px] font-bold text-indigo-200">Dual-Store Canvas</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
                       </div>
-                      <div className="flex-1 space-y-1">
-                        <div className="text-[7.5px] text-white font-medium">Framed &amp; Frameless</div>
-                        <div className="text-[6.5px] text-slate-400">Realistic bezels &amp; metrics</div>
-                        <div className="w-full h-1 rounded-full bg-indigo-500/30 overflow-hidden">
-                          <div className="w-3/4 h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full" />
+                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-300 font-mono font-bold">
+                        3x RETINA · 4K
+                      </span>
+                    </div>
+
+                    {/* Center Studio Mockup Preview with Side-by-Side Frames */}
+                    <div className="flex items-center justify-between gap-3 my-auto px-1">
+                      {/* Left: Mini Phone Stage */}
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-7 h-11 rounded-[5px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
+                          <div className="w-2 h-0.5 rounded-full bg-white/40 mx-auto" />
+                          <div className="w-full h-7 rounded-[2px] bg-gradient-to-br from-indigo-500 via-purple-600 to-rose-500" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <div className="text-[7px] text-white font-bold leading-none">Phone Preview</div>
+                          <div className="text-[6px] text-slate-400">1179 × 2556 px</div>
+                          <div className="text-[6px] text-emerald-400 font-semibold">Framed &amp; Screen-Only</div>
+                        </div>
+                      </div>
+
+                      {/* Right: Mini Tablet Stage */}
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-10 h-11 rounded-[6px] border border-indigo-400/60 bg-[#0a0b1c] p-0.5 flex flex-col justify-between shadow">
+                          <div className="w-3 h-0.5 rounded-full bg-white/40 mx-auto" />
+                          <div className="w-full h-7 rounded-[3px] bg-gradient-to-br from-purple-500 to-indigo-600" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <div className="text-[7px] text-white font-bold leading-none">Tablet Preview</div>
+                          <div className="text-[6px] text-slate-400">2048 × 2732 px</div>
+                          <div className="text-[6px] text-indigo-300 font-semibold">Native App Ratio</div>
                         </div>
                       </div>
                     </div>
+
+                    <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span>Live Stage Canvas</span>
+                      <span className="text-indigo-400 font-semibold">Simultaneous Dual-Store Viewports</span>
+                    </div>
                   </div>
 
-                  {/* Screen 2: Export Package */}
-                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-purple-950/80 via-[#1b1328] to-black border border-purple-500/25 relative overflow-hidden">
+                  {/* Screen 2: Pre-Flight ASO Compliance & 1-Click Package */}
+                  <div className="h-24 rounded-xl p-2.5 flex flex-col justify-between bg-gradient-to-br from-[#1a0822] via-[#0e0514] to-black border border-purple-500/35 relative overflow-hidden">
                     <div className="flex items-center justify-between">
-                      <span className="text-[8.5px] font-bold text-purple-300">Handoff Deliverables</span>
-                      <span className="text-[7px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-semibold">ZIP + MD</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[8.5px] font-bold text-purple-200">Pre-Flight Compliance</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      </div>
+                      <span className="text-[6.5px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
+                        100% PASSED ✓
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2.5 my-auto">
-                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center shrink-0 shadow">
-                        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
+
+                    {/* Split View: Left Audit Specs, Right Export ZIP Badge */}
+                    <div className="flex items-center justify-between gap-2.5 my-auto px-1">
+                      {/* Left: Audit Specs */}
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
+                          <span className="text-slate-300">App Title: 20/30 Chars</span>
+                          <span className="text-emerald-400 font-bold">Valid ✓</span>
+                        </div>
+                        <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[6.5px]">
+                          <span className="text-slate-300">Master Icon 1024 (Opaque)</span>
+                          <span className="text-cyan-400 font-bold">Compliant ✓</span>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0 space-y-0.5">
-                        <div className="text-[7.5px] text-white font-mono font-bold truncate">store-bundle.zip</div>
-                        <div className="text-[6.5px] text-slate-400">PNGs, screens &amp; metadata</div>
-                        <div className="text-[6.5px] text-emerald-400 font-semibold">✓ Ready to submit</div>
+
+                      {/* Right: Export Bundle Badge */}
+                      <div className="w-20 rounded-lg p-1.5 bg-purple-950/60 border border-purple-500/30 flex flex-col justify-between text-center">
+                        <span className="text-[7px] text-white font-mono font-bold truncate">store-bundle.zip</span>
+                        <div className="flex justify-center gap-1 my-0.5">
+                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">PNG</span>
+                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">ZIP</span>
+                          <span className="text-[5.5px] px-1 rounded bg-purple-500/40 text-purple-200 font-bold">MD</span>
+                        </div>
+                        <span className="text-[6px] text-emerald-400 font-bold">1-Click Export</span>
                       </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[6px] text-slate-400 pt-0.5 border-t border-white/10">
+                      <span>In-Browser Privacy</span>
+                      <span className="text-purple-400 font-semibold">Stored locally in your browser</span>
                     </div>
                   </div>
                 </div>
