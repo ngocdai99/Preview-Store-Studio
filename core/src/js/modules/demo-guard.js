@@ -708,46 +708,77 @@ function initDemoGuard() {
       }
     });
 
-    // 6. Gated Metadata Input Fields (Disable inputs & intercept clicks without spamming Buy badges)
+    // 6. Gated Metadata Input Fields (Readonly lock with live focus-link yellow border)
     const lockedFieldIds = ['f-name', 'f-sub', 'f-dev', 'f-short', 'f-promo', 'f-new', 'f-desc'];
+    const lockedFieldKeys = {
+      'f-name': 'name',
+      'f-sub': 'sub',
+      'f-dev': 'dev',
+      'f-short': 'short',
+      'f-promo': 'promo',
+      'f-new': 'new',
+      'f-desc': 'desc'
+    };
+
     lockedFieldIds.forEach(id => {
+      const fieldKey = lockedFieldKeys[id];
       const el = $(id);
       if (el) {
-        el.disabled = true;
-        el.classList.add('demo-disabled-input');
+        el.readOnly = true;
+        el.classList.add('demo-locked-input', 'demo-disabled-input');
         el.setAttribute('title', 'Editable in Plus & Pro Edition');
         
+        const triggerPaywallAndHighlight = () => {
+          if (typeof setFieldFocus === 'function') {
+            setFieldFocus(fieldKey, true);
+          }
+          requireFullVersion('edit-metadata');
+        };
+
+        el.addEventListener('click', () => {
+          triggerPaywallAndHighlight();
+        });
+
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Tab') return;
+          e.preventDefault();
+          triggerPaywallAndHighlight();
+        });
+
+        el.addEventListener('paste', (e) => {
+          e.preventDefault();
+          triggerPaywallAndHighlight();
+        });
+
+        // Also allow clicking the parent .fg label/wrapper to trigger highlight & paywall
         const fg = el.closest('.fg');
         if (fg) {
           fg.style.cursor = 'pointer';
           fg.addEventListener('click', e => {
-            // Allow info tip buttons inside the label row to open their guidelines
-            if (e.target.closest('.info-tip-btn, .tag')) return;
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            requireFullVersion('edit-metadata');
-          }, true);
+            if (e.target.closest('.info-tip-btn, .tag, input, textarea')) return;
+            triggerPaywallAndHighlight();
+          });
         }
       }
     });
 
-    // 7. Gated App Icon Upload (Disable upload button & intercept icon slot clicks)
+    // 7. Gated App Icon Upload (Intercept uploads while maintaining icon yellow highlight)
+    const triggerIconPaywallAndHighlight = () => {
+      if (typeof setFieldFocus === 'function') {
+        setFieldFocus('icon', true);
+      }
+      requireFullVersion('upload-icon');
+    };
+
     const icoUpBtn = $('icoUp');
     if (icoUpBtn) {
-      icoUpBtn.disabled = true;
       icoUpBtn.classList.add('disabled', 'demo-disabled-btn');
       icoUpBtn.setAttribute('title', 'Custom app icon upload is included in Plus & Pro Edition');
-      const icoUpParent = icoUpBtn.parentElement;
-      if (icoUpParent) {
-        icoUpParent.addEventListener('click', e => {
-          if (e.target.closest('#icoInspect, .info-tip-btn')) return;
-          if (e.target.closest('#icoUp')) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            requireFullVersion('upload-icon');
-          }
-        }, true);
-      }
+      icoUpBtn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        triggerIconPaywallAndHighlight();
+      }, true);
     }
 
     const icoDropZone = $('icoDropZone');
@@ -758,7 +789,7 @@ function initDemoGuard() {
         if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        requireFullVersion('upload-icon');
+        triggerIconPaywallAndHighlight();
       }, true);
 
       icoDropZone.addEventListener('dragover', e => {
@@ -773,7 +804,7 @@ function initDemoGuard() {
         if (files && files.length > 0) {
           e.preventDefault();
           e.stopImmediatePropagation();
-          requireFullVersion('upload-icon');
+          triggerIconPaywallAndHighlight();
         }
       }, true);
     }
@@ -785,7 +816,7 @@ function initDemoGuard() {
         e.preventDefault();
         e.stopImmediatePropagation();
         icoFile.value = '';
-        requireFullVersion('upload-icon');
+        triggerIconPaywallAndHighlight();
       }, true);
     }
   }

@@ -259,7 +259,7 @@ function DeviceFramesCard() {
                     Mockup Studio Pro
                   </p>
 
-                  <div className="mt-1">
+                  <div className="mt-0">
                     <button
                       type="button"
                       className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
@@ -534,10 +534,10 @@ function DeviceFramesCard() {
                   <div className="text-[12px] font-bold leading-tight text-white truncate">
                     Store Preview Studio
                   </div>
-                  <div className="text-[10px] text-slate-400 truncate">
+                  <div className="text-[10px] leading-tight text-slate-400 truncate">
                     Mockup Studio Pro
                   </div>
-                  <div className="mt-1">
+                  <div className="mt-0">
                     <button
                       type="button"
                       className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
@@ -988,10 +988,10 @@ function StorePresetsCard() {
                 <div className="text-[12px] font-bold leading-tight text-white truncate transition-all duration-200">
                   {current.name}
                 </div>
-                <div className="text-[10px] text-slate-400 truncate transition-all duration-200">
+                <div className="text-[10px] leading-tight text-slate-400 truncate transition-all duration-200">
                   {current.subtitle}
                 </div>
-                <div className="mt-1">
+                <div className="mt-0">
                   <button
                     type="button"
                     className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
