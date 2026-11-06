@@ -18,6 +18,26 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   box-shadow:0 0 0 1.5px #0b0b0d,0 35px 75px -15px rgba(0,0,0,.9),0 15px 32px -8px rgba(0,0,0,.6),inset 0 0 0 2px rgba(255,255,255,.08);
 }
 .dev.gtab::before,.dev.gtab::after{display:none}
+.dev.gtab.portrait::before{
+  display:block;content:'';position:absolute;left:auto;top:-5px;right:55px;width:48px;height:5px;border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg,#565860 0%,#36383e 55%,#1d1e22 100%);
+  box-shadow:0 0 0 1px #0b0b0d;
+}
+.dev.gtab.portrait::after{
+  display:block;content:'';position:absolute;left:auto;right:-5px;top:48px;width:5px;height:32px;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#1d1e22 0%,#36383e 45%,#565860 100%);
+  box-shadow:0 0 0 1px #0b0b0d,0 42px 0 0 #36383e,0 42px 0 1px #0b0b0d;
+}
+.dev.gtab:not(.portrait)::before{
+  display:block;content:'';position:absolute;top:48px;left:-5px;width:5px;height:48px;border-radius:3px 0 0 3px;
+  background:linear-gradient(90deg,#565860 0%,#36383e 55%,#1d1e22 100%);
+  box-shadow:0 0 0 1px #0b0b0d;
+}
+.dev.gtab:not(.portrait)::after{
+  display:block;content:'';position:absolute;top:-5px;left:55px;width:34px;height:5px;border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg,#565860 0%,#36383e 55%,#1d1e22 100%);
+  box-shadow:0 0 0 1px #0b0b0d,44px 0 0 0 #36383e,44px 0 0 1px #0b0b0d;
+}
 .dev.gtab7{--sw:768px;--sh:480px;--gh:175px}
 .dev.gtab7.portrait{--sw:480px;--sh:768px;--gh:270px}
 .dev.gtab10{--sw:1024px;--sh:640px;--gh:240px;--pad:18px}

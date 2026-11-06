@@ -667,6 +667,11 @@ assert(classifyIpadScreenshotRatio(1000, 1500) === 'NON_IPAD_RATIO', 'Non-standa
 // ---------------------------------------------------------------------
 console.log('\n[SUITE 9]: iPad Pro 13" Pure Preview & Validation (No Risky Resize)');
 
+const ipadFrameCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'ipad.css'), 'utf8');
+assert(ipadFrameCss.includes('.dev.ipad::before{') && ipadFrameCss.includes('top:-5px;right:65px'), 'iPad frame places Top Button (Power) on top edge near right corner');
+assert(ipadFrameCss.includes('.dev.ipad::after{') && ipadFrameCss.includes('right:-5px;top:55px') && ipadFrameCss.includes('0 44px 0'), 'iPad frame places two Volume Buttons on right edge near top camera corner');
+assert(!ipadFrameCss.includes('left:-5px'), 'iPad frame has no buttons on the left edge');
+
 assert(!bundledHtml.includes('id="btnGenIpadFromPhone"'), 'Risky #btnGenIpadFromPhone button is removed from editor');
 assert(!bundledHtml.includes('id="f-ipad-fit-mode"'), 'Risky #f-ipad-fit-mode dropdown selector is removed from editor');
 assert(!bundledHtml.includes('btnFitIpad_'), 'Risky row-level Fit button is removed from iPad list');
