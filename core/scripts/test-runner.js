@@ -4450,7 +4450,7 @@ assert(syncJsSrc58.includes(".stage [data-apple-priv-wrap] .pc"), 'sync.js targe
 assert(focusLinkCssSrc58.includes('[data-apple-priv-wrap].hl-target,') && focusLinkCssSrc58.includes('[data-apple-priv-wrap] .pc.hl-target'), 'focus-link.css provides 16px rounded gold outline for Apple privacy cards');
 assert(bundledHtml.includes('id="privacyModeSeg"') && bundledHtml.includes('id="privBtnNone"') && bundledHtml.includes('id="privBtnCollected"'), 'bundledHtml includes privacy mode tabview controls');
 assert(!privacyCardHtmlSrc58.includes('pcb-action') && !privacyCardHtmlSrc58.includes('Inspect &rarr;'), 'privacy-card.html removes heavy inspect button');
-assert(privacyCardHtmlSrc58.includes('id="privacyStatusLabel"') && privacyCardHtmlSrc58.includes('class="pcb-sub"'), 'privacy-card.html preserves clean profile title and description text');
+assert(!privacyCardHtmlSrc58.includes('pcb-title') && privacyCardHtmlSrc58.includes('class="pcb-sub"'), 'privacy-card.html preserves clean description text and removes redundant profile title');
 assert(panelCssSrc58.includes('.privacy-compact-box {') && panelCssSrc58.includes('background: transparent !important'), 'panel.css styles privacy info text cleanly without outer card background or border');
 
 console.log('\n[SUITE 59]: iPad Destination Toggle Device Mockup Reflection Verification');
