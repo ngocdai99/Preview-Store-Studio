@@ -592,24 +592,53 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             flex: 0 0 328px !important;
           }
 
-          .ipad-sr-media, [data-shots="ipad-shots"] {
+          .ipad-sr-media, [data-shots="ipad-shots"], .ipad-sr-skel-shots {
             display: grid !important;
             grid-template-columns: 1fr 1fr !important;
             gap: 8px !important;
             width: 100% !important;
+            box-sizing: border-box !important;
           }
-          .ipad-sr-media.has-landscape, [data-shots="ipad-shots"].has-landscape {
+          .ipad-sr-media.has-landscape, [data-shots="ipad-shots"].has-landscape,
+          .ipad-search-view.has-landscape .ipad-sr-skel-shots,
+          .ipad-search-view:has(.has-landscape) .ipad-sr-skel-shots {
             grid-template-columns: 1fr !important;
           }
-          .ipad-sr-media img, [data-shots="ipad-shots"] img {
-            width: 166px !important;
-            height: 221px !important;
+          .dev.ipad:not(.landscape) .ipad-sr-media img,
+          .dev.ipad:not(.landscape) [data-shots="ipad-shots"] img,
+          .dev.ipad:not(.landscape) .ipad-skel-shot {
+            width: 152px !important;
+            height: 203px !important;
+            max-width: 152px !important;
             border-radius: 10px !important;
             object-fit: cover !important;
+            display: block !important;
+            box-sizing: border-box !important;
           }
-          .ipad-sr-media img.landscape-shot, [data-shots="ipad-shots"] img.landscape-shot {
-            width: 340px !important;
-            height: 255px !important;
+          .dev.ipad:not(.landscape) .ipad-sr-media img.landscape-shot,
+          .dev.ipad:not(.landscape) [data-shots="ipad-shots"] img.landscape-shot,
+          .dev.ipad:not(.landscape) .ipad-search-view.has-landscape .ipad-skel-shot {
+            width: 312px !important;
+            height: 234px !important;
+            max-width: 312px !important;
+          }
+          .dev.ipad.landscape .ipad-sr-media img,
+          .dev.ipad.landscape [data-shots="ipad-shots"] img,
+          .dev.ipad.landscape .ipad-skel-shot {
+            width: 209px !important;
+            height: 279px !important;
+            max-width: 209px !important;
+            border-radius: 10px !important;
+            object-fit: cover !important;
+            display: block !important;
+            box-sizing: border-box !important;
+          }
+          .dev.ipad.landscape .ipad-sr-media img.landscape-shot,
+          .dev.ipad.landscape [data-shots="ipad-shots"] img.landscape-shot,
+          .dev.ipad.landscape .ipad-search-view.has-landscape .ipad-skel-shot {
+            width: 427px !important;
+            height: 320px !important;
+            max-width: 427px !important;
           }
           .dev.gtab10 #galTab10 img {
             height: 240px !important;
@@ -813,10 +842,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
               img.style.flex = `0 0 ${w}px`;
               img.style.borderRadius = '10px';
             } else if (isIpadSearch) {
-              const w = isShotLandscape ? 340 : 166;
-              const h = isShotLandscape ? 255 : 221;
+              const w = isDevLandscape
+                ? (isShotLandscape ? 427 : 209)
+                : (isShotLandscape ? 312 : 152);
+              const h = isDevLandscape
+                ? (isShotLandscape ? 320 : 279)
+                : (isShotLandscape ? 234 : 203);
               img.style.setProperty('width', w + 'px', 'important');
               img.style.setProperty('height', h + 'px', 'important');
+              img.style.setProperty('max-width', w + 'px', 'important');
               img.style.borderRadius = '10px';
             }
             return;
