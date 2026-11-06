@@ -108,11 +108,12 @@
 .ipad-compat-notice span{white-space:nowrap}
 .ipad-compat-dot{font-size:9px;opacity:.7;display:inline-block;line-height:1}
 .ipad-actions{margin-top:10px}
-.ipad-get{padding:7px 26px;font-size:14.5px;font-weight:700;border-radius:24px;background:var(--bl);color:#fff;border:0;cursor:pointer}
+.ipad-get{padding:7px 26px;font-size:14.5px;font-weight:400;border-radius:24px;background:var(--bl);color:#fff;border:0;cursor:pointer}
 
 /* iPad Metrics Ribbon */
 .ipad-met{margin-bottom:24px;padding:14px 0;border-top:0.5px solid var(--sp);border-bottom:0.5px solid var(--sp)}
-.ipad-met div small{font-size:10px}
+.ipad-met div small{font-size:10px;font-weight:400}
+.ipad-met div i{font-weight:400}
 .ipad-met div b{font-size:19px}
 .ipad-met-dev-ico{display:inline-flex;align-items:center;justify-content:center}
 .ipad-met-dev-ico svg{width:20px;height:20px;stroke:var(--t)}
@@ -200,7 +201,7 @@
   font-size:13.5px;font-weight:400;color:var(--t);letter-spacing:-0.1px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:250px;
 }
-.ipad-floating-get{padding:6px 20px;font-size:13px;font-weight:700;border-radius:999px;flex-shrink:0}
+.ipad-floating-get{padding:6px 20px;font-size:13px;font-weight:400;border-radius:999px;flex-shrink:0}
 
 /* Full Width Detail Sections on iPad */
 .phone.ipad .sec{margin-bottom:28px;padding-bottom:24px;border-bottom:0.5px solid var(--sp)}
@@ -400,7 +401,7 @@ button.get.ipad-sr-get-btn {
   background: var(--cd);
   color: var(--bl);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
   border: 0;
   cursor: pointer;
   text-transform: uppercase;

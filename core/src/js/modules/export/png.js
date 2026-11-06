@@ -497,9 +497,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             font-size: 11.5px !important;
           }
           .a-met i, .a-met small, .ipad-met i, .ipad-met small {
+            font-weight: 400 !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
+          }
+          .get, .ipad-get, .sr-get-btn, .ipad-sr-get-btn, .ipad-floating-get, .a-nav-get {
+            font-weight: 400 !important;
           }
           .g-name, .a-name, .g-dev, .ipad-name, .ipad-sub {
             display: block !important;
@@ -1006,6 +1010,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.maxHeight = '26px';
           el.style.whiteSpace = 'normal';
           el.style.lineHeight = '1.15';
+        });
+
+        // Enforce font-weight 400 for GET buttons and metrics labels (small & i) in export
+        clonedEl.querySelectorAll('.get, .ipad-get, .sr-get-btn, .ipad-sr-get-btn, .ipad-floating-get, .a-nav-get, .a-met small, .a-met i, .ipad-met small, .ipad-met i').forEach(el => {
+          el.style.fontWeight = '400';
         });
 
         // Strip focus highlight from export capture

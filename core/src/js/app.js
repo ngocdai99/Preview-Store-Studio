@@ -1062,7 +1062,20 @@ const GOOGLE_AGE_MAP = {
 };
 
 function renderStats(){
-  $$('[data-stat]').forEach(e => { e.textContent = STATS[e.dataset.stat] || ''; });
+  $$('[data-stat]').forEach(e => {
+    if (e.dataset.stat !== 'size-num' && e.dataset.stat !== 'size-unit') {
+      e.textContent = STATS[e.dataset.stat] || '';
+    }
+  });
+
+  // Parse Size into numeric value and unit for iPad metrics ribbon (e.g. "116.3" and "MB")
+  const sizeRaw = (STATS.size || '86.4 MB').trim();
+  const sizeMatch = sizeRaw.match(/^([\d.,]+)\s*([a-zA-Z]+)?$/);
+  const sizeNum = sizeMatch ? sizeMatch[1] : sizeRaw.replace(/\s*[a-zA-Z]+$/, '');
+  const sizeUnit = (sizeMatch && sizeMatch[2]) ? sizeMatch[2].toUpperCase() : (sizeRaw.match(/[a-zA-Z]+/)?.[0] || 'MB');
+  $$('[data-stat="size-num"]').forEach(e => { e.textContent = sizeNum || '86.4'; });
+  $$('[data-stat="size-unit"]').forEach(e => { e.textContent = sizeUnit || 'MB'; });
+
   const ageVal = STATS.age || '4+';
   const gAge = GOOGLE_AGE_MAP[ageVal] || { badge: ageVal, label: 'Rated for ' + ageVal };
   $$('[data-age-apple]').forEach(e => { e.textContent = ageVal; });
@@ -8746,8 +8759,8 @@ function getFieldMockupTargets(key) {
     }
     case 'size':
     case 'st-size': {
-      const raw = $$('.stage [data-stat="size"]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, [data-gmet-size] b, [data-gmet-size], .gt10-met-item small, .gt10-met-dl-size, .ipad-info-val, .a-info b') || el)));
+      const raw = $$('.stage [data-stat="size"], .stage [data-stat="size-num"]');
+      return Array.from(new Set(raw.map(el => el.closest('.a-met b, .ipad-metrics b, .ipad-met b, [data-gmet-size] b, [data-gmet-size], .gt10-met-item small, .gt10-met-dl-size, .ipad-info-val, .a-info b') || el)));
     }
     case 'age':
     case 'st-age': {
@@ -12784,9 +12797,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             font-size: 11.5px !important;
           }
           .a-met i, .a-met small, .ipad-met i, .ipad-met small {
+            font-weight: 400 !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
+          }
+          .get, .ipad-get, .sr-get-btn, .ipad-sr-get-btn, .ipad-floating-get, .a-nav-get {
+            font-weight: 400 !important;
           }
           .g-name, .a-name, .g-dev, .ipad-name, .ipad-sub {
             display: block !important;
@@ -13293,6 +13310,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.maxHeight = '26px';
           el.style.whiteSpace = 'normal';
           el.style.lineHeight = '1.15';
+        });
+
+        // Enforce font-weight 400 for GET buttons and metrics labels (small & i) in export
+        clonedEl.querySelectorAll('.get, .ipad-get, .sr-get-btn, .ipad-sr-get-btn, .ipad-floating-get, .a-nav-get, .a-met small, .a-met i, .ipad-met small, .ipad-met i').forEach(el => {
+          el.style.fontWeight = '400';
         });
 
         // Strip focus highlight from export capture

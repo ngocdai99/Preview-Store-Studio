@@ -28,7 +28,20 @@ const GOOGLE_AGE_MAP = {
 };
 
 function renderStats(){
-  $$('[data-stat]').forEach(e => { e.textContent = STATS[e.dataset.stat] || ''; });
+  $$('[data-stat]').forEach(e => {
+    if (e.dataset.stat !== 'size-num' && e.dataset.stat !== 'size-unit') {
+      e.textContent = STATS[e.dataset.stat] || '';
+    }
+  });
+
+  // Parse Size into numeric value and unit for iPad metrics ribbon (e.g. "116.3" and "MB")
+  const sizeRaw = (STATS.size || '86.4 MB').trim();
+  const sizeMatch = sizeRaw.match(/^([\d.,]+)\s*([a-zA-Z]+)?$/);
+  const sizeNum = sizeMatch ? sizeMatch[1] : sizeRaw.replace(/\s*[a-zA-Z]+$/, '');
+  const sizeUnit = (sizeMatch && sizeMatch[2]) ? sizeMatch[2].toUpperCase() : (sizeRaw.match(/[a-zA-Z]+/)?.[0] || 'MB');
+  $$('[data-stat="size-num"]').forEach(e => { e.textContent = sizeNum || '86.4'; });
+  $$('[data-stat="size-unit"]').forEach(e => { e.textContent = sizeUnit || 'MB'; });
+
   const ageVal = STATS.age || '4+';
   const gAge = GOOGLE_AGE_MAP[ageVal] || { badge: ageVal, label: 'Rated for ' + ageVal };
   $$('[data-age-apple]').forEach(e => { e.textContent = ageVal; });

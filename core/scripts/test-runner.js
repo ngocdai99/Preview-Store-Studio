@@ -510,6 +510,12 @@ assert(iosCss.includes('scrollbar-width:none'), '.a-met scrollbar is hidden');
 assert(iosCss.includes('flex:0 0 33.333333%'), '.a-met item width is flex:0 0 33.333333% (exactly 3 items on phone viewport)');
 assert(iosCss.includes('.phone.apple:not(.ipad) .a-met > div{') && iosCss.includes('height:48px;max-height:48px'), '.a-met items have fixed 48px height to prevent vertical padding stretch');
 assert(iosCss.includes('.a-met b[data-b="dev"]{') && iosCss.includes('-webkit-line-clamp:2') && iosCss.includes('max-height:26px'), '.a-met developer item is clamped to 2 lines (max 26px) so long names do not expand ribbon');
+assert(iosCss.includes('.a-met small{') && iosCss.includes('font-weight:400'), '.a-met small labels use font-weight 400');
+assert(iosCss.includes('.a-met i{') && iosCss.includes('font-weight:400'), '.a-met i sub-labels use font-weight 400');
+assert(iosCss.includes('.get{') && iosCss.includes('font-weight:400'), '.get button uses font-weight 400');
+
+const ipadMetricsHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'ipad-metrics.html'), 'utf8');
+assert(ipadMetricsHtml.includes('data-stat="size-num"') && ipadMetricsHtml.includes('data-stat="size-unit"') && ipadMetricsHtml.includes('>MB</i>'), 'iPad metrics ribbon displays SIZE with value and MB unit instead of iPadOS');
 
 const themeJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'theme.js'), 'utf8');
 assert(themeJs.includes('.a-met'), 'Drag-to-scroll handler is attached to .a-met');
@@ -518,6 +524,8 @@ const pngJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'expor
 assert(pngJs.includes('[data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b])'), 'png.js scopes [data-b] to exclude metrics ribbons from line clamp unsetting');
 assert(pngJs.includes('.phone.apple:not(.ipad) .a-met > div') && pngJs.includes('height: 48px !important'), 'png.js enforces 48px height on phone apple metrics items during export');
 assert(pngJs.includes('.a-met b[data-b="dev"]') && pngJs.includes('-webkit-line-clamp: 2 !important'), 'png.js enforces 2-line clamp on metrics developer element in export');
+assert(pngJs.includes('.get, .ipad-get, .sr-get-btn') && pngJs.includes('font-weight: 400 !important'), 'png.js enforces font-weight 400 on GET buttons during export');
+assert(pngJs.includes('.a-met i, .a-met small, .ipad-met i, .ipad-met small') && pngJs.includes('font-weight: 400 !important'), 'png.js enforces font-weight 400 on metrics labels during export');
 
 // ---------------------------------------------------------------------
 // Suite 8: Apple Universal Destination & iPad Prioritized Preview
