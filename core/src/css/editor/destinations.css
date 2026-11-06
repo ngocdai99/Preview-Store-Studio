@@ -93,6 +93,20 @@
 .dest-tile.active .dest-device-ico{
   color:#38bdf8;
 }
+
+/* Google Play Store active styling (Dark mode) */
+body[data-ui-store="google"] .dest-tile.active,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active {
+  background: rgba(5, 150, 105, 0.14);
+}
+body[data-ui-store="google"] .dest-tile.active::before,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active::before {
+  background: linear-gradient(180deg, #34d399, #059669);
+}
+body[data-ui-store="google"] .dest-tile.active .dest-device-ico,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active .dest-device-ico {
+  color: #34d399;
+}
 .dest-info{
   flex:0 0 auto;
   min-width:0;
@@ -179,6 +193,22 @@
 :root[data-ui=light] .dest-tile.active::before{background:#0071e3}
 :root[data-ui=light] .dest-device-ico{color:#64748b}
 :root[data-ui=light] .dest-tile.active .dest-device-ico{color:#0071e3}
+
+/* Google Play Store active styling (Light mode) */
+:root[data-ui=light] body[data-ui-store="google"] .dest-tile.active,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active {
+  background: rgba(5, 150, 105, 0.08);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0f172a;
+}
+:root[data-ui=light] body[data-ui-store="google"] .dest-tile.active::before,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active::before {
+  background: #059669;
+}
+:root[data-ui=light] body[data-ui-store="google"] .dest-tile.active .dest-device-ico,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .dest-tile.active .dest-device-ico {
+  color: #059669;
+}
 :root[data-ui=light] .dest-tile:not(.active) .dest-name{color:#64748b}
 :root[data-ui=light] .dest-tile.active .dest-name{color:#0f172a}
 :root[data-ui=light] .dest-tag-opt{color:#0071e3;background:transparent}

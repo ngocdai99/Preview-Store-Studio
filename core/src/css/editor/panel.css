@@ -409,6 +409,22 @@ body.sidebar-collapsed .editor-resizer{
   color: #38bdf8;
 }
 
+/* Google Play Store active styling (Dark mode) */
+body[data-ui-store="google"] .priv-seg-btn.active,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active {
+  background: rgba(5, 150, 105, 0.14);
+}
+
+body[data-ui-store="google"] .priv-seg-btn.active::before,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active::before {
+  background: linear-gradient(180deg, #34d399, #059669);
+}
+
+body[data-ui-store="google"] .priv-seg-btn.active svg,
+body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active svg {
+  color: #34d399;
+}
+
 /* Light mode */
 :root[data-ui=light] .privacy-mode-seg {
   background: transparent;
@@ -449,6 +465,24 @@ body.sidebar-collapsed .editor-resizer{
 
 :root[data-ui=light] .priv-seg-btn.active svg {
   color: #0071e3;
+}
+
+/* Google Play Store active styling (Light mode) */
+:root[data-ui=light] body[data-ui-store="google"] .priv-seg-btn.active,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active {
+  background: rgba(5, 150, 105, 0.08);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0f172a;
+}
+
+:root[data-ui=light] body[data-ui-store="google"] .priv-seg-btn.active::before,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active::before {
+  background: #059669;
+}
+
+:root[data-ui=light] body[data-ui-store="google"] .priv-seg-btn.active svg,
+:root[data-ui=light] body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active svg {
+  color: #059669;
 }
 
 
