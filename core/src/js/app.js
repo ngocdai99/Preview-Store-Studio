@@ -12952,7 +12952,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
     // Convert Google Play info tooltip SVGs to sharp PNG images on cloneTarget to prevent
     // Safari/WebKit XMLSerializer SVG clipping (where small SVGs lose parts of the stroke on export)
-    cloneTarget.querySelectorAll('.g-info-ico').forEach(svg => {
+    cloneTarget.querySelectorAll('.g-info-ico, .gt10-info-ico').forEach(svg => {
       try {
         const comp = window.getComputedStyle(svg);
         const color = comp.color || '#8e8e93';
@@ -12980,7 +12980,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           ctx.stroke();
 
           const img = document.createElement('img');
-          img.className = 'g-info-ico';
+          img.className = svg.getAttribute('class') || 'g-info-ico';
           img.src = cv.toDataURL('image/png');
           img.style.width = '10px';
           img.style.height = '10px';
@@ -13092,6 +13092,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         btnStyle.textContent = `
           .dev::before, .dev::after { display: none !important; }
           .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
+          .g-h, .g-h span, .gt10-sec-title,
           .sr-category, .sr-search-query,
           .ipad-search-query, .ipad-floating-title,
           .gp-search-query-text, .g-meta, .iap,
@@ -13128,6 +13129,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 20px !important;
             line-height: 1 !important;
           }
+          .gt10-header-metrics .gt10-met-item:first-child b,
+          .dev.gtab10 .gt10-met-item:first-child b {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 2.5px !important;
+            height: 22px !important;
+            line-height: 1 !important;
+          }
           .g-star-ico {
             display: inline-block !important;
             vertical-align: middle !important;
@@ -13136,7 +13146,18 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             flex-shrink: 0 !important;
             margin-top: -1.5px !important;
           }
-          .g-info-ico {
+          .gt10-star,
+          .dev.gtab10 .gt10-star,
+          .gt10-header-metrics .gt10-star {
+            display: inline-block !important;
+            vertical-align: middle !important;
+            width: 11px !important;
+            height: 11px !important;
+            flex-shrink: 0 !important;
+            margin-left: 0 !important;
+            margin-top: 0.5px !important;
+          }
+          .g-info-ico, .gt10-info-ico {
             display: inline-block !important;
             vertical-align: middle !important;
             width: 10px !important;
@@ -13860,7 +13881,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
 
         // Ensure tooltip info icon is replaced with sharp PNG image if still SVG in clonedDoc
-        clonedEl.querySelectorAll('svg.g-info-ico').forEach(svg => {
+        clonedEl.querySelectorAll('svg.g-info-ico, svg.gt10-info-ico').forEach(svg => {
           try {
             const comp = win.getComputedStyle(svg);
             const color = comp.color || '#8e8e93';
@@ -13885,7 +13906,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
               ctx.stroke();
 
               const img = clonedDoc.createElement('img');
-              img.className = 'g-info-ico';
+              img.className = svg.getAttribute('class') || 'g-info-ico';
               img.src = cv.toDataURL('image/png');
               img.style.width = '10px';
               img.style.height = '10px';
@@ -13900,7 +13921,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         });
 
         // Ensure tooltip info icon retains clean margin, baseline alignment and no clipping in html2canvas
-        clonedEl.querySelectorAll('.g-info-ico').forEach(el => {
+        clonedEl.querySelectorAll('.g-info-ico, .gt10-info-ico').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
           el.style.width = '10px';
@@ -13911,7 +13932,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
         // Skip metrics elements and search card titles/subtitles so their strict single-line clamping is never compromised
-        clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
+        clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .g-h, .g-h span, .gt10-sec-title, [data-b]').forEach(el => {
           if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-sub, .gt10-item-meta, .ipad-sr-card-info, .sr-info, .gp-search-card-info')) return;
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordSpacing = '0.1px';
@@ -13962,6 +13983,14 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '20px';
           el.style.lineHeight = '1';
         });
+        clonedEl.querySelectorAll('.gt10-header-metrics .gt10-met-item:first-child b, .dev.gtab10 .gt10-met-item:first-child b').forEach(el => {
+          el.style.display = 'inline-flex';
+          el.style.alignItems = 'center';
+          el.style.justifyContent = 'flex-start';
+          el.style.gap = '2.5px';
+          el.style.height = '22px';
+          el.style.lineHeight = '1';
+        });
         clonedEl.querySelectorAll('.g-star-ico').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
@@ -13969,6 +13998,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '11px';
           el.style.flexShrink = '0';
           el.style.marginTop = '-1.5px';
+        });
+        clonedEl.querySelectorAll('.gt10-star, .dev.gtab10 .gt10-star, .gt10-header-metrics .gt10-star').forEach(el => {
+          el.style.display = 'inline-block';
+          el.style.verticalAlign = 'middle';
+          el.style.width = '11px';
+          el.style.height = '11px';
+          el.style.flexShrink = '0';
+          el.style.marginLeft = '0';
+          el.style.marginTop = '0.5px';
         });
 
         // Enforce vertical centering for Google Play search card rating star in export

@@ -480,6 +480,71 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
      clonedDoc.querySelectorAll('#srchTab7').forEach(el => el.remove());
      ```
 
+### Case 10: Lỗi Lệch Icon Ngôi Sao & Mất Icon Tooltip Trên Tablet 10" Google Play (Tablet 10 Rating Star Misalignment & SVG Icon Drop Bug)
+
+#### Triệu chứng thực tế
+- Trên **Firefox Gecko**: Trong dải thông số (metrics) của Tablet 10", icon ngôi sao `★` của điểm đánh giá `4.5 ★` bị lệch lên trên quá cao so với số `4.5`. Tiêu đề mục `About this app` bị dính chữ thành `Aboutthis app`.
+- Trên **Safari WebKit**:
+  - Icon ngôi sao `★` cũng bị đẩy lên quá cao và khoảng cách giữa số `4.5` và ngôi sao bị giãn ra quá xa (`4.5    ★`).
+  - Icon thông tin hình tròn `ⓘ` bên cạnh `Everyone` (hoặc `Rated for 12+`) bị biến mất hoàn toàn trên bản xuất PNG.
+
+#### Cơ chế tầng sâu (Root Cause)
+1. **Thiếu hỗ trợ rasterize canvas cho `.gt10-info-ico` trên Safari/WebKit:**
+   - Safari WebKit khi thực hiện tuần tự hóa (serialization) SVG kích thước nhỏ (<12px) với đường nét mảnh (`stroke-width="2.2"`) vào canvas nội suy của `html2canvas` thường làm rơi rụng hoặc xóa sổ hoàn toàn các đường cong/nét vẽ (stroke clipping).
+   - Trước đây trong `png.js`, tác vụ biến đổi SVG thành ảnh raster PNG (`canvas.toDataURL()`) chỉ chọn lớp `.g-info-ico` của điện thoại, bỏ sót lớp `.gt10-info-ico` của Tablet 10". Do đó trên Safari, icon `ⓘ` trên Tablet 10" biến mất hoàn toàn.
+2. **Khoảng cách xa và lệch đỉnh do cộng dồn margin và negative margin:**
+   - Trong `core/src/css/google/tablets.css`, `.dev.gtab10 .gt10-star` được đặt cứng `margin-left: 3px !important; margin-top: -1.5px !important;`.
+   - Trong `png.js`, quy tắc chung `.g-star-ico` cũng áp dụng `margin-top: -1.5px !important;`.
+   - Khi phần tử cha `b` hiển thị dạng flexbox `align-items: center` với `gap: 2.5px`, việc cộng dồn `gap: 2.5px + margin-left: 3px` làm khoảng cách văng ra tới `5.5px` trên Safari.
+   - Thêm vào đó, `margin-top: -1.5px` kéo ngôi sao lên phía trên đỉnh của chữ số `4.5`, khiến đỉnh sao vượt qua trần của chữ số (visual cap-height).
+3. **Hiện tượng co cụm khoảng trắng (whitespace collapse) trên tiêu đề mục (`.g-h`):**
+   - Tiêu đề `<div class="g-h"><span>About this app</span></div>` không nằm trong danh sách selector áp dụng `word-spacing: 0.1px !important; letter-spacing: 0.01px !important;`, dẫn tới việc Firefox nén toàn bộ khoảng trống giữa các từ lại thành `Aboutthis app`.
+
+#### Hướng dẫn khắc phục triệt để (Standard Solution)
+1. **Bổ sung `.gt10-info-ico` vào bộ chuyển đổi Canvas PNG Rasterizer:**
+   - Cả trên `cloneTarget` và trong `onclone(clonedDoc)`:
+     ```javascript
+     cloneTarget.querySelectorAll('.g-info-ico, .gt10-info-ico').forEach(svg => {
+       // Vẽ lại vòng tròn và chữ i sắc nét trên canvas 40x40 rồi thay thế SVG bằng thẻ <img>
+       const img = document.createElement('img');
+       img.className = svg.getAttribute('class') || 'g-info-ico';
+       img.src = cv.toDataURL('image/png');
+       svg.replaceWith(img);
+     });
+     ```
+2. **Đồng bộ căn giữa dọc và khoảng cách 2.5px cho Rating Tablet 10":**
+   - Đặt `margin-left: 0 !important; margin-top: 0.5px !important;` trên `.gt10-star`:
+     ```css
+     .gt10-header-metrics .gt10-met-item:first-child b,
+     .dev.gtab10 .gt10-met-item:first-child b {
+       display: inline-flex !important;
+       align-items: center !important;
+       justify-content: flex-start !important;
+       gap: 2.5px !important;
+       height: 22px !important;
+       line-height: 1 !important;
+     }
+     .gt10-star,
+     .dev.gtab10 .gt10-star,
+     .gt10-header-metrics .gt10-star {
+       display: inline-block !important;
+       vertical-align: middle !important;
+       width: 11px !important;
+       height: 11px !important;
+       flex-shrink: 0 !important;
+       margin-left: 0 !important;
+       margin-top: 0.5px !important;
+     }
+     ```
+3. **Bổ sung các selector tiêu đề (`.g-h`, `.gt10-sec-title`) vào bộ bảo vệ khoảng trắng Firefox:**
+   - Trong `btnStyle.textContent` và `onclone`:
+     ```javascript
+     clonedEl.querySelectorAll('..., .g-h, .g-h span, .gt10-sec-title, [data-b]').forEach(el => {
+       el.style.wordSpacing = '0.1px';
+       el.style.letterSpacing = '0.01px';
+     });
+     ```
+
 ---
 
 ## 4. Bảng Tra cứu Nhanh Thông số Viewport & Screenshots
