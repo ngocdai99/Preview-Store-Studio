@@ -672,6 +672,17 @@ assert(ipadFrameCss.includes('.dev.ipad::before{') && ipadFrameCss.includes('top
 assert(ipadFrameCss.includes('.dev.ipad::after{') && ipadFrameCss.includes('right:-5px;top:55px') && ipadFrameCss.includes('0 44px 0'), 'iPad frame places two Volume Buttons on right edge near top camera corner');
 assert(!ipadFrameCss.includes('left:-5px'), 'iPad frame has no buttons on the left edge');
 
+const tabletsFrameCss = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'tablets.css'), 'utf8');
+assert(tabletsFrameCss.includes('.dev.gtab:not(.portrait)::before{') && tabletsFrameCss.includes('top:48px;left:-5px'), 'Tablet landscape places Power button on left edge');
+assert(tabletsFrameCss.includes('.dev.gtab:not(.portrait)::after{') && tabletsFrameCss.includes('top:-5px;left:48px') && tabletsFrameCss.includes('44px 0 0'), 'Tablet landscape places two Volume buttons on top edge near corner');
+
+const pngExportJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
+assert(pngExportJs.includes('const padY = opts.frameless ? 0 : 8;'), 'png.js includes padY for top/bottom button preservation during export');
+assert(pngExportJs.includes("addBtn('top', { right: 65 }, 52, true);"), 'png.js synthesizes Top Button for iPad export');
+assert(pngExportJs.includes("addBtn('right', 55, 34);") && pngExportJs.includes("addBtn('right', 99, 34);"), 'png.js synthesizes two Volume buttons on right edge for iPad export');
+assert(pngExportJs.includes("addBtn('top', { left: 48 }, 34, true);") && pngExportJs.includes("addBtn('top', { left: 92 }, 34, true);"), 'png.js synthesizes two Volume buttons on top edge for tablet export');
+assert(!pngExportJs.includes("addBtn('left', 220, 70);"), 'png.js does not synthesize old obsolete left button for iPad');
+
 assert(!bundledHtml.includes('id="btnGenIpadFromPhone"'), 'Risky #btnGenIpadFromPhone button is removed from editor');
 assert(!bundledHtml.includes('id="f-ipad-fit-mode"'), 'Risky #f-ipad-fit-mode dropdown selector is removed from editor');
 assert(!bundledHtml.includes('btnFitIpad_'), 'Risky row-level Fit button is removed from iPad list');

@@ -34,7 +34,7 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   box-shadow:0 0 0 1px #0b0b0d;
 }
 .dev.gtab:not(.portrait)::after{
-  display:block;content:'';position:absolute;top:-5px;left:55px;width:34px;height:5px;border-radius:3px 3px 0 0;
+  display:block;content:'';position:absolute;top:-5px;left:48px;width:34px;height:5px;border-radius:3px 3px 0 0;
   background:linear-gradient(180deg,#565860 0%,#36383e 55%,#1d1e22 100%);
   box-shadow:0 0 0 1px #0b0b0d,44px 0 0 0 #36383e,44px 0 0 1px #0b0b0d;
 }

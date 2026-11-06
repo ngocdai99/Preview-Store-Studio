@@ -388,6 +388,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     h = Math.round(rect.height / curZoom);
   }
   const padX = opts.frameless ? 0 : 8;
+  const padY = opts.frameless ? 0 : 8;
 
   let offscreenWrap = null;
   try{
@@ -398,7 +399,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
     // Create an unzoomed offscreen clone so html2canvas initializes layout bounds at true 1x scale
     // and keeps the live screen DOM completely untouched (zero visual jitter, flicker or collapse).
     offscreenWrap = document.createElement('div');
-    offscreenWrap.style.cssText = `position:fixed;left:0;top:0;width:${w + padX * 2}px;height:${h}px;opacity:0.001;pointer-events:none;z-index:-99999;overflow:hidden;`;
+    offscreenWrap.style.cssText = `position:fixed;left:0;top:0;width:${w + padX * 2}px;height:${h + padY * 2}px;opacity:0.001;pointer-events:none;z-index:-99999;overflow:visible;`;
     const cloneTarget = target.cloneNode(true);
     cloneTarget.style.zoom = '1';
     cloneTarget.style.transform = 'none';
@@ -418,12 +419,13 @@ async function exportPNG(scaleFactor = 2, opts = {}){
       backgroundColor: null,
       scale: scaleFactor,
       x: -padX,
+      y: -padY,
       width: w + padX * 2,
-      height: h,
+      height: h + padY * 2,
       scrollX: 0,
       scrollY: 0,
       windowWidth: Math.max(document.documentElement.clientWidth, w + 140),
-      windowHeight: Math.max(document.documentElement.clientHeight, h + 120),
+      windowHeight: Math.max(document.documentElement.clientHeight, h + 140),
       useCORS: true,
       allowTaint: true,
       logging: false,
@@ -761,16 +763,39 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             d.style.boxShadow = 'none';
             d.style.width = 'auto';
             d.style.height = 'auto';
-          } else if(!opts.frameless && !d.classList.contains('landscape') && !d.classList.contains('gtab')){
-            const addBtn = (side, top, height) => {
+          } else if(!opts.frameless && !d.classList.contains('landscape')){
+            const addBtn = (side, offset, size, isHorizontal = false) => {
               const b = clonedDoc.createElement('div');
-              const isLeft = side === 'left';
-              b.style.cssText = `position:absolute;${isLeft ? 'left:-5px;border-radius:3px 0 0 3px;background:linear-gradient(90deg,#565860 0%,#36383e 55%,#1d1e22 100%)' : 'right:-5px;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#1d1e22 0%,#36383e 45%,#565860 100%)'};top:${top}px;width:5px;height:${height}px;box-shadow:0 0 0 1px #0b0b0d;pointer-events:none;`;
+              let posCss = '';
+              if (isHorizontal) {
+                const isTop = side === 'top';
+                const offLeft = typeof offset === 'object' && offset.left !== undefined ? `left:${offset.left}px;` : '';
+                const offRight = typeof offset === 'object' && offset.right !== undefined ? `right:${offset.right}px;` : '';
+                posCss = `top:${isTop ? '-5px' : 'auto'};bottom:${isTop ? 'auto' : '-5px'};${offLeft}${offRight}width:${size}px;height:5px;border-radius:${isTop ? '3px 3px 0 0' : '0 0 3px 3px'};background:linear-gradient(${isTop ? '180deg,#565860 0%,#36383e 55%,#1d1e22 100%' : '0deg,#565860 0%,#36383e 55%,#1d1e22 100%'});`;
+              } else {
+                const isLeft = side === 'left';
+                posCss = `${isLeft ? 'left:-5px;border-radius:3px 0 0 3px;background:linear-gradient(90deg,#565860 0%,#36383e 55%,#1d1e22 100%)' : 'right:-5px;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#1d1e22 0%,#36383e 45%,#565860 100%)'};top:${offset}px;width:5px;height:${size}px;`;
+              }
+              b.style.cssText = `position:absolute;${posCss}box-shadow:0 0 0 1px #0b0b0d;pointer-events:none;`;
               d.appendChild(b);
             };
             if(d.classList.contains('ipad')){
-              addBtn('left', 220, 70);
-              addBtn('right', 220, 120);
+              // iPad: Top Button (Power) on top edge near right corner + 2 Volume Buttons on right edge near camera
+              addBtn('top', { right: 65 }, 52, true);
+              addBtn('right', 55, 34);
+              addBtn('right', 99, 34);
+            } else if(d.classList.contains('gtab')){
+              if(d.classList.contains('portrait')){
+                // Android Tablet (Portrait): Power on Top edge + 2 Volume Buttons on Right edge
+                addBtn('top', { right: 55 }, 48, true);
+                addBtn('right', 48, 32);
+                addBtn('right', 90, 32);
+              } else {
+                // Android Tablet (Landscape): Power on Left edge + 2 Volume Buttons on Top edge near corner
+                addBtn('left', 48, 48);
+                addBtn('top', { left: 48 }, 34, true);
+                addBtn('top', { left: 92 }, 34, true);
+              }
             } else if(d.classList.contains('apple')){
               addBtn('left', 144, 34);
               addBtn('left', 198, 62);
