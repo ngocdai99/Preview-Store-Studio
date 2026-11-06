@@ -991,6 +991,15 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
     top: 0 !important;
   }
 }
+
+/* Firefox Gecko isolation: compensates for Gecko font ascent baseline delta */
+@supports (-moz-appearance: none) {
+  .dev.gtab7 .g-met [data-gmet-rating] .g-star-ico,
+  .dev.gtab10 .gt10-star {
+    position: relative !important;
+    top: 1px !important;
+  }
+}
 .dev.gtab .gt7-app-stats [data-stat="size"],
 .dev.gtab .gt10-item-stats [data-stat="size"] {
   line-height: 1;

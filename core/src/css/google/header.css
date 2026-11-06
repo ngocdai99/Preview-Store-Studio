@@ -10,6 +10,12 @@
 .g-met [data-gmet-rating]{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%}
 .g-met [data-gmet-rating] b{display:inline-flex;align-items:center;justify-content:center;gap:3px;height:20px}
 .g-met [data-gmet-rating] .g-star-ico{margin-top:0}
+@supports (-moz-appearance: none) {
+  .g-met [data-gmet-rating] .g-star-ico {
+    position: relative !important;
+    top: 1px !important;
+  }
+}
 .g-star-ico{width:11px;height:11px;display:inline-block;flex-shrink:0;vertical-align:middle;color:currentColor}
 .g-met [data-gmet-size]{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%}
 .g-met [data-gmet-size] b{display:inline-flex;align-items:center;justify-content:center;height:20px;color:var(--t)}

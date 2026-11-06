@@ -659,6 +659,15 @@ async function exportPNG(scaleFactor = 2, opts = {}){
               top: 0 !important;
             }
           }
+          @supports (-moz-appearance: none) {
+            .g-star-ico,
+            .gt10-star,
+            .dev.gtab10 .gt10-star,
+            .gt10-header-metrics .gt10-star {
+              position: relative !important;
+              top: 1px !important;
+            }
+          }
           .g-info-ico, .gt10-info-ico {
             display: inline-block !important;
             vertical-align: middle !important;
@@ -1479,6 +1488,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '22px';
           el.style.lineHeight = '1';
         });
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || typeof win.ApplePaySession === 'function';
+        const isFirefox = typeof win.InstallTrigger !== 'undefined' || /firefox|fxios/i.test(navigator.userAgent);
         clonedEl.querySelectorAll('.g-star-ico').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
@@ -1486,8 +1497,11 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '11px';
           el.style.flexShrink = '0';
           el.style.marginTop = '0';
+          if (isFirefox) {
+            el.style.position = 'relative';
+            el.style.top = '1px';
+          }
         });
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || typeof win.ApplePaySession === 'function';
         clonedEl.querySelectorAll('.gt10-star, .dev.gtab10 .gt10-star, .gt10-header-metrics .gt10-star').forEach(el => {
           el.style.display = 'inline-block';
           el.style.verticalAlign = 'middle';
@@ -1497,7 +1511,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.marginLeft = '0';
           el.style.marginTop = '0';
           el.style.position = 'relative';
-          el.style.top = isSafari ? '0' : '0.5px';
+          el.style.top = isSafari ? '0' : (isFirefox ? '1px' : '0.5px');
         });
 
         // Enforce vertical centering for Google Play search card rating star in export
