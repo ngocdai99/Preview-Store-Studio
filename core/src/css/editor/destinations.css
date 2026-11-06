@@ -26,19 +26,20 @@
 .dest-tile{
   display:inline-flex;
   align-items:center;
-  gap:8px;
-  padding:6px 12px;
+  gap:7px;
+  padding:6px 12px 6px 12px;
   background:rgba(255,255,255,0.03);
   border:1px solid var(--line);
   border-radius:10px;
   cursor:pointer;
   user-select:none;
   position:relative;
+  overflow:hidden;
   width:fit-content;
   max-width:100%;
   flex:0 0 auto;
   box-sizing:border-box;
-  transition:all .2s cubic-bezier(.2,.9,.3,1);
+  transition:background .2s ease, border-color .2s ease, color .2s ease;
 }
 .dest-tile:hover:not(.locked){
   border-color:var(--line-hi);
@@ -46,12 +47,22 @@
 }
 .dest-tile.active{
   border-color:var(--line);
-  background:rgba(255,255,255,0.04);
+  background:rgba(0,113,227,0.14);
   box-shadow:none;
+}
+.dest-tile.active::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:5px;
+  bottom:5px;
+  width:3.5px;
+  border-radius:0 2px 2px 0;
+  background:linear-gradient(180deg, #38bdf8, #0071e3);
 }
 .dest-tile.locked{
   cursor:default;
-  opacity:0.9;
+  opacity:0.95;
 }
 .dest-input{
   position:absolute;
@@ -62,51 +73,25 @@
   margin:0;
 }
 .dest-check-box{
-  width:18px;
-  height:18px;
-  border-radius:5px;
-  border:1.5px solid var(--line-hi);
-  display:flex;
+  display:none !important;
+}
+.dest-device-ico{
+  display:inline-flex;
   align-items:center;
   justify-content:center;
-  flex-shrink:0;
-  background:rgba(255,255,255,0.04);
-  transition:all .2s ease;
-}
-.dest-check-box svg{
-  width:12px;
-  height:12px;
-  opacity:0;
-  stroke:#fff;
-  stroke-width:3;
-  transition:all .15s ease;
-}
-.dest-tile.active .dest-check-box{
-  background:#0a84ff;
-  border-color:#0a84ff;
-}
-.dest-tile.active .dest-check-box svg{
-  opacity:1;
-}
-.dest-icon-wrap{
-  width:28px;
-  height:28px;
-  border-radius:7px;
-  background:rgba(255,255,255,0.05);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  width:15px;
+  height:15px;
   flex-shrink:0;
   color:var(--mut);
-  transition:all .2s ease;
+  transition:color .2s ease;
 }
-.dest-icon-wrap svg{
-  width:16px;
-  height:16px;
+.dest-device-ico svg{
+  width:15px;
+  height:15px;
+  display:block;
 }
-.dest-tile.active .dest-icon-wrap{
-  background:rgba(10,132,255,0.18);
-  color:#0a84ff;
+.dest-tile.active .dest-device-ico{
+  color:#38bdf8;
 }
 .dest-info{
   flex:0 0 auto;
@@ -115,13 +100,17 @@
 .dest-name{
   font-size:12px;
   font-weight:700;
-  color:var(--tx);
+  color:var(--mut);
   display:flex;
   align-items:center;
   flex-wrap:nowrap;
   gap:6px;
   line-height:1.2;
   white-space:nowrap;
+  transition:color .2s ease;
+}
+.dest-tile.active .dest-name{
+  color:#ffffff;
 }
 .dest-sub{
   font-size:10px;
@@ -184,7 +173,12 @@
 :root[data-ui=light] .dest-badge.universal{background:rgba(10,132,255,0.12);color:#0071e3;border-color:rgba(10,132,255,0.25)}
 :root[data-ui=light] .dest-tile{background:#fff;border-color:rgba(0,0,0,0.1)}
 :root[data-ui=light] .dest-tile:hover:not(.locked){background:#f8fafc;border-color:rgba(0,0,0,0.2)}
-:root[data-ui=light] .dest-tile.active{background:#fff;border-color:rgba(0,0,0,0.1);box-shadow:none}
+:root[data-ui=light] .dest-tile.active{background:rgba(0,113,227,0.08);border-color:rgba(0,0,0,0.1);box-shadow:none}
+:root[data-ui=light] .dest-tile.active::before{background:#0071e3}
+:root[data-ui=light] .dest-device-ico{color:#64748b}
+:root[data-ui=light] .dest-tile.active .dest-device-ico{color:#0071e3}
+:root[data-ui=light] .dest-tile:not(.active) .dest-name{color:#64748b}
+:root[data-ui=light] .dest-tile.active .dest-name{color:#0f172a}
 :root[data-ui=light] .dest-desc-bar{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
 :root[data-ui=light] .dest-desc-bar.active-universal{background:transparent !important;border:none !important;box-shadow:none !important;color:#64748b}
 :root[data-ui=light] .dest-desc-bar strong{color:#0f172a}
