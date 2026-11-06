@@ -73,8 +73,8 @@ function update(){
   const srDevVal = devVal.length > 20 ? devVal.slice(0, 20).trimEnd() + ' ...' : devVal;
   const gpDevVal = devVal.length > 22 ? devVal.slice(0, 22).trimEnd() + ' ...' : devVal;
   $$('.sr-dev [data-b="dev"]').forEach(e=>e.textContent=srDevVal);
-  $$('.gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-meta [data-b="dev"]').forEach(e=>e.textContent=gpDevVal);
-  $$('[data-b="dev"]:not(.sr-dev [data-b="dev"]):not(.gp-search-card-meta [data-b="dev"]):not(.gt7-app-meta [data-b="dev"]):not(.gt10-item-meta [data-b="dev"])').forEach(e=>e.textContent=devVal);
+  $$('.gp-search-card-meta [data-b="dev"]').forEach(e=>e.textContent=gpDevVal);
+  $$('[data-b="dev"]:not(.sr-dev [data-b="dev"]):not(.gp-search-card-meta [data-b="dev"])').forEach(e=>e.textContent=devVal);
   $$('[data-b="cat"]').forEach(e=>{
     const isGoogle = !!e.closest('.dev.google, .dev.gtab');
     e.textContent = (isGoogle ? googleCatVal : appleCatVal) || catVal;

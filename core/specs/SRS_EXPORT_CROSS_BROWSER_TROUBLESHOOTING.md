@@ -547,6 +547,44 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
      });
      ```
 
+### Case 11: Lỗi Cắt Chữ Category & Dính Tràn Subtitle Trên Tablet 7" (Tablet 7 Subtitle Ellipsis & Truncation Parity Bug)
+
+#### Triệu chứng thực tế
+- Trên **Live Canvas** và **Bản xuất PNG** của Tablet 7-inch:
+  - Khi Developer Name dài (ví dụ: `TAM TRI LUC TRAINING JOINT STOCK COMPANY`), tên dev bị cắt cứng ở ký tự 22 thành `TAM TRI LUC TRAINING J ...`.
+  - Tiếp theo, dấu chấm đạn và Category vẫn bị ép hiển thị ở khoảng trống hẹp còn lại trước nút Install (`• Educat` hoặc `• Educatio`), dẫn đến việc chữ Category bị xén ngang cụt lủn và xấu mắt.
+- Trong khi đó, trên **Tablet 10-inch**: Dòng subtitle hiển thị mượt mà thành một chuỗi duy nhất: `TAM TRI LUC TRAINING JOINT ST...` mà không bị vỡ hoặc xén cụt Category.
+
+#### Cơ chế tầng sâu (Root Cause)
+1. **Hard-coded truncation trong `sync.js`:**
+   - Trong `sync.js`, biến `gpDevVal = devVal.slice(0, 22) + ' ...'` được áp dụng cho `.gt7-app-meta [data-b="dev"]`. Điều này cướp mất quyền điều khiển độ dài tự nhiên của CSS.
+2. **Cấu trúc Flexbox chia nhỏ dòng subtitle:**
+   - `.dev.gtab7 .gt7-app-meta` được khai báo `display: flex; gap: 4px;`. Flexbox coi `[data-b="dev"]`, `&bull;` và `[data-b="cat"]` là 3 phần tử con riêng biệt. Khi `data-b="dev"` chiếm phần lớn chiều ngang, `[data-b="cat"]` bị ép vào góc phải và tràn khỏi biên.
+3. **Thiếu vắng trong `searchEllipsisSelectors`:**
+   - Trong `png.js`, Tablet 10 có `.gt10-item-sub` được tính toán ellipsis nhị phân tổng thể dòng, trong khi Tablet 7 thiếu `.gt7-app-meta`.
+
+#### Hướng dẫn khắc phục triệt để (Standard Solution)
+1. **Loại bỏ hard-coded truncation trong `sync.js`:**
+   - Để `.gt7-app-meta [data-b="dev"]` nhận toàn bộ nội dung `devVal` gốc, giống như Tablet 10 (`.gt10-item-sub`).
+2. **Đồng bộ CSS hiển thị chuỗi liền mạch dạng Block:**
+   - Trong `tablets.css` và `png.js`:
+     ```css
+     .dev.gtab7 .gt7-app-meta,
+     .dev.gtab .gt10-item-sub {
+       display: block !important;
+       white-space: nowrap !important;
+       overflow: hidden !important;
+       text-overflow: ellipsis !important;
+       line-height: 1.2 !important;
+     }
+     .dev.gtab7 .gt7-app-meta span,
+     .dev.gtab .gt10-item-sub span {
+       display: inline !important;
+     }
+     ```
+3. **Bổ sung `.gt7-app-meta` vào `searchEllipsisSelectors`:**
+   - Đảm bảo khi xuất ảnh PNG qua `exportPNG()`, dòng subtitle của Tablet 7 tự động được co giãn và đặt dấu `...` ở cuối chuỗi hiển thị khi chạm giới hạn nút Install, không bao giờ bị cắt chữ.
+
 ---
 
 ## 4. Bảng Tra cứu Nhanh Thông số Viewport & Screenshots

@@ -4573,6 +4573,8 @@ assert(pngJsSrc62.includes('.g-h, .g-h span, .gt10-sec-title'), 'png.js protects
 const tabletsCssSrc62 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'tablets.css'), 'utf8');
 assert(tabletsCssSrc62.includes('.dev.gtab10 .gt10-star') && tabletsCssSrc62.includes('margin-left: 0 !important;'), 'tablets.css enforces margin-left: 0 on .gt10-star to prevent excessive gap');
 assert(tabletsCssSrc62.includes('margin-top: 0 !important;'), 'tablets.css centers .gt10-star vertically with text');
+assert(tabletsCssSrc62.includes('.dev.gtab7 .gt7-app-meta') && tabletsCssSrc62.includes('display: block;'), 'tablets.css renders .gt7-app-meta as block for unified single-line ellipsis');
+assert(pngJsSrc62.includes('.gt7-app-meta') && pngJsSrc62.includes('searchEllipsisSelectors'), 'png.js includes .gt7-app-meta in searchEllipsisSelectors');
 
 // ---------------------------------------------------------------------
 // Summary Report

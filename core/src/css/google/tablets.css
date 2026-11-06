@@ -910,10 +910,11 @@ body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none
   overflow: hidden;
   text-overflow: ellipsis;
   margin-top: 2px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  display: block;
   line-height: 1.2;
+}
+.dev.gtab7 .gt7-app-meta span {
+  display: inline !important;
 }
 .dev.gtab7 .gt7-app-stats {
   font-size: 11px;
