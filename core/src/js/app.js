@@ -12773,6 +12773,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             display: flex !important;
             flex-direction: column !important;
             justify-content: center !important;
+            align-items: center !important;
             overflow: hidden !important;
             align-self: center !important;
           }
@@ -12782,8 +12783,18 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             display: flex !important;
             flex-direction: column !important;
             justify-content: center !important;
+            align-items: center !important;
             overflow: hidden !important;
             align-self: center !important;
+          }
+          .a-met-dev-ico, .ipad-met-dev-ico {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+          }
+          .a-met-dev-ico svg, .ipad-met-dev-ico svg {
+            margin: 0 auto !important;
           }
           .a-met b[data-b="dev"] {
             display: -webkit-box !important;
@@ -13315,6 +13326,14 @@ async function exportPNG(scaleFactor = 2, opts = {}){
         // Enforce font-weight 400 for GET buttons and metrics labels (small & i) in export
         clonedEl.querySelectorAll('.get, .ipad-get, .sr-get-btn, .ipad-sr-get-btn, .ipad-floating-get, .a-nav-get, .a-met small, .a-met i, .ipad-met small, .ipad-met i').forEach(el => {
           el.style.fontWeight = '400';
+        });
+
+        // Enforce horizontal centering for developer icon in metrics
+        clonedEl.querySelectorAll('.a-met-dev-ico, .ipad-met-dev-ico').forEach(el => {
+          el.style.display = 'flex';
+          el.style.justifyContent = 'center';
+          el.style.alignItems = 'center';
+          el.style.width = '100%';
         });
 
         // Strip focus highlight from export capture
