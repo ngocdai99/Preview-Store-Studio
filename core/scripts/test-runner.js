@@ -4566,13 +4566,13 @@ console.log('\n[SUITE 62]: Tablet 10 Metrics Star Alignment & Info Icon Rasteriz
 
 const pngJsSrc62 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'png.js'), 'utf8');
 assert(pngJsSrc62.includes('.g-info-ico, .gt10-info-ico'), 'png.js includes .gt10-info-ico in SVG-to-canvas rasterizer');
-assert(pngJsSrc62.includes('.gt10-star') && pngJsSrc62.includes('margin-top: 0.5px !important;'), 'png.js applies 0.5px vertical centering for tablet 10 rating star in export CSS');
+assert(pngJsSrc62.includes('.gt10-star') && pngJsSrc62.includes('margin-top: 2px !important;'), 'png.js applies 2px vertical centering for tablet 10 rating star in export CSS');
 assert(pngJsSrc62.includes('.gt10-header-metrics .gt10-met-item:first-child b'), 'png.js enforces inline-flex and 2.5px gap on tablet 10 rating metric container');
 assert(pngJsSrc62.includes('.g-h, .g-h span, .gt10-sec-title'), 'png.js protects section headings (.g-h, .gt10-sec-title) against Firefox whitespace collapse');
 
 const tabletsCssSrc62 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'tablets.css'), 'utf8');
 assert(tabletsCssSrc62.includes('.dev.gtab10 .gt10-star') && tabletsCssSrc62.includes('margin-left: 0 !important;'), 'tablets.css enforces margin-left: 0 on .gt10-star to prevent excessive gap');
-assert(tabletsCssSrc62.includes('margin-top: 0.5px !important;'), 'tablets.css centers .gt10-star vertically with text');
+assert(tabletsCssSrc62.includes('margin-top: 2px !important;'), 'tablets.css centers .gt10-star vertically with text');
 
 // ---------------------------------------------------------------------
 // Summary Report

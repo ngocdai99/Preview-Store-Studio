@@ -13155,7 +13155,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 11px !important;
             flex-shrink: 0 !important;
             margin-left: 0 !important;
-            margin-top: 0.5px !important;
+            margin-top: 2px !important;
           }
           .g-info-ico, .gt10-info-ico {
             display: inline-block !important;
@@ -14006,7 +14006,7 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.height = '11px';
           el.style.flexShrink = '0';
           el.style.marginLeft = '0';
-          el.style.marginTop = '0.5px';
+          el.style.marginTop = '2px';
         });
 
         // Enforce vertical centering for Google Play search card rating star in export

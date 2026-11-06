@@ -513,7 +513,7 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
      });
      ```
 2. **Đồng bộ căn giữa dọc và khoảng cách 2.5px cho Rating Tablet 10":**
-   - Đặt `margin-left: 0 !important; margin-top: 0.5px !important;` trên `.gt10-star`:
+   - Đặt `margin-left: 0 !important; margin-top: 2px !important;` trên `.gt10-star`:
      ```css
      .gt10-header-metrics .gt10-met-item:first-child b,
      .dev.gtab10 .gt10-met-item:first-child b {
@@ -533,7 +533,7 @@ Tất cả các phiên làm việc sau bắt buộc phải tham chiếu tài li�
        height: 11px !important;
        flex-shrink: 0 !important;
        margin-left: 0 !important;
-       margin-top: 0.5px !important;
+       margin-top: 2px !important;
      }
      ```
 3. **Bổ sung các selector tiêu đề (`.g-h`, `.gt10-sec-title`) vào bộ bảo vệ khoảng trắng Firefox:**
