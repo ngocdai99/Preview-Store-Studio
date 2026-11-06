@@ -68,9 +68,9 @@ export function ExportCard() {
             className="w-full"
             ariaLabel="Export format tabs"
             options={[
-              { value: "png", label: "Mockup Image (.png)" },
-              { value: "md", label: "Metadata (.md)" },
-              { value: "json", label: "Project File (.json)" },
+              { value: "png", label: "Mockup Image" },
+              { value: "md", label: "Metadata" },
+              { value: "json", label: "Project File" },
             ]}
           />
         </div>
@@ -121,16 +121,13 @@ export function ExportCard() {
                   <button
                     type="button"
                     onClick={() => setPngResolution("3x")}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer flex items-center gap-1 ${
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
                       pngResolution === "3x"
                         ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    <span>3x Ultra HD</span>
-                    <span className="text-[7px] px-1 rounded bg-emerald-500/20 text-emerald-400 font-mono font-bold">
-                      RETINA
-                    </span>
+                    3x Ultra HD
                   </button>
                 </div>
               </div>
