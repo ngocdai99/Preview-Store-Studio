@@ -1550,13 +1550,7 @@ function ComplianceCard() {
   return (
     <div className="group relative rounded-[28px] px-6 py-3.5 sm:px-8 sm:py-4 flex flex-col justify-between overflow-hidden bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 col-span-1 md:col-span-1 lg:col-span-6">
       {/* Top hairline accent line (Pricing style) */}
-      <div
-        className={`absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r transition-all duration-300 ${
-          (tab === "transparency" && alphaMode === "alpha") || (tab === "ratio" && ratioMode === "distorted")
-            ? "from-amber-400 via-amber-500 to-transparent"
-            : "from-[#00D085] via-emerald-400 to-transparent"
-        }`}
-      />
+      <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[28px] bg-gradient-to-r from-[#00D085] via-emerald-400 to-transparent" />
 
       <div className="relative z-10">
         <div className="flex items-baseline gap-2">
