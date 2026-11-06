@@ -165,7 +165,7 @@ export function StorePresetsCard() {
             onChange={(val) => handleSelectPreset(val as "cyberstrike" | "pulsefit" | "zenmind")}
             options={[
               { value: "cyberstrike", label: "Games" },
-              { value: "pulsefit", label: "Health Care" },
+              { value: "pulsefit", label: "Health" },
               { value: "zenmind", label: "Wellness" },
             ]}
             className="w-[270px] sm:w-[290px]"

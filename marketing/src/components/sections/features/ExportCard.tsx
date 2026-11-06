@@ -152,11 +152,11 @@ export function ExportCard() {
                 >
                   {copiedPng ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Copied Image
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Copied!
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-slate-400" /> Copy Image
+                      <Copy className="w-3.5 h-3.5 text-slate-400" /> Copy
                     </>
                   )}
                 </button>
@@ -171,7 +171,7 @@ export function ExportCard() {
                     </>
                   ) : (
                     <>
-                      <Download className="w-3.5 h-3.5" /> Download PNG
+                      <Download className="w-3.5 h-3.5" /> Download
                     </>
                   )}
                 </button>
@@ -206,11 +206,11 @@ export function ExportCard() {
                 >
                   {copiedMd ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Copied Text
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Copied!
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-slate-400" /> Copy to Clipboard
+                      <Copy className="w-3.5 h-3.5 text-slate-400" /> Copy
                     </>
                   )}
                 </button>
@@ -221,11 +221,11 @@ export function ExportCard() {
                 >
                   {downloadedMd ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Downloaded!
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Exported!
                     </>
                   ) : (
                     <>
-                      <Download className="w-3.5 h-3.5" /> Export Metadata
+                      <Download className="w-3.5 h-3.5" /> Export
                     </>
                   )}
                 </button>
@@ -254,7 +254,7 @@ export function ExportCard() {
               {/* Action Buttons: Import Preview & Export Project File */}
               <div className="grid grid-cols-2 gap-2 pt-0.5">
                 <div className="py-1.5 px-2 rounded-lg bg-white dark:bg-[#1c1d1f] border border-slate-200 dark:border-white/10 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5 select-none opacity-85">
-                  <Upload className="w-3.5 h-3.5" /> Import Project
+                  <Upload className="w-3.5 h-3.5" /> Import
                 </div>
                 <button
                   type="button"
@@ -263,11 +263,11 @@ export function ExportCard() {
                 >
                   {downloadedJson ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Saved!
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Exported!
                     </>
                   ) : (
                     <>
-                      <Download className="w-3.5 h-3.5" /> Export Project File
+                      <Download className="w-3.5 h-3.5" /> Export
                     </>
                   )}
                 </button>
