@@ -38,7 +38,7 @@
   opacity:1;
 }
 .ico-wrap.is-placeholder:hover .ico-ov{
-  background:rgba(15,16,15,0.5);color:#fef08a;
+  background:rgba(15,16,15,0.65);color:#fbbf24;
 }
 .ico-wrap.drag-over{
   outline:2px solid #f59e0b;outline-offset:2px;
