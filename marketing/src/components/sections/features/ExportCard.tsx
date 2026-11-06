@@ -68,9 +68,9 @@ export function ExportCard() {
             className="w-full"
             ariaLabel="Export format tabs"
             options={[
-              { value: "png", label: "Mockup Image" },
+              { value: "png", label: "Mockup" },
               { value: "md", label: "Metadata" },
-              { value: "json", label: "Project File" },
+              { value: "json", label: "Project" },
             ]}
           />
         </div>
