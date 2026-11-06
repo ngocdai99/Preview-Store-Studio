@@ -516,6 +516,10 @@ assert(iosCss.includes('.get{') && iosCss.includes('font-weight:400'), '.get but
 
 const ipadMetricsHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'ipad-metrics.html'), 'utf8');
 assert(ipadMetricsHtml.includes('data-stat="size-num"') && ipadMetricsHtml.includes('data-stat="size-unit"') && ipadMetricsHtml.includes('>MB</i>'), 'iPad metrics ribbon displays SIZE with value and MB unit instead of iPadOS');
+assert(ipadMetricsHtml.includes('a-met-dev-ico') && ipadMetricsHtml.includes('<rect x="3.5"') && ipadMetricsHtml.includes('rx="3.8"'), 'iPad metrics ribbon contains authentic Apple person.crop.square developer icon');
+
+const iphoneMetricsHtml = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'metrics.html'), 'utf8');
+assert(iphoneMetricsHtml.includes('a-met-dev-ico') && iphoneMetricsHtml.includes('<rect x="3.5"') && iphoneMetricsHtml.includes('data-b="dev"'), 'iPhone metrics ribbon contains authentic Apple person.crop.square developer icon and dev label');
 
 const themeJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'theme.js'), 'utf8');
 assert(themeJs.includes('.a-met'), 'Drag-to-scroll handler is attached to .a-met');
