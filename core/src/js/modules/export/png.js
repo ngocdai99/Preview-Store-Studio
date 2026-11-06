@@ -455,8 +455,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, .gt7-app-name, .gt10-header-title, .gt10-item-title,
           .sr-title, .sr-subtitle, .sr-category, .sr-search-query,
           .ipad-sr-app-title, .ipad-sr-app-sub, .ipad-search-query, .ipad-floating-title,
-          .gp-search-query-text, .gp-search-card-name, .gp-search-card-meta, .g-meta, .iap,
-          [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]) {
+          .gp-search-query-text, .gp-search-card-name, .g-meta, .iap,
+          [data-b]:not(.a-met [data-b]):not(.ipad-met [data-b]):not(.g-met [data-b]):not(.gp-search-card-meta [data-b]):not(.gt7-app-meta [data-b]):not(.gt10-item-meta [data-b]) {
             -webkit-line-clamp: unset !important;
             -webkit-box-orient: unset !important;
             white-space: pre-wrap !important;
@@ -502,8 +502,22 @@ async function exportPNG(scaleFactor = 2, opts = {}){
             height: 9.5px !important;
             display: inline-block !important;
             vertical-align: middle !important;
-            margin-top: -0.5px !important;
+            margin-top: 1.5px !important;
             flex-shrink: 0 !important;
+          }
+          .gp-search-card-meta {
+            display: flex !important;
+            align-items: center !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 100% !important;
+          }
+          .gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-meta [data-b="dev"] {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: inline-block !important;
           }
           .sr-dev {
             display: inline-flex !important;
@@ -1082,8 +1096,8 @@ async function exportPNG(scaleFactor = 2, opts = {}){
 
         // Ensure text elements preserve word spacing across all browsers (especially Firefox)
         // Skip metrics elements (.a-met, .ipad-met, .g-met) so their strict height and clamping are never compromised
-        clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .gp-search-card-meta, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
-          if (el.closest('.a-met, .ipad-met, .g-met')) return;
+        clonedEl.querySelectorAll('.sr-title, .sr-subtitle, .sr-category, .gp-search-card-name, .g-name, .a-name, .g-dev, .a-sub, .ipad-name, .ipad-sub, [data-b]').forEach(el => {
+          if (el.closest('.a-met, .ipad-met, .g-met, .gp-search-card-meta, .gt7-app-meta, .gt10-item-meta')) return;
           el.style.whiteSpace = 'pre-wrap';
           el.style.wordSpacing = '0.1px';
           el.style.letterSpacing = '0.01px';
@@ -1151,8 +1165,22 @@ async function exportPNG(scaleFactor = 2, opts = {}){
           el.style.verticalAlign = 'middle';
           el.style.width = '9.5px';
           el.style.height = '9.5px';
-          el.style.marginTop = '-0.5px';
+          el.style.marginTop = '1.5px';
           el.style.flexShrink = '0';
+        });
+        clonedEl.querySelectorAll('.gp-search-card-meta').forEach(el => {
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.whiteSpace = 'nowrap';
+          el.style.overflow = 'hidden';
+          el.style.textOverflow = 'ellipsis';
+          el.style.maxWidth = '100%';
+        });
+        clonedEl.querySelectorAll('.gp-search-card-meta [data-b="dev"], .gt7-app-meta [data-b="dev"], .gt10-item-meta [data-b="dev"]').forEach(el => {
+          el.style.whiteSpace = 'nowrap';
+          el.style.overflow = 'hidden';
+          el.style.textOverflow = 'ellipsis';
+          el.style.display = 'inline-block';
         });
         clonedEl.querySelectorAll('.dev.gtab .gt7-app-stats, .dev.gtab .gt10-item-stats').forEach(el => {
           el.style.display = 'flex';
