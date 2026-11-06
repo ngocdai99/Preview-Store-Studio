@@ -2078,11 +2078,11 @@ function ExportCard() {
                 <button
                   type="button"
                   onClick={handleDownloadJson}
-                  className="btn-white w-full py-1.5 px-2 text-[11px]"
+                  className="btn-dark w-full py-1.5 px-2 text-[11px]"
                 >
                   {downloadedJson ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" /> Saved!
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Saved!
                     </>
                   ) : (
                     <>
