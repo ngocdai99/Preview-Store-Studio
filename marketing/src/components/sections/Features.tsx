@@ -1647,13 +1647,7 @@ function ComplianceCard() {
                       </span>
                     )}
                   </div>
-                  <div
-                    className={`text-[10.5px] mt-0.5 truncate ${
-                      alphaMode === "solid"
-                        ? "text-slate-500 dark:text-slate-400"
-                        : "text-rose-500/90 dark:text-rose-400"
-                    }`}
-                  >
+                  <div className="text-[10.5px] mt-0.5 truncate text-slate-600 dark:text-white">
                     {alphaMode === "solid"
                       ? "100% opaque background · Complies with store guidelines"
                       : "Alpha channel detected · Stores require opaque icons"}
@@ -1727,13 +1721,7 @@ function ComplianceCard() {
                       </span>
                     )}
                   </div>
-                  <div
-                    className={`text-[10.5px] mt-0.5 truncate ${
-                      resolutionMode === "1024"
-                        ? "text-slate-500 dark:text-slate-400"
-                        : "text-amber-500/90 dark:text-amber-400"
-                    }`}
-                  >
+                  <div className="text-[10.5px] mt-0.5 truncate text-slate-600 dark:text-white">
                     {resolutionMode === "1024"
                       ? "1024 × 1024 px · 380 KB (Store limit: Max 1024 KB)"
                       : "256 × 256 px · Required: 1024 × 1024 px master icon"}
@@ -1807,13 +1795,7 @@ function ComplianceCard() {
                       </span>
                     )}
                   </div>
-                  <div
-                    className={`text-[10.5px] mt-0.5 truncate ${
-                      ratioMode === "square"
-                        ? "text-slate-500 dark:text-slate-400"
-                        : "text-rose-500/90 dark:text-rose-400"
-                    }`}
-                  >
+                  <div className="text-[10.5px] mt-0.5 truncate text-slate-600 dark:text-white">
                     {ratioMode === "square"
                       ? "Width and height are identical (1.00) · No image distortion"
                       : "Aspect ratio is 1.33:1 · Required: 1:1 square"}
