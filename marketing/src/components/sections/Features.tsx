@@ -1982,11 +1982,11 @@ function ExportCard() {
                 <button
                   type="button"
                   onClick={handleDownloadPng}
-                  className="py-1.5 px-2 rounded-lg bg-purple-600 hover:bg-purple-500 active:scale-98 text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                  className="btn-white w-full py-1.5 px-2 text-[11px]"
                 >
                   {downloadedPng ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-white" /> Downloaded!
+                      <Check className="w-3.5 h-3.5 text-emerald-600" /> Downloaded!
                     </>
                   ) : (
                     <>
@@ -2036,11 +2036,11 @@ function ExportCard() {
                 <button
                   type="button"
                   onClick={handleDownloadMd}
-                  className="py-1.5 px-2 rounded-lg bg-purple-600 hover:bg-purple-500 active:scale-98 text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                  className="btn-white w-full py-1.5 px-2 text-[11px]"
                 >
                   {downloadedMd ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-white" /> Downloaded!
+                      <Check className="w-3.5 h-3.5 text-emerald-600" /> Downloaded!
                     </>
                   ) : (
                     <>
@@ -2078,11 +2078,11 @@ function ExportCard() {
                 <button
                   type="button"
                   onClick={handleDownloadJson}
-                  className="py-1.5 px-2 rounded-lg bg-purple-600 hover:bg-purple-500 active:scale-98 text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                  className="btn-white w-full py-1.5 px-2 text-[11px]"
                 >
                   {downloadedJson ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-white" /> Saved!
+                      <Check className="w-3.5 h-3.5 text-emerald-600" /> Saved!
                     </>
                   ) : (
                     <>
