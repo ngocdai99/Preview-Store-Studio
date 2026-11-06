@@ -78,73 +78,75 @@ export function ExportCard() {
         {/* Interactive Visual Canvas matching Real App Actions */}
         <div className="rounded-xl bg-slate-100 dark:bg-[#141514] border border-slate-200/80 dark:border-white/[0.06] p-3 min-h-[142px] flex flex-col justify-center">
           {tab === "png" && (
-            <div className="space-y-2">
-              {/* Framing & Resolution Radios */}
-              <div className="flex items-center justify-between gap-1 text-[11px]">
-                <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
-                  <button
-                    type="button"
-                    onClick={() => setPngFraming("frame")}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      pngFraming === "frame"
-                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    Device Frame
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPngFraming("screen")}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      pngFraming === "screen"
-                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    Screen Only
-                  </button>
+            <div className="h-[118px] flex flex-col justify-between">
+              <div className="space-y-2">
+                {/* Framing & Resolution Radios */}
+                <div className="flex items-center justify-between gap-1 text-[11px]">
+                  <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
+                    <button
+                      type="button"
+                      onClick={() => setPngFraming("frame")}
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                        pngFraming === "frame"
+                          ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      Device Frame
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPngFraming("screen")}
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                        pngFraming === "screen"
+                          ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      Screen Only
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
+                    <button
+                      type="button"
+                      onClick={() => setPngResolution("2x")}
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                        pngResolution === "2x"
+                          ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      2x HD
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPngResolution("3x")}
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
+                        pngResolution === "3x"
+                          ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
+                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                      }`}
+                    >
+                      3x Ultra HD
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-0.5 rounded-lg">
-                  <button
-                    type="button"
-                    onClick={() => setPngResolution("2x")}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      pngResolution === "2x"
-                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    2x HD
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPngResolution("3x")}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all cursor-pointer ${
-                      pngResolution === "3x"
-                        ? "bg-white dark:bg-[#25262a] text-slate-900 dark:text-white shadow-xs"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    3x Ultra HD
-                  </button>
+                {/* Status Pill */}
+                <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center justify-between text-[10.5px]">
+                  <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium truncate">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                    <span>{pngResolution === "3x" ? "3x Ultra HD" : "2x HD"} · {pngFraming === "frame" ? "Device Frame" : "Screen Only"} · Transparent</span>
+                  </span>
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-400 font-bold shrink-0 ml-1">
+                    .png
+                  </span>
                 </div>
-              </div>
-
-              {/* Status Pill */}
-              <div className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1c1d1f] border border-black/5 dark:border-white/5 flex items-center justify-between text-[10.5px]">
-                <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium truncate">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                  <span>{pngResolution === "3x" ? "3x Ultra HD" : "2x HD"} · {pngFraming === "frame" ? "Device Frame" : "Screen Only"} · Transparent</span>
-                </span>
-                <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-400 font-bold shrink-0 ml-1">
-                  .png
-                </span>
               </div>
 
               {/* Action Buttons: Copy Image & Download PNG */}
-              <div className="grid grid-cols-2 gap-2 pt-0.5">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={handleCopyPng}
@@ -180,25 +182,27 @@ export function ExportCard() {
           )}
 
           {tab === "md" && (
-            <div className="space-y-2">
-              {/* Header with Title & Badge */}
-              <div className="flex items-center justify-between text-[11px]">
-                <div className="flex items-center gap-1.5 font-mono font-bold text-slate-800 dark:text-slate-200">
-                  <FileText className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>LISTING_METADATA.md</span>
+            <div className="h-[118px] flex flex-col justify-between">
+              <div>
+                {/* Header with Title & Badge */}
+                <div className="flex items-center justify-between text-[11px]">
+                  <div className="flex items-center gap-1.5 font-mono font-bold text-slate-800 dark:text-slate-200">
+                    <FileText className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>LISTING_METADATA.md</span>
+                  </div>
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
+                    .md
+                  </span>
                 </div>
-                <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">
-                  .md
-                </span>
+
+                {/* Description with generous breathing space */}
+                <p className="mt-2.5 text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Complete store listing document with titles, subtitles, descriptions &amp; keywords.
+                </p>
               </div>
 
-              {/* Just clean text, no container */}
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-normal py-0.5">
-                Complete store listing document with titles, subtitles, descriptions &amp; keywords.
-              </p>
-
               {/* Action Buttons: Copy to Clipboard & Download .md */}
-              <div className="grid grid-cols-2 gap-2 pt-0.5">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={handleCopyMd}
@@ -234,25 +238,27 @@ export function ExportCard() {
           )}
 
           {tab === "json" && (
-            <div className="space-y-2">
-              {/* Header with Title & Badge */}
-              <div className="flex items-center justify-between text-[11px]">
-                <div className="flex items-center gap-1.5 font-mono font-bold text-slate-800 dark:text-slate-200">
-                  <Package className="w-3.5 h-3.5 text-amber-400" />
-                  <span>store-preview-project.json</span>
+            <div className="h-[118px] flex flex-col justify-between">
+              <div>
+                {/* Header with Title & Badge */}
+                <div className="flex items-center justify-between text-[11px]">
+                  <div className="flex items-center gap-1.5 font-mono font-bold text-slate-800 dark:text-slate-200">
+                    <Package className="w-3.5 h-3.5 text-amber-400" />
+                    <span>store-preview-project.json</span>
+                  </div>
+                  <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 font-bold">
+                    .json
+                  </span>
                 </div>
-                <span className="text-[9.5px] font-mono px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 font-bold">
-                  .json
-                </span>
+
+                {/* Description with generous breathing space */}
+                <p className="mt-2.5 text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Save full backup of text, images &amp; settings locally in your browser.
+                </p>
               </div>
 
-              {/* Just clean text, no container */}
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-normal py-0.5">
-                Save full backup of text, images &amp; settings locally in your browser.
-              </p>
-
               {/* Action Buttons: Import Preview & Export Project File */}
-              <div className="grid grid-cols-2 gap-2 pt-0.5">
+              <div className="grid grid-cols-2 gap-2">
                 <div className="py-1.5 px-2 rounded-lg bg-white dark:bg-[#1c1d1f] border border-slate-200 dark:border-white/10 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5 select-none opacity-85">
                   <Upload className="w-3.5 h-3.5" /> Import
                 </div>
