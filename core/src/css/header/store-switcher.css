@@ -63,9 +63,9 @@ body:not([data-ui-store])[data-dual=true] .pill {
 :root[data-ui=light] .seg[data-store="dual"] .pill,
 :root[data-ui=light] body[data-ui-store="dual"] .pill,
 :root[data-ui=light] body:not([data-ui-store])[data-dual=true] .pill {
-  background: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #0f172a !important;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, .18), inset 0 1px 0 rgba(255, 255, 255, .15) !important;
+  border: 1px solid #0f172a !important;
 }
 
 .seg button {
@@ -139,27 +139,37 @@ body:not([data-ui-store])[data-dual=true] .pill {
 }
 
 :root[data-ui=light] .seg {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, .1) !important;
+  box-shadow: 0 1px 4px -1px rgba(15, 23, 42, .08), 0 1px 2px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
+  transition: border-color .2s ease, box-shadow .2s ease !important;
+}
+
+:root[data-ui=light] .seg:hover {
+  border-color: rgba(15, 23, 42, .18) !important;
+  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, .08), 0 1px 3px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
 }
 
 :root[data-ui=light] .seg button {
-  color: #64748b;
+  color: #64748b !important;
 }
 
-:root[data-ui=light] .seg button:hover:not(.on) {
-  color: #0f172a;
+:root[data-ui=light] .seg button .s-ico {
+  color: #475569 !important;
+  opacity: .92 !important;
 }
 
+:root[data-ui=light] .seg button:hover:not(.on),
 :root[data-ui=light] .seg button:hover:not(.on) .s-ico {
-  color: #0f172a;
+  color: #0f172a !important;
+  opacity: 1 !important;
 }
 
 :root[data-ui=light] .seg button.on {
-  color: #0f172a !important;
+  color: #ffffff !important;
 }
 
 :root[data-ui=light] .seg button.on .s-ico {
-  color: #0f172a !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
