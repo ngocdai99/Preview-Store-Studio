@@ -115,15 +115,15 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 dark:border-[#282928] bg-white/85 dark:bg-[#131413]/85 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
         {/* Left Section: Brand Logo & Navigation Links (Supabase style) */}
-        <div className="flex items-center gap-4 sm:gap-6 lg:gap-8 min-w-0">
+        <div className="flex items-center gap-3 sm:gap-6 lg:gap-8 min-w-0">
           <Link
             href="/"
             onClick={(e) => handleNavClick(e, "", "#hero")}
-            className="flex items-center gap-2 group shrink-0 min-w-0"
+            className="flex items-center gap-2 group min-w-0"
           >
             <BrandIcon className="w-6 h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
-            <span className="font-bold text-[14.5px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white truncate">
-              {siteConfig.name}
+            <span className="font-bold text-[14px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white truncate">
+              <span className="hidden sm:inline">Store </span>Preview Studio
             </span>
           </Link>
 
@@ -151,11 +151,11 @@ export function Navbar() {
         </div>
 
         {/* Right Section: Demo Link + Supabase Emerald CTA Button */}
-        <div className="flex items-center gap-1.5 sm:gap-3.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           <Link
             href="/try"
             onClick={handleLiveDemoClick}
-            className={`inline-flex items-center text-[12.5px] sm:text-[13px] font-medium px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md transition-colors whitespace-nowrap ${
+            className={`inline-flex items-center text-[12px] sm:text-[13px] font-medium px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md transition-colors whitespace-nowrap shrink-0 ${
               isTryPage || activeTab === "Live Demo"
                 ? "text-[#006636] dark:text-[#00D085] font-semibold"
                 : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
@@ -167,10 +167,10 @@ export function Navbar() {
           <PrimaryButton
             href="#pricing"
             onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
-            fontSize="13px"
+            fontSize="12.5px"
             fontWeight={500}
             style={{
-              padding: "4px 10px",
+              padding: "4px 9px",
               height: "26px",
               background: "oklch(0.43627 0.11 157.5)",
               borderColor: "#1B845E",
@@ -184,7 +184,7 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
+            className="md:hidden inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors shrink-0"
             aria-label="Toggle mobile menu"
           >
             {mobileMenuOpen ? (
