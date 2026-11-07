@@ -221,11 +221,8 @@ export const en = {
         },
         features: [
           { text: "1-Click Live App Cloner (App Store)" },
-          { text: "Dual-Phone & Search Feed Viewports" },
           { text: "iPhone, iPad & Android Hardware Bezels" },
-          { text: "Smart Size & Icon Alpha Channel Detection" },
           { text: "Clean 4K Ultra HD Export", tag: "No Watermark" },
-          { text: "Store Submission Markdown & JSON Presets" },
           { text: "Private Offline Single-File Studio", tag: ".html" },
           { text: "Single-User Lifetime Commercial License" },
         ] as TierFeature[],
