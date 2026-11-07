@@ -5,15 +5,16 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   width:var(--editor-w, 500px);min-width:400px;max-width:850px;flex-shrink:0;
   background:rgba(23,24,23,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border-right:1px solid #282928;
-  overflow-y:auto;
   overflow-x:hidden;
-  scrollbar-gutter:stable;
-  padding:18px 12px 18px 18px;display:flex;flex-direction:column;gap:14px;
-  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent;
+  overflow-y:hidden;
+  padding:0 !important;
+  display:flex;
+  flex-direction:row;
+  gap:0 !important;
   margin-left:0;
   visibility:visible;
-  transition:width .28s cubic-bezier(.2,.8,.2,1), padding .28s cubic-bezier(.2,.8,.2,1), margin-left .28s cubic-bezier(.2,.8,.2,1);
-  will-change:margin-left;
+  transition:width .28s cubic-bezier(.2,.8,.2,1), margin-left .28s cubic-bezier(.2,.8,.2,1);
+  will-change:width, margin-left;
   z-index:30;
   box-shadow:4px 0 24px rgba(0,0,0,.3);
   container-type:inline-size;
@@ -44,92 +45,188 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 :root[data-ui=light] .editor::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.32);
 }
-/* Supabase Minimalist Collapsed Sidebar Icon Rail */
+
+/* VS Code / Supabase Activity Bar (Icon Control Strip) */
+.activity-bar{
+  width:52px;
+  min-width:52px;
+  max-width:52px;
+  height:100%;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:14px 0;
+  gap:6px;
+  background:#171817;
+  border-right:1px solid #282928;
+  z-index:15;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-width:none;
+}
+.activity-bar::-webkit-scrollbar{display:none}
+
+.activity-bar-btn{
+  width:38px;
+  height:38px;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:1px solid transparent;
+  color:#8e8e93;
+  cursor:pointer;
+  position:relative;
+  transition:all .18s cubic-bezier(.4, 0, .2, 1);
+  outline:none;
+  flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.activity-bar-btn:hover{
+  color:#d1d5db;
+  background:rgba(255,255,255,0.06);
+  border-color:rgba(255,255,255,0.09);
+}
+.activity-bar-btn.active{
+  background:rgba(255,255,255,0.12);
+  border-color:rgba(255,255,255,0.15);
+  color:#ffffff;
+  box-shadow:0 1px 4px rgba(0,0,0,0.35);
+}
+.activity-bar-btn.active::before{
+  content:'';
+  position:absolute;
+  left:-7px;
+  top:9px;
+  bottom:9px;
+  width:3px;
+  border-radius:0 3px 3px 0;
+  background:var(--accent, #00D085);
+}
+.activity-bar-btn svg{
+  width:17px;
+  height:17px;
+  stroke-width:2.1;
+  pointer-events:none;
+}
+
+/* Single-View Editor Cards (NO Stacked Cards Clutter) */
+.editor .card{
+  display:none !important;
+}
+.editor .card.selected{
+  display:flex !important;
+  flex-direction:column !important;
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:100% !important;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  scrollbar-gutter:stable;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,0.18) transparent;
+}
+.editor .card.selected::-webkit-scrollbar{
+  width:6px;
+}
+.editor .card.selected::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,0.16);
+  border-radius:99px;
+}
+.editor .card.selected::-webkit-scrollbar-thumb:hover{
+  background:rgba(255,255,255,0.32);
+}
+
+/* Section Top Header inside Active View */
+.editor .card.selected .card-header{
+  padding:16px 20px 14px 20px;
+  border-bottom:1px solid #282928;
+  background:rgba(29,30,29,0.85);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  position:sticky;
+  top:0;
+  z-index:10;
+  cursor:default;
+  user-select:text;
+  border-radius:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.editor .card.selected .card-header h2{
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:0.01em;
+}
+.editor .card.selected .card-header .card-toggle-ico{
+  display:none !important;
+}
+
+/* Form Body Area */
+.editor .card.selected .card-body{
+  display:block !important;
+  padding:20px 20px 36px 20px !important;
+  flex:1 0 auto !important;
+  overflow:visible !important;
+}
+
+/* Collapsed Sidebar Rail Mode: Width becomes 52px (Activity Bar only) */
 body.sidebar-collapsed .editor{
-  width: 58px !important;
-  min-width: 58px !important;
-  max-width: 58px !important;
-  margin-left: 0 !important;
-  padding: 14px 6px !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  align-items: center !important;
-  gap: 6px !important;
-  scrollbar-width: none !important;
-  box-shadow: 2px 0 16px rgba(0,0,0,.35) !important;
+  width:52px !important;
+  min-width:52px !important;
+  max-width:52px !important;
+  margin-left:0 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  box-shadow:2px 0 16px rgba(0,0,0,.35) !important;
 }
-body.sidebar-collapsed .editor::-webkit-scrollbar{
-  display: none !important;
+body.sidebar-collapsed .editor .card{
+  display:none !important;
+}
+body.sidebar-collapsed .editor-resizer{
+  opacity:0 !important;
+  pointer-events:none !important;
 }
 
-body.sidebar-collapsed .card{
-  width: 44px !important;
-  min-width: 44px !important;
-  background: transparent !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  border-radius: 8px !important;
-  margin: 0 auto !important;
-  cursor: pointer;
-  transition: all .18s ease;
+/* Light Mode Overrides */
+:root[data-ui=light] .activity-bar{
+  background:#f8fafc;
+  border-right-color:#e2e8f0;
 }
-body.sidebar-collapsed .card:hover{
-  background: rgba(255,255,255,0.06) !important;
-  border-color: rgba(255,255,255,0.1) !important;
+:root[data-ui=light] .activity-bar-btn{
+  color:#64748b;
 }
-body.sidebar-collapsed .card.selected{
-  background: rgba(255,255,255,0.09) !important;
-  border-color: rgba(255,255,255,0.14) !important;
+:root[data-ui=light] .activity-bar-btn:hover{
+  color:#0f172a;
+  background:rgba(0,0,0,0.04);
+  border-color:rgba(0,0,0,0.06);
 }
-
-body.sidebar-collapsed .card-header{
-  padding: 0 !important;
-  width: 44px !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  border-radius: 8px !important;
-  justify-content: center !important;
-  align-items: center !important;
-  background: transparent !important;
+:root[data-ui=light] .activity-bar-btn.active{
+  background:#ffffff;
+  border-color:rgba(0,0,0,0.12);
+  color:#0f172a;
+  box-shadow:0 1px 3px rgba(0,0,0,0.08);
 }
-body.sidebar-collapsed .card-header h2{
-  font-size: 0 !important;
-  gap: 0 !important;
-  margin: 0 !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
+:root[data-ui=light] .editor .card.selected .card-header{
+  background:rgba(255,255,255,0.92);
+  border-bottom-color:#e2e8f0;
 }
-body.sidebar-collapsed .card-header h2 > span:not(.card-ico):not(.card-num){
-  display: none !important;
+:root[data-ui=light] .editor .card.selected::-webkit-scrollbar-thumb{
+  background:rgba(0,0,0,0.18);
 }
-body.sidebar-collapsed .card-num,
-body.sidebar-collapsed .card-header-right,
-body.sidebar-collapsed .card-body,
-body.sidebar-collapsed .card > :not(.card-header){
-  display: none !important;
+:root[data-ui=light] .editor .card.selected::-webkit-scrollbar-thumb:hover{
+  background:rgba(0,0,0,0.32);
 }
 
-body.sidebar-collapsed .card-ico{
-  width: 32px !important;
-  height: 32px !important;
-  border-radius: 7px !important;
-}
-body.sidebar-collapsed .card-ico svg{
-  width: 16px !important;
-  height: 16px !important;
-}
-:root[data-ui=light] body.sidebar-collapsed .card:hover{
-  background: rgba(0,0,0,0.05) !important;
-  border-color: rgba(0,0,0,0.08) !important;
-}
-:root[data-ui=light] body.sidebar-collapsed .card.selected{
-  background: rgba(0,0,0,0.08) !important;
-  border-color: rgba(0,0,0,0.12) !important;
-}
 body.resizing-sidebar .editor{
   transition:none!important;
 }

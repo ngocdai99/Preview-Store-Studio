@@ -9817,6 +9817,14 @@ function setStore(s, animate = true, preserveDual = false){
   if($('edTitle')) $('edTitle').textContent = 'App Identity';
   syncCategoryUI();
   if (typeof syncAgeUI === 'function') syncAgeUI();
+  if (typeof updateActivityBarState === 'function') {
+    const selCard = $('.editor .card.selected');
+    if (selCard && selCard.getAttribute('data-only') && selCard.getAttribute('data-only') !== s) {
+      if (typeof selectEditorCard === 'function') selectEditorCard('identityCard');
+    } else {
+      updateActivityBarState();
+    }
+  }
 
   // Immediately synchronize active device tabview pill (<16ms)
   requestAnimationFrame(() => {
@@ -10580,29 +10588,58 @@ function initHeader() {
     }
   });
 
-  // Add tooltip titles for Supabase-style collapsed sidebar icon rail
-  $$('.card').forEach(card => {
-    const h2 = card.querySelector('.card-header h2');
-    const header = card.querySelector('.card-header');
-    if (h2 && header) {
-      const titleSpan = h2.querySelector('span:not(.card-num):not(.card-ico)') || h2;
-      const text = titleSpan.textContent.trim();
-      if (text) {
-        header.title = text;
-      }
-    }
-  });
+  // 5. VS Code / Supabase Activity Bar & Single-Card View Controller
+  function initActivityBar() {
+    const editor = $('editorPanel');
+    if (!editor) return;
 
-  // 5. Editor Large Cards Accordion Controller (Expand / Collapse & Selected state)
-  document.addEventListener('click', (e) => {
-    const header = e.target.closest('.card-header');
-    if (header) {
-      if (e.target.closest('.info-tip-btn, button:not(.card-toggle-btn), a, input, select, textarea')) {
-        return;
+    let bar = $('activityBar');
+    if (!bar) {
+      bar = document.createElement('nav');
+      bar.className = 'activity-bar';
+      bar.id = 'activityBar';
+      bar.setAttribute('aria-label', 'Editor Activity Bar');
+      editor.insertBefore(bar, editor.firstChild);
+    }
+    bar.innerHTML = '';
+
+    const cards = $$('.editor .card');
+    cards.forEach((card, idx) => {
+      const h2 = card.querySelector('.card-header h2');
+      const icoSvg = card.querySelector('.card-ico svg');
+      const titleSpan = h2 ? (h2.querySelector('span:not(.card-num):not(.card-ico)') || h2) : null;
+      const titleText = titleSpan ? titleSpan.textContent.trim() : `Section ${idx + 1}`;
+      
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'activity-bar-btn';
+      btn.dataset.cardId = card.id;
+      btn.title = titleText;
+      btn.setAttribute('aria-label', titleText);
+      
+      const dataOnly = card.getAttribute('data-only');
+      if (dataOnly) {
+        btn.setAttribute('data-only', dataOnly);
       }
-      const card = header.closest('.card');
-      if (card) {
-        // If sidebar is currently in Supabase-style collapsed rail mode, clicking an icon opens the sidebar and focuses that card
+
+      if (card.classList.contains('selected')) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+      } else {
+        btn.setAttribute('aria-selected', 'false');
+      }
+
+      if (icoSvg) {
+        btn.innerHTML = icoSvg.outerHTML;
+      }
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const cardId = btn.dataset.cardId;
+        const targetCard = $(cardId);
+        if (!targetCard) return;
+
+        // If sidebar is currently collapsed, expand it and show this card
         if (document.body.classList.contains('sidebar-collapsed')) {
           if (typeof toggleSidebar === 'function') {
             toggleSidebar(true);
@@ -10611,46 +10648,87 @@ function initHeader() {
             localStorage.setItem('sps_sidebar_collapsed', '0');
             if (typeof updateSidebarButtonState === 'function') updateSidebarButtonState();
           }
-          $$('.card').forEach(c => {
-            c.classList.add('collapsed');
-            c.classList.remove('selected');
-          });
-          card.classList.remove('collapsed');
-          card.classList.add('selected');
-          setTimeout(() => {
-            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }, 200);
+          selectEditorCard(cardId);
           return;
         }
 
-        const wasCollapsed = card.classList.contains('collapsed');
-        card.classList.toggle('collapsed');
-        
-        // Card is selected only if it is expanded
-        $$('.card').forEach(c => c.classList.remove('selected'));
-        if (wasCollapsed) {
-          card.classList.add('selected');
+        // VS Code behavior: Clicking the currently active activity icon toggles/closes the sidebar
+        if (btn.classList.contains('active')) {
+          if (typeof toggleSidebar === 'function') {
+            toggleSidebar(false);
+          } else {
+            document.body.classList.add('sidebar-collapsed');
+            localStorage.setItem('sps_sidebar_collapsed', '1');
+            if (typeof updateSidebarButtonState === 'function') updateSidebarButtonState();
+          }
+          return;
         }
-      }
-      return;
-    }
 
-    // Clicking anywhere inside an already expanded card body selects it
-    const bodyCard = e.target.closest('.card');
-    if (bodyCard && !bodyCard.classList.contains('collapsed')) {
-      if (!bodyCard.classList.contains('selected')) {
-        $$('.card').forEach(c => c.classList.remove('selected'));
-        bodyCard.classList.add('selected');
-      }
+        // Switch to clicked section
+        selectEditorCard(cardId);
+      });
+
+      bar.appendChild(btn);
+    });
+
+    // Ensure at least one card is selected if none currently selected
+    if (!$('.editor .card.selected') && cards.length > 0) {
+      cards[0].classList.add('selected');
+      cards[0].classList.remove('collapsed');
+      updateActivityBarState();
+    }
+  }
+
+  function selectEditorCard(cardId) {
+    const targetCard = $(cardId);
+    if (!targetCard) return;
+
+    $$('.editor .card').forEach(c => {
+      c.classList.remove('selected');
+      c.classList.add('collapsed');
+    });
+    targetCard.classList.add('selected');
+    targetCard.classList.remove('collapsed');
+    targetCard.scrollTop = 0;
+
+    updateActivityBarState();
+  }
+
+  function updateActivityBarState() {
+    const selected = $('.editor .card.selected');
+    const selectedId = selected ? selected.id : null;
+    $$('.activity-bar-btn').forEach(btn => {
+      const isAct = btn.dataset.cardId === selectedId;
+      btn.classList.toggle('active', isAct);
+      btn.setAttribute('aria-selected', isAct ? 'true' : 'false');
+    });
+  }
+
+  window.selectEditorCard = selectEditorCard;
+  window.updateActivityBarState = updateActivityBarState;
+
+  // Initialize Activity Bar on load
+  initActivityBar();
+
+  // 6. Focusin inside an editor card updates selected state and activity bar
+  document.addEventListener('focusin', (e) => {
+    const card = e.target.closest('.card');
+    if (card && !card.classList.contains('selected')) {
+      selectEditorCard(card.id);
     }
   });
 
-  // 6. Focusin inside an expanded card also updates selected state
-  document.addEventListener('focusin', (e) => {
-    const card = e.target.closest('.card');
-    if (card && !card.classList.contains('collapsed') && !card.classList.contains('selected')) {
-      $$('.card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
+  // Card Header Click Delegation (maintains compatibility and manages selected state)
+  document.addEventListener('click', (e) => {
+    const header = e.target.closest('.card-header');
+    if (header) {
+      if (e.target.closest('.info-tip-btn, button:not(.card-toggle-btn), a, input, select, textarea')) return;
+      const card = header.closest('.card');
+      if (card) {
+        card.classList.toggle('collapsed');
+        card.classList.add('selected');
+        if (typeof updateActivityBarState === 'function') updateActivityBarState();
+      }
     }
   });
 }

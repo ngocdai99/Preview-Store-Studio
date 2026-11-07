@@ -635,6 +635,14 @@ function setStore(s, animate = true, preserveDual = false){
   if($('edTitle')) $('edTitle').textContent = 'App Identity';
   syncCategoryUI();
   if (typeof syncAgeUI === 'function') syncAgeUI();
+  if (typeof updateActivityBarState === 'function') {
+    const selCard = $('.editor .card.selected');
+    if (selCard && selCard.getAttribute('data-only') && selCard.getAttribute('data-only') !== s) {
+      if (typeof selectEditorCard === 'function') selectEditorCard('identityCard');
+    } else {
+      updateActivityBarState();
+    }
+  }
 
   // Immediately synchronize active device tabview pill (<16ms)
   requestAnimationFrame(() => {
