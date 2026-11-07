@@ -15,7 +15,6 @@ export function Navbar() {
 
   const [activeTab, setActiveTab] = useState<string>(() => {
     if (isTryPage) return "Live Demo";
-    if (isHomePage) return "Studio";
     return "";
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,9 +22,7 @@ export function Navbar() {
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navItems = [
-    { label: "Studio", href: "#hero" },
     { label: "Features", href: "#features" },
-    { label: "Why Us", href: "#comparison" },
     { label: "Pricing", href: "#pricing" },
     { label: "FAQ", href: "#faq" },
   ];
@@ -46,7 +43,6 @@ export function Navbar() {
       if (isClickScrollingRef.current) return;
 
       const scrollPos = window.scrollY + 140;
-      const compEl = document.getElementById("comparison");
       const featEl = document.getElementById("features");
       const pricingEl = document.getElementById("pricing");
       const faqEl = document.getElementById("faq");
@@ -55,12 +51,10 @@ export function Navbar() {
         setActiveTab("FAQ");
       } else if (pricingEl && scrollPos >= pricingEl.offsetTop) {
         setActiveTab("Pricing");
-      } else if (compEl && scrollPos >= compEl.offsetTop) {
-        setActiveTab("Why Us");
       } else if (featEl && scrollPos >= featEl.offsetTop) {
         setActiveTab("Features");
       } else {
-        setActiveTab("Studio");
+        setActiveTab("");
       }
     };
 
@@ -124,7 +118,7 @@ export function Navbar() {
         <div className="flex items-center gap-6 lg:gap-8">
           <Link
             href="/"
-            onClick={(e) => handleNavClick(e, "Studio", "#hero")}
+            onClick={(e) => handleNavClick(e, "", "#hero")}
             className="flex items-center gap-2.5 group shrink-0"
           >
             <BrandIcon className="w-6 h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
