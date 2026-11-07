@@ -31,7 +31,7 @@ function TryStudioIframeInner() {
       src={src}
       suppressHydrationWarning
       title="Store Preview Studio Interactive Sandbox"
-      className="w-full h-full border-0 block"
+      className="absolute inset-0 w-full h-full border-0 block"
       allow="clipboard-read; clipboard-write"
     />
   );
@@ -44,7 +44,7 @@ export function TryStudioIframe() {
         <iframe
           src="/try-studio.html?embed=true"
           title="Store Preview Studio Interactive Sandbox"
-          className="w-full h-full border-0 block"
+          className="absolute inset-0 w-full h-full border-0 block"
           allow="clipboard-read; clipboard-write"
         />
       }
