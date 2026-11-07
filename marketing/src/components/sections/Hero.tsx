@@ -21,7 +21,7 @@ export function Hero() {
               <span className="text-[#0f172a] dark:text-white block">
                 {hero.titleLead}
               </span>
-              <span className="text-emerald-700 dark:text-[#00D085] block mt-1">
+              <span className="text-emerald-700 dark:text-[oklch(0.76_0.15_157.5)] block mt-1">
                 {hero.titleAccent}
               </span>
             </h1>
