@@ -21,6 +21,7 @@
   color: #fff;
   font-family: inherit;
   font-size: 13px;
+  font-weight: 400;
   line-height: 1.55;
   display: flex;
   align-items: center;
@@ -69,7 +70,7 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 500;
+  font-weight: 400;
   color: #fff;
 }
 
