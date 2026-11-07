@@ -172,8 +172,9 @@ function initHeader() {
     const selectedId = selected ? selected.id : null;
     const isLight = document.documentElement.dataset.ui === 'light';
     const activeColor = isLight ? '#0f172a' : '#ffffff';
-    const activeBg = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.12)';
-    const activeBorder = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.08)';
+    const activeBg = isLight ? '#ffffff' : 'rgba(255, 255, 255, 0.12)';
+    const activeBorder = isLight ? 'rgba(15, 23, 42, 0.16)' : 'rgba(255, 255, 255, 0.08)';
+    const activeShadow = isLight ? '0 1px 3px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff' : 'none';
 
     $$('.activity-bar-btn').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
@@ -185,6 +186,11 @@ function initHeader() {
         btn.style.setProperty('border', `1px solid ${activeBorder}`, 'important');
         btn.style.setProperty('border-radius', '6px', 'important');
         btn.style.setProperty('color', activeColor, 'important');
+        if (activeShadow !== 'none') {
+          btn.style.setProperty('box-shadow', activeShadow, 'important');
+        } else {
+          btn.style.removeProperty('box-shadow');
+        }
         const s = btn.querySelector('svg');
         if (s) {
           s.style.setProperty('opacity', '1', 'important');
@@ -196,6 +202,7 @@ function initHeader() {
         btn.style.removeProperty('border');
         btn.style.removeProperty('border-radius');
         btn.style.removeProperty('color');
+        btn.style.removeProperty('box-shadow');
         const s = btn.querySelector('svg');
         if (s) {
           s.style.removeProperty('opacity');

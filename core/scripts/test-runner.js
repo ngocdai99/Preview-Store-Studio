@@ -1625,7 +1625,7 @@ assert(bundledHtml.includes('Contains transparency (alpha channel not allowed by
 assert(bundledHtml.includes('MAX_FEATURE_BYTES = 15 * 1024 * 1024'), 'Feature Graphic Inspector modal verifies 15 MB file size limit');
 assert(bundledHtml.includes('Alpha detected · 100% Opaque required (no alpha)'), 'Feature Graphic Inspector modal rejects alpha transparency with actionable guidance');
 assert(bundledHtml.includes('id="featureCard"') && bundledHtml.includes('</i>Feature Graphic</h2>'), 'Feature Graphic card title removes (1024×500 px) for concise clean title');
-assert(bundledHtml.includes('.card h2{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0;color:#cfd8ea}'), 'Card headers enforce flex-wrap: nowrap to prevent title text dropping below icon');
+assert(bundledHtml.includes('.card h2{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0;color:#cfd8ea}'), 'Card headers enforce flex-wrap: nowrap to prevent title text dropping below icon');
 assert(bundledHtml.includes('id="featureCard"') && bundledHtml.includes('<span class="tag g">GOOGLE</span>') && bundledHtml.includes('id="featureInfoBtn"'), 'Feature Graphic card places GOOGLE tag and info button in header row aligned with title');
 assert(!bundledHtml.includes('No Feature Graphic uploaded yet'), 'Feature Graphic card suppresses redundant warning alert banner when empty');
 assert(!bundledHtml.includes('Click or drag image to upload'), 'Feature Graphic placeholder SVG removes all text descriptions for a clean minimalist icon state');
