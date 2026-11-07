@@ -186,15 +186,27 @@ export function ShowcaseCarousel() {
         >
           {/* Main 16:9 Image Frame */}
           <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-950">
-            <Image
-              key={current.id}
-              src={current.src}
-              alt={current.alt}
-              fill
-              priority={currentIndex === 0}
-              className="object-cover object-center transition-opacity duration-300 ease-out"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1152px"
-            />
+            {/* Sliding Track */}
+            <div
+              className="flex w-full h-full transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-transform"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {SHOWCASE_SLIDES.map((slide, idx) => (
+                <div
+                  key={slide.id}
+                  className="relative w-full h-full shrink-0 aspect-[16/9]"
+                >
+                  <Image
+                    src={slide.src}
+                    alt={slide.alt}
+                    fill
+                    priority={idx === 0 || idx === 1}
+                    className="object-cover object-center select-none pointer-events-none"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1152px"
+                  />
+                </div>
+              ))}
+            </div>
 
             {/* Left & Right Arrow Buttons */}
             <button
