@@ -102,55 +102,55 @@ export function Comparison() {
           </p>
         </div>
 
-        {/* Alternating Left-Right Cards Stack */}
-        <div className="space-y-6 sm:space-y-8">
+        {/* Alternating Left-Right Cards Stack (Gom nhỏ 1/2) */}
+        <div className="space-y-4 sm:space-y-6">
           {BEATS_DATA.map((item, idx) => {
             const isLeft = idx % 2 === 0;
 
             return (
               <div
                 key={item.id}
-                className={`w-full md:w-[86%] ${
+                className={`w-full md:w-[52%] ${
                   isLeft ? "md:mr-auto md:ml-0" : "md:ml-auto md:mr-0"
                 }`}
               >
-                <div className="group relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300">
+                <div className="group relative rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300">
                   {/* Subtle Top Hairline */}
                   <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
 
                   {/* Card Category Header */}
-                  <div className="flex items-center gap-2.5 mb-5">
-                    <span className="font-mono text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">
+                  <div className="flex items-center gap-2 mb-3.5">
+                    <span className="font-mono text-[11px] font-semibold text-slate-400 dark:text-slate-500">
                       {item.number}
                     </span>
                     <span className="text-slate-300 dark:text-slate-700">·</span>
-                    <span className="text-[11.5px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                       {item.category}
                     </span>
                   </div>
 
                   {/* Main Solution Value */}
-                  <div className="space-y-2">
-                    <div className="flex items-start gap-3.5">
+                  <div className="space-y-1.5">
+                    <div className="flex items-start gap-3">
                       {/* Neutral / White Icon */}
-                      <div className="shrink-0 w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.08] text-slate-900 dark:text-white flex items-center justify-center mt-0.5 border border-slate-200/80 dark:border-white/10">
+                      <div className="shrink-0 w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/[0.08] text-slate-900 dark:text-white flex items-center justify-center mt-0.5 border border-slate-200/80 dark:border-white/10">
                         {item.icon}
                       </div>
-                      <h3 className="text-[17px] sm:text-[19px] font-bold text-[#0f172a] dark:text-white leading-snug tracking-[-0.01em]">
+                      <h3 className="text-[15.5px] sm:text-[16.5px] font-bold text-[#0f172a] dark:text-white leading-snug tracking-[-0.01em]">
                         {item.solutionTitle}
                       </h3>
                     </div>
-                    <p className="text-[13.5px] sm:text-[14px] text-slate-600 dark:text-slate-400 leading-relaxed pl-[46px]">
+                    <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed pl-[44px]">
                       {item.solutionDesc}
                     </p>
                   </div>
 
                   {/* Subtle Hairline Divider */}
-                  <div className="my-5 border-t border-slate-100 dark:border-white/[0.06]" />
+                  <div className="my-3.5 border-t border-slate-100 dark:border-white/[0.06]" />
 
                   {/* The Old Way Contrast (Clean Neutral Bullet) */}
                   <div className="flex items-start gap-2.5 text-slate-500 dark:text-slate-400">
-                    <span className="shrink-0 mt-1 w-3.5 h-3.5 rounded-full bg-slate-200/70 dark:bg-white/[0.08] text-slate-500 dark:text-slate-400 flex items-center justify-center">
+                    <span className="shrink-0 mt-0.5 w-3.5 h-3.5 rounded-full bg-slate-200/70 dark:bg-white/[0.08] text-slate-500 dark:text-slate-400 flex items-center justify-center">
                       <svg
                         width="8"
                         height="8"
@@ -164,7 +164,7 @@ export function Comparison() {
                         <line x1="5" y1="12" x2="19" y2="12" />
                       </svg>
                     </span>
-                    <div className="text-[12.5px] sm:text-[13px] leading-snug">
+                    <div className="text-[12px] sm:text-[12.5px] leading-snug">
                       <span className="font-semibold text-slate-600 dark:text-slate-300 mr-1.5">
                         The old way:
                       </span>
