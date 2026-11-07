@@ -10,7 +10,7 @@ export function Pricing() {
   const { pricing } = siteConfig;
 
   return (
-    <section id="pricing" className="py-20 border-t border-border bg-background transition-colors">
+    <section id="pricing" className="py-20 border-t border-border bg-slate-50/50 dark:bg-[#131413] transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Head */}
         <div className="text-center max-w-3xl mx-auto mb-16">

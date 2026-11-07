@@ -158,16 +158,16 @@ export function ShowcaseCarousel() {
   return (
     <section
       id="showcase"
-      className="relative pt-6 pb-16 sm:pt-8 sm:pb-20 overflow-hidden"
+      className="py-20 sm:py-24 border-t border-border bg-slate-50/50 dark:bg-[#131413] transition-colors relative overflow-hidden"
       aria-label="Product Showcase Carousel"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
-          <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-tight">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+          <h2 className="text-[28px] sm:text-[36px] lg:text-[40px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-tight">
             Explore the Studio
           </h2>
-          <p className="mt-2 text-[14px] sm:text-[15.5px] text-slate-600 dark:text-slate-400">
+          <p className="mt-3 text-[15px] sm:text-[16.5px] text-slate-600 dark:text-slate-400">
             Dual-store viewports, compliance audits, and high-resolution export workflows.
           </p>
         </div>

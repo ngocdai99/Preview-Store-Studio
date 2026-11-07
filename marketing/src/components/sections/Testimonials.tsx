@@ -48,7 +48,7 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="py-20 sm:py-24 border-t border-border bg-slate-50/50 dark:bg-[#131413] transition-colors"
+      className="py-20 sm:py-24 border-t border-border bg-background transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
