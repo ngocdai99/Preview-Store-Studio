@@ -14,7 +14,7 @@ export const siteConfig = {
   description:
     "The browser-based, offline studio to design, preview, and prepare Apple App Store & Google Play listings with realistic device mockups.",
   url: "https://store-preview-studio.pages.dev",
-  ogImage: "https://store-preview-studio.pages.dev/og-image.png?v=20261026-4k",
+  ogImage: "https://store-preview-studio.pages.dev/og-image.png?v=20261107",
   gumroadUrl: "https://kaidevlabs.gumroad.com/l/store-preview-studio",
   creator: {
     name: "Kai",
