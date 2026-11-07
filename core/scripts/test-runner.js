@@ -2200,8 +2200,8 @@ assert(bundledHtml.includes(':root[data-ui=light] .card.selected:not(.collapsed)
 assert(bundledHtml.includes('#identityCard.selected:not(.collapsed) .card-num') && bundledHtml.includes('#contentCard.selected:not(.collapsed) .card-num'), 'CSS provides harmonious semantic tints for individual card numbers');
 assert(bundledHtml.includes(':root[data-ui=light] #identityCard.selected:not(.collapsed) .card-num'), 'CSS provides light theme semantic tints for card numbers');
 
-// 4. Stable Scrollbar Gutter to prevent Form Width Layout Shift on Card Expand
-assert(bundledHtml.includes('scrollbar-gutter:stable') || bundledHtml.includes('scrollbar-gutter: stable'), 'Editor form container applies scrollbar-gutter: stable to prevent layout shift upon expanding cards');
+// 4. Streamlined Scrollbar to prevent Form Width Misalignment
+assert(bundledHtml.includes('scrollbar-width:thin') || bundledHtml.includes('.editor .card.selected .card-body'), 'Editor form container applies streamlined scrollbar without gutter misalignment');
 assert(bundledHtml.includes('.editor::-webkit-scrollbar'), 'CSS provides custom floating scrollbar styles for editor drawer');
 
 // 3. CSS rules for collapsed cards and headers

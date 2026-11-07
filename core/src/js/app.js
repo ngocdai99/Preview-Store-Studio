@@ -10694,8 +10694,9 @@ function initHeader() {
     }
     const selectedId = selected ? selected.id : null;
     const isLight = document.documentElement.dataset.ui === 'light';
-    const activeColor = isLight ? '#007acc' : '#ffffff';
-    const activeBg = isLight ? 'rgba(0,122,204,0.1)' : 'rgba(255,255,255,0.12)';
+    const activeColor = isLight ? '#0f172a' : '#ffffff';
+    const activeBg = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.12)';
+    const activeBorder = isLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.08)';
 
     $$('.activity-bar-btn').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
@@ -10703,9 +10704,10 @@ function initHeader() {
       btn.setAttribute('aria-selected', isAct ? 'true' : 'false');
 
       if (isAct) {
-        btn.style.setProperty('border-left', `3px solid ${activeColor}`, 'important');
-        btn.style.setProperty('color', activeColor, 'important');
         btn.style.setProperty('background', activeBg, 'important');
+        btn.style.setProperty('border', `1px solid ${activeBorder}`, 'important');
+        btn.style.setProperty('border-radius', '8px', 'important');
+        btn.style.setProperty('color', activeColor, 'important');
         const s = btn.querySelector('svg');
         if (s) {
           s.style.setProperty('opacity', '1', 'important');
@@ -10713,9 +10715,10 @@ function initHeader() {
           s.style.setProperty('color', activeColor, 'important');
         }
       } else {
-        btn.style.removeProperty('border-left');
-        btn.style.removeProperty('color');
         btn.style.removeProperty('background');
+        btn.style.removeProperty('border');
+        btn.style.removeProperty('border-radius');
+        btn.style.removeProperty('color');
         const s = btn.querySelector('svg');
         if (s) {
           s.style.removeProperty('opacity');
