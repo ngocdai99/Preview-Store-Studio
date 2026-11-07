@@ -3,22 +3,32 @@
 import React from "react";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 import { StoreMetricsRibbon } from "@/components/ui/StoreMetricsRibbon";
+import { useDraggableScroll } from "./DeviceHardwareHelpers";
 
 export interface PhoneFramesStageProps {
   timeString: string;
-  isActive: boolean;
+  isForeground: boolean;
+  onSelect?: () => void;
 }
 
-export function PhoneFramesStage({ timeString, isActive }: PhoneFramesStageProps) {
+export function PhoneFramesStage({ timeString, isForeground, onSelect }: PhoneFramesStageProps) {
+  const { ref: scrollRef, handlers: scrollHandlers } = useDraggableScroll();
   return (
     <div
-      className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
-        isActive
-          ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 scale-[0.88] translate-y-3 pointer-events-none"
+      onClick={!isForeground ? onSelect : undefined}
+      className={`absolute inset-0 flex items-center justify-center transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
+        isForeground
+          ? "z-20 opacity-100 scale-95 sm:scale-100 translate-x-0 translate-y-0 rotate-0 filter-none pointer-events-auto"
+          : "z-10 opacity-40 hover:opacity-85 scale-[0.74] sm:scale-[0.78] hover:scale-[0.78] sm:hover:scale-[0.82] -translate-x-20 sm:-translate-x-32 -translate-y-3 sm:-translate-y-4 -rotate-2 filter blur-[0.4px] hover:blur-none cursor-pointer pointer-events-auto group"
       }`}
     >
-      <div className="relative w-[212px] sm:w-[226px] h-[392px] sm:h-[412px] rounded-[44px] p-[6px] border border-[#363840] bg-[#1e1f23] shadow-[0_16px_36px_-6px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.18)] transition-all duration-300">
+      <div
+        className={`relative w-[212px] sm:w-[226px] h-[392px] sm:h-[412px] rounded-[44px] p-[6px] border border-[#363840] bg-[#1e1f23] transition-all duration-500 ${
+          isForeground
+            ? "shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2),0_0_0_1px_rgba(255,255,255,0.12)]"
+            : "shadow-[0_12px_28px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+        }`}
+      >
         {/* Outer Physical Hardware Buttons */}
         <div className="absolute -left-[4px] top-[68px] w-[3px] h-[16px] rounded-l-sm bg-[#363840]" />
         <div className="absolute -left-[4px] top-[94px] w-[3px] h-[28px] rounded-l-sm bg-[#363840]" />
@@ -104,7 +114,9 @@ export function PhoneFramesStage({ timeString, isActive }: PhoneFramesStageProps
 
             {/* Horizontal Scroll Carousel for Landscape Cards */}
             <div
-              className="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none"
+              ref={scrollRef}
+              {...scrollHandlers}
+              className="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none cursor-grab active:cursor-grabbing"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {/* Slide 1: Live Canvas Studio (16:9 Landscape - SRS Apple & Google Standard) */}
@@ -301,6 +313,25 @@ export function PhoneFramesStage({ timeString, isActive }: PhoneFramesStageProps
           {/* iOS Home Indicator Bar */}
           <div className="w-20 h-1 rounded-full mx-auto mt-1 bg-white/35 shrink-0" />
         </div>
+
+        {/* Click overlay when in background */}
+        {!isForeground && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect?.();
+            }}
+            aria-label="Switch to iPhone preview"
+            className="absolute inset-0 z-40 w-full h-full rounded-[44px] cursor-pointer focus:outline-none"
+          >
+            <span className="sr-only">Switch to iPhone</span>
+            <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-slate-900/95 border border-white/20 text-white font-medium text-[9px] tracking-tight shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap flex items-center gap-1 backdrop-blur-md">
+              <span>View iPhone</span>
+              <span className="text-emerald-400 font-bold">↗</span>
+            </span>
+          </button>
+        )}
       </div>
     </div>
   );

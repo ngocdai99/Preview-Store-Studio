@@ -21,6 +21,88 @@ export function useDeviceTime() {
   return timeString;
 }
 
+// Hook providing smooth drag-to-scroll, wheel-to-horizontal-scroll, and arrow navigation
+export function useDraggableScroll() {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const isDownRef = React.useRef(false);
+  const startXRef = React.useRef(0);
+  const scrollLeftRef = React.useRef(0);
+
+  const updateScrollState = React.useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 6);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 6);
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    updateScrollState();
+    el.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    // Convert mouse wheel vertical scroll into horizontal scroll with preventDefault
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 2) {
+        el.scrollLeft += e.deltaY * 0.9;
+        e.preventDefault();
+      }
+    };
+    el.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+      el.removeEventListener("wheel", handleWheel);
+    };
+  }, [updateScrollState]);
+
+  const onMouseDown = React.useCallback((e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    isDownRef.current = true;
+    startXRef.current = e.pageX - el.offsetLeft;
+    scrollLeftRef.current = el.scrollLeft;
+  }, []);
+
+  const onMouseMove = React.useCallback((e: React.MouseEvent) => {
+    if (!isDownRef.current) return;
+    const el = ref.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startXRef.current) * 1.4;
+    el.scrollLeft = scrollLeftRef.current - walk;
+  }, []);
+
+  const onMouseUp = React.useCallback(() => {
+    isDownRef.current = false;
+  }, []);
+
+  const scrollByAmount = React.useCallback((amount: number) => {
+    const el = ref.current;
+    if (!el) return;
+    el.scrollBy({ left: amount, behavior: "smooth" });
+  }, []);
+
+  return {
+    ref,
+    canScrollLeft,
+    canScrollRight,
+    scrollBy: scrollByAmount,
+    handlers: {
+      onMouseDown,
+      onMouseMove,
+      onMouseUp,
+      onMouseLeave: onMouseUp,
+    },
+  };
+}
+
 // Reusable iPad / Tablet Status Bar
 export function IPadStatusBar({ timeString }: { timeString?: string }) {
   const defaultTime = useDeviceTime();

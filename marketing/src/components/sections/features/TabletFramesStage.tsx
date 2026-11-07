@@ -3,23 +3,34 @@
 import React from "react";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 import { StoreMetricsRibbon } from "@/components/ui/StoreMetricsRibbon";
-import { IPadMockupFrame } from "./DeviceHardwareHelpers";
+import { IPadMockupFrame, useDraggableScroll } from "./DeviceHardwareHelpers";
 
 export interface TabletFramesStageProps {
   timeString: string;
-  isActive: boolean;
+  isForeground: boolean;
+  onSelect?: () => void;
 }
 
-export function TabletFramesStage({ timeString, isActive }: TabletFramesStageProps) {
+export function TabletFramesStage({ timeString, isForeground, onSelect }: TabletFramesStageProps) {
+  const { ref: scrollRef, handlers: scrollHandlers } = useDraggableScroll();
   return (
     <div
-      className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
-        isActive
-          ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 scale-[0.88] -translate-y-3 pointer-events-none"
+      onClick={!isForeground ? onSelect : undefined}
+      className={`absolute inset-0 flex items-center justify-center transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
+        isForeground
+          ? "z-20 opacity-100 scale-[0.92] sm:scale-100 translate-x-0 translate-y-0 rotate-0 filter-none pointer-events-auto"
+          : "z-10 opacity-40 hover:opacity-85 scale-[0.78] sm:scale-[0.82] hover:scale-[0.82] sm:hover:scale-[0.86] translate-x-10 sm:translate-x-16 -translate-y-3 sm:-translate-y-4 rotate-[1.5deg] filter blur-[0.4px] hover:blur-none cursor-pointer pointer-events-auto group"
       }`}
     >
-      <IPadMockupFrame timeString={timeString}>
+      <div className="relative">
+        <IPadMockupFrame
+          timeString={timeString}
+          className={`transition-all duration-500 ${
+            isForeground
+              ? "shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2),0_0_0_1px_rgba(255,255,255,0.12)]"
+              : "shadow-[0_12px_28px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+          }`}
+        >
         {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
         <div className="flex items-start gap-3 mt-0.5">
           <div className="shrink-0 rounded-[13px] shadow-sm overflow-hidden">
@@ -58,7 +69,9 @@ export function TabletFramesStage({ timeString, isActive }: TabletFramesStagePro
           </div>
 
           <div
-            className="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none"
+            ref={scrollRef}
+            {...scrollHandlers}
+            className="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none cursor-grab active:cursor-grabbing"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {/* Slide 1: Studio Canvas (Exact 4:3 Landscape - Apple iPad App Store SRS Standard) */}
@@ -257,6 +270,26 @@ export function TabletFramesStage({ timeString, isActive }: TabletFramesStagePro
           </div>
         </div>
       </IPadMockupFrame>
+
+      {/* Click overlay when in background */}
+      {!isForeground && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect?.();
+          }}
+          aria-label="Switch to iPad preview"
+          className="absolute inset-0 z-40 w-full h-full rounded-[32px] cursor-pointer focus:outline-none"
+        >
+          <span className="sr-only">Switch to iPad</span>
+          <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-slate-900/95 border border-white/20 text-white font-medium text-[9px] tracking-tight shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap flex items-center gap-1 backdrop-blur-md">
+            <span>View iPad</span>
+            <span className="text-emerald-400 font-bold">↗</span>
+          </span>
+        </button>
+      )}
+      </div>
     </div>
   );
 }

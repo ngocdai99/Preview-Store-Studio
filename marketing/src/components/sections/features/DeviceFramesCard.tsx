@@ -76,10 +76,32 @@ export function DeviceFramesCard() {
         />
       }
     >
-      {/* Simulated Live Stage */}
-      <div className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-2xl">
-        <PhoneFramesStage timeString={timeString} isActive={device === "phone"} />
-        <TabletFramesStage timeString={timeString} isActive={device === "tablet"} />
+      {/* Simulated Live Stage with Layered 3D Depth */}
+      <div
+        className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-2xl"
+        style={{ perspective: "1200px" }}
+      >
+        {/* Subtle Ambient Backlight */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div
+            className={`w-[280px] h-[280px] rounded-full blur-[80px] opacity-25 transition-all duration-700 ease-out ${
+              device === "phone"
+                ? "bg-indigo-500/40 -translate-x-6"
+                : "bg-sky-500/40 translate-x-6"
+            }`}
+          />
+        </div>
+
+        <PhoneFramesStage
+          timeString={timeString}
+          isForeground={device === "phone"}
+          onSelect={() => setDevice("phone")}
+        />
+        <TabletFramesStage
+          timeString={timeString}
+          isForeground={device === "tablet"}
+          onSelect={() => setDevice("tablet")}
+        />
       </div>
     </FeatureCard>
   );
