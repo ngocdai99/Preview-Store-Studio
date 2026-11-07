@@ -30,7 +30,7 @@ const BEATS_DATA: BeatItem[] = [
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-blue-500 dark:text-blue-400"
+        className="text-slate-900 dark:text-white"
       >
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
@@ -38,7 +38,7 @@ const BEATS_DATA: BeatItem[] = [
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    hoverBorder: "hover:border-blue-500/40 dark:hover:border-blue-500/40",
+    hoverBorder: "hover:border-slate-300 dark:hover:border-white/30",
   },
   {
     id: "beat-2",
@@ -57,7 +57,7 @@ const BEATS_DATA: BeatItem[] = [
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-indigo-500 dark:text-indigo-400"
+        className="text-[#80C8FF]"
       >
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
         <line x1="16" y1="2" x2="16" y2="6" />
@@ -66,7 +66,7 @@ const BEATS_DATA: BeatItem[] = [
         <path d="M9 16l2 2 4-4" />
       </svg>
     ),
-    hoverBorder: "hover:border-indigo-500/40 dark:hover:border-indigo-500/40",
+    hoverBorder: "hover:border-[#80C8FF]/40",
   },
   {
     id: "beat-3",
@@ -85,13 +85,13 @@ const BEATS_DATA: BeatItem[] = [
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-cyan-500 dark:text-cyan-400"
+        className="text-[#47C5FB]"
       >
         <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
         <line x1="12" y1="18" x2="12.01" y2="18" />
       </svg>
     ),
-    hoverBorder: "hover:border-cyan-500/40 dark:hover:border-cyan-500/40",
+    hoverBorder: "hover:border-[#47C5FB]/40",
   },
   {
     id: "beat-4",
@@ -110,13 +110,13 @@ const BEATS_DATA: BeatItem[] = [
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-slate-900 dark:text-white"
+        className="text-[#FFFFDE]"
       >
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         <polyline points="9 12 11 14 15 10" />
       </svg>
     ),
-    hoverBorder: "hover:border-slate-400 dark:hover:border-white/30",
+    hoverBorder: "hover:border-[#FFFFDE]/40",
   },
 ];
 
