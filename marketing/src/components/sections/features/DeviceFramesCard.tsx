@@ -13,11 +13,22 @@ export function DeviceFramesCard() {
 
   return (
     <FeatureCard
-      number="01"
+      icon={
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-4 h-4"
+        >
+          <rect x="5" y="2" width="14" height="20" rx="3" />
+          <line x1="12" y1="18" x2="12.01" y2="18" />
+        </svg>
+      }
       title="Modern Device Frames"
       description="Adaptive device frames across multiple screen formats."
-      accentGradient="from-[#00D085] via-emerald-400 to-transparent"
-      badgeColorClass="border-emerald-500/40 text-emerald-600 dark:text-[#00D085]"
       className="col-span-1 md:col-span-2 lg:col-span-6"
       headerRight={
         <SlidingTabs

@@ -140,11 +140,23 @@ export function StorePresetsCard() {
 
   return (
     <FeatureCard
-      number="02"
+      icon={
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-4 h-4"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M3 9h18" />
+          <path d="M9 21V9" />
+        </svg>
+      }
       title="Curated Store Presets"
       description="Explore sample listings across diverse app categories."
-      accentGradient="from-amber-400 via-amber-500 to-transparent"
-      badgeColorClass="border-amber-500/40 text-amber-600 dark:text-amber-400"
       className="col-span-1 md:col-span-2 lg:col-span-6"
       headerRight={
         <SlidingTabs

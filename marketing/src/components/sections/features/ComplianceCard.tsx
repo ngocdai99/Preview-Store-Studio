@@ -15,11 +15,22 @@ export function ComplianceCard() {
 
   return (
     <FeatureCard
-      number="03"
+      icon={
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-4 h-4"
+        >
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      }
       title="Smart Guidelines & Asset Check"
       description="Validation checks catch formatting mistakes such as transparent alpha, low resolutions, and aspect ratio mismatches."
-      accentGradient="from-sky-400 via-blue-500 to-transparent"
-      badgeColorClass="border-sky-500/40 text-sky-600 dark:text-sky-400"
       className="col-span-1 md:col-span-1 lg:col-span-6"
     >
       <div className="relative z-10">

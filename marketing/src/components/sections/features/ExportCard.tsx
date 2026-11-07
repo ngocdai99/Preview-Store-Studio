@@ -45,11 +45,23 @@ export function ExportCard() {
 
   return (
     <FeatureCard
-      number="04"
+      icon={
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-4 h-4"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+      }
       title="Export Deliverables & Project Backup"
       description="Export 3x Retina PNG mockups, listing metadata, and full project backups."
-      accentGradient="from-purple-400 via-purple-500 to-transparent"
-      badgeColorClass="border-purple-500/40 text-purple-600 dark:text-purple-400"
       className="col-span-1 md:col-span-1 lg:col-span-6"
     >
       <div className="relative z-10">
