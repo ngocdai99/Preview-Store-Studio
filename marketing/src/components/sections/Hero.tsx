@@ -17,7 +17,7 @@ export function Hero() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 lg:gap-14">
           {/* Left Column: Two-line Punchy Headline & CTAs */}
           <div className="lg:w-[58%] shrink-0">
-            <h1 className="text-[26px] sm:text-[34px] lg:text-[38px] xl:text-[40px] font-medium tracking-[-0.02em] leading-[1.2]">
+            <h1 className="text-[26px] sm:text-[34px] lg:text-[38px] xl:text-[40px] font-medium tracking-[-0.02em] leading-[1.2] text-balance">
               <span className="text-[#0f172a] dark:text-white block">
                 {hero.titleLead}
               </span>
@@ -50,9 +50,11 @@ export function Hero() {
 
           {/* Right Column: Clean Descriptive Subtext */}
           <div className="lg:w-[42%]">
-            <p className="text-[15px] sm:text-[16px] lg:text-[16.5px] text-[#475569] dark:text-slate-400 leading-[1.65]">
-              {hero.subheadlineLead || "Save 2 hours of back-and-forth before every App Store & Google Play submission."}{" "}
-              {hero.subheadlineFollow || "App Store Connect & Google Play provide zero live preview — see exactly how your listing looks before submitting."}
+            <p className="text-[16px] text-[#475569] dark:text-[oklch(0.684_0.00275_157.5)] leading-[1.65] text-balance">
+              <span>Save 2 hours of back-and-forth before every store submission.</span>
+              <span className="block mt-1 sm:mt-1.5">
+                Preview and verify your listings on realistic device frames before submitting.
+              </span>
             </p>
           </div>
         </div>
