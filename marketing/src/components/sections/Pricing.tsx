@@ -14,7 +14,7 @@ export function Pricing() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Head */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <h2 className="section-title text-[22px] sm:text-[28px] lg:text-[32px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2] text-balance">
+          <h2 className="section-title text-[22px] sm:text-[28px] lg:text-[32px] font-medium tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2] text-balance">
             {pricing.title}
           </h2>
           <p className="mt-3 text-muted text-sm sm:text-base text-balance">{pricing.description}</p>

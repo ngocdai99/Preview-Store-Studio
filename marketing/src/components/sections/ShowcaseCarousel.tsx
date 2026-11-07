@@ -164,7 +164,7 @@ export function ShowcaseCarousel() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-          <h2 className="text-[22px] sm:text-[28px] lg:text-[32px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2]">
+          <h2 className="text-[22px] sm:text-[28px] lg:text-[32px] font-medium tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2]">
             Explore the Studio
           </h2>
         </div>

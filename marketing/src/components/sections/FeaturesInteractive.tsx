@@ -748,7 +748,7 @@ export function Features() {
             Interactive Studio Capabilities
           </div>
 
-          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
+          <h2 className="section-title text-[28px] sm:text-[36px] lg:text-[42px] font-medium tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.15] text-balance">
             {features.headline}
           </h2>
 
