@@ -97,8 +97,8 @@
     margin: 0 auto !important;
   }
   .stage-toolbar{flex-wrap:wrap;justify-content:center;gap:8px;padding:4px 8px}
-  .stage-toolbar-center{order:1;flex:0 0 auto}
-  .stage-toolbar-right{order:2;flex:0 0 auto}
+  .stage-toolbar-center{position:static;transform:none;order:1;flex:0 0 auto}
+  .stage-toolbar-right{order:2;flex:0 0 auto;margin-left:0!important}
   .stage-toolbar-left{order:3;flex:0 0 100%;justify-content:center;margin-top:2px}
   body[data-panel=edit] .stage,
   body[data-panel=edit] .editor-resizer{display:none!important}

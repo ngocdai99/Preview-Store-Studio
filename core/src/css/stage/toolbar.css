@@ -16,25 +16,30 @@
   display:flex;
   align-items:center;
   gap:8px;
-  flex:1;
+  flex:0 0 auto !important;
   justify-content:flex-start;
   min-width:0;
   position:relative;
   z-index:25;
 }
 .stage-toolbar-center{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
   display:flex;
   align-items:center;
   justify-content:center;
   flex-shrink:0;
   gap:12px;
   z-index:25;
+  pointer-events:auto;
 }
 .stage-toolbar-right{
   display:flex;
   align-items:center;
   gap:8px;
-  flex:1;
+  flex:0 0 auto !important;
+  margin-left:auto !important;
   justify-content:flex-end;
   min-width:0;
   position:relative;
