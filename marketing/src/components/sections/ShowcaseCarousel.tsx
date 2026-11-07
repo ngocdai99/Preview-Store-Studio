@@ -163,16 +163,12 @@ export function ShowcaseCarousel() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold uppercase tracking-wider text-emerald-600 dark:text-[#00D085] bg-emerald-500/10 dark:bg-[#00D085]/10 border border-emerald-500/20 dark:border-[#00D085]/20 mb-3.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-[#00D085] shadow-[0_0_6px_rgba(0,208,133,0.7)]" />
-            Product Gallery
-          </span>
-          <h2 className="text-[26px] sm:text-[34px] lg:text-[38px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-tight">
-            See Store Preview Studio in Action
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+          <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-tight">
+            Explore the Studio
           </h2>
-          <p className="mt-2.5 text-[14.5px] sm:text-[16px] text-slate-600 dark:text-slate-400">
-            Swipe through the gallery to explore our multi-store viewports, audit rules, and 4K export workflows.
+          <p className="mt-2 text-[14px] sm:text-[15.5px] text-slate-600 dark:text-slate-400">
+            Dual-store viewports, compliance audits, and high-resolution export workflows.
           </p>
         </div>
 
