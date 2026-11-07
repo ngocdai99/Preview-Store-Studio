@@ -163,13 +163,10 @@ export function ShowcaseCarousel() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <h2 className="text-[28px] sm:text-[36px] lg:text-[40px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-tight">
             Explore the Studio
           </h2>
-          <p className="mt-3 text-[15px] sm:text-[16.5px] text-slate-600 dark:text-slate-400">
-            Dual-store viewports, compliance audits, and high-resolution export workflows.
-          </p>
         </div>
 
         {/* Carousel Viewport Container */}

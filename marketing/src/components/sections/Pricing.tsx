@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import { Sparkles, Info } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 
@@ -161,22 +161,7 @@ export function Pricing() {
           ))}
         </div>
 
-          {/* Scope Note */}
-          <div className="p-4 sm:p-6 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-slate-50 dark:bg-[#1D1E1D] flex items-start gap-3 text-xs sm:text-sm text-muted leading-relaxed">
-            <Info className="w-4 h-4 text-muted flex-shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p>
-                <strong className="text-foreground">{pricing.scopeNote.coveredLabel}</strong>{" "}
-                {pricing.scopeNote.covered}
-              </p>
-              <p>
-                <strong className="text-muted">{pricing.scopeNote.notCoveredLabel}</strong>{" "}
-                {pricing.scopeNote.notCovered}
-              </p>
-            </div>
-          </div>
-
-          {/* Founder Note from Kai */}
+        {/* Founder Note from Kai */}
           <div className="mt-8 max-w-lg mx-auto w-full">
             <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-[#1D1E1D] border border-slate-200/80 dark:border-white/[0.08] shadow-[0_4px_20px_-4px_rgba(15,23,42,0.05)] dark:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.4)] flex items-start gap-3.5 sm:gap-4 transition-all">
               {/* Avatar with Static Status Indicator */}
