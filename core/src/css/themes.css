@@ -240,10 +240,9 @@
 :root[data-ui=light] .seg button:hover:not(.on){
   color:#0f172a;
 }
-:root[data-ui=light] .seg button[data-s="apple"]:not(.on) .s-ico{color:#0066ff}
-:root[data-ui=light] .seg button[data-s="google"]:not(.on) .s-ico{color:#059669}
-:root[data-ui=light] .seg button.on{color:#fff!important}
-:root[data-ui=light] .seg button.on .s-ico{color:#fff!important}
+:root[data-ui=light] .seg button:not(.on) .s-ico{color:#64748b}
+:root[data-ui=light] .seg button.on{color:#0f172a!important}
+:root[data-ui=light] .seg button.on .s-ico{color:#0f172a!important}
 
 /* High-Contrast Stage Toolbar (.vt) in Light Mode */
 :root[data-ui=light] .vt{

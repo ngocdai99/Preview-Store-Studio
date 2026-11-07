@@ -25,71 +25,47 @@
   left: 0;
   height: 27px !important;
   border-radius: 8px !important;
-  background: #0071e3;
-  box-shadow: 0 2px 6px rgba(0, 113, 227, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: #1D1E1D;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
   pointer-events: none;
   z-index: 0;
   will-change: transform, width;
 }
 
-/* Immediate store switcher pill styling (applied instantly on tab switch via .is-*, .seg[data-store], or body[data-ui-store]) */
+/* Immediate store switcher pill styling - Monochrome Dark (Sidebar / VS Code / Theme-seg style) */
 .pill.is-apple,
 .seg[data-store="apple"] .pill,
-body[data-ui-store="apple"] .pill {
-  background: #0071e3 !important;
-  box-shadow: 0 2px 6px rgba(0, 113, 227, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-}
-
+body[data-ui-store="apple"] .pill,
 .pill.is-google,
 .seg[data-store="google"] .pill,
-body[data-ui-store="google"] .pill {
-  background: #03875f !important;
-  box-shadow: 0 2px 6px rgba(3, 135, 95, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-}
-
+body[data-ui-store="google"] .pill,
 .pill.is-dual,
 .seg[data-store="dual"] .pill,
-body[data-ui-store="dual"] .pill {
-  background: #334155 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+body[data-ui-store="dual"] .pill,
+body:not([data-ui-store])[data-store=apple]:not([data-dual=true]) .pill,
+body:not([data-ui-store])[data-store=google]:not([data-dual=true]) .pill,
+body:not([data-ui-store])[data-dual=true] .pill {
+  background: #1D1E1D !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
+:root[data-ui=light] .pill,
+:root[data-ui=light] .pill.is-apple,
+:root[data-ui=light] .seg[data-store="apple"] .pill,
+:root[data-ui=light] body[data-ui-store="apple"] .pill,
+:root[data-ui=light] .pill.is-google,
+:root[data-ui=light] .seg[data-store="google"] .pill,
+:root[data-ui=light] body[data-ui-store="google"] .pill,
 :root[data-ui=light] .pill.is-dual,
 :root[data-ui=light] .seg[data-store="dual"] .pill,
-:root[data-ui=light] body[data-ui-store="dual"] .pill {
-  background: #0f172a !important;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-  border-color: #0f172a !important;
-}
-
-/* Fallback for static/legacy states when data-ui-store is not set yet */
-body:not([data-ui-store])[data-store=apple]:not([data-dual=true]) .pill {
-  background: #0071e3 !important;
-  box-shadow: 0 2px 6px rgba(0, 113, 227, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-}
-
-body:not([data-ui-store])[data-store=google]:not([data-dual=true]) .pill {
-  background: #03875f !important;
-  box-shadow: 0 2px 6px rgba(3, 135, 95, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-}
-
-body:not([data-ui-store])[data-dual=true] .pill {
-  background: #334155 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
+:root[data-ui=light] body[data-ui-store="dual"] .pill,
 :root[data-ui=light] body:not([data-ui-store])[data-dual=true] .pill {
-  background: #0f172a !important;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-  border-color: #0f172a !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
 .seg button {
@@ -97,7 +73,7 @@ body:not([data-ui-store])[data-dual=true] .pill {
   z-index: 1;
   background: none;
   border: 0;
-  color: #94a3b8;
+  color: #8e8e93;
   width: 36px !important;
   height: 27px !important;
   min-width: 36px !important;
@@ -133,7 +109,7 @@ body:not([data-ui-store])[data-dual=true] .pill {
   height: 16px;
   flex-shrink: 0;
   transition: transform 0.2s ease, color 0.2s ease, opacity 0.2s ease;
-  opacity: 0.85;
+  opacity: 0.75;
 }
 
 .s-ico svg {
@@ -142,12 +118,18 @@ body:not([data-ui-store])[data-dual=true] .pill {
   display: block;
 }
 
-.seg button[data-s="apple"]:not(.on) .s-ico {
-  color: #38bdf8;
+.seg button:not(.on) .s-ico {
+  color: #8e8e93;
 }
 
+.seg button[data-s="apple"]:not(.on) .s-ico,
 .seg button[data-s="google"]:not(.on) .s-ico {
-  color: #34d399;
+  color: #8e8e93;
+}
+
+.seg button:hover:not(.on) .s-ico {
+  color: #ffffff;
+  opacity: 1;
 }
 
 .seg button.on .s-ico {
@@ -162,6 +144,22 @@ body:not([data-ui-store])[data-dual=true] .pill {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
+:root[data-ui=light] .seg button {
+  color: #64748b;
+}
+
 :root[data-ui=light] .seg button:hover:not(.on) {
   color: #0f172a;
+}
+
+:root[data-ui=light] .seg button:hover:not(.on) .s-ico {
+  color: #0f172a;
+}
+
+:root[data-ui=light] .seg button.on {
+  color: #0f172a !important;
+}
+
+:root[data-ui=light] .seg button.on .s-ico {
+  color: #0f172a !important;
 }
