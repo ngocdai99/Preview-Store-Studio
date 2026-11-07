@@ -41,7 +41,7 @@ export function Pricing() {
                         {tier.name}
                       </h3>
                       {tier.isPopular && (
-                        <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/10 px-2 py-0.5 rounded-full">
+                        <span className="text-[11px] font-normal text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/10 px-2.5 py-0.5 rounded-full">
                           Most Popular
                         </span>
                       )}
@@ -125,7 +125,7 @@ export function Pricing() {
                               <span className="flex-1">
                                 <span>{feature.text}</span>
                                 {feature.tag && (
-                                  <span className="inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-[10.5px] font-medium tracking-wide bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-white/10 whitespace-nowrap shrink-0">
+                                  <span className="inline-flex items-center ml-2 px-2 py-0.5 rounded-full text-[10.5px] font-normal tracking-wide bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-white/10 whitespace-nowrap shrink-0">
                                     {feature.tag}
                                   </span>
                                 )}
