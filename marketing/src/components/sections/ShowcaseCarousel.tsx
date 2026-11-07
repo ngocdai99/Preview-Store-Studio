@@ -55,7 +55,7 @@ export const SHOWCASE_SLIDES: ShowcaseSlide[] = [
   },
   {
     id: "android-tablet",
-    src: "/covers/gumroad-6-android-tablet.png",
+    src: "/covers/gumroad-6-android-tablet.png?v=20261107b",
     alt: "Android Tablet Listings",
     title: "Android Tablet Listings",
     badge: "Google Play Featuring",
@@ -247,7 +247,7 @@ export function ShowcaseCarousel() {
                   aria-label={`Go to slide ${idx + 1}`}
                   className={`transition-all duration-200 cursor-pointer rounded-full ${
                     idx === currentIndex
-                      ? "w-5 sm:w-6 h-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]"
+                      ? "w-5 sm:w-6 h-1.5 bg-[#00D085] shadow-[0_0_10px_#00D085]"
                       : "w-1.5 h-1.5 bg-white/40 hover:bg-white/75"
                   }`}
                 />
