@@ -18,30 +18,6 @@ function renderHighlightedText(text: string) {
   });
 }
 
-const cardAccents = [
-  {
-    borderHover: "hover:border-[#00D085]/40 dark:hover:border-[#00D085]/40",
-    topLine: "from-[#00D085] via-emerald-400/60 to-transparent",
-    glow: "bg-[#00D085]/10 dark:bg-[#00D085]/15",
-    quoteColor: "text-[#006636] dark:text-[#00D085]",
-    pill: "bg-emerald-50 text-emerald-800 dark:bg-[#00D085]/10 dark:text-[#00D085] border-emerald-200/80 dark:border-[#00D085]/25",
-  },
-  {
-    borderHover: "hover:border-slate-400 dark:hover:border-white/30",
-    topLine: "from-slate-700 via-slate-500/50 to-transparent dark:from-white/70 dark:via-white/30 to-transparent",
-    glow: "bg-slate-500/10 dark:bg-white/5",
-    quoteColor: "text-slate-700 dark:text-slate-300",
-    pill: "bg-slate-100 text-slate-700 dark:bg-white/[0.06] dark:text-slate-300 border-slate-200/80 dark:border-white/10",
-  },
-  {
-    borderHover: "hover:border-emerald-500/40 dark:hover:border-emerald-500/40",
-    topLine: "from-emerald-500 via-teal-500/50 to-transparent",
-    glow: "bg-emerald-500/10 dark:bg-emerald-500/15",
-    quoteColor: "text-emerald-600 dark:text-emerald-400",
-    pill: "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-500/25",
-  },
-];
-
 export function Testimonials() {
   const { testimonials } = siteConfig;
 
@@ -60,9 +36,7 @@ export function Testimonials() {
 
         {/* Testimonials 3-Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
-          {testimonials.items.map((item, index) => {
-            const accent = cardAccents[index % cardAccents.length];
-
+          {testimonials.items.map((item) => {
             return (
               <div
                 key={item.author}
@@ -74,18 +48,14 @@ export function Testimonials() {
                 />
 
                 <div className="relative z-10">
-                  {/* Card Header: Accent Quote Icon + Highlight Pill */}
+                  {/* Card Header: Neutral Quote Icon + Unified Pill */}
                   <div className="flex items-center justify-between mb-5">
-                    <div
-                      className={`w-8 h-8 rounded-lg bg-slate-100/80 dark:bg-white/[0.05] border border-slate-200/60 dark:border-white/[0.08] flex items-center justify-center ${accent.quoteColor}`}
-                    >
+                    <div className="w-8 h-8 rounded-lg bg-slate-100/80 dark:bg-white/[0.05] border border-slate-200/60 dark:border-white/[0.08] flex items-center justify-center text-slate-600 dark:text-slate-300">
                       <Quote className="w-4 h-4 fill-current opacity-85" />
                     </div>
 
                     {item.highlight && (
-                      <span
-                        className={`inline-flex items-center text-[11px] font-bold tracking-tight px-2.5 py-0.5 rounded-full border ${accent.pill}`}
-                      >
+                      <span className="inline-flex items-center text-[11px] font-normal tracking-wide px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-white/10">
                         {item.highlight}
                       </span>
                     )}
