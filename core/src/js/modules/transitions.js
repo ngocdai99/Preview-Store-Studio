@@ -636,7 +636,7 @@ function setStore(s, animate = true, preserveDual = false){
   syncCategoryUI();
   if (typeof syncAgeUI === 'function') syncAgeUI();
   if (typeof updateActivityBarState === 'function') {
-    const selCard = $('.editor .card.selected');
+    const selCard = document.querySelector('.editor .card.selected');
     if (selCard && selCard.getAttribute('data-only') && selCard.getAttribute('data-only') !== s) {
       if (typeof selectEditorCard === 'function') selectEditorCard('identityCard');
     } else {

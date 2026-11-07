@@ -126,20 +126,6 @@ function initHeader() {
             localStorage.setItem('sps_sidebar_collapsed', '0');
             if (typeof updateSidebarButtonState === 'function') updateSidebarButtonState();
           }
-          selectEditorCard(cardId);
-          return;
-        }
-
-        // VS Code behavior: Clicking the currently active activity icon toggles/closes the sidebar
-        if (btn.classList.contains('active')) {
-          if (typeof toggleSidebar === 'function') {
-            toggleSidebar(false);
-          } else {
-            document.body.classList.add('sidebar-collapsed');
-            localStorage.setItem('sps_sidebar_collapsed', '1');
-            if (typeof updateSidebarButtonState === 'function') updateSidebarButtonState();
-          }
-          return;
         }
 
         // Switch to clicked section
@@ -149,12 +135,12 @@ function initHeader() {
       bar.appendChild(btn);
     });
 
-    // Ensure at least one card is selected if none currently selected
-    if (!$('.editor .card.selected') && cards.length > 0) {
+    // Ensure at least one card is selected and activity bar is immediately styled
+    if (!document.querySelector('.editor .card.selected') && cards.length > 0) {
       cards[0].classList.add('selected');
       cards[0].classList.remove('collapsed');
-      updateActivityBarState();
     }
+    updateActivityBarState();
   }
 
   function selectEditorCard(cardId) {
@@ -175,19 +161,45 @@ function initHeader() {
   }
 
   function updateActivityBarState() {
-    let selected = $('.editor .card.selected');
+    let selected = document.querySelector('.editor .card.selected');
     if (!selected) {
-      const firstCard = $('.editor .card:not(.hide)') || $('.editor .card');
+      const firstCard = document.querySelector('.editor .card:not(.hide)') || document.querySelector('.editor .card');
       if (firstCard) {
         firstCard.classList.add('selected');
         selected = firstCard;
       }
     }
     const selectedId = selected ? selected.id : null;
+    const isLight = document.documentElement.dataset.ui === 'light';
+    const activeColor = isLight ? '#007acc' : '#ffffff';
+    const activeBg = isLight ? 'rgba(0,122,204,0.1)' : 'rgba(255,255,255,0.12)';
+
     $$('.activity-bar-btn').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
       btn.classList.toggle('active', isAct);
       btn.setAttribute('aria-selected', isAct ? 'true' : 'false');
+
+      if (isAct) {
+        btn.style.setProperty('border-left', `3px solid ${activeColor}`, 'important');
+        btn.style.setProperty('color', activeColor, 'important');
+        btn.style.setProperty('background', activeBg, 'important');
+        const s = btn.querySelector('svg');
+        if (s) {
+          s.style.setProperty('opacity', '1', 'important');
+          s.style.setProperty('stroke', activeColor, 'important');
+          s.style.setProperty('color', activeColor, 'important');
+        }
+      } else {
+        btn.style.removeProperty('border-left');
+        btn.style.removeProperty('color');
+        btn.style.removeProperty('background');
+        const s = btn.querySelector('svg');
+        if (s) {
+          s.style.removeProperty('opacity');
+          s.style.removeProperty('stroke');
+          s.style.removeProperty('color');
+        }
+      }
     });
   }
 
