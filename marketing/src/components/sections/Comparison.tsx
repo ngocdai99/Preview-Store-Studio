@@ -142,20 +142,21 @@ export function Comparison() {
               {/* Bottom Problem Contrast */}
               <div className="relative z-10 mt-6 pt-4 border-t border-slate-100 dark:border-white/[0.06]">
                 <div className="flex items-start gap-2.5 text-slate-500 dark:text-slate-400">
-                  <span className="shrink-0 mt-1 w-3.5 h-3.5 rounded-full bg-slate-200/70 dark:bg-white/[0.08] text-slate-500 dark:text-slate-400 flex items-center justify-center">
-                    <svg
-                      width="8"
-                      height="8"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                  </span>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="shrink-0 mt-0.5 text-slate-400 dark:text-slate-500"
+                  >
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M12 7v5l3 3" />
+                  </svg>
                   <div className="text-[12px] sm:text-[12.5px] leading-snug">
                     <span className="font-semibold text-slate-600 dark:text-slate-300 mr-1.5">
                       The old way:
