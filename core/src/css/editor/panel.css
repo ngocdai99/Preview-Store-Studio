@@ -12,7 +12,7 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent;
   margin-left:0;
   visibility:visible;
-  transition:margin-left .32s cubic-bezier(.2,.8,.2,1), visibility .32s cubic-bezier(.2,.8,.2,1);
+  transition:width .28s cubic-bezier(.2,.8,.2,1), padding .28s cubic-bezier(.2,.8,.2,1), margin-left .28s cubic-bezier(.2,.8,.2,1);
   will-change:margin-left;
   z-index:30;
   box-shadow:4px 0 24px rgba(0,0,0,.3);
@@ -44,10 +44,91 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 :root[data-ui=light] .editor::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.32);
 }
+/* Supabase Minimalist Collapsed Sidebar Icon Rail */
 body.sidebar-collapsed .editor{
-  margin-left:calc(-1 * var(--editor-w, 500px)) !important;
-  visibility:hidden !important;
-  pointer-events:none !important;
+  width: 58px !important;
+  min-width: 58px !important;
+  max-width: 58px !important;
+  margin-left: 0 !important;
+  padding: 14px 6px !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  align-items: center !important;
+  gap: 6px !important;
+  scrollbar-width: none !important;
+  box-shadow: 2px 0 16px rgba(0,0,0,.35) !important;
+}
+body.sidebar-collapsed .editor::-webkit-scrollbar{
+  display: none !important;
+}
+
+body.sidebar-collapsed .card{
+  width: 44px !important;
+  min-width: 44px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  margin: 0 auto !important;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+body.sidebar-collapsed .card:hover{
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+body.sidebar-collapsed .card.selected{
+  background: rgba(255,255,255,0.09) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+}
+
+body.sidebar-collapsed .card-header{
+  padding: 0 !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  border-radius: 8px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: transparent !important;
+}
+body.sidebar-collapsed .card-header h2{
+  font-size: 0 !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+body.sidebar-collapsed .card-header h2 > span:not(.card-ico):not(.card-num){
+  display: none !important;
+}
+body.sidebar-collapsed .card-num,
+body.sidebar-collapsed .card-header-right,
+body.sidebar-collapsed .card-body,
+body.sidebar-collapsed .card > :not(.card-header){
+  display: none !important;
+}
+
+body.sidebar-collapsed .card-ico{
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 7px !important;
+}
+body.sidebar-collapsed .card-ico svg{
+  width: 16px !important;
+  height: 16px !important;
+}
+:root[data-ui=light] body.sidebar-collapsed .card:hover{
+  background: rgba(0,0,0,0.05) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+:root[data-ui=light] body.sidebar-collapsed .card.selected{
+  background: rgba(0,0,0,0.08) !important;
+  border-color: rgba(0,0,0,0.12) !important;
 }
 body.resizing-sidebar .editor{
   transition:none!important;

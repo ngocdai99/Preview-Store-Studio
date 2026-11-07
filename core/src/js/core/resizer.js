@@ -97,6 +97,7 @@ function toggleSidebar(forceOpen) {
   };
   requestAnimationFrame(animateFit);
 }
+window.toggleSidebar = toggleSidebar;
 
 if (btnToggleSidebar) {
   btnToggleSidebar.onclick = (e) => {

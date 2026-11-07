@@ -66,6 +66,19 @@ function initHeader() {
     }
   });
 
+  // Add tooltip titles for Supabase-style collapsed sidebar icon rail
+  $$('.card').forEach(card => {
+    const h2 = card.querySelector('.card-header h2');
+    const header = card.querySelector('.card-header');
+    if (h2 && header) {
+      const titleSpan = h2.querySelector('span:not(.card-num):not(.card-ico)') || h2;
+      const text = titleSpan.textContent.trim();
+      if (text) {
+        header.title = text;
+      }
+    }
+  });
+
   // 5. Editor Large Cards Accordion Controller (Expand / Collapse & Selected state)
   document.addEventListener('click', (e) => {
     const header = e.target.closest('.card-header');
@@ -75,6 +88,27 @@ function initHeader() {
       }
       const card = header.closest('.card');
       if (card) {
+        // If sidebar is currently in Supabase-style collapsed rail mode, clicking an icon opens the sidebar and focuses that card
+        if (document.body.classList.contains('sidebar-collapsed')) {
+          if (typeof toggleSidebar === 'function') {
+            toggleSidebar(true);
+          } else {
+            document.body.classList.remove('sidebar-collapsed');
+            localStorage.setItem('sps_sidebar_collapsed', '0');
+            if (typeof updateSidebarButtonState === 'function') updateSidebarButtonState();
+          }
+          $$('.card').forEach(c => {
+            c.classList.add('collapsed');
+            c.classList.remove('selected');
+          });
+          card.classList.remove('collapsed');
+          card.classList.add('selected');
+          setTimeout(() => {
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 200);
+          return;
+        }
+
         const wasCollapsed = card.classList.contains('collapsed');
         card.classList.toggle('collapsed');
         
