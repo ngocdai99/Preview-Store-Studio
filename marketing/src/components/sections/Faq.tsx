@@ -25,7 +25,7 @@ export function Faq() {
           {/* Right Column on Desktop (Heading & Contact Note) */}
           <div className="w-full lg:w-[320px] shrink-0 order-1 lg:order-2">
             <div className="lg:sticky lg:top-28">
-              <h2 className="text-[30px] sm:text-[36px] font-extrabold tracking-[-0.02em] text-foreground leading-[1.18]">
+              <h2 className="text-[22px] sm:text-[28px] lg:text-[32px] font-extrabold tracking-[-0.02em] text-foreground leading-[1.2]">
                 Frequently asked<br className="hidden sm:inline" /> questions
               </h2>
               <div className="mt-4 text-[14.5px] sm:text-[15px] text-muted-foreground dark:text-[#989A99] leading-relaxed">

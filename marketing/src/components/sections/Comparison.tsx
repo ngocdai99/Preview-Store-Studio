@@ -134,7 +134,7 @@ export function Comparison() {
           <span className="inline-block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-2.5">
             {comparison.badge || "THE ADVANTAGE"}
           </span>
-          <h2 className="text-[26px] sm:text-[34px] lg:text-[38px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.18] text-balance">
+          <h2 className="text-[22px] sm:text-[28px] lg:text-[32px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.2] text-balance">
             {comparison.title}
           </h2>
         </div>
