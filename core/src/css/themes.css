@@ -301,7 +301,7 @@
 :root[data-ui=light] .card:not(.collapsed) .card-header{
   border-bottom:1px solid rgba(0,0,0,0.06);
 }
-:root[data-ui=light] .lr{font-weight:700}
+:root[data-ui=light] .lr{font-weight:500}
 /* Modern Clean Flat Styling for Inputs & Textareas (No harsh shadows) */
 :root[data-ui=light] input[type=text],
 :root[data-ui=light] input[type=email],
