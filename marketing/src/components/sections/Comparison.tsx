@@ -11,9 +11,9 @@ interface BeatItem {
   problemTitle: string;
   colSpan: string;
   accent: {
-    verticalLine: string;
+    pill: string;
+    dot: string;
     borderHover: string;
-    numColor: string;
   };
 }
 
@@ -28,9 +28,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "Marketers drafting blindly in Google Docs without device limits or context",
     colSpan: "md:col-span-7",
     accent: {
-      verticalLine: "from-teal-400 via-teal-500/60 to-transparent",
+      pill: "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/25",
+      dot: "bg-teal-500 shadow-[0_0_6px_rgba(20,184,166,0.6)]",
       borderHover: "hover:border-teal-500/40 dark:hover:border-teal-500/40",
-      numColor: "text-teal-600 dark:text-teal-400",
     },
   },
   {
@@ -43,9 +43,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "Zero visibility into whether copy edits need a full developer compilation",
     colSpan: "md:col-span-5",
     accent: {
-      verticalLine: "from-rose-500 via-rose-400/60 to-transparent",
+      pill: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/25",
+      dot: "bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.6)]",
       borderHover: "hover:border-rose-500/40 dark:hover:border-rose-500/40",
-      numColor: "text-rose-600 dark:text-rose-400",
     },
   },
   {
@@ -58,9 +58,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "Typing copy into raw form inputs leaves you guessing until the app is already live",
     colSpan: "md:col-span-5",
     accent: {
-      verticalLine: "from-fuchsia-500 via-fuchsia-400/60 to-transparent",
+      pill: "bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300 border-fuchsia-500/25",
+      dot: "bg-fuchsia-500 shadow-[0_0_6px_rgba(217,70,239,0.6)]",
       borderHover: "hover:border-fuchsia-500/40 dark:hover:border-fuchsia-500/40",
-      numColor: "text-fuchsia-600 dark:text-fuchsia-400",
     },
   },
   {
@@ -73,9 +73,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "$29/mo recurring subscriptions & third-party cloud lock-in for simple asset previews",
     colSpan: "md:col-span-7",
     accent: {
-      verticalLine: "from-slate-400 via-slate-300/60 to-transparent dark:from-white/80 dark:via-white/30 dark:to-transparent",
+      pill: "bg-slate-200/70 dark:bg-white/10 text-slate-800 dark:text-white border-slate-300/80 dark:border-white/20",
+      dot: "bg-slate-700 dark:bg-white shadow-[0_0_6px_rgba(255,255,255,0.6)]",
       borderHover: "hover:border-slate-400 dark:hover:border-white/30",
-      numColor: "text-slate-800 dark:text-white",
     },
   },
 ];
@@ -107,30 +107,24 @@ export function Comparison() {
           {BEATS_DATA.map((item) => (
             <div
               key={item.id}
-              className={`col-span-1 ${item.colSpan} flex flex-col justify-between group relative rounded-2xl sm:rounded-3xl p-6 sm:p-7 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] ${item.accent.borderHover} shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300 overflow-hidden pl-7 sm:pl-8`}
+              className={`col-span-1 ${item.colSpan} flex flex-col justify-between group relative rounded-2xl sm:rounded-3xl p-6 sm:p-7 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] ${item.accent.borderHover} shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300 overflow-hidden`}
             >
-              {/* Colorful Vertical Left Edge Highlight */}
-              <div
-                className={`absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b ${item.accent.verticalLine} opacity-95`}
-              />
-
               <div className="relative z-10">
-                {/* Card Header: Category & Number */}
-                <div className="flex items-center gap-2 mb-3.5">
+                {/* Title as Pill Badge */}
+                <div className="mb-4">
                   <span
-                    className={`font-mono text-[11.5px] font-bold ${item.accent.numColor}`}
+                    className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase border shadow-xs select-none ${item.accent.pill}`}
                   >
-                    {item.number}
-                  </span>
-                  <span className="text-slate-300 dark:text-slate-700">·</span>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    {item.category}
+                    <span className={`w-1.5 h-1.5 rounded-full ${item.accent.dot}`} />
+                    <span>{item.number}</span>
+                    <span className="opacity-40">/</span>
+                    <span>{item.category}</span>
                   </span>
                 </div>
 
-                {/* Solution Block (Hero Value) - No Icon */}
+                {/* Solution Block (Hero Value) */}
                 <div className="space-y-2">
-                  <h3 className="text-[16.5px] sm:text-[18px] font-bold text-[#0f172a] dark:text-white leading-snug tracking-[-0.01em]">
+                  <h3 className="text-[17px] sm:text-[18.5px] font-bold text-[#0f172a] dark:text-white leading-snug tracking-[-0.01em]">
                     {item.solutionTitle}
                   </h3>
                   <p className="text-[13px] sm:text-[13.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
