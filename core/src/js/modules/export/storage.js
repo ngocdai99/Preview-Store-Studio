@@ -665,6 +665,13 @@ function updatePresetBanner(){
   const banner = $('presetBanner');
   if(!banner) return;
   
+  // In demo mode (/try), presets cannot be copied to draft or edited as custom draft
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    banner.style.display = 'none';
+    banner.classList.remove('is-modified');
+    return;
+  }
+  
   const hasDraft = hasUserDraft();
   const copyBtn = $('btnCopyPresetToDraft');
   const returnBtn = $('btnReturnToDraft');

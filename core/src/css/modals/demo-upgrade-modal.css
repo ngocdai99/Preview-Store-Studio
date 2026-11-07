@@ -12,6 +12,15 @@ body.sps-demo-mode #btnDraft .ms-pill-reset-btn,
   display: none !important;
 }
 
+/* Demo Mode: Hide preset warning banner and copy button since drafts cannot be saved/created */
+body.sps-demo-mode #presetBanner,
+body.sps-demo-mode .preset-banner,
+.sps-demo-mode #presetBanner,
+.sps-demo-mode .preset-banner,
+#presetBanner {
+  display: none !important;
+}
+
 /* Demo Mode: Hide page theme toggle button on /try */
 body.sps-demo-mode #btnUi,
 body.sps-demo-mode .theme-toggle-btn,

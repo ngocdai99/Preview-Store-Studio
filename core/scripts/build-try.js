@@ -169,6 +169,9 @@ function buildTry() {
   html = html.replace(/<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn"[^>]*>&times;<\/span>/gi, '');
   html = html.replace(/<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn"[^>]*>&times;<\/span>/gi, '');
 
+  // Demo Mode: Remove preset warning banner since drafts cannot be edited or created in Demo Mode
+  html = html.replace(/<div class="preset-banner" id="presetBanner"[\s\S]*?<\/button>\s*<\/div>/gi, '');
+
   // 6. Production Minification
   const minified = minifyHtmlPage(html);
 

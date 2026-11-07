@@ -30,7 +30,7 @@ const BEATS_DATA: BeatItem[] = [
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-slate-900 dark:text-white"
+        className="text-[#00D085]"
       >
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
@@ -38,7 +38,8 @@ const BEATS_DATA: BeatItem[] = [
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    hoverBorder: "hover:border-slate-300 dark:hover:border-white/30",
+    hoverBorder:
+      "hover:border-[#00D085]/35 dark:hover:border-[#00D085]/20",
   },
   {
     id: "beat-2",
@@ -66,7 +67,8 @@ const BEATS_DATA: BeatItem[] = [
         <path d="M9 16l2 2 4-4" />
       </svg>
     ),
-    hoverBorder: "hover:border-[#80C8FF]/40",
+    hoverBorder:
+      "hover:border-[#80C8FF]/35 dark:hover:border-[#80C8FF]/20",
   },
   {
     id: "beat-3",
@@ -91,7 +93,8 @@ const BEATS_DATA: BeatItem[] = [
         <line x1="12" y1="18" x2="12.01" y2="18" />
       </svg>
     ),
-    hoverBorder: "hover:border-[#47C5FB]/40",
+    hoverBorder:
+      "hover:border-[#47C5FB]/35 dark:hover:border-[#47C5FB]/20",
   },
   {
     id: "beat-4",
@@ -116,7 +119,8 @@ const BEATS_DATA: BeatItem[] = [
         <polyline points="9 12 11 14 15 10" />
       </svg>
     ),
-    hoverBorder: "hover:border-[#FFFFDE]/40",
+    hoverBorder:
+      "hover:border-amber-300/35 dark:hover:border-[#FFFFDE]/20",
   },
 ];
 

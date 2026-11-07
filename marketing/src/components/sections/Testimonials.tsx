@@ -18,6 +18,12 @@ function renderHighlightedText(text: string) {
   });
 }
 
+const TESTIMONIAL_HOVER_BORDERS = [
+  "hover:border-[#00D085]/35 dark:hover:border-[#00D085]/20",
+  "hover:border-[#80C8FF]/35 dark:hover:border-[#80C8FF]/20",
+  "hover:border-[#2dd4bf]/35 dark:hover:border-[#2dd4bf]/20",
+];
+
 export function Testimonials() {
   const { testimonials } = siteConfig;
 
@@ -36,11 +42,16 @@ export function Testimonials() {
 
         {/* Testimonials 3-Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
-          {testimonials.items.map((item) => {
+          {testimonials.items.map((item, index) => {
+            const hoverBorder =
+              TESTIMONIAL_HOVER_BORDERS[
+                index % TESTIMONIAL_HOVER_BORDERS.length
+              ];
+
             return (
               <div
                 key={item.author}
-                className="group relative overflow-hidden rounded-2xl p-7 sm:p-8 flex flex-col justify-between bg-white dark:bg-[#1D1E1D] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-colors duration-200"
+                className={`group relative overflow-hidden rounded-2xl p-7 sm:p-8 flex flex-col justify-between bg-white dark:bg-[#1D1E1D] border border-slate-200/80 dark:border-white/[0.08] ${hoverBorder} shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-all duration-300`}
               >
                 {/* Top hairline accent line */}
                 <div
