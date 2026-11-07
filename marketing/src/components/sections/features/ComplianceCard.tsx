@@ -117,7 +117,7 @@ export function ComplianceCard() {
                       </span>
                     )}
                   </div>
-                  <div className="text-[10.5px] mt-0.5 truncate text-slate-600 dark:text-white">
+                  <div className="text-[10.5px] mt-0.5 text-slate-600 dark:text-slate-300 leading-snug">
                     {alphaMode === "solid"
                       ? "100% opaque background · Complies with store guidelines"
                       : "Alpha channel detected · Stores require opaque icons"}
@@ -185,7 +185,7 @@ export function ComplianceCard() {
                       </span>
                     )}
                   </div>
-                  <div className="text-[10.5px] mt-0.5 truncate text-slate-600 dark:text-white">
+                  <div className="text-[10.5px] mt-0.5 text-slate-600 dark:text-slate-300 leading-snug">
                     {resolutionMode === "1024"
                       ? "1024 × 1024 px · 380 KB (Store limit: Max 1024 KB)"
                       : "256 × 256 px · Required: 1024 × 1024 px master icon"}
@@ -259,7 +259,7 @@ export function ComplianceCard() {
                       </span>
                     )}
                   </div>
-                  <div className="text-[10.5px] mt-0.5 truncate text-slate-600 dark:text-white">
+                  <div className="text-[10.5px] mt-0.5 text-slate-600 dark:text-slate-300 leading-snug">
                     {ratioMode === "square"
                       ? "Width and height are identical (1.00) · No image distortion"
                       : "Aspect ratio is 1.33:1 · Required: 1:1 square"}

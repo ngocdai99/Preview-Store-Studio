@@ -113,16 +113,16 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 dark:border-[#282928] bg-white/85 dark:bg-[#131413]/85 backdrop-blur-md transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
         {/* Left Section: Brand Logo & Navigation Links (Supabase style) */}
-        <div className="flex items-center gap-6 lg:gap-8">
+        <div className="flex items-center gap-4 sm:gap-6 lg:gap-8 min-w-0">
           <Link
             href="/"
             onClick={(e) => handleNavClick(e, "", "#hero")}
-            className="flex items-center gap-2.5 group shrink-0"
+            className="flex items-center gap-2 group shrink-0 min-w-0"
           >
             <BrandIcon className="w-6 h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
-            <span className="font-bold text-[15.5px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white">
+            <span className="font-bold text-[14.5px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white truncate">
               {siteConfig.name}
             </span>
           </Link>
@@ -151,11 +151,11 @@ export function Navbar() {
         </div>
 
         {/* Right Section: Demo Link + Supabase Emerald CTA Button */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5">
+        <div className="flex items-center gap-1.5 sm:gap-3.5 shrink-0">
           <Link
             href="/try"
             onClick={handleLiveDemoClick}
-            className={`hidden sm:inline-flex items-center text-[13px] font-medium px-2.5 py-1.5 transition-colors ${
+            className={`inline-flex items-center text-[12.5px] sm:text-[13px] font-medium px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md transition-colors whitespace-nowrap ${
               isTryPage || activeTab === "Live Demo"
                 ? "text-[#006636] dark:text-[#00D085] font-semibold"
                 : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
@@ -175,7 +175,7 @@ export function Navbar() {
               background: "oklch(0.43627 0.11 157.5)",
               borderColor: "#1B845E",
             }}
-            className="!rounded-[6px] shrink-0 !gap-1 leading-none shadow-none"
+            className="!rounded-[6px] shrink-0 !gap-1 leading-none shadow-none text-[12px] sm:text-[13px]"
           >
             <span>Get Access</span>
           </PrimaryButton>
