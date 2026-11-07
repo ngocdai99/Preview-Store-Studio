@@ -29,14 +29,14 @@ export function FeatureCard({
       {/* Top Header */}
       <div className="relative z-20 mb-3.5 sm:mb-4">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-          <div className={headerRight ? "" : "max-w-xl"}>
+          <div className={headerRight ? "min-w-0 flex-1" : "max-w-xl"}>
             <div className="flex items-center gap-2 mb-1.5">
               {icon && (
                 <span className="text-slate-600 dark:text-slate-300 shrink-0">
                   {icon}
                 </span>
               )}
-              <h3 className="text-[15.5px] sm:text-[16.5px] font-medium text-slate-900 dark:text-white tracking-tight">
+              <h3 className="text-[15.5px] sm:text-[16.5px] font-medium text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
                 {title}
               </h3>
             </div>

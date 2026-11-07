@@ -350,7 +350,7 @@ export function StorePresetsCard() {
             { value: "pulsefit", label: "Health" },
             { value: "zenmind", label: "Wellness" },
           ]}
-          className="w-[270px] sm:w-[290px] shrink-0"
+          className="w-[204px] sm:w-[216px] shrink-0"
           size="sm"
           ariaLabel="Preset selector tabs"
         />
