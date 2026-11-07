@@ -196,28 +196,6 @@ export function ShowcaseCarousel() {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1152px"
             />
 
-            {/* Top Bar Indicators */}
-            <div className="absolute top-3.5 sm:top-5 inset-x-3.5 sm:inset-x-5 flex items-center justify-between pointer-events-none">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-[12px] font-semibold text-white bg-black/50 backdrop-blur-md border border-white/15">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                {current.badge}
-              </span>
-
-              <div className="flex items-center gap-2 pointer-events-auto">
-                <button
-                  type="button"
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="px-2.5 py-1 rounded-full text-[11px] font-medium text-slate-200 bg-black/50 hover:bg-black/75 backdrop-blur-md border border-white/15 transition-colors cursor-pointer"
-                  title={isPlaying ? "Pause autoplay" : "Resume autoplay"}
-                >
-                  {isPlaying ? "Pause" : "Play"}
-                </button>
-                <span className="px-2.5 py-1 rounded-full text-[11.5px] font-mono font-medium text-slate-200 bg-black/50 backdrop-blur-md border border-white/15">
-                  {currentIndex + 1} / {total}
-                </span>
-              </div>
-            </div>
-
             {/* Left & Right Arrow Buttons */}
             <button
               type="button"
