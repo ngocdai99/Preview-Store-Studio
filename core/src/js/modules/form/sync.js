@@ -227,6 +227,7 @@ function setFieldFocus(key, shouldScroll = true) {
       }
       $$('.card').forEach(c => c.classList.remove('selected'));
       parentCard.classList.add('selected');
+      if (typeof updateActivityBarState === 'function') updateActivityBarState();
     }
   }
 

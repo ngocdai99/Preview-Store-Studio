@@ -8899,6 +8899,7 @@ function setFieldFocus(key, shouldScroll = true) {
       }
       $$('.card').forEach(c => c.classList.remove('selected'));
       parentCard.classList.add('selected');
+      if (typeof updateActivityBarState === 'function') updateActivityBarState();
     }
   }
 
@@ -10690,12 +10691,21 @@ function initHeader() {
     targetCard.classList.add('selected');
     targetCard.classList.remove('collapsed');
     targetCard.scrollTop = 0;
+    const bodyEl = targetCard.querySelector('.card-body');
+    if (bodyEl) bodyEl.scrollTop = 0;
 
     updateActivityBarState();
   }
 
   function updateActivityBarState() {
-    const selected = $('.editor .card.selected');
+    let selected = $('.editor .card.selected');
+    if (!selected) {
+      const firstCard = $('.editor .card:not(.hide)') || $('.editor .card');
+      if (firstCard) {
+        firstCard.classList.add('selected');
+        selected = firstCard;
+      }
+    }
     const selectedId = selected ? selected.id : null;
     $$('.activity-bar-btn').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
@@ -11171,6 +11181,7 @@ if(btnDraft){
         card.classList.remove('collapsed');
         $$('.card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
+        if (typeof updateActivityBarState === 'function') updateActivityBarState();
         const editorEl = document.querySelector('.editor');
         if(editorEl && typeof editorEl.scrollTo === 'function'){
           editorEl.scrollTo({ top: 0, behavior: 'smooth' });

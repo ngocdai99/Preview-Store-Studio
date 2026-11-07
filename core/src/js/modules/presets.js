@@ -425,6 +425,7 @@ if(btnDraft){
         card.classList.remove('collapsed');
         $$('.card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
+        if (typeof updateActivityBarState === 'function') updateActivityBarState();
         const editorEl = document.querySelector('.editor');
         if(editorEl && typeof editorEl.scrollTo === 'function'){
           editorEl.scrollTo({ top: 0, behavior: 'smooth' });

@@ -168,12 +168,21 @@ function initHeader() {
     targetCard.classList.add('selected');
     targetCard.classList.remove('collapsed');
     targetCard.scrollTop = 0;
+    const bodyEl = targetCard.querySelector('.card-body');
+    if (bodyEl) bodyEl.scrollTop = 0;
 
     updateActivityBarState();
   }
 
   function updateActivityBarState() {
-    const selected = $('.editor .card.selected');
+    let selected = $('.editor .card.selected');
+    if (!selected) {
+      const firstCard = $('.editor .card:not(.hide)') || $('.editor .card');
+      if (firstCard) {
+        firstCard.classList.add('selected');
+        selected = firstCard;
+      }
+    }
     const selectedId = selected ? selected.id : null;
     $$('.activity-bar-btn').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
