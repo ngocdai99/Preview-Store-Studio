@@ -130,16 +130,13 @@ export function Comparison() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
           <span className="inline-block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-2.5">
             {comparison.badge || "THE ADVANTAGE"}
           </span>
           <h2 className="text-[26px] sm:text-[34px] lg:text-[38px] font-extrabold tracking-[-0.02em] text-[#0f172a] dark:text-white leading-[1.18] text-balance">
             {comparison.title}
           </h2>
-          <p className="mt-3 text-[14.5px] sm:text-[15.5px] text-slate-600 dark:text-slate-400 leading-relaxed text-balance">
-            Replace fragmented spreadsheets and blind form submissions with an intuitive, offline workspace.
-          </p>
         </div>
 
         {/* 4 Compact Cards Row (Matching Supabase template style) */}
