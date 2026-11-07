@@ -163,7 +163,7 @@ export function StorePresetsCard() {
     >
       {/* Simulated Live Stage with Device Frame */}
       <div
-        className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-[24px]"
+        className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-2xl"
         style={{ perspective: "1200px" }}
       >
         <IPadMockupFrame

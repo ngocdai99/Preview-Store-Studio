@@ -66,7 +66,7 @@ export function DeviceFramesCard() {
       }
     >
       {/* Simulated Live Stage */}
-      <div className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-[24px]">
+      <div className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-2xl">
         <PhoneFramesStage timeString={timeString} isActive={device === "phone"} />
         <TabletFramesStage timeString={timeString} isActive={device === "tablet"} />
       </div>
