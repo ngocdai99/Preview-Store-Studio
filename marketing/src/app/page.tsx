@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
-import { ShowcaseCarousel } from "@/components/sections/ShowcaseCarousel";
 import { Features } from "@/components/sections/Features";
 import { Comparison } from "@/components/sections/Comparison";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -16,7 +15,6 @@ export default function HomePage() {
         <Hero />
         <Features />
         <Comparison />
-        <ShowcaseCarousel />
         <Testimonials />
         <Pricing />
         <Faq />
