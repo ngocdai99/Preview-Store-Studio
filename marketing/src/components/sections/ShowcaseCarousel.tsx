@@ -196,9 +196,6 @@ export function ShowcaseCarousel() {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1152px"
             />
 
-            {/* Bottom Dark Gradient Fade for Readability */}
-            <div className="absolute inset-x-0 bottom-0 h-44 sm:h-36 bg-gradient-to-t from-black/90 via-black/55 to-transparent pointer-events-none" />
-
             {/* Top Bar Indicators */}
             <div className="absolute top-3.5 sm:top-5 inset-x-3.5 sm:inset-x-5 flex items-center justify-between pointer-events-none">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-[12px] font-semibold text-white bg-black/50 backdrop-blur-md border border-white/15">
@@ -219,16 +216,6 @@ export function ShowcaseCarousel() {
                   {currentIndex + 1} / {total}
                 </span>
               </div>
-            </div>
-
-            {/* Bottom Caption Overlay */}
-            <div className="absolute bottom-3 sm:bottom-5 inset-x-4 sm:inset-x-6 text-left pointer-events-none">
-              <h3 className="text-[17px] sm:text-[22px] font-bold text-white tracking-tight leading-snug drop-shadow-sm">
-                {current.title}
-              </h3>
-              <p className="mt-1 text-[12.5px] sm:text-[14.5px] text-slate-300 max-w-2xl leading-relaxed drop-shadow-sm line-clamp-2 sm:line-clamp-none">
-                {current.desc}
-              </p>
             </div>
 
             {/* Left & Right Arrow Buttons */}
@@ -271,32 +258,23 @@ export function ShowcaseCarousel() {
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
-          </div>
 
-          {/* Bottom Thumbnails / Pills Navigation */}
-          <div className="p-3 sm:p-4 bg-slate-900/90 dark:bg-[#121312] border-t border-slate-800 dark:border-[#202120] flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none">
-            {SHOWCASE_SLIDES.map((slide, idx) => {
-              const active = idx === currentIndex;
-              return (
+            {/* Minimal Dots Pagination */}
+            <div className="absolute bottom-3.5 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 z-10 px-2.5 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/15 shadow-lg">
+              {SHOWCASE_SLIDES.map((_, idx) => (
                 <button
-                  key={slide.id}
+                  key={idx}
                   type="button"
                   onClick={() => goToSlide(idx)}
-                  className={`px-3 py-1.5 rounded-lg text-[12px] sm:text-[12.5px] font-medium whitespace-nowrap transition-all duration-150 cursor-pointer flex items-center gap-1.5 shrink-0 ${
-                    active
-                      ? "bg-white text-slate-950 dark:bg-white/10 dark:text-emerald-400 font-semibold border border-white/20 dark:border-emerald-500/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`transition-all duration-200 cursor-pointer rounded-full ${
+                    idx === currentIndex
+                      ? "w-5 sm:w-6 h-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]"
+                      : "w-1.5 h-1.5 bg-white/40 hover:bg-white/75"
                   }`}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      active ? "bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.8)]" : "bg-slate-600"
-                    }`}
-                  />
-                  <span>{slide.badge}</span>
-                </button>
-              );
-            })}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
