@@ -84,6 +84,13 @@
   color: #ffffff;
   border-color: #383A38;
   background: #222322;
+  box-shadow: none !important;
+}
+
+.stage-view-btn:focus,
+.stage-view-btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .stage-view-btn:active {
@@ -94,29 +101,17 @@
 .stage-device-dropdown:has(.menu.show) .stage-view-btn,
 .stage-view-dropdown:hover .stage-view-btn,
 .stage-device-dropdown:hover .stage-view-btn,
-.stage-view-btn.active {
+.stage-view-btn.active,
+#stageViewDropdown:has(.menu.show) .stage-view-btn,
+#stageViewDropdown:hover .stage-view-btn,
+#dt:has(.menu.show) .stage-view-btn,
+#dt:hover .stage-view-btn,
+#gdt:has(.menu.show) .stage-view-btn,
+#gdt:hover .stage-view-btn {
   border-color: #383A38;
   color: #ffffff;
   background: #222322;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
-}
-
-#stageViewDropdown:has(.menu.show) .stage-view-btn,
-#stageViewDropdown:hover .stage-view-btn {
-  border-color: #383A38;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
-}
-
-#dt:has(.menu.show) .stage-view-btn,
-#dt:hover .stage-view-btn {
-  border-color: rgba(0, 113, 227, 0.45);
-  box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.25);
-}
-
-#gdt:has(.menu.show) .stage-view-btn,
-#gdt:hover .stage-view-btn {
-  border-color: rgba(5, 150, 105, 0.45);
-  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.25);
+  box-shadow: none !important;
 }
 
 .stage-view-ico {
@@ -542,32 +537,22 @@
   background: #ffffff !important;
   color: #0f172a !important;
   border-color: rgba(15, 23, 42, 0.18) !important;
-  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04), inset 0 1px 0 #ffffff !important;
+  box-shadow: none !important;
 }
 
 :root[data-ui=light] #btnAppleDevice .stage-view-ico { color: #0071e3; }
 :root[data-ui=light] #btnGoogleDevice .stage-view-ico { color: #059669; }
 :root[data-ui=light] #btnStageView .stage-view-ico { color: #334155; }
 
-:root[data-ui=light] #stageViewDropdown:has(.menu.show) .stage-view-btn {
+:root[data-ui=light] #stageViewDropdown:has(.menu.show) .stage-view-btn,
+:root[data-ui=light] #dt:has(.menu.show) .stage-view-btn,
+:root[data-ui=light] #dt:hover .stage-view-btn,
+:root[data-ui=light] #gdt:has(.menu.show) .stage-view-btn,
+:root[data-ui=light] #gdt:hover .stage-view-btn {
   background: #ffffff !important;
   border-color: rgba(15, 23, 42, 0.25) !important;
   color: #0f172a !important;
-  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.08), 0 0 0 2px rgba(15, 23, 42, 0.06) !important;
-}
-
-:root[data-ui=light] #dt:has(.menu.show) .stage-view-btn {
-  background: #ffffff !important;
-  border-color: rgba(0, 113, 227, 0.45) !important;
-  color: #0f172a !important;
-  box-shadow: 0 2px 6px -1px rgba(0, 113, 227, 0.12), 0 0 0 2px rgba(0, 113, 227, 0.15) !important;
-}
-
-:root[data-ui=light] #gdt:has(.menu.show) .stage-view-btn {
-  background: #ffffff !important;
-  border-color: rgba(5, 150, 105, 0.45) !important;
-  color: #0f172a !important;
-  box-shadow: 0 2px 6px -1px rgba(5, 150, 105, 0.12), 0 0 0 2px rgba(5, 150, 105, 0.15) !important;
+  box-shadow: none !important;
 }
 
 :root[data-ui=light] .stage-view-arr {
@@ -780,12 +765,12 @@
 :root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #0f172a; }
 
 #stageViewDropdown:has(.menu.show) .stage-view-btn {
-  border-color: rgba(255, 255, 255, 0.32) !important;
-  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(255, 255, 255, 0.12) !important;
+  border-color: #383A38 !important;
+  box-shadow: none !important;
 }
 :root[data-ui=light] #stageViewDropdown:has(.menu.show) .stage-view-btn {
-  border-color: rgba(15, 23, 42, 0.28) !important;
-  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.08), 0 0 0 2px rgba(15, 23, 42, 0.06) !important;
+  border-color: rgba(15, 23, 42, 0.25) !important;
+  box-shadow: none !important;
 }
 
 /* Tablet hiding for comparison section in stage view menu */
