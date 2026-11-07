@@ -231,7 +231,7 @@ export const en = {
         ] as TierFeature[],
         cta: {
           label: "Get Started",
-          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio",
+          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio/EARLYBIRDPLUS",
         },
       },
       {
@@ -257,7 +257,7 @@ export const en = {
         ] as TierFeature[],
         cta: {
           label: "Get Started",
-          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio",
+          href: "https://kaidevlabs.gumroad.com/l/store-preview-studio/EARLYBIRDPRO",
         },
       },
     ],
