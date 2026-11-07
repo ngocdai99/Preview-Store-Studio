@@ -56,8 +56,8 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:8px 0;
-  gap:6px;
+  padding:6px 0;
+  gap:4px;
   background:#181818;
   border-right:1px solid #282928;
   z-index:15;
@@ -68,9 +68,9 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 .activity-bar::-webkit-scrollbar{display:none}
 
 .activity-bar-btn{
-  width:38px;
-  height:38px;
-  border-radius:8px;
+  width:32px;
+  height:32px;
+  border-radius:6px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -108,6 +108,7 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 .activity-bar-btn[aria-selected="true"]{
   background:rgba(255,255,255,0.12) !important;
   border:1px solid rgba(255,255,255,0.08) !important;
+  border-radius:6px !important;
   color:#ffffff !important;
 }
 .activity-bar-btn.active svg,
@@ -143,7 +144,8 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   box-sizing:border-box !important;
   margin:0 !important;
   padding:14px 16px !important;
-  border-bottom:1px solid #282928 !important;
+  border:none !important;
+  border-bottom:none !important;
   background:rgba(23,24,23,.85) !important;
   backdrop-filter:blur(24px) !important;
   -webkit-backdrop-filter:blur(24px) !important;
@@ -158,9 +160,10 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   justify-content:space-between !important;
 }
 .editor .card.selected .card-header h2{
-  font-size:14px;
+  font-size:13.5px;
   font-weight:500;
   letter-spacing:0.01em;
+  color:#cfd8ea;
 }
 .editor .card.selected .card-header .card-toggle-ico{
   display:none !important;
@@ -212,40 +215,48 @@ body.sidebar-collapsed .editor-resizer{
 
 /* Light Mode Overrides */
 :root[data-ui=light] .activity-bar{
-  background:#f3f3f3;
-  border-right-color:#e5e5e5;
+  background:#f1f5f9;
+  border-right-color:#e2e8f0;
 }
 :root[data-ui=light] .activity-bar-btn{
-  color:#616161;
-  border-left-color:transparent;
+  color:#475569;
+  background:transparent;
+  border:1px solid transparent;
 }
 :root[data-ui=light] .activity-bar-btn svg{
-  opacity:0.5;
+  opacity:0.8;
+  color:inherit;
+  stroke:currentColor;
 }
 :root[data-ui=light] .activity-bar-btn:hover{
-  color:#1e1e1e !important;
-  background:rgba(0,0,0,0.04);
+  color:#0f172a !important;
+  background:rgba(0,0,0,0.06);
 }
 :root[data-ui=light] .activity-bar-btn:hover svg{
-  opacity:0.85 !important;
-  color:#1e1e1e !important;
-  stroke:#1e1e1e !important;
+  opacity:1 !important;
+  color:#0f172a !important;
+  stroke:#0f172a !important;
 }
 :root[data-ui=light] .activity-bar-btn.active,
 :root[data-ui=light] .activity-bar-btn[aria-selected="true"]{
-  background:transparent;
-  border-left-color:#007acc !important;
-  color:#007acc !important;
+  background:rgba(0,0,0,0.08) !important;
+  border:1px solid rgba(0,0,0,0.08) !important;
+  border-radius:6px !important;
+  color:#0f172a !important;
 }
 :root[data-ui=light] .activity-bar-btn.active svg,
 :root[data-ui=light] .activity-bar-btn[aria-selected="true"] svg{
   opacity:1 !important;
-  color:#007acc !important;
-  stroke:#007acc !important;
+  color:#0f172a !important;
+  stroke:#0f172a !important;
 }
 :root[data-ui=light] .editor .card.selected .card-header{
   background:#ffffff !important;
-  border-bottom-color:#e2e8f0;
+  border:none !important;
+  border-bottom:none !important;
+}
+:root[data-ui=light] .editor .card.selected .card-header h2{
+  color:var(--tx) !important;
 }
 :root[data-ui=light] .editor .card.selected .card-body{
   scrollbar-color:rgba(0,0,0,0.18) transparent;
@@ -288,7 +299,8 @@ body.sidebar-collapsed .editor-resizer{
   display:flex;flex-direction:column;gap:0;box-shadow:0 4px 20px -2px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,0.06);transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
 }
 .card:hover{background:#242524;border-color:#383a38}
-.card h2{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0}
+.card h2{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;letter-spacing:.2px;margin:0;flex-wrap:nowrap;min-width:0;color:#cfd8ea}
+:root[data-ui=light] .card h2{color:var(--tx)}
 
 /* Card Header & Collapsible Accordion Behavior */
 .card-header {
@@ -329,11 +341,15 @@ body.sidebar-collapsed .editor-resizer{
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
   letter-spacing: .2px;
   flex-wrap: nowrap;
   min-width: 0;
+  color: #cfd8ea;
+}
+:root[data-ui=light] .card-header h2 {
+  color: var(--tx);
 }
 
 .card-header-right {

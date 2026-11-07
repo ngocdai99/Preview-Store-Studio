@@ -173,7 +173,7 @@ function initHeader() {
     const isLight = document.documentElement.dataset.ui === 'light';
     const activeColor = isLight ? '#0f172a' : '#ffffff';
     const activeBg = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.12)';
-    const activeBorder = isLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.08)';
+    const activeBorder = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.08)';
 
     $$('.activity-bar-btn').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
@@ -183,7 +183,7 @@ function initHeader() {
       if (isAct) {
         btn.style.setProperty('background', activeBg, 'important');
         btn.style.setProperty('border', `1px solid ${activeBorder}`, 'important');
-        btn.style.setProperty('border-radius', '8px', 'important');
+        btn.style.setProperty('border-radius', '6px', 'important');
         btn.style.setProperty('color', activeColor, 'important');
         const s = btn.querySelector('svg');
         if (s) {

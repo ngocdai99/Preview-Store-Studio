@@ -17,6 +17,7 @@ function applyUiTheme(t){
   if(typeof renderShots === 'function') renderShots();
   if(typeof renderIpadShots === 'function') renderIpadShots();
   if(typeof renderTabShots === 'function') renderTabShots();
+  if(typeof updateActivityBarState === 'function') updateActivityBarState();
 }
 applyUiTheme(document.documentElement.dataset.ui || 'light');
 $('btnUi').onclick = () => {
