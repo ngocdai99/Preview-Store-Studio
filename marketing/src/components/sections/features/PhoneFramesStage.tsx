@@ -8,25 +8,38 @@ import { useDraggableScroll } from "./DeviceHardwareHelpers";
 export interface PhoneFramesStageProps {
   timeString: string;
   isForeground: boolean;
+  hasInteracted?: boolean;
   onSelect?: () => void;
 }
 
-export function PhoneFramesStage({ timeString, isForeground, onSelect }: PhoneFramesStageProps) {
+export function PhoneFramesStage({
+  timeString,
+  isForeground,
+  hasInteracted = false,
+  onSelect,
+}: PhoneFramesStageProps) {
   const { ref: scrollRef, handlers: scrollHandlers } = useDraggableScroll();
+
+  const stageMotionClass = hasInteracted
+    ? isForeground
+      ? "phone-stage-orbit-fg"
+      : "phone-stage-orbit-bg"
+    : isForeground
+      ? "phone-stage-fg-initial"
+      : "phone-stage-bg-initial";
+
   return (
     <div
       onClick={!isForeground ? onSelect : undefined}
-      className={`absolute inset-0 flex items-center justify-center transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
-        isForeground
-          ? "z-20 opacity-100 scale-95 sm:scale-100 translate-x-0 translate-y-0 rotate-0 filter-none pointer-events-auto"
-          : "z-10 opacity-40 hover:opacity-85 scale-[0.74] sm:scale-[0.78] hover:scale-[0.78] sm:hover:scale-[0.82] -translate-x-20 sm:-translate-x-32 -translate-y-3 sm:-translate-y-4 -rotate-2 filter blur-[0.4px] hover:blur-none cursor-pointer pointer-events-auto group"
+      className={`absolute inset-0 flex items-center justify-center transform-gpu pointer-events-auto ${stageMotionClass} ${
+        !isForeground ? "cursor-pointer group" : ""
       }`}
     >
       <div
-        className={`relative w-[212px] sm:w-[226px] h-[392px] sm:h-[412px] rounded-[44px] p-[6px] border border-[#363840] bg-[#1e1f23] transition-all duration-500 ${
+        className={`relative w-[212px] sm:w-[226px] h-[392px] sm:h-[412px] rounded-[44px] p-[6px] border border-[#363840] bg-[#1e1f23] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isForeground
-            ? "shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2),0_0_0_1px_rgba(255,255,255,0.12)]"
-            : "shadow-[0_12px_28px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+            ? "opacity-100 filter-none shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2),0_0_0_1px_rgba(255,255,255,0.12)]"
+            : "opacity-40 group-hover:opacity-85 group-hover:scale-[1.04] filter blur-[0.4px] group-hover:blur-none shadow-[0_12px_28px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
         }`}
       >
         {/* Outer Physical Hardware Buttons */}

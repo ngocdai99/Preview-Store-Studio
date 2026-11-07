@@ -8,21 +8,40 @@ import { IPadMockupFrame, useDraggableScroll } from "./DeviceHardwareHelpers";
 export interface TabletFramesStageProps {
   timeString: string;
   isForeground: boolean;
+  hasInteracted?: boolean;
   onSelect?: () => void;
 }
 
-export function TabletFramesStage({ timeString, isForeground, onSelect }: TabletFramesStageProps) {
+export function TabletFramesStage({
+  timeString,
+  isForeground,
+  hasInteracted = false,
+  onSelect,
+}: TabletFramesStageProps) {
   const { ref: scrollRef, handlers: scrollHandlers } = useDraggableScroll();
+
+  const stageMotionClass = hasInteracted
+    ? isForeground
+      ? "ipad-stage-orbit-fg"
+      : "ipad-stage-orbit-bg"
+    : isForeground
+      ? "ipad-stage-fg-initial"
+      : "ipad-stage-bg-initial";
+
   return (
     <div
       onClick={!isForeground ? onSelect : undefined}
-      className={`absolute inset-0 flex items-center justify-center transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${
-        isForeground
-          ? "z-20 opacity-100 scale-[0.92] sm:scale-100 translate-x-0 translate-y-0 rotate-0 filter-none pointer-events-auto"
-          : "z-10 opacity-40 hover:opacity-85 scale-[0.78] sm:scale-[0.82] hover:scale-[0.82] sm:hover:scale-[0.86] translate-x-10 sm:translate-x-16 -translate-y-3 sm:-translate-y-4 rotate-[1.5deg] filter blur-[0.4px] hover:blur-none cursor-pointer pointer-events-auto group"
+      className={`absolute inset-0 flex items-center justify-center transform-gpu pointer-events-auto ${stageMotionClass} ${
+        !isForeground ? "cursor-pointer group" : ""
       }`}
     >
-      <div className="relative">
+      <div
+        className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isForeground
+            ? "opacity-100 filter-none"
+            : "opacity-40 group-hover:opacity-85 group-hover:scale-[1.04] filter blur-[0.4px] group-hover:blur-none"
+        }`}
+      >
         <IPadMockupFrame
           timeString={timeString}
           className={`transition-all duration-500 ${

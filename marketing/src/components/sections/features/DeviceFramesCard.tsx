@@ -9,7 +9,14 @@ import { TabletFramesStage } from "./TabletFramesStage";
 
 export function DeviceFramesCard() {
   const [device, setDevice] = useState<"phone" | "tablet">("phone");
+  const [hasInteracted, setHasInteracted] = useState(false);
   const timeString = useDeviceTime();
+
+  const handleSelectDevice = (next: "phone" | "tablet") => {
+    if (next === device) return;
+    setHasInteracted(true);
+    setDevice(next);
+  };
 
   return (
     <FeatureCard
@@ -33,7 +40,7 @@ export function DeviceFramesCard() {
       headerRight={
         <SlidingTabs
           value={device}
-          onChange={(val) => setDevice(val as "phone" | "tablet")}
+          onChange={(val) => handleSelectDevice(val as "phone" | "tablet")}
           className="w-[170px] sm:w-[180px] shrink-0"
           options={[
             {
@@ -95,12 +102,14 @@ export function DeviceFramesCard() {
         <PhoneFramesStage
           timeString={timeString}
           isForeground={device === "phone"}
-          onSelect={() => setDevice("phone")}
+          hasInteracted={hasInteracted}
+          onSelect={() => handleSelectDevice("phone")}
         />
         <TabletFramesStage
           timeString={timeString}
           isForeground={device === "tablet"}
-          onSelect={() => setDevice("tablet")}
+          hasInteracted={hasInteracted}
+          onSelect={() => handleSelectDevice("tablet")}
         />
       </div>
     </FeatureCard>

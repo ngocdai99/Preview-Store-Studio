@@ -453,3 +453,148 @@ html.dark .announcement-arrow {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* ==========================================================================
+   Card 1: Orbital Carousel Device Swap (Phone arcs left, iPad arcs right)
+   ========================================================================== */
+:root {
+  --phone-arc-x: -138px;
+  --phone-bg-x: -84px;
+  --ipad-arc-x: 136px;
+  --ipad-bg-x: 56px;
+  --phone-fg-scale: 1;
+  --ipad-fg-scale: 1;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --phone-arc-x: -96px;
+    --phone-bg-x: -64px;
+    --ipad-arc-x: 96px;
+    --ipad-bg-x: 42px;
+    --phone-fg-scale: 0.95;
+    --ipad-fg-scale: 0.92;
+  }
+}
+
+@keyframes orbit-z-to-back {
+  0%, 44.9% {
+    z-index: 20;
+  }
+  45%, 100% {
+    z-index: 10;
+  }
+}
+
+@keyframes orbit-z-to-front {
+  0%, 44.9% {
+    z-index: 10;
+  }
+  45%, 100% {
+    z-index: 20;
+  }
+}
+
+/* Phone swings out wide around the LEFT, then settles behind iPad */
+@keyframes phone-orbit-to-back {
+  0% {
+    transform: translate3d(0, 0, 0) scale(var(--phone-fg-scale)) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.56, 1);
+  }
+  45% {
+    transform: translate3d(var(--phone-arc-x), 6px, 0) scale(0.84) rotate(-5.5deg);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(var(--phone-bg-x), -14px, 0) scale(0.76) rotate(-2.5deg);
+  }
+}
+
+/* Phone swings out wide around the LEFT, then curves into center foreground */
+@keyframes phone-orbit-to-front {
+  0% {
+    transform: translate3d(var(--phone-bg-x), -14px, 0) scale(0.76) rotate(-2.5deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.56, 1);
+  }
+  45% {
+    transform: translate3d(var(--phone-arc-x), 8px, 0) scale(0.88) rotate(-5deg);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(var(--phone-fg-scale)) rotate(0deg);
+  }
+}
+
+/* iPad swings out wide around the RIGHT, then curves into center foreground */
+@keyframes ipad-orbit-to-front {
+  0% {
+    transform: translate3d(var(--ipad-bg-x), -14px, 0) scale(0.80) rotate(2deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.56, 1);
+  }
+  45% {
+    transform: translate3d(var(--ipad-arc-x), 8px, 0) scale(0.90) rotate(5deg);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(var(--ipad-fg-scale)) rotate(0deg);
+  }
+}
+
+/* iPad swings out wide around the RIGHT, then settles behind Phone */
+@keyframes ipad-orbit-to-back {
+  0% {
+    transform: translate3d(0, 0, 0) scale(var(--ipad-fg-scale)) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.56, 1);
+  }
+  45% {
+    transform: translate3d(var(--ipad-arc-x), 6px, 0) scale(0.86) rotate(5.5deg);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(var(--ipad-bg-x), -14px, 0) scale(0.80) rotate(2deg);
+  }
+}
+
+.phone-stage-fg-initial {
+  z-index: 20;
+  transform: translate3d(0, 0, 0) scale(var(--phone-fg-scale)) rotate(0deg);
+}
+
+.phone-stage-bg-initial {
+  z-index: 10;
+  transform: translate3d(var(--phone-bg-x), -14px, 0) scale(0.76) rotate(-2.5deg);
+}
+
+.ipad-stage-fg-initial {
+  z-index: 20;
+  transform: translate3d(0, 0, 0) scale(var(--ipad-fg-scale)) rotate(0deg);
+}
+
+.ipad-stage-bg-initial {
+  z-index: 10;
+  transform: translate3d(var(--ipad-bg-x), -14px, 0) scale(0.80) rotate(2deg);
+}
+
+.phone-stage-orbit-fg {
+  animation:
+    phone-orbit-to-front 680ms forwards,
+    orbit-z-to-front 680ms forwards;
+}
+
+.phone-stage-orbit-bg {
+  animation:
+    phone-orbit-to-back 680ms forwards,
+    orbit-z-to-back 680ms forwards;
+}
+
+.ipad-stage-orbit-fg {
+  animation:
+    ipad-orbit-to-front 680ms forwards,
+    orbit-z-to-front 680ms forwards;
+}
+
+.ipad-stage-orbit-bg {
+  animation:
+    ipad-orbit-to-back 680ms forwards,
+    orbit-z-to-back 680ms forwards;
+}
