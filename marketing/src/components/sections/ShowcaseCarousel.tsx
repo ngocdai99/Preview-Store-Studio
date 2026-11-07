@@ -31,7 +31,7 @@ export const SHOWCASE_SLIDES: ShowcaseSlide[] = [
   },
   {
     id: "audit",
-    src: "/covers/gumroad-3-audit.png",
+    src: "/covers/gumroad-3-audit.png?v=20261107b",
     alt: "Pre-Flight ASO Compliance Audit",
     title: "Pre-Flight ASO Compliance Audit",
     badge: "Rejection Guard",
@@ -174,7 +174,7 @@ export function ShowcaseCarousel() {
 
         {/* Carousel Viewport Container */}
         <div
-          className="relative w-full rounded-2xl sm:rounded-3xl border border-slate-200/90 dark:border-[#282928] bg-[#0c0d0c] shadow-[0_24px_80px_rgba(0,0,0,0.35)] overflow-hidden group select-none"
+          className="relative w-full rounded-2xl sm:rounded-3xl bg-[#0c0d0c] border border-slate-200/80 dark:border-white/[0.08] shadow-[0_24px_80px_rgba(0,0,0,0.35)] overflow-hidden group select-none"
           onMouseEnter={() => setIsPlaying(false)}
           onMouseLeave={() => setIsPlaying(true)}
           onTouchStart={handleTouchStart}
@@ -246,7 +246,7 @@ export function ShowcaseCarousel() {
             </button>
 
             {/* Minimal Dots Pagination */}
-            <div className="absolute bottom-3.5 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 z-10 px-2.5 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/15 shadow-lg">
+            <div className="absolute bottom-3.5 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 z-10 px-2.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md shadow-lg">
               {SHOWCASE_SLIDES.map((_, idx) => (
                 <button
                   key={idx}
