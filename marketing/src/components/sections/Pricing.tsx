@@ -125,15 +125,7 @@ export function Pricing() {
                               <span className="flex-1">
                                 <span>{feature.text}</span>
                                 {feature.tag && (
-                                  <span
-                                    className={`inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium tracking-wide border whitespace-nowrap shrink-0 ${
-                                      feature.tag === "src/" ||
-                                      feature.tag === "build.js" ||
-                                      feature.tag === ".html"
-                                        ? "font-mono bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700"
-                                        : "bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10"
-                                    }`}
-                                  >
+                                  <span className="inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-[10.5px] font-medium tracking-wide bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-white/10 whitespace-nowrap shrink-0">
                                     {feature.tag}
                                   </span>
                                 )}
