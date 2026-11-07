@@ -15,13 +15,13 @@
   --dev-zoom: 1;
 }
 
-/* Device Header Label (Matching Marketing Showcase) */
+/* Device Header Label - Hidden, Replaced with Clean Pure Space */
 .dev-label{
   position:absolute;
   top:calc(-32px / var(--dev-zoom, 1));
   left:0;
   right:0;
-  display:flex;
+  display:none !important;
   align-items:center;
   justify-content:center;
   pointer-events:none;
@@ -29,7 +29,7 @@
   z-index:10;
 }
 .dev-title{
-  display:inline-flex;
+  display:none !important;
   align-items:center;
   gap:calc(6.5px / var(--dev-zoom, 1));
   font-size:calc(13px / var(--dev-zoom, 1));
