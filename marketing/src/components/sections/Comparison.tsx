@@ -13,7 +13,6 @@ interface BeatItem {
   colSpan: string;
   accent: {
     verticalLine: string;
-    glow: string;
     borderHover: string;
     iconBg: string;
     numColor: string;
@@ -40,7 +39,6 @@ const BEATS_DATA: BeatItem[] = [
     colSpan: "md:col-span-7",
     accent: {
       verticalLine: "from-[#00D085] via-emerald-400/60 to-transparent",
-      glow: "bg-[#00D085]/20 dark:bg-[#00D085]/25",
       borderHover: "hover:border-[#00D085]/40 dark:hover:border-[#00D085]/40",
       iconBg: "bg-[#00D085]/10 text-emerald-700 dark:text-[#00D085] border-emerald-500/25",
       numColor: "text-emerald-700 dark:text-[#00D085]",
@@ -66,7 +64,6 @@ const BEATS_DATA: BeatItem[] = [
     colSpan: "md:col-span-5",
     accent: {
       verticalLine: "from-indigo-500 via-violet-400/60 to-transparent",
-      glow: "bg-indigo-500/20 dark:bg-indigo-500/25",
       borderHover: "hover:border-indigo-500/40 dark:hover:border-indigo-500/40",
       iconBg: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/25",
       numColor: "text-indigo-700 dark:text-indigo-400",
@@ -89,7 +86,6 @@ const BEATS_DATA: BeatItem[] = [
     colSpan: "md:col-span-5",
     accent: {
       verticalLine: "from-sky-500 via-cyan-400/60 to-transparent",
-      glow: "bg-sky-500/20 dark:bg-sky-500/25",
       borderHover: "hover:border-sky-500/40 dark:hover:border-sky-500/40",
       iconBg: "bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/25",
       numColor: "text-sky-700 dark:text-sky-400",
@@ -112,7 +108,6 @@ const BEATS_DATA: BeatItem[] = [
     colSpan: "md:col-span-7",
     accent: {
       verticalLine: "from-amber-500 via-orange-400/60 to-transparent",
-      glow: "bg-amber-500/20 dark:bg-amber-500/25",
       borderHover: "hover:border-amber-500/40 dark:hover:border-amber-500/40",
       iconBg: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/25",
       numColor: "text-amber-700 dark:text-amber-400",
@@ -152,11 +147,6 @@ export function Comparison() {
               {/* Colorful Vertical Left Edge Highlight */}
               <div
                 className={`absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b ${item.accent.verticalLine} opacity-95`}
-              />
-
-              {/* Ambient Glow emanating from the left edge */}
-              <div
-                className={`absolute -top-10 -left-10 w-36 h-36 rounded-full blur-2xl opacity-15 dark:opacity-25 pointer-events-none group-hover:opacity-35 dark:group-hover:opacity-45 transition-opacity duration-500 ${item.accent.glow}`}
               />
 
               <div className="relative z-10">
