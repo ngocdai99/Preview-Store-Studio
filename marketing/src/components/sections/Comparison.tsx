@@ -12,7 +12,7 @@ interface BeatItem {
   icon: React.ReactNode;
   colSpan: string;
   accent: {
-    topLine: string;
+    verticalLine: string;
     glow: string;
     borderHover: string;
     iconBg: string;
@@ -39,7 +39,7 @@ const BEATS_DATA: BeatItem[] = [
     ),
     colSpan: "md:col-span-7",
     accent: {
-      topLine: "from-[#00D085] via-emerald-400 to-transparent",
+      verticalLine: "from-[#00D085] via-emerald-400/60 to-transparent",
       glow: "bg-[#00D085]/20 dark:bg-[#00D085]/25",
       borderHover: "hover:border-[#00D085]/40 dark:hover:border-[#00D085]/40",
       iconBg: "bg-[#00D085]/10 text-emerald-700 dark:text-[#00D085] border-emerald-500/25",
@@ -65,7 +65,7 @@ const BEATS_DATA: BeatItem[] = [
     ),
     colSpan: "md:col-span-5",
     accent: {
-      topLine: "from-indigo-500 via-violet-400 to-transparent",
+      verticalLine: "from-indigo-500 via-violet-400/60 to-transparent",
       glow: "bg-indigo-500/20 dark:bg-indigo-500/25",
       borderHover: "hover:border-indigo-500/40 dark:hover:border-indigo-500/40",
       iconBg: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/25",
@@ -88,7 +88,7 @@ const BEATS_DATA: BeatItem[] = [
     ),
     colSpan: "md:col-span-5",
     accent: {
-      topLine: "from-sky-500 via-cyan-400 to-transparent",
+      verticalLine: "from-sky-500 via-cyan-400/60 to-transparent",
       glow: "bg-sky-500/20 dark:bg-sky-500/25",
       borderHover: "hover:border-sky-500/40 dark:hover:border-sky-500/40",
       iconBg: "bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/25",
@@ -111,7 +111,7 @@ const BEATS_DATA: BeatItem[] = [
     ),
     colSpan: "md:col-span-7",
     accent: {
-      topLine: "from-amber-500 via-orange-400 to-transparent",
+      verticalLine: "from-amber-500 via-orange-400/60 to-transparent",
       glow: "bg-amber-500/20 dark:bg-amber-500/25",
       borderHover: "hover:border-amber-500/40 dark:hover:border-amber-500/40",
       iconBg: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/25",
@@ -147,16 +147,16 @@ export function Comparison() {
           {BEATS_DATA.map((item) => (
             <div
               key={item.id}
-              className={`col-span-1 ${item.colSpan} flex flex-col justify-between group relative rounded-2xl sm:rounded-3xl p-6 sm:p-7 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] ${item.accent.borderHover} shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300 overflow-hidden`}
+              className={`col-span-1 ${item.colSpan} flex flex-col justify-between group relative rounded-2xl sm:rounded-3xl p-6 sm:p-7 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] ${item.accent.borderHover} shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300 overflow-hidden pl-7 sm:pl-8`}
             >
-              {/* Colorful Top Hairline Accent */}
+              {/* Colorful Vertical Left Edge Highlight */}
               <div
-                className={`absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r ${item.accent.topLine} opacity-90`}
+                className={`absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b ${item.accent.verticalLine} opacity-95`}
               />
 
-              {/* Ambient Glow in the Corner */}
+              {/* Ambient Glow emanating from the left edge */}
               <div
-                className={`absolute -top-12 -right-12 w-36 h-36 rounded-full blur-2xl opacity-15 dark:opacity-25 pointer-events-none group-hover:opacity-35 dark:group-hover:opacity-45 transition-opacity duration-500 ${item.accent.glow}`}
+                className={`absolute -top-10 -left-10 w-36 h-36 rounded-full blur-2xl opacity-15 dark:opacity-25 pointer-events-none group-hover:opacity-35 dark:group-hover:opacity-45 transition-opacity duration-500 ${item.accent.glow}`}
               />
 
               <div className="relative z-10">
