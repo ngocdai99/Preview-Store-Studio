@@ -4,7 +4,7 @@
 @import "editor.css";
 @import "stage.css";
 @import "apple/ios.css";
-@import "apple/ipad.css";
+@import "./apple/ipad.css";
 @import "google/play.css";
 @import "google/tablets.css";
 @import "google/feature-graphic.css";

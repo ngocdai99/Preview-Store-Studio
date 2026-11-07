@@ -2,6 +2,7 @@
 
 .age-picker-fg {
   position: relative;
+  grid-column: 1 / -1;
 }
 
 .custom-age-wrap {
@@ -88,10 +89,11 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
   display: none;
   position: absolute;
   top: calc(100% + 6px);
+  left: 0;
   right: 0;
-  min-width: 250px;
   width: 100%;
-  max-width: 320px;
+  max-width: 100%;
+  box-sizing: border-box;
   z-index: 100;
   background: var(--card, #1D1E1D);
   border: 1px solid var(--border, #282928);

@@ -164,6 +164,20 @@ function buildTry() {
   // Demo Mode: Remove preset warning banner since drafts cannot be edited or created in Demo Mode
   html = html.replace(/<div class="preset-banner" id="presetBanner"[\s\S]*?<\/div>(?=\s*<\/nav>)/gi, '');
 
+  // Demo Mode: Update Card 2, 3, 4 sequence numbers for reordered cards (2: Metrics, 3: Description, 4: Phone Screenshots)
+  html = html.replace(
+    /(<div class="card collapsed" id="statsCard">[\s\S]*?<span class="card-num" title="Card )4(">)4(<\/span>)/,
+    '$12$22$3'
+  );
+  html = html.replace(
+    /(<div class="card collapsed" id="contentCard">[\s\S]*?<span class="card-num" title="Card )2(">)2(<\/span>)/,
+    '$13$23$3'
+  );
+  html = html.replace(
+    /(<div class="card collapsed" id="shotsCard">[\s\S]*?<span class="card-num" title="Card )3(">)3(<\/span>)/,
+    '$14$24$3'
+  );
+
   // 6. Production Minification
   const minified = minifyHtmlPage(html);
 
@@ -208,7 +222,7 @@ if (require.main === module) {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         console.log(`\n[⚡] Change detected in ${file || 'files'}, rebuilding try.html in ~20ms...`);
-        buildTry();
+        require('child_process').execFileSync(process.execPath, [__filename], { stdio: 'inherit' });
       }, 50);
     };
 

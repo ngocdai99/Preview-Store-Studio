@@ -82,7 +82,7 @@ const DEMO_PAYWALL_CONFIGS = {
   },
   'edit-metadata': {
     title: 'Unlock Custom Metadata Editing',
-    desc: 'Customize your App Name, Subtitles, Developer info, What\'s New notes, and Full Descriptions with real-time character limit audits in Full Studio.',
+    desc: 'Customize your App Name, Subtitles, What\'s New notes, and Full Descriptions with real-time character limit audits in Full Studio.',
     mainFeature: 'Full store listing metadata editor & character validation'
   },
   'default': {
@@ -155,7 +155,7 @@ const MINI_STUDIO_TOAST_MAP = {
   },
   'edit-metadata': {
     title: 'Listing Metadata Editing',
-    desc: 'App Name, Subtitle, Developer & Descriptions are editable in Plus & Pro Edition.'
+    desc: 'App Name, Subtitle & Descriptions are editable in Plus & Pro Edition.'
   },
   'default': {
     title: 'Exclusive Feature',
@@ -314,6 +314,28 @@ function initDemoGuard() {
     document.body.classList.add('sps-demo-mode');
     const closeBtn = document.getElementById('presetPillCloseBtn');
     if (closeBtn) closeBtn.remove();
+
+    // Demo Mode: Reorder Editor Cards 2, 3, 4 -> Metrics (2), Description (3), Phone Screenshots (4)
+    {
+      const editorPanel = $('editorPanel');
+      const identityCardEl = $('identityCard');
+      const statsCardEl = $('statsCard');
+      const contentCardEl = $('contentCard');
+      const shotsCardEl = $('shotsCard');
+      if (editorPanel && identityCardEl && statsCardEl && contentCardEl && shotsCardEl) {
+        identityCardEl.after(statsCardEl, contentCardEl, shotsCardEl);
+        const setCardNum = (card, num) => {
+          const badge = card.querySelector('.card-header .card-num');
+          if (badge) {
+            badge.textContent = String(num);
+            badge.setAttribute('title', 'Card ' + num);
+          }
+        };
+        setCardNum(statsCardEl, 2);
+        setCardNum(contentCardEl, 3);
+        setCardNum(shotsCardEl, 4);
+      }
+    }
     
     // Setup Mini Studio Supabase Menu in Demo Mode
     const menuExport = $('menuExport');
@@ -714,11 +736,10 @@ function initDemoGuard() {
     });
 
     // 6. Gated Metadata Input Fields (Readonly lock with live focus-link yellow border)
-    const lockedFieldIds = ['f-name', 'f-sub', 'f-dev', 'f-short', 'f-promo', 'f-new', 'f-desc'];
+    const lockedFieldIds = ['f-name', 'f-sub', 'f-short', 'f-promo', 'f-new', 'f-desc'];
     const lockedFieldKeys = {
       'f-name': 'name',
       'f-sub': 'sub',
-      'f-dev': 'dev',
       'f-short': 'short',
       'f-promo': 'promo',
       'f-new': 'new',
