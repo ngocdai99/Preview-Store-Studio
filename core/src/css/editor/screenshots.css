@@ -353,8 +353,8 @@ body[data-ui-store="google"] .shot-preview-pill {
   font-size: 11px;
   line-height: 1.5;
   color: var(--mut);
-  background: var(--p2);
-  border: 1px solid var(--line);
+  background: var(--card, #1D1E1D);
+  border: 1px solid var(--border, #282928);
   border-radius: 8px;
   padding: 8px 10px;
   margin: 6px 0 10px;

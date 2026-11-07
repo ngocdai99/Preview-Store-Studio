@@ -55,7 +55,7 @@ function copyDirRecursive(src, dest) {
  * from commercial customer source files so zero demo/paywall references remain.
  */
 function stripDemoBlocks(code) {
-  const pattern = /\n?[ \t]*if\s*\(\s*typeof\s+isDemoMode\s*===\s*['"]function['"]\s*&&\s*isDemoMode\(\)(?:[^){]|\([^)]*\))*\)\s*\{/g;
+  const pattern = /(?:\n?[ \t]*\/\/[^\n]*demo[^\n]*\n|\n?[ \t]*\/\*[\s\S]*?demo[\s\S]*?\*\/\n)?\n?[ \t]*if\s*\(\s*typeof\s+isDemoMode\s*===\s*['"]function['"]\s*&&\s*isDemoMode\(\)(?:[^){]|\([^)]*\))*\)\s*\{/gi;
   let result = '';
   let lastIdx = 0;
   let match;

@@ -194,15 +194,15 @@
 /* Modern Customize Button & Collapsible Panel */
 .metrics-details{
   margin-top:10px;border-radius:12px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  background:var(--card, #1D1E1D);border:1px solid var(--border, #282928);
   box-shadow:0 1px 3px rgba(0,0,0,.15);
   overflow:hidden;transition:all .22s cubic-bezier(.4,0,.2,1);
 }
 .metrics-details:hover{
-  border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.045);
+  border-color:rgba(255,255,255,.16);background:var(--card, #1D1E1D);
 }
 .metrics-details[open]{
-  background:rgba(15,23,42,.35);border-color:rgba(245,158,11,.35);
+  background:var(--card, #1D1E1D);border-color:rgba(245,158,11,.35);
   box-shadow:0 6px 20px rgba(0,0,0,.28);
 }
 .metrics-summary{
@@ -239,8 +239,8 @@
 }
 .metrics-details[open] .ms-arrow{transform:rotate(180deg);color:#f59e0b}
 .metrics-content{
-  padding:14px 14px 16px;border-top:1px solid rgba(255,255,255,.06);
-  background:rgba(0,0,0,.12);
+  padding:14px 14px 16px;border-top:1px solid var(--border, #282928);
+  background:transparent;
 }
 :root[data-ui=light] .metrics-details{
   background:#ffffff;border-color:rgba(15,23,42,.09);box-shadow:0 1px 3px rgba(0,0,0,.04);
