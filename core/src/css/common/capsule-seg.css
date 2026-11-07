@@ -1,0 +1,243 @@
+/* ---------- Shared Component: Capsule Segmented Icon Toggle (.capsule-seg) ---------- */
+/* Shared foundation for Store Switcher (#storeSwitcher) & Device Theme Toggle (#theme) */
+
+.capsule-seg,
+.seg,
+.vt.theme-seg,
+#theme.vt {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  background: #171817;
+  border: 1px solid #282928;
+  border-radius: 12px;
+  padding: 2.5px 4px;
+  gap: 4px;
+  width: auto !important;
+  min-width: unset !important;
+  max-width: fit-content !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.15);
+  flex: 0 0 auto !important;
+  margin: 0 auto;
+}
+
+/* Sliding Indicator Pill */
+.capsule-seg .pill,
+.capsule-seg .vt-pill,
+.seg .pill,
+.vt.theme-seg .vt-pill {
+  position: absolute;
+  top: 2.5px;
+  bottom: 2.5px;
+  left: 0;
+  height: 27px !important;
+  border-radius: 8px !important;
+  background: #1D1E1D !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, width;
+}
+
+/* Test-compliant Immediate Selectors (Preserving state across store switches) */
+.pill.is-apple,
+.seg[data-store="apple"] .pill,
+body[data-ui-store="apple"] .pill,
+.pill.is-google,
+.seg[data-store="google"] .pill,
+body[data-ui-store="google"] .pill,
+.pill.is-dual,
+.seg[data-store="dual"] .pill,
+body[data-ui-store="dual"] .pill,
+body:not([data-ui-store])[data-store=apple]:not([data-dual=true]) .pill,
+body:not([data-ui-store])[data-store=google]:not([data-dual=true]) .pill,
+body:not([data-ui-store])[data-dual=true] .pill {
+  background: #1D1E1D !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Segment Buttons */
+.capsule-seg button,
+.seg button,
+.vt.theme-seg button,
+.theme-seg-btn {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+  border: 0 !important;
+  color: #8e8e93;
+  width: 36px !important;
+  height: 27px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  flex: 0 0 36px !important;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px !important;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
+  box-sizing: border-box;
+  box-shadow: none !important;
+}
+
+.capsule-seg button:hover:not(.on),
+.seg button:hover:not(.on),
+.vt.theme-seg button:hover:not(.on),
+.theme-seg-btn:hover:not(.on) {
+  color: #ffffff;
+}
+
+.capsule-seg button:active,
+.seg button:active,
+.vt.theme-seg button:active,
+.theme-seg-btn:active {
+  transform: scale(0.95);
+}
+
+.capsule-seg button.on,
+.seg button.on,
+.vt.theme-seg button.on,
+.theme-seg-btn.on {
+  color: #ffffff !important;
+}
+
+/* Segment Icons */
+.capsule-seg .s-ico,
+.capsule-seg .vt-ico,
+.seg .s-ico,
+.vt.theme-seg .vt-ico,
+.theme-seg-btn .vt-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  color: #8e8e93;
+  opacity: 0.75;
+}
+
+.capsule-seg .s-ico svg,
+.capsule-seg .vt-ico svg,
+.seg .s-ico svg,
+.vt.theme-seg .vt-ico svg,
+.theme-seg-btn .vt-ico svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.capsule-seg button:not(.on) .s-ico,
+.capsule-seg button:not(.on) .vt-ico,
+.seg button:not(.on) .s-ico,
+.vt.theme-seg button:not(.on) .vt-ico {
+  color: #8e8e93;
+}
+
+.capsule-seg button:hover:not(.on) .s-ico,
+.capsule-seg button:hover:not(.on) .vt-ico,
+.seg button:hover:not(.on) .s-ico,
+.vt.theme-seg button:hover:not(.on) .vt-ico {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.capsule-seg button.on .s-ico,
+.capsule-seg button.on .vt-ico,
+.seg button.on .s-ico,
+.vt.theme-seg button.on .vt-ico,
+.theme-seg-btn.on .vt-ico {
+  color: #ffffff !important;
+  transform: none;
+  opacity: 1;
+}
+
+/* ---------- Light Mode Shared Architecture ---------- */
+:root[data-ui=light] .capsule-seg,
+:root[data-ui=light] .seg,
+:root[data-ui=light] .vt.theme-seg,
+:root[data-ui=light] #theme.vt {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, .1) !important;
+  box-shadow: 0 1px 4px -1px rgba(15, 23, 42, .08), 0 1px 2px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
+  transition: border-color .2s ease, box-shadow .2s ease !important;
+}
+
+:root[data-ui=light] .capsule-seg:hover,
+:root[data-ui=light] .seg:hover,
+:root[data-ui=light] .vt.theme-seg:hover,
+:root[data-ui=light] #theme.vt:hover {
+  border-color: rgba(15, 23, 42, .18) !important;
+  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, .08), 0 1px 3px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
+}
+
+:root[data-ui=light] .capsule-seg .pill,
+:root[data-ui=light] .capsule-seg .vt-pill,
+:root[data-ui=light] .seg .pill,
+:root[data-ui=light] .vt.theme-seg .vt-pill,
+:root[data-ui=light] .pill.is-apple,
+:root[data-ui=light] .seg[data-store="apple"] .pill,
+:root[data-ui=light] body[data-ui-store="apple"] .pill,
+:root[data-ui=light] .pill.is-google,
+:root[data-ui=light] .seg[data-store="google"] .pill,
+:root[data-ui=light] body[data-ui-store="google"] .pill,
+:root[data-ui=light] .pill.is-dual,
+:root[data-ui=light] .seg[data-store="dual"] .pill,
+:root[data-ui=light] body[data-ui-store="dual"] .pill,
+:root[data-ui=light] body:not([data-ui-store])[data-dual=true] .pill {
+  background: #0f172a !important;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, .18), inset 0 1px 0 rgba(255, 255, 255, .15) !important;
+  border: 1px solid #0f172a !important;
+}
+
+:root[data-ui=light] .capsule-seg button,
+:root[data-ui=light] .seg button,
+:root[data-ui=light] .vt.theme-seg button,
+:root[data-ui=light] .theme-seg-btn {
+  color: #64748b !important;
+}
+
+:root[data-ui=light] .capsule-seg .s-ico,
+:root[data-ui=light] .capsule-seg .vt-ico,
+:root[data-ui=light] .seg .s-ico,
+:root[data-ui=light] .vt.theme-seg .vt-ico,
+:root[data-ui=light] .theme-seg-btn .vt-ico {
+  color: #475569 !important;
+  opacity: .92 !important;
+}
+
+:root[data-ui=light] .capsule-seg button:hover:not(.on),
+:root[data-ui=light] .capsule-seg button:hover:not(.on) .s-ico,
+:root[data-ui=light] .capsule-seg button:hover:not(.on) .vt-ico,
+:root[data-ui=light] .seg button:hover:not(.on),
+:root[data-ui=light] .seg button:hover:not(.on) .s-ico,
+:root[data-ui=light] .vt.theme-seg button:hover:not(.on),
+:root[data-ui=light] .vt.theme-seg button:hover:not(.on) .vt-ico,
+:root[data-ui=light] .theme-seg-btn:hover:not(.on) {
+  color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+:root[data-ui=light] .capsule-seg button.on,
+:root[data-ui=light] .seg button.on,
+:root[data-ui=light] .vt.theme-seg button.on,
+:root[data-ui=light] .theme-seg-btn.on {
+  color: #ffffff !important;
+}
+
+:root[data-ui=light] .capsule-seg button.on .s-ico,
+:root[data-ui=light] .capsule-seg button.on .vt-ico,
+:root[data-ui=light] .seg button.on .s-ico,
+:root[data-ui=light] .vt.theme-seg button.on .vt-ico,
+:root[data-ui=light] .theme-seg-btn.on .vt-ico {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}

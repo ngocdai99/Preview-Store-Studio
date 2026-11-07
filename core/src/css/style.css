@@ -1,5 +1,6 @@
 /* Store Preview Studio · Modular Stylesheet Entrypoint */
 @import "base.css";
+@import "common/capsule-seg.css";
 @import "header.css";
 @import "editor.css";
 @import "stage.css";
