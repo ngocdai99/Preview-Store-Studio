@@ -80,6 +80,71 @@ const BEATS_DATA: BeatItem[] = [
   },
 ];
 
+function CardView({ item }: { item: BeatItem }) {
+  return (
+    <div className="group relative rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300">
+      {/* Subtle Top Hairline */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
+
+      {/* Card Category Header */}
+      <div className="flex items-center gap-2 mb-3.5">
+        <span className="font-mono text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+          {item.number}
+        </span>
+        <span className="text-slate-300 dark:text-slate-700">·</span>
+        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          {item.category}
+        </span>
+      </div>
+
+      {/* Main Solution Value */}
+      <div className="space-y-1.5">
+        <div className="flex items-start gap-3">
+          {/* Neutral / White Icon */}
+          <div className="shrink-0 w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/[0.08] text-slate-900 dark:text-white flex items-center justify-center mt-0.5 border border-slate-200/80 dark:border-white/10">
+            {item.icon}
+          </div>
+          <h3 className="text-[15.5px] sm:text-[16.5px] font-bold text-[#0f172a] dark:text-white leading-snug tracking-[-0.01em]">
+            {item.solutionTitle}
+          </h3>
+        </div>
+        <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed pl-[44px]">
+          {item.solutionDesc}
+        </p>
+      </div>
+
+      {/* Subtle Hairline Divider */}
+      <div className="my-3.5 border-t border-slate-100 dark:border-white/[0.06]" />
+
+      {/* The Old Way Contrast (Clean Neutral Bullet) */}
+      <div className="flex items-start gap-2.5 text-slate-500 dark:text-slate-400">
+        <span className="shrink-0 mt-0.5 w-3.5 h-3.5 rounded-full bg-slate-200/70 dark:bg-white/[0.08] text-slate-500 dark:text-slate-400 flex items-center justify-center">
+          <svg
+            width="8"
+            height="8"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </span>
+        <div className="text-[12px] sm:text-[12.5px] leading-snug">
+          <span className="font-semibold text-slate-600 dark:text-slate-300 mr-1.5">
+            The old way:
+          </span>
+          <span className="text-slate-500 dark:text-slate-400">
+            {item.problemTitle}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Comparison() {
   const { comparison } = siteConfig;
 
@@ -90,7 +155,7 @@ export function Comparison() {
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
           <span className="inline-block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
             {comparison.badge || "THE ADVANTAGE"}
           </span>
@@ -102,81 +167,19 @@ export function Comparison() {
           </p>
         </div>
 
-        {/* Alternating Left-Right Cards Stack (Gom nhỏ 1/2) */}
-        <div className="space-y-4 sm:space-y-6">
-          {BEATS_DATA.map((item, idx) => {
-            const isLeft = idx % 2 === 0;
+        {/* 2 Staggered Parallel Columns (Song song, so le gần nhau, không đè hàng) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
+          {/* Cột trái: Card 01 & Card 03 */}
+          <div className="flex flex-col gap-4 sm:gap-6">
+            <CardView item={BEATS_DATA[0]} />
+            <CardView item={BEATS_DATA[2]} />
+          </div>
 
-            return (
-              <div
-                key={item.id}
-                className={`w-full md:w-[52%] ${
-                  isLeft ? "md:mr-auto md:ml-0" : "md:ml-auto md:mr-0"
-                }`}
-              >
-                <div className="group relative rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#1D1E1D] border border-slate-200/90 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.16] shadow-sm dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300">
-                  {/* Subtle Top Hairline */}
-                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
-
-                  {/* Card Category Header */}
-                  <div className="flex items-center gap-2 mb-3.5">
-                    <span className="font-mono text-[11px] font-semibold text-slate-400 dark:text-slate-500">
-                      {item.number}
-                    </span>
-                    <span className="text-slate-300 dark:text-slate-700">·</span>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                      {item.category}
-                    </span>
-                  </div>
-
-                  {/* Main Solution Value */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-start gap-3">
-                      {/* Neutral / White Icon */}
-                      <div className="shrink-0 w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/[0.08] text-slate-900 dark:text-white flex items-center justify-center mt-0.5 border border-slate-200/80 dark:border-white/10">
-                        {item.icon}
-                      </div>
-                      <h3 className="text-[15.5px] sm:text-[16.5px] font-bold text-[#0f172a] dark:text-white leading-snug tracking-[-0.01em]">
-                        {item.solutionTitle}
-                      </h3>
-                    </div>
-                    <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed pl-[44px]">
-                      {item.solutionDesc}
-                    </p>
-                  </div>
-
-                  {/* Subtle Hairline Divider */}
-                  <div className="my-3.5 border-t border-slate-100 dark:border-white/[0.06]" />
-
-                  {/* The Old Way Contrast (Clean Neutral Bullet) */}
-                  <div className="flex items-start gap-2.5 text-slate-500 dark:text-slate-400">
-                    <span className="shrink-0 mt-0.5 w-3.5 h-3.5 rounded-full bg-slate-200/70 dark:bg-white/[0.08] text-slate-500 dark:text-slate-400 flex items-center justify-center">
-                      <svg
-                        width="8"
-                        height="8"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                      </svg>
-                    </span>
-                    <div className="text-[12px] sm:text-[12.5px] leading-snug">
-                      <span className="font-semibold text-slate-600 dark:text-slate-300 mr-1.5">
-                        The old way:
-                      </span>
-                      <span className="text-slate-500 dark:text-slate-400">
-                        {item.problemTitle}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {/* Cột phải: Card 02 & Card 04 (Lệch so le xuống một nhịp) */}
+          <div className="flex flex-col gap-4 sm:gap-6 md:pt-10 lg:pt-12">
+            <CardView item={BEATS_DATA[1]} />
+            <CardView item={BEATS_DATA[3]} />
+          </div>
         </div>
       </div>
     </section>
