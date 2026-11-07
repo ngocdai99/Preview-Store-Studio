@@ -574,24 +574,6 @@ function initDemoGuard() {
       }
     });
 
-    // Add Buy badge and click lock to Apple iPad selector
-    const appleIpadBtn = $('optAppleIpad');
-    if (appleIpadBtn) {
-      if (!appleIpadBtn.querySelector('.demo-locked-badge')) {
-        const badge = document.createElement('span');
-        badge.className = 'demo-locked-badge btn-primary';
-        badge.textContent = 'Buy';
-        appleIpadBtn.appendChild(badge);
-      }
-      appleIpadBtn.addEventListener('click', e => {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        const stageMenu = $('menuAppleDevice');
-        if (stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
-        requireFullVersion('apple-ipad');
-      }, true);
-    }
-
     // Add Buy badge on Phone Screenshots header to indicate Pro capability limit
     const shotsCard = $('shotsCard');
     if (shotsCard) {
