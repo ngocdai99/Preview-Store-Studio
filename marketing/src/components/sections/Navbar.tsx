@@ -168,8 +168,14 @@ export function Navbar() {
             href="#pricing"
             onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
             fontSize="13px"
-            fontWeight={600}
-            className="px-3.5 py-1.5 sm:px-4 sm:py-2 shrink-0"
+            fontWeight={500}
+            style={{
+              padding: "4px 10px",
+              height: "26px",
+              background: "oklch(0.43627 0.11 157.5)",
+              borderColor: "#1B845E",
+            }}
+            className="!rounded-[6px] shrink-0 !gap-1 leading-none shadow-none"
           >
             <span>Get Access</span>
           </PrimaryButton>
