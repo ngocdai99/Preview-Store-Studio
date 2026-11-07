@@ -48,17 +48,17 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 
 /* VS Code / Supabase Activity Bar (Icon Control Strip) */
 .activity-bar{
-  width:52px;
-  min-width:52px;
-  max-width:52px;
+  width:48px;
+  min-width:48px;
+  max-width:48px;
   height:100%;
   flex-shrink:0;
   display:flex;
   flex-direction:column;
-  align-items:center;
-  padding:14px 0;
-  gap:6px;
-  background:#171817;
+  align-items:stretch;
+  padding:0;
+  gap:0;
+  background:#181818;
   border-right:1px solid #282928;
   z-index:15;
   overflow-y:auto;
@@ -68,44 +68,46 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 .activity-bar::-webkit-scrollbar{display:none}
 
 .activity-bar-btn{
-  width:38px;
-  height:38px;
-  border-radius:6px;
+  width:100%;
+  height:48px;
   display:flex;
   align-items:center;
   justify-content:center;
   background:transparent;
   border:none;
+  border-left:2px solid transparent;
   color:#858585;
   cursor:pointer;
   position:relative;
-  transition:color .15s ease, background .15s ease;
+  transition:color .12s ease, background .12s ease;
   outline:none;
   flex-shrink:0;
   -webkit-tap-highlight-color:transparent;
+  box-sizing:border-box;
 }
 .activity-bar-btn svg{
-  width:18px;
-  height:18px;
+  width:20px;
+  height:20px;
   stroke:currentColor;
   color:inherit;
-  stroke-width:2;
-  opacity:0.65;
+  stroke-width:1.8;
+  opacity:0.4;
   pointer-events:none;
-  transition:opacity .15s ease, stroke .15s ease, color .15s ease;
+  transition:opacity .12s ease, stroke .12s ease, color .12s ease;
 }
 .activity-bar-btn:hover{
   color:#ffffff !important;
-  background:rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.04);
 }
 .activity-bar-btn:hover svg{
-  opacity:0.95 !important;
+  opacity:0.85 !important;
   color:#ffffff !important;
   stroke:#ffffff !important;
 }
 .activity-bar-btn.active,
 .activity-bar-btn[aria-selected="true"]{
   background:transparent;
+  border-left-color:#ffffff !important;
   color:#ffffff !important;
 }
 .activity-bar-btn.active svg,
@@ -113,17 +115,6 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   opacity:1 !important;
   color:#ffffff !important;
   stroke:#ffffff !important;
-}
-.activity-bar-btn.active::before,
-.activity-bar-btn[aria-selected="true"]::before{
-  content:'';
-  position:absolute;
-  left:-7px;
-  top:2px;
-  bottom:2px;
-  width:2px;
-  border-radius:1px;
-  background:#ffffff;
 }
 
 /* Single-View Editor Cards (NO Stacked Cards Clutter) */
@@ -177,7 +168,9 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 
 /* Form Body Area */
 .editor .card.selected .card-body{
-  display:block !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:20px !important;
   padding:20px 20px 36px 20px !important;
   flex:1 1 auto !important;
   overflow-y:auto !important;
@@ -200,11 +193,11 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   background:rgba(255,255,255,0.32);
 }
 
-/* Collapsed Sidebar Rail Mode: Width becomes 52px (Activity Bar only) */
+/* Collapsed Sidebar Rail Mode: Width becomes 48px (Activity Bar only) */
 body.sidebar-collapsed .editor{
-  width:52px !important;
-  min-width:52px !important;
-  max-width:52px !important;
+  width:48px !important;
+  min-width:48px !important;
+  max-width:48px !important;
   margin-left:0 !important;
   visibility:visible !important;
   pointer-events:auto !important;
@@ -220,33 +213,36 @@ body.sidebar-collapsed .editor-resizer{
 
 /* Light Mode Overrides */
 :root[data-ui=light] .activity-bar{
-  background:#f8fafc;
-  border-right-color:#e2e8f0;
+  background:#f3f3f3;
+  border-right-color:#e5e5e5;
 }
 :root[data-ui=light] .activity-bar-btn{
   color:#616161;
+  border-left-color:transparent;
+}
+:root[data-ui=light] .activity-bar-btn svg{
+  opacity:0.5;
 }
 :root[data-ui=light] .activity-bar-btn:hover{
   color:#1e1e1e !important;
-  background:rgba(0,0,0,0.05);
+  background:rgba(0,0,0,0.04);
 }
 :root[data-ui=light] .activity-bar-btn:hover svg{
+  opacity:0.85 !important;
   color:#1e1e1e !important;
   stroke:#1e1e1e !important;
 }
 :root[data-ui=light] .activity-bar-btn.active,
 :root[data-ui=light] .activity-bar-btn[aria-selected="true"]{
   background:transparent;
+  border-left-color:#007acc !important;
   color:#007acc !important;
 }
 :root[data-ui=light] .activity-bar-btn.active svg,
 :root[data-ui=light] .activity-bar-btn[aria-selected="true"] svg{
+  opacity:1 !important;
   color:#007acc !important;
   stroke:#007acc !important;
-}
-:root[data-ui=light] .activity-bar-btn.active::before,
-:root[data-ui=light] .activity-bar-btn[aria-selected="true"]::before{
-  background:#007acc;
 }
 :root[data-ui=light] .editor .card.selected .card-header{
   background:#ffffff !important;
