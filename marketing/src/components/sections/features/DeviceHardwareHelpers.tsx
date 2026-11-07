@@ -149,7 +149,7 @@ export function IPadMockupFrame({
 }: IPadMockupFrameProps) {
   return (
     <div
-      className={`relative w-[285px] sm:w-[315px] h-[392px] sm:h-[412px] rounded-[32px] p-[6px] border border-[#3e4046] bg-[#25262a] shadow-[0_12px_32px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300 ${className}`}
+      className={`relative w-[285px] sm:w-[315px] h-[392px] sm:h-[412px] rounded-[32px] p-[6px] border border-[#3e4046] bg-[#25262a] transition-all duration-300 ${className}`}
       style={style}
     >
       {/* Outer Physical Hardware Buttons for iPad (Top Power Button & Two Side Volume Buttons) */}

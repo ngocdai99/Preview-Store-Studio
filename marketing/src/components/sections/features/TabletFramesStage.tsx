@@ -32,23 +32,19 @@ export function TabletFramesStage({
     <div
       onClick={!isForeground ? onSelect : undefined}
       className={`absolute inset-0 flex items-center justify-center transform-gpu pointer-events-auto ${stageMotionClass} ${
-        !isForeground ? "cursor-pointer group" : ""
+        !isForeground ? "cursor-pointer group/bg" : ""
       }`}
     >
       <div
         className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isForeground
             ? "opacity-100 filter-none"
-            : "opacity-40 group-hover:opacity-85 group-hover:scale-[1.04] filter blur-[0.4px] group-hover:blur-none"
+            : "opacity-40 group-hover/bg:opacity-85 group-hover/bg:scale-[1.04] filter blur-[0.4px] group-hover/bg:blur-none"
         }`}
       >
         <IPadMockupFrame
           timeString={timeString}
-          className={`transition-all duration-500 ${
-            isForeground
-              ? "shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2),0_0_0_1px_rgba(255,255,255,0.12)]"
-              : "shadow-[0_12px_28px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
-          }`}
+          className="shadow-none"
         >
         {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
         <div className="flex items-start gap-3 mt-0.5">
@@ -302,7 +298,7 @@ export function TabletFramesStage({
           className="absolute inset-0 z-40 w-full h-full rounded-[32px] cursor-pointer focus:outline-none"
         >
           <span className="sr-only">Switch to iPad</span>
-          <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-slate-900/95 border border-white/20 text-white font-medium text-[9px] tracking-tight shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap flex items-center gap-1 backdrop-blur-md">
+          <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-slate-900/95 border border-white/20 text-white font-medium text-[9px] tracking-tight shadow-xl opacity-0 group-hover/bg:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap flex items-center gap-1 backdrop-blur-md">
             <span>View iPad</span>
             <span className="text-emerald-400 font-bold">↗</span>
           </span>

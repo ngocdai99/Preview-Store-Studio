@@ -32,14 +32,14 @@ export function PhoneFramesStage({
     <div
       onClick={!isForeground ? onSelect : undefined}
       className={`absolute inset-0 flex items-center justify-center transform-gpu pointer-events-auto ${stageMotionClass} ${
-        !isForeground ? "cursor-pointer group" : ""
+        !isForeground ? "cursor-pointer group/bg" : ""
       }`}
     >
       <div
-        className={`relative w-[212px] sm:w-[226px] h-[392px] sm:h-[412px] rounded-[44px] p-[6px] border border-[#363840] bg-[#1e1f23] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`relative w-[212px] sm:w-[226px] h-[392px] sm:h-[412px] rounded-[44px] p-[6px] border border-[#363840] bg-[#1e1f23] shadow-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isForeground
-            ? "opacity-100 filter-none shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2),0_0_0_1px_rgba(255,255,255,0.12)]"
-            : "opacity-40 group-hover:opacity-85 group-hover:scale-[1.04] filter blur-[0.4px] group-hover:blur-none shadow-[0_12px_28px_-6px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+            ? "opacity-100 filter-none"
+            : "opacity-40 group-hover/bg:opacity-85 group-hover/bg:scale-[1.04] filter blur-[0.4px] group-hover/bg:blur-none"
         }`}
       >
         {/* Outer Physical Hardware Buttons */}
@@ -339,7 +339,7 @@ export function PhoneFramesStage({
             className="absolute inset-0 z-40 w-full h-full rounded-[44px] cursor-pointer focus:outline-none"
           >
             <span className="sr-only">Switch to iPhone</span>
-            <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-slate-900/95 border border-white/20 text-white font-medium text-[9px] tracking-tight shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap flex items-center gap-1 backdrop-blur-md">
+            <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-slate-900/95 border border-white/20 text-white font-medium text-[9px] tracking-tight shadow-xl opacity-0 group-hover/bg:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap flex items-center gap-1 backdrop-blur-md">
               <span>View iPhone</span>
               <span className="text-emerald-400 font-bold">↗</span>
             </span>

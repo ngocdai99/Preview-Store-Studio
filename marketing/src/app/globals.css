@@ -598,3 +598,158 @@ html.dark .announcement-arrow {
     ipad-orbit-to-back 680ms forwards,
     orbit-z-to-back 680ms forwards;
 }
+
+/* ==========================================================================
+   Card 2: 3D Stacked Deck for Store Presets (Pull from back to front)
+   ========================================================================== */
+:root {
+  --deck-front-x: -10px;
+  --deck-front-y: 12px;
+  --deck-front-scale: 0.92;
+  --deck-mid-x: 18px;
+  --deck-mid-y: -16px;
+  --deck-mid-scale: 0.85;
+  --deck-back-x: 42px;
+  --deck-back-y: -38px;
+  --deck-back-scale: 0.78;
+  --deck-pull-x: 112px;
+  --deck-tuck-x: -76px;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --deck-front-x: -6px;
+    --deck-front-y: 10px;
+    --deck-front-scale: 0.88;
+    --deck-mid-x: 12px;
+    --deck-mid-y: -14px;
+    --deck-mid-scale: 0.81;
+    --deck-back-x: 28px;
+    --deck-back-y: -34px;
+    --deck-back-scale: 0.74;
+    --deck-pull-x: 78px;
+    --deck-tuck-x: -54px;
+  }
+}
+
+@keyframes deck-z-to-front {
+  0%, 43.9% {
+    z-index: 15;
+  }
+  44%, 100% {
+    z-index: 30;
+  }
+}
+
+@keyframes deck-z-to-mid {
+  0%, 43.9% {
+    z-index: 30;
+  }
+  44%, 100% {
+    z-index: 20;
+  }
+}
+
+@keyframes deck-z-to-back {
+  0%, 43.9% {
+    z-index: 12;
+  }
+  44%, 100% {
+    z-index: 10;
+  }
+}
+
+/* Selected middle preset (1 -> 0) pulls out to the right, then sweeps onto the front */
+@keyframes deck-pull-to-front {
+  0% {
+    transform: translate3d(var(--deck-mid-x), var(--deck-mid-y), 0) scale(var(--deck-mid-scale)) rotate(2.5deg);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.54, 1);
+  }
+  44% {
+    transform: translate3d(var(--deck-pull-x), -10px, 0) scale(0.89) rotate(6deg);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(var(--deck-front-x), var(--deck-front-y), 0) scale(var(--deck-front-scale)) rotate(0deg);
+  }
+}
+
+/* Selected back preset (2 -> 0) pulls out from deepest slot, then sweeps onto the front */
+@keyframes deck-pull-deep-to-front {
+  0% {
+    transform: translate3d(var(--deck-back-x), var(--deck-back-y), 0) scale(var(--deck-back-scale)) rotate(5deg);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.54, 1);
+  }
+  44% {
+    transform: translate3d(var(--deck-pull-x), -14px, 0) scale(0.88) rotate(6.5deg);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(var(--deck-front-x), var(--deck-front-y), 0) scale(var(--deck-front-scale)) rotate(0deg);
+  }
+}
+
+/* Previous front preset ducks slightly left, then tucks into the middle slot */
+@keyframes deck-tuck-to-mid {
+  0% {
+    transform: translate3d(var(--deck-front-x), var(--deck-front-y), 0) scale(var(--deck-front-scale)) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.54, 1);
+  }
+  44% {
+    transform: translate3d(var(--deck-tuck-x), 6px, 0) scale(0.88) rotate(-3.5deg);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(var(--deck-mid-x), var(--deck-mid-y), 0) scale(var(--deck-mid-scale)) rotate(2.5deg);
+  }
+}
+
+/* Middle preset shifts back to the deepest slot in the stack */
+@keyframes deck-shift-to-back {
+  0% {
+    transform: translate3d(var(--deck-mid-x), var(--deck-mid-y), 0) scale(var(--deck-mid-scale)) rotate(2.5deg);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  100% {
+    transform: translate3d(var(--deck-back-x), var(--deck-back-y), 0) scale(var(--deck-back-scale)) rotate(5deg);
+  }
+}
+
+.deck-card-initial-0 {
+  z-index: 30;
+  transform: translate3d(var(--deck-front-x), var(--deck-front-y), 0) scale(var(--deck-front-scale)) rotate(0deg);
+}
+
+.deck-card-initial-1 {
+  z-index: 20;
+  transform: translate3d(var(--deck-mid-x), var(--deck-mid-y), 0) scale(var(--deck-mid-scale)) rotate(2.5deg);
+}
+
+.deck-card-initial-2 {
+  z-index: 10;
+  transform: translate3d(var(--deck-back-x), var(--deck-back-y), 0) scale(var(--deck-back-scale)) rotate(5deg);
+}
+
+.deck-card-orbit-0 {
+  animation:
+    deck-pull-to-front 680ms forwards,
+    deck-z-to-front 680ms forwards;
+}
+
+.deck-card-orbit-deep-0 {
+  animation:
+    deck-pull-deep-to-front 680ms forwards,
+    deck-z-to-front 680ms forwards;
+}
+
+.deck-card-orbit-1 {
+  animation:
+    deck-tuck-to-mid 680ms forwards,
+    deck-z-to-mid 680ms forwards;
+}
+
+.deck-card-orbit-2 {
+  animation:
+    deck-shift-to-back 680ms forwards,
+    deck-z-to-back 680ms forwards;
+}

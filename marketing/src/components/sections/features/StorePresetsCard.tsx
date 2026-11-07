@@ -4,25 +4,209 @@ import React, { useState } from "react";
 import { SlidingTabs } from "@/components/ui/SlidingTabs";
 import { FeatureCard } from "./FeatureCard";
 import { StoreMetricsRibbon } from "@/components/ui/StoreMetricsRibbon";
-import { IPadMockupFrame } from "./DeviceHardwareHelpers";
+import { IPadMockupFrame, useDraggableScroll } from "./DeviceHardwareHelpers";
 import { ZenmindPresetMockup } from "./ZenmindPresetMockup";
 import { PulsefitPresetMockup } from "./PulsefitPresetMockup";
 import { CyberstrikePresetMockup } from "./CyberstrikePresetMockup";
 
-export function StorePresetsCard() {
-  const [activePreset, setActivePreset] = useState<"cyberstrike" | "zenmind" | "pulsefit">("cyberstrike");
-  const [isFlipping, setIsFlipping] = useState(false);
+type PresetKey = "cyberstrike" | "pulsefit" | "zenmind";
 
-  const presets = {
+const PRESET_KEYS: PresetKey[] = ["cyberstrike", "pulsefit", "zenmind"];
+
+interface PresetDeckCardProps {
+  presetKey: PresetKey;
+  preset: {
+    name: string;
+    subtitle: string;
+    label: string;
+    rating: string;
+    ratingCount: string;
+    age: string;
+    developer: string;
+    icon: React.ReactNode;
+  };
+  depth: number;
+  prevDepth: number;
+  hasInteracted: boolean;
+  onSelect: () => void;
+}
+
+function PresetDeckCard({
+  presetKey,
+  preset,
+  depth,
+  prevDepth,
+  hasInteracted,
+  onSelect,
+}: PresetDeckCardProps) {
+  const { ref: scrollRef, handlers: scrollHandlers } = useDraggableScroll();
+  const isForeground = depth === 0;
+
+  let motionClass = `deck-card-initial-${depth}`;
+  if (hasInteracted && depth !== prevDepth) {
+    if (depth === 0) {
+      motionClass = prevDepth === 2 ? "deck-card-orbit-deep-0" : "deck-card-orbit-0";
+    } else if (depth === 1) {
+      motionClass = "deck-card-orbit-1";
+    } else {
+      motionClass = "deck-card-orbit-2";
+    }
+  }
+
+  const opacityClass =
+    depth === 0
+      ? "opacity-100 filter-none"
+      : depth === 1
+        ? "opacity-55 group-hover/bg:opacity-85 group-hover/bg:scale-[1.03] filter blur-[0.3px] group-hover/bg:blur-none"
+        : "opacity-30 group-hover/bg:opacity-70 group-hover/bg:scale-[1.03] filter blur-[0.6px] group-hover/bg:blur-none";
+
+  return (
+    <div
+      onClick={!isForeground ? onSelect : undefined}
+      className={`absolute inset-0 flex items-center justify-center transform-gpu pointer-events-auto ${motionClass} ${
+        !isForeground ? "cursor-pointer group/bg" : ""
+      }`}
+    >
+      <div className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${opacityClass}`}>
+        <IPadMockupFrame className="shadow-none">
+          {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
+          <div className="flex items-start gap-3 mt-0.5">
+            <div className="w-[46px] h-[46px] shrink-0 rounded-[12px] shadow-md overflow-hidden border border-white/10">
+              {preset.icon}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[12px] font-bold leading-tight text-white truncate">
+                {preset.name}
+              </div>
+              <div className="text-[10px] leading-tight text-slate-400 truncate">
+                {preset.subtitle}
+              </div>
+              <div className="mt-0">
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
+                >
+                  GET
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Store Metrics Ribbon (Tablet 3-Column) */}
+          <StoreMetricsRibbon
+            theme="dark"
+            rating={preset.rating}
+            ratingCount={preset.ratingCount}
+            age={preset.age}
+            developerName={preset.developer}
+            className="my-1 py-1"
+          />
+
+          {/* Tablet Screenshots Carousel */}
+          <div className="flex-1 flex flex-col justify-center min-h-0 my-1">
+            <div className="flex items-center justify-between px-0.5 mb-1.5">
+              <span className="text-[8px] font-bold text-slate-300 uppercase tracking-wider">
+                Screenshots
+              </span>
+              <span className="text-[7px] text-slate-400 font-mono">
+                Swipe ↔
+              </span>
+            </div>
+
+            <div
+              ref={scrollRef}
+              {...scrollHandlers}
+              className="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none cursor-grab active:cursor-grabbing"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {presetKey === "zenmind" && <ZenmindPresetMockup />}
+              {presetKey === "pulsefit" && <PulsefitPresetMockup />}
+              {presetKey === "cyberstrike" && <CyberstrikePresetMockup />}
+            </div>
+
+            {/* Contextual App Info Snippet below carousel */}
+            {presetKey === "cyberstrike" && (
+              <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
+                <span className="font-semibold text-cyan-300">Boss Update: Titan-Dreadnought</span>
+                <span>v2.1 · 1.8 GB</span>
+              </div>
+            )}
+            {presetKey === "pulsefit" && (
+              <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
+                <span className="font-semibold text-amber-300">Cardiac Zone 4 Real-Time Sync</span>
+                <span>v3.4 · 142 MB</span>
+              </div>
+            )}
+            {presetKey === "zenmind" && (
+              <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
+                <span className="font-semibold text-emerald-300">432Hz Solfeggio Rain Mix</span>
+                <span>v4.0 · 98 MB</span>
+              </div>
+            )}
+          </div>
+        </IPadMockupFrame>
+
+        {/* Click overlay when stacked in background */}
+        {!isForeground && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect();
+            }}
+            aria-label={`Switch to ${preset.label} preset`}
+            className="absolute inset-0 z-40 w-full h-full rounded-[32px] cursor-pointer focus:outline-none"
+          >
+            <span className="sr-only">Switch to {preset.label}</span>
+            <span className="absolute -top-3.5 right-6 px-2.5 py-1 rounded-full bg-slate-900/95 border border-white/20 text-white font-medium text-[9px] tracking-tight shadow-xl opacity-0 group-hover/bg:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap flex items-center gap-1 backdrop-blur-md">
+              <span>{preset.label}</span>
+              <span className="text-emerald-400 font-bold">↗</span>
+            </span>
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function StorePresetsCard() {
+  const [deckState, setDeckState] = useState<{
+    order: PresetKey[];
+    prevOrder: PresetKey[];
+    hasInteracted: boolean;
+  }>({
+    order: ["cyberstrike", "pulsefit", "zenmind"],
+    prevOrder: ["cyberstrike", "pulsefit", "zenmind"],
+    hasInteracted: false,
+  });
+
+  const activePreset = deckState.order[0];
+
+  const presets: Record<
+    PresetKey,
+    {
+      name: string;
+      subtitle: string;
+      label: string;
+      category: string;
+      rating: string;
+      ratingCount: string;
+      age: string;
+      developer: string;
+      glowClass: string;
+      icon: React.ReactNode;
+    }
+  > = {
     cyberstrike: {
       name: "CyberStrike: 2088 Cyber RPG",
       subtitle: "Open-world sci-fi action RPG",
+      label: "Games Preset",
       category: "Role Playing",
       rating: "4.8 ★",
       ratingCount: "145K Ratings",
       age: "12+",
       developer: "Kai DevLabs",
-      gradient: "from-[#05050b] via-[#1e0b2e] to-[#7928ca]",
+      glowClass: "bg-fuchsia-500/40 -translate-x-4",
       icon: (
         <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
           <defs>
@@ -53,12 +237,13 @@ export function StorePresetsCard() {
     zenmind: {
       name: "ZenMind: Meditation & Sleep",
       subtitle: "Guided breathwork & calm sound",
+      label: "Wellness Preset",
       category: "Health & Fitness",
       rating: "4.9 ★",
       ratingCount: "82K Ratings",
       age: "4+",
       developer: "Kai DevLabs",
-      gradient: "from-[#05140e] via-[#0c2319] to-[#059669]",
+      glowClass: "bg-emerald-500/40 translate-x-4",
       icon: (
         <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
           <defs>
@@ -93,12 +278,13 @@ export function StorePresetsCard() {
     pulsefit: {
       name: "PulseFit: Workout & Fitness",
       subtitle: "HIIT, gym plans & meal log",
+      label: "Health Preset",
       category: "Health & Fitness",
       rating: "4.9 ★",
       ratingCount: "24.6K Ratings",
       age: "4+",
       developer: "Kai DevLabs",
-      gradient: "from-[#ff6b35] via-[#ea580c] to-[#ffc107]",
+      glowClass: "bg-orange-500/40 translate-y-2",
       icon: (
         <svg viewBox="0 0 512 512" className="w-full h-full text-white drop-shadow-sm" fill="none">
           <defs>
@@ -126,17 +312,14 @@ export function StorePresetsCard() {
     },
   };
 
-  const handleSelectPreset = (key: "cyberstrike" | "zenmind" | "pulsefit") => {
-    if (key === activePreset || isFlipping) return;
-    setIsFlipping(true);
-
-    setTimeout(() => {
-      setActivePreset(key);
-      setIsFlipping(false);
-    }, 180);
+  const handleSelectPreset = (key: PresetKey) => {
+    if (key === activePreset) return;
+    setDeckState((prev) => ({
+      order: [key, ...prev.order.filter((k) => k !== key)],
+      prevOrder: prev.order,
+      hasInteracted: true,
+    }));
   };
-
-  const current = presets[activePreset];
 
   return (
     <FeatureCard
@@ -161,7 +344,7 @@ export function StorePresetsCard() {
       headerRight={
         <SlidingTabs
           value={activePreset}
-          onChange={(val) => handleSelectPreset(val as "cyberstrike" | "pulsefit" | "zenmind")}
+          onChange={(val) => handleSelectPreset(val as PresetKey)}
           options={[
             { value: "cyberstrike", label: "Games" },
             { value: "pulsefit", label: "Health" },
@@ -173,96 +356,26 @@ export function StorePresetsCard() {
         />
       }
     >
-      {/* Simulated Live Stage with Device Frame */}
+      {/* Simulated Live Stage with 3D Stacked Preset Deck */}
       <div
         className="relative z-10 w-full h-[400px] sm:h-[420px] flex items-center justify-center select-none overflow-hidden rounded-b-2xl"
         style={{ perspective: "1200px" }}
       >
-        <IPadMockupFrame
-          style={{
-            transform: isFlipping ? "rotateY(90deg) scale(0.93)" : "rotateY(0deg) scale(1)",
-            transformStyle: "preserve-3d",
-            transition: isFlipping
-              ? "transform 0.18s cubic-bezier(0.4, 0, 1, 1), opacity 0.18s ease-in"
-              : "transform 0.22s cubic-bezier(0, 0, 0.2, 1), opacity 0.22s ease-out",
-            opacity: isFlipping ? 0.7 : 1,
-            willChange: "transform, opacity",
-          }}
-        >
-          {/* Tablet Header: Brand Icon, Name, Subtitle & Blue GET Button */}
-          <div className="flex items-start gap-3 mt-0.5">
-            <div className="w-[46px] h-[46px] shrink-0 rounded-[12px] shadow-md overflow-hidden border border-white/10 transition-all duration-300">
-              {current.icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[12px] font-bold leading-tight text-white truncate transition-all duration-200">
-                {current.name}
-              </div>
-              <div className="text-[10px] leading-tight text-slate-400 truncate transition-all duration-200">
-                {current.subtitle}
-              </div>
-              <div className="mt-0">
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center px-2.5 py-[1.5px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] active:scale-95 text-white font-bold text-[8px] tracking-wide shadow-xs transition-all cursor-pointer"
-                >
-                  GET
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Store Metrics Ribbon (Tablet 3-Column) */}
-          <StoreMetricsRibbon
-            theme="dark"
-            rating={current.rating}
-            ratingCount={current.ratingCount}
-            age={current.age}
-            developerName={current.developer}
-            className="my-1 py-1"
-          />
-
-          {/* Tablet Screenshots Carousel */}
-          <div className="flex-1 flex flex-col justify-center min-h-0 my-1">
-            <div className="flex items-center justify-between px-0.5 mb-1.5">
-              <span className="text-[8px] font-bold text-slate-300 uppercase tracking-wider">
-                Screenshots
-              </span>
-              <span className="text-[7px] text-slate-400 font-mono">
-                Swipe ↔
-              </span>
-            </div>
-
-            <div
-              className="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth px-0.5 pb-1 select-none"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {activePreset === "zenmind" && <ZenmindPresetMockup />}
-              {activePreset === "pulsefit" && <PulsefitPresetMockup />}
-              {activePreset === "cyberstrike" && <CyberstrikePresetMockup />}
-            </div>
-
-            {/* Contextual App Info Snippet below carousel */}
-            {activePreset === "cyberstrike" && (
-              <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
-                <span className="font-semibold text-cyan-300">Boss Update: Titan-Dreadnought</span>
-                <span>v2.1 · 1.8 GB</span>
-              </div>
-            )}
-            {activePreset === "pulsefit" && (
-              <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
-                <span className="font-semibold text-amber-300">Cardiac Zone 4 Real-Time Sync</span>
-                <span>v3.4 · 142 MB</span>
-              </div>
-            )}
-            {activePreset === "zenmind" && (
-              <div className="px-1.5 py-1 mt-1 rounded-md bg-white/[0.04] border border-white/5 flex items-center justify-between text-[7px] text-slate-400 shrink-0">
-                <span className="font-semibold text-emerald-300">432Hz Solfeggio Rain Mix</span>
-                <span>v4.0 · 98 MB</span>
-              </div>
-            )}
-          </div>
-        </IPadMockupFrame>
+        {PRESET_KEYS.map((key) => {
+          const depth = deckState.order.indexOf(key);
+          const prevDepth = deckState.prevOrder.indexOf(key);
+          return (
+            <PresetDeckCard
+              key={key}
+              presetKey={key}
+              preset={presets[key]}
+              depth={depth}
+              prevDepth={prevDepth}
+              hasInteracted={deckState.hasInteracted}
+              onSelect={() => handleSelectPreset(key)}
+            />
+          );
+        })}
       </div>
     </FeatureCard>
   );
