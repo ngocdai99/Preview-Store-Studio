@@ -12,7 +12,7 @@ export function Hero() {
       {/* Background Soft Emerald Aurora Glow */}
       <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-emerald-500/15 via-[#00D085]/12 to-[#006636]/18 blur-[130px] rounded-full pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Supabase-style Row Layout: Left (Title + CTAs) & Right (Description) */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 lg:gap-14">
           {/* Left Column: Two-line Punchy Headline & CTAs */}
