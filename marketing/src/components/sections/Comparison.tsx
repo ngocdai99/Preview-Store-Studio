@@ -28,9 +28,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "Marketers drafting blindly in Google Docs without device limits or context",
     colSpan: "md:col-span-7",
     accent: {
-      verticalLine: "from-[#00D085] via-emerald-400/60 to-transparent",
-      borderHover: "hover:border-[#00D085]/40 dark:hover:border-[#00D085]/40",
-      numColor: "text-emerald-700 dark:text-[#00D085]",
+      verticalLine: "from-teal-400 via-teal-500/60 to-transparent",
+      borderHover: "hover:border-teal-500/40 dark:hover:border-teal-500/40",
+      numColor: "text-teal-600 dark:text-teal-400",
     },
   },
   {
@@ -43,9 +43,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "Zero visibility into whether copy edits need a full developer compilation",
     colSpan: "md:col-span-5",
     accent: {
-      verticalLine: "from-indigo-500 via-violet-400/60 to-transparent",
-      borderHover: "hover:border-indigo-500/40 dark:hover:border-indigo-500/40",
-      numColor: "text-indigo-700 dark:text-indigo-400",
+      verticalLine: "from-rose-500 via-rose-400/60 to-transparent",
+      borderHover: "hover:border-rose-500/40 dark:hover:border-rose-500/40",
+      numColor: "text-rose-600 dark:text-rose-400",
     },
   },
   {
@@ -58,9 +58,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "Typing copy into raw form inputs leaves you guessing until the app is already live",
     colSpan: "md:col-span-5",
     accent: {
-      verticalLine: "from-sky-500 via-cyan-400/60 to-transparent",
-      borderHover: "hover:border-sky-500/40 dark:hover:border-sky-500/40",
-      numColor: "text-sky-700 dark:text-sky-400",
+      verticalLine: "from-fuchsia-500 via-fuchsia-400/60 to-transparent",
+      borderHover: "hover:border-fuchsia-500/40 dark:hover:border-fuchsia-500/40",
+      numColor: "text-fuchsia-600 dark:text-fuchsia-400",
     },
   },
   {
@@ -73,9 +73,9 @@ const BEATS_DATA: BeatItem[] = [
     problemTitle: "$29/mo recurring subscriptions & third-party cloud lock-in for simple asset previews",
     colSpan: "md:col-span-7",
     accent: {
-      verticalLine: "from-amber-500 via-orange-400/60 to-transparent",
-      borderHover: "hover:border-amber-500/40 dark:hover:border-amber-500/40",
-      numColor: "text-amber-700 dark:text-amber-400",
+      verticalLine: "from-slate-400 via-slate-300/60 to-transparent dark:from-white/80 dark:via-white/30 dark:to-transparent",
+      borderHover: "hover:border-slate-400 dark:hover:border-white/30",
+      numColor: "text-slate-800 dark:text-white",
     },
   },
 ];
