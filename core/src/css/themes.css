@@ -467,13 +467,23 @@
   :root[data-ui=light] #supportCard.selected:not(.collapsed) .card-ico{box-shadow:0 4px 12px rgba(13,148,136,0.38)!important}
   :root[data-ui=light] #supportCard.selected:not(.collapsed) .card-num{background:rgba(13,148,136,0.1);color:#0f766e;border-color:rgba(13,148,136,0.28)}
 
-  /* Card Hover in Light Mode: Subtle clean brightening (neutral, no chromatic tint) */
-  :root[data-ui=light] .card:hover,
+  /* Card Hover in Light Mode: Subtle clean brightening for collapsed cards only */
   :root[data-ui=light] .card.collapsed:hover{
     background: #f8fafc !important;
     border-color: rgba(0,0,0,0.16) !important;
     box-shadow: 0 1px 3px rgba(15,23,42,0.06), 0 6px 16px -2px rgba(15,23,42,0.08) !important;
     transform: none !important;
+  }
+
+  /* Selected & Focused Card Body in Light Mode: Pure White Surface (#ffffff) */
+  :root[data-ui=light] .card.selected,
+  :root[data-ui=light] .card.selected .card-body,
+  :root[data-ui=light] .card.selected:hover,
+  :root[data-ui=light] .card.selected:hover .card-body,
+  :root[data-ui=light] .card:focus-within,
+  :root[data-ui=light] .card:focus-within .card-body,
+  :root[data-ui=light] .card-body:focus-within {
+    background: #ffffff !important;
   }
 
   /* Form Upload and Action Buttons in Light Mode with Soft Elevation */

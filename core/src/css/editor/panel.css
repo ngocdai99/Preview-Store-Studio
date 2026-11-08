@@ -273,6 +273,16 @@ body.sidebar-collapsed .editor-resizer{
   color: #1F2937 !important;
   stroke: #1F2937 !important;
 }
+:root[data-ui=light] .editor .card.selected,
+:root[data-ui=light] .editor .card.selected .card-header,
+:root[data-ui=light] .editor .card.selected .card-body,
+:root[data-ui=light] .editor .card.selected:hover,
+:root[data-ui=light] .editor .card.selected:hover .card-body,
+:root[data-ui=light] .editor .card:focus-within,
+:root[data-ui=light] .editor .card:focus-within .card-body,
+:root[data-ui=light] .editor .card-body:focus-within {
+  background:#ffffff !important;
+}
 :root[data-ui=light] .editor .card.selected .card-header{
   background:#ffffff !important;
   border:none !important;

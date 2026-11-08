@@ -191,7 +191,7 @@
 }
 
 /* ---------- App Identity Action Buttons (Upload Icon & Inspect) ---------- */
-/* Strictly NO hover scale, NO box-shadow, and neutral colors across all themes */
+/* Strictly NO hover scale, NO shadow, NO color change on hover, neutral icon color */
 #icoUp,
 #icoInspect,
 #icoUp:hover,
@@ -208,49 +208,32 @@
   box-shadow: none !important;
 }
 
-/* Neutral icon colors: never tint with store accent color */
+/* Neutral icon colors: never tint with store accent color, never change on hover */
 #icoUp .btn-mini-ico svg,
 #icoInspect .btn-mini-ico svg,
+#icoUp:hover .btn-mini-ico svg,
+#icoInspect:hover .btn-mini-ico svg,
 :root[data-ui=light] #icoUp .btn-mini-ico svg,
-:root[data-ui=light] #icoInspect .btn-mini-ico svg {
+:root[data-ui=light] #icoInspect .btn-mini-ico svg,
+:root[data-ui=light] #icoUp:hover .btn-mini-ico svg,
+:root[data-ui=light] #icoInspect:hover .btn-mini-ico svg {
   color: #4B5563 !important;
   stroke: currentColor;
 }
-#icoUp:hover .btn-mini-ico svg,
-#icoInspect:hover .btn-mini-ico svg,
-:root[data-ui=light] #icoUp:hover .btn-mini-ico svg,
-:root[data-ui=light] #icoInspect:hover:not(:disabled):not(.disabled) .btn-mini-ico svg {
-  color: #111827 !important;
-  stroke: currentColor;
-}
 
-/* Light Mode: Clean neutral buttons with color-only hover */
+/* Light Mode: Clean neutral buttons, NO color change on hover, NO scale, NO shadow */
 :root[data-ui=light] #icoUp,
-:root[data-ui=light] #icoInspect {
+:root[data-ui=light] #icoInspect,
+:root[data-ui=light] #icoUp:hover,
+:root[data-ui=light] #icoInspect:hover:not(:disabled):not(.disabled),
+:root[data-ui=light] #icoUp:active,
+:root[data-ui=light] #icoInspect:active:not(:disabled):not(.disabled) {
   background-color: #FFFFFF !important;
   border: 1px solid #D1D5DB !important;
   color: #1F2937 !important;
   box-shadow: none !important;
   border-radius: 8px;
   font-weight: 500;
-  transform: none !important;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
-}
-
-:root[data-ui=light] #icoUp:hover,
-:root[data-ui=light] #icoInspect:hover:not(:disabled):not(.disabled) {
-  background-color: #F3F4F6 !important;
-  border-color: #9CA3AF !important;
-  color: #111827 !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-:root[data-ui=light] #icoUp:active,
-:root[data-ui=light] #icoInspect:active:not(:disabled):not(.disabled) {
-  background-color: #E5E7EB !important;
-  border-color: #9CA3AF !important;
-  box-shadow: none !important;
   transform: none !important;
 }
 
@@ -269,8 +252,10 @@
   color: #9CA3AF !important;
 }
 
-/* Dark Mode: White button for Upload Icon, dark button for Inspect */
-:root:not([data-ui=light]) #icoUp {
+/* Dark Mode: NO color change on hover, NO scale, NO shadow */
+:root:not([data-ui=light]) #icoUp,
+:root:not([data-ui=light]) #icoUp:hover,
+:root:not([data-ui=light]) #icoUp:active {
   background-color: #EFF1F0 !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   color: #252625 !important;
@@ -278,32 +263,17 @@
   border-radius: 8px;
   font-weight: 500;
   transform: none !important;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 }
 
-:root:not([data-ui=light]) #icoUp .btn-mini-ico svg {
+:root:not([data-ui=light]) #icoUp .btn-mini-ico svg,
+:root:not([data-ui=light]) #icoUp:hover .btn-mini-ico svg {
   color: #252625 !important;
   stroke: currentColor;
 }
 
-:root:not([data-ui=light]) #icoUp:hover {
-  background-color: #FFFFFF !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  color: #111827 !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-:root:not([data-ui=light]) #icoUp:hover .btn-mini-ico svg {
-  color: #111827 !important;
-}
-
-:root:not([data-ui=light]) #icoUp:active {
-  background-color: #D5D8D6 !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-:root:not([data-ui=light]) #icoInspect {
+:root:not([data-ui=light]) #icoInspect,
+:root:not([data-ui=light]) #icoInspect:hover:not(:disabled):not(.disabled),
+:root:not([data-ui=light]) #icoInspect:active:not(:disabled):not(.disabled) {
   background-color: #1C1C1C !important;
   border: 1px solid #2F2F2F !important;
   color: #D1D5DB !important;
@@ -311,29 +281,12 @@
   border-radius: 8px;
   font-weight: 500;
   transform: none !important;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 }
 
-:root:not([data-ui=light]) #icoInspect .btn-mini-ico svg {
+:root:not([data-ui=light]) #icoInspect .btn-mini-ico svg,
+:root:not([data-ui=light]) #icoInspect:hover .btn-mini-ico svg {
   color: #8B8F98 !important;
   stroke: currentColor;
-}
-
-:root:not([data-ui=light]) #icoInspect:hover:not(:disabled):not(.disabled) {
-  background-color: #262626 !important;
-  border-color: #3F3F3F !important;
-  color: #F3F4F6 !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-:root:not([data-ui=light]) #icoInspect:hover:not(:disabled):not(.disabled) .btn-mini-ico svg {
-  color: #F3F4F6 !important;
-}
-
-:root:not([data-ui=light]) #icoInspect:active:not(:disabled):not(.disabled) {
-  background-color: #171717 !important;
-  box-shadow: none !important;
-  transform: none !important;
 }
 
 :root:not([data-ui=light]) #icoInspect:disabled,
