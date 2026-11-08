@@ -21,20 +21,15 @@
     <span class="tag mockup" title="Illustrative sample disclosures for preview only">MOCKUP ONLY</span>
   </div>
 
-  <div class="privacy-mode-seg" id="privacyModeSeg" role="tablist" aria-label="Privacy Disclosure Profile" data-active="none">
-    <div class="priv-seg-pill" id="privSegPill"></div>
-    <button type="button" class="priv-seg-btn tile-btn active" id="privBtnNone" data-mode="none" role="tab" aria-selected="true">
-      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9.5"></circle>
-        <polyline points="8.5 12.2 11 14.7 15.5 9.5"></polyline>
-      </svg>
-      <span>Data Not Collected</span>
+  <div class="privacy-mode-seg" id="privacyModeSeg" role="radiogroup" aria-label="Privacy Disclosure Profile" data-active="none">
+    <div class="priv-seg-pill" id="privSegPill" style="display:none !important"></div>
+    <button type="button" class="priv-seg-btn active" id="privBtnNone" data-mode="none" role="radio" aria-checked="true" aria-selected="true">
+      <span class="priv-radio-indicator"></span>
+      <span class="priv-radio-label">Data Not Collected</span>
     </button>
-    <button type="button" class="priv-seg-btn tile-btn" id="privBtnCollected" data-mode="collected" role="tab" aria-selected="false">
-      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-      </svg>
-      <span>Data Collected</span>
+    <button type="button" class="priv-seg-btn" id="privBtnCollected" data-mode="collected" role="radio" aria-checked="false" aria-selected="false">
+      <span class="priv-radio-indicator"></span>
+      <span class="priv-radio-label">Data Collected</span>
     </button>
   </div>
 

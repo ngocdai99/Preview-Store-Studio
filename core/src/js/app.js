@@ -7866,10 +7866,12 @@ function updatePrivacyModeUI() {
   if (btnNone) {
     btnNone.classList.toggle('active', isNone);
     btnNone.setAttribute('aria-selected', isNone ? 'true' : 'false');
+    btnNone.setAttribute('aria-checked', isNone ? 'true' : 'false');
   }
   if (btnCol) {
     btnCol.classList.toggle('active', !isNone);
     btnCol.setAttribute('aria-selected', !isNone ? 'true' : 'false');
+    btnCol.setAttribute('aria-checked', !isNone ? 'true' : 'false');
   }
   if (bannerTitle) {
     bannerTitle.textContent = isNone ? 'Profile: Data Not Collected' : 'Profile: Data Collected';
