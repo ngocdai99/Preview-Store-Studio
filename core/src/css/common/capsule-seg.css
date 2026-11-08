@@ -142,20 +142,24 @@ body:not([data-ui-store])[data-dual=true] .pill {
 }
 
 /* ---------- Light Mode Shared Architecture ---------- */
+/* Nền khung nút #FFFFFF, Viền khung #D9DCE1 */
 :root[data-ui=light] .capsule-seg:not(#theme),
 :root[data-ui=light] .seg {
-  background: #ffffff !important;
-  border: 1px solid rgba(15, 23, 42, .1) !important;
-  box-shadow: 0 1px 4px -1px rgba(15, 23, 42, .08), 0 1px 2px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
-  transition: border-color .2s ease, box-shadow .2s ease !important;
+  background: #FFFFFF !important;
+  border: 1px solid #D9DCE1 !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+  padding: 3px !important;
+  gap: 3px !important;
 }
 
 :root[data-ui=light] .capsule-seg:not(#theme):hover,
 :root[data-ui=light] .seg:hover {
-  border-color: rgba(15, 23, 42, .18) !important;
-  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, .08), 0 1px 3px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
+  border-color: #D9DCE1 !important;
+  box-shadow: none !important;
 }
 
+/* Ô đang chọn #ECEDF0 */
 :root[data-ui=light] .capsule-seg:not(#theme) .pill,
 :root[data-ui=light] .capsule-seg:not(#theme) .vt-pill,
 :root[data-ui=light] .seg .pill,
@@ -169,40 +173,55 @@ body:not([data-ui-store])[data-dual=true] .pill {
 :root[data-ui=light] .seg[data-store="dual"] .pill,
 :root[data-ui=light] body[data-ui-store="dual"] .pill,
 :root[data-ui=light] body:not([data-ui-store])[data-dual=true] .pill {
-  background: #334155 !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, .15), inset 0 1px 0 rgba(255, 255, 255, .15) !important;
-  border: 1px solid rgba(15, 23, 42, .15) !important;
+  background: #ECEDF0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 8px !important;
 }
 
 :root[data-ui=light] .capsule-seg:not(#theme) button,
 :root[data-ui=light] .seg button {
-  color: #64748b !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  /* Icon chưa chọn #6B7280 */
+  color: #6B7280 !important;
+  transition: background-color .15s ease, color .15s ease !important;
 }
 
 :root[data-ui=light] .capsule-seg:not(#theme) .s-ico,
 :root[data-ui=light] .capsule-seg:not(#theme) .vt-ico,
-:root[data-ui=light] .seg .s-ico {
-  color: #475569 !important;
-  opacity: .92 !important;
-}
-
-:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on),
-:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on) .s-ico,
-:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on) .vt-ico,
-:root[data-ui=light] .seg button:hover:not(.on),
-:root[data-ui=light] .seg button:hover:not(.on) .s-ico {
-  color: #0f172a !important;
+:root[data-ui=light] .seg .s-ico,
+:root[data-ui=light] .seg button:not(.on) .s-ico {
+  color: #6B7280 !important;
   opacity: 1 !important;
 }
 
+/* Ô khi rê chuột #F3F4F6, Icon khi rê chuột #374151 */
+:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on),
+:root[data-ui=light] .seg button:hover:not(.on) {
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+}
+
+:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on) .s-ico,
+:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on) .vt-ico,
+:root[data-ui=light] .seg button:hover:not(.on) .s-ico {
+  color: #374151 !important;
+  opacity: 1 !important;
+}
+
+/* Icon đang chọn #1F2937 */
 :root[data-ui=light] .capsule-seg:not(#theme) button.on,
 :root[data-ui=light] .seg button.on {
-  color: #ffffff !important;
+  color: #1F2937 !important;
+  background: transparent !important;
 }
 
 :root[data-ui=light] .capsule-seg:not(#theme) button.on .s-ico,
 :root[data-ui=light] .capsule-seg:not(#theme) button.on .vt-ico,
 :root[data-ui=light] .seg button.on .s-ico {
-  color: #ffffff !important;
+  color: #1F2937 !important;
   opacity: 1 !important;
 }
