@@ -28,20 +28,20 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: rgba(0, 208, 133, 0.14);
-  border: 1px solid rgba(0, 208, 133, 0.28);
-  color: #00D085;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #C4C5C4;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 208, 133, 0.15);
+  box-shadow: none;
 }
 
 .export-modal-title {
   font-size: 15px;
   font-weight: 700;
-  color: #f8fafc;
+  color: #C4C5C4;
   margin: 0;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -217,8 +217,8 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
+  background: #C4C5C4;
+  box-shadow: 0 0 6px rgba(196, 197, 196, 0.4);
 }
 
 /* ─── Body Controls ─── */
@@ -307,9 +307,9 @@
 }
 
 .export-radio-item.active .export-radio-indicator {
-  border-color: var(--brand-secondary, #00D085);
-  background: var(--brand-secondary, #00D085);
-  box-shadow: 0 0 8px rgba(0, 208, 133, 0.4);
+  border-color: #C4C5C4;
+  background: #C4C5C4;
+  box-shadow: 0 0 8px rgba(196, 197, 196, 0.35);
 }
 
 .export-radio-item.active .export-radio-indicator::after {
@@ -333,24 +333,24 @@
 }
 
 .export-radio-item:hover .export-radio-label {
-  color: #f1f5f9;
+  color: #ffffff;
 }
 
 .export-radio-item.active .export-radio-label {
-  color: #f8fafc;
+  color: #C4C5C4;
   font-weight: 500;
 }
 
 .export-tag-best {
   font-size: 8.5px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 1px 4.5px;
+  padding: 1.5px 5.5px;
   border-radius: 4px;
-  background: rgba(0, 208, 133, 0.16);
-  color: var(--brand-secondary, #00D085);
-  border: 1px solid rgba(0, 208, 133, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: #C4C5C4;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   line-height: 1.2;
 }
 
@@ -372,15 +372,15 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  background: #C4C5C4;
+  box-shadow: 0 0 6px rgba(196, 197, 196, 0.4);
   flex-shrink: 0;
 }
 
 .export-summary-text {
   font-size: 11px;
   font-weight: 500;
-  color: #94a3b8;
+  color: #C4C5C4;
   letter-spacing: 0.2px;
 }
 
@@ -452,9 +452,9 @@
 }
 
 .export-btn-secondary.copied {
-  background-color: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #10b981;
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
 }
 
 .export-btn-primary {
@@ -498,10 +498,10 @@
 }
 
 :root[data-ui=light] .export-modal-icon-wrap {
-  background: rgba(0, 208, 133, 0.12);
-  border: 1px solid rgba(0, 208, 133, 0.28);
-  color: #006636;
-  box-shadow: 0 2px 8px rgba(0, 102, 54, 0.08);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  box-shadow: none;
 }
 
 :root[data-ui=light] .export-modal-title {
@@ -595,9 +595,9 @@
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator {
-  border-color: var(--brand-secondary, #00D085);
-  background: var(--brand-secondary, #00D085);
-  box-shadow: 0 0 6px rgba(0, 208, 133, 0.35);
+  border-color: #0f172a;
+  background: #0f172a;
+  box-shadow: 0 0 6px rgba(15, 23, 42, 0.2);
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator::after {
@@ -619,9 +619,14 @@
 }
 
 :root[data-ui=light] .export-tag-best {
-  background: rgba(0, 208, 133, 0.16);
-  color: var(--brand-secondary, #00D085);
-  border-color: rgba(0, 208, 133, 0.35);
+  background: rgba(15, 23, 42, 0.05);
+  color: #475569;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+:root[data-ui=light] .export-summary-dot {
+  background: #475569;
+  box-shadow: none;
 }
 
 :root[data-ui=light] .export-modal-footer {
