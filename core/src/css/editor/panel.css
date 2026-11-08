@@ -224,10 +224,13 @@ body.sidebar-collapsed .editor-resizer{
 
 /* Light Mode Overrides for Activity Bar */
 :root[data-ui=light] .activity-bar{
-  background: #ffffff !important;
-  border-right: 1px solid #D9DCE1;
+  background: #FAFAFB !important;
+  border-right: 1px solid #E5E7EB;
 }
 :root[data-ui=light] .activity-bar-btn{
+  width: 36px;
+  height: 36px;
+  border-radius: 10px !important;
   color: #6B7280;
   background: transparent;
   border: none !important;
@@ -258,9 +261,9 @@ body.sidebar-collapsed .editor-resizer{
 }
 :root[data-ui=light] .activity-bar-btn.active,
 :root[data-ui=light] .activity-bar-btn[aria-selected="true"]{
-  background: #ECEDF0 !important;
+  background: #E5E7EB !important;
   border: none !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   box-shadow: none !important;
   color: #1F2937 !important;
 }
