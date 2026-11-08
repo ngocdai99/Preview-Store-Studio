@@ -684,21 +684,6 @@ body.sidebar-collapsed .editor-resizer{
   color: #C4C5C4;
 }
 
-/* Google Play Store active styling (Dark mode) */
-body[data-ui-store="google"] .priv-seg-btn.active,
-body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active {
-  background: rgba(5, 150, 105, 0.14);
-}
-
-body[data-ui-store="google"] .priv-seg-btn.active::before,
-body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active::before {
-  background: linear-gradient(180deg, #34d399, #059669);
-}
-
-body[data-ui-store="google"] .priv-seg-btn.active svg,
-body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"]) .priv-seg-btn.active svg {
-  color: #34d399;
-}
 
 /* Light mode */
 :root[data-ui=light] .privacy-mode-seg {
