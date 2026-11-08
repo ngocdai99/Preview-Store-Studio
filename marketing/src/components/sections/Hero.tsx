@@ -83,82 +83,72 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right Column: Interactive iPhone / iPad 3D Device Stage */}
+          {/* Right Column: Interactive iPhone / iPad 3D Device Stage (Floating, no container box) */}
           <div className="lg:w-[50%] flex flex-col items-center">
-            {/* Stage Frame Container */}
-            <div className="w-full max-w-[460px] rounded-2xl bg-white dark:bg-[#151615] border border-slate-200/80 dark:border-white/[0.08] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)] dark:shadow-[0_20px_50px_-16px_rgba(0,0,0,0.5)] overflow-hidden">
-              {/* Header Bar with Device Switcher */}
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 dark:border-white/[0.06] bg-slate-50/60 dark:bg-white/[0.02]">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[12px] font-semibold text-slate-700 dark:text-slate-300">
-                    Adaptive Frames
-                  </span>
-                </div>
+            {/* Floating Device Switcher */}
+            <div className="mb-2 flex items-center justify-center w-full z-20">
+              <SlidingTabs
+                value={device}
+                onChange={(val) => handleSelectDevice(val as "phone" | "tablet")}
+                className="w-[170px] sm:w-[180px] shrink-0 shadow-sm"
+                options={[
+                  {
+                    value: "phone",
+                    label: "iPhone",
+                    icon: (
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-3.5 h-3.5"
+                      >
+                        <rect x="6" y="2" width="12" height="20" rx="2.5" />
+                        <line x1="10" y1="18" x2="14" y2="18" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    value: "tablet",
+                    label: "iPad",
+                    icon: (
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-3.5 h-3.5"
+                      >
+                        <rect x="4" y="2" width="16" height="20" rx="2" />
+                        <line x1="12" y1="18" x2="12" y2="18" />
+                      </svg>
+                    ),
+                  },
+                ]}
+              />
+            </div>
 
-                <SlidingTabs
-                  value={device}
-                  onChange={(val) => handleSelectDevice(val as "phone" | "tablet")}
-                  className="w-[160px] shrink-0"
-                  options={[
-                    {
-                      value: "phone",
-                      label: "iPhone",
-                      icon: (
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="w-3.5 h-3.5"
-                        >
-                          <rect x="6" y="2" width="12" height="20" rx="2.5" />
-                          <line x1="10" y1="18" x2="14" y2="18" />
-                        </svg>
-                      ),
-                    },
-                    {
-                      value: "tablet",
-                      label: "iPad",
-                      icon: (
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="w-3.5 h-3.5"
-                        >
-                          <rect x="4" y="2" width="16" height="20" rx="2" />
-                          <line x1="12" y1="18" x2="12" y2="18" />
-                        </svg>
-                      ),
-                    },
-                  ]}
-                />
-              </div>
-
-              {/* Simulated Live Stage with Layered 3D Depth */}
-              <div
-                className="relative z-10 w-full h-[410px] sm:h-[430px] flex items-center justify-center select-none overflow-hidden"
-                style={{ perspective: "1200px" }}
-              >
-                <PhoneFramesStage
-                  timeString={timeString}
-                  isForeground={device === "phone"}
-                  hasInteracted={hasInteracted}
-                  onSelect={() => handleSelectDevice("phone")}
-                />
-                <TabletFramesStage
-                  timeString={timeString}
-                  isForeground={device === "tablet"}
-                  hasInteracted={hasInteracted}
-                  onSelect={() => handleSelectDevice("tablet")}
-                />
-              </div>
+            {/* Simulated Live Stage with Layered 3D Depth - Pure Floating */}
+            <div
+              className="relative z-10 w-full max-w-[460px] h-[410px] sm:h-[430px] flex items-center justify-center select-none"
+              style={{ perspective: "1200px" }}
+            >
+              <PhoneFramesStage
+                timeString={timeString}
+                isForeground={device === "phone"}
+                hasInteracted={hasInteracted}
+                onSelect={() => handleSelectDevice("phone")}
+              />
+              <TabletFramesStage
+                timeString={timeString}
+                isForeground={device === "tablet"}
+                hasInteracted={hasInteracted}
+                onSelect={() => handleSelectDevice("tablet")}
+              />
             </div>
           </div>
         </div>
