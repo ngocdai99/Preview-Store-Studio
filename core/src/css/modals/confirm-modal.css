@@ -284,23 +284,23 @@
 }
 
 :root[data-ui=light] .confirm-btn-reset {
-  background-color: #1e293b;
-  border: 1px solid #0f172a;
+  background-color: #334155;
+  border: 1px solid #1e293b;
   color: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.14);
   transform: none !important;
 }
 
 :root[data-ui=light] .confirm-btn-reset:hover {
-  background-color: #0f172a;
-  border-color: #020617;
+  background-color: #1e293b;
+  border-color: #0f172a;
   color: #ffffff;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.22);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
   transform: none !important;
 }
 
 :root[data-ui=light] .confirm-btn-reset:active {
-  background-color: #020617;
+  background-color: #0f172a;
   transform: none !important;
 }
 
