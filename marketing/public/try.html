@@ -16082,6 +16082,7 @@ CURRENT_APP_ID = String(state.appId || state.appleId);
 if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
 }
 CURRENT_PRESET_KEY = 'draft';
+CURRENT_ACTIVE_PRESET = 'studio';
 isPresetModified = false;
 if (state.icon1024) CUSTOM_ICON_1024 = state.icon1024;
 else if (state.iconApple) CUSTOM_ICON_1024 = state.iconApple;
@@ -16729,11 +16730,13 @@ restoring = false;
 } else if(initialUrlAppId){
 if(userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
 CURRENT_PRESET_KEY = 'draft';
+CURRENT_ACTIVE_PRESET = 'studio';
 loadPreset('draft');
 } else {
 CURRENT_PRESET_KEY = 'draft';
 loadPreset('none');
 CURRENT_PRESET_KEY = 'draft';
+CURRENT_ACTIVE_PRESET = 'studio';
 }
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
 CURRENT_PRESET_KEY = 'draft';

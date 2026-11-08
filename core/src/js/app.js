@@ -14785,6 +14785,7 @@ function applyImportedStoreApp(state) {
   }
 
   CURRENT_PRESET_KEY = 'draft';
+  CURRENT_ACTIVE_PRESET = 'studio';
   isPresetModified = false;
 
   // Auto select Apple App Store and iPhone device
@@ -15562,12 +15563,14 @@ if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to
 } else if(initialUrlAppId){
   if(userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
     CURRENT_PRESET_KEY = 'draft';
+    CURRENT_ACTIVE_PRESET = 'studio';
     loadPreset('draft');
   } else {
     // URL has an app ID: stay in draft mode with clean slate so studio preset is never loaded or flashed
     CURRENT_PRESET_KEY = 'draft';
     loadPreset('none');
     CURRENT_PRESET_KEY = 'draft';
+    CURRENT_ACTIVE_PRESET = 'studio';
   }
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
   CURRENT_PRESET_KEY = 'draft';

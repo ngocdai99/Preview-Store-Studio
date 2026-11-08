@@ -288,6 +288,7 @@ function applyImportedStoreApp(state) {
   }
 
   CURRENT_PRESET_KEY = 'draft';
+  CURRENT_ACTIVE_PRESET = 'studio';
   isPresetModified = false;
 
   // Auto select Apple App Store and iPhone device
