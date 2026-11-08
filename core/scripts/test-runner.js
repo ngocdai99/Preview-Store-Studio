@@ -3908,6 +3908,10 @@ asyncSuites.push((async () => {
   assert(fs.existsSync(path.join(ROOT_DIR, 'docs/src/marketing/components/mini-studio.html')), 'Mini-studio HTML component remains intact');
   assert(fs.existsSync(path.join(ROOT_DIR, 'docs/src/marketing/js/mini-studio.js')), 'Mini-studio JS remains intact');
 
+  // 10. Default auto-pick Store Preview Studio preset when visiting demo without appid
+  assert(tryHtml.includes("userDraft = null;\nCURRENT_PRESET_KEY = 'studio';\nCURRENT_ACTIVE_PRESET = 'studio';") || (tryHtml.includes("userDraft = null;") && tryHtml.includes("CURRENT_PRESET_KEY = 'studio';")), 'try.html auto-picks Store Preview Studio preset when not navigating with appid');
+  assert(!coreHtml.includes("isDemoMode"), 'core.html strips demo mode branch completely');
+
   // 10. Verify dev server routing for localhost:3000 (core) and localhost:3000/try (try)
   const devJsSrc = fs.readFileSync(path.join(ROOT_DIR, 'dev.js'), 'utf8');
   assert(devJsSrc.includes("pathname === '/try'") && devJsSrc.includes("pathname === '/try.html'"), 'dev.js handles /try and /try.html endpoints');

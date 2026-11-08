@@ -15544,8 +15544,7 @@ if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
     }
   } catch (_) {}
 }
-
-if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
+ else if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
   try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
   isPresetModified = false;
   userDraft = null;

@@ -153,7 +153,35 @@ if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
   } catch (_) {}
 }
 
-if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
+if (typeof isDemoMode === 'function' && isDemoMode()) {
+  if (initialUrlAppId) {
+    if (userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)) {
+      CURRENT_PRESET_KEY = 'draft';
+      CURRENT_ACTIVE_PRESET = 'studio';
+      loadPreset('draft');
+    } else {
+      CURRENT_PRESET_KEY = 'draft';
+      loadPreset('none');
+      CURRENT_PRESET_KEY = 'draft';
+      CURRENT_ACTIVE_PRESET = 'studio';
+    }
+  } else {
+    // In demo mode (/try), if not navigating with appid, default auto-pick Store Preview Studio
+    isPresetModified = false;
+    userDraft = null;
+    CURRENT_PRESET_KEY = 'studio';
+    CURRENT_ACTIVE_PRESET = 'studio';
+    restoring = true;
+    try {
+      loadPreset('studio');
+      if (typeof toggleDualPhone === 'function') {
+        toggleDualPhone(true);
+      }
+    } finally {
+      restoring = false;
+    }
+  }
+} else if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
   try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
   isPresetModified = false;
   userDraft = null;
