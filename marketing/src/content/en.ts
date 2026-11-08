@@ -285,6 +285,13 @@ export const en = {
           "No, and no software tool on the market can. Store Preview Studio gives you realistic visual mockups and catches mechanical formatting mistakes (such as wrong icon dimensions, transparent alpha channels on iOS, or invalid screenshot aspect ratios). However, final app approval is determined entirely by the official Apple and Google review teams based on your compiled code, privacy policies, and store guidelines.",
       },
       {
+        id: "offline-workflow",
+        topic: "Offline Workflow",
+        question: "Does Store Preview Studio really work offline?",
+        answer:
+          "Yes. All mockup rendering, metadata drafting, character counting, and 4K exporting run directly inside your browser with zero tracking and zero server storage. An internet connection is only needed if you choose to import a public store listing from a URL.",
+      },
+      {
         id: "client-handoff",
         topic: "Client Review Handoff",
         question:
