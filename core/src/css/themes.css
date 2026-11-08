@@ -580,7 +580,7 @@ select.fsel:hover{
 }
 select.fsel:focus{
   outline:0;
-  border-color:rgba(255,255,255,0.32);
+  border-color:rgba(255,255,255,0.22);
   box-shadow:none !important;
   background-color:#131413;
 }

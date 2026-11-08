@@ -41,7 +41,7 @@
 .custom-age-trigger:focus,
 .custom-age-wrap.open .custom-age-trigger {
   outline: 0;
-  border-color: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.22);
   box-shadow: none;
   background: #131413;
 }

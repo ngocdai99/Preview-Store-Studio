@@ -4484,7 +4484,7 @@ assert(bundledHtml.includes('id="privacyModeSeg"') && bundledHtml.includes('id="
 assert(!privacyCardHtmlSrc58.includes('pcb-action') && !privacyCardHtmlSrc58.includes('Inspect &rarr;'), 'privacy-card.html removes heavy inspect button');
 assert(!privacyCardHtmlSrc58.includes('pcb-title') && privacyCardHtmlSrc58.includes('class="pcb-sub"'), 'privacy-card.html preserves clean description text and removes redundant profile title');
 assert(panelCssSrc58.includes('.privacy-compact-box {') && panelCssSrc58.includes('background: transparent !important'), 'panel.css styles privacy info text cleanly without outer card background or border');
-assert(panelCssSrc58.includes('body[data-ui-store="google"] .priv-seg-btn.active') && panelCssSrc58.includes('linear-gradient(180deg, #34d399, #059669)'), 'panel.css switches privacy buttons to Google green accent when store is Google');
+assert(panelCssSrc58.includes('.priv-seg-btn.active') && panelCssSrc58.includes('background: rgba(255, 255, 255, 0.05)'), 'panel.css styles privacy buttons with soft neutral selected styling');
 
 console.log('\n[SUITE 59]: iPad Destination Toggle Device Mockup Reflection Verification');
 

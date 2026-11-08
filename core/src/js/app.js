@@ -3964,6 +3964,7 @@ function initTour() {
 
   relocateTourButton();
 
+  // If in demo mode and first time visiting, auto-offer tour after brief delay
 }
 
 if (typeof document !== 'undefined') {
@@ -10695,8 +10696,8 @@ function initHeader() {
     }
     const selectedId = selected ? selected.id : null;
     const isLight = document.documentElement.dataset.ui === 'light';
-    const activeColor = isLight ? '#0071e3' : '#ffffff';
-    const activeBg = isLight ? 'rgba(0, 113, 227, 0.12)' : 'rgba(255, 255, 255, 0.14)';
+    const activeColor = isLight ? '#006636' : '#ffffff';
+    const activeBg = isLight ? 'rgba(0, 102, 54, 0.12)' : 'rgba(255, 255, 255, 0.14)';
 
     $$('.activity-bar-btn').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
@@ -10705,10 +10706,7 @@ function initHeader() {
 
       if (isAct) {
         btn.style.setProperty('background', activeBg, 'important');
-        btn.style.setProperty('border', 'none', 'important');
-        btn.style.setProperty('border-radius', '8px', 'important');
         btn.style.setProperty('color', activeColor, 'important');
-        btn.style.removeProperty('box-shadow');
         const s = btn.querySelector('svg');
         if (s) {
           s.style.setProperty('opacity', '1', 'important');
@@ -10717,10 +10715,7 @@ function initHeader() {
         }
       } else {
         btn.style.removeProperty('background');
-        btn.style.removeProperty('border');
-        btn.style.removeProperty('border-radius');
         btn.style.removeProperty('color');
-        btn.style.removeProperty('box-shadow');
         const s = btn.querySelector('svg');
         if (s) {
           s.style.removeProperty('opacity');
@@ -11874,6 +11869,7 @@ function updatePresetBanner(){
   const banner = $('presetBanner');
   if(!banner) return;
   
+  // In demo mode (/try), presets cannot be copied to draft or edited as custom draft
   
   const hasDraft = hasUserDraft();
   const copyBtn = $('btnCopyPresetToDraft');
