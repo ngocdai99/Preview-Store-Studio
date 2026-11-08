@@ -2301,8 +2301,8 @@ assert(!metricsPopSnippet.includes('info-pop-link'), 'metricsInfoPop does not co
 
 assert(bundledHtml.includes('.info-pop-link') && bundledHtml.includes('.info-pop-footer'), 'Bundled CSS provides styling for .info-pop-link and .info-pop-footer');
 assert(bundledHtml.includes(':root[data-ui=light] .info-pop-link'), 'Bundled CSS provides light theme adaptation for .info-pop-link');
-assert(/:root\[data-ui=light\]\s*\.info-pop-title\{\s*color:#0f172a/.test(bundledHtml), 'Tooltip title uses crisp black text (#0f172a) in light mode');
-assert(/:root\[data-ui=light\]\s*\.info-popover\{[^}]*box-shadow:\s*none/.test(bundledHtml), 'Tooltip popover shadow is completely removed in light mode (box-shadow: none)');
+assert(/:root\[data-ui=light\]\s*\.info-pop-title\{\s*color:#1F2937/i.test(bundledHtml), 'Tooltip title uses refined text (#1F2937) in light mode');
+assert(/:root\[data-ui=light\]\s*\.info-popover\{[^}]*box-shadow:\s*0\s+16px\s+40px/i.test(bundledHtml), 'Tooltip popover uses soft shadow in light mode');
 assert(!bundledHtml.includes('#privacyInfoPop .info-pop-title{color:#34d399}'), 'Tooltip title does not use green tint');
 assert(!bundledHtml.includes('body[data-store=google] .info-tip-btn:hover{color:#10b981'), 'Tooltip icon button uses neutral monochrome styling without store/card tinting');
 assert(/:root\[data-ui=light\]\s*\.info-tip-btn\{[^}]*background:transparent!important/.test(bundledHtml), 'Tooltip button has transparent background without outer wrapper or shadow in light mode');
