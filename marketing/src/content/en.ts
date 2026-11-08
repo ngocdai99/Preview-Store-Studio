@@ -191,8 +191,8 @@ export const en = {
 
   pricing: {
     banner: {
-      tag: "EARLY BIRD IS LIVE",
-      text: "Special launch pricing for early supporters · Instant offline delivery",
+      tag: "LAUNCH PRICING",
+      text: "Limited to first 100 licenses · Instant offline delivery",
     },
     title: "One-time purchase. No subscription.",
     description:
@@ -227,7 +227,7 @@ export const en = {
           { text: "Single-User Lifetime Commercial License" },
         ] as TierFeature[],
         cta: {
-          label: "Get Started",
+          label: "Buy Plus – $29",
           href: "https://kaidevlabs.gumroad.com/l/store-preview-studio/EARLYBIRDPLUS",
         },
       },
@@ -252,7 +252,7 @@ export const en = {
           { text: "Agency Marketing & ASO Playbook" },
         ] as TierFeature[],
         cta: {
-          label: "Get Started",
+          label: "Buy Pro – $39",
           href: "https://kaidevlabs.gumroad.com/l/store-preview-studio/EARLYBIRDPRO",
         },
       },

@@ -43,18 +43,39 @@ export function Pricing() {
                     </div>
 
                     {/* Plan Description */}
-                    <p className="text-[13px] sm:text-[13.5px] text-slate-600 dark:text-[#989A99] mb-5 leading-relaxed min-h-[38px]">
+                    <p className="text-[13px] sm:text-[13.5px] text-muted mb-4 leading-relaxed min-h-[38px]">
                       {tier.description}
                     </p>
 
-                    {/* CTA Button placed right below description */}
+                    {/* Price Display placed above CTA button */}
+                    <div className="mb-4 pt-4 border-t border-border">
+                      <div className="flex items-center justify-between text-[11px] font-normal text-muted mb-1.5">
+                        <span className="uppercase tracking-wider">One-time purchase</span>
+                        <span className="text-accent font-medium">First 100 copies</span>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        {tier.price.original && (
+                          <span className="font-mono text-xl sm:text-2xl text-muted/60 line-through">
+                            ${tier.price.original}
+                          </span>
+                        )}
+                        <p className="font-mono text-4xl sm:text-[46px] font-medium text-foreground leading-none tracking-tight">
+                          ${tier.price.current}
+                        </p>
+                        <span className="text-xs sm:text-[13px] text-muted font-normal">
+                          / lifetime
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* CTA Button placed directly below Price */}
                     <div className="mb-6">
                       {isPlus ? (
                         <a
                           href={tier.cta.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="relative inline-flex items-center justify-center w-full h-[36px] sm:h-[38px] px-4 py-2 rounded-lg text-[13.5px] font-medium text-slate-900 dark:text-white bg-slate-100 hover:bg-slate-200 dark:bg-[oklch(0.95_0.00275_157.5_/_0.0328947)] dark:hover:bg-white/[0.08] border border-slate-300 dark:border-white/10 shadow-xs transition-colors duration-150 cursor-pointer select-none text-center"
+                          className="relative inline-flex items-center justify-center w-full h-[38px] sm:h-[40px] px-4 py-2 rounded-lg text-[13.5px] font-medium text-foreground bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] border border-border shadow-xs transition-colors duration-150 cursor-pointer select-none text-center"
                         >
                           <span>{tier.cta.label}</span>
                         </a>
@@ -65,31 +86,11 @@ export function Pricing() {
                           rel="noopener noreferrer"
                           fontSize="13.5px"
                           fontWeight={600}
-                          className="w-full h-[36px] sm:h-[38px] px-4 py-2 rounded-lg"
+                          className="w-full h-[38px] sm:h-[40px] px-4 py-2 rounded-lg"
                         >
                           <span>{tier.cta.label}</span>
                         </PrimaryButton>
                       )}
-                    </div>
-
-                    {/* Price Display matching DevTools inspect: p.mt-2.pb-1.font-mono.text-5xl */}
-                    <div className="mb-6 pt-5 border-t border-slate-100 dark:border-white/[0.06]">
-                      <span className="text-[11px] font-normal uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
-                        One-time purchase
-                      </span>
-                      <div className="flex items-baseline gap-2">
-                        {tier.price.original && (
-                          <span className="font-mono text-xl sm:text-2xl text-slate-400 dark:text-slate-600 line-through">
-                            ${tier.price.original}
-                          </span>
-                        )}
-                        <p className="mt-2 pb-1 font-mono text-4xl sm:text-[46px] font-medium text-slate-900 dark:text-[oklch(0.95_0.00275_157.5)] leading-none tracking-tight">
-                          ${tier.price.current}
-                        </p>
-                        <span className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 font-normal">
-                          / lifetime
-                        </span>
-                      </div>
                     </div>
 
                     {/* Features Checklist */}
