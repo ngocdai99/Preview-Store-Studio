@@ -3964,6 +3964,7 @@ function initTour() {
 
   relocateTourButton();
 
+  // If in demo mode and first time visiting, auto-offer tour after brief delay
 }
 
 if (typeof document !== 'undefined') {
@@ -11868,6 +11869,7 @@ function updatePresetBanner(){
   const banner = $('presetBanner');
   if(!banner) return;
   
+  // In demo mode (/try), presets cannot be copied to draft or edited as custom draft
   
   const hasDraft = hasUserDraft();
   const copyBtn = $('btnCopyPresetToDraft');
