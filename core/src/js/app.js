@@ -9756,6 +9756,7 @@ function setStore(s, animate = true, preserveDual = false){
   } else {
     if ($('ipadCard')) $('ipadCard').style.display = 'none';
   }
+  if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(s);
   if($('edTitle')) $('edTitle').textContent = 'App Identity';
   syncCategoryUI();
   if (typeof syncAgeUI === 'function') syncAgeUI();
@@ -9764,7 +9765,7 @@ function setStore(s, animate = true, preserveDual = false){
     if (selCard && selCard.getAttribute('data-only') && selCard.getAttribute('data-only') !== s) {
       if (typeof selectEditorCard === 'function') selectEditorCard('identityCard');
     } else {
-      updateActivityBarState();
+      updateActivityBarState(s);
     }
   }
 
@@ -9881,6 +9882,8 @@ function setStore(s, animate = true, preserveDual = false){
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
+      if(typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(s);
+      if(typeof updateActivityBarState === 'function') updateActivityBarState(s);
       if(typeof validateScreenshots === 'function') validateScreenshots();
       if(typeof validateTabletShots === 'function') validateTabletShots();
       if(!isRestoring && typeof renderShots === 'function') renderShots();
@@ -10565,6 +10568,22 @@ function initHeader() {
   });
 
   // 5. VS Code / Supabase Activity Bar & Single-Card View Controller
+  function syncActivityBarVisibility(activeStore) {
+    const currentStore = activeStore || (typeof store !== 'undefined' && store) || (document.body ? (document.body.dataset.uiStore || document.body.dataset.store) : 'apple') || 'apple';
+    $$('.activity-bar-btn[data-card-id]').forEach(btn => {
+      const cardId = btn.dataset.cardId;
+      const card = cardId ? $(cardId) : null;
+      const dataOnly = btn.getAttribute('data-only') || (card ? card.getAttribute('data-only') : null);
+      const isHidden = dataOnly ? (dataOnly !== currentStore) : false;
+      btn.classList.toggle('hide', isHidden);
+      if (isHidden) {
+        btn.style.setProperty('display', 'none', 'important');
+      } else {
+        btn.style.removeProperty('display');
+      }
+    });
+  }
+
   function initActivityBar() {
     const editor = $('editorPanel');
     if (!editor) return;
@@ -10644,10 +10663,20 @@ function initHeader() {
       bar.appendChild(btn);
     });
 
-    // Ensure at least one card is selected and activity bar is immediately styled
-    if (!document.querySelector('.editor .card.selected') && cards.length > 0) {
-      cards[0].classList.add('selected');
-      cards[0].classList.remove('collapsed');
+    // Synchronize activity bar items visibility with current active store (Apple: 6 items, Google: 8 items)
+    syncActivityBarVisibility();
+
+    // Ensure at least one visible card is selected and activity bar is immediately styled
+    let selected = document.querySelector('.editor .card.selected:not(.hide)');
+    if (!selected) {
+      const currentStore = (typeof store !== 'undefined' && store) || (document.body ? (document.body.dataset.uiStore || document.body.dataset.store) : 'apple') || 'apple';
+      const firstCard = document.querySelector(`.editor .card:not(.hide):not([data-only="${currentStore === 'apple' ? 'google' : 'apple'}"])`) || cards[0];
+      if (firstCard) {
+        cards.forEach(c => {
+          c.classList.toggle('selected', c === firstCard);
+          c.classList.toggle('collapsed', c !== firstCard);
+        });
+      }
     }
     updateActivityBarState();
   }
@@ -10678,10 +10707,14 @@ function initHeader() {
     updateActivityBarState();
   }
 
-  function updateActivityBarState() {
+  function updateActivityBarState(storeOverride) {
+    const currentStore = storeOverride || (typeof store !== 'undefined' && store) || (document.body ? (document.body.dataset.uiStore || document.body.dataset.store) : 'apple') || 'apple';
+    syncActivityBarVisibility(currentStore);
+
     let selected = document.querySelector('.editor .card.selected');
-    if (!selected || selected.classList.contains('hide')) {
-      const firstCard = document.querySelector('.editor .card:not(.hide)') || document.querySelector('.editor .card');
+    const isInvalid = !selected || selected.classList.contains('hide') || (selected.getAttribute('data-only') && selected.getAttribute('data-only') !== currentStore);
+    if (isInvalid) {
+      const firstCard = document.querySelector(`.editor .card:not(.hide):not([data-only="${currentStore === 'apple' ? 'google' : 'apple'}"])`) || document.querySelector('.editor .card');
       if (firstCard) {
         $$('.editor .card').forEach(c => {
           if (c !== firstCard) {
@@ -10728,6 +10761,7 @@ function initHeader() {
 
   window.selectEditorCard = selectEditorCard;
   window.updateActivityBarState = updateActivityBarState;
+  window.syncActivityBarVisibility = syncActivityBarVisibility;
 
   // Initialize Activity Bar on load
   initActivityBar();
@@ -15451,6 +15485,8 @@ document.body.dataset.appleDevice = 'iphone';
 document.body.dataset.googleDevice = 'phone';
 if (typeof setStore === 'function') setStore('apple', false, true);
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
+if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(store);
+if (typeof updateActivityBarState === 'function') updateActivityBarState(store);
 
 // Check if URL specifies an incoming app to auto-load
 let initialUrlAppId = null;
@@ -15554,6 +15590,8 @@ setInterval(() => { if(typeof updateMockupClocks === 'function') updateMockupClo
 if(typeof setView === 'function'){
   setView('detail', true);
 }
+if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(store);
+if (typeof updateActivityBarState === 'function') updateActivityBarState(store);
 fit();
 setTimeout(syncAllVtPills, 10);
 setTimeout(syncAllVtPills, 120);

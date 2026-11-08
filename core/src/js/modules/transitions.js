@@ -631,6 +631,7 @@ function setStore(s, animate = true, preserveDual = false){
   } else {
     if ($('ipadCard')) $('ipadCard').style.display = 'none';
   }
+  if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(s);
   if($('edTitle')) $('edTitle').textContent = 'App Identity';
   syncCategoryUI();
   if (typeof syncAgeUI === 'function') syncAgeUI();
@@ -639,7 +640,7 @@ function setStore(s, animate = true, preserveDual = false){
     if (selCard && selCard.getAttribute('data-only') && selCard.getAttribute('data-only') !== s) {
       if (typeof selectEditorCard === 'function') selectEditorCard('identityCard');
     } else {
-      updateActivityBarState();
+      updateActivityBarState(s);
     }
   }
 
@@ -756,6 +757,8 @@ function setStore(s, animate = true, preserveDual = false){
       } else {
         if($('ipadCard')) $('ipadCard').style.display = 'none';
       }
+      if(typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(s);
+      if(typeof updateActivityBarState === 'function') updateActivityBarState(s);
       if(typeof validateScreenshots === 'function') validateScreenshots();
       if(typeof validateTabletShots === 'function') validateTabletShots();
       if(!isRestoring && typeof renderShots === 'function') renderShots();

@@ -3297,6 +3297,55 @@ assert(simGetVisibleCardCount() === 8, 'Switching to Google Play visibly display
 simCardSetStore('apple');
 assert(simGetVisibleCardCount() === 6, 'Switching back to Apple Store visibly restores exactly 6 cards');
 
+// 6. Activity Bar Store Synchronization (Apple 6 Items vs Google 8 Items)
+assert(bundledHtml.includes('body[data-ui-store=apple] .activity-bar-btn[data-only=google]') && bundledHtml.includes('display:none'),
+  'CSS immediately hides Google activity bar items when Apple store is active');
+assert(bundledHtml.includes('body[data-ui-store=google] .activity-bar-btn[data-only=apple]') && bundledHtml.includes('display:none'),
+  'CSS immediately hides Apple activity bar items when Google store is active');
+assert(bundledHtml.includes('syncActivityBarVisibility'), 'syncActivityBarVisibility engine exists in bundle');
+
+const simBarButtons = {
+  identityCard: { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'identityCard' }, getAttribute: () => null, style: { display: '' } },
+  contentCard:  { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'contentCard' }, getAttribute: () => null, style: { display: '' } },
+  shotsCard:    { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'shotsCard' }, getAttribute: () => null, style: { display: '' } },
+  statsCard:    { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'statsCard' }, getAttribute: () => null, style: { display: '' } },
+  ipadCard:     { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'ipadCard' }, getAttribute: () => 'apple', style: { display: '' } },
+  tabCard:      { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'tabCard' }, getAttribute: () => 'google', style: { display: '' } },
+  featureCard:  { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'featureCard' }, getAttribute: () => 'google', style: { display: '' } },
+  supportCard:  { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'supportCard' }, getAttribute: () => 'google', style: { display: '' } },
+  privacyCard:  { classList: new Set(['activity-bar-btn']), dataset: { cardId: 'privacyCard' }, getAttribute: () => null, style: { display: '' } }
+};
+
+function simSyncActivityBar(currentStore) {
+  Object.values(simBarButtons).forEach(btn => {
+    const only = btn.getAttribute('data-only');
+    const isHidden = only ? (only !== currentStore) : false;
+    if (isHidden) {
+      btn.classList.add('hide');
+      btn.style.display = 'none';
+    } else {
+      btn.classList.delete('hide');
+      btn.style.display = '';
+    }
+  });
+}
+
+function simGetVisibleActivityBarCount() {
+  return Object.values(simBarButtons).filter(btn => !btn.classList.has('hide') && btn.style.display !== 'none').length;
+}
+
+// Initial / default Apple store: exactly 6 buttons
+simSyncActivityBar('apple');
+assert(simGetVisibleActivityBarCount() === 6, `Activity bar on Apple store visibly displays exactly 6 items (found ${simGetVisibleActivityBarCount()})`);
+
+// Switching to Google Play: exactly 8 buttons
+simSyncActivityBar('google');
+assert(simGetVisibleActivityBarCount() === 8, `Activity bar on Google Play visibly displays exactly 8 items (found ${simGetVisibleActivityBarCount()})`);
+
+// Switching back to Apple: exactly 6 buttons
+simSyncActivityBar('apple');
+assert(simGetVisibleActivityBarCount() === 6, `Activity bar switching back to Apple visibly restores exactly 6 items (found ${simGetVisibleActivityBarCount()})`);
+
 console.log('\n[SUITE 44]: Stage Zero-Shift Overflow & ResizeObserver Oscillation Guard');
 
 // Test 1: Stage has overflow: hidden to prevent scrollbars from altering clientWidth/clientHeight

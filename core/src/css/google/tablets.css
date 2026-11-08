@@ -5,9 +5,13 @@ body[data-store=google][data-google-device="tab7"] .dev.gtab7{display:block!impo
 body[data-store=google][data-google-device="tab10"] .dev.gtab10{display:block!important}
 body[data-store=google][data-google-device="tab10"] #stageViewDropdown{display:none!important}
 body[data-ui-store=apple] .card[data-only=google],
-body:not([data-ui-store])[data-store=apple] .card[data-only=google]{display:none}
+body:not([data-ui-store])[data-store=apple] .card[data-only=google],
+body[data-ui-store=apple] .activity-bar-btn[data-only=google],
+body:not([data-ui-store])[data-store=apple] .activity-bar-btn[data-only=google]{display:none!important}
 body[data-ui-store=google] .card[data-only=apple],
-body:not([data-ui-store])[data-store=google] .card[data-only=apple]{display:none}
+body:not([data-ui-store])[data-store=google] .card[data-only=apple],
+body[data-ui-store=google] .activity-bar-btn[data-only=apple],
+body:not([data-ui-store])[data-store=google] .activity-bar-btn[data-only=apple]{display:none!important}
 .card.hide{display:none}
 
 .dev.gtab{

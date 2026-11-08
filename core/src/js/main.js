@@ -114,6 +114,8 @@ document.body.dataset.appleDevice = 'iphone';
 document.body.dataset.googleDevice = 'phone';
 if (typeof setStore === 'function') setStore('apple', false, true);
 $$('[data-only]').forEach(e => e.classList.toggle('hide', e.dataset.only !== store));
+if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(store);
+if (typeof updateActivityBarState === 'function') updateActivityBarState(store);
 
 // Check if URL specifies an incoming app to auto-load
 let initialUrlAppId = null;
@@ -217,6 +219,8 @@ setInterval(() => { if(typeof updateMockupClocks === 'function') updateMockupClo
 if(typeof setView === 'function'){
   setView('detail', true);
 }
+if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(store);
+if (typeof updateActivityBarState === 'function') updateActivityBarState(store);
 fit();
 setTimeout(syncAllVtPills, 10);
 setTimeout(syncAllVtPills, 120);
