@@ -47,12 +47,26 @@
   border-radius: 8px;
   background: none;
   border: 0;
-  color: var(--tx);
+  color: #C4C5C4;
   font-size: 12.5px;
   font-weight: 500;
   text-align: left;
   width: 100%;
   transition: background 0.15s ease, color 0.15s ease;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+:root[data-ui=light] .menu-item {
+  color: var(--tx);
+}
+
+:root[data-ui=light] .menu-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--tx);
 }
 
 .menu-item i {
@@ -604,7 +618,24 @@
   font-weight: 500;
   font-size: 12.5px;
   line-height: 1.3;
-  color: inherit;
+  color: #C4C5C4;
+  transition: color 0.15s ease;
+}
+
+.menu .menu-item:hover .mi-name,
+#menuExport .menu-item:hover .mi-name,
+#menuPresets .menu-item:hover .mi-name {
+  color: #ffffff;
+}
+
+:root[data-ui=light] .menu .mi-name {
+  color: #0f172a;
+}
+
+:root[data-ui=light] .menu .menu-item:hover .mi-name,
+:root[data-ui=light] #menuExport .menu-item:hover .mi-name,
+:root[data-ui=light] #menuPresets .menu-item:hover .mi-name {
+  color: #0f172a;
 }
 
 .menu .mi-t small {
