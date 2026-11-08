@@ -308,9 +308,9 @@
 
 /* Network confirmation icon wrap & buttons */
 .network-confirm-icon-wrap {
-  background: rgba(16, 185, 129, 0.12) !important;
-  border-color: rgba(16, 185, 129, 0.25) !important;
-  color: #10b981 !important;
+  background: rgba(0, 208, 133, 0.12) !important;
+  border-color: rgba(0, 208, 133, 0.28) !important;
+  color: #00D085 !important;
 }
 
 .network-confirm-icon-wrap.offline {
@@ -320,9 +320,9 @@
 }
 
 :root[data-ui=light] .network-confirm-icon-wrap {
-  background: #effdf5 !important;
-  border-color: #bbf7d0 !important;
-  color: #059669 !important;
+  background: rgba(0, 102, 54, 0.08) !important;
+  border-color: rgba(0, 102, 54, 0.22) !important;
+  color: #006636 !important;
 }
 
 :root[data-ui=light] .network-confirm-icon-wrap.offline {
@@ -331,16 +331,71 @@
   color: #d97706 !important;
 }
 
+/* Primary confirm action: Allow & Connect */
 .network-btn-confirm {
-  background: #059669 !important;
-  border-color: #047857 !important;
-  color: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3) !important;
+  background: #00D085 !important;
+  border: 1px solid #00D085 !important;
+  color: #0A1C14 !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 10px rgba(0, 208, 133, 0.28) !important;
+  transition: all 0.15s ease !important;
 }
 
 .network-btn-confirm:hover {
-  background: #047857 !important;
-  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4) !important;
+  background: #00b875 !important;
+  border-color: #00b875 !important;
+  color: #0A1C14 !important;
+  box-shadow: 0 4px 14px rgba(0, 208, 133, 0.38) !important;
+}
+
+.network-btn-confirm:active {
+  background: #00a368 !important;
+  border-color: #00a368 !important;
+}
+
+:root[data-ui=light] .network-btn-confirm {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #006636 !important;
+  border: 1px solid #1B845E !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 2px 8px rgba(0, 102, 54, 0.25) !important;
+}
+
+:root[data-ui=light] .network-btn-confirm:hover {
+  background: #007a41 !important;
+  border-color: #209d70 !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 14px rgba(0, 102, 54, 0.35) !important;
+}
+
+:root[data-ui=light] .network-btn-confirm:active {
+  background: #005a30 !important;
+  border-color: #166e4e !important;
+}
+
+/* Secondary cancel action: Stay Offline */
+#networkConfirmCancel {
+  font-weight: 600 !important;
+  transition: all 0.15s ease !important;
+}
+
+#networkConfirmCancel:focus-visible {
+  box-shadow: 0 0 0 2px var(--brand-secondary, #00D085) !important;
+}
+
+:root[data-ui=light] #networkConfirmCancel {
+  background-color: #ffffff !important;
+  border: 1px solid #E1E3E8 !important;
+  color: #1F2937 !important;
+}
+
+:root[data-ui=light] #networkConfirmCancel:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #111827 !important;
+}
+
+:root[data-ui=light] #networkConfirmCancel:focus-visible {
+  box-shadow: 0 0 0 2px var(--brand-primary, #006636) !important;
 }
 
 /* Compact action buttons for Store Import */

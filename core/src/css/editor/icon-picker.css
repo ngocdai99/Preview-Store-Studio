@@ -60,10 +60,11 @@
   background:transparent;color:#8B8F98;
 }
 .ico-wrap.drag-over .ico-ov{
+  display:flex !important;
   opacity:1 !important;background:transparent !important;color:#00D085 !important;
 }
-.ico-wrap.has:hover .ico-ov{
-  opacity:1;background:rgba(15,16,15,0.65);color:#fff;
+.ico-wrap.has:not(.drag-over) .ico-ov{
+  display:none !important;
 }
 
 /* ---------- LIGHT MODE (.ico-wrap) ---------- */
@@ -97,6 +98,7 @@
   border-color:#A9D6BC !important;
 }
 :root[data-ui=light] .ico-wrap.drag-over .ico-ov{
+  display:flex !important;
   opacity:1 !important;background:transparent !important;color:#006636 !important;
 }
 :root[data-ui=light] .ico-wrap.has{
@@ -104,9 +106,6 @@
 }
 :root[data-ui=light] .ico-wrap.has:hover{
   box-shadow:0 8px 20px rgba(0,0,0,.12);
-}
-:root[data-ui=light] .ico-wrap.has .ico-ov{
-  background:rgba(15,23,42,.75);color:#f8fafc;
 }
 
 /* Floating X Remove Button */
@@ -192,7 +191,7 @@
 }
 
 /* ---------- App Identity Action Buttons (Upload Icon & Inspect) ---------- */
-/* Strictly NO hover scale and NO translateY across all themes */
+/* Strictly NO hover scale, NO box-shadow, and neutral colors across all themes */
 #icoUp,
 #icoInspect,
 #icoUp:hover,
@@ -206,76 +205,148 @@
 :root[data-ui=light] #icoUp:active,
 :root[data-ui=light] #icoInspect:active {
   transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Dark Mode: White Button for Upload Icon & Dark Button for Inspect */
-:root:not([data-ui=light]) #icoUp {
-  background-color: var(--btn-white-bg, #EFF1F0);
-  border: 1px solid var(--btn-white-border, rgba(0, 0, 0, 0.08));
-  color: var(--btn-white-text, #252625);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+/* Neutral icon colors: never tint with store accent color */
+#icoUp .btn-mini-ico svg,
+#icoInspect .btn-mini-ico svg,
+:root[data-ui=light] #icoUp .btn-mini-ico svg,
+:root[data-ui=light] #icoInspect .btn-mini-ico svg {
+  color: #4B5563 !important;
+  stroke: currentColor;
+}
+#icoUp:hover .btn-mini-ico svg,
+#icoInspect:hover .btn-mini-ico svg,
+:root[data-ui=light] #icoUp:hover .btn-mini-ico svg,
+:root[data-ui=light] #icoInspect:hover:not(:disabled):not(.disabled) .btn-mini-ico svg {
+  color: #111827 !important;
+  stroke: currentColor;
+}
+
+/* Light Mode: Clean neutral buttons with color-only hover */
+:root[data-ui=light] #icoUp,
+:root[data-ui=light] #icoInspect {
+  background-color: #FFFFFF !important;
+  border: 1px solid #D1D5DB !important;
+  color: #1F2937 !important;
+  box-shadow: none !important;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 500;
   transform: none !important;
-  transition: background-color 0.15s ease, opacity 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+:root[data-ui=light] #icoUp:hover,
+:root[data-ui=light] #icoInspect:hover:not(:disabled):not(.disabled) {
+  background-color: #F3F4F6 !important;
+  border-color: #9CA3AF !important;
+  color: #111827 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+:root[data-ui=light] #icoUp:active,
+:root[data-ui=light] #icoInspect:active:not(:disabled):not(.disabled) {
+  background-color: #E5E7EB !important;
+  border-color: #9CA3AF !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+:root[data-ui=light] #icoInspect:disabled,
+:root[data-ui=light] #icoInspect.disabled {
+  background-color: #F9FAFB !important;
+  border-color: #E5E7EB !important;
+  color: #9CA3AF !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+:root[data-ui=light] #icoInspect:disabled .btn-mini-ico svg,
+:root[data-ui=light] #icoInspect.disabled .btn-mini-ico svg {
+  color: #9CA3AF !important;
+}
+
+/* Dark Mode: White button for Upload Icon, dark button for Inspect */
+:root:not([data-ui=light]) #icoUp {
+  background-color: #EFF1F0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #252625 !important;
+  box-shadow: none !important;
+  border-radius: 8px;
+  font-weight: 500;
+  transform: none !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 }
 
 :root:not([data-ui=light]) #icoUp .btn-mini-ico svg {
-  color: var(--btn-white-text, #252625);
+  color: #252625 !important;
   stroke: currentColor;
 }
 
 :root:not([data-ui=light]) #icoUp:hover {
-  background-color: var(--btn-white-hover-bg, #E1E3E2);
-  border-color: var(--btn-white-border, rgba(0, 0, 0, 0.08)) !important;
-  color: var(--btn-white-hover-text, #252625) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #111827 !important;
+  box-shadow: none !important;
   transform: none !important;
+}
+:root:not([data-ui=light]) #icoUp:hover .btn-mini-ico svg {
+  color: #111827 !important;
 }
 
 :root:not([data-ui=light]) #icoUp:active {
-  background-color: var(--btn-white-active-bg, #D5D8D6);
-  border-color: var(--btn-white-border, rgba(0, 0, 0, 0.08)) !important;
+  background-color: #D5D8D6 !important;
+  box-shadow: none !important;
   transform: none !important;
 }
 
 :root:not([data-ui=light]) #icoInspect {
-  background-color: var(--btn-dark-bg, #1D1E1D);
-  border: 1px solid var(--btn-dark-border, #282928);
-  color: var(--btn-dark-text, #EDEDED);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  background-color: #1C1C1C !important;
+  border: 1px solid #2F2F2F !important;
+  color: #D1D5DB !important;
+  box-shadow: none !important;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 500;
   transform: none !important;
-  transition: background-color 0.15s ease, opacity 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 }
 
 :root:not([data-ui=light]) #icoInspect .btn-mini-ico svg {
-  color: var(--btn-dark-text, #EDEDED);
+  color: #8B8F98 !important;
   stroke: currentColor;
 }
 
 :root:not([data-ui=light]) #icoInspect:hover:not(:disabled):not(.disabled) {
-  background-color: #242524;
-  border-color: var(--btn-dark-border, #282928) !important;
-  color: var(--btn-dark-text, #EDEDED) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  background-color: #262626 !important;
+  border-color: #3F3F3F !important;
+  color: #F3F4F6 !important;
+  box-shadow: none !important;
   transform: none !important;
+}
+:root:not([data-ui=light]) #icoInspect:hover:not(:disabled):not(.disabled) .btn-mini-ico svg {
+  color: #F3F4F6 !important;
 }
 
 :root:not([data-ui=light]) #icoInspect:active:not(:disabled):not(.disabled) {
-  background-color: #171817;
-  border-color: var(--btn-dark-border, #282928) !important;
+  background-color: #171717 !important;
+  box-shadow: none !important;
   transform: none !important;
 }
 
 :root:not([data-ui=light]) #icoInspect:disabled,
 :root:not([data-ui=light]) #icoInspect.disabled {
-  background-color: var(--btn-dark-bg, #1D1E1D) !important;
-  border-color: var(--btn-dark-border, #282928) !important;
-  color: var(--btn-dark-text, #EDEDED) !important;
-  opacity: 0.38 !important;
+  background-color: #1C1C1C !important;
+  border-color: #262626 !important;
+  color: #525252 !important;
+  opacity: 0.45 !important;
   cursor: not-allowed !important;
-  transform: none !important;
   box-shadow: none !important;
+  transform: none !important;
+}
+:root:not([data-ui=light]) #icoInspect:disabled .btn-mini-ico svg,
+:root:not([data-ui=light]) #icoInspect.disabled .btn-mini-ico svg {
+  color: #525252 !important;
 }

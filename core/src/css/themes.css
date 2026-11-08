@@ -182,8 +182,7 @@
 :root[data-ui=light] .ico-wrap.is-placeholder:hover{border-color:#9CA3AF;box-shadow:none}
 :root[data-ui=light] .ico-wrap.is-placeholder .ico-ov,
 :root[data-ui=light] .ico-wrap.is-placeholder:hover .ico-ov{background:transparent;color:#6B7280}
-:root[data-ui=light] .ico-wrap.has .ico-ov,
-:root[data-ui=light] .ico-wrap.has:hover .ico-ov{background:rgba(15,23,42,.75);color:#f8fafc}
+:root[data-ui=light] .ico-wrap.has:not(.drag-over) .ico-ov{display:none!important}
 :root[data-ui=light] .ico-wrap.drag-over{background:#E3F3EB!important;border:1.5px solid #006636!important}
 :root[data-ui=light] .ico-wrap.drag-over .ico-ov{background:transparent!important;color:#006636!important}
 :root[data-ui=light] .menu{background:rgba(255,255,255,.97);box-shadow:0 16px 36px rgba(15,23,42,.16)}
