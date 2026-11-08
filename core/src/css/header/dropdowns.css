@@ -156,13 +156,13 @@
 }
 
 #menuPresets .menu-item.active {
-  background: rgba(59, 130, 246, 0.16);
-  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 :root[data-ui=light] #menuPresets .menu-item.active {
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.28);
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.14);
 }
 
 #presetItemDraft .preset-thumb {
@@ -461,7 +461,7 @@
   font-weight: 500;
 }
 
-/* Sparkle Icon for Templates Trigger */
+/* Sparkle Icon for Templates Trigger (Neutral Activity Bar Style) */
 .mi-ico-sparkle {
   display: inline-flex;
   align-items: center;
@@ -469,18 +469,32 @@
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  background: rgba(245, 158, 11, 0.14);
-  color: #fbbf24;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #C4C5C4;
   flex-shrink: 0;
   margin-top: 1px;
 }
 
-:root[data-ui=light] .mi-ico-sparkle {
-  background: #fef3c7;
-  color: #d97706;
+.menu-item:hover .mi-ico-sparkle {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.20);
+  color: #ffffff;
 }
 
-/* Menu Item Brand Indigo Violet Icon Badges */
+:root[data-ui=light] .mi-ico-sparkle {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+:root[data-ui=light] .menu-item:hover .mi-ico-sparkle {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.16);
+  color: #0f172a;
+}
+
+/* Menu Item Icon Badges (Unified Neutral Palette matching Activity Bar) */
 .mi-ico {
   width: 28px;
   height: 28px;
@@ -489,9 +503,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #EDEDED;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #C4C5C4;
   box-shadow: none;
   margin-top: 1px;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
@@ -500,178 +514,47 @@
 .mi-ico svg {
   width: 14.5px;
   height: 14.5px;
-  stroke-width: 2.2;
+  stroke-width: 2;
   display: block;
+  opacity: 0.7;
+  transition: opacity 0.15s ease, color 0.15s ease;
 }
 
+.menu .menu-item:hover .mi-ico,
 #menuExport .menu-item:hover .mi-ico {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(255, 255, 255, 0.20) !important;
   transform: none !important;
+}
+
+.menu .menu-item:hover .mi-ico svg,
+#menuExport .menu-item:hover .mi-ico svg {
+  opacity: 1 !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 :root[data-ui=light] .mi-ico {
-  background: rgba(15, 23, 42, 0.05);
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  color: #0f172a;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
   box-shadow: none;
 }
 
+:root[data-ui=light] .menu .menu-item:hover .mi-ico,
 :root[data-ui=light] #menuExport .menu-item:hover .mi-ico {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #0f172a !important;
   transform: none !important;
 }
 
-/* Tinted Vibrant Icon Chips per Menu Action */
-/* 1. Export Mockup Image: Primary Emerald */
-#optOpenExportModal .mi-ico {
-  background: rgba(0, 208, 133, 0.14);
-  border-color: rgba(0, 208, 133, 0.28);
-  color: #00D085;
-}
-#optOpenExportModal:hover .mi-ico {
-  background: rgba(0, 208, 133, 0.24);
-  border-color: rgba(0, 208, 133, 0.5);
-  color: #26e099;
-}
-:root[data-ui=light] #optOpenExportModal .mi-ico {
-  background: rgba(0, 208, 133, 0.12);
-  border-color: rgba(0, 208, 133, 0.28);
-  color: #006636;
-}
-:root[data-ui=light] #optOpenExportModal:hover .mi-ico {
-  background: rgba(0, 208, 133, 0.2);
-  border-color: rgba(0, 208, 133, 0.42);
-  color: #004d28;
-}
-
-/* 2. Copy Text: Radiant Purple */
-#btnCopyText .mi-ico {
-  background: rgba(168, 85, 247, 0.14);
-  border-color: rgba(168, 85, 247, 0.28);
-  color: #c084fc;
-}
-#btnCopyText:hover .mi-ico {
-  background: rgba(168, 85, 247, 0.24);
-  border-color: rgba(168, 85, 247, 0.5);
-  color: #e9d5ff;
-}
-:root[data-ui=light] #btnCopyText .mi-ico {
-  background: rgba(124, 58, 237, 0.1);
-  border-color: rgba(124, 58, 237, 0.24);
-  color: #7c3aed;
-}
-:root[data-ui=light] #btnCopyText:hover .mi-ico {
-  background: rgba(124, 58, 237, 0.18);
-  border-color: rgba(124, 58, 237, 0.38);
-  color: #6d28d9;
-}
-
-/* 3. Export Markdown: Emerald Mint */
-#optExportMD .mi-ico {
-  background: rgba(52, 211, 153, 0.14);
-  border-color: rgba(52, 211, 153, 0.28);
-  color: #34d399;
-}
-#optExportMD:hover .mi-ico {
-  background: rgba(52, 211, 153, 0.24);
-  border-color: rgba(52, 211, 153, 0.5);
-  color: #a7f3d0;
-}
-:root[data-ui=light] #optExportMD .mi-ico {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.24);
-  color: #059669;
-}
-:root[data-ui=light] #optExportMD:hover .mi-ico {
-  background: rgba(16, 185, 129, 0.18);
-  border-color: rgba(16, 185, 129, 0.38);
-  color: #047857;
-}
-
-/* 4. Export JSON: Warm Amber */
-#optExportJSON .mi-ico {
-  background: rgba(245, 158, 11, 0.14);
-  border-color: rgba(245, 158, 11, 0.28);
-  color: #fbbf24;
-}
-#optExportJSON:hover .mi-ico {
-  background: rgba(245, 158, 11, 0.24);
-  border-color: rgba(245, 158, 11, 0.5);
-  color: #fde68a;
-}
-:root[data-ui=light] #optExportJSON .mi-ico {
-  background: rgba(217, 119, 6, 0.1);
-  border-color: rgba(217, 119, 6, 0.24);
-  color: #d97706;
-}
-:root[data-ui=light] #optExportJSON:hover .mi-ico {
-  background: rgba(217, 119, 6, 0.18);
-  border-color: rgba(217, 119, 6, 0.38);
-  color: #b45309;
-}
-
-/* 5. Import JSON: Tech Indigo */
-#optImportJSON .mi-ico {
-  background: rgba(99, 102, 241, 0.14);
-  border-color: rgba(99, 102, 241, 0.28);
-  color: #818cf8;
-}
-#optImportJSON:hover .mi-ico {
-  background: rgba(99, 102, 241, 0.24);
-  border-color: rgba(99, 102, 241, 0.5);
-  color: #c7d2fe;
-}
-:root[data-ui=light] #optImportJSON .mi-ico {
-  background: rgba(79, 70, 229, 0.1);
-  border-color: rgba(79, 70, 229, 0.24);
-  color: #4f46e5;
-}
-:root[data-ui=light] #optImportJSON:hover .mi-ico {
-  background: rgba(79, 70, 229, 0.18);
-  border-color: rgba(79, 70, 229, 0.38);
-  color: #4338ca;
-}
-
-/* 6. Clone App: App Store Blue */
-#btnOpenStoreImport .mi-ico {
-  background: rgba(59, 130, 246, 0.14);
-  border-color: rgba(59, 130, 246, 0.28);
-  color: #60a5fa;
-}
-#btnOpenStoreImport:hover .mi-ico {
-  background: rgba(59, 130, 246, 0.24);
-  border-color: rgba(59, 130, 246, 0.5);
-  color: #93c5fd;
-}
-:root[data-ui=light] #btnOpenStoreImport .mi-ico {
-  background: rgba(0, 113, 227, 0.1);
-  border-color: rgba(0, 113, 227, 0.24);
-  color: #0071e3;
-}
-:root[data-ui=light] #btnOpenStoreImport:hover .mi-ico {
-  background: rgba(0, 113, 227, 0.18);
-  border-color: rgba(0, 113, 227, 0.38);
-  color: #005bb5;
-}
-
-/* 7. Sample Templates: Golden Sparkle */
-#optOpenTemplatesModal .mi-ico {
-  background: rgba(234, 179, 8, 0.14);
-  border-color: rgba(234, 179, 8, 0.28);
-  color: #facc15;
-}
-#optOpenTemplatesModal:hover .mi-ico {
-  background: rgba(234, 179, 8, 0.24);
-  border-color: rgba(234, 179, 8, 0.5);
-  color: #fef08a;
-}
-:root[data-ui=light] #optOpenTemplatesModal .mi-ico {
-  background: rgba(202, 138, 4, 0.1);
-  border-color: rgba(202, 138, 4, 0.24);
-  color: #ca8a04;
-}
-:root[data-ui=light] #optOpenTemplatesModal:hover .mi-ico {
-  background: rgba(202, 138, 4, 0.18);
-  border-color: rgba(202, 138, 4, 0.38);
-  color: #a16207;
+:root[data-ui=light] .menu .menu-item:hover .mi-ico svg,
+:root[data-ui=light] #menuExport .menu-item:hover .mi-ico svg {
+  opacity: 1 !important;
+  color: #0f172a !important;
+  stroke: #0f172a !important;
 }
 
 #menuExport .menu-item {
