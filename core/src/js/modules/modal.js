@@ -926,11 +926,11 @@
     const fileInput = $('msIconModalInput') || $('imageDetailModalInput');
     if (uploadBtn && fileInput) {
       uploadBtn.addEventListener('click', e => {
-        if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+        if (typeof isDemoMode === 'function' && isDemoMode()) {
           e.preventDefault();
           e.stopPropagation();
           if (typeof requireFullVersion === 'function') {
-            requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+            requireFullVersion(_activeModalType === 'icon' ? 'upload-icon' : (_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots'));
           }
           return;
         }
@@ -938,12 +938,12 @@
         fileInput.click();
       });
       fileInput.addEventListener('change', e => {
-        if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+        if (typeof isDemoMode === 'function' && isDemoMode()) {
           e.preventDefault();
           e.stopPropagation();
           e.target.value = '';
           if (typeof requireFullVersion === 'function') {
-            requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+            requireFullVersion(_activeModalType === 'icon' ? 'upload-icon' : (_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots'));
           }
           return;
         }
@@ -963,9 +963,9 @@
       e.stopPropagation();
       if (artContainer) artContainer.classList.remove('drag-over');
       if (modalCanvas) modalCanvas.classList.remove('drag-over');
-      if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+      if (typeof isDemoMode === 'function' && isDemoMode()) {
         if (typeof requireFullVersion === 'function') {
-          requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+          requireFullVersion(_activeModalType === 'icon' ? 'upload-icon' : (_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots'));
         }
         return;
       }

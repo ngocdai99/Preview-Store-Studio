@@ -81,9 +81,9 @@ const DEMO_PAYWALL_CONFIGS = {
     mainFeature: 'Unlimited custom app drafts with local browser persistence'
   },
   'edit-metadata': {
-    title: 'Unlock Custom Metadata Editing',
-    desc: 'Customize your App Name, Subtitles, What\'s New notes, and Full Descriptions with real-time character limit audits in Full Studio.',
-    mainFeature: 'Full store listing metadata editor & character validation'
+    title: 'Unlock Full Description & Release Notes Editing',
+    desc: 'Customize Promotional Text, What\'s New release notes, and Full Descriptions with real-time character limit audits in Full Studio.',
+    mainFeature: 'Full promotional copy, release notes & description editor'
   },
   'default': {
     title: 'Unlock Full Studio',
@@ -154,8 +154,8 @@ const MINI_STUDIO_TOAST_MAP = {
     desc: 'Drafting custom app listings is included in Plus & Pro Edition.'
   },
   'edit-metadata': {
-    title: 'Listing Metadata Editing',
-    desc: 'App Name, Subtitle & Descriptions are editable in Plus & Pro Edition.'
+    title: 'Description & Release Notes',
+    desc: 'Promotional Text, What\'s New & Full Description are editable in Plus & Pro Edition.'
   },
   'default': {
     title: 'Exclusive Feature',
@@ -734,12 +734,9 @@ function initDemoGuard() {
       }
     });
 
-    // 6. Gated Metadata Input Fields (Readonly lock with live focus-link yellow border)
-    const lockedFieldIds = ['f-name', 'f-sub', 'f-short', 'f-promo', 'f-new', 'f-desc'];
+    // 6. Gated Metadata Input Fields (Card 1 Identity inputs stay editable; Description card fields locked with live focus-link highlight)
+    const lockedFieldIds = ['f-promo', 'f-new', 'f-desc'];
     const lockedFieldKeys = {
-      'f-name': 'name',
-      'f-sub': 'sub',
-      'f-short': 'short',
       'f-promo': 'promo',
       'f-new': 'new',
       'f-desc': 'desc'
@@ -815,6 +812,15 @@ function initDemoGuard() {
         e.preventDefault();
         e.stopImmediatePropagation();
         triggerIconPaywallAndHighlight();
+      }, true);
+
+      icoDropZone.addEventListener('keydown', e => {
+        if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          triggerIconPaywallAndHighlight();
+        }
       }, true);
 
       icoDropZone.addEventListener('dragover', e => {

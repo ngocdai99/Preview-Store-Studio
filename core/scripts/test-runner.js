@@ -3855,13 +3855,244 @@ asyncSuites.push((async () => {
   assert(tryHtml.includes('id="demoUpgradeModal"'), 'try.html contains #demoUpgradeModal');
   assert(tryHtml.includes('id="btnStartTour"'), 'try.html contains #btnStartTour');
 
-  // 5. Verify demo-guard logic and paywall triggers
+  // 5. Verify demo-guard logic and paywall triggers (Option B: Card 1 App Identity inputs editable, icon upload & Description card locked)
   const demoGuardSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/demo-guard.js'), 'utf8');
   assert(demoGuardSrc.includes('function isDemoMode()') && demoGuardSrc.includes('window.SPS_DEMO_MODE'), 'demo-guard.js exports isDemoMode checking window.SPS_DEMO_MODE');
   assert(demoGuardSrc.includes('function requireFullVersion('), 'demo-guard.js exports requireFullVersion');
   assert(demoGuardSrc.includes('export-png') && demoGuardSrc.includes('export-copy') && demoGuardSrc.includes('export-markdown') && demoGuardSrc.includes('export-json') && demoGuardSrc.includes('store-import') && demoGuardSrc.includes('upload-shots') && demoGuardSrc.includes('upload-icon') && demoGuardSrc.includes('edit-metadata'), 'demo-guard.js defines all contextual paywall messages');
-  assert(demoGuardSrc.includes('lockedFieldIds') && demoGuardSrc.includes('demo-disabled-input'), 'demo-guard.js disables metadata inputs in demo mode');
+  const lockedFieldsMatch = demoGuardSrc.match(/const lockedFieldIds\s*=\s*\[([^\]]*)\]/);
+  assert(lockedFieldsMatch && demoGuardSrc.includes('demo-disabled-input'), 'demo-guard.js declares lockedFieldIds with demo-disabled-input styling');
+  const lockedFieldsList = lockedFieldsMatch ? lockedFieldsMatch[1] : '';
+  assert(
+    lockedFieldsList.includes("'f-promo'") && lockedFieldsList.includes("'f-new'") && lockedFieldsList.includes("'f-desc'"),
+    'demo-guard.js keeps Description card fields (f-promo, f-new, f-desc) locked in demo mode'
+  );
+  assert(
+    !lockedFieldsList.includes("'f-name'") && !lockedFieldsList.includes("'f-sub'") && !lockedFieldsList.includes("'f-short'") && !lockedFieldsList.includes("'f-dev'"),
+    'demo-guard.js leaves Card 1 App Identity inputs (f-name, f-sub, f-short, f-dev) editable in demo mode'
+  );
+  assert(
+    !demoGuardSrc.includes('App Name, Subtitle & Descriptions are editable') && !demoGuardSrc.includes('App Name & Subtitles'),
+    'demo-guard.js edit-metadata messaging reflects Description & Release Notes instead of claiming App Name/Subtitle are locked'
+  );
+  assert(
+    demoGuardSrc.includes("icoDropZone.addEventListener('keydown'") && demoGuardSrc.includes('triggerIconPaywallAndHighlight'),
+    'demo-guard.js locks App Icon upload across click, keydown, drop, and file input'
+  );
   assert(demoGuardSrc.includes('custom-draft') && demoGuardSrc.includes('btnDraft'), 'demo-guard.js gates custom draft creation in demo mode');
+
+  const modalSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/modal.js'), 'utf8');
+  assert(
+    !modalSrc.includes("_activeModalType !== 'icon'") && modalSrc.includes("_activeModalType === 'icon' ? 'upload-icon'"),
+    'modal.js gates App Icon upload/drop replacement inside image detail modal during demo mode'
+  );
+
+  // 5b. Runtime behavioral simulation of Option B (Card 1 Identity editable, icon upload & modal upload locked)
+  {
+    const makeDomNode = (id, tag = 'div') => {
+      const classes = new Set();
+      const listeners = {};
+      const node = {
+        id,
+        tagName: tag.toUpperCase(),
+        value: '',
+        readOnly: false,
+        disabled: false,
+        style: {},
+        dataset: {},
+        attrs: {},
+        innerHTML: '',
+        textContent: '',
+        classList: {
+          add: (...cls) => cls.forEach(c => classes.add(c)),
+          remove: (...cls) => cls.forEach(c => classes.delete(c)),
+          contains: (c) => classes.has(c),
+          toggle: (c, force) => {
+            if (force === undefined ? !classes.has(c) : force) classes.add(c);
+            else classes.delete(c);
+          }
+        },
+        setAttribute: (k, v) => { node.attrs[k] = String(v); },
+        removeAttribute: (k) => { delete node.attrs[k]; },
+        querySelector: () => null,
+        querySelectorAll: () => [],
+        closest: (sel) => {
+          if (!sel) return null;
+          const parts = sel.split(',').map(s => s.trim());
+          for (const part of parts) {
+            if (part.startsWith('#') && part.slice(1) === id) return node;
+            if (part.startsWith('.') && classes.has(part.slice(1))) return node;
+          }
+          return null;
+        },
+        focus: () => {},
+        click: () => {},
+        remove: () => {},
+        after: () => {},
+        insertBefore: () => {},
+        appendChild: () => {},
+        addEventListener: (type, fn) => {
+          if (!listeners[type]) listeners[type] = [];
+          listeners[type].push(fn);
+        },
+        dispatchEvent: (evt) => {
+          const event = Object.assign({
+            target: node,
+            defaultPrevented: false,
+            propagationStopped: false,
+            preventDefault: () => { event.defaultPrevented = true; },
+            stopPropagation: () => { event.propagationStopped = true; },
+            stopImmediatePropagation: () => { event.propagationStopped = true; }
+          }, evt || {});
+          (listeners[event.type] || []).forEach(fn => {
+            if (!event.propagationStopped) fn(event);
+          });
+          return event;
+        }
+      };
+      return node;
+    };
+
+    const simIds = [
+      'demoUpgradeModal', 'f-name', 'f-sub', 'f-short', 'f-dev', 'f-promo', 'f-new', 'f-desc',
+      'icoUp', 'icoDropZone', 'icoFile', 'icoInspect', 'icoRemove'
+    ];
+    const simEls = {};
+    simIds.forEach(id => {
+      simEls[id] = makeDomNode(id, id.startsWith('f-') ? 'input' : 'div');
+    });
+
+    const postedToasts = [];
+    const focusedCalls = [];
+    const simWindow = {
+      SPS_DEMO_MODE: true,
+      self: { name: 'iframe' },
+      top: { postMessage: () => {} },
+      parent: { postMessage: (msg) => postedToasts.push(msg) },
+      addEventListener: () => {}
+    };
+
+    const simCtx = {
+      console,
+      window: simWindow,
+      setTimeout: () => 1,
+      clearTimeout: () => {},
+      document: {
+        documentElement: { dataset: {} },
+        readyState: 'complete',
+        body: { classList: makeDomNode('body').classList, dataset: {}, appendChild: () => {} },
+        getElementById: (id) => simEls[id] || null,
+        querySelector: () => null,
+        querySelectorAll: () => [],
+        createElement: (tag) => makeDomNode('created-' + tag, tag),
+        addEventListener: () => {}
+      },
+      $: (id) => simEls[id] || null,
+      $$: () => [],
+      setFieldFocus: (fieldKey, flash) => focusedCalls.push({ fieldKey, flash })
+    };
+
+    vm.createContext(simCtx);
+    vm.runInContext(demoGuardSrc, simCtx);
+
+    assert(
+      simEls['f-name'].readOnly === false && !simEls['f-name'].classList.contains('demo-locked-input') &&
+      simEls['f-sub'].readOnly === false && !simEls['f-sub'].classList.contains('demo-locked-input') &&
+      simEls['f-short'].readOnly === false && !simEls['f-short'].classList.contains('demo-locked-input') &&
+      simEls['f-dev'].readOnly === false && !simEls['f-dev'].classList.contains('demo-locked-input'),
+      'Runtime: Card 1 App Identity inputs (f-name, f-sub, f-short, f-dev) remain editable in Demo Mode'
+    );
+
+    assert(
+      simEls['f-promo'].readOnly === true && simEls['f-promo'].classList.contains('demo-locked-input') &&
+      simEls['f-new'].readOnly === true && simEls['f-desc'].readOnly === true,
+      'Runtime: Description card fields (f-promo, f-new, f-desc) are readOnly and locked in Demo Mode'
+    );
+
+    postedToasts.length = 0;
+    focusedCalls.length = 0;
+    simEls['f-promo'].dispatchEvent({ type: 'click' });
+    assert(
+      postedToasts.length === 1 && postedToasts[0].toast.title === 'Description & Release Notes' &&
+      focusedCalls.some(c => c.fieldKey === 'promo'),
+      'Runtime: clicking locked Description card field opens Description & Release Notes toast and highlights promo preview'
+    );
+
+    postedToasts.length = 0;
+    focusedCalls.length = 0;
+    const icoUpEvt = simEls['icoUp'].dispatchEvent({ type: 'click' });
+    assert(
+      icoUpEvt.defaultPrevented && postedToasts.length === 1 && postedToasts[0].toast.title === 'Custom App Icon Upload' &&
+      focusedCalls.some(c => c.fieldKey === 'icon'),
+      'Runtime: clicking #icoUp in Demo Mode intercepts upload and shows Custom App Icon Upload toast'
+    );
+
+    postedToasts.length = 0;
+    const icoZoneClickEvt = simEls['icoDropZone'].dispatchEvent({ type: 'click', target: simEls['icoDropZone'] });
+    const icoKeyEvt = simEls['icoDropZone'].dispatchEvent({ type: 'keydown', key: 'Enter', target: simEls['icoDropZone'] });
+    const icoDropEvt = simEls['icoDropZone'].dispatchEvent({ type: 'drop', dataTransfer: { files: [{ name: 'icon.png', type: 'image/png' }] } });
+    assert(
+      icoZoneClickEvt.defaultPrevented && icoKeyEvt.defaultPrevented && icoDropEvt.defaultPrevented && postedToasts.length === 3,
+      'Runtime: #icoDropZone blocks click, Enter key, and file drop in Demo Mode'
+    );
+
+    postedToasts.length = 0;
+    const inspectPassEvt = simEls['icoDropZone'].dispatchEvent({ type: 'click', target: simEls['icoInspect'] });
+    assert(
+      !inspectPassEvt.defaultPrevented && postedToasts.length === 0,
+      'Runtime: #icoInspect click is NOT blocked by #icoDropZone click guard in Demo Mode'
+    );
+
+    // Modal runtime check: when opened for an App Icon in Demo Mode, Upload button / file input / drop call requireFullVersion('upload-icon')
+    const modalEls = {
+      msIconModal: makeDomNode('msIconModal'),
+      msIconModalCanvas: makeDomNode('msIconModalCanvas'),
+      msIconModalArt: makeDomNode('msIconModalArt'),
+      msIconModalClose: makeDomNode('msIconModalClose', 'button'),
+      msIconModalUploadBtn: makeDomNode('msIconModalUploadBtn', 'button'),
+      msIconModalInput: makeDomNode('msIconModalInput', 'input'),
+      msIconModalImg: makeDomNode('msIconModalImg', 'img'),
+      msIconModalTitle: makeDomNode('msIconModalTitle'),
+      msIconModalMeta: makeDomNode('msIconModalMeta'),
+      msIconModalBadge: makeDomNode('msIconModalBadge'),
+      msIconModalDetails: makeDomNode('msIconModalDetails')
+    };
+    modalEls.msIconModalImg.style = {};
+    modalEls.msIconModalMeta.style = {};
+    modalEls.msIconModalBadge.style = {};
+    modalEls.msIconModalDetails.style = {};
+
+    const modalPaywallCalls = [];
+    const modalCtx = {
+      console,
+      addEventListener: () => {},
+      document: {
+        documentElement: { style: {} },
+        getElementById: (id) => modalEls[id] || null,
+        body: makeDomNode('body'),
+        addEventListener: () => {}
+      },
+      $: (id) => modalEls[id] || null,
+      $$: () => [],
+      isDemoMode: () => true,
+      requireFullVersion: (key) => modalPaywallCalls.push(key),
+      Image: function MockImg() { this.onload = null; },
+      FileReader: function MockReader() { throw new Error('FileReader should not run when Demo Mode blocks upload'); },
+      setTimeout: () => 1
+    };
+    modalCtx.window = modalCtx;
+    vm.createContext(modalCtx);
+    vm.runInContext(modalSrc, modalCtx);
+    modalCtx.openImageDetailModal({ src: 'data:image/png;base64,AA==', type: 'icon', store: 'apple' });
+
+    modalEls.msIconModalUploadBtn.dispatchEvent({ type: 'click' });
+    modalEls.msIconModalInput.dispatchEvent({ type: 'change', target: modalEls.msIconModalInput });
+    modalEls.msIconModal.dispatchEvent({ type: 'drop', dataTransfer: { files: [{ name: 'icon.png', type: 'image/png' }] } });
+    assert(
+      modalPaywallCalls.length === 3 && modalPaywallCalls.every(k => k === 'upload-icon'),
+      'Runtime: Image Detail Modal blocks Upload button, file input, and drop with upload-icon paywall when _activeModalType === icon in Demo Mode'
+    );
+  }
 
   // 6. Verify 1-line gating hooks in export modules
   const pngSrc = fs.readFileSync(path.join(ROOT_DIR, 'src/js/modules/export/png.js'), 'utf8');

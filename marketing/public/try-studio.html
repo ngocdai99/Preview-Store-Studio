@@ -5997,9 +5997,9 @@ desc: 'Draft your own app listing from scratch with custom metadata, icon upload
 mainFeature: 'Unlimited custom app drafts with local browser persistence'
 },
 'edit-metadata': {
-title: 'Unlock Custom Metadata Editing',
-desc: 'Customize your App Name, Subtitles, What\'s New notes, and Full Descriptions with real-time character limit audits in Full Studio.',
-mainFeature: 'Full store listing metadata editor & character validation'
+title: 'Unlock Full Description & Release Notes Editing',
+desc: 'Customize Promotional Text, What\'s New release notes, and Full Descriptions with real-time character limit audits in Full Studio.',
+mainFeature: 'Full promotional copy, release notes & description editor'
 },
 'default': {
 title: 'Unlock Full Studio',
@@ -6069,8 +6069,8 @@ title: 'Create Your Custom App',
 desc: 'Drafting custom app listings is included in Plus & Pro Edition.'
 },
 'edit-metadata': {
-title: 'Listing Metadata Editing',
-desc: 'App Name, Subtitle & Descriptions are editable in Plus & Pro Edition.'
+title: 'Description & Release Notes',
+desc: 'Promotional Text, What\'s New & Full Description are editable in Plus & Pro Edition.'
 },
 'default': {
 title: 'Exclusive Feature',
@@ -6570,11 +6570,8 @@ requireFullVersion(paywallKey);
 });
 }
 });
-const lockedFieldIds = ['f-name', 'f-sub', 'f-short', 'f-promo', 'f-new', 'f-desc'];
+const lockedFieldIds = ['f-promo', 'f-new', 'f-desc'];
 const lockedFieldKeys = {
-'f-name': 'name',
-'f-sub': 'sub',
-'f-short': 'short',
 'f-promo': 'promo',
 'f-new': 'new',
 'f-desc': 'desc'
@@ -6639,6 +6636,14 @@ if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
 e.preventDefault();
 e.stopImmediatePropagation();
 triggerIconPaywallAndHighlight();
+}, true);
+icoDropZone.addEventListener('keydown', e => {
+if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
+if (e.key === 'Enter' || e.key === ' ') {
+e.preventDefault();
+e.stopImmediatePropagation();
+triggerIconPaywallAndHighlight();
+}
 }, true);
 icoDropZone.addEventListener('dragover', e => {
 const dt = e.dataTransfer;
@@ -9266,11 +9271,11 @@ const uploadBtn = $('msIconModalUploadBtn') || $('imageDetailModalUploadBtn');
 const fileInput = $('msIconModalInput') || $('imageDetailModalInput');
 if (uploadBtn && fileInput) {
 uploadBtn.addEventListener('click', e => {
-if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+if (typeof isDemoMode === 'function' && isDemoMode()) {
 e.preventDefault();
 e.stopPropagation();
 if (typeof requireFullVersion === 'function') {
-requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+requireFullVersion(_activeModalType === 'icon' ? 'upload-icon' : (_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots'));
 }
 return;
 }
@@ -9278,12 +9283,12 @@ e.stopPropagation();
 fileInput.click();
 });
 fileInput.addEventListener('change', e => {
-if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+if (typeof isDemoMode === 'function' && isDemoMode()) {
 e.preventDefault();
 e.stopPropagation();
 e.target.value = '';
 if (typeof requireFullVersion === 'function') {
-requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+requireFullVersion(_activeModalType === 'icon' ? 'upload-icon' : (_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots'));
 }
 return;
 }
@@ -9300,9 +9305,9 @@ e.preventDefault();
 e.stopPropagation();
 if (artContainer) artContainer.classList.remove('drag-over');
 if (modalCanvas) modalCanvas.classList.remove('drag-over');
-if (typeof isDemoMode === 'function' && isDemoMode() && _activeModalType !== 'icon') {
+if (typeof isDemoMode === 'function' && isDemoMode()) {
 if (typeof requireFullVersion === 'function') {
-requireFullVersion(_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots');
+requireFullVersion(_activeModalType === 'icon' ? 'upload-icon' : (_activeModalType === 'feature' ? 'feature-graphic' : 'upload-shots'));
 }
 return;
 }
