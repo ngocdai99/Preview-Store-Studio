@@ -182,7 +182,6 @@ body:not([data-ui-store])[data-dual=true] .pill {
 :root[data-ui=light] .capsule-seg .pill,
 :root[data-ui=light] .capsule-seg .vt-pill,
 :root[data-ui=light] .seg .pill,
-:root[data-ui=light] .vt.theme-seg .vt-pill,
 :root[data-ui=light] .pill.is-apple,
 :root[data-ui=light] .seg[data-store="apple"] .pill,
 :root[data-ui=light] body[data-ui-store="apple"] .pill,
@@ -196,6 +195,13 @@ body:not([data-ui-store])[data-dual=true] .pill {
   background: #334155 !important;
   box-shadow: 0 1px 3px rgba(15, 23, 42, .15), inset 0 1px 0 rgba(255, 255, 255, .15) !important;
   border: 1px solid rgba(15, 23, 42, .15) !important;
+}
+
+:root[data-ui=light] .vt.theme-seg .vt-pill,
+:root[data-ui=light] #theme.vt .vt-pill {
+  background: rgba(0, 102, 54, 0.12) !important;
+  box-shadow: 0 1px 2px rgba(0, 102, 54, .08) !important;
+  border: 1px solid rgba(0, 102, 54, .14) !important;
 }
 
 :root[data-ui=light] .capsule-seg button,
@@ -227,17 +233,24 @@ body:not([data-ui-store])[data-dual=true] .pill {
 }
 
 :root[data-ui=light] .capsule-seg button.on,
-:root[data-ui=light] .seg button.on,
+:root[data-ui=light] .seg button.on {
+  color: #ffffff !important;
+}
+
 :root[data-ui=light] .vt.theme-seg button.on,
 :root[data-ui=light] .theme-seg-btn.on {
-  color: #ffffff !important;
+  color: var(--brand-primary, #006636) !important;
 }
 
 :root[data-ui=light] .capsule-seg button.on .s-ico,
 :root[data-ui=light] .capsule-seg button.on .vt-ico,
-:root[data-ui=light] .seg button.on .s-ico,
+:root[data-ui=light] .seg button.on .s-ico {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
 :root[data-ui=light] .vt.theme-seg button.on .vt-ico,
 :root[data-ui=light] .theme-seg-btn.on .vt-ico {
-  color: #ffffff !important;
+  color: var(--brand-primary, #006636) !important;
   opacity: 1 !important;
 }
