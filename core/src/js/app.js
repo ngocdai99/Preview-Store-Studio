@@ -3541,6 +3541,9 @@ function updateSidebarButtonState() {
     btn.title = isCollapsed 
       ? 'Show form panel (Sidebar) [Ctrl+B / ⌘B]' 
       : 'Hide form panel (Sidebar) [Ctrl+B / ⌘B]';
+    if (typeof updateActivityBarState === 'function') {
+      updateActivityBarState();
+    }
   }
 }
 
@@ -10729,6 +10732,36 @@ function initHeader() {
         }
       }
     });
+
+    const toggleBtn = $('btnToggleSidebar');
+    if (toggleBtn) {
+      const isMobile = typeof isM === 'function' && isM();
+      const isCollapsed = isMobile
+        ? (document.body.dataset.panel || 'view') !== 'edit'
+        : document.body.classList.contains('sidebar-collapsed');
+      const isAct = !isCollapsed;
+      toggleBtn.classList.toggle('active', isAct);
+      toggleBtn.setAttribute('aria-expanded', isAct ? 'true' : 'false');
+      const svgs = toggleBtn.querySelectorAll('svg');
+
+      if (isAct) {
+        toggleBtn.style.setProperty('background', activeBg, 'important');
+        toggleBtn.style.setProperty('color', activeColor, 'important');
+        svgs.forEach(s => {
+          s.style.setProperty('opacity', '1', 'important');
+          s.style.setProperty('stroke', activeColor, 'important');
+          s.style.setProperty('color', activeColor, 'important');
+        });
+      } else {
+        toggleBtn.style.removeProperty('background');
+        toggleBtn.style.removeProperty('color');
+        svgs.forEach(s => {
+          s.style.removeProperty('opacity');
+          s.style.removeProperty('stroke');
+          s.style.removeProperty('color');
+        });
+      }
+    }
   }
 
   window.selectEditorCard = selectEditorCard;

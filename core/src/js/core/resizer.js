@@ -64,6 +64,9 @@ function updateSidebarButtonState() {
     btn.title = isCollapsed 
       ? 'Show form panel (Sidebar) [Ctrl+B / ⌘B]' 
       : 'Hide form panel (Sidebar) [Ctrl+B / ⌘B]';
+    if (typeof updateActivityBarState === 'function') {
+      updateActivityBarState();
+    }
   }
 }
 

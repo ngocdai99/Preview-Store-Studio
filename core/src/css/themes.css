@@ -179,6 +179,15 @@
   stroke:#0f172a !important;
   opacity:1 !important;
 }
+:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn.active{
+  background:rgba(0,102,54,0.08) !important;
+  color:#006636 !important;
+}
+:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn.active svg{
+  color:#006636 !important;
+  stroke:#006636 !important;
+  opacity:1 !important;
+}
 :root[data-ui=light] .add{border-color:#c7c7cc}
 :root[data-ui=light] .add:hover{background:rgba(0,0,0,.02)}
 :root[data-ui=light] .srow{background:#fff}

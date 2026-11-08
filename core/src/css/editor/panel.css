@@ -146,21 +146,33 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   stroke:#ffffff !important;
 }
 
-/* Sidebar Toggle Button inside Activity Bar */
+/* Sidebar Toggle Button inside Activity Bar (Matching standard activity-bar-btn styling) */
 .sidebar-toggle-btn.activity-bar-btn{
-  background:transparent !important;
+  background:transparent;
   box-shadow:none !important;
   border:none !important;
   color:#858585;
+}
+.sidebar-toggle-btn.activity-bar-btn svg{
+  opacity:0.45;
 }
 .sidebar-toggle-btn.activity-bar-btn:hover{
   background:rgba(255,255,255,0.08) !important;
   color:#ffffff !important;
 }
-.sidebar-toggle-btn.activity-bar-btn svg{
-  opacity:0.65;
-}
 .sidebar-toggle-btn.activity-bar-btn:hover svg{
+  opacity:0.85 !important;
+  color:#ffffff !important;
+  stroke:#ffffff !important;
+}
+.sidebar-toggle-btn.activity-bar-btn.active{
+  background:rgba(255,255,255,0.14) !important;
+  color:#ffffff !important;
+  border:none !important;
+  border-radius:8px !important;
+  box-shadow:none !important;
+}
+.sidebar-toggle-btn.activity-bar-btn.active svg{
   opacity:1 !important;
   color:#ffffff !important;
   stroke:#ffffff !important;
