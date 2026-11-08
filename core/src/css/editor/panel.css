@@ -695,8 +695,8 @@ body.sidebar-collapsed .editor-resizer{
 :root[data-ui=light] .tile-btn,
 :root[data-ui=light] .dest-tile,
 :root[data-ui=light] .priv-seg-btn {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.1);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   color: #64748b;
 }
 
@@ -707,33 +707,35 @@ body.sidebar-collapsed .editor-resizer{
   color: #64748b;
 }
 
+:root[data-ui=light] .tile-btn:hover:not(.active),
+:root[data-ui=light] .dest-tile:hover:not(.active),
+:root[data-ui=light] .priv-seg-btn:hover:not(.active) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
 :root[data-ui=light] .tile-btn.active,
 :root[data-ui=light] .dest-tile.active,
 :root[data-ui=light] .priv-seg-btn.active {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  border: 1.5px solid #334155;
   color: #0f172a;
-  box-shadow: none;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 :root[data-ui=light] .tile-btn.active::before,
 :root[data-ui=light] .dest-tile.active::before,
 :root[data-ui=light] .priv-seg-btn.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 7px;
-  bottom: 7px;
-  width: 2.5px;
-  border-radius: 0 2px 2px 0;
-  background: #64748b;
+  display: none;
 }
 
 :root[data-ui=light] .tile-btn.active svg,
 :root[data-ui=light] .dest-tile.active svg,
 :root[data-ui=light] .priv-seg-btn.active svg,
 :root[data-ui=light] .dest-tile.active .dest-device-ico {
-  color: #64748b;
+  color: #0f172a;
 }
 
 :root[data-ui=light] .dest-tile.active .dest-name {
