@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import { CookieBanner } from "@/components/ui/CookieBanner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default function RootLayout({
     <html lang="en" className="h-full scroll-smooth dark" data-theme="dark">
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased">
         {children}
+        <CookieBanner />
         <script
           id="microsoft-clarity"
           dangerouslySetInnerHTML={{
