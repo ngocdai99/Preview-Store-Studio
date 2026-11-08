@@ -1,10 +1,8 @@
 /* ---------- Shared Component: Capsule Segmented Icon Toggle (.capsule-seg) ---------- */
 /* Shared foundation for Store Switcher (#storeSwitcher) & Device Theme Toggle (#theme) */
 
-.capsule-seg,
-.seg,
-.vt.theme-seg,
-#theme.vt {
+.capsule-seg:not(#theme),
+.seg {
   position: relative;
   display: inline-flex !important;
   align-items: center;
@@ -24,10 +22,9 @@
 }
 
 /* Sliding Indicator Pill */
-.capsule-seg .pill,
-.capsule-seg .vt-pill,
-.seg .pill,
-.vt.theme-seg .vt-pill {
+.capsule-seg:not(#theme) .pill,
+.capsule-seg:not(#theme) .vt-pill,
+.seg .pill {
   position: absolute;
   top: 2.5px;
   bottom: 2.5px;
@@ -62,10 +59,8 @@ body:not([data-ui-store])[data-dual=true] .pill {
 }
 
 /* Segment Buttons */
-.capsule-seg button,
-.seg button,
-.vt.theme-seg button,
-.theme-seg-btn {
+.capsule-seg:not(#theme) button,
+.seg button {
   position: relative;
   z-index: 2;
   background: transparent !important;
@@ -87,33 +82,25 @@ body:not([data-ui-store])[data-dual=true] .pill {
   box-shadow: none !important;
 }
 
-.capsule-seg button:hover:not(.on),
-.seg button:hover:not(.on),
-.vt.theme-seg button:hover:not(.on),
-.theme-seg-btn:hover:not(.on) {
+.capsule-seg:not(#theme) button:hover:not(.on),
+.seg button:hover:not(.on) {
   color: #ffffff;
 }
 
-.capsule-seg button:active,
-.seg button:active,
-.vt.theme-seg button:active,
-.theme-seg-btn:active {
+.capsule-seg:not(#theme) button:active,
+.seg button:active {
   transform: scale(0.95);
 }
 
-.capsule-seg button.on,
-.seg button.on,
-.vt.theme-seg button.on,
-.theme-seg-btn.on {
+.capsule-seg:not(#theme) button.on,
+.seg button.on {
   color: #ffffff !important;
 }
 
 /* Segment Icons */
-.capsule-seg .s-ico,
-.capsule-seg .vt-ico,
-.seg .s-ico,
-.vt.theme-seg .vt-ico,
-.theme-seg-btn .vt-ico {
+.capsule-seg:not(#theme) .s-ico,
+.capsule-seg:not(#theme) .vt-ico,
+.seg .s-ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -125,62 +112,52 @@ body:not([data-ui-store])[data-dual=true] .pill {
   opacity: 0.75;
 }
 
-.capsule-seg .s-ico svg,
-.capsule-seg .vt-ico svg,
-.seg .s-ico svg,
-.vt.theme-seg .vt-ico svg,
-.theme-seg-btn .vt-ico svg {
+.capsule-seg:not(#theme) .s-ico svg,
+.capsule-seg:not(#theme) .vt-ico svg,
+.seg .s-ico svg {
   width: 15px;
   height: 15px;
   display: block;
 }
 
-.capsule-seg button:not(.on) .s-ico,
-.capsule-seg button:not(.on) .vt-ico,
-.seg button:not(.on) .s-ico,
-.vt.theme-seg button:not(.on) .vt-ico {
+.capsule-seg:not(#theme) button:not(.on) .s-ico,
+.capsule-seg:not(#theme) button:not(.on) .vt-ico,
+.seg button:not(.on) .s-ico {
   color: #8e8e93;
 }
 
-.capsule-seg button:hover:not(.on) .s-ico,
-.capsule-seg button:hover:not(.on) .vt-ico,
-.seg button:hover:not(.on) .s-ico,
-.vt.theme-seg button:hover:not(.on) .vt-ico {
+.capsule-seg:not(#theme) button:hover:not(.on) .s-ico,
+.capsule-seg:not(#theme) button:hover:not(.on) .vt-ico,
+.seg button:hover:not(.on) .s-ico {
   color: #ffffff;
   opacity: 1;
 }
 
-.capsule-seg button.on .s-ico,
-.capsule-seg button.on .vt-ico,
-.seg button.on .s-ico,
-.vt.theme-seg button.on .vt-ico,
-.theme-seg-btn.on .vt-ico {
+.capsule-seg:not(#theme) button.on .s-ico,
+.capsule-seg:not(#theme) button.on .vt-ico,
+.seg button.on .s-ico {
   color: #ffffff !important;
   transform: none;
   opacity: 1;
 }
 
 /* ---------- Light Mode Shared Architecture ---------- */
-:root[data-ui=light] .capsule-seg,
-:root[data-ui=light] .seg,
-:root[data-ui=light] .vt.theme-seg,
-:root[data-ui=light] #theme.vt {
+:root[data-ui=light] .capsule-seg:not(#theme),
+:root[data-ui=light] .seg {
   background: #ffffff !important;
   border: 1px solid rgba(15, 23, 42, .1) !important;
   box-shadow: 0 1px 4px -1px rgba(15, 23, 42, .08), 0 1px 2px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
   transition: border-color .2s ease, box-shadow .2s ease !important;
 }
 
-:root[data-ui=light] .capsule-seg:hover,
-:root[data-ui=light] .seg:hover,
-:root[data-ui=light] .vt.theme-seg:hover,
-:root[data-ui=light] #theme.vt:hover {
+:root[data-ui=light] .capsule-seg:not(#theme):hover,
+:root[data-ui=light] .seg:hover {
   border-color: rgba(15, 23, 42, .18) !important;
   box-shadow: 0 2px 6px -1px rgba(15, 23, 42, .08), 0 1px 3px rgba(15, 23, 42, .04), inset 0 1px 0 #fff !important;
 }
 
-:root[data-ui=light] .capsule-seg .pill,
-:root[data-ui=light] .capsule-seg .vt-pill,
+:root[data-ui=light] .capsule-seg:not(#theme) .pill,
+:root[data-ui=light] .capsule-seg:not(#theme) .vt-pill,
 :root[data-ui=light] .seg .pill,
 :root[data-ui=light] .pill.is-apple,
 :root[data-ui=light] .seg[data-store="apple"] .pill,
@@ -197,60 +174,35 @@ body:not([data-ui-store])[data-dual=true] .pill {
   border: 1px solid rgba(15, 23, 42, .15) !important;
 }
 
-:root[data-ui=light] .vt.theme-seg .vt-pill,
-:root[data-ui=light] #theme.vt .vt-pill {
-  background: rgba(0, 102, 54, 0.12) !important;
-  box-shadow: 0 1px 2px rgba(0, 102, 54, .08) !important;
-  border: 1px solid rgba(0, 102, 54, .14) !important;
-}
-
-:root[data-ui=light] .capsule-seg button,
-:root[data-ui=light] .seg button,
-:root[data-ui=light] .vt.theme-seg button,
-:root[data-ui=light] .theme-seg-btn {
+:root[data-ui=light] .capsule-seg:not(#theme) button,
+:root[data-ui=light] .seg button {
   color: #64748b !important;
 }
 
-:root[data-ui=light] .capsule-seg .s-ico,
-:root[data-ui=light] .capsule-seg .vt-ico,
-:root[data-ui=light] .seg .s-ico,
-:root[data-ui=light] .vt.theme-seg .vt-ico,
-:root[data-ui=light] .theme-seg-btn .vt-ico {
+:root[data-ui=light] .capsule-seg:not(#theme) .s-ico,
+:root[data-ui=light] .capsule-seg:not(#theme) .vt-ico,
+:root[data-ui=light] .seg .s-ico {
   color: #475569 !important;
   opacity: .92 !important;
 }
 
-:root[data-ui=light] .capsule-seg button:hover:not(.on),
-:root[data-ui=light] .capsule-seg button:hover:not(.on) .s-ico,
-:root[data-ui=light] .capsule-seg button:hover:not(.on) .vt-ico,
+:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on),
+:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on) .s-ico,
+:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on) .vt-ico,
 :root[data-ui=light] .seg button:hover:not(.on),
-:root[data-ui=light] .seg button:hover:not(.on) .s-ico,
-:root[data-ui=light] .vt.theme-seg button:hover:not(.on),
-:root[data-ui=light] .vt.theme-seg button:hover:not(.on) .vt-ico,
-:root[data-ui=light] .theme-seg-btn:hover:not(.on) {
+:root[data-ui=light] .seg button:hover:not(.on) .s-ico {
   color: #0f172a !important;
   opacity: 1 !important;
 }
 
-:root[data-ui=light] .capsule-seg button.on,
+:root[data-ui=light] .capsule-seg:not(#theme) button.on,
 :root[data-ui=light] .seg button.on {
   color: #ffffff !important;
 }
 
-:root[data-ui=light] .vt.theme-seg button.on,
-:root[data-ui=light] .theme-seg-btn.on {
-  color: var(--brand-primary, #006636) !important;
-}
-
-:root[data-ui=light] .capsule-seg button.on .s-ico,
-:root[data-ui=light] .capsule-seg button.on .vt-ico,
+:root[data-ui=light] .capsule-seg:not(#theme) button.on .s-ico,
+:root[data-ui=light] .capsule-seg:not(#theme) button.on .vt-ico,
 :root[data-ui=light] .seg button.on .s-ico {
   color: #ffffff !important;
-  opacity: 1 !important;
-}
-
-:root[data-ui=light] .vt.theme-seg button.on .vt-ico,
-:root[data-ui=light] .theme-seg-btn.on .vt-ico {
-  color: var(--brand-primary, #006636) !important;
   opacity: 1 !important;
 }
