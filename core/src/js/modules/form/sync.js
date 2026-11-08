@@ -96,9 +96,9 @@ function update(){
   if (typeof renderPrivacy === 'function') renderPrivacy();
   if (typeof renderReviews === 'function') renderReviews();
 
-  // Re-sync focus highlight if field is currently active
+  // Re-sync focus highlight if field is currently active (without forcing card selection)
   if (typeof setFieldFocus === 'function' && activeFieldFocusKey) {
-    setFieldFocus(activeFieldFocusKey, false);
+    setFieldFocus(activeFieldFocusKey, false, false);
   }
 }
 
@@ -206,7 +206,7 @@ function getFieldMockupTargets(key) {
 
 let activeFieldFocusKey = null;
 
-function setFieldFocus(key, shouldScroll = true) {
+function setFieldFocus(key, shouldScroll = true, autoSelectCard = true) {
   activeFieldFocusKey = key;
   
   // Clear previous focus highlight on all targets
@@ -214,20 +214,22 @@ function setFieldFocus(key, shouldScroll = true) {
 
   if (!key) return;
 
-  // Auto-expand containing card if it is currently collapsed & mark it selected
-  let editorInput = $('f-' + key) || $(key);
-  if (!editorInput && key === 'privacy') {
-    editorInput = $('privacyCard') || $('privacyModeSeg');
-  }
-  if (editorInput) {
-    const parentCard = editorInput.closest('.card') || (editorInput.classList.contains('card') ? editorInput : null);
-    if (parentCard) {
-      if (parentCard.classList.contains('collapsed')) {
-        parentCard.classList.remove('collapsed');
+  // Auto-expand containing card if it is currently collapsed & mark it selected (when autoSelectCard is true)
+  if (autoSelectCard) {
+    let editorInput = $('f-' + key) || $(key);
+    if (!editorInput && key === 'privacy') {
+      editorInput = $('privacyCard') || $('privacyModeSeg');
+    }
+    if (editorInput) {
+      const parentCard = editorInput.closest('.card') || (editorInput.classList.contains('card') ? editorInput : null);
+      if (parentCard) {
+        if (parentCard.classList.contains('collapsed')) {
+          parentCard.classList.remove('collapsed');
+        }
+        $$('.card').forEach(c => c.classList.remove('selected'));
+        parentCard.classList.add('selected');
+        if (typeof updateActivityBarState === 'function') updateActivityBarState();
       }
-      $$('.card').forEach(c => c.classList.remove('selected'));
-      parentCard.classList.add('selected');
-      if (typeof updateActivityBarState === 'function') updateActivityBarState();
     }
   }
 

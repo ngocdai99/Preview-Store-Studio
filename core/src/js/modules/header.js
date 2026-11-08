@@ -158,6 +158,15 @@ function initHeader() {
     const targetCard = $(cardId);
     if (!targetCard) return;
 
+    // If active field focus belonged to another card, clear it so highlight doesn't linger
+    if (typeof activeFieldFocusKey !== 'undefined' && activeFieldFocusKey) {
+      const activeInp = $('f-' + activeFieldFocusKey) || $(activeFieldFocusKey);
+      if (activeInp && !targetCard.contains(activeInp)) {
+        activeFieldFocusKey = null;
+        $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+      }
+    }
+
     $$('.editor .card').forEach(c => {
       c.classList.remove('selected');
       c.classList.add('collapsed');
@@ -173,10 +182,17 @@ function initHeader() {
 
   function updateActivityBarState() {
     let selected = document.querySelector('.editor .card.selected');
-    if (!selected) {
+    if (!selected || selected.classList.contains('hide')) {
       const firstCard = document.querySelector('.editor .card:not(.hide)') || document.querySelector('.editor .card');
       if (firstCard) {
+        $$('.editor .card').forEach(c => {
+          if (c !== firstCard) {
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
         firstCard.classList.add('selected');
+        firstCard.classList.remove('collapsed');
         selected = firstCard;
       }
     }

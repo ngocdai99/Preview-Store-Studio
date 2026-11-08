@@ -8700,9 +8700,9 @@ function update(){
   if (typeof renderPrivacy === 'function') renderPrivacy();
   if (typeof renderReviews === 'function') renderReviews();
 
-  // Re-sync focus highlight if field is currently active
+  // Re-sync focus highlight if field is currently active (without forcing card selection)
   if (typeof setFieldFocus === 'function' && activeFieldFocusKey) {
-    setFieldFocus(activeFieldFocusKey, false);
+    setFieldFocus(activeFieldFocusKey, false, false);
   }
 }
 
@@ -8810,7 +8810,7 @@ function getFieldMockupTargets(key) {
 
 let activeFieldFocusKey = null;
 
-function setFieldFocus(key, shouldScroll = true) {
+function setFieldFocus(key, shouldScroll = true, autoSelectCard = true) {
   activeFieldFocusKey = key;
   
   // Clear previous focus highlight on all targets
@@ -8818,20 +8818,22 @@ function setFieldFocus(key, shouldScroll = true) {
 
   if (!key) return;
 
-  // Auto-expand containing card if it is currently collapsed & mark it selected
-  let editorInput = $('f-' + key) || $(key);
-  if (!editorInput && key === 'privacy') {
-    editorInput = $('privacyCard') || $('privacyModeSeg');
-  }
-  if (editorInput) {
-    const parentCard = editorInput.closest('.card') || (editorInput.classList.contains('card') ? editorInput : null);
-    if (parentCard) {
-      if (parentCard.classList.contains('collapsed')) {
-        parentCard.classList.remove('collapsed');
+  // Auto-expand containing card if it is currently collapsed & mark it selected (when autoSelectCard is true)
+  if (autoSelectCard) {
+    let editorInput = $('f-' + key) || $(key);
+    if (!editorInput && key === 'privacy') {
+      editorInput = $('privacyCard') || $('privacyModeSeg');
+    }
+    if (editorInput) {
+      const parentCard = editorInput.closest('.card') || (editorInput.classList.contains('card') ? editorInput : null);
+      if (parentCard) {
+        if (parentCard.classList.contains('collapsed')) {
+          parentCard.classList.remove('collapsed');
+        }
+        $$('.card').forEach(c => c.classList.remove('selected'));
+        parentCard.classList.add('selected');
+        if (typeof updateActivityBarState === 'function') updateActivityBarState();
       }
-      $$('.card').forEach(c => c.classList.remove('selected'));
-      parentCard.classList.add('selected');
-      if (typeof updateActivityBarState === 'function') updateActivityBarState();
     }
   }
 
@@ -10614,6 +10616,15 @@ function initHeader() {
     const targetCard = $(cardId);
     if (!targetCard) return;
 
+    // If active field focus belonged to another card, clear it so highlight doesn't linger
+    if (typeof activeFieldFocusKey !== 'undefined' && activeFieldFocusKey) {
+      const activeInp = $('f-' + activeFieldFocusKey) || $(activeFieldFocusKey);
+      if (activeInp && !targetCard.contains(activeInp)) {
+        activeFieldFocusKey = null;
+        $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+      }
+    }
+
     $$('.editor .card').forEach(c => {
       c.classList.remove('selected');
       c.classList.add('collapsed');
@@ -10629,10 +10640,17 @@ function initHeader() {
 
   function updateActivityBarState() {
     let selected = document.querySelector('.editor .card.selected');
-    if (!selected) {
+    if (!selected || selected.classList.contains('hide')) {
       const firstCard = document.querySelector('.editor .card:not(.hide)') || document.querySelector('.editor .card');
       if (firstCard) {
+        $$('.editor .card').forEach(c => {
+          if (c !== firstCard) {
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
         firstCard.classList.add('selected');
+        firstCard.classList.remove('collapsed');
         selected = firstCard;
       }
     }

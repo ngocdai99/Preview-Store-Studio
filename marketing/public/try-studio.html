@@ -460,7 +460,7 @@ _b.classList.add('in-header');
 </div>
 <div class="card collapsed" id="statsCard">
   <div class="card-header">
-    <h2><span class="card-num" title="Card 2">2</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Settings &amp; Metrics</h2>
+    <h2><span class="card-num" title="Card 4">4</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></i>Settings &amp; Metrics</h2>
     <div class="card-header-right">
       <span class="info-tip-btn" id="metricsInfoBtn" tabindex="0" role="button" aria-label="Mockup Metrics Display Guidelines" title="How Metrics &amp; Badges Work in Preview Studio">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -479,145 +479,123 @@ _b.classList.add('in-header');
     <span class="tag mockup" title="Illustrative sample data for preview only">MOCKUP ONLY</span>
   </div>
   <p class="hint">Ratings, ranking, and download badges use illustrative sample data.</p>
-  <details class="metrics-details" id="metricsDetails">
-    <summary class="metrics-summary">
-      <div class="metrics-btn-left">
-        <span class="metrics-btn-ico">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line>
-            <line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line>
-            <line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line>
+  <div class="stat-grid" style="margin-top:12px">
+    <div class="fg"><div class="lr"><label for="f-st-rating">Rating</label></div><input type="text" id="f-st-rating" maxlength="4" placeholder="4.9"></div>
+    <div class="fg"><div class="lr"><label for="f-st-count">Ratings Count</label></div><input type="text" id="f-st-count" maxlength="8" placeholder="1.8K"></div>
+    <div class="fg"><div class="lr"><label for="f-st-rank">Chart Rank (#)</label></div><input type="text" id="f-st-rank" maxlength="4" placeholder="1"></div>
+    <div class="fg"><div class="lr"><label for="f-st-dl">Downloads (Google)</label></div><input type="text" id="f-st-dl" maxlength="10" placeholder="50K+"></div>
+    <div class="fg"><div class="lr"><label for="f-st-size">App Size</label></div><input type="text" id="f-st-size" maxlength="10" placeholder="86 MB"></div>
+    <div class="fg age-picker-fg" style="grid-column:1 / -1">
+      <div class="lr">
+        <label for="customAgeTrigger">Age Rating</label>
+        <div class="lr-right">
+          <span class="info-tip-btn" data-tip-title="Age Rating Guidelines" data-tip-desc="Determined by content questionnaires in App Store Connect (4+, 9+, 12+, 17+) and Google Play IARC (Everyone, Teen, Mature)." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/manage-app-information/set-age-ratings/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9878810" tabindex="0" role="button" aria-label="Age Rating Guidelines" title="Age Rating Guidelines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </span>
+        </div>
+      </div>
+      <select class="fsel" id="f-st-age" aria-label="Age Rating" style="display:none">
+        <option value="4+">4+ / Everyone (E)</option>
+        <option value="9+">9+ / Everyone 10+ (E10+)</option>
+        <option value="12+">12+ / Teen (T)</option>
+        <option value="17+">17+ / Mature 17+ (M)</option>
+        <option value="18+">18+ / Adults Only (AO)</option>
+      </select>
+      <div class="custom-cat-wrap custom-age-wrap" id="customAgeWrap">
+        <button type="button" class="custom-cat-trigger custom-age-trigger" id="customAgeTrigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Select age rating">
+          <span class="custom-cat-trigger-content custom-age-trigger-content">
+            <svg class="custom-cat-icon custom-age-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span class="custom-cat-val custom-age-val" id="customAgeVal">4+ / Everyone (E)</span>
+          </span>
+          <svg class="custom-cat-chevron custom-age-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
-        </span>
-        <span class="metrics-btn-title">Customize</span>
-      </div>
-      <div class="metrics-btn-action">
-        <svg class="ms-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </div>
-    </summary>
-    <div class="metrics-content">
-      <div class="stat-grid">
-        <div class="fg"><div class="lr"><label for="f-st-rating">Rating</label></div><input type="text" id="f-st-rating" maxlength="4" placeholder="4.9"></div>
-        <div class="fg"><div class="lr"><label for="f-st-count">Ratings Count</label></div><input type="text" id="f-st-count" maxlength="8" placeholder="1.8K"></div>
-        <div class="fg"><div class="lr"><label for="f-st-rank">Chart Rank (#)</label></div><input type="text" id="f-st-rank" maxlength="4" placeholder="1"></div>
-        <div class="fg"><div class="lr"><label for="f-st-dl">Downloads (Google)</label></div><input type="text" id="f-st-dl" maxlength="10" placeholder="50K+"></div>
-        <div class="fg"><div class="lr"><label for="f-st-size">App Size</label></div><input type="text" id="f-st-size" maxlength="10" placeholder="86 MB"></div>
-        <div class="fg age-picker-fg" style="grid-column:1 / -1">
-          <div class="lr">
-            <label for="customAgeTrigger">Age Rating</label>
-            <div class="lr-right">
-              <span class="info-tip-btn" data-tip-title="Age Rating Guidelines" data-tip-desc="Determined by content questionnaires in App Store Connect (4+, 9+, 12+, 17+) and Google Play IARC (Everyone, Teen, Mature)." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/manage-app-information/set-age-ratings/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9878810" tabindex="0" role="button" aria-label="Age Rating Guidelines" title="Age Rating Guidelines">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-              </span>
-            </div>
+        </button>
+        <div class="custom-cat-menu custom-age-menu" id="customAgeMenu" role="listbox">
+          <div class="custom-cat-search custom-age-search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="customAgeSearch" placeholder="Search age rating..." autocomplete="off" spellcheck="false">
           </div>
-          <select class="fsel" id="f-st-age" aria-label="Age Rating" style="display:none">
-            <option value="4+">4+ / Everyone (E)</option>
-            <option value="9+">9+ / Everyone 10+ (E10+)</option>
-            <option value="12+">12+ / Teen (T)</option>
-            <option value="17+">17+ / Mature 17+ (M)</option>
-            <option value="18+">18+ / Adults Only (AO)</option>
-          </select>
-          <div class="custom-cat-wrap custom-age-wrap" id="customAgeWrap">
-            <button type="button" class="custom-cat-trigger custom-age-trigger" id="customAgeTrigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Select age rating">
-              <span class="custom-cat-trigger-content custom-age-trigger-content">
-                <svg class="custom-cat-icon custom-age-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                <span class="custom-cat-val custom-age-val" id="customAgeVal">4+ / Everyone (E)</span>
-              </span>
-              <svg class="custom-cat-chevron custom-age-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-            <div class="custom-cat-menu custom-age-menu" id="customAgeMenu" role="listbox">
-              <div class="custom-cat-search custom-age-search">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="customAgeSearch" placeholder="Search age rating..." autocomplete="off" spellcheck="false">
-              </div>
-              <div class="custom-cat-options custom-age-options" id="customAgeOptions"></div>
-            </div>
-          </div>
-        </div>
-        <div class="fg iap-picker-fg" style="grid-column:1 / -1">
-          <div class="lr">
-            <label for="customIapTrigger">Monetization Badge</label>
-            <div class="lr-right">
-              <span class="info-tip-btn" data-tip-title="Monetization Guidelines" data-tip-desc="Discloses whether your app includes in-app purchases, subscriptions, upfront pricing, or ad networks on store listings." data-tip-apple-link="https://developer.apple.com/in-app-purchase/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/1153481" tabindex="0" role="button" aria-label="Monetization Guidelines" title="Monetization Guidelines">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-              </span>
-            </div>
-          </div>
-          <select class="fsel" id="f-st-iap" aria-label="Monetization Badge" style="display:none">
-            <option value="iap">In-App Purchases (No Ads)</option>
-            <option value="ads_iap">Contains Ads · In-App Purchases</option>
-            <option value="ads">Contains Ads Only</option>
-            <option value="free">None (100% Free / Paid Upfront)</option>
-          </select>
-          <div class="custom-cat-wrap custom-iap-wrap" id="customIapWrap">
-            <button type="button" class="custom-cat-trigger custom-iap-trigger" id="customIapTrigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Select monetization badge">
-              <span class="custom-cat-trigger-content custom-iap-trigger-content">
-                <svg class="custom-cat-icon custom-iap-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                  <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                </svg>
-                <span class="custom-cat-val custom-iap-val" id="customIapVal">In-App Purchases (No Ads)</span>
-              </span>
-              <svg class="custom-cat-chevron custom-iap-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-            <div class="custom-cat-menu custom-iap-menu" id="customIapMenu" role="listbox">
-              <div class="custom-cat-search custom-iap-search">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="customIapSearch" placeholder="Search monetization badge..." autocomplete="off" spellcheck="false">
-              </div>
-              <div class="custom-cat-options custom-iap-options" id="customIapOptions"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="review-custom-wrap">
-        <div class="form-row-2col" style="margin-bottom:10px">
-          <div class="fg" style="margin:0">
-            <div class="lr">
-              <label for="f-rev-title">Review Title</label>
-              <div class="lr-right">
-                <span class="info-tip-btn" data-tip-title="Customer Reviews Guidelines" data-tip-desc="Featured customer review title on store listings. On live stores, genuine reviews and ratings are submitted by verified users." tabindex="0" role="button" aria-label="Customer Reviews Guidelines" title="Customer Reviews Guidelines">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                </span>
-              </div>
-            </div>
-            <input type="text" id="f-rev-title" placeholder="Love this app so much">
-          </div>
-          <div class="fg" style="margin:0">
-            <div class="lr"><label for="f-rev-user">Review Username</label></div>
-            <input type="text" id="f-rev-user" placeholder="michellerebecca">
-          </div>
-        </div>
-        <div class="fg" style="margin:0">
-          <div class="lr"><label for="f-rev-desc">Review Description</label></div>
-          <textarea id="f-rev-desc" rows="3" placeholder="This app is one of my favorite used apps on my phone. The interface is so intuitive and beautiful. Would recommend to everyone!"></textarea>
+          <div class="custom-cat-options custom-age-options" id="customAgeOptions"></div>
         </div>
       </div>
     </div>
-  </details>
+    <div class="fg iap-picker-fg" style="grid-column:1 / -1">
+      <div class="lr">
+        <label for="customIapTrigger">Monetization Badge</label>
+        <div class="lr-right">
+          <span class="info-tip-btn" data-tip-title="Monetization Guidelines" data-tip-desc="Discloses whether your app includes in-app purchases, subscriptions, upfront pricing, or ad networks on store listings." data-tip-apple-link="https://developer.apple.com/in-app-purchase/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/1153481" tabindex="0" role="button" aria-label="Monetization Guidelines" title="Monetization Guidelines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </span>
+        </div>
+      </div>
+      <select class="fsel" id="f-st-iap" aria-label="Monetization Badge" style="display:none">
+        <option value="iap">In-App Purchases (No Ads)</option>
+        <option value="ads_iap">Contains Ads · In-App Purchases</option>
+        <option value="ads">Contains Ads Only</option>
+        <option value="free">None (100% Free / Paid Upfront)</option>
+      </select>
+      <div class="custom-cat-wrap custom-iap-wrap" id="customIapWrap">
+        <button type="button" class="custom-cat-trigger custom-iap-trigger" id="customIapTrigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Select monetization badge">
+          <span class="custom-cat-trigger-content custom-iap-trigger-content">
+            <svg class="custom-cat-icon custom-iap-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+            <span class="custom-cat-val custom-iap-val" id="customIapVal">In-App Purchases (No Ads)</span>
+          </span>
+          <svg class="custom-cat-chevron custom-iap-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div class="custom-cat-menu custom-iap-menu" id="customIapMenu" role="listbox">
+          <div class="custom-cat-search custom-iap-search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="customIapSearch" placeholder="Search monetization badge..." autocomplete="off" spellcheck="false">
+          </div>
+          <div class="custom-cat-options custom-iap-options" id="customIapOptions"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="review-custom-wrap">
+    <div class="form-row-2col" style="margin-bottom:10px">
+      <div class="fg" style="margin:0">
+        <div class="lr">
+          <label for="f-rev-title">Review Title</label>
+          <div class="lr-right">
+            <span class="info-tip-btn" data-tip-title="Customer Reviews Guidelines" data-tip-desc="Featured customer review title on store listings. On live stores, genuine reviews and ratings are submitted by verified users." tabindex="0" role="button" aria-label="Customer Reviews Guidelines" title="Customer Reviews Guidelines">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            </span>
+          </div>
+        </div>
+        <input type="text" id="f-rev-title" placeholder="Love this app so much">
+      </div>
+      <div class="fg" style="margin:0">
+        <div class="lr"><label for="f-rev-user">Review Username</label></div>
+        <input type="text" id="f-rev-user" placeholder="michellerebecca">
+      </div>
+    </div>
+    <div class="fg" style="margin:0">
+      <div class="lr"><label for="f-rev-desc">Review Description</label></div>
+      <textarea id="f-rev-desc" rows="3" placeholder="This app is one of my favorite used apps on my phone. The interface is so intuitive and beautiful. Would recommend to everyone!"></textarea>
+    </div>
+  </div>
   <input type="hidden" id="f-st-off" value="false">
   <input type="hidden" id="f-st-wm" value="false">
   </div>
 </div>
 <div class="card collapsed" id="contentCard">
   <div class="card-header">
-    <h2><span class="card-num" title="Card 3">3</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></i>Description &amp; Release Notes</h2>
+    <h2><span class="card-num" title="Card 2">2</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></i>Description &amp; Release Notes</h2>
     <div class="card-header-right">
       <span class="info-tip-btn" data-tip-title="Content &amp; Updates Guidelines" data-tip-desc="Detailed promotional content, release update notes, and SEO/ASO descriptions for store search indexing." data-tip-apple-link="https://developer.apple.com/app-store/product-page/" tabindex="0" role="button" aria-label="Content &amp; Updates Guidelines" title="Content &amp; Updates Guidelines">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -708,7 +686,7 @@ Pay once on Gumroad, own forever. No subscriptions, no cloud dependencies.</text
 </div>
 <div class="card collapsed" id="shotsCard">
   <div class="card-header">
-    <h2><span class="card-num" title="Card 4">4</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"></rect><line x1="10.5" y1="5" x2="13.5" y2="5"></line><line x1="10" y1="19" x2="14" y2="19"></line></svg></i>Phone Screenshots</h2>
+    <h2><span class="card-num" title="Card 3">3</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"></rect><line x1="10.5" y1="5" x2="13.5" y2="5"></line><line x1="10" y1="19" x2="14" y2="19"></line></svg></i>Phone Screenshots</h2>
     <div class="card-header-right">
       <span class="info-tip-btn" data-tip-title="Phone Screenshots Guidelines" data-tip-desc="Visual previews of your app experience. Up to 10 screenshots per display size. The first 3 appear directly in store search results." data-tip-apple-link="https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151#screenshots" tabindex="0" role="button" aria-label="Phone Screenshots Guidelines" title="Phone Screenshots Guidelines">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -11199,7 +11177,7 @@ $$('.promo[data-b="promo"]').forEach(el => { el.style.display = hasPromo ? 'bloc
 if (typeof renderPrivacy === 'function') renderPrivacy();
 if (typeof renderReviews === 'function') renderReviews();
 if (typeof setFieldFocus === 'function' && activeFieldFocusKey) {
-setFieldFocus(activeFieldFocusKey, false);
+setFieldFocus(activeFieldFocusKey, false, false);
 }
 }
 function getFieldMockupTargets(key) {
@@ -11303,10 +11281,11 @@ return $$('.stage [data-b="' + key + '"]');
 }
 }
 let activeFieldFocusKey = null;
-function setFieldFocus(key, shouldScroll = true) {
+function setFieldFocus(key, shouldScroll = true, autoSelectCard = true) {
 activeFieldFocusKey = key;
 $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
 if (!key) return;
+if (autoSelectCard) {
 let editorInput = $('f-' + key) || $(key);
 if (!editorInput && key === 'privacy') {
 editorInput = $('privacyCard') || $('privacyModeSeg');
@@ -11320,6 +11299,7 @@ parentCard.classList.remove('collapsed');
 $$('.card').forEach(c => c.classList.remove('selected'));
 parentCard.classList.add('selected');
 if (typeof updateActivityBarState === 'function') updateActivityBarState();
+}
 }
 }
 const targets = getFieldMockupTargets(key);
@@ -12780,6 +12760,13 @@ updateActivityBarState();
 function selectEditorCard(cardId) {
 const targetCard = $(cardId);
 if (!targetCard) return;
+if (typeof activeFieldFocusKey !== 'undefined' && activeFieldFocusKey) {
+const activeInp = $('f-' + activeFieldFocusKey) || $(activeFieldFocusKey);
+if (activeInp && !targetCard.contains(activeInp)) {
+activeFieldFocusKey = null;
+$$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+}
+}
 $$('.editor .card').forEach(c => {
 c.classList.remove('selected');
 c.classList.add('collapsed');
@@ -12793,10 +12780,17 @@ updateActivityBarState();
 }
 function updateActivityBarState() {
 let selected = document.querySelector('.editor .card.selected');
-if (!selected) {
+if (!selected || selected.classList.contains('hide')) {
 const firstCard = document.querySelector('.editor .card:not(.hide)') || document.querySelector('.editor .card');
 if (firstCard) {
+$$('.editor .card').forEach(c => {
+if (c !== firstCard) {
+c.classList.remove('selected');
+c.classList.add('collapsed');
+}
+});
 firstCard.classList.add('selected');
+firstCard.classList.remove('collapsed');
 selected = firstCard;
 }
 }
