@@ -303,13 +303,16 @@ body.resizing-sidebar .editor{
   transition:all .2s ease;
 }
 .editor-resizer:hover::after, .editor-resizer.dragging::after{
-  background:var(--ac);height:68px;box-shadow:0 0 10px var(--glow);width:4px;
+  background:#C4C5C4;height:68px;box-shadow:0 0 10px rgba(196,197,196,.3);width:4px;
 }
 body.sidebar-collapsed .editor-resizer{
   opacity:0 !important;
   pointer-events:none !important;
 }
 :root[data-ui=light] .editor-resizer::after{background:rgba(0,0,0,.18)}
+:root[data-ui=light] .editor-resizer:hover::after, :root[data-ui=light] .editor-resizer.dragging::after{
+  background:#334155;box-shadow:0 0 8px rgba(51,65,85,.25);
+}
 
 /* Card base */
 .card{
