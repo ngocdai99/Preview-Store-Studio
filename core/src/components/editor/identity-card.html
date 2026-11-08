@@ -1,9 +1,9 @@
 <!-- Card 1: App Identity -->
 <div class="card selected" id="identityCard">
   <div class="card-header">
-    <h2><span class="card-num" title="Card 1">1</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></i><span id="edTitle">App Identity</span></h2>
+    <h2><span class="card-num">1</span><i class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></i><span id="edTitle">App Identity</span></h2>
     <div class="card-header-right">
-      <span class="info-tip-btn" data-tip-title="App Identity Guidelines" data-tip-desc="Core identity assets for your store listing: App Icon, App Name, Subtitle, Developer information, Category, and Device Support." data-tip-apple-link="https://developer.apple.com/app-store/product-page/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="App Identity Guidelines" title="App Identity Guidelines">
+      <span class="info-tip-btn" data-tip-title="App Identity Guidelines" data-tip-desc="Core identity assets for your store listing: App Icon, App Name, Subtitle, Developer information, Category, and Device Support." data-tip-apple-link="https://developer.apple.com/app-store/product-page/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="App Identity Guidelines">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
       </span>
       <span class="card-toggle-ico" aria-hidden="true">
@@ -20,18 +20,18 @@
     <div class="lr">
       <label id="iconSpecLabel">App Icon (1024×1024 px) <span class="tag a">APPLE</span></label>
       <div class="lr-right">
-        <span class="info-tip-btn" id="iosIconInfoBtn" data-only="apple" tabindex="0" role="button" aria-label="iOS App Icon &amp; Xcode Guidelines" title="iOS App Icon &amp; Xcode Guidelines">
+        <span class="info-tip-btn" id="iosIconInfoBtn" data-only="apple" tabindex="0" role="button" aria-label="iOS App Icon &amp; Xcode Guidelines">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </span>
-        <span class="info-tip-btn" data-only="google" data-tip-title="Google Play App Icon Guidelines" data-tip-desc="512 × 512 px 32-bit PNG with alpha channel, up to 1024 KB. Sharp square corners (Google Play dynamically applies 20% corner radius and shadow)." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="Google Play App Icon Guidelines" title="Google Play App Icon Guidelines">
+        <span class="info-tip-btn" data-only="google" data-tip-title="Google Play App Icon Guidelines" data-tip-desc="512 × 512 px 32-bit PNG with alpha channel, up to 1024 KB. Sharp square corners (Google Play dynamically applies 20% corner radius and shadow)." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="Google Play App Icon Guidelines">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </span>
       </div>
     </div>
     <div class="icorow">
-      <div class="ico-wrap is-placeholder" id="icoDropZone" title="Click to upload custom app icon" tabindex="0">
+      <div class="ico-wrap is-placeholder" id="icoDropZone" tabindex="0">
         <img id="icoPrev" data-icon alt="App Icon">
-        <button type="button" class="ico-remove-btn" id="icoRemove" title="Remove custom app icon" aria-label="Remove custom app icon" style="display:none">
+        <button type="button" class="ico-remove-btn" id="icoRemove" aria-label="Remove custom app icon" style="display:none">
           <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -50,12 +50,12 @@
         <p class="hint" id="iconSpecHint" style="font-size:10.5px;margin:0">PNG · 1:1 Square · 100% Opaque</p>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button type="button" class="mini" id="icoUp"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>Upload Icon</button>
-          <button type="button" class="mini disabled" id="icoInspect" disabled title="Upload an app icon to inspect store compliance"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>Inspect</button>
+          <button type="button" class="mini disabled" id="icoInspect" disabled aria-label="Inspect app icon"><span class="btn-mini-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>Inspect</button>
           <input type="file" id="icoFile" accept="image/*" hidden>
         </div>
       </div>
     </div>
-    <div id="iconStatusBadge" class="ms-icon-status" style="margin-top:8px;margin-bottom:0;cursor:pointer;display:none" title="Click to inspect icon details"></div>
+    <div id="iconStatusBadge" class="ms-icon-status" style="margin-top:8px;margin-bottom:0;cursor:pointer;display:none"></div>
   </div>
 
   <!-- App Name (30 chars) -->
@@ -64,7 +64,7 @@
       <label>App name<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label>
       <div class="lr-right">
         <span class="cc" id="c-name"></span>
-        <span class="info-tip-btn" id="appNameInfoBtn" tabindex="0" role="button" aria-label="App Name Guidelines" title="App Name Guidelines">
+        <span class="info-tip-btn" id="appNameInfoBtn" tabindex="0" role="button" aria-label="App Name Guidelines">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </span>
       </div>
@@ -78,7 +78,7 @@
       <label>Subtitle<span class="tag a">APPLE</span></label>
       <div class="lr-right">
         <span class="cc" id="c-sub"></span>
-        <span class="info-tip-btn" data-tip-title="Subtitle Guidelines" data-tip-desc="A concise summary of your app's main purpose (max 30 characters), appearing right below the app name on iOS." data-tip-apple-link="https://developer.apple.com/app-store/product-page/#subtitle" tabindex="0" role="button" aria-label="Subtitle Guidelines" title="Subtitle Guidelines">
+        <span class="info-tip-btn" data-tip-title="Subtitle Guidelines" data-tip-desc="A concise summary of your app's main purpose (max 30 characters), appearing right below the app name on iOS." data-tip-apple-link="https://developer.apple.com/app-store/product-page/#subtitle" tabindex="0" role="button" aria-label="Subtitle Guidelines">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </span>
       </div>
@@ -92,7 +92,7 @@
       <label>Short Description<span class="tag g">GOOGLE</span></label>
       <div class="lr-right">
         <span class="cc" id="c-short"></span>
-        <span class="info-tip-btn" data-tip-title="Short Description Guidelines" data-tip-desc="The first description users see on Google Play (max 80 characters) before tapping 'About this app'. Crucial for search and conversion." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="Short Description Guidelines" title="Short Description Guidelines">
+        <span class="info-tip-btn" data-tip-title="Short Description Guidelines" data-tip-desc="The first description users see on Google Play (max 80 characters) before tapping 'About this app'. Crucial for search and conversion." data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9866151" tabindex="0" role="button" aria-label="Short Description Guidelines">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </span>
       </div>
@@ -111,7 +111,7 @@
     <div class="lr">
       <label>Category<span class="tag a" title="App Store">APPLE</span><span class="tag g" title="Google Play">GOOGLE</span></label>
       <div class="lr-right">
-        <span class="info-tip-btn" data-tip-title="Category Guidelines" data-tip-desc="The primary category for your app. Helps store algorithms place your app in top charts and recommendation lists." data-tip-apple-link="https://developer.apple.com/app-store/categories/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9859673" tabindex="0" role="button" aria-label="Category Guidelines" title="Category Guidelines">
+        <span class="info-tip-btn" data-tip-title="Category Guidelines" data-tip-desc="The primary category for your app. Helps store algorithms place your app in top charts and recommendation lists." data-tip-apple-link="https://developer.apple.com/app-store/categories/" data-tip-google-link="https://support.google.com/googleplay/android-developer/answer/9859673" tabindex="0" role="button" aria-label="Category Guidelines">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </span>
       </div>
@@ -156,7 +156,7 @@
     <div class="lr">
       <label>Supported Devices<span class="tag a">APPLE</span></label>
       <div class="lr-right">
-        <span class="info-tip-btn" data-tip-title="Supported Devices Guidelines" data-tip-desc="Configure whether your iOS binary is iPhone-only or a Universal app supporting both iPhone and iPad native interfaces." tabindex="0" role="button" aria-label="Supported Devices Guidelines" title="Supported Devices Guidelines">
+        <span class="info-tip-btn" data-tip-title="Supported Devices Guidelines" data-tip-desc="Configure whether your iOS binary is iPhone-only or a Universal app supporting both iPhone and iPad native interfaces." tabindex="0" role="button" aria-label="Supported Devices Guidelines">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </span>
       </div>
@@ -164,7 +164,7 @@
 
     <div class="dest-grid">
       <!-- iPhone Tile (Primary / Required) -->
-      <label class="dest-tile tile-btn active locked" id="destTileIphone" title="iPhone is required for all iOS App Store listings">
+      <label class="dest-tile tile-btn active locked" id="destTileIphone" aria-label="iPhone is required for all iOS App Store listings">
         <input type="checkbox" id="f-dest-iphone" checked disabled class="dest-input">
         <div class="dest-check-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -182,7 +182,7 @@
       </label>
 
       <!-- iPad Tile (Universal App) -->
-      <label class="dest-tile tile-btn" id="destTileIpad" title="Check to support iPad (Universal App) &amp; enable iPad screenshots">
+      <label class="dest-tile tile-btn" id="destTileIpad" aria-label="Support iPad (Universal App) &amp; enable iPad screenshots">
         <input type="checkbox" id="f-dest-ipad" class="dest-input">
         <div class="dest-check-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>

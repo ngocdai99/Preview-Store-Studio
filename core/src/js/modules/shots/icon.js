@@ -34,12 +34,12 @@ function updateIconDropZoneUi(){
     if(placeholder){
       dropZone.classList.add('is-placeholder');
       dropZone.classList.remove('has');
-      dropZone.setAttribute('title', 'Click to upload custom app icon');
     } else {
       dropZone.classList.remove('is-placeholder');
       dropZone.classList.add('has');
-      dropZone.setAttribute('title', 'Click to inspect icon in high resolution');
     }
+    if(typeof dropZone.removeAttribute === 'function') dropZone.removeAttribute('title');
+    else dropZone.title = '';
   }
 
   if(removeBtn){
@@ -51,7 +51,8 @@ function updateIconDropZoneUi(){
     inspectBtn.disabled = disabled;
     inspectBtn.classList.toggle('disabled', disabled);
     inspectBtn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
-    inspectBtn.setAttribute('title', disabled ? 'Upload an app icon to inspect store compliance' : 'Inspect Icon Details & Store Compliance');
+    if(typeof inspectBtn.removeAttribute === 'function') inspectBtn.removeAttribute('title');
+    else inspectBtn.title = '';
   }
 
   if(placeholder){

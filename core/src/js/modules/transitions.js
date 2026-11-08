@@ -584,7 +584,7 @@ function setStore(s, animate = true, preserveDual = false){
       if(previewCounterEl){
         previewCounterEl.style.display = 'inline-flex';
         previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-        previewCounterEl.title = 'Images appear on App Store product page';
+        previewCounterEl.removeAttribute('title');
       }
       counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
     } else {
@@ -598,8 +598,7 @@ function setStore(s, animate = true, preserveDual = false){
     if(addBtn){
       const atLimit = SHOTS.length >= maxAllowed;
       addBtn.disabled = atLimit;
-      if(atLimit) addBtn.title = `${s === 'apple' ? 'App Store' : 'Google Play'} allows a maximum of ${maxAllowed} screenshots`;
-      else addBtn.removeAttribute('title');
+      addBtn.removeAttribute('title');
     }
   }
 
@@ -854,6 +853,9 @@ function toggleDualPhone(forceState) {
 
   const activeStore = (typeof store !== 'undefined' && (store === 'apple' || store === 'google')) ? store : 'apple';
 
+  const curCard = document.querySelector('.editor .card.selected');
+  const curCardId = curCard ? curCard.id : null;
+
   const applyDualState = () => {
     document.body.dataset.dual = nextDual ? 'true' : 'false';
     if (nextDual) {
@@ -889,6 +891,20 @@ function toggleDualPhone(forceState) {
     if (typeof renderIcons === 'function') renderIcons();
     if (typeof renderShots === 'function') renderShots();
     if (typeof update === 'function') update();
+    if (curCardId) {
+      const keepCard = $(curCardId);
+      if (keepCard && !keepCard.classList.contains('hide')) {
+        $$('.editor .card').forEach(c => {
+          if (c !== keepCard) {
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
+        keepCard.classList.add('selected');
+        keepCard.classList.remove('collapsed');
+      }
+    }
+    if (typeof updateActivityBarState === 'function') updateActivityBarState();
     if (typeof fit === 'function') fit();
     syncAllVtPills();
     if (typeof saveState === 'function') saveState(false);

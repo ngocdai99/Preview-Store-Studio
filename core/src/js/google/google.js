@@ -102,8 +102,7 @@ function renderTablets(){
     if(addBtn){
       const atLimit = items.length >= MAX_TAB;
       addBtn.disabled = atLimit;
-      if(atLimit) addBtn.title = `${c.name} tablets allow a maximum of ${MAX_TAB} screenshots`;
-      else addBtn.removeAttribute('title');
+      addBtn.removeAttribute('title');
     }
 
     const be = $(c.badge);
@@ -129,7 +128,7 @@ function renderTablets(){
       r.className = 'srow tab srow-tab';
       r.draggable = true;
       const handle = document.createElement('div');
-      handle.className = 'drag-handle'; handle.textContent = '⠿'; handle.title = 'Drag to reorder';
+      handle.className = 'drag-handle'; handle.textContent = '⠿';
       r.appendChild(handle);
       const hasImg = !!(it && it.src && typeof it.src === 'string' && it.src.trim() && (typeof PH === 'undefined' || it.src !== PH) && (typeof PH_TAB === 'undefined' || it.src !== PH_TAB) && (typeof PH_LIGHT === 'undefined' || it.src !== PH_LIGHT));
 
@@ -140,7 +139,7 @@ function renderTablets(){
         thumbWrap.className = 'shot-thumb-wrap has';
         const thumb = mk(it.src, `${c.name} Screenshot ` + (i + 1));
         thumb.style.cursor = 'pointer';
-        thumb.title = 'Click to inspect & view details';
+        thumb.setAttribute('aria-label', 'Click to inspect & view details');
         thumb.onclick = () => {
           if(typeof openImageDetailModal === 'function'){
             openImageDetailModal({
@@ -160,7 +159,6 @@ function renderTablets(){
         thumbWrap.appendChild(thumb);
       } else {
         thumbWrap.className = 'shot-thumb-wrap is-placeholder';
-        thumbWrap.title = `Click to upload ${c.name} screenshot`;
         thumbWrap.setAttribute('role', 'button');
         thumbWrap.setAttribute('tabindex', '0');
         const ov = document.createElement('div');
@@ -184,7 +182,6 @@ function renderTablets(){
       const delBtn = document.createElement('button');
       delBtn.type = 'button';
       delBtn.className = 'shot-remove-btn';
-      delBtn.title = 'Delete Screenshot';
       delBtn.setAttribute('aria-label', 'Delete Screenshot');
       delBtn.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
       delBtn.onmousedown = e => e.stopPropagation();
@@ -402,6 +399,8 @@ function setGoogleDevice(d, animate = true){
     syncAllVtPills();
     return;
   }
+  const curCard = document.querySelector('.editor .card.selected');
+  const curCardId = curCard ? curCard.id : null;
   const applyState = () => {
     googleDevice = nextDev;
     if(nextDual){
@@ -412,6 +411,20 @@ function setGoogleDevice(d, animate = true){
       document.body.dataset.appleDevice = 'iphone';
     }
     applyGoogleDevice();
+    if(curCardId){
+      const keepCard = $(curCardId);
+      if(keepCard && !keepCard.classList.contains('hide')){
+        $$('.editor .card').forEach(c => {
+          if(c !== keepCard){
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
+        keepCard.classList.add('selected');
+        keepCard.classList.remove('collapsed');
+      }
+    }
+    if(typeof updateActivityBarState === 'function') updateActivityBarState();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);
   };

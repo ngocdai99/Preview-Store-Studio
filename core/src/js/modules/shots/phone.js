@@ -56,7 +56,6 @@ function renderShots(){
     const handle = document.createElement('div');
     handle.className = 'drag-handle';
     handle.textContent = '⠿';
-    handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
     const hasImg = !!(s && typeof s === 'string' && s.trim() && (typeof PH === 'undefined' || s !== PH) && (typeof PH_LIGHT === 'undefined' || s !== PH_LIGHT));
@@ -68,7 +67,6 @@ function renderShots(){
       thumbWrap.className = 'shot-thumb-wrap has';
       const thumb = mk(s, 'Screenshot ' + (i + 1));
       thumb.style.cursor = 'pointer';
-      thumb.title = 'Click to inspect & view details';
       thumb.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
           openImageDetailModal({
@@ -88,7 +86,6 @@ function renderShots(){
       thumbWrap.appendChild(thumb);
     } else {
       thumbWrap.className = 'shot-thumb-wrap is-placeholder';
-      thumbWrap.title = 'Click to upload screenshot';
       thumbWrap.setAttribute('role', 'button');
       thumbWrap.setAttribute('tabindex', '0');
       const ov = document.createElement('div');
@@ -116,7 +113,6 @@ function renderShots(){
     const delBtn = document.createElement('button');
     delBtn.type = 'button';
     delBtn.className = 'shot-remove-btn';
-    delBtn.title = 'Delete Screenshot';
     delBtn.setAttribute('aria-label', 'Delete Screenshot');
     delBtn.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
     delBtn.onmousedown = e => e.stopPropagation();
@@ -235,18 +231,14 @@ function validateScreenshots(){
   if(addBtn){
     const atLimit = (typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed;
     addBtn.disabled = atLimit;
-    if(atLimit){
-      addBtn.title = `${store === 'apple' ? 'App Store' : 'Google Play'} allows a maximum of ${maxAllowed} screenshots`;
-    } else {
-      addBtn.removeAttribute('title');
-    }
+    addBtn.removeAttribute('title');
   }
   if(store === 'apple'){
     const appPreviewCount = Math.min(validCount, 3);
     if(previewCounterEl){
       previewCounterEl.style.display = 'inline-flex';
       previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-      previewCounterEl.title = 'Images appear on App Store product page';
+      previewCounterEl.removeAttribute('title');
     }
     if(counterEl){
       counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;

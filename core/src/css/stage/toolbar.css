@@ -595,38 +595,6 @@
   color: #6B7280 !important;
 }
 
-/* Sleek Tooltip for Stage Device Dropdown (Matches Design Spec) */
-.stage-device-dropdown[data-tooltip] {
-  position: relative;
-}
-
-.stage-device-dropdown[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 8px);
-  transform: translateY(-50%) scale(0.96);
-  background: #1F2937;
-  color: #FFFFFF;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.2;
-  padding: 5px 9px;
-  border-radius: 6px;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
-  z-index: 400;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-}
-
-.stage-device-dropdown[data-tooltip]:hover:not(:has(.menu.show))::after {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(-50%) scale(1);
-}
 
 /* Light Mode Device Menus (#menuAppleDevice, #menuGoogleDevice) & Stage View Menu (#vt) */
 :root[data-ui=light] .stage-view-menu,

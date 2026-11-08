@@ -4017,12 +4017,12 @@ function updateIconDropZoneUi(){
     if(placeholder){
       dropZone.classList.add('is-placeholder');
       dropZone.classList.remove('has');
-      dropZone.setAttribute('title', 'Click to upload custom app icon');
     } else {
       dropZone.classList.remove('is-placeholder');
       dropZone.classList.add('has');
-      dropZone.setAttribute('title', 'Click to inspect icon in high resolution');
     }
+    if(typeof dropZone.removeAttribute === 'function') dropZone.removeAttribute('title');
+    else dropZone.title = '';
   }
 
   if(removeBtn){
@@ -4034,7 +4034,8 @@ function updateIconDropZoneUi(){
     inspectBtn.disabled = disabled;
     inspectBtn.classList.toggle('disabled', disabled);
     inspectBtn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
-    inspectBtn.setAttribute('title', disabled ? 'Upload an app icon to inspect store compliance' : 'Inspect Icon Details & Store Compliance');
+    if(typeof inspectBtn.removeAttribute === 'function') inspectBtn.removeAttribute('title');
+    else inspectBtn.title = '';
   }
 
   if(placeholder){
@@ -4526,7 +4527,6 @@ function renderShots(){
     const handle = document.createElement('div');
     handle.className = 'drag-handle';
     handle.textContent = '⠿';
-    handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
     const hasImg = !!(s && typeof s === 'string' && s.trim() && (typeof PH === 'undefined' || s !== PH) && (typeof PH_LIGHT === 'undefined' || s !== PH_LIGHT));
@@ -4538,7 +4538,6 @@ function renderShots(){
       thumbWrap.className = 'shot-thumb-wrap has';
       const thumb = mk(s, 'Screenshot ' + (i + 1));
       thumb.style.cursor = 'pointer';
-      thumb.title = 'Click to inspect & view details';
       thumb.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
           openImageDetailModal({
@@ -4558,7 +4557,6 @@ function renderShots(){
       thumbWrap.appendChild(thumb);
     } else {
       thumbWrap.className = 'shot-thumb-wrap is-placeholder';
-      thumbWrap.title = 'Click to upload screenshot';
       thumbWrap.setAttribute('role', 'button');
       thumbWrap.setAttribute('tabindex', '0');
       const ov = document.createElement('div');
@@ -4582,7 +4580,6 @@ function renderShots(){
     const delBtn = document.createElement('button');
     delBtn.type = 'button';
     delBtn.className = 'shot-remove-btn';
-    delBtn.title = 'Delete Screenshot';
     delBtn.setAttribute('aria-label', 'Delete Screenshot');
     delBtn.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
     delBtn.onmousedown = e => e.stopPropagation();
@@ -4693,18 +4690,14 @@ function validateScreenshots(){
   if(addBtn){
     const atLimit = (typeof SHOTS !== 'undefined' ? SHOTS.length : 0) >= maxAllowed;
     addBtn.disabled = atLimit;
-    if(atLimit){
-      addBtn.title = `${store === 'apple' ? 'App Store' : 'Google Play'} allows a maximum of ${maxAllowed} screenshots`;
-    } else {
-      addBtn.removeAttribute('title');
-    }
+    addBtn.removeAttribute('title');
   }
   if(store === 'apple'){
     const appPreviewCount = Math.min(validCount, 3);
     if(previewCounterEl){
       previewCounterEl.style.display = 'inline-flex';
       previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-      previewCounterEl.title = 'Images appear on App Store product page';
+      previewCounterEl.removeAttribute('title');
     }
     if(counterEl){
       counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
@@ -5220,7 +5213,6 @@ function renderIpadSlist(){
     const handle = document.createElement('div');
     handle.className = 'drag-handle';
     handle.textContent = '⠿';
-    handle.title = 'Drag to reorder';
     r.appendChild(handle);
 
     const hasImg = !!(s && typeof s === 'string' && s.trim() && (typeof PH === 'undefined' || s !== PH) && (typeof PH_IPAD === 'undefined' || s !== PH_IPAD) && (typeof PH_LIGHT === 'undefined' || s !== PH_LIGHT));
@@ -5232,7 +5224,6 @@ function renderIpadSlist(){
       thumbWrap.className = 'shot-thumb-wrap has';
       const thumb = mk(s, 'iPad Screenshot ' + (i + 1));
       thumb.style.cursor = 'pointer';
-      thumb.title = 'Click to inspect & view details';
       thumb.onclick = () => {
         if(typeof openImageDetailModal === 'function'){
           openImageDetailModal({
@@ -5252,7 +5243,6 @@ function renderIpadSlist(){
       thumbWrap.appendChild(thumb);
     } else {
       thumbWrap.className = 'shot-thumb-wrap is-placeholder';
-      thumbWrap.title = 'Click to upload iPad screenshot';
       thumbWrap.setAttribute('role', 'button');
       thumbWrap.setAttribute('tabindex', '0');
       const ov = document.createElement('div');
@@ -5276,7 +5266,6 @@ function renderIpadSlist(){
     const delBtn = document.createElement('button');
     delBtn.type = 'button';
     delBtn.className = 'shot-remove-btn';
-    delBtn.title = 'Delete Screenshot';
     delBtn.setAttribute('aria-label', 'Delete Screenshot');
     delBtn.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
     delBtn.onmousedown = e => e.stopPropagation();
@@ -5381,11 +5370,7 @@ function validateIpadScreenshots(){
   if(addBtn){
     const atLimit = (typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10;
     addBtn.disabled = atLimit;
-    if(atLimit){
-      addBtn.title = 'iPad allows a maximum of 10 screenshots';
-    } else {
-      addBtn.removeAttribute('title');
-    }
+    addBtn.removeAttribute('title');
   }
   const badgeEl = $('ipadShotStatusBadge');
   if(!badgeEl) return;
@@ -6728,16 +6713,14 @@ function validateFeatureGraphic(){
 
   const placeholder = isPlaceholderFeature();
   if(dropZone){
-    if(placeholder){
-      dropZone.setAttribute('title', 'Click to upload Feature Graphic (1024×500 px)');
-    } else {
-      dropZone.setAttribute('title', 'Click to inspect Feature Graphic in high resolution');
-    }
+    if(typeof dropZone.removeAttribute === 'function') dropZone.removeAttribute('title');
+    else dropZone.title = '';
   }
   if(inspectBtn){
     inspectBtn.disabled = placeholder;
     inspectBtn.classList.toggle('disabled', placeholder);
-    inspectBtn.setAttribute('title', placeholder ? 'Upload a feature graphic to inspect' : 'Inspect Feature Graphic Details & Compliance');
+    if(typeof inspectBtn.removeAttribute === 'function') inspectBtn.removeAttribute('title');
+    else inspectBtn.title = '';
   }
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');
@@ -6988,8 +6971,7 @@ function renderTablets(){
     if(addBtn){
       const atLimit = items.length >= MAX_TAB;
       addBtn.disabled = atLimit;
-      if(atLimit) addBtn.title = `${c.name} tablets allow a maximum of ${MAX_TAB} screenshots`;
-      else addBtn.removeAttribute('title');
+      addBtn.removeAttribute('title');
     }
 
     const be = $(c.badge);
@@ -7015,7 +6997,7 @@ function renderTablets(){
       r.className = 'srow tab srow-tab';
       r.draggable = true;
       const handle = document.createElement('div');
-      handle.className = 'drag-handle'; handle.textContent = '⠿'; handle.title = 'Drag to reorder';
+      handle.className = 'drag-handle'; handle.textContent = '⠿';
       r.appendChild(handle);
       const hasImg = !!(it && it.src && typeof it.src === 'string' && it.src.trim() && (typeof PH === 'undefined' || it.src !== PH) && (typeof PH_TAB === 'undefined' || it.src !== PH_TAB) && (typeof PH_LIGHT === 'undefined' || it.src !== PH_LIGHT));
 
@@ -7026,7 +7008,7 @@ function renderTablets(){
         thumbWrap.className = 'shot-thumb-wrap has';
         const thumb = mk(it.src, `${c.name} Screenshot ` + (i + 1));
         thumb.style.cursor = 'pointer';
-        thumb.title = 'Click to inspect & view details';
+        thumb.setAttribute('aria-label', 'Click to inspect & view details');
         thumb.onclick = () => {
           if(typeof openImageDetailModal === 'function'){
             openImageDetailModal({
@@ -7046,7 +7028,6 @@ function renderTablets(){
         thumbWrap.appendChild(thumb);
       } else {
         thumbWrap.className = 'shot-thumb-wrap is-placeholder';
-        thumbWrap.title = `Click to upload ${c.name} screenshot`;
         thumbWrap.setAttribute('role', 'button');
         thumbWrap.setAttribute('tabindex', '0');
         const ov = document.createElement('div');
@@ -7070,7 +7051,6 @@ function renderTablets(){
       const delBtn = document.createElement('button');
       delBtn.type = 'button';
       delBtn.className = 'shot-remove-btn';
-      delBtn.title = 'Delete Screenshot';
       delBtn.setAttribute('aria-label', 'Delete Screenshot');
       delBtn.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
       delBtn.onmousedown = e => e.stopPropagation();
@@ -7284,6 +7264,8 @@ function setGoogleDevice(d, animate = true){
     syncAllVtPills();
     return;
   }
+  const curCard = document.querySelector('.editor .card.selected');
+  const curCardId = curCard ? curCard.id : null;
   const applyState = () => {
     googleDevice = nextDev;
     if(nextDual){
@@ -7294,6 +7276,20 @@ function setGoogleDevice(d, animate = true){
       document.body.dataset.appleDevice = 'iphone';
     }
     applyGoogleDevice();
+    if(curCardId){
+      const keepCard = $(curCardId);
+      if(keepCard && !keepCard.classList.contains('hide')){
+        $$('.editor .card').forEach(c => {
+          if(c !== keepCard){
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
+        keepCard.classList.add('selected');
+        keepCard.classList.remove('collapsed');
+      }
+    }
+    if(typeof updateActivityBarState === 'function') updateActivityBarState();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);
   };
@@ -9701,7 +9697,7 @@ function setStore(s, animate = true, preserveDual = false){
       if(previewCounterEl){
         previewCounterEl.style.display = 'inline-flex';
         previewCounterEl.textContent = `${appPreviewCount} of 3 App Previews`;
-        previewCounterEl.title = 'Images appear on App Store product page';
+        previewCounterEl.removeAttribute('title');
       }
       counterEl.textContent = `${validCount} of ${maxAllowed} App Screenshots`;
     } else {
@@ -9715,8 +9711,7 @@ function setStore(s, animate = true, preserveDual = false){
     if(addBtn){
       const atLimit = SHOTS.length >= maxAllowed;
       addBtn.disabled = atLimit;
-      if(atLimit) addBtn.title = `${s === 'apple' ? 'App Store' : 'Google Play'} allows a maximum of ${maxAllowed} screenshots`;
-      else addBtn.removeAttribute('title');
+      addBtn.removeAttribute('title');
     }
   }
 
@@ -9971,6 +9966,9 @@ function toggleDualPhone(forceState) {
 
   const activeStore = (typeof store !== 'undefined' && (store === 'apple' || store === 'google')) ? store : 'apple';
 
+  const curCard = document.querySelector('.editor .card.selected');
+  const curCardId = curCard ? curCard.id : null;
+
   const applyDualState = () => {
     document.body.dataset.dual = nextDual ? 'true' : 'false';
     if (nextDual) {
@@ -10006,6 +10004,20 @@ function toggleDualPhone(forceState) {
     if (typeof renderIcons === 'function') renderIcons();
     if (typeof renderShots === 'function') renderShots();
     if (typeof update === 'function') update();
+    if (curCardId) {
+      const keepCard = $(curCardId);
+      if (keepCard && !keepCard.classList.contains('hide')) {
+        $$('.editor .card').forEach(c => {
+          if (c !== keepCard) {
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
+        keepCard.classList.add('selected');
+        keepCard.classList.remove('collapsed');
+      }
+    }
+    if (typeof updateActivityBarState === 'function') updateActivityBarState();
     if (typeof fit === 'function') fit();
     syncAllVtPills();
     if (typeof saveState === 'function') saveState(false);
@@ -10173,6 +10185,8 @@ function setAppleDevice(d, animate = true){
     syncAllVtPills();
     return;
   }
+  const curCard = document.querySelector('.editor .card.selected');
+  const curCardId = curCard ? curCard.id : null;
   const applyState = () => {
     appleDevice = d;
     document.body.dataset.appleDevice = d === 'dual' ? 'iphone' : d;
@@ -10199,6 +10213,20 @@ function setAppleDevice(d, animate = true){
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();
     update();
+    if(curCardId){
+      const keepCard = $(curCardId);
+      if(keepCard && !keepCard.classList.contains('hide')){
+        $$('.editor .card').forEach(c => {
+          if(c !== keepCard){
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
+        keepCard.classList.add('selected');
+        keepCard.classList.remove('collapsed');
+      }
+    }
+    if(typeof updateActivityBarState === 'function') updateActivityBarState();
     syncAppleNavScroll();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);
@@ -11710,7 +11738,8 @@ function updateDraftPill(){
 
       presetPill.style.display = 'inline-flex';
       presetPill.classList.toggle('on', isViewingPreset);
-      presetPill.setAttribute('title', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
+      presetPill.removeAttribute('title');
+      presetPill.setAttribute('aria-label', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
 
       const existingPresetThumb = presetPill.querySelector('#presetBtnThumb');
       const existingPresetTitle = presetPill.querySelector('#presetBtnTitle');
@@ -11773,7 +11802,7 @@ function updateDraftPill(){
     const f = userDraft.form || {};
     const appTitle = (f.name && f.name.trim()) ? (typeof clampGraphemes === 'function' ? clampGraphemes(f.name.trim(), 30) : f.name.trim()) : 'Your App';
 
-    draftPill.setAttribute('title', appTitle + (CURRENT_PRESET_KEY === 'draft' ? ' (Active Workspace)' : ' (Saved Draft · Click to Return)'));
+    draftPill.removeAttribute('title');
 
     const existingDraftThumb = draftPill.querySelector('#draftBtnThumb');
     const existingDraftTitle = draftPill.querySelector('#draftBtnTitle');
@@ -11788,7 +11817,7 @@ function updateDraftPill(){
       draftPill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
         '<span id="draftBtnTitle">' + escapeHtml(appTitle) + '</span>' +
         '<small id="draftBtnBadge">Draft</small>' +
-        '<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</span>';
+        '<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn" aria-label="Reset draft">&times;</span>';
 
       const resetBtn = draftPill.querySelector('#msPillResetBtn');
       if(resetBtn){
@@ -11812,7 +11841,7 @@ function updateDraftPill(){
     } else {
       draftPill.innerHTML = '<span id="draftBtnTitle">+ Your App</span>';
     }
-    draftPill.setAttribute('title', 'Start your custom app draft');
+    draftPill.removeAttribute('title');
   }
 
   updatePresetMenuSelection();

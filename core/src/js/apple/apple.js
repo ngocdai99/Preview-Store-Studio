@@ -13,6 +13,8 @@ function setAppleDevice(d, animate = true){
     syncAllVtPills();
     return;
   }
+  const curCard = document.querySelector('.editor .card.selected');
+  const curCardId = curCard ? curCard.id : null;
   const applyState = () => {
     appleDevice = d;
     document.body.dataset.appleDevice = d === 'dual' ? 'iphone' : d;
@@ -39,6 +41,20 @@ function setAppleDevice(d, animate = true){
     renderShots();
     if(typeof renderIpadShots === 'function') renderIpadShots();
     update();
+    if(curCardId){
+      const keepCard = $(curCardId);
+      if(keepCard && !keepCard.classList.contains('hide')){
+        $$('.editor .card').forEach(c => {
+          if(c !== keepCard){
+            c.classList.remove('selected');
+            c.classList.add('collapsed');
+          }
+        });
+        keepCard.classList.add('selected');
+        keepCard.classList.remove('collapsed');
+      }
+    }
+    if(typeof updateActivityBarState === 'function') updateActivityBarState();
     syncAppleNavScroll();
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);

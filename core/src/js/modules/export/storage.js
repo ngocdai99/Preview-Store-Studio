@@ -539,7 +539,8 @@ function updateDraftPill(){
 
       presetPill.style.display = 'inline-flex';
       presetPill.classList.toggle('on', isViewingPreset);
-      presetPill.setAttribute('title', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
+      presetPill.removeAttribute('title');
+      presetPill.setAttribute('aria-label', isViewingPreset ? ('Viewing preset: ' + pName + ' (Click to browse templates)') : ('View preset: ' + pName + ' (Click to view)'));
 
       const existingPresetThumb = presetPill.querySelector('#presetBtnThumb');
       const existingPresetTitle = presetPill.querySelector('#presetBtnTitle');
@@ -605,7 +606,7 @@ function updateDraftPill(){
     const f = userDraft.form || {};
     const appTitle = (f.name && f.name.trim()) ? (typeof clampGraphemes === 'function' ? clampGraphemes(f.name.trim(), 30) : f.name.trim()) : 'Your App';
 
-    draftPill.setAttribute('title', appTitle + (CURRENT_PRESET_KEY === 'draft' ? ' (Active Workspace)' : ' (Saved Draft · Click to Return)'));
+    draftPill.removeAttribute('title');
 
     const existingDraftThumb = draftPill.querySelector('#draftBtnThumb');
     const existingDraftTitle = draftPill.querySelector('#draftBtnTitle');
@@ -620,7 +621,7 @@ function updateDraftPill(){
       draftPill.innerHTML = '<img alt="" id="draftBtnThumb" src="' + iconSrc + '">' +
         '<span id="draftBtnTitle">' + escapeHtml(appTitle) + '</span>' +
         '<small id="draftBtnBadge">Draft</small>' +
-        '<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn" title="Reset draft and clear fields" aria-label="Reset draft">&times;</span>';
+        '<span role="button" class="ms-pill-reset-btn" id="msPillResetBtn" aria-label="Reset draft">&times;</span>';
 
       const resetBtn = draftPill.querySelector('#msPillResetBtn');
       if(resetBtn){
@@ -648,7 +649,7 @@ function updateDraftPill(){
     } else {
       draftPill.innerHTML = '<span id="draftBtnTitle">+ Your App</span>';
     }
-    draftPill.setAttribute('title', 'Start your custom app draft');
+    draftPill.removeAttribute('title');
   }
 
   updatePresetMenuSelection();

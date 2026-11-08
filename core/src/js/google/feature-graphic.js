@@ -112,16 +112,14 @@ function validateFeatureGraphic(){
 
   const placeholder = isPlaceholderFeature();
   if(dropZone){
-    if(placeholder){
-      dropZone.setAttribute('title', 'Click to upload Feature Graphic (1024×500 px)');
-    } else {
-      dropZone.setAttribute('title', 'Click to inspect Feature Graphic in high resolution');
-    }
+    if(typeof dropZone.removeAttribute === 'function') dropZone.removeAttribute('title');
+    else dropZone.title = '';
   }
   if(inspectBtn){
     inspectBtn.disabled = placeholder;
     inspectBtn.classList.toggle('disabled', placeholder);
-    inspectBtn.setAttribute('title', placeholder ? 'Upload a feature graphic to inspect' : 'Inspect Feature Graphic Details & Compliance');
+    if(typeof inspectBtn.removeAttribute === 'function') inspectBtn.removeAttribute('title');
+    else inspectBtn.title = '';
   }
 
   const currentAsset = (typeof FEATURE_GRAPHIC !== 'undefined' ? FEATURE_GRAPHIC : '');

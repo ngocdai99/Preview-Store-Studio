@@ -328,7 +328,6 @@ function initDemoGuard() {
           const badge = card.querySelector('.card-header .card-num');
           if (badge) {
             badge.textContent = String(num);
-            badge.setAttribute('title', 'Card ' + num);
           }
         };
         setCardNum(statsCardEl, 2);
@@ -752,7 +751,7 @@ function initDemoGuard() {
       if (el) {
         el.readOnly = true;
         el.classList.add('demo-locked-input', 'demo-disabled-input');
-        el.setAttribute('title', 'Editable in Plus & Pro Edition');
+        el.removeAttribute('title');
         
         const triggerPaywallAndHighlight = () => {
           if (typeof setFieldFocus === 'function') {
@@ -799,7 +798,7 @@ function initDemoGuard() {
     const icoUpBtn = $('icoUp');
     if (icoUpBtn) {
       icoUpBtn.classList.add('disabled', 'demo-disabled-btn');
-      icoUpBtn.setAttribute('title', 'Custom app icon upload is included in Plus & Pro Edition');
+      icoUpBtn.removeAttribute('title');
       icoUpBtn.addEventListener('click', e => {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -810,7 +809,7 @@ function initDemoGuard() {
     const icoDropZone = $('icoDropZone');
     if (icoDropZone) {
       icoDropZone.classList.add('demo-disabled-dropzone');
-      icoDropZone.setAttribute('title', 'Custom app icon upload is included in Plus & Pro Edition');
+      icoDropZone.removeAttribute('title');
       icoDropZone.addEventListener('click', e => {
         if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
         e.preventDefault();
