@@ -123,7 +123,7 @@ export function Navbar() {
           >
             <BrandIcon className="w-6 h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
             <span className="font-bold text-[14px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white truncate">
-              <span className="hidden sm:inline">Store </span>Preview Studio
+              Store Preview Studio
             </span>
           </Link>
 

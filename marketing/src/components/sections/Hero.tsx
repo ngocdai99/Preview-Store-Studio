@@ -51,7 +51,7 @@ export function Hero() {
           {/* Right Column: Clean Descriptive Subtext */}
           <div className="lg:w-[42%]">
             <p className="text-[16px] text-[#475569] dark:text-[oklch(0.684_0.00275_157.5)] leading-[1.65] text-balance">
-              <span>Save 2 hours of back-and-forth before every store submission.</span>
+              <span>Save hours of back-and-forth before every store submission.</span>
               <span className="block mt-1 sm:mt-1.5">
                 Preview and verify your listings on realistic device frames before submitting.
               </span>

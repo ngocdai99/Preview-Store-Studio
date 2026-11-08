@@ -7,7 +7,7 @@ import { AgencySandboxBanner } from "@/components/AgencySandboxBanner";
 export const metadata: Metadata = {
   title: "Live Interactive Demo · Store Preview Studio",
   description:
-    "Save 2 hours of back-and-forth before every store submission. Preview and verify your listings on realistic device frames before submitting.",
+    "Save hours of back-and-forth before every store submission. Preview and verify your listings on realistic device frames before submitting.",
 };
 
 export default function TryPage() {

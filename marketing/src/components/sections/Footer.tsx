@@ -35,7 +35,7 @@ export function Footer() {
                   href={link.href}
                   target={isExternal ? "_blank" : undefined}
                   rel={isExternal ? "noopener noreferrer" : undefined}
-                  className="inline-flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
+                  className="inline-flex items-center min-h-[44px] px-1 gap-1 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
                 >
                   <span>{link.label}</span>
                   {isExternal && (
@@ -49,7 +49,7 @@ export function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="inline-flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
+                className="inline-flex items-center min-h-[44px] px-1 gap-1 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
               >
                 <span>{link.label}</span>
               </Link>

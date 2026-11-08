@@ -19,11 +19,11 @@ export const en = {
     titleLead: "Stop guessing how your app listing",
     titleAccent: "looks before submitting.",
     subheadlineLead:
-      "Save 2 hours of back-and-forth with your client before every App Store submission.",
+      "Save hours of back-and-forth with your client before every App Store submission.",
     subheadlineFollow:
       "App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
     subheadline:
-      "Save 2 hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
+      "Save hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
     primaryCta: {
       label: "Get Lifetime Access",
       href: "#pricing",
