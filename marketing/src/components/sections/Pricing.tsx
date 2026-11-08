@@ -29,22 +29,17 @@ export function Pricing() {
                 <div
                   key={tier.id}
                   className={`relative rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-colors duration-200 ${
-                    tier.isPopular
+                    !isPlus
                       ? "bg-white dark:bg-[#1D1E1D] border-2 border-slate-300 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
                       : "bg-white dark:bg-[#151615] border border-slate-200 dark:border-white/[0.08] shadow-sm"
                   }`}
                 >
                   <div>
-                    {/* Plan Header: Name & Most Popular Pill */}
+                    {/* Plan Header: Name */}
                     <div className="flex items-center gap-2.5 mb-2">
                       <h3 className="text-base sm:text-[17px] font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
                         {tier.name}
                       </h3>
-                      {tier.isPopular && (
-                        <span className="text-[11px] font-normal text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/10 px-2.5 py-0.5 rounded-full">
-                          Most Popular
-                        </span>
-                      )}
                     </div>
 
                     {/* Plan Description */}

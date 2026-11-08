@@ -235,7 +235,6 @@ export const en = {
         id: "pro",
         name: "Pro Studio",
         badge: "PRO",
-        isPopular: true,
         description:
           "For agencies, studios, and developers requiring commercial client licensing and full source code.",
         price: {
@@ -309,7 +308,6 @@ export const en = {
       { label: "Live Demo", href: "/try" },
       { label: "Why Us", href: "#comparison" },
       { label: "Features", href: "#features" },
-      { label: "Reviews", href: "#testimonials" },
       { label: "Pricing", href: "#pricing" },
       { label: "FAQ", href: "#faq" },
       { label: "Gumroad Store", href: "https://kaidevlabs.gumroad.com/" },

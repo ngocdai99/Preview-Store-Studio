@@ -2,7 +2,6 @@ import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { Features } from "@/components/sections/Features";
 import { Comparison } from "@/components/sections/Comparison";
-import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
 import { Faq } from "@/components/sections/Faq";
 import { Footer } from "@/components/sections/Footer";
@@ -15,7 +14,6 @@ export default function HomePage() {
         <Hero />
         <Features />
         <Comparison />
-        <Testimonials />
         <Pricing />
         <Faq />
       </main>
