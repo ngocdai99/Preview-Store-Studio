@@ -275,7 +275,7 @@ export const en = {
   faq: {
     title: "Frequently Asked Questions",
     description:
-      "Everything you need to know about store review compliance, client handoff, and product updates.",
+      "Everything you need to know about Store Preview Studio, licensing, and offline usage.",
     items: [
       {
         id: "store-review-policy",
