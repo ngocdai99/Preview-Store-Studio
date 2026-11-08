@@ -147,7 +147,7 @@ export function Pricing() {
               {/* Avatar with Static Status Indicator */}
               <div className="relative shrink-0">
                 <Image
-                  src="/kai.jpg"
+                  src="/kai.webp"
                   alt="Kai"
                   width={44}
                   height={44}

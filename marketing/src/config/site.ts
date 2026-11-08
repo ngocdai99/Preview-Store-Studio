@@ -19,7 +19,7 @@ export const siteConfig = {
   creator: {
     name: "Kai",
     brand: "Kai DevLabs",
-    avatar: "/kai.jpg",
+    avatar: "/kai.webp",
   },
 
   // Dictionary Content (Language: English)
