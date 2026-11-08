@@ -2275,9 +2275,9 @@ const ZENMIND_FEATURE = makeSvgDataUri(`
 
 const BLANK_FEATURE = makeSvgDataUri(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500">
-  <rect width="1024" height="500" fill="#121a2c"/>
-  <rect x="20" y="20" width="984" height="460" rx="16" fill="none" stroke="#2f3e66" stroke-width="2" stroke-dasharray="10 10"/>
-  <g transform="translate(480, 218)" stroke="#64748b" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="1024" height="500" fill="#161716"/>
+  <rect x="20" y="20" width="984" height="460" rx="16" fill="none" stroke="#383A38" stroke-width="2.5" stroke-dasharray="10 10"/>
+  <g transform="translate(480, 218)" stroke="#8B8F98" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <rect x="0" y="0" width="64" height="64" rx="12"/>
     <circle cx="20" cy="20" r="5"/>
     <path d="M64 44 L46 26 L14 58"/>

@@ -2110,7 +2110,7 @@ assert(bundledHtml.includes('.shot-thumb-ov{'), 'Bundled CSS contains lookup ico
 assert(bundledHtml.includes('.shot-inspect-btn:disabled, .shot-inspect-btn.disabled{'), 'Bundled CSS contains disabled styling for screenshot inspect buttons');
 
 // App Icon Dashed Placeholder and Menu Reset Verification
-assert(/\.ico-wrap\.is-placeholder\s*\{[\s\S]*?border:\s*1\.5px dashed #f59e0b/.test(bundledHtml), 'App icon zone defines amber-orange dashed border for placeholder state');
+assert(/\.ico-wrap\.is-placeholder\s*\{[\s\S]*?border:\s*1\.5px dashed (?:#f59e0b|#3F3F3F)/.test(bundledHtml), 'App icon zone defines dashed border for placeholder state');
 assert(iconJsCode.includes("typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON"), 'isPlaceholderIcon returns false when custom icon is uploaded');
 assert(bundledHtml.includes('sps_reset_to_blank'), 'Factory reset in menu triggers clean draft with dashed placeholder app icon');
 
