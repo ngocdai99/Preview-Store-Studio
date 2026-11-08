@@ -224,7 +224,7 @@ body.sidebar-collapsed .editor-resizer{
 
 /* Light Mode Overrides for Activity Bar */
 :root[data-ui=light] .activity-bar{
-  background: #F5F5F7;
+  background: #ffffff !important;
   border-right: 1px solid #D9DCE1;
 }
 :root[data-ui=light] .activity-bar-btn{

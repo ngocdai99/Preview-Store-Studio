@@ -182,8 +182,8 @@ function initHeader() {
     }
     const selectedId = selected ? selected.id : null;
     const isLight = document.documentElement.dataset.ui === 'light';
-    const activeColor = isLight ? '#006636' : '#ffffff';
-    const activeBg = isLight ? 'rgba(0, 102, 54, 0.08)' : 'rgba(255, 255, 255, 0.14)';
+    const activeColor = isLight ? '#1F2937' : '#ffffff';
+    const activeBg = isLight ? '#ECEDF0' : 'rgba(255, 255, 255, 0.14)';
 
     $$('.activity-bar-btn[data-card-id]').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
