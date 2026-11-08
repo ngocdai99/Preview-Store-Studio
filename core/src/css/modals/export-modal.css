@@ -505,7 +505,7 @@
 }
 
 :root[data-ui=light] .export-modal-title {
-  color: #0f172a;
+  color: #1e293b;
 }
 
 :root[data-ui=light] .export-modal-subtitle {
@@ -518,7 +518,7 @@
 
 :root[data-ui=light] .export-modal-close:hover {
   background: #f1f5f9;
-  color: #0f172a;
+  color: #1e293b;
 }
 
 :root[data-ui=light] .export-summary-bar {
@@ -587,17 +587,17 @@
 }
 
 :root[data-ui=light] .export-radio-indicator {
-  border-color: #94a3b8;
+  border-color: #cbd5e1;
 }
 
 :root[data-ui=light] .export-radio-item:hover .export-radio-indicator {
-  border-color: #475569;
+  border-color: #94a3b8;
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator {
-  border-color: #0f172a;
-  background: #0f172a;
-  box-shadow: 0 0 6px rgba(15, 23, 42, 0.2);
+  border-color: #475569;
+  background: #475569;
+  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.12);
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-indicator::after {
@@ -614,18 +614,18 @@
 }
 
 :root[data-ui=light] .export-radio-item.active .export-radio-label {
-  color: #0f172a;
+  color: #1e293b;
   font-weight: 500;
 }
 
 :root[data-ui=light] .export-tag-best {
-  background: rgba(15, 23, 42, 0.05);
+  background: #f1f5f9;
   color: #475569;
-  border-color: rgba(15, 23, 42, 0.12);
+  border-color: #e2e8f0;
 }
 
 :root[data-ui=light] .export-summary-dot {
-  background: #475569;
+  background: #64748b;
   box-shadow: none;
 }
 
@@ -638,7 +638,7 @@
 }
 
 :root[data-ui=light] .export-btn-ghost:hover {
-  color: #0f172a;
+  color: #1e293b;
   background: #f1f5f9;
 }
 
@@ -653,7 +653,7 @@
 :root[data-ui=light] .export-btn-secondary:hover {
   background-color: #f8fafc;
   border-color: rgba(0, 0, 0, 0.14);
-  color: #0f172a;
+  color: #1e293b;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
   transform: none !important;
 }
@@ -665,18 +665,23 @@
 }
 
 :root[data-ui=light] .export-btn-primary {
-  background-color: var(--btn-dark-bg, #1D1E1D);
-  border: 1px solid var(--btn-dark-border, #282928);
-  color: var(--btn-dark-text, #EDEDED);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  background-color: #2e302f;
+  border: 1px solid #232524;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
   transform: none !important;
 }
 
 :root[data-ui=light] .export-btn-primary:hover {
-  background-color: var(--btn-dark-hover-bg, #222322);
-  border-color: var(--btn-dark-hover-border, #282928);
-  color: var(--btn-dark-hover-text, #EDEDED);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  background-color: #1e201f;
+  border-color: #171817;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+  transform: none !important;
+}
+
+:root[data-ui=light] .export-btn-primary:active {
+  background-color: #121312;
   transform: none !important;
 }
 

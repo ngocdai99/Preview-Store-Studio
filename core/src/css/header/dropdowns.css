@@ -629,13 +629,13 @@
 }
 
 :root[data-ui=light] .menu .mi-name {
-  color: #0f172a;
+  color: #1e293b;
 }
 
 :root[data-ui=light] .menu .menu-item:hover .mi-name,
 :root[data-ui=light] #menuExport .menu-item:hover .mi-name,
 :root[data-ui=light] #menuPresets .menu-item:hover .mi-name {
-  color: #0f172a;
+  color: #1e293b;
 }
 
 .menu .mi-t small {
