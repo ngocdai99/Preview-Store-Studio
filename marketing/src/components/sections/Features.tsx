@@ -2,7 +2,6 @@
 
 import { siteConfig } from "@/config/site";
 import {
-  DeviceFramesCard,
   StorePresetsCard,
   ComplianceCard,
   ExportCard,
@@ -24,9 +23,8 @@ export function Features() {
           </h2>
         </div>
 
-        {/* 4-Card Bento Grid: Row 1 (6 + 6 cols) & Row 2 (6 + 6 cols) */}
+        {/* 3-Card Bento Grid: Row 1 Showcase (12 cols) & Row 2 Utilities (6 + 6 cols) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 sm:gap-7">
-          <DeviceFramesCard />
           <StorePresetsCard />
           <ComplianceCard />
           <ExportCard />

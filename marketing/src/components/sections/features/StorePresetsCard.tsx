@@ -169,7 +169,11 @@ function PresetDeckCard({
   );
 }
 
-export function StorePresetsCard() {
+export function StorePresetsCard({
+  className = "col-span-1 md:col-span-2 lg:col-span-12",
+}: {
+  className?: string;
+} = {}) {
   const [deckState, setDeckState] = useState<{
     order: PresetKey[];
     prevOrder: PresetKey[];
@@ -340,7 +344,7 @@ export function StorePresetsCard() {
       }
       title="Curated Store Presets"
       description="Explore sample listings across diverse app categories."
-      className="col-span-1 md:col-span-2 lg:col-span-6"
+      className={className}
       headerRight={
         <SlidingTabs
           value={activePreset}
