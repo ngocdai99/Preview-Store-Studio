@@ -161,7 +161,7 @@ export function Navbar() {
                 : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            <span className="hidden sm:inline">Live </span>Demo
+            <span className="hidden sm:inline">Live&nbsp;</span>Demo
           </Link>
 
           <PrimaryButton
