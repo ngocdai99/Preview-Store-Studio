@@ -1,7 +1,12 @@
 /* ─── Universal Store Import Modal Styles ─── */
 .store-import-card {
+  position: relative;
   max-width: 480px;
   gap: 14px;
+}
+
+.store-import-card .confirm-modal-header {
+  padding-right: 32px;
 }
 
 .store-import-title-wrap {
@@ -71,18 +76,21 @@
 }
 
 .store-import-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   background: none;
   border: 0;
   color: #94a3b8;
   cursor: pointer;
   padding: 6px;
   border-radius: 8px;
-  margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   transition: all 0.18s ease;
+  z-index: 2;
 }
 
 .store-import-close-btn:hover {
