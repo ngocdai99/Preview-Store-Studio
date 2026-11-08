@@ -26,21 +26,18 @@ export function Footer() {
         >
           {footer.links.map((link) => {
             const isExternal = link.href.startsWith("http");
-            const isStaticPage = !link.href.startsWith("#") && !isExternal;
 
-            if (isStaticPage || isExternal) {
+            if (isExternal) {
               return (
                 <a
                   key={link.label}
                   href={link.href}
-                  target={isExternal ? "_blank" : undefined}
-                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center min-h-[44px] px-1 gap-1 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
                 >
                   <span>{link.label}</span>
-                  {isExternal && (
-                    <ArrowUpRight className="w-3 h-3 opacity-60 stroke-[2.2]" />
-                  )}
+                  <ArrowUpRight className="w-3 h-3 opacity-60 stroke-[2.2]" />
                 </a>
               );
             }
