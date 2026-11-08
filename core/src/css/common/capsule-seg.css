@@ -29,9 +29,8 @@
   top: 3px;
   bottom: 3px;
   left: 0;
-  width: 28px !important;
   height: 28px !important;
-  border-radius: 50% !important;
+  border-radius: 9999px !important;
   background: #1D1E1D !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -67,20 +66,25 @@ body:not([data-ui-store])[data-dual=true] .pill {
   background: transparent !important;
   border: 0 !important;
   color: #8e8e93;
-  width: 28px !important;
+  width: auto !important;
   height: 28px !important;
-  min-width: 28px !important;
-  max-width: 28px !important;
-  flex: 0 0 28px !important;
-  padding: 0 !important;
+  min-width: unset !important;
+  max-width: unset !important;
+  flex: 0 0 auto !important;
+  padding: 0 12px 0 10px !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50% !important;
+  gap: 6px;
+  border-radius: 9999px !important;
   cursor: pointer;
   transition: color 0.2s ease, transform 0.15s ease;
   box-sizing: border-box;
   box-shadow: none !important;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .capsule-seg:not(#theme) button:hover:not(.on),
@@ -177,25 +181,30 @@ body:not([data-ui-store])[data-dual=true] .pill {
   background: #ECEDF0 !important;
   box-shadow: none !important;
   border: none !important;
-  border-radius: 50% !important;
-  width: 28px !important;
+  border-radius: 9999px !important;
   height: 28px !important;
 }
 
 :root[data-ui=light] .capsule-seg:not(#theme) button,
 :root[data-ui=light] .seg button {
-  width: 28px !important;
+  width: auto !important;
   height: 28px !important;
-  min-width: 28px !important;
-  max-width: 28px !important;
-  flex: 0 0 28px !important;
-  border-radius: 50% !important;
+  min-width: unset !important;
+  max-width: unset !important;
+  flex: 0 0 auto !important;
+  padding: 0 12px 0 10px !important;
+  border-radius: 9999px !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  /* Icon chưa chọn #6B7280 */
+  /* Icon & chữ chưa chọn #6B7280 */
   color: #6B7280 !important;
   transition: background-color .15s ease, color .15s ease !important;
+}
+
+:root[data-ui=light] .capsule-seg:not(#theme) .s-label,
+:root[data-ui=light] .seg .s-label {
+  color: #6B7280 !important;
 }
 
 :root[data-ui=light] .capsule-seg:not(#theme) .s-ico,
@@ -206,10 +215,15 @@ body:not([data-ui-store])[data-dual=true] .pill {
   opacity: 1 !important;
 }
 
-/* Ô khi rê chuột #F3F4F6, Icon khi rê chuột #374151 */
+/* Ô khi rê chuột #F3F4F6, Icon & chữ khi rê chuột #374151 */
 :root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on),
 :root[data-ui=light] .seg button:hover:not(.on) {
   background: #F3F4F6 !important;
+  color: #374151 !important;
+}
+
+:root[data-ui=light] .capsule-seg:not(#theme) button:hover:not(.on) .s-label,
+:root[data-ui=light] .seg button:hover:not(.on) .s-label {
   color: #374151 !important;
 }
 
@@ -220,11 +234,16 @@ body:not([data-ui-store])[data-dual=true] .pill {
   opacity: 1 !important;
 }
 
-/* Icon đang chọn #1F2937 */
+/* Icon & chữ đang chọn #1F2937 */
 :root[data-ui=light] .capsule-seg:not(#theme) button.on,
 :root[data-ui=light] .seg button.on {
   color: #1F2937 !important;
   background: transparent !important;
+}
+
+:root[data-ui=light] .capsule-seg:not(#theme) button.on .s-label,
+:root[data-ui=light] .seg button.on .s-label {
+  color: #1F2937 !important;
 }
 
 :root[data-ui=light] .capsule-seg:not(#theme) button.on .s-ico,
