@@ -140,7 +140,7 @@
   justify-content: center;
   width: 12px;
   height: 12px;
-  color: #94a3b8;
+  color: #C4C5C4;
   margin-left: 2px;
   transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
@@ -770,7 +770,9 @@
 }
 
 /* Button & Dropdown Synchronization */
-#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #f8fafc; }
+#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #C4C5C4; }
+#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-label { color: #C4C5C4; }
+#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-arr { color: #C4C5C4; }
 :root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #0f172a; }
 
 #stageViewDropdown:has(.menu.show) .stage-view-btn {
