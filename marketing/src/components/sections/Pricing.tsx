@@ -51,7 +51,7 @@ export function Pricing() {
                     <div className="mb-4 pt-4 border-t border-border">
                       <div className="flex items-center justify-between text-[11px] font-normal text-muted mb-1.5">
                         <span className="uppercase tracking-wider">One-time purchase</span>
-                        <span className="text-accent font-medium">First 100 copies</span>
+                        <span className="text-accent font-medium">First 20 copies</span>
                       </div>
                       <div className="flex items-baseline gap-2">
                         {tier.price.original && (
