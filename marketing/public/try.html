@@ -751,8 +751,8 @@ Pay once on Gumroad, own forever. No subscriptions, no cloud dependencies.</text
     <span class="cc" id="ipadShotCounter">0 / 10 screenshots</span>
   </div>
   <div class="sl" id="ipadSlist"></div>
-  <button class="add" id="addIpadShot"><span class="add-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>Add Screenshot</button>
-  <input type="file" id="ipadShotFile" accept="image/*" hidden>
+  <button class="add" id="addIpadShot"><span class="add-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>Upload screenshots</button>
+  <input type="file" id="ipadShotFile" accept="image/*" multiple hidden>
   </div>
 </div>
 <div class="card collapsed" data-only="google" id="tabCard">
@@ -8340,64 +8340,7 @@ if(typeof flashField === 'function') flashField('dest-ipad');
 saveState();
 };
 }
-const addIpadShot = $('addIpadShot');
-if(addIpadShot){
-addIpadShot.onclick = () => {
-if(typeof isDemoMode === 'function' && isDemoMode()){
-if(typeof requireFullVersion === 'function') requireFullVersion('ipad-screenshots');
-return;
-}
-if((typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10){
-showToast('iPad allows up to 10 screenshots', 'warn');
-return;
-}
-if(!SUPPORTS_IPAD) setSupportsIpad(true);
-IPAD_SHOTS.push('');
-renderIpadShots();
-saveState();
-const ins = $$('#ipadSlist input');
-if(ins.length) ins[ins.length - 1].focus();
-};
-}
-const ipadShotFile = $('ipadShotFile');
-if(ipadShotFile){
-ipadShotFile.onchange = e => {
-const f = e.target.files[0];
-if(!f) return;
-if(ipadPick < 0 && (typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10){
-showToast('iPad allows up to 10 screenshots', 'warn');
-e.target.value = '';
-return;
-}
-if(typeof isDemoMode === 'function' && isDemoMode()){
-window._demoScreenshotUploadCount = 0;
-if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
-e.target.value = '';
-return;
-}
-if(typeof validateUploadFile === 'function' && !validateUploadFile(f, MAX_UPLOAD_BYTES, 'iPad screenshot')){
-e.target.value = '';
-return;
-}
-readFile(f, d => {
-if(!SUPPORTS_IPAD) setSupportsIpad(true);
-ipadPick < 0 ? IPAD_SHOTS.push(d) : IPAD_SHOTS[ipadPick] = d;
-ipadPick = -1;
-renderIpadShots();
-saveState();
-showToast('iPad screenshot uploaded!', 'ok');
-});
-e.target.value = '';
-};
-}
-const ipadSlistArea = $('ipadSlist') ? $('ipadSlist').parentElement : null;
-if(ipadSlistArea){
-ipadSlistArea.addEventListener('dragover', e => e.preventDefault());
-ipadSlistArea.addEventListener('drop', e => {
-const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
-if(files.length){
-e.preventDefault();
-e.stopPropagation();
+function addIpadFiles(files){
 let validFiles = files.filter(f => (typeof validateUploadFile !== 'function') || validateUploadFile(f, MAX_UPLOAD_BYTES, 'iPad screenshot'));
 if(!validFiles.length) return;
 const currentCount = typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0;
@@ -8411,18 +8354,85 @@ validFiles = validFiles.slice(0, room);
 showToast(`Only ${room} more fit (max 10) — extra files skipped`, 'warn');
 }
 if(!SUPPORTS_IPAD) setSupportsIpad(true);
-let loaded = 0;
+let done = 0;
+const out = [];
 validFiles.forEach(f => {
 readFile(f, d => {
-IPAD_SHOTS.push(d);
-loaded++;
-if(loaded === validFiles.length){
+out.push(d);
+if(++done === validFiles.length){
+out.forEach(dataUrl => {
+const emptyIdx = IPAD_SHOTS.findIndex(item => !item || !item.trim());
+if(emptyIdx >= 0){
+IPAD_SHOTS[emptyIdx] = dataUrl;
+} else if(IPAD_SHOTS.length < 10){
+IPAD_SHOTS.push(dataUrl);
+}
+});
 renderIpadShots();
 saveState();
-showToast(`Added ${validFiles.length} iPad screenshot(s)!`, 'ok');
+showToast(`Added ${validFiles.length} iPad screenshot${validFiles.length===1?'':'s'}!`, 'ok');
 }
 });
 });
+}
+const addIpadShot = $('addIpadShot');
+if(addIpadShot){
+addIpadShot.onclick = () => {
+if(typeof isDemoMode === 'function' && isDemoMode()){
+if(typeof requireFullVersion === 'function') requireFullVersion('ipad-screenshots');
+return;
+}
+if((typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10){
+showToast('iPad allows up to 10 screenshots', 'warn');
+return;
+}
+if(typeof canUpload === 'function' && !canUpload(1000)) return;
+ipadPick = -1;
+const fi = $('ipadShotFile');
+if(fi) fi.click();
+};
+}
+const ipadShotFile = $('ipadShotFile');
+if(ipadShotFile){
+ipadShotFile.onchange = e => {
+const files = [...e.target.files];
+e.target.value = '';
+if(!files.length) return;
+if(ipadPick < 0 && (typeof IPAD_SHOTS !== 'undefined' ? IPAD_SHOTS.length : 0) >= 10){
+showToast('iPad allows up to 10 screenshots', 'warn');
+return;
+}
+if(typeof isDemoMode === 'function' && isDemoMode()){
+window._demoScreenshotUploadCount = 0;
+if(typeof requireFullVersion === 'function') requireFullVersion('upload-shots');
+return;
+}
+if(ipadPick >= 0){
+const idx = ipadPick;
+ipadPick = -1;
+if(typeof validateUploadFile === 'function' && !validateUploadFile(files[0], MAX_UPLOAD_BYTES, 'iPad screenshot')) return;
+readFile(files[0], d => {
+if(!SUPPORTS_IPAD) setSupportsIpad(true);
+IPAD_SHOTS[idx] = d;
+renderIpadShots();
+saveState();
+showToast('iPad screenshot updated!', 'ok');
+});
+} else {
+ipadPick = -1;
+addIpadFiles(files);
+}
+};
+}
+const ipadSlistArea = $('ipadSlist') ? $('ipadSlist').parentElement : null;
+if(ipadSlistArea){
+ipadSlistArea.addEventListener('dragover', e => e.preventDefault());
+ipadSlistArea.addEventListener('drop', e => {
+const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+if(files.length){
+e.preventDefault();
+e.stopPropagation();
+addIpadFiles(files);
 }
 });
 }
