@@ -159,23 +159,25 @@
 :root[data-ui=light] input:focus,:root[data-ui=light] textarea:focus{background:#fff}
 :root[data-ui=light] input:disabled{color:var(--mut);background:#f5f5f7}
 :root[data-ui=light] .btn.primary,:root[data-ui=light] .btn.primary:hover{color:#fff}
-:root[data-ui=light] .sidebar-toggle-btn{
-  background:#ffffff;
-  border-color:rgba(15,23,42,.14);
-  color:#64748b;
-  box-shadow:0 1px 3px rgba(15,23,42,.06),inset 0 1px 0 #ffffff;
+:root[data-ui=light] .brand h1{color:#0f172a !important}
+:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn{
+  background:transparent !important;
+  border:none !important;
+  color:#475569 !important;
+  box-shadow:none !important;
 }
-:root[data-ui=light] .sidebar-toggle-btn:hover{
-  background:#f8fafc;
-  border-color:rgba(15,23,42,.32);
-  color:#0f172a;
-  box-shadow:0 3px 10px rgba(15,23,42,.09),inset 0 1px 0 #ffffff;
+:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn:hover{
+  background:rgba(0,0,0,0.06) !important;
+  color:#0f172a !important;
 }
-:root[data-ui=light] .sidebar-toggle-btn.active{
-  background:#ffffff;
-  border-color:rgba(15,23,42,.26);
-  color:#0f172a;
-  box-shadow:0 1px 4px rgba(15,23,42,.08),inset 0 1px 0 #ffffff;
+:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn svg{
+  color:inherit !important;
+  opacity:0.65 !important;
+}
+:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn:hover svg{
+  color:#0f172a !important;
+  stroke:#0f172a !important;
+  opacity:1 !important;
 }
 :root[data-ui=light] .add{border-color:#c7c7cc}
 :root[data-ui=light] .add:hover{background:rgba(0,0,0,.02)}
@@ -228,7 +230,6 @@
   background:var(--ac);
   box-shadow:0 2px 6px var(--glow);
 }
-
 
 /* High-Contrast Store Switcher (.seg) in Light Mode */
 :root[data-ui=light] .seg{

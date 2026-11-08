@@ -79,7 +79,13 @@ function initHeader() {
       bar.setAttribute('aria-label', 'Editor Activity Bar');
       editor.insertBefore(bar, editor.firstChild);
     }
-    bar.innerHTML = '';
+    let itemsContainer = $('activityBarItems');
+    if (!itemsContainer) {
+      itemsContainer = bar;
+      itemsContainer.innerHTML = '';
+    } else {
+      itemsContainer.innerHTML = '';
+    }
 
     const cards = $$('.editor .card');
     cards.forEach((card, idx) => {
@@ -132,7 +138,7 @@ function initHeader() {
         selectEditorCard(cardId);
       });
 
-      bar.appendChild(btn);
+      itemsContainer.appendChild(btn);
     });
 
     // Ensure at least one card is selected and activity bar is immediately styled
@@ -174,7 +180,7 @@ function initHeader() {
     const activeColor = isLight ? '#006636' : '#ffffff';
     const activeBg = isLight ? 'rgba(0, 102, 54, 0.08)' : 'rgba(255, 255, 255, 0.14)';
 
-    $$('.activity-bar-btn').forEach(btn => {
+    $$('.activity-bar-btn[data-card-id]').forEach(btn => {
       const isAct = btn.dataset.cardId === selectedId;
       btn.classList.toggle('active', isAct);
       btn.setAttribute('aria-selected', isAct ? 'true' : 'false');

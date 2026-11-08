@@ -36,67 +36,6 @@ header {
   flex-shrink: 0;
 }
 
-/* Sidebar Toggle Button (Fixed in Header Corner - Neutral & State-adaptive) */
-.sidebar-toggle-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: #1D1E1D;
-  border: 1px solid #282928;
-  color: #94a3b8;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  flex-shrink: 0;
-  user-select: none;
-}
-
-.sidebar-toggle-btn:hover {
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  transform: scale(1.04);
-}
-
-.sidebar-toggle-btn:active {
-  transform: scale(0.98);
-}
-
-.sidebar-toggle-btn.active {
-  border-color: rgba(255, 255, 255, 0.24);
-  background: rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-
-.sidebar-toggle-btn svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2;
-  display: block;
-  pointer-events: none;
-}
-
-.sidebar-toggle-btn .ico-sidebar-expanded {
-  display: block;
-}
-
-.sidebar-toggle-btn .ico-sidebar-collapsed {
-  display: none;
-}
-
-body.sidebar-collapsed .sidebar-toggle-btn .ico-sidebar-expanded,
-.sidebar-toggle-btn:not(.active) .ico-sidebar-expanded {
-  display: none;
-}
-
-body.sidebar-collapsed .sidebar-toggle-btn .ico-sidebar-collapsed,
-.sidebar-toggle-btn:not(.active) .ico-sidebar-collapsed {
-  display: block;
-}
 
 .logo {
   width: 34px;
@@ -127,6 +66,7 @@ body.sidebar-collapsed .sidebar-toggle-btn .ico-sidebar-collapsed,
   letter-spacing: -0.2px;
   line-height: 1.2;
   white-space: nowrap;
+  color: #C4C5C4;
 }
 
 .brand p {
