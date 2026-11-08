@@ -40,7 +40,7 @@
 .custom-cat-trigger:focus,
 .custom-cat-wrap.open .custom-cat-trigger {
   outline: 0;
-  border-color: var(--ac);
+  border-color: rgba(255, 255, 255, 0.32);
   box-shadow: none;
   background: #131413;
 }
@@ -81,7 +81,7 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
 
 .custom-cat-wrap.open .custom-cat-chevron {
   transform: rotate(180deg);
-  color: var(--ac);
+  color: #cbd5e1;
 }
 
 /* Category Dropdown Popover Menu */
@@ -256,7 +256,7 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
 :root[data-ui=light] .custom-cat-trigger:focus,
 :root[data-ui=light] .custom-cat-wrap.open .custom-cat-trigger {
   background: #ffffff;
-  border-color: var(--ac);
+  border-color: #64748b;
   box-shadow: none !important;
 }
 

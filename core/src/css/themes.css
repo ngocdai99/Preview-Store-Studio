@@ -339,7 +339,7 @@
 :root[data-ui=light] textarea:focus,
 :root[data-ui=light] select.fsel:focus{
   background:#ffffff;
-  border-color:var(--ac);
+  border-color:#64748b;
   box-shadow:none !important;
   outline:none;
 }
@@ -580,7 +580,7 @@ select.fsel:hover{
 }
 select.fsel:focus{
   outline:0;
-  border-color:var(--ac);
+  border-color:rgba(255,255,255,0.32);
   box-shadow:none !important;
   background-color:#131413;
 }
@@ -589,7 +589,7 @@ body[data-store=apple] #f-cat-google{display:none}
 body[data-store=google] #f-cat-apple{display:none}
 /* Replaced select.fsel with modern shadow */
 
-:root[data-ui=light] select.fsel:focus{background-color:#fff;border-color:var(--ac)}
+:root[data-ui=light] select.fsel:focus{background-color:#fff;border-color:#64748b}
 
 /* Search-result views (iPad / Google tablets) */
 .ipad-s-title{font-size:38px;font-weight:800;margin:14px 0 18px;letter-spacing:-.6px}

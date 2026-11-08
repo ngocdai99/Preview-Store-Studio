@@ -40,7 +40,7 @@
 .custom-iap-trigger:focus,
 .custom-iap-wrap.open .custom-iap-trigger {
   outline: 0;
-  border-color: var(--ac);
+  border-color: rgba(255, 255, 255, 0.32);
   box-shadow: none;
   background: #131413;
 }
@@ -81,7 +81,7 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
 
 .custom-iap-wrap.open .custom-iap-chevron {
   transform: rotate(180deg);
-  color: var(--ac);
+  color: #cbd5e1;
 }
 
 /* Monetization Dropdown Popover Menu */
@@ -266,7 +266,7 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
 :root[data-ui=light] .custom-iap-trigger:focus,
 :root[data-ui=light] .custom-iap-wrap.open .custom-iap-trigger {
   background: #ffffff;
-  border-color: var(--ac);
+  border-color: #64748b;
   box-shadow: none !important;
 }
 
