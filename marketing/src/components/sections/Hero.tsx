@@ -67,7 +67,7 @@ export function Hero() {
             </div>
 
             {/* Micro Trust Indicators */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-slate-500 dark:text-slate-400 font-medium">
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#475569] dark:text-[oklch(0.684_0.00275_157.5)] font-medium">
               <span className="inline-flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 No subscription
