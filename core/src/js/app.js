@@ -4010,7 +4010,6 @@ function updateIconDropZoneUi(){
   const dropZone = $('icoDropZone');
   const inspectBtn = $('icoInspect');
   const badge = $('iconStatusBadge');
-  const dimTag = $('iconDimTag');
   const removeBtn = $('icoRemove');
   const placeholder = isPlaceholderIcon();
 
@@ -4123,15 +4122,10 @@ let _iconValRunId = 0;
 function validateAppIcon(){
   updateIconDropZoneUi();
   const badge = $('iconStatusBadge');
-  const dimTag = $('iconDimTag');
   if(!badge) return;
   if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){
     badge.style.display = 'none';
     badge.innerHTML = '';
-    if(dimTag){
-      dimTag.style.display = 'none';
-      dimTag.textContent = '';
-    }
     return;
   }
   const targetDim = (store === 'google' ? 512 : 1024);
@@ -4146,10 +4140,6 @@ function validateAppIcon(){
       if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){
         badge.style.display = 'none';
         badge.innerHTML = '';
-        if(dimTag){
-          dimTag.style.display = 'none';
-          dimTag.textContent = '';
-        }
         return;
       }
       runIconPixelAudit(pngSrc);
@@ -4161,7 +4151,6 @@ function validateAppIcon(){
 
 function runIconPixelAudit(iconSrc){
   const badge = $('iconStatusBadge');
-  const dimTag = $('iconDimTag');
   if(!badge || !iconSrc) return;
   const runId = ++_iconValRunId;
   const img = new Image();
@@ -4171,10 +4160,6 @@ function runIconPixelAudit(iconSrc){
     if(isPlaceholderIcon() || !ICON || ICON === BLANK_ICON){
       badge.style.display = 'none';
       badge.innerHTML = '';
-      if(dimTag){
-        dimTag.style.display = 'none';
-        dimTag.textContent = '';
-      }
       return;
     }
     const w = img.naturalWidth || 0;
@@ -4229,11 +4214,6 @@ function runIconPixelAudit(iconSrc){
     if(store === 'apple'){
       // Rule 1: 1:1 Square aspect ratio
       if(!isSq){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag err';
-          dimTag.textContent = `${(w / (h || 1)).toFixed(2)}:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>App Store Error:</strong> Non-square icon (${w}×${h} px). Apple requires 1:1 square artwork (1024×1024 px).</span>`;
         badge.style.display = 'flex';
@@ -4242,11 +4222,6 @@ function runIconPixelAudit(iconSrc){
 
       // Rule 2: PNG format required
       if(mimeType && !isPng){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag warn';
-          dimTag.textContent = `1:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Format Notice:</strong> PNG format required by App Store Connect.</span>`;
         badge.style.display = 'flex';
@@ -4255,11 +4230,6 @@ function runIconPixelAudit(iconSrc){
 
       // Rule 3: 100% Opaque (no alpha channel)
       if(hasAlpha){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag err';
-          dimTag.textContent = `1:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>App Store Rejection Risk:</strong> Alpha transparency detected. Apple requires 100% opaque icon artwork.</span>`;
         badge.style.display = 'flex';
@@ -4268,22 +4238,13 @@ function runIconPixelAudit(iconSrc){
 
       // Rule 4: Exact 1024×1024 px dimensions
       if(w !== 1024 || h !== 1024){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag warn';
-          dimTag.textContent = `1:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Apple requires exact <strong>1024×1024 px</strong>.</span>`;
         badge.style.display = 'flex';
         return;
       }
 
-      // Compliant: All criteria met -> completely hide both dimTag and badge message
-      if(dimTag){
-        dimTag.style.display = 'none';
-        dimTag.textContent = '';
-      }
+      // Compliant: All criteria met -> completely hide badge message
       badge.className = 'shot-status-badge ok';
       badge.style.display = 'none';
       badge.innerHTML = '';
@@ -4300,11 +4261,6 @@ function runIconPixelAudit(iconSrc){
     else {
       // Rule 1: 1:1 Square aspect ratio
       if(!isSq){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag err';
-          dimTag.textContent = `${(w / (h || 1)).toFixed(2)}:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>Google Play Error:</strong> Non-square icon (${w}×${h} px). Google Play requires 1:1 square artwork (512×512 px).</span>`;
         badge.style.display = 'flex';
@@ -4315,11 +4271,6 @@ function runIconPixelAudit(iconSrc){
       const MAX_GOOGLE_ICON_BYTES = 1024 * 1024;
       if(sizeBytes > MAX_GOOGLE_ICON_BYTES){
         const sizeKb = (sizeBytes / 1024).toFixed(0);
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag err';
-          dimTag.textContent = `1:1 (${w}×${h}) · ${sizeKb} KB`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>File Size Error:</strong> ${sizeKb} KB exceeds Google Play 1024 KB limit.</span>`;
         badge.style.display = 'flex';
@@ -4328,11 +4279,6 @@ function runIconPixelAudit(iconSrc){
 
       // Rule 3: 32-bit PNG format (sRGB color space)
       if(mimeType && !isPng){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag err';
-          dimTag.textContent = `1:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge err';
         badge.innerHTML = `${SB_ERR}<span><strong>Format Notice:</strong> Google Play requires 32-bit PNG format.</span>`;
         badge.style.display = 'flex';
@@ -4341,11 +4287,6 @@ function runIconPixelAudit(iconSrc){
 
       // Rule 4: Do not include rounded corners or drop shadows in artwork
       if(hasPreRoundedCorners){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag warn';
-          dimTag.textContent = `1:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Notice:</strong> Pre-rounded corners or shadow detected. Google Play dynamically applies corner radius and shadow.</span>`;
         badge.style.display = 'flex';
@@ -4354,22 +4295,13 @@ function runIconPixelAudit(iconSrc){
 
       // Rule 5: Target dimensions 512×512 px
       if(w !== 512 || h !== 512){
-        if(dimTag){
-          dimTag.className = 'shot-dim-tag warn';
-          dimTag.textContent = `1:1 (${w}×${h})`;
-          dimTag.style.display = 'inline-flex';
-        }
         badge.className = 'shot-status-badge warn';
         badge.innerHTML = `${SB_WARN}<span><strong>Dimension Notice (${w}×${h} px):</strong> Google Play requires <strong>512×512 px</strong> square.</span>`;
         badge.style.display = 'flex';
         return;
       }
 
-      // Compliant: All criteria met -> completely hide both dimTag and badge message
-      if(dimTag){
-        dimTag.style.display = 'none';
-        dimTag.textContent = '';
-      }
+      // Compliant: All criteria met -> completely hide badge message
       badge.className = 'shot-status-badge ok';
       badge.style.display = 'none';
       badge.innerHTML = '';
@@ -4522,11 +4454,6 @@ if(icoRemoveBtn){
     if(badge){
       badge.style.display = 'none';
       badge.innerHTML = '';
-    }
-    const dimTag = $('iconDimTag');
-    if(dimTag){
-      dimTag.style.display = 'none';
-      dimTag.textContent = '';
     }
     renderIcons();
     saveState();
