@@ -65,7 +65,7 @@
   border-radius: 10px;
   border: 1px solid #282928;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  color: #EDEDED;
+  color: #C4C5C4;
   font-family: inherit;
   font-size: 12.5px;
   font-weight: 500;
@@ -81,7 +81,7 @@
 }
 
 .stage-view-btn:hover {
-  color: #ffffff;
+  color: #C4C5C4;
   border-color: #383A38;
   background: #222322;
   box-shadow: none !important;
@@ -109,7 +109,7 @@
 #gdt:has(.menu.show) .stage-view-btn,
 #gdt:hover .stage-view-btn {
   border-color: #383A38;
-  color: #ffffff;
+  color: #C4C5C4;
   background: #222322;
   box-shadow: none !important;
 }
@@ -151,7 +151,7 @@
 .stage-device-dropdown:has(.menu.show) .stage-view-arr,
 .stage-device-dropdown:hover .stage-view-arr {
   transform: rotate(180deg);
-  color: #ffffff;
+  color: #C4C5C4;
 }
 
 .stage-view-badge {
@@ -263,7 +263,7 @@
 
 .stage-view-menu .menu-item:hover {
   background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
+  color: #C4C5C4;
 }
 
 /* Base default for .stage-view-menu */
@@ -271,7 +271,7 @@
 .stage-view-menu .menu-item.active {
   background: rgba(255, 255, 255, 0.08);
   border: none !important;
-  color: #ffffff;
+  color: #C4C5C4;
 }
 
 .stage-view-menu .menu-item.on::before,
@@ -356,7 +356,7 @@
 
 #vt .menu-item:hover:not(.on) {
   background: rgba(255, 255, 255, 0.04) !important;
-  color: #f1f5f9 !important;
+  color: #C4C5C4 !important;
   border: none !important;
 }
 
@@ -422,7 +422,7 @@
   background: #94a3b8 !important;
 }
 #vt .menu-item.on .mi-name {
-  color: #f1f5f9 !important;
+  color: #C4C5C4 !important;
   font-weight: 500 !important;
 }
 #vt .menu-item.on .mi-ico {
@@ -459,7 +459,7 @@
 #menuAppleDevice .menu-item.active .mi-name,
 #menuGoogleDevice .menu-item.on .mi-name,
 #menuGoogleDevice .menu-item.active .mi-name {
-  color: #f1f5f9 !important;
+  color: #C4C5C4 !important;
   font-weight: 500 !important;
 }
 #menuAppleDevice .menu-item.on .mi-ico,
@@ -475,7 +475,7 @@
 #menuAppleDevice .menu-item:hover:not(.on),
 #menuGoogleDevice .menu-item:hover:not(.on) {
   background: rgba(255, 255, 255, 0.04) !important;
-  color: #f1f5f9 !important;
+  color: #C4C5C4 !important;
   border: none !important;
 }
 #menuAppleDevice .menu-item:hover:not(.on) .mi-ico,
