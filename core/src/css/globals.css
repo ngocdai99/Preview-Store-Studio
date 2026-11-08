@@ -33,14 +33,29 @@
   --btn-dark-border: #282928;
   --btn-dark-text: #EDEDED;
   --btn-dark-hover-bg: #222322;
-  --btn-dark-hover-border: #282928;
-  --btn-dark-hover-text: #EDEDED;
+  --btn-dark-hover-border: #383a38;
+  --btn-dark-hover-text: #ffffff;
   --purple-brand: #00D085;
   --purple-brand-hover: #26e099;
   --purple-brand-light: rgba(0, 208, 133, 0.15);
   --purple-brand-border: rgba(0, 208, 133, 0.35);
   --icon-unselected: #C4C5C4; /* Unselected icon color */
   color-scheme: dark;
+}
+
+:root[data-ui="light"], [data-theme="light"], html[data-ui="light"] {
+  --btn-white-bg: #2e302f;
+  --btn-white-text: #ffffff;
+  --btn-white-hover-bg: #1e201f;
+  --btn-white-hover-text: #ffffff;
+  --btn-white-active-bg: #121312;
+  --btn-white-border: #232524;
+  --btn-dark-bg: #ffffff;
+  --btn-dark-border: rgba(0, 0, 0, 0.10);
+  --btn-dark-text: #1e293b;
+  --btn-dark-hover-bg: #f8fafc;
+  --btn-dark-hover-border: rgba(0, 0, 0, 0.16);
+  --btn-dark-hover-text: #0f172a;
 }
 
 @theme inline {
@@ -93,7 +108,7 @@ body {
   color: var(--nav-pill-color) !important;
 }
 
-/* Supabase Standard Button Styles: White Button & Black Button */
+/* Standard Unified Control Buttons: Primary (.btn-white) & Secondary (.btn-dark, .btn-black) */
 .btn-white {
   background-color: var(--btn-white-bg);
   color: var(--btn-white-text);
@@ -101,6 +116,8 @@ body {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   border-radius: 9px;
   font-weight: 600;
+  font-size: 13px;
+  padding: 8px 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -108,6 +125,7 @@ body {
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   user-select: none;
   cursor: pointer;
+  line-height: 1.25;
 }
 
 .btn-white:hover {
@@ -129,6 +147,8 @@ body {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
   border-radius: 9px;
   font-weight: 600;
+  font-size: 13px;
+  padding: 8px 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -136,13 +156,14 @@ body {
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   user-select: none;
   cursor: pointer;
+  line-height: 1.25;
 }
 
 .btn-black:hover:not(:disabled),
 .btn-dark:hover:not(:disabled) {
   background-color: var(--btn-dark-hover-bg, #222322);
-  border-color: var(--btn-dark-hover-border, #282928);
-  color: var(--btn-dark-hover-text, #EDEDED);
+  border-color: var(--btn-dark-hover-border, #383a38);
+  color: var(--btn-dark-hover-text, #ffffff);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
