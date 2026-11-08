@@ -1724,10 +1724,10 @@ assert(bundledHtml.includes('CURRENT_PRESET_KEY !== \'draft\'') && bundledHtml.i
 assert(bundledHtml.includes('CURRENT_ACTIVE_PRESET = key'), 'loadPreset updates CURRENT_ACTIVE_PRESET while preserving userDraft');
 assert(bundledHtml.includes('applyImportedStoreApp') && bundledHtml.includes('userDraft = getCurrentStateObject();'), 'applyImportedStoreApp replaces draft with imported app data');
 
-// Test 8: Workspace pill decorative top accent lines (Luminous purple for Selected pill)
+// Test 8: Workspace pill decorative top accent lines (Brand green for Selected pill)
 assert(bundledHtml.includes('#btnDraft::before') && bundledHtml.includes('#btnPresetPill::before'), 'Workspace bar defines decorative top accent line pseudo-elements for draft and preset pills');
-assert(bundledHtml.includes('#btnDraft.on::before') && (bundledHtml.includes('#c084fc') || bundledHtml.includes('#a855f7') || bundledHtml.includes('#9333ea')), 'Selected draft pill uses luminous purple top accent gradient');
-assert(bundledHtml.includes('#btnPresetPill.on::before') && (bundledHtml.includes('#c084fc') || bundledHtml.includes('#a855f7') || bundledHtml.includes('#9333ea')), 'Preset pill has luminous purple top accent gradient');
+assert(bundledHtml.includes('#btnDraft.on::before') && (bundledHtml.includes('#00D085') || bundledHtml.includes('--brand-secondary')), 'Selected draft pill uses brand secondary green top accent line');
+assert(bundledHtml.includes('#btnPresetPill.on::before') && (bundledHtml.includes('#00D085') || bundledHtml.includes('--brand-secondary')), 'Preset pill uses brand secondary green top accent line');
 
 // ---------------------------------------------------------------------
 // [SUITE 21]: Supported Devices Clean Checkboxes & Draft iPad State Reset Verification

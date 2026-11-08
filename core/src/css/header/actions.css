@@ -283,37 +283,37 @@
   box-shadow: none !important;
 }
 
-/* Selected State: White Button (Matches Marketing White Button Tokens) */
+/* Selected State: Dark pill (darker than unselected #1D1E1D, with brighter border) */
 .ms-pill.custom.on,
 .ms-pill.custom.has-draft.on,
 .ms-pill.on {
-  background: #EFF1F0 !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  color: #252625 !important;
+  background: #141514 !important;
+  border: 1px solid #383A38 !important;
+  color: #FFFFFF !important;
   height: 34px !important;
   min-height: 34px !important;
   max-height: 34px !important;
   box-sizing: border-box !important;
   line-height: 1 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
 .ms-pill.custom.on:hover,
 .ms-pill.custom.has-draft.on:hover,
 .ms-pill.on:hover {
-  background: #E1E3E2 !important;
-  color: #252625 !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
+  background: #181918 !important;
+  color: #FFFFFF !important;
+  border-color: #484A48 !important;
   box-shadow: none !important;
 }
 
 .ms-pill.custom.on:active,
 .ms-pill.custom.has-draft.on:active,
 .ms-pill.on:active {
-  background: #D5D8D6 !important;
+  background: #101110 !important;
 }
 
-/* ---------- WORKSPACE PILL TOP ACCENT LINES (PURPLE FOR SELECTED PILL) ---------- */
+/* ---------- WORKSPACE PILL TOP ACCENT LINES (BRAND COLOR FOR SELECTED PILL) ---------- */
 #btnDraft,
 #btnPresetPill {
   position: relative;
@@ -339,11 +339,11 @@
   transition: opacity 0.2s ease;
 }
 
-/* Luminous purple top-edge accent line: Marks SELECTED pill (.on) against white surface */
+/* Luminous brand green top-edge accent line (2px): Marks SELECTED pill (.on) */
 #btnDraft.on::before,
 #btnPresetPill.on::before {
   opacity: 1;
-  background: linear-gradient(90deg, #9333ea 0%, #a855f7 35%, rgba(168, 85, 247, 0.5) 65%, transparent 100%);
+  background: var(--brand-secondary, #00D085);
 }
 
 .ms-pill.custom.has-draft img,
@@ -357,33 +357,42 @@
   flex-shrink: 0;
 }
 
-/* Badge for unselected pill: soft rounded pill badge */
-.ms-pill.custom.has-draft small,
-.ms-pill small {
-  color: #e2e8f0;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+/* Badge for Draft: neutral gray */
+#draftBtnBadge,
+#btnDraft small,
+#btnDraft.on small,
+.ms-pill.custom.has-draft small {
+  color: #D1D5DB !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
   padding: 1.5px 7px;
   border-radius: 999px;
   font-size: 10.5px;
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: normal;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
   transition: all .2s ease;
   box-shadow: none !important;
   text-shadow: none !important;
 }
 
-/* Badge for selected pill: subtle soft rounded badge */
-.ms-pill.custom.on small,
-.ms-pill.custom.has-draft.on small,
-.ms-pill.on small {
-  color: #475569 !important;
-  background: rgba(0, 0, 0, 0.06) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+/* Badge for Preset: brand green tone */
+#presetBtnBadge,
+#btnPresetPill small,
+#btnPresetPill.on small,
+.ms-pill small {
+  color: #00D085 !important;
+  background: rgba(0, 208, 133, 0.12) !important;
+  border: 1px solid rgba(0, 208, 133, 0.32) !important;
+  padding: 1.5px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
   font-weight: 500 !important;
   text-transform: none !important;
   letter-spacing: normal !important;
+  transition: all .2s ease;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 /* Close button for unselected pill (bare X icon, no background container) */
@@ -398,37 +407,37 @@
   border-radius: 0;
   border: none;
   background: transparent !important;
-  color: #989A99;
+  color: #8B8F98;
   font-size: 15px;
   font-weight: 500;
   line-height: 1;
   cursor: pointer;
   padding: 0 1px;
-  opacity: 0.75;
+  opacity: 0.8;
   box-shadow: none !important;
   transition: opacity .15s ease, color .15s ease;
 }
 
 .ms-pill-reset-btn:hover {
   background: transparent !important;
-  color: #ffffff;
+  color: #FFFFFF;
   opacity: 1;
 }
 
-/* Close button on selected white pill */
+/* Close button on selected pill */
 .ms-pill.custom.on .ms-pill-reset-btn,
 .ms-pill.custom.has-draft.on .ms-pill-reset-btn,
 .ms-pill.on .ms-pill-reset-btn {
   background: transparent !important;
-  color: #475569 !important;
-  opacity: 0.7;
+  color: #8B8F98 !important;
+  opacity: 0.8;
 }
 
 .ms-pill.custom.on .ms-pill-reset-btn:hover,
 .ms-pill.custom.has-draft.on .ms-pill-reset-btn:hover,
 .ms-pill.on .ms-pill-reset-btn:hover {
   background: transparent !important;
-  color: #0f172a !important;
+  color: #FFFFFF !important;
   opacity: 1;
 }
 
@@ -499,43 +508,55 @@
 :root[data-ui=light] .ms-pill.custom.has-draft.on,
 :root[data-ui=light] .ms-pill.on {
   background: #ffffff !important;
-  border: 1px solid rgba(15, 23, 42, 0.12) !important;
-  color: #0f172a !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #111827 !important;
   font-weight: 500 !important;
   height: 34px !important;
   min-height: 34px !important;
   max-height: 34px !important;
   box-sizing: border-box !important;
   line-height: 1 !important;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
 }
 
 :root[data-ui=light] .ms-pill.custom.on:hover,
 :root[data-ui=light] .ms-pill.custom.has-draft.on:hover,
 :root[data-ui=light] .ms-pill.on:hover {
   background: #ffffff !important;
-  border-color: rgba(15, 23, 42, 0.22) !important;
+  border-color: #94A3B8 !important;
   color: #000000 !important;
   box-shadow: none !important;
 }
 
+/* Light mode - Huy hiệu Draft: trung tính (xám) */
+:root[data-ui=light] #draftBtnBadge,
+:root[data-ui=light] #btnDraft small,
+:root[data-ui=light] #btnDraft.on small,
 :root[data-ui=light] .ms-pill.custom small,
 :root[data-ui=light] .ms-pill.custom.has-draft small {
-  color: #475569;
-  background: rgba(15, 23, 42, 0.05);
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  font-weight: 500;
-  text-transform: none;
-}
-
-:root[data-ui=light] .ms-pill.custom.on small,
-:root[data-ui=light] .ms-pill.custom.has-draft.on small,
-:root[data-ui=light] .ms-pill.on small {
-  color: #7e22ce !important;
-  background: rgba(168, 85, 247, 0.08) !important;
-  border: 1px solid rgba(168, 85, 247, 0.2) !important;
+  color: #4B5563 !important;
+  background: #F3F4F6 !important;
+  border: 1px solid #E5E7EB !important;
   font-weight: 500 !important;
   text-transform: none !important;
+}
+
+/* Light mode - Huy hiệu Preset: tông brand (nền xanh rất nhạt, chữ xanh) */
+:root[data-ui=light] #presetBtnBadge,
+:root[data-ui=light] #btnPresetPill small,
+:root[data-ui=light] #btnPresetPill.on small,
+:root[data-ui=light] .ms-pill.on small {
+  color: #006636 !important;
+  background: #E6F4EC !important;
+  border: 1px solid #A9D6BC !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+:root[data-ui=light] .ms-pill.custom.has-draft img,
+:root[data-ui=light] .ms-pill img {
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
 }
 
 :root[data-ui=light] .ms-pill-reset-btn {
@@ -560,35 +581,18 @@
   color: #0f172a !important;
 }
 
-/* Light mode top accent lines (Active only on SELECTED pill) */
+/* Light mode top accent lines (Active only on SELECTED pill, 2px brand primary green) */
 :root[data-ui=light] #btnDraft::before,
 :root[data-ui=light] #btnPresetPill::before {
   opacity: 0;
   top: 0;
+  height: 2px;
 }
 
 :root[data-ui=light] #btnDraft.on::before,
 :root[data-ui=light] #btnPresetPill.on::before {
   opacity: 1;
-  background: linear-gradient(90deg, #9333ea 0%, #a855f7 35%, rgba(168, 85, 247, 0.55) 65%, transparent 100%);
-}
-
-:root[data-ui=light] #btnPresetPill.on {
-  border-color: rgba(168, 85, 247, 0.45) !important;
-  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.16), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
-}
-
-:root[data-ui=light] #btnPresetPill.on:hover {
-  border-color: rgba(168, 85, 247, 0.7) !important;
-  box-shadow: none !important;
-}
-
-:root[data-ui=light] #btnPresetPill.on small {
-  color: #7e22ce !important;
-  background: rgba(168, 85, 247, 0.08) !important;
-  border: 1px solid rgba(168, 85, 247, 0.2) !important;
-  font-weight: 500 !important;
-  text-transform: none !important;
+  background: var(--brand-primary, #006636);
 }
 
 #btnPresets {
