@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { siteConfig } from "@/config/site";
@@ -15,26 +14,23 @@ export default function TermsPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-foreground selection:text-background transition-colors">
       <Navbar />
 
-      <main className="flex-1 py-12 sm:py-16 lg:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 py-10 sm:py-14 lg:py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="mb-10 sm:mb-12 border-b border-border pb-8">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-[oklch(0.76_0.15_157.5)] text-xs font-medium mb-3">
-              <span>Agreement &amp; Licensing</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-[#0f172a] dark:text-white">
+          <div className="mb-8 sm:mb-10 border-b border-border pb-6">
+            <h1 className="text-2xl sm:text-[26px] font-semibold tracking-tight text-foreground">
               Terms of Service &amp; Refund Policy
             </h1>
-            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-2 text-xs text-muted">
               Last updated: November 2026
             </p>
           </div>
 
           {/* Content Sections */}
-          <div className="space-y-10 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
+          <div className="space-y-8 text-[#d1d5db] text-[13.5px] sm:text-[14px] leading-relaxed">
             {/* Section 1 */}
-            <section className="space-y-3">
-              <h2 className="text-xl font-medium text-[#0f172a] dark:text-white tracking-tight">
+            <section className="space-y-2">
+              <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
                 1. Acceptance of Terms
               </h2>
               <p>
@@ -43,23 +39,23 @@ export default function TermsPage() {
             </section>
 
             {/* Section 2 */}
-            <section className="space-y-3">
-              <h2 className="text-xl font-medium text-[#0f172a] dark:text-white tracking-tight">
+            <section className="space-y-2">
+              <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
                 2. Software License Grants
               </h2>
               <p>
                 Store Preview Studio is sold as a perpetual, one-time purchase license. Depending on the tier you acquire:
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-                <div className="p-4 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-border">
-                  <h3 className="font-medium text-slate-900 dark:text-white">Plus Edition License</h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-3">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-card border border-border">
+                  <h3 className="text-[13.5px] font-semibold text-foreground">Plus Edition License</h3>
+                  <p className="text-xs text-muted mt-1 leading-normal">
                     Grants a non-exclusive, perpetual license for an individual developer or creator to prepare, preview, and export unlimited listings and mockups for personal and commercial applications.
                   </p>
                 </div>
-                <div className="p-4 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-border">
-                  <h3 className="font-medium text-slate-900 dark:text-white">Pro Edition License</h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-card border border-border">
+                  <h3 className="text-[13.5px] font-semibold text-foreground">Pro Edition License</h3>
+                  <p className="text-xs text-muted mt-1 leading-normal">
                     Grants a commercial team license including full unminified source code access, white-label client presentation rights, and multi-seat deployment across team members within your organization.
                   </p>
                 </div>
@@ -70,8 +66,8 @@ export default function TermsPage() {
             </section>
 
             {/* Section 3 */}
-            <section className="space-y-3">
-              <h2 className="text-xl font-medium text-[#0f172a] dark:text-white tracking-tight">
+            <section className="space-y-2">
+              <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
                 3. Ownership of Deliverables &amp; User Content
               </h2>
               <p>
@@ -83,8 +79,8 @@ export default function TermsPage() {
             </section>
 
             {/* Section 4 */}
-            <section className="space-y-3">
-              <h2 className="text-xl font-medium text-[#0f172a] dark:text-white tracking-tight">
+            <section className="space-y-2">
+              <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
                 4. 14-Day Transparent Refund Policy
               </h2>
               <p>
@@ -96,14 +92,14 @@ export default function TermsPage() {
             </section>
 
             {/* Section 5 */}
-            <section className="space-y-3">
-              <h2 className="text-xl font-medium text-[#0f172a] dark:text-white tracking-tight">
+            <section className="space-y-2">
+              <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
                 5. Disclaimer Regarding App Store Review &amp; Approval
               </h2>
               <p>
                 Store Preview Studio provides validation checks and layout previews based on publicly accessible store formatting guidelines. However:
               </p>
-              <ul className="list-disc pl-5 space-y-1.5 text-slate-600 dark:text-slate-400">
+              <ul className="list-disc pl-5 space-y-1 text-muted">
                 <li>
                   Store Preview Studio is an independent development tool and is not endorsed by, sponsored by, or affiliated with Apple Inc. or Google LLC.
                 </li>
@@ -114,8 +110,8 @@ export default function TermsPage() {
             </section>
 
             {/* Section 6 */}
-            <section className="space-y-3">
-              <h2 className="text-xl font-medium text-[#0f172a] dark:text-white tracking-tight">
+            <section className="space-y-2">
+              <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
                 6. Limitation of Liability
               </h2>
               <p>
@@ -124,53 +120,37 @@ export default function TermsPage() {
             </section>
 
             {/* Section 7 */}
-            <section className="space-y-3">
-              <h2 className="text-xl font-medium text-[#0f172a] dark:text-white tracking-tight">
-                7. Contact
+            <section className="space-y-2">
+              <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
+                7. Contact &amp; Support
               </h2>
               <p>
-                For license verification, support, or terms inquiries:
+                For license verification, support, or refund inquiries:
               </p>
-              <div className="p-4 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-border">
-                <p className="font-medium text-slate-900 dark:text-white">Kai DevLabs</p>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                  Kai Support:{" "}
+              <div className="p-3.5 sm:p-4 rounded-xl bg-card border border-border">
+                <p className="font-medium text-foreground text-[13.5px]">Kai DevLabs</p>
+                <p className="text-xs text-muted mt-1.5 flex items-center gap-1.5 flex-wrap">
+                  <span>Kai Support:</span>
                   <a
                     href="mailto:support.kai.devlabs@gmail.com"
-                    className="text-emerald-700 dark:text-[oklch(0.76_0.15_157.5)] underline hover:opacity-80 font-mono text-[13.5px]"
+                    className="text-accent hover:text-accent-hover font-mono underline transition-colors"
                   >
                     support.kai.devlabs@gmail.com
                   </a>
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                <p className="text-[11.5px] text-muted mt-1">
                   Merchant storefront:{" "}
                   <a
                     href="https://kaidevlabs.gumroad.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:underline text-slate-600 dark:text-slate-300"
+                    className="text-foreground hover:underline"
                   >
                     kaidevlabs.gumroad.com
                   </a>
                 </p>
               </div>
             </section>
-          </div>
-
-          {/* Bottom Navigation */}
-          <div className="mt-12 pt-8 border-t border-border flex items-center justify-between text-sm">
-            <Link
-              href="/"
-              className="text-emerald-700 dark:text-[oklch(0.76_0.15_157.5)] hover:underline inline-flex items-center gap-1 font-medium"
-            >
-              <span>← Back to Home</span>
-            </Link>
-            <Link
-              href="/privacy"
-              className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-            >
-              <span>Read Privacy Policy →</span>
-            </Link>
           </div>
         </div>
       </main>
