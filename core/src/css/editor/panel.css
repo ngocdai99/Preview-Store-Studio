@@ -67,26 +67,6 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 }
 .activity-bar::-webkit-scrollbar{display:none}
 
-.activity-bar-items{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-  width:100%;
-}
-
-.activity-bar-divider{
-  width:24px;
-  height:1px;
-  background:#282928;
-  margin:2px 0;
-  flex-shrink:0;
-}
-
-:root[data-ui=light] .activity-bar-divider{
-  background:#e2e8f0;
-}
-
 .activity-bar-btn{
   width:32px;
   height:32px;
@@ -146,51 +126,6 @@ main{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
   stroke:#ffffff !important;
 }
 
-/* Sidebar Toggle Button inside Activity Bar (Matching standard activity-bar-btn styling) */
-.sidebar-toggle-btn.activity-bar-btn{
-  background:transparent;
-  box-shadow:none !important;
-  border:none !important;
-  color:#858585;
-}
-.sidebar-toggle-btn.activity-bar-btn svg{
-  opacity:0.45;
-}
-.sidebar-toggle-btn.activity-bar-btn:hover{
-  background:rgba(255,255,255,0.08) !important;
-  color:#ffffff !important;
-}
-.sidebar-toggle-btn.activity-bar-btn:hover svg{
-  opacity:0.85 !important;
-  color:#ffffff !important;
-  stroke:#ffffff !important;
-}
-.sidebar-toggle-btn.activity-bar-btn.active{
-  background:rgba(255,255,255,0.14) !important;
-  color:#ffffff !important;
-  border:none !important;
-  border-radius:8px !important;
-  box-shadow:none !important;
-}
-.sidebar-toggle-btn.activity-bar-btn.active svg{
-  opacity:1 !important;
-  color:#ffffff !important;
-  stroke:#ffffff !important;
-}
-.sidebar-toggle-btn .ico-sidebar-expanded{
-  display:block;
-}
-.sidebar-toggle-btn .ico-sidebar-collapsed{
-  display:none;
-}
-body.sidebar-collapsed .sidebar-toggle-btn .ico-sidebar-expanded,
-.sidebar-toggle-btn:not(.active) .ico-sidebar-expanded{
-  display:none !important;
-}
-body.sidebar-collapsed .sidebar-toggle-btn .ico-sidebar-collapsed,
-.sidebar-toggle-btn:not(.active) .ico-sidebar-collapsed{
-  display:block !important;
-}
 
 /* Single-View Editor Cards (NO Stacked Cards Clutter) */
 .editor .card{

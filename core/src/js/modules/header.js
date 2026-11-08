@@ -79,13 +79,7 @@ function initHeader() {
       bar.setAttribute('aria-label', 'Editor Activity Bar');
       editor.insertBefore(bar, editor.firstChild);
     }
-    let itemsContainer = $('activityBarItems');
-    if (!itemsContainer) {
-      itemsContainer = bar;
-      itemsContainer.innerHTML = '';
-    } else {
-      itemsContainer.innerHTML = '';
-    }
+    bar.innerHTML = '';
 
     const cards = $$('.editor .card');
     cards.forEach((card, idx) => {
@@ -123,8 +117,19 @@ function initHeader() {
         const targetCard = $(cardId);
         if (!targetCard) return;
 
+        const isCurrentSelected = targetCard.classList.contains('selected');
+        const isSidebarCollapsed = document.body.classList.contains('sidebar-collapsed');
+
+        // VS Code style: clicking the currently active tab toggles (collapses) the sidebar
+        if (isCurrentSelected && !isSidebarCollapsed) {
+          if (typeof toggleSidebar === 'function') {
+            toggleSidebar(false);
+          }
+          return;
+        }
+
         // If sidebar is currently collapsed, expand it and show this card
-        if (document.body.classList.contains('sidebar-collapsed')) {
+        if (isSidebarCollapsed) {
           if (typeof toggleSidebar === 'function') {
             toggleSidebar(true);
           } else {
@@ -138,7 +143,7 @@ function initHeader() {
         selectEditorCard(cardId);
       });
 
-      itemsContainer.appendChild(btn);
+      bar.appendChild(btn);
     });
 
     // Ensure at least one card is selected and activity bar is immediately styled
@@ -205,36 +210,6 @@ function initHeader() {
         }
       }
     });
-
-    const toggleBtn = $('btnToggleSidebar');
-    if (toggleBtn) {
-      const isMobile = typeof isM === 'function' && isM();
-      const isCollapsed = isMobile
-        ? (document.body.dataset.panel || 'view') !== 'edit'
-        : document.body.classList.contains('sidebar-collapsed');
-      const isAct = !isCollapsed;
-      toggleBtn.classList.toggle('active', isAct);
-      toggleBtn.setAttribute('aria-expanded', isAct ? 'true' : 'false');
-      const svgs = toggleBtn.querySelectorAll('svg');
-
-      if (isAct) {
-        toggleBtn.style.setProperty('background', activeBg, 'important');
-        toggleBtn.style.setProperty('color', activeColor, 'important');
-        svgs.forEach(s => {
-          s.style.setProperty('opacity', '1', 'important');
-          s.style.setProperty('stroke', activeColor, 'important');
-          s.style.setProperty('color', activeColor, 'important');
-        });
-      } else {
-        toggleBtn.style.removeProperty('background');
-        toggleBtn.style.removeProperty('color');
-        svgs.forEach(s => {
-          s.style.removeProperty('opacity');
-          s.style.removeProperty('stroke');
-          s.style.removeProperty('color');
-        });
-      }
-    }
   }
 
   window.selectEditorCard = selectEditorCard;

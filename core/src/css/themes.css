@@ -160,34 +160,6 @@
 :root[data-ui=light] input:disabled{color:var(--mut);background:#f5f5f7}
 :root[data-ui=light] .btn.primary,:root[data-ui=light] .btn.primary:hover{color:#fff}
 :root[data-ui=light] .brand h1{color:#0f172a !important}
-:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn{
-  background:transparent !important;
-  border:none !important;
-  color:#475569 !important;
-  box-shadow:none !important;
-}
-:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn:hover{
-  background:rgba(0,0,0,0.06) !important;
-  color:#0f172a !important;
-}
-:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn svg{
-  color:inherit !important;
-  opacity:0.65 !important;
-}
-:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn:hover svg{
-  color:#0f172a !important;
-  stroke:#0f172a !important;
-  opacity:1 !important;
-}
-:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn.active{
-  background:rgba(0,102,54,0.08) !important;
-  color:#006636 !important;
-}
-:root[data-ui=light] .sidebar-toggle-btn.activity-bar-btn.active svg{
-  color:#006636 !important;
-  stroke:#006636 !important;
-  opacity:1 !important;
-}
 :root[data-ui=light] .add{border-color:#c7c7cc}
 :root[data-ui=light] .add:hover{background:rgba(0,0,0,.02)}
 :root[data-ui=light] .srow{background:#fff}
@@ -239,20 +211,6 @@
   background:var(--ac);
   box-shadow:0 2px 6px var(--glow);
 }
-
-/* High-Contrast Store Switcher (.seg) in Light Mode */
-:root[data-ui=light] .seg{
-  background:#ffffff !important;
-  border:1px solid rgba(15,23,42,.1) !important;
-  box-shadow:0 1px 4px -1px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04), inset 0 1px 0 #fff !important;
-}
-:root[data-ui=light] .seg button{color:#64748b}
-:root[data-ui=light] .seg button:hover:not(.on){
-  color:#0f172a;
-}
-:root[data-ui=light] .seg button:not(.on) .s-ico{color:#475569!important;opacity:.92!important}
-:root[data-ui=light] .seg button.on{color:#ffffff!important}
-:root[data-ui=light] .seg button.on .s-ico{color:#ffffff!important;opacity:1!important}
 
 /* High-Contrast Stage Toolbar (.vt) in Light Mode */
 :root[data-ui=light] .vt{
