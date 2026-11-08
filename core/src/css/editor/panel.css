@@ -594,11 +594,13 @@ body.sidebar-collapsed .editor-resizer{
 .privacy-mode-seg {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 8px;
   margin: 4px 0 10px;
   padding: 0;
+  width: 100%;
+  box-sizing: border-box;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -606,6 +608,11 @@ body.sidebar-collapsed .editor-resizer{
 
 .priv-seg-pill {
   display: none !important;
+}
+
+.privacy-mode-seg .priv-seg-btn {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .tile-btn,
@@ -634,7 +641,7 @@ body.sidebar-collapsed .editor-resizer{
   color: var(--mut);
   line-height: 1.2;
   white-space: nowrap;
-  transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+  transition: border-color .15s ease, background-color .15s ease;
   outline: none;
 }
 
@@ -647,15 +654,6 @@ body.sidebar-collapsed .editor-resizer{
   display: block;
   flex-shrink: 0;
   color: var(--mut);
-  transition: color .2s ease;
-}
-
-.tile-btn:hover:not(.active),
-.dest-tile:hover:not(.active),
-.priv-seg-btn:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #e2e8f0;
 }
 
 .tile-btn.active,
@@ -664,6 +662,7 @@ body.sidebar-collapsed .editor-resizer{
   border-color: rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.05);
   color: #C4C5C4;
+  font-weight: 500;
   box-shadow: none;
 }
 
@@ -690,6 +689,7 @@ body.sidebar-collapsed .editor-resizer{
 .tile-btn.active .dest-name,
 .dest-tile.active .dest-name {
   color: #C4C5C4;
+  font-weight: 500;
 }
 
 /* Light mode styling for Unified Tile Buttons */
@@ -699,13 +699,17 @@ body.sidebar-collapsed .editor-resizer{
   box-shadow: none;
 }
 
-/* Nút chưa chọn #FAFAFA, Viền #E2E8F0 */
+/* Nút chưa chọn #FAFAFA, Viền #E2E8F0 (Hover không đổi màu) */
 :root[data-ui=light] .tile-btn,
 :root[data-ui=light] .dest-tile,
-:root[data-ui=light] .priv-seg-btn {
+:root[data-ui=light] .priv-seg-btn,
+:root[data-ui=light] .tile-btn:hover:not(.active),
+:root[data-ui=light] .dest-tile:hover:not(.active),
+:root[data-ui=light] .priv-seg-btn:hover:not(.active) {
   background: #FAFAFA !important;
   border: 1px solid #E2E8F0 !important;
   color: #475569 !important;
+  font-weight: 500 !important;
   box-shadow: none !important;
 }
 
@@ -716,22 +720,17 @@ body.sidebar-collapsed .editor-resizer{
   color: #64748b !important;
 }
 
-:root[data-ui=light] .tile-btn:hover:not(.active),
-:root[data-ui=light] .dest-tile:hover:not(.active),
-:root[data-ui=light] .priv-seg-btn:hover:not(.active) {
-  background: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
-  color: #334155 !important;
-}
-
-/* Nút chọn #FFFFFF, Viền chọn #CBD5E1 */
+/* Nút chọn #FFFFFF, Viền chọn #CBD5E1 (Giữ nguyên font-weight: 500 chống layout shift) */
 :root[data-ui=light] .tile-btn.active,
 :root[data-ui=light] .dest-tile.active,
-:root[data-ui=light] .priv-seg-btn.active {
+:root[data-ui=light] .priv-seg-btn.active,
+:root[data-ui=light] .tile-btn.active:hover,
+:root[data-ui=light] .dest-tile.active:hover,
+:root[data-ui=light] .priv-seg-btn.active:hover {
   background: #FFFFFF !important;
   border: 1px solid #CBD5E1 !important;
   color: #0f172a !important;
-  font-weight: 600;
+  font-weight: 500 !important;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
 }
 
@@ -759,9 +758,11 @@ body.sidebar-collapsed .editor-resizer{
 
 :root[data-ui=light] .dest-tile.active .dest-name {
   color: #0f172a !important;
+  font-weight: 500 !important;
 }
 :root[data-ui=light] .dest-tile:not(.active) .dest-name {
   color: #475569 !important;
+  font-weight: 500 !important;
 }
 
 
