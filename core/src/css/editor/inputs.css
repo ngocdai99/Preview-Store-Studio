@@ -1,5 +1,5 @@
 /* ---------- FORM INPUTS, TEXTAREAS & METERS ---------- */
-.cc{font-size:11px;font-weight:700;color:var(--mut);font-variant-numeric:tabular-nums;transition:color .25s ease;margin-left:auto;white-space:nowrap;flex-shrink:0}
+.cc{font-size:11px;font-weight:400;color:var(--mut);font-variant-numeric:tabular-nums;transition:color .25s ease;margin-left:auto;white-space:nowrap;flex-shrink:0}
 .cc.warn{color:var(--warn)}
 .cc.err,.counter-exceeded{color:var(--err);animation:shake-overlimit .3s ease-in-out both}
 

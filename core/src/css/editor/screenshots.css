@@ -107,7 +107,7 @@
 .srow.tab img, .srow.srow-tab img{width:64px;height:48px;border-radius:7px;object-fit:cover}
 .srow .col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px}
 .shot-row-head{display:flex;align-items:center;gap:6px;min-height:20px}
-.shot-row-title{font-size:12px;font-weight:750;color:#f1f5f9;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.shot-row-title{font-size:12px;font-weight:750;color:#C4C5C4;letter-spacing:.02em;font-variant-numeric:tabular-nums}
 :root[data-ui=light] .shot-row-title{color:#0f172a}
 /* App Preview Badge in Shot Row (Apple only) */
 .shot-preview-pill {

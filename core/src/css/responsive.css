@@ -218,7 +218,8 @@
 .metrics-details:hover .metrics-btn-ico{
   background:rgba(245,158,11,.22);border-color:rgba(245,158,11,.4);transform:scale(1.05);
 }
-.metrics-btn-title{font-size:12.5px;font-weight:600;color:var(--tx);letter-spacing:.01em}
+.metrics-btn-title{font-size:12.5px;font-weight:600;color:#C4C5C4;letter-spacing:.01em}
+:root[data-ui=light] .metrics-btn-title{color:var(--tx)}
 .metrics-btn-action{
   width:22px;height:22px;border-radius:6px;
   background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
