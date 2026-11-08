@@ -111,13 +111,22 @@ export default function PrivacyPage() {
               </p>
               <div className="p-4 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-border">
                 <p className="font-medium text-slate-900 dark:text-white">Store Preview Studio by Kai DevLabs</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                  General inquiries:{" "}
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                  Kai Support:{" "}
+                  <a
+                    href="mailto:support.kai.devlabs@gmail.com"
+                    className="text-emerald-700 dark:text-[oklch(0.76_0.15_157.5)] underline hover:opacity-80 font-mono text-[13.5px]"
+                  >
+                    support.kai.devlabs@gmail.com
+                  </a>
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Store &amp; license inquiries:{" "}
                   <a
                     href="https://kaidevlabs.gumroad.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-emerald-700 dark:text-[oklch(0.76_0.15_157.5)] underline hover:opacity-80"
+                    className="hover:underline text-slate-600 dark:text-slate-300"
                   >
                     kaidevlabs.gumroad.com
                   </a>

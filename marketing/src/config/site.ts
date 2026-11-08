@@ -16,6 +16,7 @@ export const siteConfig = {
   url: "https://store-preview-studio.pages.dev",
   ogImage: "https://store-preview-studio.pages.dev/og-image.png?v=20261107",
   gumroadUrl: "https://kaidevlabs.gumroad.com/l/store-preview-studio",
+  supportEmail: "support.kai.devlabs@gmail.com",
   creator: {
     name: "Kai",
     brand: "Kai DevLabs",
