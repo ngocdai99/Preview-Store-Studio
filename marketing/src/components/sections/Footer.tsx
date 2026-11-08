@@ -7,52 +7,83 @@ export function Footer() {
   const { footer } = siteConfig;
 
   return (
-    <footer className="border-t border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-[#131413] py-8 sm:py-10 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-5 text-xs text-slate-500 dark:text-slate-400">
-        {/* Brand & Copyright */}
-        <div className="flex items-center gap-2.5">
-          <BrandIcon className="w-5 h-5" />
-          <span className="font-semibold text-slate-900 dark:text-white">
-            {siteConfig.name}
-          </span>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <span>{footer.copyright}</span>
+    <footer className="border-t border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-[#131413] pt-12 pb-10 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Multi-Column Footer Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-slate-200/60 dark:border-white/[0.06]">
+          {/* Brand & Support Column (Spans 6 cols on md, 5 on lg) */}
+          <div className="md:col-span-6 lg:col-span-5 space-y-3.5">
+            <div className="flex items-center gap-2.5">
+              <BrandIcon className="w-6 h-6" />
+              <span className="font-semibold text-[15px] sm:text-base text-slate-900 dark:text-white tracking-tight">
+                {siteConfig.name}
+              </span>
+            </div>
+            <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed">
+              The browser-based studio to preview, verify, and prepare Apple App Store &amp; Google Play listings with realistic device frames. 100% offline &amp; private.
+            </p>
+            <div className="pt-1 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 flex-wrap">
+              <span>Kai Support:</span>
+              <a
+                href="mailto:support.kai.devlabs@gmail.com"
+                className="text-emerald-700 dark:text-[oklch(0.76_0.15_157.5)] hover:underline font-mono"
+              >
+                support.kai.devlabs@gmail.com
+              </a>
+            </div>
+          </div>
+
+          {/* Navigation Columns (Spans remaining columns) */}
+          <div className="md:col-span-6 lg:col-span-7 grid grid-cols-2 gap-8 sm:gap-10 sm:justify-items-end">
+            {footer.columns.map((column) => (
+              <div key={column.title} className="space-y-3 sm:min-w-[140px]">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+                  {column.title}
+                </h3>
+                <ul className="space-y-2 text-xs sm:text-[13px]">
+                  {column.links.map((link) => {
+                    const isExternal = link.href.startsWith("http");
+
+                    if (isExternal) {
+                      return (
+                        <li key={link.label}>
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
+                          >
+                            <span>{link.label}</span>
+                            <ArrowUpRight className="w-3 h-3 opacity-60 stroke-[2.2]" />
+                          </a>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={link.label}>
+                        <Link
+                          href={link.href}
+                          className="inline-block text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
+                        >
+                          <span>{link.label}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav
-          aria-label="Footer Navigation"
-          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-slate-500 dark:text-slate-400"
-        >
-          {footer.links.map((link) => {
-            const isExternal = link.href.startsWith("http");
-
-            if (isExternal) {
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center min-h-[44px] px-1 gap-1 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
-                >
-                  <span>{link.label}</span>
-                  <ArrowUpRight className="w-3 h-3 opacity-60 stroke-[2.2]" />
-                </a>
-              );
-            }
-
-            return (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="inline-flex items-center min-h-[44px] px-1 gap-1 hover:text-slate-900 dark:hover:text-white transition-colors py-1 select-none"
-              >
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Bottom Bar: Copyright & Neutral Disclaimer */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 dark:text-slate-500">
+          <p>{footer.copyright}</p>
+          <p className="text-[11.5px] text-center sm:text-right text-slate-400 dark:text-slate-500">
+            {footer.disclaimer}
+          </p>
+        </div>
       </div>
     </footer>
   );

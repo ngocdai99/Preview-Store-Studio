@@ -311,6 +311,27 @@ export const en = {
 
   footer: {
     copyright: "© 2026 Store Preview Studio by Kai DevLabs",
+    disclaimer: "Independent tool · Not affiliated with Apple Inc. or Google LLC.",
+    columns: [
+      {
+        title: "Product",
+        links: [
+          { label: "Live Demo", href: "/try" },
+          { label: "Why Us", href: "/#comparison" },
+          { label: "Features", href: "/#features" },
+          { label: "Pricing", href: "/#pricing" },
+          { label: "FAQ", href: "/#faq" },
+        ],
+      },
+      {
+        title: "Legal & Store",
+        links: [
+          { label: "Privacy Policy", href: "/privacy" },
+          { label: "Terms & Refunds", href: "/terms" },
+          { label: "Gumroad Store", href: "https://kaidevlabs.gumroad.com/" },
+        ],
+      },
+    ],
     links: [
       { label: "Live Demo", href: "/try" },
       { label: "Why Us", href: "/#comparison" },
