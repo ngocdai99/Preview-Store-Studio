@@ -23,19 +23,23 @@ export default {
         (country ? '&country=' + encodeURIComponent(country) : '');
 
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
         const res = await fetch(itunesUrl, {
+          signal: controller.signal,
           headers: {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'application/json'
           }
         });
+        clearTimeout(timeoutId);
         const data = await res.text();
         return new Response(data, {
           status: res.status,
           headers: {
             'Content-Type': 'application/json; charset=utf-8',
             'Access-Control-Allow-Origin': '*',
-            'Cache-Control': 'public, max-age=3600'
+            'Cache-Control': res.ok ? 'public, max-age=3600' : 'no-cache'
           }
         });
       } catch (err) {

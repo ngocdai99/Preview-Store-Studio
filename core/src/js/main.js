@@ -168,17 +168,19 @@ if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to
   }finally{
     restoring = false;
   }
-} else if(initialUrlAppId && userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
-  CURRENT_PRESET_KEY = 'draft';
-  loadPreset('draft');
+} else if(initialUrlAppId){
+  if(userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
+    CURRENT_PRESET_KEY = 'draft';
+    loadPreset('draft');
+  } else {
+    // URL has an app ID: stay in draft mode with clean slate so studio preset is never loaded or flashed
+    CURRENT_PRESET_KEY = 'draft';
+    loadPreset('none');
+    CURRENT_PRESET_KEY = 'draft';
+  }
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
   CURRENT_PRESET_KEY = 'draft';
   loadPreset('draft');
-} else if(initialUrlAppId){
-  // URL has an app ID: stay in draft mode with clean slate so studio preset is never loaded or flashed
-  CURRENT_PRESET_KEY = 'draft';
-  loadPreset('none');
-  CURRENT_PRESET_KEY = 'draft';
 } else if(!loadState()){
   restoring = true;
   try{

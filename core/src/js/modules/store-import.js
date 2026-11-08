@@ -222,31 +222,37 @@ async function fetchAppleAppData(appId, country) {
   const directUrl = 'https://itunes.apple.com/lookup?' + query;
 
   let res;
-  const isWeb = typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:');
-  if (isWeb) {
+  // 1. Try direct iTunes API first (native CORS support from browser client)
+  try {
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timeoutId = controller ? setTimeout(() => controller.abort(), 4000) : null;
+    res = await fetch(directUrl, { signal: controller ? controller.signal : undefined });
+    if (timeoutId) clearTimeout(timeoutId);
+    if (!res.ok) throw new Error('Direct fetch status ' + res.status);
+  } catch (_) {
+    // 2. Fallback to JSONP (100% immune to CORS and cross-origin restrictions)
     try {
-      res = await fetch(proxyUrl);
-      if (!res.ok) throw new Error('Proxy returned ' + res.status);
-    } catch (_) {
-      try {
-        res = await fetch(directUrl);
-      } catch (err) {
-        return await fetchAppleAppViaJsonp(appId, country);
-      }
-    }
-  } else {
-    try {
-      res = await fetch(directUrl);
-    } catch (_) {
       return await fetchAppleAppViaJsonp(appId, country);
+    } catch (_) {
+      // 3. Fallback to Edge proxy /api/lookup
+      const isWeb = typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:');
+      if (isWeb) {
+        try {
+          res = await fetch(proxyUrl);
+        } catch (err) {
+          throw new Error('Unable to connect to Apple App Store API');
+        }
+      } else {
+        throw new Error('Unable to connect to Apple App Store API');
+      }
     }
   }
 
-  if (!res.ok) {
+  if (!res || !res.ok) {
     try {
       return await fetchAppleAppViaJsonp(appId, country);
     } catch (_) {
-      throw new Error('Apple App Store returned status ' + res.status);
+      throw new Error('Apple App Store returned status ' + (res ? res.status : 'error'));
     }
   }
   const data = await res.json();
@@ -656,14 +662,10 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
       return;
     }
 
-    // Auto-imported from URL on default initial workspace: apply directly without modal
+    // Auto-imported from URL on default or explicit app link: apply directly without modal
     if (isAutoFromUrl) {
-      const currentName = (typeof getDraftDisplayName === 'function') ? getDraftDisplayName() : '';
-      const isDefaultPresetDraft = !currentName || currentName === 'Store Preview Studio' || currentName === 'Untitled' || (typeof hasLiveUserContent === 'function' && !hasLiveUserContent());
-      if (isDefaultPresetDraft) {
-        apply();
-        return;
-      }
+      apply();
+      return;
     }
 
     if (typeof window !== 'undefined') window.CURRENT_INCOMING_APP_ID = targetAppId;
@@ -838,19 +840,19 @@ function checkAndLoadStoreParams() {
         : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
 
       // If the app is already loaded in draft (e.g. from cache on reload), skip redundant re-fetch
-      if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft') {
+      const draftName = (typeof userDraft !== 'undefined' && userDraft && userDraft.form && userDraft.form.name) ? String(userDraft.form.name).trim() : '';
+      if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft' && draftName && draftName !== 'Store Preview Studio') {
         return;
       }
 
+      const input = $('storeImportInput');
+      if (input) input.value = appid || url;
+
       if (typeof isDemoMode === 'function' && isDemoMode()) {
-        const demoInput = $('storeImportInput');
-        if (demoInput) demoInput.value = appid || url;
         handleStoreImportSubmit(true, true);
         return;
       }
       openStoreImportModal();
-      const input = $('storeImportInput');
-      if (input) input.value = appid || url;
       showNetworkConfirmModal({
         onConfirm: () => {
           handleStoreImportSubmit(true, true);

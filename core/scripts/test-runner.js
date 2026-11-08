@@ -1548,6 +1548,13 @@ const mockDevSuffixApp = normalizeAppleApp({
 assert(mockDevSuffixApp.form.name === '5 Phút Thuộc Bài', 'normalizeAppleApp extracts actual app name when suffix matches developer name');
 assert(mockDevSuffixApp.form.sub === 'Official Education App', 'normalizeAppleApp prevents developer name from being mistakenly set as subtitle');
 
+// 3. Direct iTunes CORS & URL auto-import direct apply tests
+assert(bundledHtml.includes('// 1. Try direct iTunes API first (native CORS support from browser client)'), 'fetchAppleAppData prioritizes direct iTunes API with browser CORS');
+assert(bundledHtml.includes('// 2. Fallback to JSONP (100% immune to CORS and cross-origin restrictions)'), 'fetchAppleAppData includes JSONP fallback for CORS-isolated environments');
+assert(bundledHtml.includes('// Auto-imported from URL on default or explicit app link: apply directly without modal'), 'handleStoreImportSubmit applies URL auto-imports directly without confirmation modal');
+assert(bundledHtml.includes("} else if(initialUrlAppId){\n  if(userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){"), 'main.js prioritizes initialUrlAppId over existing stale user draft');
+
+
 // Test iPhone-only app normalization
 const normIphoneOnly = normalizeAppleApp({
   trackName: 'Tinder - Dating App',

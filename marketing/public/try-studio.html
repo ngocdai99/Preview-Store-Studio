@@ -16018,30 +16018,33 @@ const query = 'id=' + encodeURIComponent(appId) + (country ? '&country=' + encod
 const proxyUrl = '/api/lookup?' + query;
 const directUrl = 'https://itunes.apple.com/lookup?' + query;
 let res;
+try {
+const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+const timeoutId = controller ? setTimeout(() => controller.abort(), 4000) : null;
+res = await fetch(directUrl, { signal: controller ? controller.signal : undefined });
+if (timeoutId) clearTimeout(timeoutId);
+if (!res.ok) throw new Error('Direct fetch status ' + res.status);
+} catch (_) {
+try {
+return await fetchAppleAppViaJsonp(appId, country);
+} catch (_) {
 const isWeb = typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:');
 if (isWeb) {
 try {
 res = await fetch(proxyUrl);
-if (!res.ok) throw new Error('Proxy returned ' + res.status);
-} catch (_) {
-try {
-res = await fetch(directUrl);
 } catch (err) {
-return await fetchAppleAppViaJsonp(appId, country);
-}
+throw new Error('Unable to connect to Apple App Store API');
 }
 } else {
-try {
-res = await fetch(directUrl);
-} catch (_) {
-return await fetchAppleAppViaJsonp(appId, country);
+throw new Error('Unable to connect to Apple App Store API');
 }
 }
-if (!res.ok) {
+}
+if (!res || !res.ok) {
 try {
 return await fetchAppleAppViaJsonp(appId, country);
 } catch (_) {
-throw new Error('Apple App Store returned status ' + res.status);
+throw new Error('Apple App Store returned status ' + (res ? res.status : 'error'));
 }
 }
 const data = await res.json();
@@ -16358,12 +16361,8 @@ apply();
 return;
 }
 if (isAutoFromUrl) {
-const currentName = (typeof getDraftDisplayName === 'function') ? getDraftDisplayName() : '';
-const isDefaultPresetDraft = !currentName || currentName === 'Store Preview Studio' || currentName === 'Untitled' || (typeof hasLiveUserContent === 'function' && !hasLiveUserContent());
-if (isDefaultPresetDraft) {
 apply();
 return;
-}
 }
 if (typeof window !== 'undefined') window.CURRENT_INCOMING_APP_ID = targetAppId;
 if (typeof confirmReplaceDraft === 'function') {
@@ -16506,18 +16505,17 @@ const cleanTargetId = target.id ? String(target.id).trim() : '';
 const currentActiveId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID)
 ? String(CURRENT_APP_ID).trim()
 : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
-if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft') {
+const draftName = (typeof userDraft !== 'undefined' && userDraft && userDraft.form && userDraft.form.name) ? String(userDraft.form.name).trim() : '';
+if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft' && draftName && draftName !== 'Store Preview Studio') {
 return;
 }
+const input = $('storeImportInput');
+if (input) input.value = appid || url;
 if (typeof isDemoMode === 'function' && isDemoMode()) {
-const demoInput = $('storeImportInput');
-if (demoInput) demoInput.value = appid || url;
 handleStoreImportSubmit(true, true);
 return;
 }
 openStoreImportModal();
-const input = $('storeImportInput');
-if (input) input.value = appid || url;
 showNetworkConfirmModal({
 onConfirm: () => {
 handleStoreImportSubmit(true, true);
@@ -16712,16 +16710,18 @@ toggleDualPhone(true);
 }finally{
 restoring = false;
 }
-} else if(initialUrlAppId && userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
-CURRENT_PRESET_KEY = 'draft';
-loadPreset('draft');
-} else if(typeof hasUserDraft === 'function' && hasUserDraft()){
-CURRENT_PRESET_KEY = 'draft';
-loadPreset('draft');
 } else if(initialUrlAppId){
+if(userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)){
+CURRENT_PRESET_KEY = 'draft';
+loadPreset('draft');
+} else {
 CURRENT_PRESET_KEY = 'draft';
 loadPreset('none');
 CURRENT_PRESET_KEY = 'draft';
+}
+} else if(typeof hasUserDraft === 'function' && hasUserDraft()){
+CURRENT_PRESET_KEY = 'draft';
+loadPreset('draft');
 } else if(!loadState()){
 restoring = true;
 try{
