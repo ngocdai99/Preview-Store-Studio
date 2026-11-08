@@ -581,7 +581,7 @@
   color: #0f172a !important;
 }
 
-/* Light mode top accent lines (Active only on SELECTED pill, 2px brand primary green) */
+/* Light mode top accent lines (Active only on SELECTED pill, 2px brand secondary green) */
 :root[data-ui=light] #btnDraft::before,
 :root[data-ui=light] #btnPresetPill::before {
   opacity: 0;
@@ -592,7 +592,7 @@
 :root[data-ui=light] #btnDraft.on::before,
 :root[data-ui=light] #btnPresetPill.on::before {
   opacity: 1;
-  background: var(--brand-primary, #006636);
+  background: var(--brand-secondary, #00D085);
 }
 
 #btnPresets {
