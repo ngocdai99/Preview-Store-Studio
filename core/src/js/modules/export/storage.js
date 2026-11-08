@@ -94,11 +94,26 @@ function applyStateObject(s){
   if(s.view && typeof setView === 'function') setView(s.view, true);
   if(s.theme && $$('.phone').length) (typeof setDeviceTheme === 'function' ? setDeviceTheme(s.theme, false) : $$('.phone').forEach(p => p.dataset.theme = s.theme));
   if(s.form){
-    if(s.form.name !== undefined && $('f-name')) $('f-name').value = s.form.name;
-    if(s.form.sub !== undefined && $('f-sub')) $('f-sub').value = s.form.sub;
-    if(s.form.promo !== undefined && $('f-promo')) $('f-promo').value = s.form.promo;
-    if(s.form.short !== undefined && $('f-short')) $('f-short').value = s.form.short;
-    if(s.form.dev !== undefined && $('f-dev')) $('f-dev').value = s.form.dev;
+    if(s.form.name !== undefined && $('f-name')) {
+      $('f-name').value = s.form.name;
+      try { $('f-name').setAttribute('value', s.form.name); } catch(_) {}
+    }
+    if(s.form.sub !== undefined && $('f-sub')) {
+      $('f-sub').value = s.form.sub;
+      try { $('f-sub').setAttribute('value', s.form.sub); } catch(_) {}
+    }
+    if(s.form.promo !== undefined && $('f-promo')) {
+      $('f-promo').value = s.form.promo;
+      try { $('f-promo').setAttribute('value', s.form.promo); } catch(_) {}
+    }
+    if(s.form.short !== undefined && $('f-short')) {
+      $('f-short').value = s.form.short;
+      try { $('f-short').setAttribute('value', s.form.short); } catch(_) {}
+    }
+    if(s.form.dev !== undefined && $('f-dev')) {
+      $('f-dev').value = s.form.dev;
+      try { $('f-dev').setAttribute('value', s.form.dev); } catch(_) {}
+    }
     if(s.form.cat !== undefined) setCategory(s.form.cat);
     if(s.form.catApple !== undefined) setCategory(s.form.catApple, 'apple');
     if(s.form.catGoogle !== undefined) setCategory(s.form.catGoogle, 'google');

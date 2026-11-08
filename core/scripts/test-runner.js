@@ -1206,6 +1206,7 @@ assert(appleBackCheck.status === 'warn', 'Step D: Switching back to Apple detect
 // 4. Bundled Source Code Integrity Check
 assert(bundledHtml.includes('Google Play requires <strong>512×512 px</strong>'), 'Bundled HTML contains exact Google Play 512px dimension requirement string');
 assert(bundledHtml.includes('validateAppIcon()') && bundledHtml.includes('setStore'), 'setStore triggers validateAppIcon immediately upon store switch');
+assert(bundledHtml.includes("const dimTag = $('iconDimTag') || $('icoDimTag');"), 'updateIconDropZoneUi safely defines dimTag to prevent ReferenceError crash on placeholder reset');
 
 // ---------------------------------------------------------------------
 // Module 14: Version Field Store Visibility & Full Description Tooltip Popover

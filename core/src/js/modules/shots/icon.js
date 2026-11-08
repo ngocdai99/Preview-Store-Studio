@@ -27,6 +27,7 @@ function updateIconDropZoneUi(){
   const dropZone = $('icoDropZone');
   const inspectBtn = $('icoInspect');
   const badge = $('iconStatusBadge');
+  const dimTag = $('iconDimTag') || $('icoDimTag');
   const removeBtn = $('icoRemove');
   const placeholder = isPlaceholderIcon();
 
