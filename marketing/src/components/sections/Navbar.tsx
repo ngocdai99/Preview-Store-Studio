@@ -115,14 +115,14 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 dark:border-[#282928] bg-white/85 dark:bg-[#131413]/85 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
         {/* Left Section: Brand Logo & Navigation Links (Supabase style) */}
-        <div className="flex items-center gap-3 sm:gap-6 lg:gap-8 min-w-0">
+        <div className="flex items-center gap-2 sm:gap-6 lg:gap-8 min-w-0">
           <Link
             href="/"
             onClick={(e) => handleNavClick(e, "", "#hero")}
-            className="flex items-center gap-2 group min-w-0"
+            className="flex items-center gap-1.5 sm:gap-2 group shrink-0"
           >
-            <BrandIcon className="w-6 h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
-            <span className="font-bold text-[14px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white truncate">
+            <BrandIcon className="w-5 h-5 sm:w-6 sm:h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
+            <span className="font-bold text-[13.5px] sm:text-[16px] tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
               Store Preview Studio
             </span>
           </Link>
@@ -161,7 +161,7 @@ export function Navbar() {
                 : "text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            Live Demo
+            <span className="hidden sm:inline">Live </span>Demo
           </Link>
 
           <PrimaryButton
