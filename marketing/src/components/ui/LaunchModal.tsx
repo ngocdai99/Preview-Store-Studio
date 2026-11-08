@@ -32,8 +32,8 @@ export function LaunchModal({ isOpen, onClose, tierId }: LaunchModalProps) {
 
   const isPro = tierId === "pro";
   const tierName = isPro ? "Pro Studio" : "Plus Edition";
-  const tierPrice = isPro ? "$39" : "$29";
-  const originalPrice = isPro ? "$59" : "$39";
+  const tierPrice = isPro ? "$49" : "$29";
+  const originalPrice = isPro ? "$69" : "$39";
 
   // Handle ESC key to close and body scroll locking
   useEffect(() => {

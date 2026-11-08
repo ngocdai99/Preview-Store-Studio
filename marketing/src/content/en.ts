@@ -227,7 +227,7 @@ export const en = {
           { text: "Single-User Lifetime Commercial License" },
         ] as TierFeature[],
         cta: {
-          label: "Get Started",
+          label: "Buy Plus — $29",
           href: "https://kaidevlabs.gumroad.com/l/store-preview-studio/EARLYBIRDPLUS",
         },
       },
@@ -238,8 +238,8 @@ export const en = {
         description:
           "For agencies, studios, and developers requiring commercial client licensing and full source code.",
         price: {
-          original: 59,
-          current: 39,
+          original: 69,
+          current: 49,
           currency: "$",
           period: "one-time payment",
         },
@@ -252,7 +252,7 @@ export const en = {
           { text: "Agency Marketing & ASO Playbook" },
         ] as TierFeature[],
         cta: {
-          label: "Get Started",
+          label: "Buy Pro — $49",
           href: "https://kaidevlabs.gumroad.com/l/store-preview-studio/EARLYBIRDPRO",
         },
       },

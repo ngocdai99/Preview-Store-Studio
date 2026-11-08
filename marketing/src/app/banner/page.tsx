@@ -62,8 +62,8 @@ export default function BannerStudioPage() {
   const [plusDesc, setPlusDesc] = useState("For indie developers and creators who need a fast, standalone offline preview studio.");
   const [plusLicenseBadge, setPlusLicenseBadge] = useState("Personal License");
 
-  const [proOriginalPrice, setProOriginalPrice] = useState("$59");
-  const [proPrice, setProPrice] = useState("$39");
+  const [proOriginalPrice, setProOriginalPrice] = useState("$69");
+  const [proPrice, setProPrice] = useState("$49");
   const [proDesc, setProDesc] = useState("For agencies, studios, and devs requiring commercial client licensing & full source code.");
   const [proLicenseBadge, setProLicenseBadge] = useState("Commercial License");
 
@@ -343,8 +343,8 @@ export default function BannerStudioPage() {
     setPlusPrice("$29");
     setPlusDesc("For indie developers and creators who need a fast, standalone offline preview studio.");
     setPlusLicenseBadge("Personal License");
-    setProOriginalPrice("$59");
-    setProPrice("$39");
+    setProOriginalPrice("$69");
+    setProPrice("$49");
     setProDesc("For agencies, studios, and developers requiring commercial client licensing and full source code.");
     setProLicenseBadge("Commercial License");
     setImageSrc("/banner-dual-mockup.svg");

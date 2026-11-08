@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { CookieBanner } from "@/components/ui/CookieBanner";
+import { AgencyProvider } from "@/context/AgencyContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -37,7 +38,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full scroll-smooth dark" data-theme="dark">
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased">
-        {children}
+        <AgencyProvider>
+          {children}
+        </AgencyProvider>
         <CookieBanner />
         <script
           id="microsoft-clarity"
@@ -53,6 +56,10 @@ export default function RootLayout({
                 if (window.location.search) {
                   var p = new URLSearchParams(window.location.search);
                   var appid = p.get('appid') || p.get('id') || p.get('app_id') || p.get('apple_id');
+                  var vip = p.get('vip') || p.get('offer');
+                  if (appid || vip === '39' || vip === 'agency39') {
+                    try { localStorage.setItem('sps_agency_vip', appid || '39'); } catch(_) {}
+                  }
                   if (appid && typeof window.clarity === 'function') {
                     window.clarity('set', 'appid', appid);
                     window.clarity('identify', appid);

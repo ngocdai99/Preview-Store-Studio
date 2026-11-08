@@ -3,9 +3,22 @@
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { useAgency } from "@/context/AgencyContext";
 
 export function Pricing() {
   const { pricing } = siteConfig;
+  const { isAgencyVip } = useAgency();
+
+  const handleProClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (isAgencyVip) {
+      e.preventDefault();
+      window.open(
+        "https://kaidevlabs.gumroad.com/l/store-preview-studio/AGENCY39",
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+  };
 
   return (
     <section id="pricing" className="py-20 border-t border-border bg-slate-50/50 dark:bg-[#131413] transition-colors">
@@ -24,6 +37,12 @@ export function Pricing() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 items-stretch mb-10">
             {pricing.tiers.map((tier) => {
               const isPlus = tier.id === "plus";
+              const showAgencyVipPro = !isPlus && isAgencyVip;
+              const displayCurrentPrice = showAgencyVipPro ? 39 : tier.price.current;
+              const displayCtaLabel = showAgencyVipPro ? "Buy Pro (Agency Locked-In) — $39" : tier.cta.label;
+              const displayCtaHref = showAgencyVipPro
+                ? "https://kaidevlabs.gumroad.com/l/store-preview-studio/AGENCY39"
+                : tier.cta.href;
 
               return (
                 <div
@@ -36,10 +55,15 @@ export function Pricing() {
                 >
                   <div>
                     {/* Plan Header: Name */}
-                    <div className="flex items-center gap-2.5 mb-2">
+                    <div className="flex items-center justify-between gap-2.5 mb-2">
                       <h3 className="text-base sm:text-[17px] font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
                         {tier.name}
                       </h3>
+                      {showAgencyVipPro && (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-[#00D085] border border-emerald-500/25">
+                          Invited Agency Rate
+                        </span>
+                      )}
                     </div>
 
                     {/* Plan Description */}
@@ -51,7 +75,9 @@ export function Pricing() {
                     <div className="mb-4 pt-4 border-t border-border">
                       <div className="flex items-center justify-between text-[11px] font-normal text-muted mb-1.5">
                         <span className="uppercase tracking-wider">One-time purchase</span>
-                        <span className="text-accent font-medium">First 20 copies</span>
+                        <span className="text-accent font-medium">
+                          {showAgencyVipPro ? "Locked-in $39 outreach offer" : "First 20 copies"}
+                        </span>
                       </div>
                       <div className="flex items-baseline gap-2">
                         {tier.price.original && (
@@ -59,8 +85,13 @@ export function Pricing() {
                             ${tier.price.original}
                           </span>
                         )}
+                        {showAgencyVipPro && (
+                          <span className="font-mono text-xl sm:text-2xl text-muted/60 line-through">
+                            ${tier.price.current}
+                          </span>
+                        )}
                         <p className="font-mono text-4xl sm:text-[46px] font-medium text-foreground leading-none tracking-tight">
-                          ${tier.price.current}
+                          ${displayCurrentPrice}
                         </p>
                         <span className="text-xs sm:text-[13px] text-muted font-normal">
                           / lifetime
@@ -72,23 +103,24 @@ export function Pricing() {
                     <div className="mb-6">
                       {isPlus ? (
                         <a
-                          href={tier.cta.href}
+                          href={displayCtaHref}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="relative inline-flex items-center justify-center w-full h-[38px] sm:h-[40px] px-4 py-2 rounded-lg text-[13.5px] font-medium text-foreground bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] border border-border shadow-xs transition-colors duration-150 cursor-pointer select-none text-center"
                         >
-                          <span>{tier.cta.label}</span>
+                          <span>{displayCtaLabel}</span>
                         </a>
                       ) : (
                         <PrimaryButton
-                          href={tier.cta.href}
+                          href={displayCtaHref}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={handleProClick}
                           fontSize="13.5px"
                           fontWeight={600}
                           className="w-full h-[38px] sm:h-[40px] px-4 py-2 rounded-lg"
                         >
-                          <span>{tier.cta.label}</span>
+                          <span>{displayCtaLabel}</span>
                         </PrimaryButton>
                       )}
                     </div>

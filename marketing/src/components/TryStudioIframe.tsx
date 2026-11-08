@@ -3,9 +3,11 @@
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useAgency } from "@/context/AgencyContext";
 
 function TryStudioIframeInner() {
   const searchParams = useSearchParams();
+  const { appId: contextAppId } = useAgency();
 
   // Compute initial src directly so iframe never loads empty and reloads
   const iframeSrc = useMemo(() => {
@@ -15,10 +17,16 @@ function TryStudioIframeInner() {
       const winSp = new URLSearchParams(window.location.search);
       winSp.forEach((val, key) => sp.set(key, val));
     }
+
+    // Fallback to persisted app ID from context or localStorage if parent URL was cleaned
+    const activeAppId = sp.get("appid") || sp.get("id") || contextAppId;
+    if (activeAppId) {
+      sp.set("appid", activeAppId);
+    }
     sp.set("embed", "true");
     const qs = sp.toString();
     return `/try-studio.html${qs ? `?${qs}` : "?embed=true"}`;
-  }, [searchParams]);
+  }, [searchParams, contextAppId]);
 
   return (
     <iframe
