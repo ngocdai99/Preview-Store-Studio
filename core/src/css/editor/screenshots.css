@@ -280,11 +280,12 @@ body[data-ui-store="google"] .shot-preview-pill {
 .btn-spinner{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:dlSpin .65s linear infinite;vertical-align:middle;margin-right:4px}
 @keyframes dlSpin{to{transform:rotate(360deg)}}
 .add{
-  border:1.5px dashed rgba(255,255,255,.16);background:none;color:var(--mut);border-radius:12px;padding:10px;font-weight:700;font-size:12.5px;
-  transition:border-color .15s ease, background-color .15s ease, color .15s ease;display:flex;align-items:center;justify-content:center;gap:6px;
+  border:1.5px dashed rgba(255,255,255,.14);background:transparent;color:#8B8F98;border-radius:12px;padding:10px;font-weight:500;font-size:12.5px;
+  transition:border-color .18s ease, background-color .18s ease, color .18s ease;display:flex;align-items:center;justify-content:center;gap:6px;
   transform:none !important;
 }
-.add:hover{border-color:rgba(255,255,255,.45);color:#fff;background:rgba(255,255,255,.04);transform:none !important}
+.add:hover{border-color:rgba(255,255,255,.26);color:#D1D5DB;background:rgba(255,255,255,.025);transform:none !important}
+.add:active{border-color:rgba(255,255,255,.20);background:rgba(255,255,255,.04);transform:none !important}
 .add:disabled, .add[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
 .hint{font-size:11px;color:var(--mut);line-height:1.5}
 

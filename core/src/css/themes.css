@@ -130,13 +130,14 @@
 .btn-mini-ico{display:inline-flex;align-items:center;justify-content:center;margin-right:0;vertical-align:-1px;flex-shrink:0}
 .btn-mini-ico svg{width:13.5px;height:13.5px;stroke-width:2.2;display:block}
 .add-ico{
-  width:18px;height:18px;border-radius:5px;background:rgba(10,132,255,.14);color:var(--ac);
+  width:18px;height:18px;border-radius:5px;background:rgba(255,255,255,0.08);color:#8B8F98;
   display:inline-flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;
-  transition:all .2s ease;
+  transition:all .18s ease;
 }
 .add-ico svg{width:12px;height:12px;stroke-width:2.5}
 .add{display:inline-flex;align-items:center;justify-content:center;transform:none !important}
 .add:hover{transform:none !important}
+.add:hover .add-ico{background:rgba(255,255,255,0.14);color:#D1D5DB}
 
 /* ---------- PAGE THEME: LIGHT (Apple-style white) ---------- */
 :root[data-ui=light]{
@@ -517,28 +518,30 @@
   .mini .btn-mini-ico:only-child{margin-right:0}
   :root[data-ui=light] .add{
     background:#ffffff;
-    border:1px dashed rgba(0,0,0,.18);
-    box-shadow:0 1px 3px rgba(0,0,0,.04);
-    color:#1d1d1f;
-    font-weight:600;
-    transition:border-color .15s ease, background-color .15s ease;
+    border:1px dashed #D1D5DB;
+    box-shadow:none !important;
+    color:#4B5563;
+    font-weight:500;
+    transition:border-color .18s ease, background-color .18s ease, color .18s ease;
     transform:none !important;
   }
   :root[data-ui=light] .add:hover{
-    background:#f8fafc;
-    border-color:rgba(0,0,0,.35);
-    box-shadow:0 1px 3px rgba(0,0,0,.04);
+    background:#FAFAFB;
+    border-color:#9CA3AF;
+    box-shadow:none !important;
+    color:#1F2937;
     transform:none !important;
   }
   :root[data-ui=light] .add:active{
+    background:#F3F4F6;
     transform:none !important;
   }
   :root[data-ui=light] .add-ico{
-    background:#e8f2ff;color:#0071e3;
-    transition:none;
+    background:rgba(0,0,0,0.04);color:#6B7280;
+    transition:all .18s ease;
   }
   :root[data-ui=light] .add:hover .add-ico{
-    background:#e8f2ff !important;color:#0071e3 !important;
+    background:rgba(0,0,0,0.07) !important;color:#1F2937 !important;
   }
 
 
