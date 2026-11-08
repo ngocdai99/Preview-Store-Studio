@@ -300,6 +300,11 @@ body[data-ui-store="google"] .shot-preview-pill {
 .shot-status-badge .sb-ico svg{width:15px;height:15px;stroke-width:2.3;display:block}
 .shot-status-badge > span:not(.sb-ico){
   flex:1 1 180px;min-width:0;word-break:break-word;align-self:flex-start;
+  font-weight:400;
+}
+.shot-status-badge strong,
+.shot-status-badge b{
+  font-weight:500;
 }
 .sb-issues-list{
   margin-top:4px;display:flex;flex-direction:column;gap:3px;
