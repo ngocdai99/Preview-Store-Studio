@@ -212,7 +212,7 @@ body.sidebar-collapsed .editor{
   margin-left:0 !important;
   visibility:visible !important;
   pointer-events:auto !important;
-  box-shadow:2px 0 16px rgba(0,0,0,.35) !important;
+  box-shadow:2px 0 12px rgba(0,0,0,.20) !important;
 }
 body.sidebar-collapsed .editor .card{
   display:none !important;
@@ -222,10 +222,16 @@ body.sidebar-collapsed .editor-resizer{
   pointer-events:none !important;
 }
 
-/* Light Mode Overrides for Activity Bar */
+/* Light Mode Overrides for Activity Bar & Collapsed Rail */
 :root[data-ui=light] .activity-bar{
   background: #FAFAFB !important;
-  border-right: 1px solid #E5E7EB;
+  border-right: 1px solid #E5E7EB !important;
+  box-shadow: none !important;
+}
+:root[data-ui=light] body.sidebar-collapsed .editor,
+:root[data-ui=light] .editor{
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.03), 2px 0 6px rgba(0, 0, 0, 0.02) !important;
+  border-right: 1px solid #E5E7EB !important;
 }
 :root[data-ui=light] .activity-bar-btn{
   width: 36px;
