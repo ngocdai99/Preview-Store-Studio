@@ -37,7 +37,7 @@
   letter-spacing:.05em;
   white-space:nowrap;
   line-height:1;
-  color:var(--mut);
+  color:rgba(255, 255, 255, 0.92);
   background:transparent !important;
   border:none !important;
   box-shadow:none !important;
@@ -47,14 +47,14 @@
   height:calc(12px / var(--dev-zoom, 1)) !important;
   display:block;
   flex-shrink:0;
-  color:var(--mut);
-  opacity:0.85;
+  color:currentColor;
+  opacity:0.9;
 }
 .dev-label.a .dev-title,
 .dev-label.g .dev-title{
-  color:var(--mut);
+  color:rgba(255, 255, 255, 0.92);
 }
 :root[data-ui=light] .dev-label.a .dev-title,
 :root[data-ui=light] .dev-label.g .dev-title{
-  color:var(--mut);
+  color:#0f172a;
 }
