@@ -70,7 +70,7 @@ export const en = {
         indexLabel: "03",
         windowTitle: "03 · Audit",
         title: "Pre-Flight ASO Compliance Audit",
-        caption: "Automated checks catch ITMS-90717 alpha violations and character overflows before review.",
+        caption: "Catch icon transparency issues, invalid screenshot sizes, and character overflows before review.",
         src: "/images/audit.png",
         srcMobile: "/images/audit_mobile.png",
         width: 3200,
