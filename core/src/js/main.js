@@ -248,8 +248,17 @@ if(typeof updateMockupClocks === 'function'){
   window.addEventListener('load', updateMockupClocks);
 }
 setInterval(() => { if(typeof updateMockupClocks === 'function') updateMockupClocks(); }, 10000);
+if(typeof setStore === 'function'){
+  setStore('apple', false, true);
+}
+if(typeof toggleDualPhone === 'function'){
+  toggleDualPhone(true);
+}
 if(typeof setView === 'function'){
   setView('detail', true);
+}
+if(typeof syncDeviceDropdowns === 'function'){
+  syncDeviceDropdowns();
 }
 if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(store);
 if (typeof updateActivityBarState === 'function') updateActivityBarState(store);

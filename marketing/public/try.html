@@ -14004,6 +14004,12 @@ const raw = localStorage.getItem(STORAGE_KEY);
 if(raw){
 const s = JSON.parse(raw);
 loadedFromLs = applyStateObject(s);
+if(loadedFromLs){
+if(typeof setStore === 'function') setStore('apple', false, true);
+if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+if(typeof setView === 'function') setView('detail', true);
+if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+}
 }
 }
 }catch(e){
@@ -14017,6 +14023,10 @@ if(idbState && typeof idbState === 'object'){
 restoring = true;
 try{
 applyStateObject(idbState);
+if(typeof setStore === 'function') setStore('apple', false, true);
+if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+if(typeof setView === 'function') setView('detail', true);
+if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
 if(typeof renderIcons === 'function') renderIcons();
 if(typeof renderFeature === 'function') renderFeature();
 if(typeof renderShots === 'function') renderShots();
@@ -16811,8 +16821,17 @@ window.addEventListener('DOMContentLoaded', updateMockupClocks);
 window.addEventListener('load', updateMockupClocks);
 }
 setInterval(() => { if(typeof updateMockupClocks === 'function') updateMockupClocks(); }, 10000);
+if(typeof setStore === 'function'){
+setStore('apple', false, true);
+}
+if(typeof toggleDualPhone === 'function'){
+toggleDualPhone(true);
+}
 if(typeof setView === 'function'){
 setView('detail', true);
+}
+if(typeof syncDeviceDropdowns === 'function'){
+syncDeviceDropdowns();
 }
 if (typeof syncActivityBarVisibility === 'function') syncActivityBarVisibility(store);
 if (typeof updateActivityBarState === 'function') updateActivityBarState(store);

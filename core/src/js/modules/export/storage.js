@@ -780,6 +780,12 @@ function loadState(){
       if(raw){
         const s = JSON.parse(raw);
         loadedFromLs = applyStateObject(s);
+        if(loadedFromLs){
+          if(typeof setStore === 'function') setStore('apple', false, true);
+          if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+          if(typeof setView === 'function') setView('detail', true);
+          if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+        }
       }
     }
   }catch(e){
@@ -795,6 +801,11 @@ function loadState(){
         restoring = true;
         try{
           applyStateObject(idbState);
+          // Always ensure iPhone + Dual Detail View on initial boot
+          if(typeof setStore === 'function') setStore('apple', false, true);
+          if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+          if(typeof setView === 'function') setView('detail', true);
+          if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
           if(typeof renderIcons === 'function') renderIcons();
           if(typeof renderFeature === 'function') renderFeature();
           if(typeof renderShots === 'function') renderShots();
