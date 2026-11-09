@@ -18,7 +18,7 @@
 /* Device Header Label */
 .dev-label{
   position:absolute;
-  top:calc(-34px / var(--dev-zoom, 1));
+  top:calc(-28px / var(--dev-zoom, 1));
   left:0;
   right:0;
   display:flex;
@@ -34,42 +34,27 @@
   gap:calc(6.5px / var(--dev-zoom, 1));
   font-size:calc(13px / var(--dev-zoom, 1));
   font-weight:700;
-  letter-spacing:.04em;
+  letter-spacing:.05em;
   white-space:nowrap;
   line-height:1;
-  padding:calc(4px / var(--dev-zoom, 1)) calc(12px / var(--dev-zoom, 1));
-  border-radius:calc(20px / var(--dev-zoom, 1));
-  background:rgba(255, 255, 255, 0.05);
-  border:1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:0 2px 8px rgba(0,0,0,0.25);
-  backdrop-filter:blur(6px);
+  color:var(--mut);
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
 }
 .dev-title svg{
   width:calc(12px / var(--dev-zoom, 1)) !important;
   height:calc(12px / var(--dev-zoom, 1)) !important;
   display:block;
   flex-shrink:0;
+  color:var(--mut);
+  opacity:0.85;
 }
-.dev-label.a .dev-title{
-  color:#7dd3fc;
-  border-color:rgba(125, 211, 252, 0.2);
-  background:rgba(125, 211, 252, 0.08);
-}
+.dev-label.a .dev-title,
 .dev-label.g .dev-title{
-  color:#6ee7b7;
-  border-color:rgba(110, 231, 183, 0.2);
-  background:rgba(110, 231, 183, 0.08);
+  color:var(--mut);
 }
-:root[data-ui=light] .dev-title{
-  box-shadow:0 1px 4px rgba(0,0,0,0.06);
-}
-:root[data-ui=light] .dev-label.a .dev-title{
-  color:#0071e3;
-  border-color:rgba(0, 113, 227, 0.2);
-  background:rgba(0, 113, 227, 0.06);
-}
+:root[data-ui=light] .dev-label.a .dev-title,
 :root[data-ui=light] .dev-label.g .dev-title{
-  color:#01875f;
-  border-color:rgba(1, 135, 95, 0.2);
-  background:rgba(1, 135, 95, 0.06);
+  color:var(--mut);
 }
