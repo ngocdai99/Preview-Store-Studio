@@ -213,15 +213,21 @@ function getFieldMockupTargets(key) {
 let activeFieldFocusKey = null;
 
 function setFieldFocus(key, shouldScroll = true, autoSelectCard = true) {
+  const isSameKey = (activeFieldFocusKey === key);
   activeFieldFocusKey = key;
   
-  // Clear previous focus highlight on all targets
-  $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+  if (!key) {
+    $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+    return;
+  }
 
-  if (!key) return;
+  // Clear previous focus highlight on all targets when switching fields
+  if (!isSameKey) {
+    $$('.stage .hl-target').forEach(el => el.classList.remove('hl-target'));
+  }
 
   // Auto-expand containing card if it is currently collapsed & mark it selected (when autoSelectCard is true)
-  if (autoSelectCard) {
+  if (autoSelectCard && !isSameKey) {
     let editorInput = $('f-' + key) || $(key);
     if (!editorInput && key === 'privacy') {
       editorInput = $('privacyCard') || $('privacyModeSeg');
@@ -270,20 +276,27 @@ function setFieldFocus(key, shouldScroll = true, autoSelectCard = true) {
       const scrRect = scr.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
 
-      // Relative position within scroll container
-      const relativeTop = (targetRect.top - scrRect.top) + scr.scrollTop;
-      
-      // Center the target element in the visible height of the phone/tablet screen
-      const targetCenter = relativeTop - (scr.clientHeight / 2) + (targetRect.height / 2);
-      const scrollToY = Math.max(0, targetCenter);
+      // Only scroll if target is outside comfortable viewport bounds
+      const isVisibleV = (
+        targetRect.top >= scrRect.top + 24 &&
+        targetRect.bottom <= scrRect.bottom - 24
+      );
+      if (!isVisibleV) {
+        // Relative position within scroll container
+        const relativeTop = (targetRect.top - scrRect.top) + scr.scrollTop;
+        
+        // Center the target element in the visible height of the phone/tablet screen
+        const targetCenter = relativeTop - (scr.clientHeight / 2) + (targetRect.height / 2);
+        const scrollToY = Math.max(0, targetCenter);
 
-      if (typeof scr.scrollTo === 'function') {
-        scr.scrollTo({
-          top: scrollToY,
-          behavior: 'smooth'
-        });
-      } else {
-        scr.scrollTop = scrollToY;
+        if (typeof scr.scrollTo === 'function') {
+          scr.scrollTo({
+            top: scrollToY,
+            behavior: 'smooth'
+          });
+        } else {
+          scr.scrollTop = scrollToY;
+        }
       }
     }
 
@@ -292,12 +305,18 @@ function setFieldFocus(key, shouldScroll = true, autoSelectCard = true) {
     if (met) {
       const metRect = met.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
-      const relativeLeft = (targetRect.left - metRect.left) + met.scrollLeft;
-      const targetCenterH = relativeLeft - (met.clientWidth / 2) + (targetRect.width / 2);
-      met.scrollTo({
-        left: Math.max(0, targetCenterH),
-        behavior: 'smooth'
-      });
+      const isVisibleH = (
+        targetRect.left >= metRect.left + 16 &&
+        targetRect.right <= metRect.right - 16
+      );
+      if (!isVisibleH) {
+        const relativeLeft = (targetRect.left - metRect.left) + met.scrollLeft;
+        const targetCenterH = relativeLeft - (met.clientWidth / 2) + (targetRect.width / 2);
+        met.scrollTo({
+          left: Math.max(0, targetCenterH),
+          behavior: 'smooth'
+        });
+      }
     }
   });
 }
@@ -306,13 +325,14 @@ function flashField(key) {
   if (!key) return;
   const targets = getFieldMockupTargets(key);
   targets.forEach(el => {
+    if (!el || !el.classList) return;
     el.classList.remove('hl-flash');
     void el.offsetWidth;
     el.classList.add('hl-flash');
     clearTimeout(el._flashTimer);
     el._flashTimer = setTimeout(() => {
       el.classList.remove('hl-flash');
-    }, 1150);
+    }, 400);
   });
 }
 
@@ -479,10 +499,6 @@ function initFieldFocusLinking() {
 $$('input[type=text],textarea').forEach(e => {
   e.addEventListener('input', () => {
     update();
-    const rawId = e.id || '';
-    if (rawId.startsWith('f-')) {
-      flashField(rawId.replace('f-', ''));
-    }
     if(typeof handleUserFormEdit === 'function'){
       handleUserFormEdit();
     } else {

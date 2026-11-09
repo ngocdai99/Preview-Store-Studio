@@ -1,11 +1,11 @@
 /* ---------- Field Focus Highlight & Scroll Linking (Form <-> Device Mockups) ---------- */
 .hl-target {
-  background-color: rgba(245, 158, 11, 0.22) !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 2px !important;
-  border-radius: 6px !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
-  transition: outline 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.18s ease !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.55) !important;
+  outline-offset: 1.5px !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  transition: outline 0.15s ease, background-color 0.15s ease !important;
 }
 
 /* For inline text data-b elements: give proper display and yellow background */
@@ -13,15 +13,15 @@ span[data-b].hl-target,
 i[data-b].hl-target,
 b[data-b].hl-target,
 div[data-b].hl-target {
-  background-color: rgba(245, 158, 11, 0.25) !important;
-  border-radius: 4px !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  border-radius: 3px !important;
 }
 
 /* For rounded app icons */
 img.hl-target {
-  outline: 2.5px solid #f59e0b !important;
+  outline: 2px solid rgba(245, 158, 11, 0.6) !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  box-shadow: none !important;
   background-color: transparent !important;
 }
 
@@ -29,10 +29,10 @@ img.hl-target {
 .g-desc-arrow.hl-target,
 .g-h span.g-desc-arrow.hl-target {
   border-radius: 50% !important;
-  outline: 2px solid #f59e0b !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.6) !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.55) !important;
-  background-color: rgba(245, 158, 11, 0.25) !important;
+  box-shadow: none !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
 }
 
 .g-desc-arrow.hl-flash,
@@ -44,10 +44,10 @@ img.hl-target {
 .safe[data-google-safety].hl-target,
 [data-google-safety].hl-target {
   border-radius: 14px !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 3px !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
-  background-color: rgba(245, 158, 11, 0.1) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+  background-color: rgba(245, 158, 11, 0.05) !important;
 }
 
 .safe[data-google-safety].hl-flash,
@@ -59,10 +59,10 @@ img.hl-target {
 [data-apple-priv-wrap].hl-target,
 [data-apple-priv-wrap] .pc.hl-target {
   border-radius: 16px !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 3px !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
-  background-color: rgba(245, 158, 11, 0.1) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+  background-color: rgba(245, 158, 11, 0.05) !important;
 }
 
 [data-apple-priv-wrap].hl-flash,
@@ -73,40 +73,40 @@ img.hl-target {
 /* Specific Category Pill & Chips: cleanly change the border/outline to orange/yellow */
 .chips span[data-b="cat"].hl-target,
 .chips [data-b="cat"].hl-target {
-  background-color: rgba(245, 158, 11, 0.28) !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
   border-color: #f59e0b !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 2px !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  outline-offset: 1px !important;
   border-radius: 16px !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+  box-shadow: none !important;
 }
 
 .ipad-cat-pill.hl-target {
-  background-color: rgba(245, 158, 11, 0.28) !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 2px !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  outline-offset: 1px !important;
   border-radius: 999px !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+  box-shadow: none !important;
 }
 
 /* Apple Metrics Ribbon & Information Category */
 .a-met [data-b="cat"].hl-target,
 .a-info [data-b="cat"].hl-target,
 .ipad-info-val[data-b="cat"].hl-target {
-  background-color: rgba(245, 158, 11, 0.28) !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 2px !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  outline-offset: 1px !important;
   border-radius: 4px !important;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.45) !important;
+  box-shadow: none !important;
 }
 
 /* Version badge on Apple What's New: highlight full "Version X.Y.Z" */
 .wn-ver.hl-target {
-  background-color: rgba(245, 158, 11, 0.25) !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 3px !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  outline-offset: 2px !important;
   border-radius: 6px !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45) !important;
+  box-shadow: none !important;
 }
 
 .wn-ver.hl-flash {
@@ -116,11 +116,11 @@ img.hl-target {
 /* Apple Platforms Support (iPhone & iPad): highlight "iPhone, iPad" badge line */
 .a-platforms-badge.hl-target,
 .ipad-platforms-row.hl-target {
-  background-color: rgba(245, 158, 11, 0.25) !important;
-  outline: 2px solid #f59e0b !important;
-  outline-offset: 2px !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  outline-offset: 1px !important;
   border-radius: 6px !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  box-shadow: none !important;
 }
 
 .a-platforms-badge.hl-flash,
@@ -152,11 +152,11 @@ img.hl-target {
 .chips span.st.hl-target,
 .g-about .st.hl-target,
 .gt10-rank-chip.hl-target {
-  background-color: rgba(245, 158, 11, 0.28) !important;
-  outline: 2px solid #f59e0b !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  outline: 1.5px solid rgba(245, 158, 11, 0.5) !important;
   outline-offset: 1px !important;
-  border-radius: 9px !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
 }
 
 .gt10-met-item b.hl-target,
@@ -223,35 +223,25 @@ img.hl-target {
   border-radius: 4px !important;
 }
 
-/* Typing Flash animation */
+/* Gentle typing indicator without jarring strobe flash */
 .hl-flash {
-  animation: fieldHlFlash 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  animation: fieldHlFlash 0.3s ease-out !important;
 }
 
 @keyframes fieldHlFlash {
   0% {
-    background-color: rgba(245, 158, 11, 0.55) !important;
-    outline: 2.5px solid #f59e0b !important;
-    outline-offset: 3px !important;
-    box-shadow: 0 0 16px rgba(245, 158, 11, 0.65) !important;
-  }
-  50% {
-    background-color: rgba(245, 158, 11, 0.35) !important;
-    outline: 2px solid #f59e0b !important;
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+    background-color: rgba(245, 158, 11, 0.16) !important;
+    outline-color: rgba(245, 158, 11, 0.7) !important;
   }
   100% {
-    background-color: rgba(245, 158, 11, 0.22) !important;
-    outline: 2px solid #f59e0b !important;
-    outline-offset: 2px !important;
-    box-shadow: 0 0 10px rgba(245, 158, 11, 0.45) !important;
+    background-color: rgba(245, 158, 11, 0.08) !important;
+    outline-color: rgba(245, 158, 11, 0.5) !important;
   }
 }
 
 .chips span[data-b="cat"].hl-flash {
-  background-color: rgba(245, 158, 11, 0.35) !important;
+  background-color: rgba(245, 158, 11, 0.16) !important;
   border-color: #f59e0b !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6) !important;
 }
 
 /* Clean export protection: exports NEVER render the focus highlight */
