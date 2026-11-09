@@ -25,7 +25,7 @@ export const en = {
     subheadline:
       "Save hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
     primaryCta: {
-      label: "Get Lifetime Access",
+      label: "Get Lifetime Access — $29",
       href: "#pricing",
     },
     secondaryCta: {
@@ -36,6 +36,57 @@ export const en = {
       "Offline & Private Workspace",
       "No Subscriptions",
       "Pay Once, Keep Forever",
+    ],
+  },
+
+  seeItInAction: {
+    title: "See it in action",
+    slides: [
+      {
+        id: "dual-store",
+        name: "Workspace",
+        indexLabel: "01",
+        windowTitle: "01 · Workspace",
+        title: "Dual-Store Studio Workspace",
+        caption: "Edit metadata once and watch iPhone and Android viewports update live.",
+        src: "/images/workspace_dual_store.png",
+        width: 3590,
+        height: 2022,
+      },
+      {
+        id: "tablet",
+        name: "Tablet",
+        indexLabel: "02",
+        windowTitle: "02 · Tablet",
+        title: "Tablet & iPad Stage Workspace",
+        caption: "Preview expanded 4:3 screenshot layouts for iPad and Android tablets.",
+        src: "/images/workspace_tablet_10.png",
+        width: 3550,
+        height: 1876,
+      },
+      {
+        id: "audit",
+        name: "Audit",
+        indexLabel: "03",
+        windowTitle: "03 · Audit",
+        title: "Pre-Flight ASO Compliance Audit",
+        caption: "Automated checks catch ITMS-90717 alpha violations and character overflows before review.",
+        src: "/images/audit.png",
+        srcMobile: "/images/audit_mobile.png",
+        width: 3200,
+        height: 1700,
+      },
+      {
+        id: "export",
+        name: "Export",
+        indexLabel: "04",
+        windowTitle: "04 · Export",
+        title: "1-Click Batch Asset & Preset Export",
+        caption: "Download Retina 4K mockups, framed screenshots, and metadata JSON bundles in one zip.",
+        src: "/images/export.png",
+        width: 3200,
+        height: 1700,
+      },
     ],
   },
 
@@ -162,38 +213,7 @@ export const en = {
     ],
   },
 
-  testimonials: {
-    title: "See how founders and agencies ship\u00A0faster.",
-    items: [
-      {
-        quote:
-          "Before Preview Studio, every App Store submission felt like flying blind. We'd submit metadata, wait 2 days for review, only to realize the title wrapped awkwardly on smaller iPhones. **Preview Studio saved us hours of costly revision rounds before our launch day.**",
-        author: "Alex Rivera",
-        role: "Startup Founder · Shipped 4 iOS Apps",
-        highlight: "Saved hours before launch day",
-      },
-      {
-        quote:
-          "Our clients always asked: 'Can we see what the store page will actually look like before we approve the screenshots?' We used to build messy PowerPoint decks. **Now we just export clean 4K mockups or share the standalone file.** It makes our agency deliverables look noticeably more polished and professional.",
-        author: "Marcus Vance",
-        role: "Partner at AppCraft Studio · ASO & Growth Agency",
-        highlight: "Agency-grade client deliverables",
-      },
-      {
-        quote:
-          "Figma templates for App Store screenshots get outdated every time Apple changes bezel radiuses or introduces a new Dynamic Island. **Preview Studio gives me instant, hardware-accurate frames** and catches illegal icon transparency before engineering touches it.",
-        author: "Elena Rostova",
-        role: "Lead Product Designer · FinTech Mobile Suite",
-        highlight: "Hardware-accurate Dynamic Island",
-      },
-    ],
-  },
-
   pricing: {
-    banner: {
-      tag: "LAUNCH PRICING",
-      text: "Limited to first 20 licenses · Instant offline delivery",
-    },
     title: "One-time purchase. No subscription.",
     description:
       "No recurring fees. Standalone offline HTML studio. Pay once, keep your copy forever.",

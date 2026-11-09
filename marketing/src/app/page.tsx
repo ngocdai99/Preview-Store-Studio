@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
+import { SeeItInAction } from "@/components/sections/SeeItInAction";
 import { Features } from "@/components/sections/Features";
 import { Comparison } from "@/components/sections/Comparison";
 import { Pricing } from "@/components/sections/Pricing";
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-1">
         <Hero />
+        <SeeItInAction />
         <Features />
         <Comparison />
         <Pricing />

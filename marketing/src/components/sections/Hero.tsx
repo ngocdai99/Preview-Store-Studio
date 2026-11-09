@@ -3,8 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { PrimaryButton } from "@/components/ui/PrimaryButton";
-import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { SlidingTabs } from "@/components/ui/SlidingTabs";
 import { useDeviceTime } from "./features/DeviceHardwareHelpers";
 import { PhoneFramesStage } from "./features/PhoneFramesStage";
@@ -23,7 +21,7 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative pt-8 pb-12 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-16 overflow-hidden">
+    <section id="hero" className="relative pt-6 pb-4 sm:pt-8 sm:pb-6 lg:pt-10 lg:pb-8 overflow-hidden">
       {/* Background Soft Emerald Aurora Glow */}
       <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-emerald-500/15 via-[#00D085]/12 to-[#006636]/18 blur-[130px] rounded-full pointer-events-none -z-10" />
 
@@ -45,26 +43,7 @@ export function Hero() {
               <span>Preview and verify your listings on realistic device frames before submitting.</span>
             </p>
 
-            {/* CTAs */}
-            <div className="mt-6 sm:mt-7 flex flex-row items-center gap-3">
-              <PrimaryButton
-                href={hero.primaryCta.href}
-                fontSize="13.5px"
-                fontWeight={600}
-                className="h-[36px] sm:h-[38px] px-4 sm:px-5 rounded-lg shadow-sm"
-              >
-                <span>{hero.primaryCta.label}</span>
-              </PrimaryButton>
 
-              <SecondaryButton
-                href={hero.secondaryCta.href}
-                fontSize="13.5px"
-                fontWeight={500}
-                className="h-[36px] sm:h-[38px] px-4 sm:px-5 rounded-lg"
-              >
-                <span>{hero.secondaryCta.label}</span>
-              </SecondaryButton>
-            </div>
 
             {/* Micro Trust Indicators */}
             <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#475569] dark:text-[oklch(0.684_0.00275_157.5)] font-medium">
