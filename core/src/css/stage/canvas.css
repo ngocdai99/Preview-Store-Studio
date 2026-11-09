@@ -15,13 +15,13 @@
   --dev-zoom: 1;
 }
 
-/* Device Header Label - Hidden, Replaced with Clean Pure Space */
+/* Device Header Label */
 .dev-label{
   position:absolute;
-  top:calc(-32px / var(--dev-zoom, 1));
+  top:calc(-34px / var(--dev-zoom, 1));
   left:0;
   right:0;
-  display:none !important;
+  display:flex;
   align-items:center;
   justify-content:center;
   pointer-events:none;
@@ -29,14 +29,20 @@
   z-index:10;
 }
 .dev-title{
-  display:none !important;
+  display:inline-flex;
   align-items:center;
   gap:calc(6.5px / var(--dev-zoom, 1));
   font-size:calc(13px / var(--dev-zoom, 1));
-  font-weight:800;
-  letter-spacing:.05em;
+  font-weight:700;
+  letter-spacing:.04em;
   white-space:nowrap;
   line-height:1;
+  padding:calc(4px / var(--dev-zoom, 1)) calc(12px / var(--dev-zoom, 1));
+  border-radius:calc(20px / var(--dev-zoom, 1));
+  background:rgba(255, 255, 255, 0.05);
+  border:1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+  backdrop-filter:blur(6px);
 }
 .dev-title svg{
   width:calc(12px / var(--dev-zoom, 1)) !important;
@@ -46,13 +52,24 @@
 }
 .dev-label.a .dev-title{
   color:#7dd3fc;
+  border-color:rgba(125, 211, 252, 0.2);
+  background:rgba(125, 211, 252, 0.08);
 }
 .dev-label.g .dev-title{
   color:#6ee7b7;
+  border-color:rgba(110, 231, 183, 0.2);
+  background:rgba(110, 231, 183, 0.08);
+}
+:root[data-ui=light] .dev-title{
+  box-shadow:0 1px 4px rgba(0,0,0,0.06);
 }
 :root[data-ui=light] .dev-label.a .dev-title{
   color:#0071e3;
+  border-color:rgba(0, 113, 227, 0.2);
+  background:rgba(0, 113, 227, 0.06);
 }
 :root[data-ui=light] .dev-label.g .dev-title{
   color:#01875f;
+  border-color:rgba(1, 135, 95, 0.2);
+  background:rgba(1, 135, 95, 0.06);
 }
