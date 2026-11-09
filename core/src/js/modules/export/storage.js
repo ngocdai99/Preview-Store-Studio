@@ -49,7 +49,7 @@ function sanitizeStateForLocalStorage(state){
   return clean;
 }
 
-function applyStateObject(s){
+function applyStateObject(s, restoreLayout = false){
   if(!s || typeof s !== 'object') return false;
 
   if(s.appId || s.appleId){
@@ -88,10 +88,12 @@ function applyStateObject(s){
 
   // 2. Set Store and Devices without animation or icon interference
   const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
-  if(s.store) setStore(s.store, false, isSavedDual);
-  if(s.appleDevice) setAppleDevice(s.appleDevice, false);
-  else if(document.body) document.body.dataset.appleDevice = appleDevice;
-  if(s.view && typeof setView === 'function') setView(s.view, true);
+  if(restoreLayout){
+    if(s.store) setStore(s.store, false, isSavedDual);
+    if(s.appleDevice) setAppleDevice(s.appleDevice, false);
+    else if(document.body) document.body.dataset.appleDevice = appleDevice;
+    if(s.view && typeof setView === 'function') setView(s.view, true);
+  }
   if(s.theme && $$('.phone').length) (typeof setDeviceTheme === 'function' ? setDeviceTheme(s.theme, false) : $$('.phone').forEach(p => p.dataset.theme = s.theme));
   if(s.form){
     if(s.form.name !== undefined && $('f-name')) {
@@ -447,6 +449,10 @@ function loadDraftFromStorage(){
           restoring = true;
           try{
             applyStateObject(userDraft);
+            if(typeof setStore === 'function') setStore('apple', false, true);
+            if(typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+            if(typeof setView === 'function') setView('detail', true);
+            if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
             if(typeof renderIcons === 'function') renderIcons();
             if(typeof renderFeature === 'function') renderFeature();
             if(typeof renderShots === 'function') renderShots();
@@ -782,7 +788,7 @@ function loadState(){
         loadedFromLs = applyStateObject(s);
         if(loadedFromLs){
           if(typeof setStore === 'function') setStore('apple', false, true);
-          if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+          if(typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
           if(typeof setView === 'function') setView('detail', true);
           if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
         }
@@ -803,7 +809,7 @@ function loadState(){
           applyStateObject(idbState);
           // Always ensure iPhone + Dual Detail View on initial boot
           if(typeof setStore === 'function') setStore('apple', false, true);
-          if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+          if(typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
           if(typeof setView === 'function') setView('detail', true);
           if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
           if(typeof renderIcons === 'function') renderIcons();

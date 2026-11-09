@@ -853,7 +853,7 @@ $$('.seg button').forEach(b => b.onclick = () => setStore(b.dataset.s));
 $$('#vt button[data-v]').forEach(b => b.onclick = () => setView(b.dataset.v));
 
 // Dual Phone Comparison Toggle on Stage Bottom Bar
-function toggleDualPhone(forceState) {
+function toggleDualPhone(forceState, animate = true) {
   const isCurrentlyDual = document.body.dataset.dual === 'true';
   const nextDual = typeof forceState === 'boolean' ? forceState : !isCurrentlyDual;
 
@@ -921,7 +921,7 @@ function toggleDualPhone(forceState) {
     if (typeof updateActivityBarState === 'function') updateActivityBarState();
     if (typeof fit === 'function') fit();
     syncAllVtPills();
-    if (typeof saveState === 'function') saveState(false);
+    if (typeof saveState === 'function' && animate && (!window.restoring)) saveState(false);
   };
 
   // Immediate device selector update (<1ms)
@@ -938,14 +938,14 @@ function toggleDualPhone(forceState) {
   }
   syncAllVtPills();
 
-  if (typeof transitionStoreMode === 'function') {
-    if (nextDual) {
-      transitionStoreMode(activeStore, 'dual', applyDualState);
-    } else {
-      transitionStoreMode('dual', activeStore, applyDualState);
-    }
-  } else {
+  if (!animate || typeof transitionStoreMode !== 'function') {
     applyDualState();
+  } else {
+    if (nextDual) {
+      transitionStoreMode(activeStore, 'dual', applyDualState, animate);
+    } else {
+      transitionStoreMode('dual', activeStore, applyDualState, animate);
+    }
   }
 }
 

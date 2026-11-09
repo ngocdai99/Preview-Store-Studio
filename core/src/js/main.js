@@ -252,7 +252,7 @@ if(typeof setStore === 'function'){
   setStore('apple', false, true);
 }
 if(typeof toggleDualPhone === 'function'){
-  toggleDualPhone(true);
+  toggleDualPhone(true, false);
 }
 if(typeof setView === 'function'){
   setView('detail', true);

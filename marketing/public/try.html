@@ -12413,7 +12413,7 @@ if(typeof syncAppleNavScroll === 'function') syncAppleNavScroll();
 }
 $$('.seg button').forEach(b => b.onclick = () => setStore(b.dataset.s));
 $$('#vt button[data-v]').forEach(b => b.onclick = () => setView(b.dataset.v));
-function toggleDualPhone(forceState) {
+function toggleDualPhone(forceState, animate = true) {
 const isCurrentlyDual = document.body.dataset.dual === 'true';
 const nextDual = typeof forceState === 'boolean' ? forceState : !isCurrentlyDual;
 const btn = $('btnDualPhone');
@@ -12472,7 +12472,7 @@ keepCard.classList.remove('collapsed');
 if (typeof updateActivityBarState === 'function') updateActivityBarState();
 if (typeof fit === 'function') fit();
 syncAllVtPills();
-if (typeof saveState === 'function') saveState(false);
+if (typeof saveState === 'function' && animate && (!window.restoring)) saveState(false);
 };
 $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
 $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === 'phone'));
@@ -12486,14 +12486,14 @@ if ($('gdt')) $('gdt').style.display = 'flex';
 if ($('gdt')) syncVtPill($('gdt'));
 }
 syncAllVtPills();
-if (typeof transitionStoreMode === 'function') {
-if (nextDual) {
-transitionStoreMode(activeStore, 'dual', applyDualState);
-} else {
-transitionStoreMode('dual', activeStore, applyDualState);
-}
-} else {
+if (!animate || typeof transitionStoreMode !== 'function') {
 applyDualState();
+} else {
+if (nextDual) {
+transitionStoreMode(activeStore, 'dual', applyDualState, animate);
+} else {
+transitionStoreMode('dual', activeStore, applyDualState, animate);
+}
 }
 }
 function setupHoverDropdown(containerId, btnId, menuId) {
@@ -13583,7 +13583,7 @@ delete clean.tab10Shots;
 }
 return clean;
 }
-function applyStateObject(s){
+function applyStateObject(s, restoreLayout = false){
 if(!s || typeof s !== 'object') return false;
 if(s.appId || s.appleId){
 CURRENT_APP_ID = String(s.appId || s.appleId);
@@ -13614,10 +13614,12 @@ ICON = s.icon;
 }
 }
 const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
+if(restoreLayout){
 if(s.store) setStore(s.store, false, isSavedDual);
 if(s.appleDevice) setAppleDevice(s.appleDevice, false);
 else if(document.body) document.body.dataset.appleDevice = appleDevice;
 if(s.view && typeof setView === 'function') setView(s.view, true);
+}
 if(s.theme && $$('.phone').length) (typeof setDeviceTheme === 'function' ? setDeviceTheme(s.theme, false) : $$('.phone').forEach(p => p.dataset.theme = s.theme));
 if(s.form){
 if(s.form.name !== undefined && $('f-name')) {
@@ -13899,6 +13901,10 @@ if(CURRENT_PRESET_KEY === 'draft'){
 restoring = true;
 try{
 applyStateObject(userDraft);
+if(typeof setStore === 'function') setStore('apple', false, true);
+if(typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+if(typeof setView === 'function') setView('detail', true);
+if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
 if(typeof renderIcons === 'function') renderIcons();
 if(typeof renderFeature === 'function') renderFeature();
 if(typeof renderShots === 'function') renderShots();
@@ -14179,7 +14185,7 @@ const s = JSON.parse(raw);
 loadedFromLs = applyStateObject(s);
 if(loadedFromLs){
 if(typeof setStore === 'function') setStore('apple', false, true);
-if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+if(typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
 if(typeof setView === 'function') setView('detail', true);
 if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
 }
@@ -14197,7 +14203,7 @@ restoring = true;
 try{
 applyStateObject(idbState);
 if(typeof setStore === 'function') setStore('apple', false, true);
-if(typeof toggleDualPhone === 'function') toggleDualPhone(true);
+if(typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
 if(typeof setView === 'function') setView('detail', true);
 if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
 if(typeof renderIcons === 'function') renderIcons();
@@ -16998,7 +17004,7 @@ if(typeof setStore === 'function'){
 setStore('apple', false, true);
 }
 if(typeof toggleDualPhone === 'function'){
-toggleDualPhone(true);
+toggleDualPhone(true, false);
 }
 if(typeof setView === 'function'){
 setView('detail', true);

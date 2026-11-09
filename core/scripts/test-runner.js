@@ -4199,8 +4199,12 @@ assert(mainJsRaw.includes("setView('detail', true)"), 'main.js explicitly applie
 
 // 5. Storage engine resetFactoryStorage applies pristine dual phone + detail view defaults
 const storageJsRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'export', 'storage.js'), 'utf8');
+const transitionsJsRaw = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
 assert(storageJsRaw.includes("document.body.dataset.dual = 'true'") && storageJsRaw.includes("setView('detail', true)"), 'resetFactoryStorage resets to dual phone and detail view');
 assert(storageJsRaw.includes("isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual'"), 'applyStateObject correctly inspects saved dual state');
+assert(storageJsRaw.includes("function applyStateObject(s, restoreLayout = false)"), 'applyStateObject defaults restoreLayout to false to preserve startup layout');
+assert(transitionsJsRaw.includes("function toggleDualPhone(forceState, animate = true)"), 'toggleDualPhone supports synchronous non-animating bootstrap mode');
+assert(mainJsRaw.includes("toggleDualPhone(true, false)"), 'main.js bootstraps dual phone synchronously without animation lag');
 
 // 6. Bundled core.html and try.html contain dual phone and detail view defaults
 const bundledCore = fs.readFileSync(path.join(ROOT_DIR, 'core.html'), 'utf8');
