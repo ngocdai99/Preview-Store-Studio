@@ -4905,6 +4905,31 @@ const appleMetricsCssSrc63 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', '
 assert(appleMetricsCssSrc63.includes('.a-met-dev-ico svg,.a-met-dev-ico img'), 'metrics.css supports both svg and rasterized img for iPhone developer icon');
 
 // ---------------------------------------------------------------------
+// [SUITE 64]: Google Play Navigation View Switcher (Phone & 10" Tablet)
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 64]: Google Play Navigation View Switcher (Phone & 10" Tablet)');
+
+const googleJsSrc64 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'google', 'google.js'), 'utf8');
+assert(googleJsSrc64.includes('function initGoogleTabs'), 'google.js defines initGoogleTabs');
+assert(googleJsSrc64.includes('initGoogleTabs()'), 'google.js invokes initGoogleTabs');
+assert(googleJsSrc64.includes('.phone.google .gnav'), 'google.js binds listeners to Android phone bottom nav');
+assert(googleJsSrc64.includes('.gt10-rail'), 'google.js binds listeners to Android 10" tablet navigation rail');
+assert(googleJsSrc64.includes('.gp-search-back-btn, .gt10-search-btn-icon'), 'google.js binds back buttons on search view to return to detail view');
+
+const transitionsJsSrc64 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
+assert(transitionsJsSrc64.includes("document.querySelectorAll('.phone.google .gnav')"), 'transitions.js syncs active state on Android phone nav');
+assert(transitionsJsSrc64.includes("document.querySelectorAll('.gt10-rail')"), 'transitions.js syncs active state on Android 10" tablet rail');
+
+const gPhoneHtmlSrc64 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'google', 'phone.html'), 'utf8');
+assert(/<div class="on">[\s\S]*?Apps<\/div>/.test(gPhoneHtmlSrc64), 'phone.html initializes Apps tab with class "on"');
+
+const gTab10HtmlSrc64 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'google', 'tab10.html'), 'utf8');
+assert(/class="gt10-rail-item on"[\s\S]*?gt10-rail-lbl">Apps<\/span>/.test(gTab10HtmlSrc64), 'tab10.html initializes Apps rail item with class "on"');
+
+const gNavCssSrc64 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google', 'nav.css'), 'utf8');
+assert(gNavCssSrc64.includes('.gnav div{display:flex;') && gNavCssSrc64.includes('cursor:pointer;'), 'nav.css provides cursor:pointer for bottom nav interactive items');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {

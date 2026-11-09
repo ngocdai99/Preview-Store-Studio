@@ -1,6 +1,7 @@
 /* ---------- GOOGLE PLAY BOTTOM NAVIGATION & SEARCH VIEW ---------- */
 .gnav{height:70px;flex-shrink:0;display:flex;justify-content:space-around;align-items:center;background:var(--sf);padding:4px 0 10px;border-top:1px solid rgba(0,0,0,.04);position:relative;z-index:8}
-.gnav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--s);font-weight:500}
+.gnav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--s);font-weight:500;cursor:pointer;user-select:none;transition:color .15s}
+.gnav div:hover{color:var(--t)}
 .gnav div span{height:30px;padding:0 20px;border-radius:15px;display:inline-flex;align-items:center;justify-content:center;color:currentColor}
 .gnav div span svg{width:20px;height:20px;stroke-width:2;display:block}
 .gnav .on{color:#0b57d0;font-weight:600}.gnav .on span{background:#c2e7ff;color:#001d35}

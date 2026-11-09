@@ -449,4 +449,41 @@ function tabStatus(key){
   return bad ? `${bad} of ${v.length} with format issues` : `Uploaded (${v.length} screenshot${v.length===1?'':'s'})`;
 }
 
+// --- Google Play Navigation Interactive Switcher (Phone & 10" Tablet) ---
+function initGoogleTabs(){
+  // 1. Android Phone Bottom Navigation Bar (.gnav)
+  document.querySelectorAll('.phone.google .gnav').forEach(navBar => {
+    const items = navBar.querySelectorAll(':scope > div');
+    if(items.length >= 4){
+      items[1].addEventListener('click', () => {
+        if(typeof setView === 'function') setView('detail');
+      });
+      items[2].addEventListener('click', () => {
+        if(typeof setView === 'function') setView('search');
+      });
+    }
+  });
+
+  // 2. Android 10" Tablet Left Rail Navigation (.gt10-rail)
+  document.querySelectorAll('.gt10-rail').forEach(rail => {
+    const items = rail.querySelectorAll('.gt10-rail-item');
+    if(items.length >= 3){
+      items[1].addEventListener('click', () => {
+        if(typeof setView === 'function') setView('detail');
+      });
+      items[2].addEventListener('click', () => {
+        if(typeof setView === 'function') setView('search');
+      });
+    }
+  });
+
+  // 3. Android Search Back Buttons -> return to Detail View
+  document.querySelectorAll('.gp-search-back-btn, .gt10-search-btn-icon').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(typeof setView === 'function') setView('detail');
+    });
+  });
+}
+initGoogleTabs();
+
 

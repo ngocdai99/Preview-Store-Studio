@@ -835,6 +835,17 @@ function setView(v, force = false){
       }
     }
   });
+  document.querySelectorAll('.gt10-rail').forEach(rail => {
+    const items = rail.querySelectorAll('.gt10-rail-item');
+    if(items.length >= 3){
+      items.forEach(t => t.classList.remove('on'));
+      if(v === 'search'){
+        items[2].classList.add('on');
+      } else {
+        items[1].classList.add('on');
+      }
+    }
+  });
   if(typeof syncAppleNavScroll === 'function') syncAppleNavScroll();
 }
 
