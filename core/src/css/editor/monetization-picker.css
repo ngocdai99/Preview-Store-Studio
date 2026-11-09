@@ -40,8 +40,8 @@
 .custom-iap-trigger:focus,
 .custom-iap-wrap.open .custom-iap-trigger {
   outline: 0;
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow: none;
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 0 1.5px rgba(245, 158, 11, 0.2);
   background: #131413;
 }
 
@@ -266,8 +266,8 @@ body[data-store="google"]:not([data-ui-store="apple"]):not([data-ui-store="dual"
 :root[data-ui=light] .custom-iap-trigger:focus,
 :root[data-ui=light] .custom-iap-wrap.open .custom-iap-trigger {
   background: #ffffff;
-  border-color: #64748b;
-  box-shadow: none !important;
+  border-color: rgba(245, 158, 11, 0.65);
+  box-shadow: 0 0 0 1.5px rgba(245, 158, 11, 0.25) !important;
 }
 
 :root[data-ui=light] .custom-iap-val {

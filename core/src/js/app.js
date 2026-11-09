@@ -7476,6 +7476,9 @@ function openCustomCat() {
   if (listContainer && activeOpt) {
     listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
   }
+  if (typeof flashField === 'function') {
+    flashField('cat');
+  }
   if (typeof setFieldFocus === 'function') {
     setFieldFocus('cat', false, false);
   }
@@ -7638,6 +7641,8 @@ function setCategory(val, only){
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
+      if (typeof flashField === 'function') flashField('cat');
+      if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       if (isCustomCatOpen()) {
         closeCustomCat();
       } else {
@@ -7647,11 +7652,13 @@ function setCategory(val, only){
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('cat');
         if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
+          if (typeof flashField === 'function') flashField('cat');
           setFieldFocus('cat', false, false);
         }
       });
@@ -7661,6 +7668,7 @@ function setCategory(val, only){
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('cat');
         if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       });
     }
@@ -8170,6 +8178,9 @@ function openCustomAge() {
   if (listContainer && activeOpt) {
     listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
   }
+  if (typeof flashField === 'function') {
+    flashField('st-age');
+  }
   if (typeof setFieldFocus === 'function') {
     setFieldFocus('st-age', false, false);
   }
@@ -8321,6 +8332,8 @@ function renderCustomAgeOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
+      if (typeof flashField === 'function') flashField('st-age');
+      if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       if (isCustomAgeOpen()) {
         closeCustomAge();
       } else {
@@ -8330,11 +8343,13 @@ function renderCustomAgeOptions(query = '') {
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-age');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
+          if (typeof flashField === 'function') flashField('st-age');
           setFieldFocus('st-age', false, false);
         }
       });
@@ -8344,6 +8359,7 @@ function renderCustomAgeOptions(query = '') {
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-age');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       });
     }
@@ -8461,6 +8477,9 @@ function openCustomIap() {
   const activeOpt = wrap.querySelector('.custom-iap-option.active');
   if (listContainer && activeOpt) {
     listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
+  }
+  if (typeof flashField === 'function') {
+    flashField('st-iap');
   }
   if (typeof setFieldFocus === 'function') {
     setFieldFocus('st-iap', false, false);
@@ -8610,6 +8629,8 @@ function renderCustomIapOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
+      if (typeof flashField === 'function') flashField('st-iap');
+      if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       if (isCustomIapOpen()) {
         closeCustomIap();
       } else {
@@ -8619,11 +8640,13 @@ function renderCustomIapOptions(query = '') {
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-iap');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
+          if (typeof flashField === 'function') flashField('st-iap');
           setFieldFocus('st-iap', false, false);
         }
       });
@@ -8633,6 +8656,7 @@ function renderCustomIapOptions(query = '') {
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-iap');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       });
     }
@@ -9079,6 +9103,7 @@ function initFieldFocusLinking() {
       if (key.startsWith('cat')) key = 'cat';
       if (key) {
         const isCustomTrigger = (targetInput.id === 'customCatTrigger' || targetInput.id === 'customAgeTrigger' || targetInput.id === 'customIapTrigger');
+        if (typeof flashField === 'function') flashField(key);
         setFieldFocus(key, !isCustomTrigger, !isCustomTrigger);
       }
     });
@@ -9107,30 +9132,57 @@ function initFieldFocusLinking() {
   // Custom Category dropdown trigger and search interaction zones
   const catZones = $$('#customCatTrigger, #customCatSearch, .custom-cat-trigger:not(.custom-age-trigger):not(.custom-iap-trigger)');
   catZones.forEach(el => {
-    el.addEventListener('focus', () => setFieldFocus('cat', false, false));
-    el.addEventListener('click', () => setFieldFocus('cat', false, false));
+    el.addEventListener('focus', () => {
+      if (typeof flashField === 'function') flashField('cat');
+      setFieldFocus('cat', false, false);
+    });
+    el.addEventListener('click', () => {
+      if (typeof flashField === 'function') flashField('cat');
+      setFieldFocus('cat', false, false);
+    });
     el.addEventListener('mouseenter', () => {
-      if (!activeFieldFocusKey) setFieldFocus('cat', false, false);
+      if (!activeFieldFocusKey) {
+        if (typeof flashField === 'function') flashField('cat');
+        setFieldFocus('cat', false, false);
+      }
     });
   });
 
   // Custom Age dropdown trigger and search interaction zones
   const ageZones = $$('#customAgeTrigger, #customAgeSearch, .custom-age-trigger');
   ageZones.forEach(el => {
-    el.addEventListener('focus', () => setFieldFocus('st-age', false, false));
-    el.addEventListener('click', () => setFieldFocus('st-age', false, false));
+    el.addEventListener('focus', () => {
+      if (typeof flashField === 'function') flashField('st-age');
+      setFieldFocus('st-age', false, false);
+    });
+    el.addEventListener('click', () => {
+      if (typeof flashField === 'function') flashField('st-age');
+      setFieldFocus('st-age', false, false);
+    });
     el.addEventListener('mouseenter', () => {
-      if (!activeFieldFocusKey) setFieldFocus('st-age', false, false);
+      if (!activeFieldFocusKey) {
+        if (typeof flashField === 'function') flashField('st-age');
+        setFieldFocus('st-age', false, false);
+      }
     });
   });
 
   // Custom Monetization dropdown trigger and search interaction zones
   const iapZones = $$('#customIapTrigger, #customIapSearch, .custom-iap-trigger');
   iapZones.forEach(el => {
-    el.addEventListener('focus', () => setFieldFocus('st-iap', false, false));
-    el.addEventListener('click', () => setFieldFocus('st-iap', false, false));
+    el.addEventListener('focus', () => {
+      if (typeof flashField === 'function') flashField('st-iap');
+      setFieldFocus('st-iap', false, false);
+    });
+    el.addEventListener('click', () => {
+      if (typeof flashField === 'function') flashField('st-iap');
+      setFieldFocus('st-iap', false, false);
+    });
     el.addEventListener('mouseenter', () => {
-      if (!activeFieldFocusKey) setFieldFocus('st-iap', false, false);
+      if (!activeFieldFocusKey) {
+        if (typeof flashField === 'function') flashField('st-iap');
+        setFieldFocus('st-iap', false, false);
+      }
     });
   });
 

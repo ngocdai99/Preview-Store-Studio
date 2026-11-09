@@ -148,6 +148,10 @@ img.hl-target {
 .ipad-info-val.hl-target,
 .iap[data-iap-apple].hl-target,
 .g-meta[data-iap-google].hl-target,
+[data-iap-cell].hl-target,
+.ipad-info-cell[data-iap-cell].hl-target,
+[data-iap-cell] b.hl-target,
+[data-iap-yesno].hl-target,
 .chips .st.hl-target,
 .chips span.st.hl-target,
 .g-about .st.hl-target,
@@ -218,6 +222,10 @@ img.hl-target {
 .ipad-info-val.hl-flash,
 .iap[data-iap-apple].hl-flash,
 .g-meta[data-iap-google].hl-flash,
+[data-iap-cell].hl-flash,
+.ipad-info-cell[data-iap-cell].hl-flash,
+[data-iap-cell] b.hl-flash,
+[data-iap-yesno].hl-flash,
 .g-about .st.hl-flash,
 .gt10-rank-chip.hl-flash {
   border-radius: 4px !important;

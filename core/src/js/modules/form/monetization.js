@@ -56,6 +56,9 @@ function openCustomIap() {
   if (listContainer && activeOpt) {
     listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
   }
+  if (typeof flashField === 'function') {
+    flashField('st-iap');
+  }
   if (typeof setFieldFocus === 'function') {
     setFieldFocus('st-iap', false, false);
   }
@@ -204,6 +207,8 @@ function renderCustomIapOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
+      if (typeof flashField === 'function') flashField('st-iap');
+      if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       if (isCustomIapOpen()) {
         closeCustomIap();
       } else {
@@ -213,11 +218,13 @@ function renderCustomIapOptions(query = '') {
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-iap');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
+          if (typeof flashField === 'function') flashField('st-iap');
           setFieldFocus('st-iap', false, false);
         }
       });
@@ -227,6 +234,7 @@ function renderCustomIapOptions(query = '') {
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-iap');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       });
     }

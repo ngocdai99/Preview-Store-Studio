@@ -86,6 +86,9 @@ function openCustomCat() {
   if (listContainer && activeOpt) {
     listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
   }
+  if (typeof flashField === 'function') {
+    flashField('cat');
+  }
   if (typeof setFieldFocus === 'function') {
     setFieldFocus('cat', false, false);
   }
@@ -248,6 +251,8 @@ function setCategory(val, only){
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
+      if (typeof flashField === 'function') flashField('cat');
+      if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       if (isCustomCatOpen()) {
         closeCustomCat();
       } else {
@@ -257,11 +262,13 @@ function setCategory(val, only){
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('cat');
         if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
+          if (typeof flashField === 'function') flashField('cat');
           setFieldFocus('cat', false, false);
         }
       });
@@ -271,6 +278,7 @@ function setCategory(val, only){
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('cat');
         if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       });
     }

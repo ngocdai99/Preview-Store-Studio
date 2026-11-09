@@ -57,6 +57,9 @@ function openCustomAge() {
   if (listContainer && activeOpt) {
     listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
   }
+  if (typeof flashField === 'function') {
+    flashField('st-age');
+  }
   if (typeof setFieldFocus === 'function') {
     setFieldFocus('st-age', false, false);
   }
@@ -208,6 +211,8 @@ function renderCustomAgeOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
+      if (typeof flashField === 'function') flashField('st-age');
+      if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       if (isCustomAgeOpen()) {
         closeCustomAge();
       } else {
@@ -217,11 +222,13 @@ function renderCustomAgeOptions(query = '') {
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-age');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
+          if (typeof flashField === 'function') flashField('st-age');
           setFieldFocus('st-age', false, false);
         }
       });
@@ -231,6 +238,7 @@ function renderCustomAgeOptions(query = '') {
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
+        if (typeof flashField === 'function') flashField('st-age');
         if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       });
     }
