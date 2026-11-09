@@ -53,17 +53,35 @@ function renderStats(){
   $$('.dev:not(.gtab7) [data-gmet-size]').forEach(e => { e.style.display = hasRating ? 'none' : ''; });
   $$('.dev.gtab7 [data-gmet-size]').forEach(e => { e.style.display = 'flex'; });
 
-  const iapVal = STATS.iap || 'iap';
+  const iapVal = (STATS.iap || 'iap').trim();
   const hasIap = (iapVal === 'iap' || iapVal === 'ads_iap');
-  $$('[data-iap-apple]').forEach(e => { e.style.display = hasIap ? '' : 'none'; });
-  $$('[data-iap-yesno]').forEach(e => { e.textContent = hasIap ? 'Yes' : 'No'; });
+  const isCustom = !['iap', 'ads_iap', 'ads', 'free'].includes(iapVal.toLowerCase());
+
+  $$('[data-iap-apple]').forEach(e => {
+    if (isCustom) {
+      e.textContent = iapVal;
+      e.style.display = '';
+    } else {
+      e.textContent = 'In-App Purchases';
+      e.style.display = hasIap ? '' : 'none';
+    }
+  });
+
+  $$('[data-iap-yesno]').forEach(e => {
+    if (isCustom) {
+      e.textContent = iapVal;
+    } else {
+      e.textContent = hasIap ? 'Yes' : 'No';
+    }
+  });
+
   const gMetaMap = {
     iap: 'In-app purchases',
     ads_iap: 'Contains ads · In-app purchases',
     ads: 'Contains ads',
     free: ''
   };
-  const gMetaText = gMetaMap[iapVal] !== undefined ? gMetaMap[iapVal] : 'In-app purchases';
+  const gMetaText = isCustom ? iapVal : (gMetaMap[iapVal] !== undefined ? gMetaMap[iapVal] : 'In-app purchases');
   $$('[data-iap-google]').forEach(e => {
     e.textContent = gMetaText;
     e.style.display = gMetaText ? '' : 'none';

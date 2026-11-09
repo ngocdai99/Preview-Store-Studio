@@ -4930,6 +4930,32 @@ const gNavCssSrc64 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'google',
 assert(gNavCssSrc64.includes('.gnav div{display:flex;') && gNavCssSrc64.includes('cursor:pointer;'), 'nav.css provides cursor:pointer for bottom nav interactive items');
 
 // ---------------------------------------------------------------------
+// [SUITE 65]: Dual-Device Apple Monetization Badge & iPad Parity Verification
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 65]: Dual-Device Apple Monetization Badge & iPad Parity Verification');
+
+const ipadHeroHtmlSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'ipad-hero.html'), 'utf8');
+assert(ipadHeroHtmlSrc65.includes('data-iap-apple') && ipadHeroHtmlSrc65.includes('ipad-iap'), 'ipad-hero.html includes data-iap-apple monetization badge under GET button');
+
+const ipadInfoHtmlSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'ipad-info.html'), 'utf8');
+assert(ipadInfoHtmlSrc65.includes('data-iap-cell') && ipadInfoHtmlSrc65.includes('data-iap-yesno'), 'ipad-info.html includes In-App Purchases cell with data-iap-yesno in 2-column info grid');
+
+const iphoneInfoHtmlSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'components', 'mockups', 'apple', 'sections', 'information.html'), 'utf8');
+assert(iphoneInfoHtmlSrc65.includes('data-iap-cell') && iphoneInfoHtmlSrc65.includes('data-iap-yesno'), 'information.html identifies In-App Purchases cell with data-iap-cell');
+
+const ipadCssSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'apple', 'ipad.css'), 'utf8');
+assert(ipadCssSrc65.includes('.ipad-iap'), 'ipad.css defines .ipad-iap styling');
+
+const focusLinkCssSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'css', 'stage', 'focus-link.css'), 'utf8');
+assert(focusLinkCssSrc65.includes('.iap[data-iap-apple][style*="display: none"]') && focusLinkCssSrc65.includes('display: none !important;'), 'focus-link.css protects hidden monetization badge from forced display');
+
+const stateJsSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'core', 'state.js'), 'utf8');
+assert(stateJsSrc65.includes('isCustom') && stateJsSrc65.includes('$$(\'[data-iap-apple]\')'), 'state.js updates monetization badge and supports custom values across Apple devices');
+
+const syncJsSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'form', 'sync.js'), 'utf8');
+assert(syncJsSrc65.includes('mockupIapEls') && syncJsSrc65.includes('openCustomIap'), 'sync.js attaches click listener on mockup monetization targets to open editor dropdown');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {

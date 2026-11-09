@@ -188,8 +188,15 @@ img.hl-target {
 
 .iap[data-iap-apple].hl-target,
 .g-meta[data-iap-google].hl-target {
-  display: inline-block !important;
+  display: inline-block;
   padding: 1px 4px !important;
+}
+
+.iap[data-iap-apple][style*="display: none"],
+.iap[data-iap-apple][style*="display:none"],
+.g-meta[data-iap-google][style*="display: none"],
+.g-meta[data-iap-google][style*="display:none"] {
+  display: none !important;
 }
 
 .a-met b.hl-flash,

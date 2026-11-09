@@ -1087,17 +1087,35 @@ function renderStats(){
   $$('.dev:not(.gtab7) [data-gmet-size]').forEach(e => { e.style.display = hasRating ? 'none' : ''; });
   $$('.dev.gtab7 [data-gmet-size]').forEach(e => { e.style.display = 'flex'; });
 
-  const iapVal = STATS.iap || 'iap';
+  const iapVal = (STATS.iap || 'iap').trim();
   const hasIap = (iapVal === 'iap' || iapVal === 'ads_iap');
-  $$('[data-iap-apple]').forEach(e => { e.style.display = hasIap ? '' : 'none'; });
-  $$('[data-iap-yesno]').forEach(e => { e.textContent = hasIap ? 'Yes' : 'No'; });
+  const isCustom = !['iap', 'ads_iap', 'ads', 'free'].includes(iapVal.toLowerCase());
+
+  $$('[data-iap-apple]').forEach(e => {
+    if (isCustom) {
+      e.textContent = iapVal;
+      e.style.display = '';
+    } else {
+      e.textContent = 'In-App Purchases';
+      e.style.display = hasIap ? '' : 'none';
+    }
+  });
+
+  $$('[data-iap-yesno]').forEach(e => {
+    if (isCustom) {
+      e.textContent = iapVal;
+    } else {
+      e.textContent = hasIap ? 'Yes' : 'No';
+    }
+  });
+
   const gMetaMap = {
     iap: 'In-app purchases',
     ads_iap: 'Contains ads · In-app purchases',
     ads: 'Contains ads',
     free: ''
   };
-  const gMetaText = gMetaMap[iapVal] !== undefined ? gMetaMap[iapVal] : 'In-app purchases';
+  const gMetaText = isCustom ? iapVal : (gMetaMap[iapVal] !== undefined ? gMetaMap[iapVal] : 'In-app purchases');
   $$('[data-iap-google]').forEach(e => {
     e.textContent = gMetaText;
     e.style.display = gMetaText ? '' : 'none';
@@ -8847,7 +8865,13 @@ function getFieldMockupTargets(key) {
     case 'iap':
     case 'st-iap': {
       const raw = $$('.stage [data-iap-apple], .stage [data-iap-yesno], .stage [data-iap-google]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-info b') || el)));
+      const visible = raw.filter(el => {
+        if (!el) return false;
+        const s = (typeof el.getAttribute === 'function' ? el.getAttribute('style') : (el.style ? el.style.display : '')) || '';
+        return !s.includes('display: none') && !s.includes('display:none');
+      });
+      const candidates = visible.length ? visible : raw;
+      return Array.from(new Set(candidates.map(el => (el && typeof el.closest === 'function' ? el.closest('.a-info b, .ipad-info-cell, [data-iap-cell]') : null) || el)));
     }
     default:
       return $$('.stage [data-b="' + key + '"]');
@@ -9060,6 +9084,20 @@ function initFieldFocusLinking() {
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('st-iap', true);
     });
+  });
+
+  // Mockup monetization badges interaction zones (clicking on mockup opens dropdown)
+  const mockupIapEls = $$('.stage [data-iap-apple], .stage [data-iap-yesno], .stage [data-iap-cell]');
+  mockupIapEls.forEach(el => {
+    if (!el) return;
+    if (el.style) el.style.cursor = 'pointer';
+    if (typeof el.addEventListener === 'function') {
+      el.addEventListener('click', (e) => {
+        if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+        setFieldFocus('st-iap', true);
+        if (typeof openCustomIap === 'function') openCustomIap();
+      });
+    }
   });
 
   // Supported Devices interaction zones (iPhone & iPad checkboxes)

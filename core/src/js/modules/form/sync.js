@@ -197,7 +197,13 @@ function getFieldMockupTargets(key) {
     case 'iap':
     case 'st-iap': {
       const raw = $$('.stage [data-iap-apple], .stage [data-iap-yesno], .stage [data-iap-google]');
-      return Array.from(new Set(raw.map(el => el.closest('.a-info b') || el)));
+      const visible = raw.filter(el => {
+        if (!el) return false;
+        const s = (typeof el.getAttribute === 'function' ? el.getAttribute('style') : (el.style ? el.style.display : '')) || '';
+        return !s.includes('display: none') && !s.includes('display:none');
+      });
+      const candidates = visible.length ? visible : raw;
+      return Array.from(new Set(candidates.map(el => (el && typeof el.closest === 'function' ? el.closest('.a-info b, .ipad-info-cell, [data-iap-cell]') : null) || el)));
     }
     default:
       return $$('.stage [data-b="' + key + '"]');
@@ -410,6 +416,20 @@ function initFieldFocusLinking() {
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) setFieldFocus('st-iap', true);
     });
+  });
+
+  // Mockup monetization badges interaction zones (clicking on mockup opens dropdown)
+  const mockupIapEls = $$('.stage [data-iap-apple], .stage [data-iap-yesno], .stage [data-iap-cell]');
+  mockupIapEls.forEach(el => {
+    if (!el) return;
+    if (el.style) el.style.cursor = 'pointer';
+    if (typeof el.addEventListener === 'function') {
+      el.addEventListener('click', (e) => {
+        if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+        setFieldFocus('st-iap', true);
+        if (typeof openCustomIap === 'function') openCustomIap();
+      });
+    }
   });
 
   // Supported Devices interaction zones (iPhone & iPad checkboxes)
