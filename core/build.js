@@ -36,10 +36,10 @@ const c = {
 };
 
 /**
- * Resolves <!-- @include "path/to/file.html" --> recursively
+ * Resolves <!-- @include "path/to/file.html" [prop="val"] --> recursively
  */
 function resolveHtmlIncludes(content, baseDir) {
-  return content.replace(/<!--\s*@include\s*["']([^"']+)["']\s*-->/gi, (match, includePath) => {
+  return content.replace(/<!--\s*@include\s*["']([^"']+)["'](?:\s+([^\->]+?))?\s*-->/gi, (match, includePath, rawProps) => {
     const fullPath = path.isAbsolute(includePath) 
       ? includePath 
       : path.join(SRC_DIR, includePath);
@@ -48,7 +48,36 @@ function resolveHtmlIncludes(content, baseDir) {
       console.warn(`[!] HTML include not found: ${fullPath}`);
       return `<!-- Missing include: ${includePath} -->`;
     }
-    const included = fs.readFileSync(fullPath, 'utf8');
+    let included = fs.readFileSync(fullPath, 'utf8');
+
+    if (rawProps) {
+      const propRegex = /([a-zA-Z0-9_-]+)=(?:["']([^"']*)["']|'([^']*)')/g;
+      let pMatch;
+      const props = {};
+      while ((pMatch = propRegex.exec(rawProps)) !== null) {
+        props[pMatch[1]] = pMatch[2] !== undefined ? pMatch[2] : pMatch[3];
+      }
+
+      if (props.store === 'apple') {
+        if (!props.storeClass) props.storeClass = 'a';
+        if (!props.platform) props.platform = 'APP STORE';
+        if (!props.icon) {
+          props.icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/></svg>';
+        }
+      } else if (props.store === 'google') {
+        if (!props.storeClass) props.storeClass = 'g';
+        if (!props.platform) props.platform = 'GOOGLE PLAY';
+        if (!props.icon) {
+          props.icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4.5c0-.8.9-1.3 1.6-.9l12 7.5c.7.4.7 1.4 0 1.8l-12 7.5c-.7.4-1.6-.1-1.6-.9V4.5z"/></svg>';
+        }
+      }
+
+      for (const [key, val] of Object.entries(props)) {
+        const placeholder = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+        included = included.replace(placeholder, val);
+      }
+    }
+
     return resolveHtmlIncludes(included, path.dirname(fullPath));
   });
 }

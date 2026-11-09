@@ -33,8 +33,8 @@
   align-items:center;
   gap:calc(6.5px / var(--dev-zoom, 1));
   font-size:calc(13px / var(--dev-zoom, 1));
-  font-weight:700;
-  letter-spacing:.05em;
+  font-weight:500;
+  letter-spacing:.04em;
   white-space:nowrap;
   line-height:1;
   color:rgba(255, 255, 255, 0.92);
@@ -43,11 +43,11 @@
   box-shadow:none !important;
 }
 .dev-title svg{
-  width:calc(12px / var(--dev-zoom, 1)) !important;
-  height:calc(12px / var(--dev-zoom, 1)) !important;
+  width:calc(13px / var(--dev-zoom, 1)) !important;
+  height:calc(13px / var(--dev-zoom, 1)) !important;
   display:block;
   flex-shrink:0;
-  color:currentColor;
+  stroke:currentColor;
   opacity:0.9;
 }
 .dev-label.a .dev-title,
