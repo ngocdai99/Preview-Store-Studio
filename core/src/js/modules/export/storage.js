@@ -571,17 +571,17 @@ function updateDraftPill(){
           '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
           '<small id="presetBtnBadge">Preset</small>' +
           '<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</span>';
+      }
 
-        const closeBtn = presetPill.querySelector('#presetPillCloseBtn');
-        if(closeBtn){
-          closeBtn.addEventListener('click', function(e){
-            e.stopPropagation();
-            if(typeof closePresetPill === 'function') closePresetPill();
-          });
-        }
-
+      const closeBtn = presetPill.querySelector('#presetPillCloseBtn');
+      if(closeBtn){
+        closeBtn.onclick = function(e){
+          if(e && e.stopPropagation) e.stopPropagation();
+          if(e && e.preventDefault) e.preventDefault();
+          if(typeof closePresetPill === 'function') closePresetPill();
+        };
         if(typeof isDemoMode === 'function' && isDemoMode()){
-          if(closeBtn) closeBtn.remove();
+          closeBtn.remove();
         }
       }
     }

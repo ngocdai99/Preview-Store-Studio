@@ -13301,22 +13301,18 @@ loadPreset('draft');
 }
 function closePresetPill(){
 CURRENT_ACTIVE_PRESET = null;
-if(CURRENT_PRESET_KEY !== 'draft'){
 if(typeof hasUserDraft === 'function' && hasUserDraft()){
 loadPreset('draft');
-CURRENT_ACTIVE_PRESET = null;
 } else {
 loadPreset('none');
+CURRENT_PRESET_KEY = 'draft';
+isPresetModified = false;
+userDraft = null;
+}
 CURRENT_ACTIVE_PRESET = null;
 if(typeof updateDraftPill === 'function') updateDraftPill();
 if(typeof updatePresetBanner === 'function') updatePresetBanner();
 if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
-}
-} else {
-if(typeof updateDraftPill === 'function') updateDraftPill();
-if(typeof updatePresetBanner === 'function') updatePresetBanner();
-if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
-}
 }
 const btnDraft = $('btnDraft');
 if(btnDraft){
@@ -13352,9 +13348,14 @@ const btnPresetPill = $('btnPresetPill');
 if(btnPresetPill){
 btnPresetPill.onclick = () => {
 const ev = window.event;
-if(ev && ev.target && ev.target.closest && ev.target.closest('#presetPillCloseBtn')) return;
+if(ev && ev.target && ev.target.closest && ev.target.closest('#presetPillCloseBtn, .ms-pill-reset-btn')){
+if(ev.stopPropagation) ev.stopPropagation();
+if(ev.preventDefault) ev.preventDefault();
+closePresetPill();
+return;
+}
 if(CURRENT_PRESET_KEY === 'draft'){
-loadPreset(CURRENT_ACTIVE_PRESET || 'taskflow');
+loadPreset(CURRENT_ACTIVE_PRESET || 'studio');
 } else {
 const tModal = $('templatesModal');
 if(tModal){
@@ -13362,6 +13363,14 @@ tModal.classList.add('open');
 tModal.setAttribute('aria-hidden', 'false');
 }
 }
+};
+}
+const presetPillCloseBtn = $('presetPillCloseBtn');
+if(presetPillCloseBtn){
+presetPillCloseBtn.onclick = (e) => {
+if(e && e.stopPropagation) e.stopPropagation();
+if(e && e.preventDefault) e.preventDefault();
+closePresetPill();
 };
 }
 const STORAGE_KEY = 'store_preview_studio_state_v2';
@@ -13832,15 +13841,16 @@ presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
 '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
 '<small id="presetBtnBadge">Preset</small>' +
 '';
+}
 const closeBtn = presetPill.querySelector('#presetPillCloseBtn');
 if(closeBtn){
-closeBtn.addEventListener('click', function(e){
-e.stopPropagation();
+closeBtn.onclick = function(e){
+if(e && e.stopPropagation) e.stopPropagation();
+if(e && e.preventDefault) e.preventDefault();
 if(typeof closePresetPill === 'function') closePresetPill();
-});
-}
+};
 if(typeof isDemoMode === 'function' && isDemoMode()){
-if(closeBtn) closeBtn.remove();
+closeBtn.remove();
 }
 }
 }

@@ -391,22 +391,18 @@ if(btnReturn){
 
 function closePresetPill(){
   CURRENT_ACTIVE_PRESET = null;
-  if(CURRENT_PRESET_KEY !== 'draft'){
-    if(typeof hasUserDraft === 'function' && hasUserDraft()){
-      loadPreset('draft');
-      CURRENT_ACTIVE_PRESET = null;
-    } else {
-      loadPreset('none');
-      CURRENT_ACTIVE_PRESET = null;
-      if(typeof updateDraftPill === 'function') updateDraftPill();
-      if(typeof updatePresetBanner === 'function') updatePresetBanner();
-      if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
-    }
+  if(typeof hasUserDraft === 'function' && hasUserDraft()){
+    loadPreset('draft');
   } else {
-    if(typeof updateDraftPill === 'function') updateDraftPill();
-    if(typeof updatePresetBanner === 'function') updatePresetBanner();
-    if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
+    loadPreset('none');
+    CURRENT_PRESET_KEY = 'draft';
+    isPresetModified = false;
+    userDraft = null;
   }
+  CURRENT_ACTIVE_PRESET = null;
+  if(typeof updateDraftPill === 'function') updateDraftPill();
+  if(typeof updatePresetBanner === 'function') updatePresetBanner();
+  if(typeof updatePresetMenuSelection === 'function') updatePresetMenuSelection();
 }
 
 const btnDraft = $('btnDraft');
@@ -445,9 +441,14 @@ const btnPresetPill = $('btnPresetPill');
 if(btnPresetPill){
   btnPresetPill.onclick = () => {
     const ev = window.event;
-    if(ev && ev.target && ev.target.closest && ev.target.closest('#presetPillCloseBtn')) return;
+    if(ev && ev.target && ev.target.closest && ev.target.closest('#presetPillCloseBtn, .ms-pill-reset-btn')){
+      if(ev.stopPropagation) ev.stopPropagation();
+      if(ev.preventDefault) ev.preventDefault();
+      closePresetPill();
+      return;
+    }
     if(CURRENT_PRESET_KEY === 'draft'){
-      loadPreset(CURRENT_ACTIVE_PRESET || 'taskflow');
+      loadPreset(CURRENT_ACTIVE_PRESET || 'studio');
     } else {
       const tModal = $('templatesModal');
       if(tModal){
@@ -455,6 +456,15 @@ if(btnPresetPill){
         tModal.setAttribute('aria-hidden', 'false');
       }
     }
+  };
+}
+
+const presetPillCloseBtn = $('presetPillCloseBtn');
+if(presetPillCloseBtn){
+  presetPillCloseBtn.onclick = (e) => {
+    if(e && e.stopPropagation) e.stopPropagation();
+    if(e && e.preventDefault) e.preventDefault();
+    closePresetPill();
   };
 }
 
