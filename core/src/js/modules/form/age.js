@@ -61,7 +61,7 @@ function openCustomAge() {
     flashField('st-age');
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('st-age', false, false);
+    setFieldFocus('st-age', true);
   }
 }
 
@@ -211,8 +211,6 @@ function renderCustomAgeOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
-      if (typeof flashField === 'function') flashField('st-age');
-      if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       if (isCustomAgeOpen()) {
         closeCustomAge();
       } else {

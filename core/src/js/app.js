@@ -7480,7 +7480,7 @@ function openCustomCat() {
     flashField('cat');
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('cat', false, false);
+    setFieldFocus('cat', true);
   }
 }
 
@@ -7641,8 +7641,6 @@ function setCategory(val, only){
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
-      if (typeof flashField === 'function') flashField('cat');
-      if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       if (isCustomCatOpen()) {
         closeCustomCat();
       } else {
@@ -8182,7 +8180,7 @@ function openCustomAge() {
     flashField('st-age');
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('st-age', false, false);
+    setFieldFocus('st-age', true);
   }
 }
 
@@ -8332,8 +8330,6 @@ function renderCustomAgeOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
-      if (typeof flashField === 'function') flashField('st-age');
-      if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
       if (isCustomAgeOpen()) {
         closeCustomAge();
       } else {
@@ -8482,7 +8478,7 @@ function openCustomIap() {
     flashField('st-iap');
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('st-iap', false, false);
+    setFieldFocus('st-iap', true);
   }
 }
 
@@ -8629,8 +8625,6 @@ function renderCustomIapOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
-      if (typeof flashField === 'function') flashField('st-iap');
-      if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       if (isCustomIapOpen()) {
         closeCustomIap();
       } else {
@@ -9138,7 +9132,7 @@ function initFieldFocusLinking() {
     });
     el.addEventListener('click', () => {
       if (typeof flashField === 'function') flashField('cat');
-      setFieldFocus('cat', false, false);
+      setFieldFocus('cat', true);
     });
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) {
@@ -9157,7 +9151,7 @@ function initFieldFocusLinking() {
     });
     el.addEventListener('click', () => {
       if (typeof flashField === 'function') flashField('st-age');
-      setFieldFocus('st-age', false, false);
+      setFieldFocus('st-age', true);
     });
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) {
@@ -9176,7 +9170,7 @@ function initFieldFocusLinking() {
     });
     el.addEventListener('click', () => {
       if (typeof flashField === 'function') flashField('st-iap');
-      setFieldFocus('st-iap', false, false);
+      setFieldFocus('st-iap', true);
     });
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) {

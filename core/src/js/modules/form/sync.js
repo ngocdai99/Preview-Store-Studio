@@ -419,7 +419,7 @@ function initFieldFocusLinking() {
     });
     el.addEventListener('click', () => {
       if (typeof flashField === 'function') flashField('cat');
-      setFieldFocus('cat', false, false);
+      setFieldFocus('cat', true);
     });
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) {
@@ -438,7 +438,7 @@ function initFieldFocusLinking() {
     });
     el.addEventListener('click', () => {
       if (typeof flashField === 'function') flashField('st-age');
-      setFieldFocus('st-age', false, false);
+      setFieldFocus('st-age', true);
     });
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) {
@@ -457,7 +457,7 @@ function initFieldFocusLinking() {
     });
     el.addEventListener('click', () => {
       if (typeof flashField === 'function') flashField('st-iap');
-      setFieldFocus('st-iap', false, false);
+      setFieldFocus('st-iap', true);
     });
     el.addEventListener('mouseenter', () => {
       if (!activeFieldFocusKey) {

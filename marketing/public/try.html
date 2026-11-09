@@ -10122,7 +10122,7 @@ if (typeof flashField === 'function') {
 flashField('cat');
 }
 if (typeof setFieldFocus === 'function') {
-setFieldFocus('cat', false, false);
+setFieldFocus('cat', true);
 }
 }
 function closeCustomCat() {
@@ -10265,8 +10265,6 @@ const searchInput = $('customCatSearch');
 if (trigger) {
 trigger.onclick = (e) => {
 e.stopPropagation();
-if (typeof flashField === 'function') flashField('cat');
-if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
 if (isCustomCatOpen()) {
 closeCustomCat();
 } else {
@@ -10738,7 +10736,7 @@ if (typeof flashField === 'function') {
 flashField('st-age');
 }
 if (typeof setFieldFocus === 'function') {
-setFieldFocus('st-age', false, false);
+setFieldFocus('st-age', true);
 }
 }
 function closeCustomAge() {
@@ -10874,8 +10872,6 @@ const sel = $('f-st-age');
 if (trigger) {
 trigger.onclick = (e) => {
 e.stopPropagation();
-if (typeof flashField === 'function') flashField('st-age');
-if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
 if (isCustomAgeOpen()) {
 closeCustomAge();
 } else {
@@ -11000,7 +10996,7 @@ if (typeof flashField === 'function') {
 flashField('st-iap');
 }
 if (typeof setFieldFocus === 'function') {
-setFieldFocus('st-iap', false, false);
+setFieldFocus('st-iap', true);
 }
 }
 function closeCustomIap() {
@@ -11133,8 +11129,6 @@ const sel = $('f-st-iap');
 if (trigger) {
 trigger.onclick = (e) => {
 e.stopPropagation();
-if (typeof flashField === 'function') flashField('st-iap');
-if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
 if (isCustomIapOpen()) {
 closeCustomIap();
 } else {
@@ -11564,7 +11558,7 @@ setFieldFocus('cat', false, false);
 });
 el.addEventListener('click', () => {
 if (typeof flashField === 'function') flashField('cat');
-setFieldFocus('cat', false, false);
+setFieldFocus('cat', true);
 });
 el.addEventListener('mouseenter', () => {
 if (!activeFieldFocusKey) {
@@ -11581,7 +11575,7 @@ setFieldFocus('st-age', false, false);
 });
 el.addEventListener('click', () => {
 if (typeof flashField === 'function') flashField('st-age');
-setFieldFocus('st-age', false, false);
+setFieldFocus('st-age', true);
 });
 el.addEventListener('mouseenter', () => {
 if (!activeFieldFocusKey) {
@@ -11598,7 +11592,7 @@ setFieldFocus('st-iap', false, false);
 });
 el.addEventListener('click', () => {
 if (typeof flashField === 'function') flashField('st-iap');
-setFieldFocus('st-iap', false, false);
+setFieldFocus('st-iap', true);
 });
 el.addEventListener('mouseenter', () => {
 if (!activeFieldFocusKey) {

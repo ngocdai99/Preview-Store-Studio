@@ -90,7 +90,7 @@ function openCustomCat() {
     flashField('cat');
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('cat', false, false);
+    setFieldFocus('cat', true);
   }
 }
 
@@ -251,8 +251,6 @@ function setCategory(val, only){
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
-      if (typeof flashField === 'function') flashField('cat');
-      if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       if (isCustomCatOpen()) {
         closeCustomCat();
       } else {

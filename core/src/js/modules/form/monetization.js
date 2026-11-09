@@ -60,7 +60,7 @@ function openCustomIap() {
     flashField('st-iap');
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('st-iap', false, false);
+    setFieldFocus('st-iap', true);
   }
 }
 
@@ -207,8 +207,6 @@ function renderCustomIapOptions(query = '') {
   if (trigger) {
     trigger.onclick = (e) => {
       e.stopPropagation();
-      if (typeof flashField === 'function') flashField('st-iap');
-      if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       if (isCustomIapOpen()) {
         closeCustomIap();
       } else {
