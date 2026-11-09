@@ -300,10 +300,13 @@ function applyImportedStoreApp(state) {
   else if (state.iconGoogle) CUSTOM_ICON_512 = state.iconGoogle;
 
   if (typeof setStore === 'function') {
-    setStore('apple', false);
+    setStore('apple', false, true);
   }
-  if (typeof setAppleDevice === 'function') {
-    setAppleDevice('iphone', false);
+  if (typeof toggleDualPhone === 'function') {
+    toggleDualPhone(true, false);
+  }
+  if (typeof setView === 'function') {
+    setView('detail', true);
   }
 
   // Reset Feature Graphic: Apple App Store does not provide Google Play Feature Graphic.
@@ -322,10 +325,16 @@ function applyImportedStoreApp(state) {
 
   // Double ensure store & device buttons reflect selection after state apply
   if (typeof setStore === 'function') {
-    setStore('apple', false);
+    setStore('apple', false, true);
   }
-  if (typeof setAppleDevice === 'function') {
-    setAppleDevice('iphone', false);
+  if (typeof toggleDualPhone === 'function') {
+    toggleDualPhone(true, false);
+  }
+  if (typeof setView === 'function') {
+    setView('detail', true);
+  }
+  if (typeof syncDeviceDropdowns === 'function') {
+    syncDeviceDropdowns();
   }
 
   // Rerender all components
@@ -843,6 +852,11 @@ function checkAndLoadStoreParams() {
       // If the app is already loaded in draft (e.g. from cache on reload), skip redundant re-fetch
       const draftName = (typeof userDraft !== 'undefined' && userDraft && userDraft.form && userDraft.form.name) ? String(userDraft.form.name).trim() : '';
       if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft' && draftName && draftName !== 'Store Preview Studio') {
+        if (typeof setStore === 'function') setStore('apple', false, true);
+        if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+        if (typeof setView === 'function') setView('detail', true);
+        if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+        if (typeof fit === 'function') fit();
         return;
       }
 

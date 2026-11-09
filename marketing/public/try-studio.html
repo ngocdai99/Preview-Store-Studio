@@ -16295,10 +16295,13 @@ else if (state.icon) CUSTOM_ICON_1024 = state.icon;
 if (state.icon512) CUSTOM_ICON_512 = state.icon512;
 else if (state.iconGoogle) CUSTOM_ICON_512 = state.iconGoogle;
 if (typeof setStore === 'function') {
-setStore('apple', false);
+setStore('apple', false, true);
 }
-if (typeof setAppleDevice === 'function') {
-setAppleDevice('iphone', false);
+if (typeof toggleDualPhone === 'function') {
+toggleDualPhone(true, false);
+}
+if (typeof setView === 'function') {
+setView('detail', true);
 }
 FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
 state.featureGraphic = FEATURE_GRAPHIC;
@@ -16308,10 +16311,16 @@ applyStateObject(state);
 }
 FEATURE_GRAPHIC = (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '');
 if (typeof setStore === 'function') {
-setStore('apple', false);
+setStore('apple', false, true);
 }
-if (typeof setAppleDevice === 'function') {
-setAppleDevice('iphone', false);
+if (typeof toggleDualPhone === 'function') {
+toggleDualPhone(true, false);
+}
+if (typeof setView === 'function') {
+setView('detail', true);
+}
+if (typeof syncDeviceDropdowns === 'function') {
+syncDeviceDropdowns();
 }
 if (typeof renderIcons === 'function') renderIcons();
 if (typeof renderFeature === 'function') renderFeature();
@@ -16729,6 +16738,11 @@ const currentActiveId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID
 : ((typeof userDraft !== 'undefined' && userDraft && (userDraft.appId || userDraft.appleId)) ? String(userDraft.appId || userDraft.appleId).trim() : '');
 const draftName = (typeof userDraft !== 'undefined' && userDraft && userDraft.form && userDraft.form.name) ? String(userDraft.form.name).trim() : '';
 if (cleanTargetId && currentActiveId && cleanTargetId === currentActiveId && CURRENT_PRESET_KEY === 'draft' && draftName && draftName !== 'Store Preview Studio') {
+if (typeof setStore === 'function') setStore('apple', false, true);
+if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+if (typeof setView === 'function') setView('detail', true);
+if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+if (typeof fit === 'function') fit();
 return;
 }
 const input = $('storeImportInput');
@@ -16929,6 +16943,9 @@ loadPreset('none');
 CURRENT_PRESET_KEY = 'draft';
 CURRENT_ACTIVE_PRESET = 'studio';
 }
+if (typeof toggleDualPhone === 'function') {
+toggleDualPhone(true, false);
+}
 } else {
 isPresetModified = false;
 userDraft = null;
@@ -16969,6 +16986,9 @@ CURRENT_PRESET_KEY = 'draft';
 loadPreset('none');
 CURRENT_PRESET_KEY = 'draft';
 CURRENT_ACTIVE_PRESET = 'studio';
+}
+if(typeof toggleDualPhone === 'function'){
+toggleDualPhone(true, false);
 }
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
 CURRENT_PRESET_KEY = 'draft';

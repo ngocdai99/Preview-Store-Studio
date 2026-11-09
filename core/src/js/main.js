@@ -165,6 +165,9 @@ if (typeof isDemoMode === 'function' && isDemoMode()) {
       CURRENT_PRESET_KEY = 'draft';
       CURRENT_ACTIVE_PRESET = 'studio';
     }
+    if (typeof toggleDualPhone === 'function') {
+      toggleDualPhone(true, false);
+    }
   } else {
     // In demo mode (/try), if not navigating with appid, default auto-pick Store Preview Studio
     isPresetModified = false;
@@ -207,6 +210,9 @@ if (typeof isDemoMode === 'function' && isDemoMode()) {
     loadPreset('none');
     CURRENT_PRESET_KEY = 'draft';
     CURRENT_ACTIVE_PRESET = 'studio';
+  }
+  if(typeof toggleDualPhone === 'function'){
+    toggleDualPhone(true, false);
   }
 } else if(typeof hasUserDraft === 'function' && hasUserDraft()){
   CURRENT_PRESET_KEY = 'draft';
