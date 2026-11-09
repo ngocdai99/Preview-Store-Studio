@@ -90,7 +90,7 @@ function applyStateObject(s, restoreLayout = false){
   const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
   if(restoreLayout){
     if(s.store) setStore(s.store, false, isSavedDual);
-    if(s.appleDevice) setAppleDevice(s.appleDevice, false);
+    if(s.appleDevice) setAppleDevice(s.appleDevice, false, isSavedDual);
     else if(document.body) document.body.dataset.appleDevice = appleDevice;
     if(s.view && typeof setView === 'function') setView(s.view, true);
   }

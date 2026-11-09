@@ -542,7 +542,7 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
   }
 }
 
-function setStore(s, animate = true, preserveDual = false){
+function setStore(s, animate = true, preserveDual = true){
   const isDual = document.body.dataset.dual === 'true';
   const fromMode = isDual ? 'dual' : store;
   const toMode = (isDual && preserveDual) ? 'dual' : s;

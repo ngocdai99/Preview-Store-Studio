@@ -2,12 +2,12 @@
 // --- Apple Device Mode & Store Switchers ---
 let appleDevice = 'dual'; // 'iphone' | 'ipad' | 'dual'
 
-function setAppleDevice(d, animate = true){
+function setAppleDevice(d, animate = true, preserveDual = false){
   const stageMenu = $('menuAppleDevice');
   if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   if(d !== 'ipad' && d !== 'dual') d = 'iphone';
   const wasDual = document.body.dataset.dual === 'true';
-  const nextDual = d === 'dual';
+  const nextDual = preserveDual ? true : (d === 'dual');
   if(appleDevice === d && document.body.dataset.appleDevice === d && wasDual === nextDual){
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     syncAllVtPills();

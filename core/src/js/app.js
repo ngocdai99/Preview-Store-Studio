@@ -9837,7 +9837,7 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
   }
 }
 
-function setStore(s, animate = true, preserveDual = false){
+function setStore(s, animate = true, preserveDual = true){
   const isDual = document.body.dataset.dual === 'true';
   const fromMode = isDual ? 'dual' : store;
   const toMode = (isDual && preserveDual) ? 'dual' : s;
@@ -10376,12 +10376,12 @@ setTimeout(initDeviceTheme, 0);
 // --- Apple Device Mode & Store Switchers ---
 let appleDevice = 'dual'; // 'iphone' | 'ipad' | 'dual'
 
-function setAppleDevice(d, animate = true){
+function setAppleDevice(d, animate = true, preserveDual = false){
   const stageMenu = $('menuAppleDevice');
   if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   if(d !== 'ipad' && d !== 'dual') d = 'iphone';
   const wasDual = document.body.dataset.dual === 'true';
-  const nextDual = d === 'dual';
+  const nextDual = preserveDual ? true : (d === 'dual');
   if(appleDevice === d && document.body.dataset.appleDevice === d && wasDual === nextDual){
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     syncAllVtPills();
@@ -11554,7 +11554,7 @@ function applyStateObject(s, restoreLayout = false){
   const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
   if(restoreLayout){
     if(s.store) setStore(s.store, false, isSavedDual);
-    if(s.appleDevice) setAppleDevice(s.appleDevice, false);
+    if(s.appleDevice) setAppleDevice(s.appleDevice, false, isSavedDual);
     else if(document.body) document.body.dataset.appleDevice = appleDevice;
     if(s.view && typeof setView === 'function') setView(s.view, true);
   }
@@ -15060,14 +15060,38 @@ function applyImportedStoreApp(state) {
 
   if (typeof getCurrentStateObject === 'function') {
     userDraft = getCurrentStateObject();
-    userDraft.isCustomized = true;
+    if (userDraft) {
+      userDraft.appleDevice = 'dual';
+      userDraft.googleDevice = 'dual';
+      userDraft.isCustomized = true;
+    }
   }
   if (typeof saveDraftToStorage === 'function') saveDraftToStorage();
 
   if (typeof updatePresetBanner === 'function') updatePresetBanner();
   if (typeof updateDraftPill === 'function') updateDraftPill();
+  if (typeof setStore === 'function') setStore('apple', false, true);
+  if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+  if (typeof setView === 'function') setView('detail', true);
+  if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   if (typeof syncAllVtPills === 'function') syncAllVtPills();
   if (typeof fit === 'function') fit();
+
+  // Guard against any trailing async render/observer events resetting dual phone
+  setTimeout(() => {
+    if (typeof setStore === 'function') setStore('apple', false, true);
+    if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+    if (typeof setView === 'function') setView('detail', true);
+    if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+    if (typeof fit === 'function') fit();
+  }, 100);
+  setTimeout(() => {
+    if (typeof setStore === 'function') setStore('apple', false, true);
+    if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+    if (typeof setView === 'function') setView('detail', true);
+    if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+    if (typeof fit === 'function') fit();
+  }, 350);
 
   const targetId = state.appId || state.appleId || (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : '');
   if (targetId && typeof sessionStorage !== 'undefined') {
@@ -15862,4 +15886,11 @@ window.addEventListener('load', syncAllVtPills);
 if (typeof checkAndLoadStoreParams === 'function') {
   checkAndLoadStoreParams();
 }
+setTimeout(() => {
+  if (typeof setStore === 'function') setStore('apple', false, true);
+  if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+  if (typeof setView === 'function') setView('detail', true);
+  if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+  if (typeof fit === 'function') fit();
+}, 200);
 

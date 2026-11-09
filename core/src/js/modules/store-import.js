@@ -350,14 +350,38 @@ function applyImportedStoreApp(state) {
 
   if (typeof getCurrentStateObject === 'function') {
     userDraft = getCurrentStateObject();
-    userDraft.isCustomized = true;
+    if (userDraft) {
+      userDraft.appleDevice = 'dual';
+      userDraft.googleDevice = 'dual';
+      userDraft.isCustomized = true;
+    }
   }
   if (typeof saveDraftToStorage === 'function') saveDraftToStorage();
 
   if (typeof updatePresetBanner === 'function') updatePresetBanner();
   if (typeof updateDraftPill === 'function') updateDraftPill();
+  if (typeof setStore === 'function') setStore('apple', false, true);
+  if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+  if (typeof setView === 'function') setView('detail', true);
+  if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   if (typeof syncAllVtPills === 'function') syncAllVtPills();
   if (typeof fit === 'function') fit();
+
+  // Guard against any trailing async render/observer events resetting dual phone
+  setTimeout(() => {
+    if (typeof setStore === 'function') setStore('apple', false, true);
+    if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+    if (typeof setView === 'function') setView('detail', true);
+    if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+    if (typeof fit === 'function') fit();
+  }, 100);
+  setTimeout(() => {
+    if (typeof setStore === 'function') setStore('apple', false, true);
+    if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
+    if (typeof setView === 'function') setView('detail', true);
+    if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
+    if (typeof fit === 'function') fit();
+  }, 350);
 
   const targetId = state.appId || state.appleId || (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : '');
   if (targetId && typeof sessionStorage !== 'undefined') {
