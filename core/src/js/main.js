@@ -175,7 +175,7 @@ if (typeof isDemoMode === 'function' && isDemoMode()) {
     try {
       loadPreset('studio');
       if (typeof toggleDualPhone === 'function') {
-        toggleDualPhone(true);
+        toggleDualPhone(true, false);
       }
     } finally {
       restoring = false;
@@ -191,7 +191,7 @@ if (typeof isDemoMode === 'function' && isDemoMode()) {
   try{
     loadPreset('studio');
     if(typeof toggleDualPhone === 'function'){
-      toggleDualPhone(true);
+      toggleDualPhone(true, false);
     }
   }finally{
     restoring = false;
@@ -216,7 +216,7 @@ if (typeof isDemoMode === 'function' && isDemoMode()) {
   try{
     loadPreset('studio');
     if(typeof toggleDualPhone === 'function'){
-      toggleDualPhone(true);
+      toggleDualPhone(true, false);
     }
   }finally{
     restoring = false;

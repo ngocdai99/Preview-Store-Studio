@@ -363,7 +363,11 @@ function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
 function applyGoogleDevice(){
-  const isDual = googleDevice === 'dual' || appleDevice === 'dual';
+  const isDual = googleDevice === 'dual' || appleDevice === 'dual' || document.body.dataset.dual === 'true';
+  if (isDual) {
+    googleDevice = 'dual';
+    appleDevice = 'dual';
+  }
   document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
   document.body.dataset.dual = isDual ? 'true' : 'false';
   const selGoogle = (isDual || googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;

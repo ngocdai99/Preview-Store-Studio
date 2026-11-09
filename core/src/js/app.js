@@ -7263,7 +7263,11 @@ function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
 function applyGoogleDevice(){
-  const isDual = googleDevice === 'dual' || appleDevice === 'dual';
+  const isDual = googleDevice === 'dual' || appleDevice === 'dual' || document.body.dataset.dual === 'true';
+  if (isDual) {
+    googleDevice = 'dual';
+    appleDevice = 'dual';
+  }
   document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
   document.body.dataset.dual = isDual ? 'true' : 'false';
   const selGoogle = (isDual || googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
@@ -9834,10 +9838,11 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
 }
 
 function setStore(s, animate = true, preserveDual = false){
-  const fromMode = document.body.dataset.dual === 'true' ? 'dual' : store;
-  const toMode = s;
+  const isDual = document.body.dataset.dual === 'true';
+  const fromMode = isDual ? 'dual' : store;
+  const toMode = (isDual && preserveDual) ? 'dual' : s;
 
-  if (document.body.dataset.dual === 'true' && !preserveDual) {
+  if (isDual && !preserveDual) {
     document.body.dataset.dual = 'false';
     const btn = $('btnDualPhone');
     if (btn) {
@@ -9893,11 +9898,6 @@ function setStore(s, animate = true, preserveDual = false){
     }
   }
 
-  if(fromMode === toMode){
-    syncAllVtPills();
-    return;
-  }
-
   // 2. IMMEDIATELY SELECT DEVICE ON TABVIEW WITHOUT WAITING FOR ANIMATION (<1ms)
   let targetAppleDev = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
   let targetGoogleDev = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
@@ -9947,20 +9947,24 @@ function setStore(s, animate = true, preserveDual = false){
       document.body.dataset.dual = 'false';
       if(appleDevice === 'dual') appleDevice = 'iphone';
       if(googleDevice === 'dual') googleDevice = 'phone';
+    } else {
+      document.body.dataset.dual = 'true';
+      appleDevice = 'dual';
+      googleDevice = 'dual';
     }
     store = s;
     document.body.dataset.store = s;
     document.body.dataset.appleDevice = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
     document.body.dataset.googleDevice = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
 
-    const isDual = document.body.dataset.dual === 'true';
+    const isDualNow = document.body.dataset.dual === 'true';
     const btn = $('btnDualPhone');
     if (btn) {
-      btn.classList.toggle('on', isDual);
-      btn.setAttribute('aria-checked', isDual ? 'true' : 'false');
+      btn.classList.toggle('on', isDualNow);
+      btn.setAttribute('aria-checked', isDualNow ? 'true' : 'false');
     }
     const badge = $('stageDualBadge');
-    if (badge) badge.style.display = isDual ? 'inline-flex' : 'none';
+    if (badge) badge.style.display = isDualNow ? 'inline-flex' : 'none';
 
     const iconLabel = $('iconSpecLabel');
     const iconHint = $('iconSpecHint');
@@ -10055,6 +10059,12 @@ function setStore(s, animate = true, preserveDual = false){
       if(!isRestoring && typeof renderShots === 'function') renderShots();
     if(typeof saveState === 'function') saveState(false);
   };
+
+  if(fromMode === toMode || (isDual && preserveDual)){
+    applyStoreMode();
+    syncAllVtPills();
+    return;
+  }
 
   transitionStoreMode(fromMode, toMode, applyStoreMode, animate);
 }
@@ -10229,7 +10239,7 @@ function toggleDualPhone(forceState, animate = true) {
   }
   syncAllVtPills();
 
-  if (!animate || typeof transitionStoreMode !== 'function') {
+  if (!animate || typeof transitionStoreMode !== 'function' || isCurrentlyDual === nextDual) {
     applyDualState();
   } else {
     if (nextDual) {
@@ -15757,7 +15767,7 @@ if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
   try{
     loadPreset('studio');
     if(typeof toggleDualPhone === 'function'){
-      toggleDualPhone(true);
+      toggleDualPhone(true, false);
     }
   }finally{
     restoring = false;
@@ -15782,7 +15792,7 @@ if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
   try{
     loadPreset('studio');
     if(typeof toggleDualPhone === 'function'){
-      toggleDualPhone(true);
+      toggleDualPhone(true, false);
     }
   }finally{
     restoring = false;
