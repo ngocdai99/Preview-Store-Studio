@@ -64,6 +64,7 @@ function openCustomCat() {
   const trigger = $('customCatTrigger');
   const searchInput = $('customCatSearch');
   if (!wrap) return;
+  if (wrap.classList.contains('open')) return;
 
   // Close age and monetization dropdowns if open
   if (typeof closeCustomAge === 'function') closeCustomAge();
@@ -71,17 +72,22 @@ function openCustomCat() {
 
   wrap.classList.add('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
+  renderCustomCatOptions('');
   if (searchInput) {
     searchInput.value = '';
-    searchInput.focus();
+    try {
+      searchInput.focus({ preventScroll: true });
+    } catch(e) {
+      searchInput.focus();
+    }
   }
-  renderCustomCatOptions('');
+  const listContainer = $('customCatOptions');
   const activeOpt = wrap.querySelector('.custom-cat-option.active');
-  if (activeOpt) {
-    activeOpt.scrollIntoView({ block: 'nearest' });
+  if (listContainer && activeOpt) {
+    listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('cat', true);
+    setFieldFocus('cat', false, false);
   }
 }
 
@@ -89,6 +95,7 @@ function closeCustomCat() {
   const wrap = $('customCatWrap');
   const trigger = $('customCatTrigger');
   if (!wrap) return;
+  if (!wrap.classList.contains('open')) return;
   wrap.classList.remove('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'false');
 }
@@ -98,7 +105,13 @@ function selectCategoryFromUI(catVal) {
   setCategory(catVal, activeSt);
   closeCustomCat();
   const trigger = $('customCatTrigger');
-  if (trigger) trigger.focus();
+  if (trigger) {
+    try {
+      trigger.focus({ preventScroll: true });
+    } catch(e) {
+      trigger.focus();
+    }
+  }
   if (typeof update === 'function') update();
   if (typeof saveState === 'function') saveState();
   if (typeof flashField === 'function') flashField('cat');
@@ -244,16 +257,12 @@ function setCategory(val, only){
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
-        if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
-      });
-
-      trigger.addEventListener('click', () => {
-        if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
+        if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
-          setFieldFocus('cat', true);
+          setFieldFocus('cat', false, false);
         }
       });
     }
@@ -262,7 +271,7 @@ function setCategory(val, only){
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
-        if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
+        if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
       });
     }
     searchInput.oninput = () => {

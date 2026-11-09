@@ -10099,27 +10099,34 @@ const wrap = $('customCatWrap');
 const trigger = $('customCatTrigger');
 const searchInput = $('customCatSearch');
 if (!wrap) return;
+if (wrap.classList.contains('open')) return;
 if (typeof closeCustomAge === 'function') closeCustomAge();
 if (typeof closeCustomIap === 'function') closeCustomIap();
 wrap.classList.add('open');
 if (trigger) trigger.setAttribute('aria-expanded', 'true');
+renderCustomCatOptions('');
 if (searchInput) {
 searchInput.value = '';
+try {
+searchInput.focus({ preventScroll: true });
+} catch(e) {
 searchInput.focus();
 }
-renderCustomCatOptions('');
+}
+const listContainer = $('customCatOptions');
 const activeOpt = wrap.querySelector('.custom-cat-option.active');
-if (activeOpt) {
-activeOpt.scrollIntoView({ block: 'nearest' });
+if (listContainer && activeOpt) {
+listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
 }
 if (typeof setFieldFocus === 'function') {
-setFieldFocus('cat', true);
+setFieldFocus('cat', false, false);
 }
 }
 function closeCustomCat() {
 const wrap = $('customCatWrap');
 const trigger = $('customCatTrigger');
 if (!wrap) return;
+if (!wrap.classList.contains('open')) return;
 wrap.classList.remove('open');
 if (trigger) trigger.setAttribute('aria-expanded', 'false');
 }
@@ -10128,7 +10135,13 @@ const activeSt = typeof store !== 'undefined' ? store : 'apple';
 setCategory(catVal, activeSt);
 closeCustomCat();
 const trigger = $('customCatTrigger');
-if (trigger) trigger.focus();
+if (trigger) {
+try {
+trigger.focus({ preventScroll: true });
+} catch(e) {
+trigger.focus();
+}
+}
 if (typeof update === 'function') update();
 if (typeof saveState === 'function') saveState();
 if (typeof flashField === 'function') flashField('cat');
@@ -10257,14 +10270,11 @@ openCustomCat();
 };
 if (typeof trigger.addEventListener === 'function') {
 trigger.addEventListener('focus', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
-});
-trigger.addEventListener('click', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
+if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
 });
 trigger.addEventListener('mouseenter', () => {
 if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
-setFieldFocus('cat', true);
+setFieldFocus('cat', false, false);
 }
 });
 }
@@ -10272,7 +10282,7 @@ setFieldFocus('cat', true);
 if (searchInput) {
 if (typeof searchInput.addEventListener === 'function') {
 searchInput.addEventListener('focus', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('cat', true);
+if (typeof setFieldFocus === 'function') setFieldFocus('cat', false, false);
 });
 }
 searchInput.oninput = () => {
@@ -10697,27 +10707,34 @@ const wrap = $('customAgeWrap');
 const trigger = $('customAgeTrigger');
 const searchInput = $('customAgeSearch');
 if (!wrap) return;
+if (wrap.classList.contains('open')) return;
 if (typeof closeCustomCat === 'function') closeCustomCat();
 if (typeof closeCustomIap === 'function') closeCustomIap();
 wrap.classList.add('open');
 if (trigger) trigger.setAttribute('aria-expanded', 'true');
+renderCustomAgeOptions('');
 if (searchInput) {
 searchInput.value = '';
+try {
+searchInput.focus({ preventScroll: true });
+} catch(e) {
 searchInput.focus();
 }
-renderCustomAgeOptions('');
+}
+const listContainer = $('customAgeOptions');
 const activeOpt = wrap.querySelector('.custom-age-option.active');
-if (activeOpt) {
-activeOpt.scrollIntoView({ block: 'nearest' });
+if (listContainer && activeOpt) {
+listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
 }
 if (typeof setFieldFocus === 'function') {
-setFieldFocus('st-age', true);
+setFieldFocus('st-age', false, false);
 }
 }
 function closeCustomAge() {
 const wrap = $('customAgeWrap');
 const trigger = $('customAgeTrigger');
 if (!wrap) return;
+if (!wrap.classList.contains('open')) return;
 wrap.classList.remove('open');
 if (trigger) trigger.setAttribute('aria-expanded', 'false');
 }
@@ -10739,7 +10756,13 @@ sel.value = ageVal;
 }
 closeCustomAge();
 const trigger = $('customAgeTrigger');
-if (trigger) trigger.focus();
+if (trigger) {
+try {
+trigger.focus({ preventScroll: true });
+} catch(e) {
+trigger.focus();
+}
+}
 if (typeof renderStats === 'function') renderStats();
 syncAgeUI();
 if (typeof debouncedSave === 'function') debouncedSave();
@@ -10848,14 +10871,11 @@ openCustomAge();
 };
 if (typeof trigger.addEventListener === 'function') {
 trigger.addEventListener('focus', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('st-age', true);
-});
-trigger.addEventListener('click', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('st-age', true);
+if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
 });
 trigger.addEventListener('mouseenter', () => {
 if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
-setFieldFocus('st-age', true);
+setFieldFocus('st-age', false, false);
 }
 });
 }
@@ -10863,7 +10883,7 @@ setFieldFocus('st-age', true);
 if (searchInput) {
 if (typeof searchInput.addEventListener === 'function') {
 searchInput.addEventListener('focus', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('st-age', true);
+if (typeof setFieldFocus === 'function') setFieldFocus('st-age', false, false);
 });
 }
 searchInput.oninput = () => {
@@ -10941,27 +10961,34 @@ const wrap = $('customIapWrap');
 const trigger = $('customIapTrigger');
 const searchInput = $('customIapSearch');
 if (!wrap) return;
+if (wrap.classList.contains('open')) return;
 if (typeof closeCustomCat === 'function') closeCustomCat();
 if (typeof closeCustomAge === 'function') closeCustomAge();
 wrap.classList.add('open');
 if (trigger) trigger.setAttribute('aria-expanded', 'true');
+renderCustomIapOptions('');
 if (searchInput) {
 searchInput.value = '';
+try {
+searchInput.focus({ preventScroll: true });
+} catch(e) {
 searchInput.focus();
 }
-renderCustomIapOptions('');
+}
+const listContainer = $('customIapOptions');
 const activeOpt = wrap.querySelector('.custom-iap-option.active');
-if (activeOpt) {
-activeOpt.scrollIntoView({ block: 'nearest' });
+if (listContainer && activeOpt) {
+listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
 }
 if (typeof setFieldFocus === 'function') {
-setFieldFocus('st-iap', true);
+setFieldFocus('st-iap', false, false);
 }
 }
 function closeCustomIap() {
 const wrap = $('customIapWrap');
 const trigger = $('customIapTrigger');
 if (!wrap) return;
+if (!wrap.classList.contains('open')) return;
 wrap.classList.remove('open');
 if (trigger) trigger.setAttribute('aria-expanded', 'false');
 }
@@ -10983,7 +11010,13 @@ sel.value = iapVal;
 }
 closeCustomIap();
 const trigger = $('customIapTrigger');
-if (trigger) trigger.focus();
+if (trigger) {
+try {
+trigger.focus({ preventScroll: true });
+} catch(e) {
+trigger.focus();
+}
+}
 if (typeof renderStats === 'function') renderStats();
 syncIapUI();
 if (typeof debouncedSave === 'function') debouncedSave();
@@ -11089,14 +11122,11 @@ openCustomIap();
 };
 if (typeof trigger.addEventListener === 'function') {
 trigger.addEventListener('focus', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', true);
-});
-trigger.addEventListener('click', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', true);
+if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
 });
 trigger.addEventListener('mouseenter', () => {
 if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
-setFieldFocus('st-iap', true);
+setFieldFocus('st-iap', false, false);
 }
 });
 }
@@ -11104,7 +11134,7 @@ setFieldFocus('st-iap', true);
 if (searchInput) {
 if (typeof searchInput.addEventListener === 'function') {
 searchInput.addEventListener('focus', () => {
-if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', true);
+if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
 });
 }
 searchInput.oninput = () => {
@@ -11480,7 +11510,8 @@ else if (targetInput.id === 'customAgeTrigger' || rawId.includes('age')) key = '
 else if (targetInput.id === 'customIapTrigger' || rawId.includes('iap')) key = 'st-iap';
 if (key.startsWith('cat')) key = 'cat';
 if (key) {
-setFieldFocus(key, true);
+const isCustomTrigger = (targetInput.id === 'customCatTrigger' || targetInput.id === 'customAgeTrigger' || targetInput.id === 'customIapTrigger');
+setFieldFocus(key, !isCustomTrigger, !isCustomTrigger);
 }
 });
 });
@@ -11500,28 +11531,28 @@ el.addEventListener('mouseenter', () => {
 if (!activeFieldFocusKey) setFieldFocus('shots', true);
 });
 });
-const catZones = $$('#customCatTrigger, #customCatSearch, .custom-cat-trigger');
+const catZones = $$('#customCatTrigger, #customCatSearch, .custom-cat-trigger:not(.custom-age-trigger):not(.custom-iap-trigger)');
 catZones.forEach(el => {
-el.addEventListener('focus', () => setFieldFocus('cat', true));
-el.addEventListener('click', () => setFieldFocus('cat', true));
+el.addEventListener('focus', () => setFieldFocus('cat', false, false));
+el.addEventListener('click', () => setFieldFocus('cat', false, false));
 el.addEventListener('mouseenter', () => {
-if (!activeFieldFocusKey) setFieldFocus('cat', true);
+if (!activeFieldFocusKey) setFieldFocus('cat', false, false);
 });
 });
 const ageZones = $$('#customAgeTrigger, #customAgeSearch, .custom-age-trigger');
 ageZones.forEach(el => {
-el.addEventListener('focus', () => setFieldFocus('st-age', true));
-el.addEventListener('click', () => setFieldFocus('st-age', true));
+el.addEventListener('focus', () => setFieldFocus('st-age', false, false));
+el.addEventListener('click', () => setFieldFocus('st-age', false, false));
 el.addEventListener('mouseenter', () => {
-if (!activeFieldFocusKey) setFieldFocus('st-age', true);
+if (!activeFieldFocusKey) setFieldFocus('st-age', false, false);
 });
 });
 const iapZones = $$('#customIapTrigger, #customIapSearch, .custom-iap-trigger');
 iapZones.forEach(el => {
-el.addEventListener('focus', () => setFieldFocus('st-iap', true));
-el.addEventListener('click', () => setFieldFocus('st-iap', true));
+el.addEventListener('focus', () => setFieldFocus('st-iap', false, false));
+el.addEventListener('click', () => setFieldFocus('st-iap', false, false));
 el.addEventListener('mouseenter', () => {
-if (!activeFieldFocusKey) setFieldFocus('st-iap', true);
+if (!activeFieldFocusKey) setFieldFocus('st-iap', false, false);
 });
 });
 const mockupIapEls = $$('.stage [data-iap-apple], .stage [data-iap-yesno], .stage [data-iap-cell]');

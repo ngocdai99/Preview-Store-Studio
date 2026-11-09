@@ -34,6 +34,7 @@ function openCustomIap() {
   const trigger = $('customIapTrigger');
   const searchInput = $('customIapSearch');
   if (!wrap) return;
+  if (wrap.classList.contains('open')) return;
 
   // Close category and age dropdowns if open
   if (typeof closeCustomCat === 'function') closeCustomCat();
@@ -41,17 +42,22 @@ function openCustomIap() {
 
   wrap.classList.add('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
+  renderCustomIapOptions('');
   if (searchInput) {
     searchInput.value = '';
-    searchInput.focus();
+    try {
+      searchInput.focus({ preventScroll: true });
+    } catch(e) {
+      searchInput.focus();
+    }
   }
-  renderCustomIapOptions('');
+  const listContainer = $('customIapOptions');
   const activeOpt = wrap.querySelector('.custom-iap-option.active');
-  if (activeOpt) {
-    activeOpt.scrollIntoView({ block: 'nearest' });
+  if (listContainer && activeOpt) {
+    listContainer.scrollTop = Math.max(0, activeOpt.offsetTop - listContainer.offsetTop);
   }
   if (typeof setFieldFocus === 'function') {
-    setFieldFocus('st-iap', true);
+    setFieldFocus('st-iap', false, false);
   }
 }
 
@@ -59,6 +65,7 @@ function closeCustomIap() {
   const wrap = $('customIapWrap');
   const trigger = $('customIapTrigger');
   if (!wrap) return;
+  if (!wrap.classList.contains('open')) return;
   wrap.classList.remove('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'false');
 }
@@ -81,7 +88,13 @@ function selectIapFromUI(iapVal) {
   }
   closeCustomIap();
   const trigger = $('customIapTrigger');
-  if (trigger) trigger.focus();
+  if (trigger) {
+    try {
+      trigger.focus({ preventScroll: true });
+    } catch(e) {
+      trigger.focus();
+    }
+  }
   if (typeof renderStats === 'function') renderStats();
   syncIapUI();
   if (typeof debouncedSave === 'function') debouncedSave();
@@ -200,16 +213,12 @@ function renderCustomIapOptions(query = '') {
 
     if (typeof trigger.addEventListener === 'function') {
       trigger.addEventListener('focus', () => {
-        if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', true);
-      });
-
-      trigger.addEventListener('click', () => {
-        if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', true);
+        if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       });
 
       trigger.addEventListener('mouseenter', () => {
         if (typeof setFieldFocus === 'function' && typeof activeFieldFocusKey !== 'undefined' && !activeFieldFocusKey) {
-          setFieldFocus('st-iap', true);
+          setFieldFocus('st-iap', false, false);
         }
       });
     }
@@ -218,7 +227,7 @@ function renderCustomIapOptions(query = '') {
   if (searchInput) {
     if (typeof searchInput.addEventListener === 'function') {
       searchInput.addEventListener('focus', () => {
-        if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', true);
+        if (typeof setFieldFocus === 'function') setFieldFocus('st-iap', false, false);
       });
     }
 

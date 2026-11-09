@@ -383,7 +383,8 @@ function initFieldFocusLinking() {
       else if (targetInput.id === 'customIapTrigger' || rawId.includes('iap')) key = 'st-iap';
       if (key.startsWith('cat')) key = 'cat';
       if (key) {
-        setFieldFocus(key, true);
+        const isCustomTrigger = (targetInput.id === 'customCatTrigger' || targetInput.id === 'customAgeTrigger' || targetInput.id === 'customIapTrigger');
+        setFieldFocus(key, !isCustomTrigger, !isCustomTrigger);
       }
     });
   });
@@ -409,32 +410,32 @@ function initFieldFocusLinking() {
   });
 
   // Custom Category dropdown trigger and search interaction zones
-  const catZones = $$('#customCatTrigger, #customCatSearch, .custom-cat-trigger');
+  const catZones = $$('#customCatTrigger, #customCatSearch, .custom-cat-trigger:not(.custom-age-trigger):not(.custom-iap-trigger)');
   catZones.forEach(el => {
-    el.addEventListener('focus', () => setFieldFocus('cat', true));
-    el.addEventListener('click', () => setFieldFocus('cat', true));
+    el.addEventListener('focus', () => setFieldFocus('cat', false, false));
+    el.addEventListener('click', () => setFieldFocus('cat', false, false));
     el.addEventListener('mouseenter', () => {
-      if (!activeFieldFocusKey) setFieldFocus('cat', true);
+      if (!activeFieldFocusKey) setFieldFocus('cat', false, false);
     });
   });
 
   // Custom Age dropdown trigger and search interaction zones
   const ageZones = $$('#customAgeTrigger, #customAgeSearch, .custom-age-trigger');
   ageZones.forEach(el => {
-    el.addEventListener('focus', () => setFieldFocus('st-age', true));
-    el.addEventListener('click', () => setFieldFocus('st-age', true));
+    el.addEventListener('focus', () => setFieldFocus('st-age', false, false));
+    el.addEventListener('click', () => setFieldFocus('st-age', false, false));
     el.addEventListener('mouseenter', () => {
-      if (!activeFieldFocusKey) setFieldFocus('st-age', true);
+      if (!activeFieldFocusKey) setFieldFocus('st-age', false, false);
     });
   });
 
   // Custom Monetization dropdown trigger and search interaction zones
   const iapZones = $$('#customIapTrigger, #customIapSearch, .custom-iap-trigger');
   iapZones.forEach(el => {
-    el.addEventListener('focus', () => setFieldFocus('st-iap', true));
-    el.addEventListener('click', () => setFieldFocus('st-iap', true));
+    el.addEventListener('focus', () => setFieldFocus('st-iap', false, false));
+    el.addEventListener('click', () => setFieldFocus('st-iap', false, false));
     el.addEventListener('mouseenter', () => {
-      if (!activeFieldFocusKey) setFieldFocus('st-iap', true);
+      if (!activeFieldFocusKey) setFieldFocus('st-iap', false, false);
     });
   });
 
