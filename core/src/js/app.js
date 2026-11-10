@@ -7263,10 +7263,14 @@ function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
 function applyGoogleDevice(){
-  const isDual = googleDevice === 'dual' || appleDevice === 'dual' || document.body.dataset.dual === 'true';
+  const isTablet = googleDevice === 'tab7' || googleDevice === 'tab10' || appleDevice === 'ipad';
+  const isDual = !isTablet && (googleDevice === 'dual' || appleDevice === 'dual' || document.body.dataset.dual === 'true');
   if (isDual) {
     googleDevice = 'dual';
     appleDevice = 'dual';
+  } else {
+    if (googleDevice === 'dual') googleDevice = 'phone';
+    if (appleDevice === 'dual') appleDevice = 'iphone';
   }
   document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
   document.body.dataset.dual = isDual ? 'true' : 'false';
@@ -7303,6 +7307,7 @@ function setGoogleDevice(d, animate = true){
   const curCardId = curCard ? curCard.id : null;
   const applyState = () => {
     googleDevice = nextDev;
+    document.body.dataset.dual = nextDual ? 'true' : 'false';
     if(nextDual){
       appleDevice = 'dual';
       document.body.dataset.appleDevice = 'iphone';
@@ -7310,7 +7315,12 @@ function setGoogleDevice(d, animate = true){
       appleDevice = 'iphone';
       document.body.dataset.appleDevice = 'iphone';
     }
+    document.body.dataset.googleDevice = nextDual ? 'phone' : nextDev;
     applyGoogleDevice();
+    const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+    if (typeof renderTablets === 'function') renderTablets();
+    if (typeof update === 'function') update();
     if(curCardId){
       const keepCard = $(curCardId);
       if(keepCard && !keepCard.classList.contains('hide')){
@@ -9838,7 +9848,9 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
 }
 
 function setStore(s, animate = true, preserveDual = true){
-  const isDual = document.body.dataset.dual === 'true';
+  const isTablet = (s === 'apple' && appleDevice === 'ipad') || (s === 'google' && (googleDevice === 'tab7' || googleDevice === 'tab10'));
+  if (isTablet) preserveDual = false;
+  const isDual = !isTablet && document.body.dataset.dual === 'true';
   const fromMode = isDual ? 'dual' : store;
   const toMode = (isDual && preserveDual) ? 'dual' : s;
 
@@ -9943,7 +9955,7 @@ function setStore(s, animate = true, preserveDual = true){
   });
 
   const applyStoreMode = () => {
-    if (!preserveDual) {
+    if (!preserveDual || isTablet) {
       document.body.dataset.dual = 'false';
       if(appleDevice === 'dual') appleDevice = 'iphone';
       if(googleDevice === 'dual') googleDevice = 'phone';
@@ -15886,11 +15898,4 @@ window.addEventListener('load', syncAllVtPills);
 if (typeof checkAndLoadStoreParams === 'function') {
   checkAndLoadStoreParams();
 }
-setTimeout(() => {
-  if (typeof setStore === 'function') setStore('apple', false, true);
-  if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
-  if (typeof setView === 'function') setView('detail', true);
-  if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
-  if (typeof fit === 'function') fit();
-}, 200);
 

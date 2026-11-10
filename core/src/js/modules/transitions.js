@@ -543,7 +543,9 @@ function transitionStoreMode(fromMode, toMode, onApply, animate = true){
 }
 
 function setStore(s, animate = true, preserveDual = true){
-  const isDual = document.body.dataset.dual === 'true';
+  const isTablet = (s === 'apple' && appleDevice === 'ipad') || (s === 'google' && (googleDevice === 'tab7' || googleDevice === 'tab10'));
+  if (isTablet) preserveDual = false;
+  const isDual = !isTablet && document.body.dataset.dual === 'true';
   const fromMode = isDual ? 'dual' : store;
   const toMode = (isDual && preserveDual) ? 'dual' : s;
 
@@ -648,7 +650,7 @@ function setStore(s, animate = true, preserveDual = true){
   });
 
   const applyStoreMode = () => {
-    if (!preserveDual) {
+    if (!preserveDual || isTablet) {
       document.body.dataset.dual = 'false';
       if(appleDevice === 'dual') appleDevice = 'iphone';
       if(googleDevice === 'dual') googleDevice = 'phone';

@@ -9,13 +9,19 @@
     "start": "npm --prefix core run dev",
     "dev:core": "npm --prefix core run dev",
     "dev:marketing": "npm --prefix marketing run dev",
+    "dev:portfolio": "npm --prefix portfolio run dev",
+    "dev:cv": "npm --prefix cv run dev",
     "build": "npm --prefix core run build && npm --prefix core run build:try",
     "build:core": "npm --prefix core run build",
     "build:marketing": "npm --prefix marketing run build",
+    "build:portfolio": "npm --prefix portfolio run build",
+    "build:cv": "npm --prefix cv run build",
     "release": "npm --prefix core run release",
     "generate:og": "python3 core/scripts/generate-og-image.py",
     "check:og": "python3 core/scripts/generate-og-image.py --check-only",
     "deploy:landing": "npm --prefix core run build:try && npm --prefix marketing run build && npx wrangler pages deploy marketing/out --project-name store-preview-studio",
+    "deploy:portfolio": "npm --prefix portfolio run build && npx wrangler pages deploy portfolio/out --project-name kaidevlabs",
+    "deploy:cv": "npm --prefix cv run build && npx wrangler pages deploy cv/out --project-name kaicv",
     "push:landing": "git subtree push --prefix marketing landing main"
   }
 }

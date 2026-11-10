@@ -275,11 +275,4 @@ window.addEventListener('load', syncAllVtPills);
 if (typeof checkAndLoadStoreParams === 'function') {
   checkAndLoadStoreParams();
 }
-setTimeout(() => {
-  if (typeof setStore === 'function') setStore('apple', false, true);
-  if (typeof toggleDualPhone === 'function') toggleDualPhone(true, false);
-  if (typeof setView === 'function') setView('detail', true);
-  if (typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
-  if (typeof fit === 'function') fit();
-}, 200);
 

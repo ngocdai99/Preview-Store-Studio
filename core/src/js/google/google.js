@@ -363,10 +363,14 @@ function applyTabOrient(){
   Object.keys(TAB_CFG).forEach(k => { const d = $(TAB_CFG[k].dev); if(d) d.classList.toggle('portrait', tabOrient[k] === 'portrait'); });
 }
 function applyGoogleDevice(){
-  const isDual = googleDevice === 'dual' || appleDevice === 'dual' || document.body.dataset.dual === 'true';
+  const isTablet = googleDevice === 'tab7' || googleDevice === 'tab10' || appleDevice === 'ipad';
+  const isDual = !isTablet && (googleDevice === 'dual' || appleDevice === 'dual' || document.body.dataset.dual === 'true');
   if (isDual) {
     googleDevice = 'dual';
     appleDevice = 'dual';
+  } else {
+    if (googleDevice === 'dual') googleDevice = 'phone';
+    if (appleDevice === 'dual') appleDevice = 'iphone';
   }
   document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
   document.body.dataset.dual = isDual ? 'true' : 'false';
@@ -407,6 +411,7 @@ function setGoogleDevice(d, animate = true){
   const curCardId = curCard ? curCard.id : null;
   const applyState = () => {
     googleDevice = nextDev;
+    document.body.dataset.dual = nextDual ? 'true' : 'false';
     if(nextDual){
       appleDevice = 'dual';
       document.body.dataset.appleDevice = 'iphone';
@@ -414,7 +419,12 @@ function setGoogleDevice(d, animate = true){
       appleDevice = 'iphone';
       document.body.dataset.appleDevice = 'iphone';
     }
+    document.body.dataset.googleDevice = nextDual ? 'phone' : nextDev;
     applyGoogleDevice();
+    const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+    if (typeof renderTablets === 'function') renderTablets();
+    if (typeof update === 'function') update();
     if(curCardId){
       const keepCard = $(curCardId);
       if(keepCard && !keepCard.classList.contains('hide')){

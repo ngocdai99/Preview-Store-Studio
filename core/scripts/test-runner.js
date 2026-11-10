@@ -4960,6 +4960,20 @@ const syncJsSrc65 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 
 assert(syncJsSrc65.includes('mockupIapEls') && syncJsSrc65.includes('openCustomIap'), 'sync.js attaches click listener on mockup monetization targets to open editor dropdown');
 
 // ---------------------------------------------------------------------
+// [SUITE 66]: Tablet Selection (tab7 / tab10 / ipad) & Dual Mode Disabling
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 66]: Tablet Selection (tab7 / tab10 / ipad) & Dual Mode Disabling');
+
+const googleJsSrc66 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'google', 'google.js'), 'utf8');
+assert(googleJsSrc66.includes("const isTablet = googleDevice === 'tab7' || googleDevice === 'tab10' || appleDevice === 'ipad';"), 'google.js detects tablet state in applyGoogleDevice');
+assert(googleJsSrc66.includes("const isDual = !isTablet"), 'applyGoogleDevice prevents dual mode when a tablet is active');
+assert(googleJsSrc66.includes("document.body.dataset.dual = nextDual ? 'true' : 'false';"), 'setGoogleDevice properly updates dataset.dual on device change');
+
+const transitionsJsSrc66 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'transitions.js'), 'utf8');
+assert(transitionsJsSrc66.includes("const isTablet = (s === 'apple' && appleDevice === 'ipad') || (s === 'google' && (googleDevice === 'tab7' || googleDevice === 'tab10'));"), 'transitions.js detects tablet state in setStore');
+assert(transitionsJsSrc66.includes("if (isTablet) preserveDual = false;"), 'setStore does not preserve dual mode when switching store on a tablet');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {
