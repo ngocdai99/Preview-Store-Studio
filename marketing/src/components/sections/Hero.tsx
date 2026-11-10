@@ -30,10 +30,8 @@ export function Hero() {
           {/* Left Column: Headline, Description & CTAs */}
           <div className="lg:w-[50%] shrink-0">
             {/* Header Eyebrow */}
-            <p className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3 sm:mb-3.5 select-none">
-              <span className="text-slate-900 dark:text-white">Store Preview Studio</span>
-              <span className="mx-2 text-slate-300 dark:text-slate-700 select-none">—</span>
-              <span className="text-emerald-700 dark:text-[#00D085] font-semibold">{hero.badge}</span>
+            <p className="text-[13px] sm:text-[14px] font-medium text-slate-500 dark:text-slate-400 mb-2.5 sm:mb-3 select-none">
+              {hero.badge}
             </p>
 
             <h1 className="text-[28px] sm:text-[36px] lg:text-[42px] xl:text-[44px] font-medium tracking-[-0.02em] leading-[1.18] text-balance">
