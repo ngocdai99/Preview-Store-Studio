@@ -44,26 +44,20 @@ export function Hero() {
             </h1>
 
             <p className="mt-4 sm:mt-5 text-[15px] sm:text-[16px] text-[#475569] dark:text-[oklch(0.684_0.00275_157.5)] leading-[1.65] max-w-xl">
-              <span className="block">Save hours of back-and-forth before every store submission.</span>
-              <span className="block mt-1 sm:mt-1.5">Preview and verify your listings on realistic device frames before submitting.</span>
+              <span className="block">{hero.subheadlineLead}</span>
+              <span className="block mt-1 sm:mt-1.5">{hero.subheadlineFollow}</span>
             </p>
 
 
 
             {/* Micro Trust Indicators */}
             <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#475569] dark:text-[oklch(0.684_0.00275_157.5)] font-medium">
-              <span className="inline-flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                No subscription
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                Standalone offline HTML
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                App Store &amp; Google Play
-              </span>
+              {hero.trustBadges.map((badge, idx) => (
+                <span key={idx} className="inline-flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  {badge}
+                </span>
+              ))}
             </div>
           </div>
 

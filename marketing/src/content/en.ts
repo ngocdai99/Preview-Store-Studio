@@ -15,15 +15,14 @@ export const en = {
   },
 
   hero: {
-    badge: "Store Preview Studio — App Store & Google Play mockup studio for agencies",
+    badge: "App Store & Google Play mockup studio for agencies",
     titleLead: "Stop guessing how your app listing",
     titleAccent: "looks before submitting.",
-    subheadlineLead:
-      "Save hours of back-and-forth with your client before every App Store submission.",
+    subheadlineLead: "Save hours of back-and-forth.",
     subheadlineFollow:
-      "App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
+      "Preview and verify your listings on realistic device frames.",
     subheadline:
-      "Save hours of back-and-forth with your client before every App Store submission. App Store Connect & Google Play provide no live preview — see exactly how your listing looks before submitting.",
+      "Save hours of back-and-forth. Preview and verify your listings on realistic device frames.",
     primaryCta: {
       label: "Get Lifetime Access — $29",
       href: "#pricing",
@@ -33,9 +32,9 @@ export const en = {
       href: "/try",
     },
     trustBadges: [
-      "Offline & Private Workspace",
-      "No Subscriptions",
-      "Pay Once, Keep Forever",
+      "One-time payment",
+      "Standalone offline HTML",
+      "No developer accounts required",
     ],
   },
 
