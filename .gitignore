@@ -28,6 +28,8 @@ core/store_preview_studio.html
 core/store_preview_studio.min.html
 core/store-preview-studio-*.zip
 core/store-preview-studio-*/
+core/the-no-bs-aso-cheatsheet-*.zip
+*.zip
 core/docs/*
 !core/docs/src/
 core/cloudflare/

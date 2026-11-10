@@ -16,7 +16,6 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const { build, CORE_JS_MODULES } = require('./build.js');
-const { buildAllDocs } = require('./scripts/build-docs-html.js');
 
 const ROOT_DIR = __dirname;
 const distDir = path.join(ROOT_DIR, 'dist');
@@ -160,15 +159,34 @@ function runRelease() {
   verifyQualityGates();
 
   // Clean up any legacy zip files from root and package/
-  ['store-preview-studio-standard-v1.0.zip', 'store-preview-studio-v1.0.zip'].forEach(f => {
+  [
+    'store-preview-studio-standard-v1.0.zip',
+    'store-preview-studio-v1.0.zip',
+    'store-preview-studio-freebie-v1.0.zip',
+    'the-no-bs-aso-cheatsheet-v1.0.zip'
+  ].forEach(f => {
     const rootZip = path.join(ROOT_DIR, f);
     if (fs.existsSync(rootZip)) fs.unlinkSync(rootZip);
     const pkgZip = path.join(ROOT_DIR, 'package', f);
     if (fs.existsSync(pkgZip)) fs.unlinkSync(pkgZip);
   });
 
-  // Build Documentation HTML (Agency FAQ)
-  buildAllDocs({ silent: true });
+  // Sync Documentation HTML, Freebie guides, and icon from core/docs to package
+  [
+    'AGENCY_MARKETING_FAQ.html',
+    'FREEBIE_ASO_CHEATSHEET.html',
+    'FREEBIE_ASO_CHEATSHEET.md',
+    'The-No-BS-ASO-Cheatsheet.html',
+    'The-No-BS-ASO-Cheatsheet.md',
+    'icon.svg'
+  ].forEach(file => {
+    const src = path.join(ROOT_DIR, 'docs', file);
+    const pkg = path.join(ROOT_DIR, 'package', file);
+    if (fs.existsSync(src)) {
+      fs.mkdirSync(path.dirname(pkg), { recursive: true });
+      fs.copyFileSync(src, pkg);
+    }
+  });
 
   // 1. Build full standalone file
   console.log(`  ${c.dim}Building standalone unminified HTML...${c.reset}`);
@@ -190,6 +208,27 @@ function runRelease() {
 
   // Source presets directory
   const srcPresets = path.join(ROOT_DIR, 'presets');
+
+  // =====================================================================
+  // TIER 0: FREEBIE EDITION ($0) — Mini ASO Cheatsheet (HTML + MD + Assets)
+  // =====================================================================
+  const freebieName = 'the-no-bs-aso-cheatsheet-v1.0';
+  const freebieDir = path.join(distDir, freebieName);
+  fs.mkdirSync(freebieDir, { recursive: true });
+
+  [
+    'The-No-BS-ASO-Cheatsheet.html',
+    'The-No-BS-ASO-Cheatsheet.md',
+    'icon.svg'
+  ].forEach(f => {
+    let src = path.join(ROOT_DIR, 'docs', f);
+    if (!fs.existsSync(src)) src = path.join(ROOT_DIR, f);
+    if (!fs.existsSync(src)) src = path.join(ROOT_DIR, 'package', f);
+    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(freebieDir, f));
+  });
+
+  const freebieZipPath = path.join(ROOT_DIR, `${freebieName}.zip`);
+  if (fs.existsSync(freebieZipPath)) fs.unlinkSync(freebieZipPath);
 
   // =====================================================================
   // TIER 1: PLUS EDITION ($29) — Minified HTML + Full 6 Presets + Readme/License
@@ -238,10 +277,11 @@ function runRelease() {
     : path.join(ROOT_DIR, 'README.md');
   fs.copyFileSync(proReadme, path.join(proDir, 'README.md'));
 
-  // Copy documentation, Agency FAQ HTML, and launch script
+  // Copy documentation, Agency FAQ HTML, icon, and launch script
   [
     'LICENSE.txt',
     'AGENCY_MARKETING_FAQ.html',
+    'icon.svg',
     'start_dev.command'
   ].forEach(f => {
     let src = path.join(ROOT_DIR, f);
@@ -321,6 +361,12 @@ function runRelease() {
   if (fs.existsSync(proZipPath)) fs.unlinkSync(proZipPath);
 
   try {
+    execSync(`zip -rq "${freebieZipPath}" "${freebieName}"`, { cwd: distDir });
+    if (fs.existsSync(path.join(ROOT_DIR, 'package'))) {
+      fs.copyFileSync(freebieZipPath, path.join(ROOT_DIR, 'package', `${freebieName}.zip`));
+    }
+    const freebieKb = (fs.statSync(freebieZipPath).size / 1024).toFixed(1);
+
     execSync(`zip -rq "${plusZipPath}" "${plusName}"`, { cwd: distDir });
     if (fs.existsSync(path.join(ROOT_DIR, 'package'))) {
       fs.copyFileSync(plusZipPath, path.join(ROOT_DIR, 'package', `${plusName}.zip`));
@@ -336,6 +382,10 @@ function runRelease() {
     console.log(`\n${c.bold}${c.green}====================================================================${c.reset}`);
     console.log(`${c.bold}${c.green}   COMMERCIAL PACKAGING COMPLETE · ALL QUALITY GATES VERIFIED       ${c.reset}`);
     console.log(`${c.bold}${c.green}====================================================================${c.reset}\n`);
+
+    console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightGreen}The No-BS ASO Cheatsheet ($0 / Lead Magnet)${c.reset} ${c.dim}(${freebieKb} KB)${c.reset}`);
+    console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${freebieZipPath}${c.reset}`);
+    console.log(`    ${c.gray}Package:${c.reset} The No-BS ASO Cheatsheet (HTML & MD) · Store Rules, Limits & Dimensions\n`);
 
     console.log(`  ${c.green}[OK]${c.reset} ${c.bold}${c.brightYellow}Plus Edition ($29)${c.reset} ${c.dim}(${plusKb} KB)${c.reset}`);
     console.log(`    ${c.gray}Path:${c.reset} ${c.brightGreen}${plusZipPath}${c.reset}`);

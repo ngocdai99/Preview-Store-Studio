@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { BrandIcon } from "@/components/ui/BrandIcon";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ExternalLink } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -25,6 +25,11 @@ export function Navbar() {
     { label: "Features", href: "#features" },
     { label: "Pricing", href: "#pricing" },
     { label: "FAQ", href: "#faq" },
+    {
+      label: "Gumroad Store",
+      href: "https://kaidevlabs.gumroad.com/",
+      external: true,
+    },
   ];
 
   // Scroll spy to dynamically sync selected tab with current section in view
@@ -130,6 +135,21 @@ export function Navbar() {
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-5 lg:gap-6">
             {navItems.map((item) => {
+              if (item.external) {
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[13.5px] font-medium text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white transition-colors duration-150"
+                  >
+                    <span>{item.label}</span>
+                    <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+                  </a>
+                );
+              }
+
               const isSelected = activeTab === item.label;
 
               return (
@@ -200,6 +220,22 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200/90 dark:border-[#282928] bg-white/95 dark:bg-[#131413]/95 backdrop-blur-xl px-4 py-3 space-y-1">
           {navItems.map((item) => {
+            if (item.external) {
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2 rounded-md text-[14px] font-medium text-slate-600 dark:text-[#989A99] hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
+                  <span>{item.label}</span>
+                  <ExternalLink className="w-4 h-4 opacity-60" />
+                </a>
+              );
+            }
+
             const isSelected = activeTab === item.label;
             return (
               <Link
