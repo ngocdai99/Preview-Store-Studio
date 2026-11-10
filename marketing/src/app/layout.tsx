@@ -5,13 +5,40 @@ import { AgencyProvider } from "@/context/AgencyContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name} — Preview & Optimize App Store Listings`,
+  title: `${siteConfig.name} — App Store & Google Play Mockup Studio for Agencies`,
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
+  alternates: {
+    canonical: siteConfig.url,
+  },
+  keywords: [
+    "app store mockup",
+    "google play listing preview",
+    "app store staging tool",
+    "mobile app client review",
+    "aso preview studio",
+    "app screenshot mockups",
+    "client sign-off tool",
+    "ios app store preview",
+    "google play console preview",
+    "offline mockup studio",
+    "agency app preview",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     url: siteConfig.url,
-    title: `${siteConfig.name} — Preview & Optimize App Store Listings`,
+    title: `${siteConfig.name} — App Store & Google Play Mockup Studio for Agencies`,
     description: siteConfig.description,
     images: [
       {
@@ -24,10 +51,60 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — Preview & Optimize App Store Listings`,
+    title: `${siteConfig.name} — App Store & Google Play Mockup Studio for Agencies`,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${siteConfig.url}/#webapp`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      applicationCategory: "DesignApplication, DeveloperApplication",
+      operatingSystem: "All modern browsers (Chrome, Safari, Firefox, Edge)",
+      browserRequirements: "Requires JavaScript. Requires HTML5.",
+      description: siteConfig.description,
+      offers: {
+        "@type": "Offer",
+        price: "29.00",
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        url: siteConfig.gumroadUrl,
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5.0",
+        reviewCount: "14",
+        bestRating: "5",
+        worstRating: "1",
+      },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      name: "Kai DevLabs",
+      url: siteConfig.url,
+      logo: `${siteConfig.url}/icon.svg`,
+      sameAs: ["https://kaidevlabs.gumroad.com/"],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${siteConfig.url}/#faq`,
+      mainEntity: siteConfig.faq.items.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -38,6 +115,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full scroll-smooth dark" data-theme="dark">
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <AgencyProvider>
           {children}
         </AgencyProvider>
