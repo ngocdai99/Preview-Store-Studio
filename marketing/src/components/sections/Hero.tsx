@@ -29,11 +29,12 @@ export function Hero() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10 lg:gap-12">
           {/* Left Column: Headline, Description & CTAs */}
           <div className="lg:w-[50%] shrink-0">
-            {/* Eyebrow Badge Pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 text-emerald-800 dark:text-[#00D085] text-[12px] sm:text-[13px] font-medium mb-3.5 sm:mb-4 select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>{hero.badge}</span>
-            </div>
+            {/* Header Eyebrow */}
+            <p className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3 sm:mb-3.5 select-none">
+              <span className="text-slate-900 dark:text-white">Store Preview Studio</span>
+              <span className="mx-2 text-slate-300 dark:text-slate-700 select-none">—</span>
+              <span className="text-emerald-700 dark:text-[#00D085] font-semibold">{hero.badge}</span>
+            </p>
 
             <h1 className="text-[28px] sm:text-[36px] lg:text-[42px] xl:text-[44px] font-medium tracking-[-0.02em] leading-[1.18] text-balance">
               <span className="text-[#0f172a] dark:text-white block">
