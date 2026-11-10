@@ -312,12 +312,16 @@ export const en = {
           "Yes. All mockup rendering, metadata drafting, character counting, and 4K exporting run directly inside your browser with zero tracking and zero server storage. An internet connection is only needed if you choose to import a public store listing from a URL.",
       },
       {
-        id: "client-handoff",
-        topic: "Client Review Handoff",
+        id: "free-cheatsheet",
+        topic: "Store Specs & Free Cheatsheet",
         question:
-          "Do my clients need a $99/year Apple Developer or Google Play account to view previews?",
+          "Where can I find the exact character limits and submission rules for Apple & Google Play?",
         answer:
-          "No! In native store consoles, clients cannot view or review listings unless they hold a paid developer account and console invite. With Store Preview Studio, you simply hand over the standalone HTML file or export JSON presets — clients can review realistic listings directly in any browser with no logins and no extra fees.",
+          "You can get our free reference guide — The No-BS ASO Cheatsheet on Gumroad. It covers all exact character limits, unreviewed promotional text rules, screenshot resolutions, and search indexing weights in an offline interactive cheatsheet.",
+        link: {
+          label: "Download Free Cheatsheet",
+          href: "https://kaidevlabs.gumroad.com/l/aso-cheatsheet",
+        },
       },
       {
         id: "product-updates",
@@ -346,9 +350,10 @@ export const en = {
       {
         title: "Legal & Store",
         links: [
+          { label: "Free ASO Cheatsheet", href: "https://kaidevlabs.gumroad.com/l/aso-cheatsheet" },
+          { label: "Gumroad Store", href: "https://kaidevlabs.gumroad.com/" },
           { label: "Privacy Policy", href: "/privacy" },
           { label: "Terms & Refunds", href: "/terms" },
-          { label: "Gumroad Store", href: "https://kaidevlabs.gumroad.com/" },
         ],
       },
     ],
@@ -358,6 +363,7 @@ export const en = {
       { label: "Features", href: "/#features" },
       { label: "Pricing", href: "/#pricing" },
       { label: "FAQ", href: "/#faq" },
+      { label: "Free Cheatsheet", href: "https://kaidevlabs.gumroad.com/l/aso-cheatsheet" },
       { label: "Privacy", href: "/privacy" },
       { label: "Terms", href: "/terms" },
       { label: "Gumroad Store", href: "https://kaidevlabs.gumroad.com/" },

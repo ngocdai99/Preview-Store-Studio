@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import { ArrowUpRight } from "lucide-react";
 
 export function Faq() {
   const { faq } = siteConfig;
@@ -29,6 +30,19 @@ export function Faq() {
                 <p className="text-[14.5px] sm:text-[15.5px] text-muted-foreground dark:text-[#989A99] leading-[1.68]">
                   {item.answer}
                 </p>
+                {"link" in item && item.link && (
+                  <div className="pt-0.5">
+                    <a
+                      href={item.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[13.5px] font-semibold text-[#006636] dark:text-[#00D085] hover:underline"
+                    >
+                      <span>{item.link.label}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 opacity-80 stroke-[2.2]" />
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>
