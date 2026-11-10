@@ -313,13 +313,13 @@ export const en = {
       },
       {
         id: "free-cheatsheet",
-        topic: "Store Specs & Free Cheatsheet",
+        topic: "Store Guidelines & Specs",
         question:
           "Where can I find the exact character limits and submission rules for Apple & Google Play?",
         answer:
-          "You can get our free reference guide — The No-BS ASO Cheatsheet on Gumroad. It covers all exact character limits, unreviewed promotional text rules, screenshot resolutions, and search indexing weights in an offline interactive cheatsheet.",
+          "Official specs are scattered across Apple Developer and Google Play Console documentation. If you'd rather not dig through dozens of doc pages, we've summarized all exact rules, character limits, and asset dimensions into a single free reference sheet.",
         link: {
-          label: "Download Free Cheatsheet",
+          label: "Get The Free ASO Cheatsheet",
           href: "https://kaidevlabs.gumroad.com/l/aso-cheatsheet",
         },
       },
