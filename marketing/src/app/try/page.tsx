@@ -7,7 +7,7 @@ import { AgencySandboxBanner } from "@/components/AgencySandboxBanner";
 export const metadata: Metadata = {
   title: "Live Interactive Demo · Store Preview Studio",
   description:
-    "Save hours of back-and-forth before every store submission. Preview and verify your listings on realistic device frames before submitting.",
+    "App Store & Google Play mockup studio for agencies. Preview and verify your listings on realistic device frames.",
 };
 
 export default function TryPage() {

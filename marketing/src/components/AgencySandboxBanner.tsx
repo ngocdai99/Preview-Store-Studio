@@ -6,10 +6,10 @@ export function AgencySandboxBanner() {
     >
       <div className="max-w-4xl mx-auto flex flex-col items-center gap-1 sm:gap-1.5">
         <h2 className="text-sm sm:text-[15px] font-medium text-slate-900 dark:text-white tracking-tight leading-snug">
-          Save hours of back-and-forth before every store submission.
+          App Store &amp; Google Play mockup studio for agencies
         </h2>
         <p className="text-xs sm:text-[13px] text-slate-500 dark:text-[oklch(0.684_0.00275_157.5)] font-normal leading-normal text-balance">
-          Preview and verify your listings on realistic device frames before submitting.
+          Preview and verify your listings on realistic device frames
         </p>
       </div>
     </aside>
