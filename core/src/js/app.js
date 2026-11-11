@@ -14933,12 +14933,12 @@ function fetchAppleAppViaJsonp(appId, country) {
 }
 
 /**
- * Fetches Apple App Store data via official iTunes API (Native CORS enabled)
- * @param {string} appId 
- * @param {string} country 
+ * Fetches Apple App Store data for a single storefront via official iTunes API (Native CORS enabled)
+ * @param {string} appId
+ * @param {string} [country]
  * @returns {Promise<object>}
  */
-async function fetchAppleAppData(appId, country) {
+async function fetchAppleSingleStorefront(appId, country) {
   const query = 'id=' + encodeURIComponent(appId) + (country ? '&country=' + encodeURIComponent(country) : '');
   const proxyUrl = '/api/lookup?' + query;
   const directUrl = 'https://itunes.apple.com/lookup?' + query;
@@ -14955,7 +14955,10 @@ async function fetchAppleAppData(appId, country) {
     // 2. Fallback to JSONP (100% immune to CORS and cross-origin restrictions)
     try {
       return await fetchAppleAppViaJsonp(appId, country);
-    } catch (_) {
+    } catch (jsonpErr) {
+      if (jsonpErr && jsonpErr.message && jsonpErr.message.startsWith('App not found')) {
+        throw jsonpErr;
+      }
       // 3. Fallback to Edge proxy /api/lookup
       const isWeb = typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:');
       if (isWeb) {
@@ -14973,7 +14976,10 @@ async function fetchAppleAppData(appId, country) {
   if (!res || !res.ok) {
     try {
       return await fetchAppleAppViaJsonp(appId, country);
-    } catch (_) {
+    } catch (jsonpErr) {
+      if (jsonpErr && jsonpErr.message && jsonpErr.message.startsWith('App not found')) {
+        throw jsonpErr;
+      }
       throw new Error('Apple App Store returned status ' + (res ? res.status : 'error'));
     }
   }
@@ -14982,6 +14988,31 @@ async function fetchAppleAppData(appId, country) {
     throw new Error('App not found on Apple App Store (ID: ' + appId + ')');
   }
   return normalizeAppleApp(data.results[0]);
+}
+
+/**
+ * Fetches Apple App Store data via official iTunes API, probing major storefronts if country is omitted
+ * @param {string} appId 
+ * @param {string} country 
+ * @returns {Promise<object>}
+ */
+async function fetchAppleAppData(appId, country) {
+  try {
+    return await fetchAppleSingleStorefront(appId, country);
+  } catch (err) {
+    const isNotFound = err && err.message && err.message.startsWith('App not found');
+    if (country || !isNotFound || typeof fetch !== 'function') {
+      throw err;
+    }
+
+    // Many regional apps (e.g. UK/EU/APAC) are not indexed in the default US storefront
+    const fallbackCountries = ['gb', 'au', 'ca', 'ie', 'de', 'fr', 'sg', 'jp', 'vn'];
+    try {
+      return await Promise.any(fallbackCountries.map(c => fetchAppleSingleStorefront(appId, c)));
+    } catch (_) {
+      throw err;
+    }
+  }
 }
 
 /**
@@ -15426,10 +15457,13 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
       apply();
     }
   } catch (err) {
-    if (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError')))) {
-      setStoreImportStatus('error', 'Network error: Unable to reach Apple App Store. Please check your internet connection and try again.');
-    } else {
-      setStoreImportStatus('error', err.message || 'Failed to import app data from App Store.');
+    const errMsg = (!isNetworkOnline() || err.name === 'TypeError' || (err.message && (err.message.includes('fetch') || err.message.includes('NetworkError'))))
+      ? 'Network error: Unable to reach Apple App Store. Please check your internet connection and try again.'
+      : (err.message || 'Failed to import app data from App Store.');
+    setStoreImportStatus('error', errMsg);
+    const modal = $('storeImportModal');
+    if (isAutoFromUrl && (!modal || !modal.classList.contains('open')) && typeof showToast === 'function') {
+      showToast(errMsg, 'error');
     }
   } finally {
     if (submitBtn) {

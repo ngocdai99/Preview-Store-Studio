@@ -2,6 +2,17 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Google Search Console Site Verification (Strict Exact Match)
+    if (url.pathname === '/googlea4a7855838cd2c01.html') {
+      return new Response('google-site-verification: googlea4a7855838cd2c01.html', {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-cache'
+        }
+      });
+    }
+
     // Fast Edge API Proxy for App Store Metadata
     if (url.pathname === '/api/lookup') {
       const id = url.searchParams.get('id') || url.searchParams.get('appid');
@@ -74,6 +85,18 @@ export default {
           'Access-Control-Allow-Origin': '*'
         }
       });
+    }
+
+    // Redirect direct top-level browser visits to /try-studio(.html) back to /try
+    if (
+      (url.pathname === '/try-studio' || url.pathname === '/try-studio.html') &&
+      request.headers.get('Sec-Fetch-Dest') === 'document'
+    ) {
+      const target = new URL('/try', url.origin);
+      url.searchParams.forEach((v, k) => {
+        if (k !== 'embed') target.searchParams.set(k, v);
+      });
+      return Response.redirect(target.toString(), 302);
     }
 
     return env.ASSETS.fetch(request);

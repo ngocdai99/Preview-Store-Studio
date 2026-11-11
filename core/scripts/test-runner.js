@@ -4974,6 +4974,20 @@ assert(transitionsJsSrc66.includes("const isTablet = (s === 'apple' && appleDevi
 assert(transitionsJsSrc66.includes("if (isTablet) preserveDual = false;"), 'setStore does not preserve dual mode when switching store on a tablet');
 
 // ---------------------------------------------------------------------
+// [SUITE 67]: Embedded Try-Studio Redirect/Telemetry Guard & Multi-Storefront Lookup
+// ---------------------------------------------------------------------
+console.log('\n[SUITE 67]: Embedded Try-Studio Redirect/Telemetry Guard & Multi-Storefront Lookup');
+
+const tryTemplateSrc67 = fs.readFileSync(path.join(ROOT_DIR, 'docs', 'src', 'marketing', 'try.html'), 'utf8');
+assert(tryTemplateSrc67.includes('<meta name="robots" content="noindex, nofollow">'), 'try.html marks embed sandbox as noindex, nofollow');
+assert(tryTemplateSrc67.includes("window.location.replace('/try'"), 'try.html redirects direct top-level /try-studio visits back to /try');
+assert(tryTemplateSrc67.includes('if (isEmbeddedTry) return;'), 'try.html suppresses duplicate Clarity page tracking inside embedded iframe');
+
+const storeImportSrc67 = fs.readFileSync(path.join(ROOT_DIR, 'src', 'js', 'modules', 'store-import.js'), 'utf8');
+assert(storeImportSrc67.includes('fallbackCountries') && storeImportSrc67.includes("'gb'"), 'store-import.js probes regional storefronts such as GB when country is omitted');
+assert(storeImportSrc67.includes("if (isAutoFromUrl && (!modal || !modal.classList.contains('open')) && typeof showToast === 'function')"), 'store-import.js surfaces visible toast when auto URL import fails');
+
+// ---------------------------------------------------------------------
 // Summary Report
 // ---------------------------------------------------------------------
 Promise.all(asyncSuites).then(() => {
