@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-import { CookieBanner } from "@/components/ui/CookieBanner";
-import { AgencyProvider } from "@/context/AgencyContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -90,7 +88,7 @@ const jsonLd = {
       name: "Kai DevLabs",
       url: siteConfig.url,
       logo: `${siteConfig.url}/icon.svg`,
-      sameAs: ["https://kaidevlabs.gumroad.com/"],
+      sameAs: ["https://kaidevlabs.gumroad.com/", siteConfig.creator.url],
     },
     {
       "@type": "FAQPage",
@@ -119,10 +117,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <AgencyProvider>
-          {children}
-        </AgencyProvider>
-        <CookieBanner />
+        {children}
         <script
           id="microsoft-clarity"
           dangerouslySetInnerHTML={{
