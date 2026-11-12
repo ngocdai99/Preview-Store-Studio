@@ -22,6 +22,18 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-[#181918] text-[#1A1A1A] antialiased selection:bg-[#0F6B57]/20 selection:text-[#0F6B57]">
         {children}
+        <script
+          id="microsoft-clarity"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "zcpq1mut5m");
+            `,
+          }}
+        />
       </body>
     </html>
   );
