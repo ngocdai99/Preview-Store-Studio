@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Printer, ArrowLeft } from "lucide-react";
+import { Printer, ArrowUpRight } from "lucide-react";
 import { DeviceThemeSwitch } from "@/components/DeviceThemeSwitch";
 
 // Printable A4 height at 96 DPI with 7.5mm top & bottom page margins: (297 - 15) / 25.4 * 96 ≈ 1066px
@@ -160,14 +160,16 @@ export default function CVPage() {
       <header className="no-print max-w-[794px] mx-auto mb-4 flex flex-wrap items-center justify-between gap-3 text-xs">
         <a
           href="https://kaidevlabs.pages.dev"
+          target="_blank"
+          rel="noreferrer"
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-colors ${
             isDark
               ? "bg-[#1D1E1D] text-[#EDEDED] border-[#282928] hover:bg-[#252625]"
               : "bg-white text-slate-800 border-slate-300 hover:bg-slate-50 shadow-xs"
           }`}
         >
-          <ArrowLeft className="w-3.5 h-3.5 text-[#989A99]" />
           <span>My Portfolio</span>
+          <ArrowUpRight className="w-3.5 h-3.5 text-[#989A99]" />
         </a>
 
         <div className="flex flex-wrap items-center gap-2">
