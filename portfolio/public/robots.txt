@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kaidevlabs.pages.dev/sitemap.xml
