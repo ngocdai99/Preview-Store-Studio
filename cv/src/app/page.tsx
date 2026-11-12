@@ -167,7 +167,7 @@ export default function CVPage() {
           }`}
         >
           <ArrowLeft className="w-3.5 h-3.5 text-[#989A99]" />
-          <span>Back to Portfolio</span>
+          <span>My Portfolio</span>
         </a>
 
         <div className="flex flex-wrap items-center gap-2">

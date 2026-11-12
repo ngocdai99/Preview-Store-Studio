@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "Bui Ngoc Dai — Mobile Developer (Flutter & React Native) | CV",
   description:
     "Curriculum Vitae of Bui Ngoc Dai (Kai) — Mobile Developer with production experience shipping Flutter & React Native apps.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "88x88" },
+    ],
+  },
 };
 
 export default function RootLayout({
