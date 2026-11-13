@@ -618,7 +618,7 @@ function initSharedPopovers() {
 
   function updatePosition(btn) {
     if (!btn || !pop || !pop.classList.contains("open")) return;
-    if (document.body.classList.contains("sidebar-collapsed")) {
+    if (btn.closest(".editor") && document.body.classList.contains("sidebar-collapsed")) {
       hide(true);
       return;
     }
@@ -781,12 +781,9 @@ function initSharedPopovers() {
     }
   });
 
-  const editor = document.querySelector(".editor");
-  if (editor) {
-    editor.addEventListener("scroll", () => {
-      if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);
-    }, { passive: true });
-  }
+  document.addEventListener("scroll", () => {
+    if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);
+  }, { passive: true, capture: true });
 
   window.addEventListener("resize", () => {
     if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);

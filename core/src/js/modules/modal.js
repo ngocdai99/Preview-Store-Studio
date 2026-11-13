@@ -130,6 +130,11 @@
     _activeModalTitle = opts.title || '';
 
     let src = opts.src;
+    // Custom icon: always inspect the store-specific variant, regardless of passed src
+    if (_activeModalType === 'icon' && typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) {
+      if (_activeModalStore === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) src = CUSTOM_ICON_512;
+      else if (_activeModalStore === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) src = CUSTOM_ICON_1024;
+    }
     if (!src) {
       if (_activeModalType === 'icon') {
         if (_activeModalStore === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) {
@@ -212,8 +217,18 @@
       } else if (typeof setTargetStore === 'function') {
         setTargetStore(_activeModalStore);
       }
-    } else if (typeof initIconResizer === 'function') {
-      initIconResizer();
+    } else {
+      if (typeof initIconResizer === 'function') initIconResizer();
+      // Non-icon assets never use the resizer: force Inspect pane and clear stale icon resize UI
+      if (typeof global.IconInspector !== 'undefined' && typeof global.IconInspector.switchTab === 'function') {
+        global.IconInspector.switchTab('inspect');
+      } else {
+        const pi = $('iconPaneInspect'), pr = $('iconPaneResize');
+        if (pi) pi.classList.add('active');
+        if (pr) pr.classList.remove('active');
+      }
+      const staleMsg = $('iconResizeStatusMsg');
+      if (staleMsg) staleMsg.style.display = 'none';
     }
 
     const primaryActionBtn = $('iconActionPrimaryBtn');
@@ -222,6 +237,26 @@
     }
 
     const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
+    // Icon uses the live 1:1 canvas + fit strategy; every other asset shows its own image as-is
+    {
+      const liveCv = $('appIconResizeLiveCanvas');
+      const secTitle = document.querySelector('.icon-resizer-section-title');
+      const fitBox = document.querySelector('.icon-resizer-fit-container');
+      if (liveCv) liveCv.style.display = isIconType ? '' : 'none';
+      if (secTitle) secTitle.style.display = isIconType ? '' : 'none';
+      if (fitBox && !isIconType) fitBox.style.display = 'none';
+      if (imgEl) imgEl.style.display = isIconType ? 'none' : 'block';
+      const wrap = $('msIconModalImgWrap');
+      if (wrap) {
+        // Non-icon assets: plain image area, no 1:1 checkerboard card
+        wrap.style.background = isIconType ? '' : 'none';
+        wrap.style.boxShadow = isIconType ? '' : 'none';
+        wrap.style.aspectRatio = isIconType ? '' : 'auto';
+        wrap.style.maxWidth = isIconType ? '' : '100%';
+        wrap.style.maxHeight = isIconType ? '' : '100%';
+        wrap.style.height = isIconType ? '' : '100%';
+      }
+    }
     if (_activeModalType === 'icon' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
       const targetDim = (_activeModalStore === 'google' ? 512 : 1024);
       rasterizeSvgToStorePng(_activeModalAsset, targetDim, pngDataUrl => {
@@ -847,7 +882,7 @@
 
       if (msgEl) {
         if (detailsHtml) {
-          msgEl.className = 'icon-modal-warn-msg visible' + (level === 'warn' ? ' warn-mode' : '');
+          msgEl.className = 'icon-modal-warn-msg visible' + (level === 'warn' ? ' warn-mode' : (level === 'err' ? ' err-mode' : ''));
           msgEl.innerHTML = detailsHtml;
         } else {
           msgEl.className = 'icon-modal-warn-msg';

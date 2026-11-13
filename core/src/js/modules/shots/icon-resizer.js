@@ -5,10 +5,12 @@
 
   let _resizerInitialized = false;
   let _sourceDataUrl = '';
+  let _originalSourceDataUrl = ''; // Always the user-uploaded original, never overwritten by resize output
   let _sourceImg = null;
   let _sourceWidth = 0;
   let _sourceHeight = 0;
   let _fitMode = 'center-crop';
+  let _bothStoresDone = false; // Track if resize has been applied for both stores
 
   function $(id) {
     return document.getElementById(id);
@@ -83,7 +85,8 @@
 
   function setFitMode(mode) {
     _fitMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
-
+    _bothStoresDone = false; // Fit mode changed — pending re-apply
+    updateFitContainerVisibility();
     const cardCrop = $('appIconFitCardCrop');
     const cardPad = $('appIconFitCardPad');
     const cardStretch = $('appIconFitCardStretch');
@@ -99,6 +102,7 @@
 
     updateFitPill();
     updateLivePreview();
+    updateActionBtn();
   }
 
   function getFitMode() {
@@ -108,13 +112,17 @@
   function setSource(src) {
     if (!src) return;
     _sourceDataUrl = src;
+    _originalSourceDataUrl = src; // Lock original — never overwritten by resize output
+    _bothStoresDone = false;
     ensureSourceLoaded(() => {
+      checkAlreadyCompliant();
       updateLivePreview();
+      updateFitContainerVisibility();
     });
   }
 
   function ensureSourceLoaded(callback) {
-    const rawSrc = _sourceDataUrl || (typeof ICON !== 'undefined' ? ICON : '');
+    const rawSrc = _originalSourceDataUrl || _sourceDataUrl || (typeof ICON !== 'undefined' ? ICON : '');
     if (!rawSrc) return;
 
     if (_sourceImg && _sourceImg.src === rawSrc && _sourceImg.complete) {
@@ -196,38 +204,41 @@
   function applyTransformation() {
     if (!_sourceImg) return;
 
+    // Render 1024×1024 for Apple App Store
+    const cv1024 = document.createElement('canvas');
+    renderToCanvas(cv1024, 1024);
+    const dataUrl1024 = cv1024.toDataURL('image/png');
+
+    // Render 512×512 for Google Play (downscaled from same source for consistency)
+    const cv512 = document.createElement('canvas');
+    renderToCanvas(cv512, 512);
+    const dataUrl512 = cv512.toDataURL('image/png');
+
+    // Active store determines which size is used as ICON (for live preview)
     const targetStore = (typeof global.IconLog !== 'undefined' && typeof global.IconLog.getTargetStore === 'function')
       ? global.IconLog.getTargetStore()
       : 'apple';
+    const transformedDataUrl = (targetStore === 'google') ? dataUrl512 : dataUrl1024;
 
-    const targetDim = (targetStore === 'google') ? 512 : 1024;
-    const offscreenCv = document.createElement('canvas');
-    renderToCanvas(offscreenCv, targetDim);
-
-    const transformedDataUrl = offscreenCv.toDataURL('image/png');
-
-    // Update global state and draft
+    // Update global state — both sizes always saved
     if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
-    if (typeof CURRENT_PRESET_KEY !== 'undefined') CURRENT_PRESET_KEY = 'draft';
+    if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = dataUrl1024;
+    if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = dataUrl512;
+    if (typeof ICON !== 'undefined') ICON = transformedDataUrl;
 
-    if (targetStore === 'apple') {
-      if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = transformedDataUrl;
-    } else {
-      if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = transformedDataUrl;
-    }
+    // Output is always PNG from canvas.toDataURL — reset file type metadata accordingly
+    if (typeof ICON_FILE_TYPE !== 'undefined') ICON_FILE_TYPE = 'image/png';
+    if (typeof ICON_FILE_SIZE !== 'undefined') ICON_FILE_SIZE = 0;
 
-    if (typeof ICON !== 'undefined') {
-      ICON = transformedDataUrl;
-    }
-
-    if (typeof userDraft !== 'undefined' && userDraft) {
+    if (typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft') {
       userDraft.icon = transformedDataUrl;
-      if (targetStore === 'apple') userDraft.icon1024 = transformedDataUrl;
-      if (targetStore === 'google') userDraft.icon512 = transformedDataUrl;
+      userDraft.icon1024 = dataUrl1024;
+      userDraft.icon512 = dataUrl512;
       userDraft.isCustomIcon = true;
     }
 
-    _sourceDataUrl = transformedDataUrl;
+    // DO NOT overwrite _sourceDataUrl — keep original source so fit mode changes still work
+    _bothStoresDone = true;
 
     // Re-render editor icons and save state
     if (typeof renderIcons === 'function') renderIcons();
@@ -239,17 +250,53 @@
     const modalImg = $('msIconModalImg');
     if (modalImg) modalImg.src = transformedDataUrl;
 
-    // Immediately re-inspect transformed asset -> Diagnostic Log updates to store compliant!
+    // Re-inspect using active store
     if (typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
       global.IconLog.inspectIcon(transformedDataUrl, null, targetStore);
     }
 
-    // Update live preview directly in unified view
     updateLivePreview();
 
-    if (typeof showToast === 'function') {
-      showToast(`App icon resized to ${targetDim}×${targetDim} px and verified compliant!`, 'ok');
+    // Output always 1024×1024 square — mark compliant, hide fit container
+    _bothStoresDone = true;
+    updateFitContainerVisibility();
+  }
+
+  // Check if the loaded source image is already store-compliant (correct size, square)
+  // This runs on every source load — persists across modal close/reopen
+  function checkAlreadyCompliant() {
+    const w = _sourceWidth;
+    const h = _sourceHeight;
+    const isSquare = (w === h && w > 0);
+    let tStore = 'apple';
+    try { if (global.IconLog && typeof global.IconLog.getTargetStore === 'function') tStore = global.IconLog.getTargetStore(); } catch (e) {}
+    const isStoreSize = (w === (tStore === 'google' ? 512 : 1024));
+    const srcStr = _originalSourceDataUrl || _sourceDataUrl || '';
+    const isPngSrc = !srcStr.startsWith('data:') || srcStr.startsWith('data:image/png');
+    _bothStoresDone = isSquare && isStoreSize && isPngSrc;
+  }
+
+  function updateFitContainerVisibility() {
+    const fitSection = document.querySelector('.icon-resizer-fit-container');
+    const primaryBtn = $('iconActionPrimaryBtn');
+    const statusMsg = $('iconResizeStatusMsg');
+
+    if (_bothStoresDone) {
+      if (fitSection) fitSection.style.display = 'none';
+      if (primaryBtn) primaryBtn.disabled = true;
+      if (statusMsg) {
+        statusMsg.textContent = 'Icon already meets store size requirements.';
+        statusMsg.style.display = 'block';
+      }
+    } else {
+      if (fitSection) fitSection.style.display = '';
+      if (primaryBtn) primaryBtn.disabled = false;
+      if (statusMsg) statusMsg.style.display = 'none';
     }
+  }
+
+  function updateActionBtn() {
+    // No-op — button text stays static, fit container visibility is handled separately
   }
 
   // Inter-module hooks
@@ -259,14 +306,20 @@
 
   global.onResizerSourceChanged = function(src) {
     _sourceDataUrl = src;
+    _originalSourceDataUrl = src;
+    _bothStoresDone = false;
     ensureSourceLoaded(() => {
+      checkAlreadyCompliant();
       updateLivePreview();
+      updateFitContainerVisibility();
     });
   };
 
   global.onResizerTabActivated = function() {
     ensureSourceLoaded(() => {
+      checkAlreadyCompliant();
       updateLivePreview();
+      updateFitContainerVisibility();
     });
     setTimeout(updateFitPill, 20);
     setTimeout(updateFitPill, 60);

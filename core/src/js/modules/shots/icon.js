@@ -72,6 +72,12 @@ function getIconMeta(src = null){
   const targetSrc = src || ICON;
   let size = ICON_FILE_SIZE || 0;
   let type = ICON_FILE_TYPE || '';
+  // Data URL is authoritative: global file metadata may be stale (other store variant / earlier upload)
+  if(typeof targetSrc === 'string' && targetSrc.startsWith('data:')){
+    const semi0 = targetSrc.indexOf(';');
+    if(semi0 !== -1) type = targetSrc.substring(5, semi0);
+    if(targetSrc !== ICON) size = 0;
+  }
   if((!size || !type) && typeof targetSrc === 'string' && targetSrc.startsWith('data:')){
     const comma = targetSrc.indexOf(',');
     if(comma !== -1){
@@ -148,11 +154,31 @@ function validateAppIcon(){
     return;
   }
   const targetDim = (store === 'google' ? 512 : 1024);
-  const activeIconSrc = (typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON)
-    ? ICON
-    : ((store === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512)
-        ? CUSTOM_ICON_512
-        : ((store === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON));
+  // Always pick store-specific size when available - ICON may hold the other store's dimension
+  const activeIconSrc =
+    (store === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512)
+      ? CUSTOM_ICON_512
+      : (store === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024)
+        ? CUSTOM_ICON_1024
+        : ICON;
+
+  // Self-heal: stored Google variant may hold a 1024px image (e.g. restored from older draft)
+  if(store === 'google' && IS_CUSTOM_ICON && activeIconSrc === CUSTOM_ICON_512 && typeof downscaleIconTo512 === 'function' && typeof activeIconSrc === 'string' && activeIconSrc.startsWith('data:image/') && !activeIconSrc.startsWith('data:image/svg')){
+    const probe = new Image();
+    probe.onload = () => {
+      if(probe.naturalWidth > 512 && store === 'google' && CUSTOM_ICON_512 === activeIconSrc){
+        downscaleIconTo512(activeIconSrc, d512 => {
+          if(d512 && d512 !== activeIconSrc){
+            if(!CUSTOM_ICON_1024) CUSTOM_ICON_1024 = activeIconSrc;
+            CUSTOM_ICON_512 = d512;
+            ICON = d512;
+            if(typeof renderIcons === 'function') renderIcons();
+          }
+        });
+      }
+    };
+    probe.src = activeIconSrc;
+  }
 
   if(typeof rasterizeSvgToStorePng === 'function' && typeof activeIconSrc === 'string' && activeIconSrc.startsWith('data:image/svg+xml')){
     rasterizeSvgToStorePng(activeIconSrc, targetDim, pngSrc => {
@@ -383,19 +409,17 @@ if($('icoFile')){
       return;
     }
     IS_CUSTOM_ICON = true;
-    CURRENT_PRESET_KEY = 'draft';
     ICON_FILE_SIZE = f.size || 0;
     ICON_FILE_TYPE = f.type || '';
     ICON_FILE_NAME = f.name || '';
     readFile(f, d => {
       ICON = d;
       if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
-      if(typeof userDraft !== 'undefined' && userDraft){
+      if(typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft'){
         userDraft.icon = d;
         userDraft.icon1024 = d;
         userDraft.isCustomIcon = true;
       }
-      CURRENT_PRESET_KEY = 'draft';
       renderIcons();
       saveState();
       if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -430,19 +454,17 @@ if(icoDropZone){
     if(file && file.type.startsWith('image/')){
       if(typeof validateUploadFile === 'function' && !validateUploadFile(file, MAX_UPLOAD_BYTES, 'App icon')) return;
       IS_CUSTOM_ICON = true;
-      CURRENT_PRESET_KEY = 'draft';
       ICON_FILE_SIZE = file.size || 0;
       ICON_FILE_TYPE = file.type || '';
       ICON_FILE_NAME = file.name || '';
       readFile(file, d => {
         ICON = d;
         if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
-        if(typeof userDraft !== 'undefined' && userDraft){
+        if(typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft'){
           userDraft.icon = d;
           userDraft.icon1024 = d;
           userDraft.isCustomIcon = true;
         }
-        CURRENT_PRESET_KEY = 'draft';
         renderIcons();
         saveState();
         if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -467,7 +489,7 @@ if(icoRemoveBtn){
     ICON_FILE_NAME = '';
     const fileInput = $('icoFile');
     if(fileInput) fileInput.value = '';
-    if(typeof userDraft !== 'undefined' && userDraft){
+    if(typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft'){
       userDraft.icon = ICON;
       userDraft.icon1024 = ICON;
       userDraft.isCustomIcon = false;

@@ -16,127 +16,21 @@
     if (_logInitialized) return;
     _logInitialized = true;
 
-    // AnimatedSize accordion for store review disclaimer
+    // Store review disclaimer tooltip trigger
     const disclaimer = $('iconModalDisclaimer');
-    const infoPanel = $('msIconModalInfo');
-    if (disclaimer && !disclaimer._animatedSizeSetup) {
-      disclaimer._animatedSizeSetup = true;
-
-      const summary = disclaimer.querySelector('summary');
-      const content = disclaimer.querySelector('.icon-modal-disclaimer-content');
-
-      if (summary && content) {
-        let animation = null;
-        let contentAnimation = null;
-        let isClosing = false;
-        let isExpanding = false;
-
-        const getBorderOffset = () => {
-          return disclaimer.offsetHeight - disclaimer.clientHeight;
-        };
-
-        const scrollInfoToBottom = () => {
-          if (!infoPanel) return;
-          infoPanel.scrollTo({
-            top: infoPanel.scrollHeight,
-            behavior: 'smooth'
-          });
-        };
-
-        const onAnimationFinish = (isOpen) => {
-          disclaimer.open = isOpen;
-          disclaimer.classList.remove('is-closing', 'is-expanding');
-          disclaimer.style.height = '';
-          disclaimer.style.overflow = '';
-          if (animation) {
-            animation.cancel();
-            animation = null;
+    if (disclaimer && !disclaimer._disclaimerSetup) {
+      disclaimer._disclaimerSetup = true;
+      const tipBtn = disclaimer.querySelector('.info-tip-btn');
+      if (tipBtn) {
+        disclaimer.addEventListener('click', (e) => {
+          if (!e.target.closest('.info-tip-btn')) {
+            tipBtn.click();
           }
-          if (contentAnimation) {
-            contentAnimation.cancel();
-            contentAnimation = null;
-          }
-          isClosing = false;
-          isExpanding = false;
-          if (isOpen) {
-            scrollInfoToBottom();
-          }
-        };
-
-        const shrink = () => {
-          isClosing = true;
-          isExpanding = false;
-          disclaimer.classList.add('is-closing');
-          disclaimer.classList.remove('is-expanding');
-
-          const startHeight = `${disclaimer.getBoundingClientRect().height}px`;
-          const closedHeight = `${summary.offsetHeight + getBorderOffset()}px`;
-
-          if (animation) animation.cancel();
-          if (contentAnimation) contentAnimation.cancel();
-
-          contentAnimation = content.animate(
-            { opacity: [1, 0] },
-            { duration: 150, easing: 'ease-in', fill: 'forwards' }
-          );
-
-          animation = disclaimer.animate(
-            { height: [startHeight, closedHeight] },
-            { duration: 220, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
-          );
-
-          animation.onfinish = () => onAnimationFinish(false);
-          animation.oncancel = () => {
-            isClosing = false;
-            disclaimer.classList.remove('is-closing');
-          };
-        };
-
-        const expand = () => {
-          isExpanding = true;
-          isClosing = false;
-          disclaimer.classList.add('is-expanding');
-          disclaimer.classList.remove('is-closing');
-
-          const startHeight = `${disclaimer.getBoundingClientRect().height}px`;
-
-          // Temporarily unconstrain height to measure full natural target height
-          disclaimer.open = true;
-          disclaimer.style.height = 'auto';
-          const fullHeight = `${disclaimer.getBoundingClientRect().height}px`;
-          disclaimer.style.height = startHeight;
-
-          if (animation) animation.cancel();
-          if (contentAnimation) contentAnimation.cancel();
-
-          contentAnimation = content.animate(
-            { opacity: [0, 1] },
-            { duration: 220, easing: 'ease-out', fill: 'forwards' }
-          );
-
-          animation = disclaimer.animate(
-            { height: [startHeight, fullHeight] },
-            { duration: 250, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
-          );
-
-          scrollInfoToBottom();
-
-          animation.onfinish = () => onAnimationFinish(true);
-          animation.oncancel = () => {
-            isExpanding = false;
-            disclaimer.classList.remove('is-expanding');
-          };
-        };
-
-        summary.addEventListener('click', (e) => {
-          e.preventDefault();
-          disclaimer.style.overflow = 'hidden';
-
-          if (isClosing || !disclaimer.open) {
-            disclaimer.style.height = `${disclaimer.getBoundingClientRect().height}px`;
-            expand();
-          } else if (isExpanding || disclaimer.open) {
-            shrink();
+        });
+        disclaimer.addEventListener('keydown', (e) => {
+          if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('.info-tip-btn')) {
+            e.preventDefault();
+            tipBtn.click();
           }
         });
       }
@@ -153,7 +47,7 @@
     // Update Store Tag Badge (Single badge reflecting the active store, no in-modal switcher)
     const storeBadge = $('msIconModalStoreBadge');
     if (storeBadge) {
-      storeBadge.textContent = _targetStore === 'apple' ? 'Apple' : 'Google Play';
+      storeBadge.textContent = _targetStore === 'apple' ? 'Apple' : 'Google';
       storeBadge.className = 'icon-modal-store-tag ' + (_targetStore === 'apple' ? 'a' : 'g');
     }
 
@@ -355,6 +249,9 @@
         } else if (isJpeg) {
           formatEl.textContent = 'JPEG';
           formatEl.className = 'icon-metric-val warn';
+        } else if (mimeType && !isPng) {
+          formatEl.textContent = `${fmt} · Not PNG`;
+          formatEl.className = 'icon-metric-val warn';
         } else {
           formatEl.textContent = `${fmt} · Opaque`;
           formatEl.className = 'icon-metric-val ok';
@@ -423,6 +320,14 @@
           severity: 'ok',
           title: 'Standard PNG Format',
           desc: ''
+        });
+      }
+      else if (mimeType) {
+        const fmtName = mimeType.replace('image/', '').toUpperCase();
+        issues.push({
+          severity: 'warn',
+          title: 'File Format: ' + fmtName,
+          desc: 'Store icons must be PNG. Use Fix & Resize to convert automatically.'
         });
       }
 

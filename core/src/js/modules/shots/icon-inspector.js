@@ -144,10 +144,9 @@
 
     // Update global icon state if user dropped image
     if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
-    if (typeof CURRENT_PRESET_KEY !== 'undefined') CURRENT_PRESET_KEY = 'draft';
     if (typeof ICON !== 'undefined') ICON = dataUrl;
 
-    if (typeof userDraft !== 'undefined' && userDraft) {
+    if (typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft') {
       userDraft.icon = dataUrl;
       userDraft.icon1024 = dataUrl;
       userDraft.isCustomIcon = true;

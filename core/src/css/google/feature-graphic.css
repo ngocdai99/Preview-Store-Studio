@@ -134,7 +134,7 @@
 .info-pop-body{
   display:flex;flex-direction:column;gap:8px;font-size:11.5px;line-height:1.5;color:#A1A1AA;
 }
-.info-pop-body p{margin:0}
+.info-pop-body p{margin:0;white-space:pre-line}
 .info-pop-body b{color:#F3F4F6;font-weight:600}
 
 /* Popover Footer & Learn More Link Button */

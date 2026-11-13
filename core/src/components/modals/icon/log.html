@@ -48,16 +48,14 @@
   </div>
 
   <!-- Diagnostic Log Card -->
-  <div class="icon-status-card">
     <div class="icon-status-head">
-      <span class="icon-modal-field-label">Diagnostic Log</span>
       <div id="msIconModalBadge" class="icon-modal-badge" style="display: none !important;" aria-hidden="true"></div>
     </div>
     <div class="icon-modal-warn-msg" id="msIconModalMsg"></div>
-  </div>
 
   <!-- Dynamic Action Buttons -->
   <div class="icon-modal-actions">
+    <p class="icon-resize-status-msg" id="iconResizeStatusMsg" style="display:none;"></p>
     <button type="button" class="fit-btn" id="iconActionPrimaryBtn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 3 21 3 21 9"></polyline>
@@ -77,28 +75,24 @@
     <input type="file" id="msIconModalInput" accept="image/*" hidden>
   </div>
 
-  <!-- Store Review Disclaimer (Collapsible with Arrow) -->
-  <details class="icon-modal-disclaimer" id="iconModalDisclaimer">
-    <summary class="icon-modal-disclaimer-summary">
-      <div class="icon-modal-disclaimer-summary-left">
-        <div class="icon-modal-disclaimer-icon">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-          </svg>
-        </div>
-        <span class="icon-modal-disclaimer-title">Store Review Disclaimer</span>
-      </div>
-      <div class="icon-modal-disclaimer-arrow" aria-hidden="true">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
+  <!-- Store Review Disclaimer (Popup Tooltip) -->
+  <div class="icon-modal-disclaimer" id="iconModalDisclaimer" role="button" tabindex="0" aria-label="Store Review Disclaimer">
+    <div class="icon-modal-disclaimer-left">
+      <div class="icon-modal-disclaimer-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
         </svg>
       </div>
-    </summary>
-    <div class="icon-modal-disclaimer-content">
-      <p class="icon-modal-disclaimer-desc">Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels on iOS, or file size limits).</p>
-      <p class="icon-modal-disclaimer-desc">However, passing these checks does not guarantee store approval — final acceptance is decided solely by Apple and Google review teams based on your complete submission and store guidelines.</p>
+      <span class="icon-modal-disclaimer-title">Store Review Disclaimer</span>
     </div>
-  </details>
+    <span class="info-tip-btn" data-tip-title="Store Review Disclaimer" data-tip-desc="Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels on iOS, or file size limits).&#10;&#10;However, passing these checks does not guarantee store approval — final acceptance is decided solely by Apple and Google review teams based on your complete submission and store guidelines." tabindex="0" role="button" aria-label="Store Review Disclaimer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    </span>
+  </div>
 </div>

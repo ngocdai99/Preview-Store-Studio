@@ -621,7 +621,7 @@ function initSharedPopovers() {
 
   function updatePosition(btn) {
     if (!btn || !pop || !pop.classList.contains("open")) return;
-    if (document.body.classList.contains("sidebar-collapsed")) {
+    if (btn.closest(".editor") && document.body.classList.contains("sidebar-collapsed")) {
       hide(true);
       return;
     }
@@ -784,12 +784,9 @@ function initSharedPopovers() {
     }
   });
 
-  const editor = document.querySelector(".editor");
-  if (editor) {
-    editor.addEventListener("scroll", () => {
-      if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);
-    }, { passive: true });
-  }
+  document.addEventListener("scroll", () => {
+    if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);
+  }, { passive: true, capture: true });
 
   window.addEventListener("resize", () => {
     if (activeBtn && pop.classList.contains("open")) updatePosition(activeBtn);
@@ -4124,6 +4121,12 @@ function getIconMeta(src = null){
   const targetSrc = src || ICON;
   let size = ICON_FILE_SIZE || 0;
   let type = ICON_FILE_TYPE || '';
+  // Data URL is authoritative: global file metadata may be stale (other store variant / earlier upload)
+  if(typeof targetSrc === 'string' && targetSrc.startsWith('data:')){
+    const semi0 = targetSrc.indexOf(';');
+    if(semi0 !== -1) type = targetSrc.substring(5, semi0);
+    if(targetSrc !== ICON) size = 0;
+  }
   if((!size || !type) && typeof targetSrc === 'string' && targetSrc.startsWith('data:')){
     const comma = targetSrc.indexOf(',');
     if(comma !== -1){
@@ -4200,11 +4203,31 @@ function validateAppIcon(){
     return;
   }
   const targetDim = (store === 'google' ? 512 : 1024);
-  const activeIconSrc = (typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON)
-    ? ICON
-    : ((store === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512)
-        ? CUSTOM_ICON_512
-        : ((store === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) ? CUSTOM_ICON_1024 : ICON));
+  // Always pick store-specific size when available - ICON may hold the other store's dimension
+  const activeIconSrc =
+    (store === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512)
+      ? CUSTOM_ICON_512
+      : (store === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024)
+        ? CUSTOM_ICON_1024
+        : ICON;
+
+  // Self-heal: stored Google variant may hold a 1024px image (e.g. restored from older draft)
+  if(store === 'google' && IS_CUSTOM_ICON && activeIconSrc === CUSTOM_ICON_512 && typeof downscaleIconTo512 === 'function' && typeof activeIconSrc === 'string' && activeIconSrc.startsWith('data:image/') && !activeIconSrc.startsWith('data:image/svg')){
+    const probe = new Image();
+    probe.onload = () => {
+      if(probe.naturalWidth > 512 && store === 'google' && CUSTOM_ICON_512 === activeIconSrc){
+        downscaleIconTo512(activeIconSrc, d512 => {
+          if(d512 && d512 !== activeIconSrc){
+            if(!CUSTOM_ICON_1024) CUSTOM_ICON_1024 = activeIconSrc;
+            CUSTOM_ICON_512 = d512;
+            ICON = d512;
+            if(typeof renderIcons === 'function') renderIcons();
+          }
+        });
+      }
+    };
+    probe.src = activeIconSrc;
+  }
 
   if(typeof rasterizeSvgToStorePng === 'function' && typeof activeIconSrc === 'string' && activeIconSrc.startsWith('data:image/svg+xml')){
     rasterizeSvgToStorePng(activeIconSrc, targetDim, pngSrc => {
@@ -4432,19 +4455,17 @@ if($('icoFile')){
       return;
     }
     IS_CUSTOM_ICON = true;
-    CURRENT_PRESET_KEY = 'draft';
     ICON_FILE_SIZE = f.size || 0;
     ICON_FILE_TYPE = f.type || '';
     ICON_FILE_NAME = f.name || '';
     readFile(f, d => {
       ICON = d;
       if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
-      if(typeof userDraft !== 'undefined' && userDraft){
+      if(typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft'){
         userDraft.icon = d;
         userDraft.icon1024 = d;
         userDraft.isCustomIcon = true;
       }
-      CURRENT_PRESET_KEY = 'draft';
       renderIcons();
       saveState();
       if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -4479,19 +4500,17 @@ if(icoDropZone){
     if(file && file.type.startsWith('image/')){
       if(typeof validateUploadFile === 'function' && !validateUploadFile(file, MAX_UPLOAD_BYTES, 'App icon')) return;
       IS_CUSTOM_ICON = true;
-      CURRENT_PRESET_KEY = 'draft';
       ICON_FILE_SIZE = file.size || 0;
       ICON_FILE_TYPE = file.type || '';
       ICON_FILE_NAME = file.name || '';
       readFile(file, d => {
         ICON = d;
         if(typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = d;
-        if(typeof userDraft !== 'undefined' && userDraft){
+        if(typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft'){
           userDraft.icon = d;
           userDraft.icon1024 = d;
           userDraft.isCustomIcon = true;
         }
-        CURRENT_PRESET_KEY = 'draft';
         renderIcons();
         saveState();
         if(typeof updateDraftPill === 'function') updateDraftPill();
@@ -4516,7 +4535,7 @@ if(icoRemoveBtn){
     ICON_FILE_NAME = '';
     const fileInput = $('icoFile');
     if(fileInput) fileInput.value = '';
-    if(typeof userDraft !== 'undefined' && userDraft){
+    if(typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft'){
       userDraft.icon = ICON;
       userDraft.icon1024 = ICON;
       userDraft.isCustomIcon = false;
@@ -4679,10 +4698,9 @@ if(icoRemoveBtn){
 
     // Update global icon state if user dropped image
     if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
-    if (typeof CURRENT_PRESET_KEY !== 'undefined') CURRENT_PRESET_KEY = 'draft';
     if (typeof ICON !== 'undefined') ICON = dataUrl;
 
-    if (typeof userDraft !== 'undefined' && userDraft) {
+    if (typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft') {
       userDraft.icon = dataUrl;
       userDraft.icon1024 = dataUrl;
       userDraft.isCustomIcon = true;
@@ -4737,10 +4755,12 @@ if(icoRemoveBtn){
 
   let _resizerInitialized = false;
   let _sourceDataUrl = '';
+  let _originalSourceDataUrl = ''; // Always the user-uploaded original, never overwritten by resize output
   let _sourceImg = null;
   let _sourceWidth = 0;
   let _sourceHeight = 0;
   let _fitMode = 'center-crop';
+  let _bothStoresDone = false; // Track if resize has been applied for both stores
 
   function $(id) {
     return document.getElementById(id);
@@ -4815,7 +4835,8 @@ if(icoRemoveBtn){
 
   function setFitMode(mode) {
     _fitMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
-
+    _bothStoresDone = false; // Fit mode changed — pending re-apply
+    updateFitContainerVisibility();
     const cardCrop = $('appIconFitCardCrop');
     const cardPad = $('appIconFitCardPad');
     const cardStretch = $('appIconFitCardStretch');
@@ -4831,6 +4852,7 @@ if(icoRemoveBtn){
 
     updateFitPill();
     updateLivePreview();
+    updateActionBtn();
   }
 
   function getFitMode() {
@@ -4840,13 +4862,17 @@ if(icoRemoveBtn){
   function setSource(src) {
     if (!src) return;
     _sourceDataUrl = src;
+    _originalSourceDataUrl = src; // Lock original — never overwritten by resize output
+    _bothStoresDone = false;
     ensureSourceLoaded(() => {
+      checkAlreadyCompliant();
       updateLivePreview();
+      updateFitContainerVisibility();
     });
   }
 
   function ensureSourceLoaded(callback) {
-    const rawSrc = _sourceDataUrl || (typeof ICON !== 'undefined' ? ICON : '');
+    const rawSrc = _originalSourceDataUrl || _sourceDataUrl || (typeof ICON !== 'undefined' ? ICON : '');
     if (!rawSrc) return;
 
     if (_sourceImg && _sourceImg.src === rawSrc && _sourceImg.complete) {
@@ -4928,38 +4954,41 @@ if(icoRemoveBtn){
   function applyTransformation() {
     if (!_sourceImg) return;
 
+    // Render 1024×1024 for Apple App Store
+    const cv1024 = document.createElement('canvas');
+    renderToCanvas(cv1024, 1024);
+    const dataUrl1024 = cv1024.toDataURL('image/png');
+
+    // Render 512×512 for Google Play (downscaled from same source for consistency)
+    const cv512 = document.createElement('canvas');
+    renderToCanvas(cv512, 512);
+    const dataUrl512 = cv512.toDataURL('image/png');
+
+    // Active store determines which size is used as ICON (for live preview)
     const targetStore = (typeof global.IconLog !== 'undefined' && typeof global.IconLog.getTargetStore === 'function')
       ? global.IconLog.getTargetStore()
       : 'apple';
+    const transformedDataUrl = (targetStore === 'google') ? dataUrl512 : dataUrl1024;
 
-    const targetDim = (targetStore === 'google') ? 512 : 1024;
-    const offscreenCv = document.createElement('canvas');
-    renderToCanvas(offscreenCv, targetDim);
-
-    const transformedDataUrl = offscreenCv.toDataURL('image/png');
-
-    // Update global state and draft
+    // Update global state — both sizes always saved
     if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
-    if (typeof CURRENT_PRESET_KEY !== 'undefined') CURRENT_PRESET_KEY = 'draft';
+    if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = dataUrl1024;
+    if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = dataUrl512;
+    if (typeof ICON !== 'undefined') ICON = transformedDataUrl;
 
-    if (targetStore === 'apple') {
-      if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = transformedDataUrl;
-    } else {
-      if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = transformedDataUrl;
-    }
+    // Output is always PNG from canvas.toDataURL — reset file type metadata accordingly
+    if (typeof ICON_FILE_TYPE !== 'undefined') ICON_FILE_TYPE = 'image/png';
+    if (typeof ICON_FILE_SIZE !== 'undefined') ICON_FILE_SIZE = 0;
 
-    if (typeof ICON !== 'undefined') {
-      ICON = transformedDataUrl;
-    }
-
-    if (typeof userDraft !== 'undefined' && userDraft) {
+    if (typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft') {
       userDraft.icon = transformedDataUrl;
-      if (targetStore === 'apple') userDraft.icon1024 = transformedDataUrl;
-      if (targetStore === 'google') userDraft.icon512 = transformedDataUrl;
+      userDraft.icon1024 = dataUrl1024;
+      userDraft.icon512 = dataUrl512;
       userDraft.isCustomIcon = true;
     }
 
-    _sourceDataUrl = transformedDataUrl;
+    // DO NOT overwrite _sourceDataUrl — keep original source so fit mode changes still work
+    _bothStoresDone = true;
 
     // Re-render editor icons and save state
     if (typeof renderIcons === 'function') renderIcons();
@@ -4971,17 +5000,53 @@ if(icoRemoveBtn){
     const modalImg = $('msIconModalImg');
     if (modalImg) modalImg.src = transformedDataUrl;
 
-    // Immediately re-inspect transformed asset -> Diagnostic Log updates to store compliant!
+    // Re-inspect using active store
     if (typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
       global.IconLog.inspectIcon(transformedDataUrl, null, targetStore);
     }
 
-    // Update live preview directly in unified view
     updateLivePreview();
 
-    if (typeof showToast === 'function') {
-      showToast(`App icon resized to ${targetDim}×${targetDim} px and verified compliant!`, 'ok');
+    // Output always 1024×1024 square — mark compliant, hide fit container
+    _bothStoresDone = true;
+    updateFitContainerVisibility();
+  }
+
+  // Check if the loaded source image is already store-compliant (correct size, square)
+  // This runs on every source load — persists across modal close/reopen
+  function checkAlreadyCompliant() {
+    const w = _sourceWidth;
+    const h = _sourceHeight;
+    const isSquare = (w === h && w > 0);
+    let tStore = 'apple';
+    try { if (global.IconLog && typeof global.IconLog.getTargetStore === 'function') tStore = global.IconLog.getTargetStore(); } catch (e) {}
+    const isStoreSize = (w === (tStore === 'google' ? 512 : 1024));
+    const srcStr = _originalSourceDataUrl || _sourceDataUrl || '';
+    const isPngSrc = !srcStr.startsWith('data:') || srcStr.startsWith('data:image/png');
+    _bothStoresDone = isSquare && isStoreSize && isPngSrc;
+  }
+
+  function updateFitContainerVisibility() {
+    const fitSection = document.querySelector('.icon-resizer-fit-container');
+    const primaryBtn = $('iconActionPrimaryBtn');
+    const statusMsg = $('iconResizeStatusMsg');
+
+    if (_bothStoresDone) {
+      if (fitSection) fitSection.style.display = 'none';
+      if (primaryBtn) primaryBtn.disabled = true;
+      if (statusMsg) {
+        statusMsg.textContent = 'Icon already meets store size requirements.';
+        statusMsg.style.display = 'block';
+      }
+    } else {
+      if (fitSection) fitSection.style.display = '';
+      if (primaryBtn) primaryBtn.disabled = false;
+      if (statusMsg) statusMsg.style.display = 'none';
     }
+  }
+
+  function updateActionBtn() {
+    // No-op — button text stays static, fit container visibility is handled separately
   }
 
   // Inter-module hooks
@@ -4991,14 +5056,20 @@ if(icoRemoveBtn){
 
   global.onResizerSourceChanged = function(src) {
     _sourceDataUrl = src;
+    _originalSourceDataUrl = src;
+    _bothStoresDone = false;
     ensureSourceLoaded(() => {
+      checkAlreadyCompliant();
       updateLivePreview();
+      updateFitContainerVisibility();
     });
   };
 
   global.onResizerTabActivated = function() {
     ensureSourceLoaded(() => {
+      checkAlreadyCompliant();
       updateLivePreview();
+      updateFitContainerVisibility();
     });
     setTimeout(updateFitPill, 20);
     setTimeout(updateFitPill, 60);
@@ -5089,127 +5160,21 @@ if(icoRemoveBtn){
     if (_logInitialized) return;
     _logInitialized = true;
 
-    // AnimatedSize accordion for store review disclaimer
+    // Store review disclaimer tooltip trigger
     const disclaimer = $('iconModalDisclaimer');
-    const infoPanel = $('msIconModalInfo');
-    if (disclaimer && !disclaimer._animatedSizeSetup) {
-      disclaimer._animatedSizeSetup = true;
-
-      const summary = disclaimer.querySelector('summary');
-      const content = disclaimer.querySelector('.icon-modal-disclaimer-content');
-
-      if (summary && content) {
-        let animation = null;
-        let contentAnimation = null;
-        let isClosing = false;
-        let isExpanding = false;
-
-        const getBorderOffset = () => {
-          return disclaimer.offsetHeight - disclaimer.clientHeight;
-        };
-
-        const scrollInfoToBottom = () => {
-          if (!infoPanel) return;
-          infoPanel.scrollTo({
-            top: infoPanel.scrollHeight,
-            behavior: 'smooth'
-          });
-        };
-
-        const onAnimationFinish = (isOpen) => {
-          disclaimer.open = isOpen;
-          disclaimer.classList.remove('is-closing', 'is-expanding');
-          disclaimer.style.height = '';
-          disclaimer.style.overflow = '';
-          if (animation) {
-            animation.cancel();
-            animation = null;
+    if (disclaimer && !disclaimer._disclaimerSetup) {
+      disclaimer._disclaimerSetup = true;
+      const tipBtn = disclaimer.querySelector('.info-tip-btn');
+      if (tipBtn) {
+        disclaimer.addEventListener('click', (e) => {
+          if (!e.target.closest('.info-tip-btn')) {
+            tipBtn.click();
           }
-          if (contentAnimation) {
-            contentAnimation.cancel();
-            contentAnimation = null;
-          }
-          isClosing = false;
-          isExpanding = false;
-          if (isOpen) {
-            scrollInfoToBottom();
-          }
-        };
-
-        const shrink = () => {
-          isClosing = true;
-          isExpanding = false;
-          disclaimer.classList.add('is-closing');
-          disclaimer.classList.remove('is-expanding');
-
-          const startHeight = `${disclaimer.getBoundingClientRect().height}px`;
-          const closedHeight = `${summary.offsetHeight + getBorderOffset()}px`;
-
-          if (animation) animation.cancel();
-          if (contentAnimation) contentAnimation.cancel();
-
-          contentAnimation = content.animate(
-            { opacity: [1, 0] },
-            { duration: 150, easing: 'ease-in', fill: 'forwards' }
-          );
-
-          animation = disclaimer.animate(
-            { height: [startHeight, closedHeight] },
-            { duration: 220, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
-          );
-
-          animation.onfinish = () => onAnimationFinish(false);
-          animation.oncancel = () => {
-            isClosing = false;
-            disclaimer.classList.remove('is-closing');
-          };
-        };
-
-        const expand = () => {
-          isExpanding = true;
-          isClosing = false;
-          disclaimer.classList.add('is-expanding');
-          disclaimer.classList.remove('is-closing');
-
-          const startHeight = `${disclaimer.getBoundingClientRect().height}px`;
-
-          // Temporarily unconstrain height to measure full natural target height
-          disclaimer.open = true;
-          disclaimer.style.height = 'auto';
-          const fullHeight = `${disclaimer.getBoundingClientRect().height}px`;
-          disclaimer.style.height = startHeight;
-
-          if (animation) animation.cancel();
-          if (contentAnimation) contentAnimation.cancel();
-
-          contentAnimation = content.animate(
-            { opacity: [0, 1] },
-            { duration: 220, easing: 'ease-out', fill: 'forwards' }
-          );
-
-          animation = disclaimer.animate(
-            { height: [startHeight, fullHeight] },
-            { duration: 250, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
-          );
-
-          scrollInfoToBottom();
-
-          animation.onfinish = () => onAnimationFinish(true);
-          animation.oncancel = () => {
-            isExpanding = false;
-            disclaimer.classList.remove('is-expanding');
-          };
-        };
-
-        summary.addEventListener('click', (e) => {
-          e.preventDefault();
-          disclaimer.style.overflow = 'hidden';
-
-          if (isClosing || !disclaimer.open) {
-            disclaimer.style.height = `${disclaimer.getBoundingClientRect().height}px`;
-            expand();
-          } else if (isExpanding || disclaimer.open) {
-            shrink();
+        });
+        disclaimer.addEventListener('keydown', (e) => {
+          if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('.info-tip-btn')) {
+            e.preventDefault();
+            tipBtn.click();
           }
         });
       }
@@ -5226,7 +5191,7 @@ if(icoRemoveBtn){
     // Update Store Tag Badge (Single badge reflecting the active store, no in-modal switcher)
     const storeBadge = $('msIconModalStoreBadge');
     if (storeBadge) {
-      storeBadge.textContent = _targetStore === 'apple' ? 'Apple' : 'Google Play';
+      storeBadge.textContent = _targetStore === 'apple' ? 'Apple' : 'Google';
       storeBadge.className = 'icon-modal-store-tag ' + (_targetStore === 'apple' ? 'a' : 'g');
     }
 
@@ -5428,6 +5393,9 @@ if(icoRemoveBtn){
         } else if (isJpeg) {
           formatEl.textContent = 'JPEG';
           formatEl.className = 'icon-metric-val warn';
+        } else if (mimeType && !isPng) {
+          formatEl.textContent = `${fmt} · Not PNG`;
+          formatEl.className = 'icon-metric-val warn';
         } else {
           formatEl.textContent = `${fmt} · Opaque`;
           formatEl.className = 'icon-metric-val ok';
@@ -5496,6 +5464,14 @@ if(icoRemoveBtn){
           severity: 'ok',
           title: 'Standard PNG Format',
           desc: ''
+        });
+      }
+      else if (mimeType) {
+        const fmtName = mimeType.replace('image/', '').toUpperCase();
+        issues.push({
+          severity: 'warn',
+          title: 'File Format: ' + fmtName,
+          desc: 'Store icons must be PNG. Use Fix & Resize to convert automatically.'
         });
       }
 
@@ -6925,6 +6901,11 @@ if(ipadSlistArea){
     _activeModalTitle = opts.title || '';
 
     let src = opts.src;
+    // Custom icon: always inspect the store-specific variant, regardless of passed src
+    if (_activeModalType === 'icon' && typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) {
+      if (_activeModalStore === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) src = CUSTOM_ICON_512;
+      else if (_activeModalStore === 'apple' && typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) src = CUSTOM_ICON_1024;
+    }
     if (!src) {
       if (_activeModalType === 'icon') {
         if (_activeModalStore === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) {
@@ -7007,8 +6988,18 @@ if(ipadSlistArea){
       } else if (typeof setTargetStore === 'function') {
         setTargetStore(_activeModalStore);
       }
-    } else if (typeof initIconResizer === 'function') {
-      initIconResizer();
+    } else {
+      if (typeof initIconResizer === 'function') initIconResizer();
+      // Non-icon assets never use the resizer: force Inspect pane and clear stale icon resize UI
+      if (typeof global.IconInspector !== 'undefined' && typeof global.IconInspector.switchTab === 'function') {
+        global.IconInspector.switchTab('inspect');
+      } else {
+        const pi = $('iconPaneInspect'), pr = $('iconPaneResize');
+        if (pi) pi.classList.add('active');
+        if (pr) pr.classList.remove('active');
+      }
+      const staleMsg = $('iconResizeStatusMsg');
+      if (staleMsg) staleMsg.style.display = 'none';
     }
 
     const primaryActionBtn = $('iconActionPrimaryBtn');
@@ -7017,6 +7008,26 @@ if(ipadSlistArea){
     }
 
     const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
+    // Icon uses the live 1:1 canvas + fit strategy; every other asset shows its own image as-is
+    {
+      const liveCv = $('appIconResizeLiveCanvas');
+      const secTitle = document.querySelector('.icon-resizer-section-title');
+      const fitBox = document.querySelector('.icon-resizer-fit-container');
+      if (liveCv) liveCv.style.display = isIconType ? '' : 'none';
+      if (secTitle) secTitle.style.display = isIconType ? '' : 'none';
+      if (fitBox && !isIconType) fitBox.style.display = 'none';
+      if (imgEl) imgEl.style.display = isIconType ? 'none' : 'block';
+      const wrap = $('msIconModalImgWrap');
+      if (wrap) {
+        // Non-icon assets: plain image area, no 1:1 checkerboard card
+        wrap.style.background = isIconType ? '' : 'none';
+        wrap.style.boxShadow = isIconType ? '' : 'none';
+        wrap.style.aspectRatio = isIconType ? '' : 'auto';
+        wrap.style.maxWidth = isIconType ? '' : '100%';
+        wrap.style.maxHeight = isIconType ? '' : '100%';
+        wrap.style.height = isIconType ? '' : '100%';
+      }
+    }
     if (_activeModalType === 'icon' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
       const targetDim = (_activeModalStore === 'google' ? 512 : 1024);
       rasterizeSvgToStorePng(_activeModalAsset, targetDim, pngDataUrl => {
@@ -7642,7 +7653,7 @@ if(ipadSlistArea){
 
       if (msgEl) {
         if (detailsHtml) {
-          msgEl.className = 'icon-modal-warn-msg visible' + (level === 'warn' ? ' warn-mode' : '');
+          msgEl.className = 'icon-modal-warn-msg visible' + (level === 'warn' ? ' warn-mode' : (level === 'err' ? ' err-mode' : ''));
           msgEl.innerHTML = detailsHtml;
         } else {
           msgEl.className = 'icon-modal-warn-msg';

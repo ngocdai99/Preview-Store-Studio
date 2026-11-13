@@ -212,6 +212,26 @@
   flex-direction: column;
   gap: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  flex: 1 1 auto;
+  min-height: 90px;
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.icon-status-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+.icon-status-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.icon-status-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
 }
 
 .icon-status-head {
@@ -219,6 +239,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  position: sticky;
+  top: 0;
+  background: #202020;
+  z-index: 2;
+  padding-bottom: 2px;
+  flex-shrink: 0;
 }
 
 #msIconModalBadge,
@@ -228,7 +254,7 @@
 
 /* Detailed Diagnostic Checklist (Clear breakdown of current issues) */
 .icon-modal-warn-msg {
-  font-size: 11.5px;
+  font-size: 12px;
   color: #EDEDED;
   line-height: 1.45;
   display: block;
@@ -244,7 +270,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border-radius: 8px;
   font-size: 11px;
   line-height: 1.35;
@@ -318,6 +344,21 @@
   margin-top: auto;
 }
 
+.icon-resize-status-msg {
+  font-size: 11px;
+  color: #6B7280;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+.icon-modal-actions .fit-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .icon-modal-actions .fit-btn {
   width: 100%;
   justify-content: center;
@@ -361,38 +402,34 @@
   stroke: #D1D5DB;
 }
 
-/* Disclaimer (Collapsible Accordion with Arrow & AnimatedSize) */
+/* Disclaimer (Popup Tooltip Trigger Bar) */
 .icon-modal-disclaimer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
   background: #141414;
   border: 1px solid #242424;
   border-radius: 9px;
   margin-top: 4px;
   margin-bottom: 6px;
   flex-shrink: 0;
-  overflow: hidden;
-  transition: border-color 0.18s ease;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.18s ease, background 0.18s ease;
 }
 
 .icon-modal-disclaimer:hover {
   border-color: #2F2F2F;
+  background: #181918;
 }
 
-.icon-modal-disclaimer-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 10px;
-  cursor: pointer;
-  user-select: none;
-  list-style: none;
+.icon-modal-disclaimer:focus-visible {
+  outline: 2px solid #3B82F6;
+  outline-offset: 1px;
 }
 
-.icon-modal-disclaimer-summary::-webkit-details-marker,
-.icon-modal-disclaimer-summary::marker {
-  display: none;
-}
-
-.icon-modal-disclaimer-summary-left {
+.icon-modal-disclaimer-left {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -404,6 +441,11 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.icon-modal-disclaimer:hover .icon-modal-disclaimer-icon {
+  color: #9CA3AF;
 }
 
 .icon-modal-disclaimer-title {
@@ -415,46 +457,12 @@
   transition: color 0.15s ease;
 }
 
-.icon-modal-disclaimer-summary:hover .icon-modal-disclaimer-title {
+.icon-modal-disclaimer:hover .icon-modal-disclaimer-title {
   color: #D1D5DB;
 }
 
-.icon-modal-disclaimer-arrow {
-  color: #6B7280;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s ease;
-}
-
-.icon-modal-disclaimer-summary:hover .icon-modal-disclaimer-arrow {
-  color: #D1D5DB;
-}
-
-.icon-modal-disclaimer[open] .icon-modal-disclaimer-arrow {
-  transform: rotate(180deg);
-}
-
-.icon-modal-disclaimer.is-closing .icon-modal-disclaimer-arrow {
-  transform: rotate(0deg) !important;
-}
-
-.icon-modal-disclaimer-content {
-  padding: 0 10px 9px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  padding-top: 6px;
-  will-change: opacity;
-}
-
-.icon-modal-disclaimer-desc {
-  font-size: 12px;
-  color: #6B7280;
-  line-height: 1.45;
-  margin: 0;
+.icon-modal-disclaimer .info-tip-btn {
+  margin: 0 !important;
 }
 
 /* Light Theme Overrides */
@@ -527,3 +535,6 @@
 :root[data-ui="light"] .icon-issue-item.ok .icon-issue-icon {
   color: var(--brand-primary, #006636);
 }
+
+.icon-modal-warn-msg.err-mode strong { color: #F87171; }
+.icon-modal-warn-msg.warn-mode strong { color: #FBBF24; }
