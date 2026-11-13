@@ -141,6 +141,18 @@
   #draftBtnTitle, #presetBtnTitle{max-width:200px;min-width:0}
   #btnExport .lbl{display:none}
   #btnExport{width:38px;min-width:38px;height:32px;padding:0;border-radius:10px;justify-content:center;box-sizing:border-box}
+  .menu,
+  #menuExport{
+    max-height:calc(100vh - 190px);
+    max-height:calc(100dvh - 190px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-y;
+  }
+  #menuExport::before{display:none}
+  #menuExport .menu-item{flex-shrink:0;touch-action:pan-y}
   #btnDraft .ms-pill-reset-btn, #btnPresetPill .ms-pill-reset-btn{display:inline-flex;width:auto;height:auto;font-size:15px;margin-left:4px;flex-shrink:0}
   main{flex-direction:column;min-height:0;width:100%}
   .editor-resizer{display:none!important}
@@ -228,6 +240,23 @@
 /* Small Tablet & Intermediate Viewports: <= 680px */
 @media(max-width:680px){
   .workspace-bar{padding:6px 10px;gap:4px}
+  .workspace-nav-main{gap:5px}
+  .workspace-bar .ms-pill,
+  .workspace-bar .ms-pill.custom,
+  .workspace-bar .ms-pill.custom.has-draft,
+  .workspace-bar .ms-pill.custom.on,
+  .workspace-bar .ms-pill.custom.has-draft.on,
+  .workspace-bar .ms-pill.on,
+  :root[data-ui=light] .workspace-bar .ms-pill.custom,
+  :root[data-ui=light] .workspace-bar .ms-pill.custom.has-draft,
+  :root[data-ui=light] .workspace-bar .ms-pill.custom.on,
+  :root[data-ui=light] .workspace-bar .ms-pill.custom.has-draft.on,
+  :root[data-ui=light] .workspace-bar .ms-pill.on{height:32px!important;min-height:32px!important;max-height:32px!important;min-width:0;flex:0 1 auto}
+  .workspace-bar #btnStartTour,
+  .right .ms-pill.tour-btn,
+  .ms-pill.tour-btn.in-header{width:32px!important;min-width:32px!important;max-width:32px!important;height:32px!important;min-height:32px!important;max-height:32px!important;padding:0!important;justify-content:center!important;flex:0 0 32px!important}
+  .workspace-bar #btnStartTour span,
+  .ms-pill.tour-btn.in-header span{display:none!important}
   #draftBtnTitle, #presetBtnTitle{max-width:120px}
   #btnPresets{padding:6px 10px;font-size:12px;gap:4px}
   #btnExport{width:38px;min-width:38px;height:32px;padding:0;border-radius:10px}
@@ -249,8 +278,13 @@
   .right{gap:5px}
   .header-center{margin-top:0}
   .workspace-bar{padding:6px 8px;gap:4px}
+  .workspace-nav-main{gap:4px}
+  .workspace-bar .ms-pill.custom:not(.has-draft){padding:0 9px;gap:5px;font-size:11.5px;flex-shrink:0}
+  .workspace-bar .ms-pill.custom.has-draft{padding:3px 8px 3px 4px;gap:5px;font-size:11.5px}
+  .workspace-bar .ms-pill.custom.has-draft img,
+  .workspace-bar .ms-pill img{width:22px;height:22px;border-radius:6px}
   #draftBtnBadge, #presetBtnBadge{display:none}
-  #draftBtnTitle, #presetBtnTitle{max-width:85px;font-size:12px}
+  #draftBtnTitle, #presetBtnTitle{max-width:85px;font-size:11.5px}
   #btnDraft small{font-size:9.5px;padding:1px 4px}
   #btnDraft .ms-pill-reset-btn, #btnPresetPill .ms-pill-reset-btn{width:auto;height:auto;font-size:14px}
   #btnPresets{padding:5px 8px;font-size:11.5px}
@@ -262,12 +296,17 @@
 /* Compact Mobile: <= 420px */
 @media(max-width:420px){
   .workspace-bar{padding:5px 6px;gap:3px}
+  .workspace-nav-main{gap:3px}
+  .workspace-bar .ms-pill.custom:not(.has-draft){padding:0 7px;gap:4px;font-size:11px}
+  .workspace-bar .ms-pill.custom.has-draft{padding:3px 7px 3px 3px;gap:4px;font-size:11px}
+  .workspace-bar .ms-pill.custom.has-draft img,
+  .workspace-bar .ms-pill img{width:20px;height:20px;border-radius:5px}
   #draftBtnBadge, #presetBtnBadge{display:none}
-  #draftBtnTitle, #presetBtnTitle{max-width:60px}
+  #draftBtnTitle, #presetBtnTitle{max-width:68px;font-size:11px}
   .ms-pill-import .lbl-full, .ms-pill-import .lbl-short{display:none}
   .ms-pill-import{padding:5px 8px}
   #btnExport .lbl{display:none}
-  #btnExport{width:38px;min-width:38px;height:32px;padding:0;border-radius:10px}
+  #btnExport{width:36px;min-width:36px;height:32px;padding:0;border-radius:10px}
 }
 
 @media(max-width:380px){
@@ -275,8 +314,9 @@
   .brand h1{font-size:11.5px}
   .logo{width:26px;height:26px}
   .workspace-bar{padding:5px 4px;gap:3px}
+  .workspace-nav-main{gap:3px}
   #draftBtnBadge, #presetBtnBadge{display:none}
-  #draftBtnTitle, #presetBtnTitle{max-width:45px}
+  #draftBtnTitle, #presetBtnTitle{max-width:52px}
   .seg button{padding:5px 2px;font-size:11px;gap:3px}
   .seg button span:not(.s-ico){font-size:10.5px}
 }
@@ -404,3 +444,15 @@ body[data-store=google] .sw-row:has(.sw-inp:checked){
 span.sv{all:unset!important}
 /* Transparent PNG icons keep a white tile so white glyphs never vanish on the white store page */
 .phone [data-icon]{background:#fff;flex-shrink:0}
+
+@media(max-width:980px){
+  .toast-container{
+    bottom:78px;
+    left:12px;
+    right:12px;
+    align-items:center;
+  }
+  .toast-container .toast{
+    max-width:100%;
+  }
+}

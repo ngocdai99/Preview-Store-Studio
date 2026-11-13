@@ -3,8 +3,6 @@
 let appleDevice = 'dual'; // 'iphone' | 'ipad' | 'dual'
 
 function setAppleDevice(d, animate = true, preserveDual = false){
-  const stageMenu = $('menuAppleDevice');
-  if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   if(d !== 'ipad' && d !== 'dual') d = 'iphone';
   const wasDual = document.body.dataset.dual === 'true';
   const nextDual = preserveDual ? true : (d === 'dual');
@@ -21,13 +19,17 @@ function setAppleDevice(d, animate = true, preserveDual = false){
     document.body.dataset.dual = nextDual ? 'true' : 'false';
     if(nextDual){
       googleDevice = 'dual';
-    } else if(wasDual && googleDevice === 'dual'){
+    } else if(googleDevice === 'dual'){
       googleDevice = 'phone';
       document.body.dataset.googleDevice = 'phone';
     }
-    const selApple = (d === 'dual' || !d) ? 'iphone' : d;
+    const selApple = (d === 'dual' || nextDual) ? 'dual' : ((!d) ? 'iphone' : d);
     const selGoogle = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
-    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+    if (typeof syncAppleTabButtons === 'function') {
+      syncAppleTabButtons(selApple, nextDual);
+    } else {
+      $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+    }
     $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
     $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'apple'));
     const btn = $('btnDualPhone');
@@ -59,15 +61,13 @@ function setAppleDevice(d, animate = true, preserveDual = false){
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);
   };
-  if(nextDual || wasDual){
-    clearDevTransitions();
-    applyState();
-    fit();
-    syncAllVtPills();
-    return;
-  }
   transitionDevice('apple', d, applyState, animate);
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
+  const activeAppleBtn = (d === 'dual' || nextDual) ? 'dual' : d;
+  if (typeof syncAppleTabButtons === 'function') {
+    syncAppleTabButtons(activeAppleBtn, nextDual);
+  } else {
+    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === activeAppleBtn));
+  }
   if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   syncAllVtPills();
 }

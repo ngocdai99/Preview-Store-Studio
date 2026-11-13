@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow">
-<title>Interactive Studio Demo · Store Preview Studio</title>
+<title>Live Demo - Store Preview Studio</title>
 <meta name="description" content="Try Store Preview Studio live in your browser. Dual App Store & Google Play preview, 8-card ASO editor, and instant device mockups.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='fav-sq-bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231F211F'/%3E%3Cstop offset='100%25' stop-color='%23121312'/%3E%3C/linearGradient%3E%3Cfilter id='fav-shadow' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeDropShadow dx='-2' dy='3' stdDeviation='3.5' flood-color='%23000000' flood-opacity='0.8'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23fav-sq-bg)' stroke='rgba(255,255,255,0.12)' stroke-width='1.5'/%3E%3Cg transform='scale(0.72) translate(19, 19)'%3E%3Cpath d='M 18,22 C 18,15 22,11 28,11 C 34,11 38,15 38,22 L 38,34 L 72,63 C 76,67 76,73 72,77 L 61,88 C 57,92 51,92 47,88 L 18,63 Z' fill='%23006636'/%3E%3Cg filter='url(%23fav-shadow)'%3E%3Cpath d='M 18,76 C 18,83 22,86 28,86 C 34,86 38,83 38,76 L 38,56 L 72,26 C 77,22 77,14 72,10 C 67,6 59,6 55,10 L 26,36 C 21,40 18,44 18,50 Z' fill='%2300D085'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
 <!-- Enable SPS Demo Mode Flag -->
@@ -132,43 +132,6 @@ html, body {
   background: rgba(0, 0, 0, 0.05);
 }
 
-.try-topbar-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.try-demo-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 7px;
-  padding: 5.5px 12px;
-  border-radius: 20px;
-  font-size: 11.5px;
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  background: rgba(0, 208, 133, 0.15);
-  color: #ffffff;
-  border: 1px solid rgba(0, 208, 133, 0.3);
-}
-[data-ui="light"] .try-demo-badge {
-  color: #111827;
-  background: rgba(0, 208, 133, 0.12);
-  border: 1px solid rgba(0, 180, 110, 0.35);
-}
-.try-demo-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #00d085;
-  box-shadow: 0 0 6px #00d085;
-  flex-shrink: 0;
-}
-
 .try-topbar-right {
   display: flex;
   align-items: center;
@@ -265,6 +228,14 @@ html, body {
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
+
+@media (max-width: 980px) {
+  .brand-try-mode,
+  .mac-traffic-lights,
+  .try-live-demo-pill {
+    display: none !important;
+  }
+}
 </style>
 
 <!-- Inlined HTML2Canvas -->
@@ -285,12 +256,6 @@ html, body {
       </svg>
       <span>Overview</span>
     </a>
-  </div>
-  <div class="try-topbar-center">
-    <span class="try-demo-badge">
-      <span class="try-demo-dot"></span>
-      Interactive Sandbox Demo
-    </span>
   </div>
   <div class="try-topbar-right"></div>
 </header>

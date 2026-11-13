@@ -275,40 +275,52 @@ function renderTablets(){
       ? valid.map(it => it.src)
       : (otherTabShots.length > 0 ? otherTabShots : phoneShots);
 
+    const uiMode = (typeof document !== 'undefined' && document.documentElement && document.documentElement.dataset && document.documentElement.dataset.ui) ? document.documentElement.dataset.ui : '';
+    const resolveDisplay = src => (typeof getDisplaySrc === 'function' ? getDisplaySrc(src) : src);
+    const tabGalKey = uiMode + '|' + tabOrient[key] + '|' + (hasDedicatedTabShots ? 'd' : hasCrossTabShots ? 'c' : 'p') + '||' + effectiveShots.map(resolveDisplay).join('\n');
+
     const g = $(c.gal);
     if(g){
-      g.innerHTML = '';
-      if(effectiveShots.length){
-        effectiveShots.forEach((src, i) => {
-          const label = hasDedicatedTabShots
-            ? `${c.name} Screenshot ${i + 1}`
-            : hasCrossTabShots
-              ? `${TAB_CFG[otherKey].name} Screenshot ${i + 1}`
-              : `Phone Screenshot ${i + 1}`;
-          const img = mk(src, label);
-          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
-          g.appendChild(img);
-        });
-      } else {
-        for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      const expectedGalLen = effectiveShots.length ? effectiveShots.length : 3;
+      if(!(g.dataset && g.dataset.shotsKey === tabGalKey && g.children && g.children.length === expectedGalLen)){
+        g.innerHTML = '';
+        if(effectiveShots.length){
+          effectiveShots.forEach((src, i) => {
+            const label = hasDedicatedTabShots
+              ? `${c.name} Screenshot ${i + 1}`
+              : hasCrossTabShots
+                ? `${TAB_CFG[otherKey].name} Screenshot ${i + 1}`
+                : `Phone Screenshot ${i + 1}`;
+            const img = mk(src, label);
+            if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+            g.appendChild(img);
+          });
+        } else {
+          for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+        }
+        if(g.dataset) g.dataset.shotsKey = tabGalKey;
       }
     }
     const sg = $('srch' + key.charAt(0).toUpperCase() + key.slice(1));
     if(sg){
-      sg.innerHTML = '';
-      if(effectiveShots.length){
-        effectiveShots.slice(0, 3).forEach((src, i) => {
-          const label = hasDedicatedTabShots
-            ? `${c.name} Result ${i + 1}`
-            : hasCrossTabShots
-              ? `${TAB_CFG[otherKey].name} Result ${i + 1}`
-              : `Phone Result ${i + 1}`;
-          const img = mk(src, label);
-          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
-          sg.appendChild(img);
-        });
-      } else {
-        for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      const expectedSrchLen = effectiveShots.length ? Math.min(3, effectiveShots.length) : 3;
+      if(!(sg.dataset && sg.dataset.shotsKey === tabGalKey && sg.children && sg.children.length === expectedSrchLen)){
+        sg.innerHTML = '';
+        if(effectiveShots.length){
+          effectiveShots.slice(0, 3).forEach((src, i) => {
+            const label = hasDedicatedTabShots
+              ? `${c.name} Result ${i + 1}`
+              : hasCrossTabShots
+                ? `${TAB_CFG[otherKey].name} Result ${i + 1}`
+                : `Phone Result ${i + 1}`;
+            const img = mk(src, label);
+            if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+            sg.appendChild(img);
+          });
+        } else {
+          for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+        }
+        if(sg.dataset) sg.dataset.shotsKey = tabGalKey;
       }
     }
   });
@@ -375,9 +387,18 @@ function applyGoogleDevice(){
   document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
   document.body.dataset.dual = isDual ? 'true' : 'false';
   const selGoogle = (isDual || googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
-  const selApple = (isDual || appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+  const selApple = isDual ? 'dual' : ((appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice);
+  if (typeof syncGoogleTabButtons === 'function') {
+    syncGoogleTabButtons(isDual ? 'dual' : googleDevice, isDual);
+  } else {
+    const selGoogle = (isDual || googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
+  }
+  if (typeof syncAppleTabButtons === 'function') {
+    syncAppleTabButtons(selApple, isDual);
+  } else {
+    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+  }
   if (!isDual && typeof store !== 'undefined' && store) {
     $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === store));
   } else if (!isDual) {
@@ -399,7 +420,7 @@ function setGoogleDevice(d, animate = true){
   }
   const stageMenu = $('menuGoogleDevice');
   if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
-  const nextDev = (d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone';
+  const nextDev = (d === 'tablet') ? (googleDevice === 'tab7' ? 'tab7' : 'tab10') : ((d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone');
   const wasDual = document.body.dataset.dual === 'true';
   const nextDual = nextDev === 'dual';
   if(googleDevice === nextDev && document.body.dataset.googleDevice === (nextDual ? 'phone' : nextDev) && wasDual === nextDual){
@@ -415,14 +436,18 @@ function setGoogleDevice(d, animate = true){
     if(nextDual){
       appleDevice = 'dual';
       document.body.dataset.appleDevice = 'iphone';
-    } else if(wasDual && appleDevice === 'dual'){
+    } else if(appleDevice === 'dual'){
       appleDevice = 'iphone';
       document.body.dataset.appleDevice = 'iphone';
     }
     document.body.dataset.googleDevice = nextDual ? 'phone' : nextDev;
     applyGoogleDevice();
-    const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
-    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+    if (typeof syncGoogleTabButtons === 'function') {
+      syncGoogleTabButtons(nextDev, nextDual);
+    } else {
+      const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
+      $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+    }
     if (typeof renderTablets === 'function') renderTablets();
     if (typeof update === 'function') update();
     if(curCardId){
@@ -442,20 +467,17 @@ function setGoogleDevice(d, animate = true){
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);
   };
-  if(nextDual || wasDual){
-    clearDevTransitions();
-    applyState();
-    fit();
-    syncAllVtPills();
-    return;
-  }
   transitionDevice('google', nextDev, applyState, animate);
-  const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+  if (typeof syncGoogleTabButtons === 'function') {
+    syncGoogleTabButtons(nextDev, nextDual);
+  } else {
+    const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+  }
   if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   syncAllVtPills();
 }
-$$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));
+$$('#gdt [data-gd]:not(#btnGoogleDevice)').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));
 function tabStatus(key){
   const v = TABS[key].filter(i => i.src), bad = v.filter(i => tabIssues(key, i).length).length;
   if(!v.length) return 'None uploaded (optional)';

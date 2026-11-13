@@ -273,7 +273,11 @@ function startServer(port) {
         if (filename && filename.endsWith('app.js')) return; // Ignore generated bundle file
         const fileInfo = filename ? `[${filename}]` : 'files';
         console.log(`\n[i] Change detected in ${fileInfo}, rebuilding core and try...`);
-        const b = build();
+        try {
+          delete require.cache[require.resolve('./build.js')];
+        } catch (_) {}
+        const freshBuild = require('./build.js').build;
+        const b = freshBuild();
         if (typeof buildTry === 'function') {
           try {
             buildTry();

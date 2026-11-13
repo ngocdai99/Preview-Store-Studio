@@ -396,18 +396,62 @@ function showToast(msg, icon='', duration=3200){
 }
 
 // --- Menu Dropdown Helpers ---
+function fitDropdownMenu(menu){
+  if (!menu || !menu.classList || !menu.classList.contains('show')) return;
+  if (typeof menu.getBoundingClientRect !== 'function' || typeof window === 'undefined') return;
+  const vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight || 0;
+  if (!vh) return;
+  const menuRect = menu.getBoundingClientRect();
+  const anchor = menu.parentElement;
+  const anchorRect = anchor && typeof anchor.getBoundingClientRect === 'function'
+    ? anchor.getBoundingClientRect()
+    : null;
+  const startY = Math.max(menuRect.top || 0, anchorRect && anchorRect.bottom ? anchorRect.bottom + 8 : 0);
+  if (startY <= 0 || startY >= vh) return;
+  const mtabs = typeof document !== 'undefined' && document.querySelector ? document.querySelector('.mtabs') : null;
+  const mtabsRect = (mtabs && mtabs.offsetParent !== null && typeof mtabs.getBoundingClientRect === 'function')
+    ? mtabs.getBoundingClientRect()
+    : null;
+  const bottomLimit = (mtabsRect && mtabsRect.top > startY)
+    ? Math.min(vh - 10, mtabsRect.top - 10)
+    : (vh - 14);
+  menu.style.maxHeight = Math.max(180, Math.floor(bottomLimit - startY)) + 'px';
+  menu.style.overflowY = 'auto';
+}
 function setupDropdown(btnId, menuId){
   const btn=$(btnId), menu=$(menuId);
   if (!btn || !menu) return;
+  if (typeof menu.addEventListener === 'function' && (!menu.dataset || !menu.dataset.dropdownBound)) {
+    if (menu.dataset) menu.dataset.dropdownBound = '1';
+    menu.addEventListener('click', (e) => {
+      if (!e.target || !e.target.closest || !e.target.closest('.menu-item, .ms-menu-side-card, .ms-side-link, button, a')) {
+        e.stopPropagation();
+      }
+    });
+  }
   btn.onclick=(e)=>{
     e.stopPropagation();
     $$('.menu').forEach(m=>{if(m!==menu)m.classList.remove('show')});
-    menu.classList.toggle('show');
+    const opening = menu.classList.toggle('show');
+    if (typeof btn.setAttribute === 'function') {
+      btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    }
+    if (opening) {
+      menu.scrollTop = 0;
+      fitDropdownMenu(menu);
+    }
   };
 }
 if ($('btnPresets')) setupDropdown('btnPresets','menuPresets');
 setupDropdown('btnExport','menuExport');
 document.addEventListener('click',()=>$$('.menu').forEach(m=>m.classList.remove('show')));
+const refitOpenMenus = () => $$('.menu.show').forEach(fitDropdownMenu);
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  window.addEventListener('resize', refitOpenMenus);
+  if (window.visualViewport && typeof window.visualViewport.addEventListener === 'function') {
+    window.visualViewport.addEventListener('resize', refitOpenMenus);
+  }
+}
 
 // --- Reusable Info Popover Controller (Fixed positioning, floats over canvas, auto-closes on collapse) ---
 function initInfoPopover(btnId, popId, closeId, allowedStore = null) {

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
-import { siteConfig } from "@/config/site";
+import { createPageMetadata, siteConfig } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: `Privacy Policy — ${siteConfig.name}`,
   description:
     "Learn how Store Preview Studio protects your privacy with browser-based local storage and transparent analytics policies.",
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

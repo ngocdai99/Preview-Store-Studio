@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://store-preview-studio.pages.dev/sitemap.xml
+Sitemap: https://storepreviewstudio.com/sitemap.xml

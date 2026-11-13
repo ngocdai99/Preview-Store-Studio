@@ -81,6 +81,10 @@ export function Navbar() {
     setActiveTab(label);
     setMobileMenuOpen(false);
 
+    if (isTryPage) {
+      return;
+    }
+
     isClickScrollingRef.current = true;
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
@@ -123,7 +127,13 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-6 lg:gap-8 min-w-0">
           <Link
             href="/"
-            onClick={(e) => handleNavClick(e, "", "#hero")}
+            onClick={(e) => {
+              if (isTryPage) {
+                setMobileMenuOpen(false);
+                return;
+              }
+              handleNavClick(e, "", "#hero");
+            }}
             className="flex items-center gap-1.5 sm:gap-2 group shrink-0"
           >
             <BrandIcon className="w-5 h-5 sm:w-6 sm:h-6 rounded-md shrink-0 transition-opacity duration-150 group-hover:opacity-85" />
@@ -151,12 +161,13 @@ export function Navbar() {
               }
 
               const isSelected = activeTab === item.label;
+              const linkHref = isTryPage && item.href.startsWith("#") ? `/${item.href}` : item.href;
 
               return (
                 <Link
                   key={item.label}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.label, item.href)}
+                  href={linkHref}
+                  onClick={(e) => handleNavClick(e, item.label, linkHref)}
                   className={`text-[13.5px] transition-colors duration-150 ${
                     isSelected
                       ? "text-[#006636] dark:text-[#00D085] font-semibold"
@@ -185,8 +196,8 @@ export function Navbar() {
           </Link>
 
           <PrimaryButton
-            href="#pricing"
-            onClick={(e) => handleNavClick(e, "Pricing", "#pricing")}
+            href={isTryPage ? "/#pricing" : "#pricing"}
+            onClick={(e) => handleNavClick(e, "Pricing", isTryPage ? "/#pricing" : "#pricing")}
             fontSize="12.5px"
             fontWeight={500}
             style={{
@@ -237,11 +248,12 @@ export function Navbar() {
             }
 
             const isSelected = activeTab === item.label;
+            const linkHref = isTryPage && item.href.startsWith("#") ? `/${item.href}` : item.href;
             return (
               <Link
                 key={item.label}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.label, item.href)}
+                href={linkHref}
+                onClick={(e) => handleNavClick(e, item.label, linkHref)}
                 className={`block px-3 py-2 rounded-md text-[14px] transition-colors ${
                   isSelected
                     ? "text-[#006636] dark:text-[#00D085] font-semibold bg-[#006636]/10 dark:bg-[#00D085]/10"

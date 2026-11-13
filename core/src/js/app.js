@@ -399,18 +399,62 @@ function showToast(msg, icon='', duration=3200){
 }
 
 // --- Menu Dropdown Helpers ---
+function fitDropdownMenu(menu){
+  if (!menu || !menu.classList || !menu.classList.contains('show')) return;
+  if (typeof menu.getBoundingClientRect !== 'function' || typeof window === 'undefined') return;
+  const vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight || 0;
+  if (!vh) return;
+  const menuRect = menu.getBoundingClientRect();
+  const anchor = menu.parentElement;
+  const anchorRect = anchor && typeof anchor.getBoundingClientRect === 'function'
+    ? anchor.getBoundingClientRect()
+    : null;
+  const startY = Math.max(menuRect.top || 0, anchorRect && anchorRect.bottom ? anchorRect.bottom + 8 : 0);
+  if (startY <= 0 || startY >= vh) return;
+  const mtabs = typeof document !== 'undefined' && document.querySelector ? document.querySelector('.mtabs') : null;
+  const mtabsRect = (mtabs && mtabs.offsetParent !== null && typeof mtabs.getBoundingClientRect === 'function')
+    ? mtabs.getBoundingClientRect()
+    : null;
+  const bottomLimit = (mtabsRect && mtabsRect.top > startY)
+    ? Math.min(vh - 10, mtabsRect.top - 10)
+    : (vh - 14);
+  menu.style.maxHeight = Math.max(180, Math.floor(bottomLimit - startY)) + 'px';
+  menu.style.overflowY = 'auto';
+}
 function setupDropdown(btnId, menuId){
   const btn=$(btnId), menu=$(menuId);
   if (!btn || !menu) return;
+  if (typeof menu.addEventListener === 'function' && (!menu.dataset || !menu.dataset.dropdownBound)) {
+    if (menu.dataset) menu.dataset.dropdownBound = '1';
+    menu.addEventListener('click', (e) => {
+      if (!e.target || !e.target.closest || !e.target.closest('.menu-item, .ms-menu-side-card, .ms-side-link, button, a')) {
+        e.stopPropagation();
+      }
+    });
+  }
   btn.onclick=(e)=>{
     e.stopPropagation();
     $$('.menu').forEach(m=>{if(m!==menu)m.classList.remove('show')});
-    menu.classList.toggle('show');
+    const opening = menu.classList.toggle('show');
+    if (typeof btn.setAttribute === 'function') {
+      btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    }
+    if (opening) {
+      menu.scrollTop = 0;
+      fitDropdownMenu(menu);
+    }
   };
 }
 if ($('btnPresets')) setupDropdown('btnPresets','menuPresets');
 setupDropdown('btnExport','menuExport');
 document.addEventListener('click',()=>$$('.menu').forEach(m=>m.classList.remove('show')));
+const refitOpenMenus = () => $$('.menu.show').forEach(fitDropdownMenu);
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  window.addEventListener('resize', refitOpenMenus);
+  if (window.visualViewport && typeof window.visualViewport.addEventListener === 'function') {
+    window.visualViewport.addEventListener('resize', refitOpenMenus);
+  }
+}
 
 // --- Reusable Info Popover Controller (Fixed positioning, floats over canvas, auto-closes on collapse) ---
 function initInfoPopover(btnId, popId, closeId, allowedStore = null) {
@@ -3905,18 +3949,24 @@ function relocateTourButton() {
   const headerRight = document.querySelector('header .right');
   if (!btn || !headerRight) return;
 
+  if (typeof window !== 'undefined' && !relocateTourButton._resizeBound) {
+    relocateTourButton._resizeBound = true;
+    window.addEventListener('resize', relocateTourButton);
+  }
+
   try {
     const completed = localStorage.getItem('sps_tour_completed') === 'true';
-    if (completed) {
+    let isDemoMobile = false;
+
+    if (completed || isDemoMobile) {
       if (btnUi && btnUi.parentNode === headerRight) {
         if (btn.nextElementSibling !== btnUi || btn.parentNode !== headerRight) {
           headerRight.insertBefore(btn, btnUi);
-          btn.classList.add('in-header');
         }
       } else if (btn.parentNode !== headerRight) {
         headerRight.appendChild(btn);
-        btn.classList.add('in-header');
       }
+      btn.classList.add('in-header');
     } else {
       const navMain = document.querySelector('.workspace-nav-main');
       const presetPill = $('btnPresetPill');
@@ -3929,6 +3979,7 @@ function relocateTourButton() {
         }
       }
     }
+    if (typeof syncAllVtPills === 'function') syncAllVtPills();
   } catch (_) {}
 }
 
@@ -4486,6 +4537,1069 @@ if(icoRemoveBtn){
 
 
 /* =========================================================================
+   Module: src/js/modules/shots/icon-inspector.js
+   ========================================================================= */
+// Store Preview Studio · App Icon Inspector Controller
+// Manages the Inspector Tab view, viewport rendering, and drag-and-drop file ingestion
+(function(global) {
+  'use strict';
+
+  let _inspectorInitialized = false;
+  let _currentTab = 'inspect';
+
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function initIconInspector() {
+    if (_inspectorInitialized) return;
+    _inspectorInitialized = true;
+
+    // Tab buttons
+    const btnInspect = $('iconTabBtnInspect');
+    const btnResize = $('iconTabBtnResize');
+
+    if (btnInspect) {
+      btnInspect.onclick = (e) => {
+        if (e) e.stopPropagation();
+        switchIconModalTab('inspect');
+      };
+    }
+    if (btnResize) {
+      btnResize.onclick = (e) => {
+        if (e) e.stopPropagation();
+        switchIconModalTab('resize');
+      };
+    }
+
+    // Drag and drop onto modal art viewport
+    const artZone = $('msIconModalArt');
+    if (artZone) {
+      artZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        artZone.classList.add('drag-over');
+      });
+
+      artZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        artZone.classList.remove('drag-over');
+      });
+
+      artZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        artZone.classList.remove('drag-over');
+
+        const file = e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files[0] : null;
+        if (file && file.type && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            const dataUrl = evt.target.result;
+            loadInspectorImage(dataUrl, file);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // Modal close button
+    const closeBtn = $('msIconModalClose');
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        if (typeof global.closeIconModal === 'function') {
+          global.closeIconModal();
+        }
+      };
+    }
+
+    // Global document event delegation for failsafe click interception on tab buttons
+    if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+      document.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!target) return;
+        const btn = (typeof target.closest === 'function') ? target.closest('.icon-modal-tab-btn') : null;
+        if (!btn) return;
+        const tab = btn.dataset.tab || (btn.id === 'iconTabBtnResize' ? 'resize' : 'inspect');
+        switchIconModalTab(tab);
+      });
+    }
+  }
+
+  function getCurrentIconModalTab() {
+    return _currentTab;
+  }
+
+  function switchIconModalTab(tabName) {
+    _currentTab = (tabName === 'resize') ? 'resize' : 'inspect';
+
+    const btnInspect = $('iconTabBtnInspect');
+    const btnResize = $('iconTabBtnResize');
+    const paneInspect = $('iconPaneInspect');
+    const paneResize = $('iconPaneResize');
+
+    if (btnInspect) {
+      btnInspect.classList.toggle('active', _currentTab === 'inspect');
+      btnInspect.setAttribute('aria-selected', _currentTab === 'inspect' ? 'true' : 'false');
+    }
+    if (btnResize) {
+      btnResize.classList.toggle('active', _currentTab === 'resize');
+      btnResize.setAttribute('aria-selected', _currentTab === 'resize' ? 'true' : 'false');
+    }
+    if (paneInspect) paneInspect.classList.toggle('active', _currentTab === 'inspect');
+    if (paneResize) paneResize.classList.toggle('active', _currentTab === 'resize');
+
+    // Update Action Button Text
+    const primaryText = $('iconActionPrimaryText');
+    if (primaryText) {
+      if (_currentTab === 'resize') {
+        primaryText.textContent = 'Apply & Validate Icon';
+      } else {
+        // Look at current badge state or default to fix
+        const badge = $('msIconModalBadge');
+        const isOk = badge && badge.classList.contains('ok');
+        primaryText.textContent = isOk ? 'Re-fit / Resize Icon' : 'Fix & Resize to Store Spec';
+      }
+    }
+
+    // If switching to Resizer tab, ensure live preview is loaded
+    if (_currentTab === 'resize') {
+      if (typeof global.onResizerTabActivated === 'function') {
+        global.onResizerTabActivated();
+      }
+    }
+  }
+
+  function loadInspectorImage(dataUrl, file) {
+    const imgEl = $('msIconModalImg');
+    if (imgEl) {
+      imgEl.src = dataUrl;
+    }
+
+    // Update global icon state if user dropped image
+    if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
+    if (typeof CURRENT_PRESET_KEY !== 'undefined') CURRENT_PRESET_KEY = 'draft';
+    if (typeof ICON !== 'undefined') ICON = dataUrl;
+
+    if (typeof userDraft !== 'undefined' && userDraft) {
+      userDraft.icon = dataUrl;
+      userDraft.icon1024 = dataUrl;
+      userDraft.isCustomIcon = true;
+    }
+
+    if (typeof renderIcons === 'function') renderIcons();
+    if (typeof saveState === 'function') saveState();
+    if (typeof updateDraftPill === 'function') updateDraftPill();
+
+    // Re-audit with IconLog
+    if (typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
+      const store = (typeof global.IconLog.getTargetStore === 'function') ? global.IconLog.getTargetStore() : 'apple';
+      global.IconLog.inspectIcon(dataUrl, file, store);
+    }
+
+    // Inform resizer
+    if (typeof global.onResizerSourceChanged === 'function') {
+      global.onResizerSourceChanged(dataUrl);
+    }
+  }
+
+  // Export to global scope
+  global.IconInspector = {
+    init: initIconInspector,
+    getCurrentTab: getCurrentIconModalTab,
+    switchTab: switchIconModalTab,
+    loadImage: loadInspectorImage
+  };
+
+  global.switchIconModalTab = switchIconModalTab;
+  global.getCurrentIconModalTab = getCurrentIconModalTab;
+
+  // Auto-init on load or DOMContentLoaded
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initIconInspector);
+    } else {
+      initIconInspector();
+    }
+  }
+
+})(typeof window !== 'undefined' ? window : this);
+
+
+/* =========================================================================
+   Module: src/js/modules/shots/icon-resizer.js
+   ========================================================================= */
+// Store Preview Studio · App Icon Resizer & Store Optimizer Engine
+// Mathematical aspect-ratio fitting strategies (Center Crop, Pad, Stretch) with guaranteed 100% solid store parity
+(function(global) {
+  'use strict';
+
+  let _resizerInitialized = false;
+  let _sourceDataUrl = '';
+  let _sourceImg = null;
+  let _sourceWidth = 0;
+  let _sourceHeight = 0;
+  let _fitMode = 'center-crop';
+
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function initIconResizer() {
+    if (_resizerInitialized) return;
+    _resizerInitialized = true;
+
+    // Fit Mode Selection Cards
+    const cardCrop = $('appIconFitCardCrop');
+    const cardPad = $('appIconFitCardPad');
+    const cardStretch = $('appIconFitCardStretch');
+
+    if (cardCrop) cardCrop.onclick = () => setFitMode('center-crop');
+    if (cardPad) cardPad.onclick = () => setFitMode('pad');
+    if (cardStretch) cardStretch.onclick = () => setFitMode('stretch');
+
+    const radioInputs = (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function')
+      ? document.querySelectorAll('input[name="appIconFitMode"]')
+      : [];
+    radioInputs.forEach(radio => {
+      radio.onchange = () => setFitMode(radio.value);
+    });
+
+    // Primary Action Button (Unified direct execution)
+    const primaryBtn = $('iconActionPrimaryBtn');
+    if (primaryBtn) {
+      primaryBtn.onclick = () => {
+        applyTransformation();
+      };
+    }
+
+    // Auto-sync sliding pill position
+    setTimeout(updateFitPill, 20);
+    setTimeout(updateFitPill, 100);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', updateFitPill);
+    }
+  }
+
+  function updateFitPill() {
+    const container = $('appIconFitOptions') || (typeof document !== 'undefined' ? document.querySelector('.icon-resizer-fit-options') : null);
+    if (!container) return;
+    let pill = $('appIconFitPill') || container.querySelector('.icon-resizer-fit-pill');
+    if (!pill) {
+      pill = document.createElement('span');
+      pill.id = 'appIconFitPill';
+      pill.className = 'icon-resizer-fit-pill';
+      pill.setAttribute('aria-hidden', 'true');
+      container.prepend(pill);
+    }
+    const activeCard = container.querySelector('.icon-resizer-fit-card.active');
+    if (activeCard && container.offsetParent !== null && activeCard.offsetWidth > 0) {
+      let left = activeCard.offsetLeft;
+      if (activeCard.offsetParent && activeCard.offsetParent !== container) {
+        if (typeof activeCard.getBoundingClientRect === 'function' && typeof container.getBoundingClientRect === 'function') {
+          const btnRect = activeCard.getBoundingClientRect();
+          const contRect = container.getBoundingClientRect();
+          if (contRect.width > 0) {
+            left = btnRect.left - contRect.left;
+          }
+        }
+      }
+      pill.style.width = activeCard.offsetWidth + 'px';
+      pill.style.transform = `translateX(${left}px)`;
+      pill.style.opacity = '1';
+    } else {
+      pill.style.opacity = '0';
+    }
+  }
+
+  function setFitMode(mode) {
+    _fitMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
+
+    const cardCrop = $('appIconFitCardCrop');
+    const cardPad = $('appIconFitCardPad');
+    const cardStretch = $('appIconFitCardStretch');
+
+    if (cardCrop) cardCrop.classList.toggle('active', _fitMode === 'center-crop');
+    if (cardPad) cardPad.classList.toggle('active', _fitMode === 'pad');
+    if (cardStretch) cardStretch.classList.toggle('active', _fitMode === 'stretch');
+
+    const radio = (typeof document !== 'undefined' && typeof document.querySelector === 'function')
+      ? document.querySelector(`input[name="appIconFitMode"][value="${_fitMode}"]`)
+      : null;
+    if (radio) radio.checked = true;
+
+    updateFitPill();
+    updateLivePreview();
+  }
+
+  function getFitMode() {
+    return _fitMode;
+  }
+
+  function setSource(src) {
+    if (!src) return;
+    _sourceDataUrl = src;
+    ensureSourceLoaded(() => {
+      updateLivePreview();
+    });
+  }
+
+  function ensureSourceLoaded(callback) {
+    const rawSrc = _sourceDataUrl || (typeof ICON !== 'undefined' ? ICON : '');
+    if (!rawSrc) return;
+
+    if (_sourceImg && _sourceImg.src === rawSrc && _sourceImg.complete) {
+      if (typeof callback === 'function') callback();
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      _sourceImg = img;
+      _sourceWidth = img.naturalWidth || img.width;
+      _sourceHeight = img.naturalHeight || img.height;
+      if (typeof callback === 'function') callback();
+    };
+    img.onerror = () => {
+      // Fallback without crossOrigin for mzstatic or localized asset protection
+      const fallbackImg = new Image();
+      fallbackImg.onload = () => {
+        _sourceImg = fallbackImg;
+        _sourceWidth = fallbackImg.naturalWidth || fallbackImg.width;
+        _sourceHeight = fallbackImg.naturalHeight || fallbackImg.height;
+        if (typeof callback === 'function') callback();
+      };
+      fallbackImg.src = rawSrc;
+    };
+    img.src = rawSrc;
+  }
+
+  /**
+   * Renders image into target canvas with guaranteed 100% solid white pre-fill
+   * Eliminates all alpha channel risks (Apple rejection ITMS-90717 & Google Play squircle compatibility)
+   */
+  function renderToCanvas(targetCanvas, targetSize) {
+    if (!_sourceImg || !_sourceImg.width) return;
+    targetCanvas.width = targetSize;
+    targetCanvas.height = targetSize;
+
+    const ctx = targetCanvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, targetSize, targetSize);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // GUARANTEED STORE STANDARD: Always pre-fill 100% solid white background (#FFFFFF)
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, targetSize, targetSize);
+
+    const srcW = _sourceWidth;
+    const srcH = _sourceHeight;
+
+    if (_fitMode === 'stretch') {
+      ctx.drawImage(_sourceImg, 0, 0, targetSize, targetSize);
+    } else if (_fitMode === 'pad') {
+      const scale = Math.min(targetSize / srcW, targetSize / srcH);
+      const drawW = srcW * scale;
+      const drawH = srcH * scale;
+      const drawX = (targetSize - drawW) / 2;
+      const drawY = (targetSize - drawH) / 2;
+      ctx.drawImage(_sourceImg, drawX, drawY, drawW, drawH);
+    } else {
+      // center-crop (default recommended)
+      const scale = Math.max(targetSize / srcW, targetSize / srcH);
+      const drawW = srcW * scale;
+      const drawH = srcH * scale;
+      const drawX = (targetSize - drawW) / 2;
+      const drawY = (targetSize - drawH) / 2;
+      ctx.drawImage(_sourceImg, drawX, drawY, drawW, drawH);
+    }
+  }
+
+  function updateLivePreview() {
+    const liveCanvas = $('appIconResizeLiveCanvas');
+    if (!liveCanvas || !_sourceImg) return;
+    renderToCanvas(liveCanvas, 1024);
+  }
+
+  function applyTransformation() {
+    if (!_sourceImg) return;
+
+    const targetStore = (typeof global.IconLog !== 'undefined' && typeof global.IconLog.getTargetStore === 'function')
+      ? global.IconLog.getTargetStore()
+      : 'apple';
+
+    const targetDim = (targetStore === 'google') ? 512 : 1024;
+    const offscreenCv = document.createElement('canvas');
+    renderToCanvas(offscreenCv, targetDim);
+
+    const transformedDataUrl = offscreenCv.toDataURL('image/png');
+
+    // Update global state and draft
+    if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
+    if (typeof CURRENT_PRESET_KEY !== 'undefined') CURRENT_PRESET_KEY = 'draft';
+
+    if (targetStore === 'apple') {
+      if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = transformedDataUrl;
+    } else {
+      if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = transformedDataUrl;
+    }
+
+    if (typeof ICON !== 'undefined') {
+      ICON = transformedDataUrl;
+    }
+
+    if (typeof userDraft !== 'undefined' && userDraft) {
+      userDraft.icon = transformedDataUrl;
+      if (targetStore === 'apple') userDraft.icon1024 = transformedDataUrl;
+      if (targetStore === 'google') userDraft.icon512 = transformedDataUrl;
+      userDraft.isCustomIcon = true;
+    }
+
+    _sourceDataUrl = transformedDataUrl;
+
+    // Re-render editor icons and save state
+    if (typeof renderIcons === 'function') renderIcons();
+    if (typeof validateAppIcon === 'function') validateAppIcon();
+    if (typeof saveState === 'function') saveState();
+    if (typeof updateDraftPill === 'function') updateDraftPill();
+
+    // Update Image in Inspector tab
+    const modalImg = $('msIconModalImg');
+    if (modalImg) modalImg.src = transformedDataUrl;
+
+    // Immediately re-inspect transformed asset -> Diagnostic Log updates to store compliant!
+    if (typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
+      global.IconLog.inspectIcon(transformedDataUrl, null, targetStore);
+    }
+
+    // Update live preview directly in unified view
+    updateLivePreview();
+
+    if (typeof showToast === 'function') {
+      showToast(`App icon resized to ${targetDim}×${targetDim} px and verified compliant!`, 'ok');
+    }
+  }
+
+  // Inter-module hooks
+  global.onResizerTargetStoreChanged = function(store) {
+    updateLivePreview();
+  };
+
+  global.onResizerSourceChanged = function(src) {
+    _sourceDataUrl = src;
+    ensureSourceLoaded(() => {
+      updateLivePreview();
+    });
+  };
+
+  global.onResizerTabActivated = function() {
+    ensureSourceLoaded(() => {
+      updateLivePreview();
+    });
+    setTimeout(updateFitPill, 20);
+    setTimeout(updateFitPill, 60);
+  };
+
+  function switchIconModalTab(tabName) {
+    if (typeof global.IconInspector !== 'undefined' && typeof global.IconInspector.switchTab === 'function') {
+      global.IconInspector.switchTab(tabName);
+    } else {
+      const paneInspect = $('iconPaneInspect');
+      const paneResize = $('iconPaneResize');
+      if (paneInspect) paneInspect.classList.toggle('active', tabName !== 'resize');
+      if (paneResize) paneResize.classList.toggle('active', tabName === 'resize');
+    }
+    if (tabName === 'resize') {
+      setTimeout(updateFitPill, 20);
+      setTimeout(updateFitPill, 60);
+    }
+  }
+
+  function openIconResizerModal(options = {}) {
+    initIconResizer();
+    const rawSrc = options.src || (typeof ICON !== 'undefined' ? ICON : '');
+    _sourceDataUrl = rawSrc;
+    const store = options.store || (typeof store !== 'undefined' ? store : 'apple');
+
+    if (typeof global.openIconModal === 'function') {
+      global.openIconModal({ src: rawSrc, store, type: 'icon' });
+    }
+    switchIconModalTab('resize');
+  }
+
+  function closeIconResizerModal() {
+    if (typeof global.closeIconModal === 'function') {
+      global.closeIconModal();
+    }
+  }
+
+  // Export to global scope
+  global.IconResizer = {
+    init: initIconResizer,
+    setSource,
+    setFitMode,
+    getFitMode,
+    updateLivePreview,
+    applyTransformation,
+    ensureSourceLoaded,
+    syncPill: updateFitPill
+  };
+
+  global.initIconResizer = initIconResizer;
+  global.syncIconFitPill = updateFitPill;
+  global.switchIconModalTab = switchIconModalTab;
+  global.openIconResizerModal = openIconResizerModal;
+  global.closeIconResizerModal = closeIconResizerModal;
+  global.ensureResizerSourceLoaded = ensureSourceLoaded;
+
+  // Auto-init on load or DOMContentLoaded
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initIconResizer);
+    } else {
+      initIconResizer();
+    }
+  }
+
+})(typeof window !== 'undefined' ? window : this);
+
+
+/* =========================================================================
+   Module: src/js/modules/shots/icon-log.js
+   ========================================================================= */
+// Store Preview Studio · App Icon Diagnostic Log & Store Requirements Engine
+// Manages store target specifications, source vs target comparison, and itemized diagnostic checklist
+(function(global) {
+  'use strict';
+
+  let _logInitialized = false;
+  let _targetStore = 'apple';
+  let _lastAuditedSrc = '';
+  let _lastAuditedMeta = null;
+
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function initIconLog() {
+    if (_logInitialized) return;
+    _logInitialized = true;
+
+    // AnimatedSize accordion for store review disclaimer
+    const disclaimer = $('iconModalDisclaimer');
+    const infoPanel = $('msIconModalInfo');
+    if (disclaimer && !disclaimer._animatedSizeSetup) {
+      disclaimer._animatedSizeSetup = true;
+
+      const summary = disclaimer.querySelector('summary');
+      const content = disclaimer.querySelector('.icon-modal-disclaimer-content');
+
+      if (summary && content) {
+        let animation = null;
+        let contentAnimation = null;
+        let isClosing = false;
+        let isExpanding = false;
+
+        const getBorderOffset = () => {
+          return disclaimer.offsetHeight - disclaimer.clientHeight;
+        };
+
+        const scrollInfoToBottom = () => {
+          if (!infoPanel) return;
+          infoPanel.scrollTo({
+            top: infoPanel.scrollHeight,
+            behavior: 'smooth'
+          });
+        };
+
+        const onAnimationFinish = (isOpen) => {
+          disclaimer.open = isOpen;
+          disclaimer.classList.remove('is-closing', 'is-expanding');
+          disclaimer.style.height = '';
+          disclaimer.style.overflow = '';
+          if (animation) {
+            animation.cancel();
+            animation = null;
+          }
+          if (contentAnimation) {
+            contentAnimation.cancel();
+            contentAnimation = null;
+          }
+          isClosing = false;
+          isExpanding = false;
+          if (isOpen) {
+            scrollInfoToBottom();
+          }
+        };
+
+        const shrink = () => {
+          isClosing = true;
+          isExpanding = false;
+          disclaimer.classList.add('is-closing');
+          disclaimer.classList.remove('is-expanding');
+
+          const startHeight = `${disclaimer.getBoundingClientRect().height}px`;
+          const closedHeight = `${summary.offsetHeight + getBorderOffset()}px`;
+
+          if (animation) animation.cancel();
+          if (contentAnimation) contentAnimation.cancel();
+
+          contentAnimation = content.animate(
+            { opacity: [1, 0] },
+            { duration: 150, easing: 'ease-in', fill: 'forwards' }
+          );
+
+          animation = disclaimer.animate(
+            { height: [startHeight, closedHeight] },
+            { duration: 220, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+          );
+
+          animation.onfinish = () => onAnimationFinish(false);
+          animation.oncancel = () => {
+            isClosing = false;
+            disclaimer.classList.remove('is-closing');
+          };
+        };
+
+        const expand = () => {
+          isExpanding = true;
+          isClosing = false;
+          disclaimer.classList.add('is-expanding');
+          disclaimer.classList.remove('is-closing');
+
+          const startHeight = `${disclaimer.getBoundingClientRect().height}px`;
+
+          // Temporarily unconstrain height to measure full natural target height
+          disclaimer.open = true;
+          disclaimer.style.height = 'auto';
+          const fullHeight = `${disclaimer.getBoundingClientRect().height}px`;
+          disclaimer.style.height = startHeight;
+
+          if (animation) animation.cancel();
+          if (contentAnimation) contentAnimation.cancel();
+
+          contentAnimation = content.animate(
+            { opacity: [0, 1] },
+            { duration: 220, easing: 'ease-out', fill: 'forwards' }
+          );
+
+          animation = disclaimer.animate(
+            { height: [startHeight, fullHeight] },
+            { duration: 250, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+          );
+
+          scrollInfoToBottom();
+
+          animation.onfinish = () => onAnimationFinish(true);
+          animation.oncancel = () => {
+            isExpanding = false;
+            disclaimer.classList.remove('is-expanding');
+          };
+        };
+
+        summary.addEventListener('click', (e) => {
+          e.preventDefault();
+          disclaimer.style.overflow = 'hidden';
+
+          if (isClosing || !disclaimer.open) {
+            disclaimer.style.height = `${disclaimer.getBoundingClientRect().height}px`;
+            expand();
+          } else if (isExpanding || disclaimer.open) {
+            shrink();
+          }
+        });
+      }
+    }
+  }
+
+  function getTargetStore() {
+    return _targetStore;
+  }
+
+  function setTargetStore(newStore) {
+    _targetStore = (newStore === 'google') ? 'google' : 'apple';
+
+    // Update Store Tag Badge (Single badge reflecting the active store, no in-modal switcher)
+    const storeBadge = $('msIconModalStoreBadge');
+    if (storeBadge) {
+      storeBadge.textContent = _targetStore === 'apple' ? 'Apple' : 'Google Play';
+      storeBadge.className = 'icon-modal-store-tag ' + (_targetStore === 'apple' ? 'a' : 'g');
+    }
+
+    // Update Target Requirement Card
+    const targetBadge = $('iconTargetSpecBadge') || $('iconTargetSpecVal');
+    const targetDesc = $('iconTargetSpecDesc');
+    const targetCompareVal = $('iconCompareTargetVal');
+
+    const targetDimText = _targetStore === 'apple' ? '1024 × 1024 px' : '512 × 512 px';
+
+    if (targetBadge) {
+      targetBadge.textContent = `${targetDimText} · 100% Opaque Solid`;
+    }
+    if (targetCompareVal) {
+      targetCompareVal.textContent = targetDimText;
+    }
+    if (targetDesc) {
+      targetDesc.textContent = _targetStore === 'apple'
+        ? 'Apple App Store requires a 100% opaque 1:1 square without an alpha transparency channel (rejection error ITMS-90717).'
+        : 'Google Play requires a full-bleed 512×512 px square (max 1024 KB); store system automatically applies squircle mask and drop shadow.';
+    }
+
+    // Inform resizer if loaded
+    if (typeof global.onResizerTargetStoreChanged === 'function') {
+      global.onResizerTargetStoreChanged(_targetStore);
+    }
+
+    // Re-audit currently loaded asset against newly selected store
+    if (_lastAuditedSrc) {
+      inspectIcon(_lastAuditedSrc, _lastAuditedMeta, _targetStore);
+    }
+  }
+
+  function detectImageAlpha(img) {
+    try {
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 64;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, 64, 64);
+      const data = ctx.getImageData(0, 0, 64, 64).data;
+      for (let i = 3; i < data.length; i += 4) {
+        if (data[i] < 250) {
+          return true;
+        }
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  function detectPreRoundedCorners(img) {
+    try {
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 64;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, 64, 64);
+      const data = ctx.getImageData(0, 0, 64, 64).data;
+      const cornerIdx = [
+        (0 * 64 + 0) * 4 + 3,       // Top-left
+        (0 * 64 + 63) * 4 + 3,      // Top-right
+        (63 * 64 + 0) * 4 + 3,      // Bottom-left
+        (63 * 64 + 63) * 4 + 3      // Bottom-right
+      ];
+      return cornerIdx.some(idx => data[idx] < 200);
+    } catch (_) {}
+    return false;
+  }
+
+  function getAssetMeta(src, file) {
+    if (file && typeof file.size === 'number') {
+      return { size: file.size, type: file.type || 'image/png', name: file.name || '' };
+    }
+    let size = 0;
+    let type = 'image/png';
+    if (typeof src === 'string' && src.startsWith('data:')) {
+      const comma = src.indexOf(',');
+      if (comma !== -1) {
+        const semi = src.indexOf(';');
+        if (semi !== -1) type = src.substring(5, semi);
+        const base64 = src.slice(comma + 1);
+        const padding = base64.endsWith('==') ? 2 : (base64.endsWith('=') ? 1 : 0);
+        size = Math.round((base64.length * 3) / 4 - padding);
+      }
+    }
+    return { size, type };
+  }
+
+  /**
+   * Main audit entrypoint: Audits an icon against Apple App Store or Google Play requirements
+   * Updates:
+   *   1. Source vs Target Comparison Capsule (SOURCE ... px -> TARGET ... px)
+   *   2. 2x2 Metrics Grid
+   *   3. Itemized Diagnostic Checklist (clearly explaining all detected issues)
+   *   4. Primary Action Button state & label
+   */
+  function inspectIcon(src, file, storeOverride) {
+    initIconLog();
+
+    if (storeOverride) {
+      _targetStore = (storeOverride === 'google') ? 'google' : 'apple';
+    }
+
+    _lastAuditedSrc = src || '';
+    _lastAuditedMeta = file || null;
+
+    const dimEl = $('msIconModalDim');
+    const ratioEl = $('msIconModalRatio');
+    const sizeEl = $('msIconModalSize');
+    const formatEl = $('msIconModalFormat');
+    const badgeEl = $('msIconModalBadge');
+    const msgEl = $('msIconModalMsg');
+    const compareSourceVal = $('iconCompareSourceVal');
+    const compareTargetVal = $('iconCompareTargetVal');
+    const primaryBtnText = $('iconActionPrimaryText');
+
+    const targetDim = (_targetStore === 'google') ? 512 : 1024;
+    const targetDimText = `${targetDim} × ${targetDim} px`;
+
+    if (compareTargetVal) {
+      compareTargetVal.textContent = targetDimText;
+    }
+
+    const isPlaceholder = !src ||
+      src === (typeof PH !== 'undefined' ? PH : '') ||
+      src === (typeof BLANK_ICON !== 'undefined' ? BLANK_ICON : '');
+
+    if (isPlaceholder) {
+      if (dimEl) { dimEl.textContent = `Empty (${targetDimText} target)`; dimEl.className = 'icon-metric-val'; }
+      if (ratioEl) { ratioEl.textContent = '1:1 Square'; ratioEl.className = 'icon-metric-val'; }
+      if (sizeEl) { sizeEl.textContent = 'None'; sizeEl.className = 'icon-metric-val'; }
+      if (formatEl) { formatEl.textContent = 'PNG'; formatEl.className = 'icon-metric-val'; }
+      if (compareSourceVal) compareSourceVal.textContent = '-- × -- px';
+      if (badgeEl) {
+        badgeEl.className = 'icon-modal-badge';
+        badgeEl.textContent = 'Empty Slot · Ready to Upload';
+      }
+      if (msgEl) {
+        msgEl.innerHTML = '<div class="icon-issue-list"><div class="icon-issue-item ok has-desc"><span class="icon-issue-icon">ℹ</span><div class="icon-issue-body"><div class="icon-issue-title">No Icon Uploaded</div><div class="icon-issue-desc">Drag and drop or upload an image to inspect.</div></div></div></div>';
+      }
+      return;
+    }
+
+    const meta = getAssetMeta(src, file);
+    const mimeType = (meta.type || '').toLowerCase();
+    const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg';
+    const isPng = mimeType === 'image/png';
+    const sizeBytes = meta.size || 0;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const w = img.naturalWidth || img.width || 1024;
+      const h = img.naturalHeight || img.height || 1024;
+      const isSq = (w === h) || ((Math.abs(w - h) / Math.max(w, h)) < 0.05);
+      const hasAlpha = detectImageAlpha(img);
+      const hasPreRoundedCorners = detectPreRoundedCorners(img);
+
+      // 1. Update Comparison Capsule
+      if (compareSourceVal) {
+        compareSourceVal.textContent = `${w} × ${h} px`;
+      }
+
+      // 2. Update 2x2 Metrics Grid
+      if (dimEl) {
+        dimEl.textContent = `${w} × ${h} px`;
+        const dimOk = (w === targetDim && h === targetDim);
+        dimEl.className = 'icon-metric-val ' + (dimOk ? 'ok' : (isSq ? 'warn' : 'err'));
+      }
+
+      if (ratioEl) {
+        if (isSq) {
+          ratioEl.textContent = '1:1 Square';
+          ratioEl.className = 'icon-metric-val ok';
+        } else {
+          const r = (w / (h || 1)).toFixed(2);
+          ratioEl.textContent = `${r}:1 Non-square`;
+          ratioEl.className = 'icon-metric-val err';
+        }
+      }
+
+      if (sizeEl) {
+        if (sizeBytes > 0) {
+          const kb = (sizeBytes / 1024).toFixed(0);
+          sizeEl.textContent = `${kb} KB`;
+          const isOverSize = (_targetStore === 'google' && sizeBytes > 1024 * 1024);
+          sizeEl.className = 'icon-metric-val ' + (isOverSize ? 'err' : 'ok');
+        } else {
+          sizeEl.textContent = 'Optimized';
+          sizeEl.className = 'icon-metric-val ok';
+        }
+      }
+
+      if (formatEl) {
+        const fmt = (mimeType || 'image/png').replace('image/', '').toUpperCase();
+        if (hasAlpha) {
+          formatEl.textContent = `${fmt} · Alpha`;
+          formatEl.className = 'icon-metric-val err';
+        } else if (isJpeg) {
+          formatEl.textContent = 'JPEG';
+          formatEl.className = 'icon-metric-val warn';
+        } else {
+          formatEl.textContent = `${fmt} · Opaque`;
+          formatEl.className = 'icon-metric-val ok';
+        }
+      }
+
+      // 3. Itemized Diagnostic Audit (Detailing all issues)
+      const issues = [];
+
+      // Check 1: 1:1 Square Aspect Ratio
+      if (!isSq) {
+        const r = (w / (h || 1)).toFixed(2);
+        issues.push({
+          severity: 'err',
+          title: `Non-Square Aspect Ratio: ${w} × ${h} px (${r}:1)`,
+          desc: `${_targetStore === 'apple' ? 'Apple App Store' : 'Google Play'} requires an exact 1:1 square icon.`
+        });
+      } else {
+        issues.push({
+          severity: 'ok',
+          title: 'Standard 1:1 Square Ratio',
+          desc: ''
+        });
+      }
+
+      // Check 2: Exact Dimensions
+      if (w !== targetDim || h !== targetDim) {
+        const level = isSq ? 'warn' : 'err';
+        issues.push({
+          severity: level,
+          title: `Non-Target Dimensions: ${w} × ${h} px`,
+          desc: `Target specification is ${targetDimText}.`
+        });
+      } else {
+        issues.push({
+          severity: 'ok',
+          title: `Standard Resolution: ${targetDimText}`,
+          desc: ''
+        });
+      }
+
+      // Check 3: Alpha Transparency
+      if (hasAlpha) {
+        issues.push({
+          severity: 'err',
+          title: 'Alpha Channel Detected (Transparency)',
+          desc: 'Artwork must be 100% opaque solid without transparency (ITMS-90717).'
+        });
+      } else {
+        issues.push({
+          severity: 'ok',
+          title: '100% Opaque Solid (No Alpha Channel)',
+          desc: ''
+        });
+      }
+
+      // Check 4: File Format
+      if (isJpeg) {
+        issues.push({
+          severity: 'warn',
+          title: 'File Format: JPEG',
+          desc: 'PNG format is recommended to prevent compression artifacts.'
+        });
+      } else if (isPng) {
+        issues.push({
+          severity: 'ok',
+          title: 'Standard PNG Format',
+          desc: ''
+        });
+      }
+
+      // Check 5: Google-specific checks
+      if (_targetStore === 'google') {
+        const MAX_GOOGLE_ICON_BYTES = 1024 * 1024;
+        if (sizeBytes > MAX_GOOGLE_ICON_BYTES) {
+          const kb = (sizeBytes / 1024).toFixed(0);
+          issues.push({
+            severity: 'err',
+            title: `File Size Exceeds Limit: ${kb} KB / 1024 KB`,
+            desc: 'Google Play requires icon file size under 1024 KB.'
+          });
+        }
+        if (hasPreRoundedCorners) {
+          issues.push({
+            severity: 'warn',
+            title: 'Pre-Rounded Corners or Shadows Detected',
+            desc: 'Google Play dynamically applies squircle masks; submit full-bleed artwork.'
+          });
+        }
+      }
+
+      // Calculate overall compliance level
+      const errCount = issues.filter(i => i.severity === 'err').length;
+      const warnCount = issues.filter(i => i.severity === 'warn').length;
+
+      let overallLevel = 'ok';
+      if (errCount > 0) overallLevel = 'err';
+      else if (warnCount > 0) overallLevel = 'warn';
+
+      if (badgeEl) {
+        badgeEl.className = 'icon-modal-badge ' + overallLevel;
+        if (overallLevel === 'err') {
+          badgeEl.textContent = `${errCount} issue${errCount > 1 ? 's' : ''} detected · Action needed`;
+        } else if (overallLevel === 'warn') {
+          badgeEl.textContent = `${warnCount} notice${warnCount > 1 ? 's' : ''} · Store guidelines`;
+        } else {
+          badgeEl.textContent = `${targetDimText} · Store Compliant`;
+        }
+      }
+
+      // Render Itemized Diagnostic Checklist
+      if (msgEl) {
+        const listHtml = issues.map(item => {
+          const iconSymbol = item.severity === 'ok' ? '✓' : (item.severity === 'warn' ? '!' : '✕');
+          const hasDescClass = item.desc ? ' has-desc' : '';
+          const descHtml = item.desc ? `<div class="icon-issue-desc">${item.desc}</div>` : '';
+          return `
+            <div class="icon-issue-item ${item.severity}${hasDescClass}">
+              <span class="icon-issue-icon">${iconSymbol}</span>
+              <div class="icon-issue-body">
+                <div class="icon-issue-title">${item.title}</div>
+                ${descHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        msgEl.innerHTML = `<div class="icon-issue-list">${listHtml}</div>`;
+      }
+
+      // Synchronize Primary Action Button Text
+      if (primaryBtnText) {
+        const activeTab = (typeof global.getCurrentIconModalTab === 'function')
+          ? global.getCurrentIconModalTab()
+          : 'inspect';
+
+        if (activeTab === 'inspect') {
+          primaryBtnText.textContent = (overallLevel === 'ok')
+            ? 'Re-fit / Resize Icon'
+            : 'Fix & Resize to Store Spec';
+        }
+      }
+    };
+
+    img.src = src;
+  }
+
+  // Export to global scope
+  global.IconLog = {
+    init: initIconLog,
+    getTargetStore,
+    setTargetStore,
+    inspectIcon
+  };
+
+  // Global helper aliases
+  global.setTargetStore = setTargetStore;
+  global.inspectIconAsset = inspectIcon;
+
+  // Auto-init on load or DOMContentLoaded
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initIconLog);
+    } else {
+      initIconLog();
+    }
+  }
+
+})(typeof window !== 'undefined' ? window : this);
+
+
+/* =========================================================================
    Module: src/js/modules/shots/phone.js
    ========================================================================= */
 // Store Preview Studio - Phone Screenshots Manager & Validator
@@ -4495,14 +5609,25 @@ function renderShots(){
   // Sanitize SHOTS array to ensure strings only
   SHOTS = SHOTS.filter(s => typeof s === 'string');
 
-  // Update Phone Mockup Carousels
+  const valid = SHOTS.filter(s => s && typeof s === 'string' && s.trim());
+  const uiMode = (typeof document !== 'undefined' && document.documentElement && document.documentElement.dataset && document.documentElement.dataset.ui) ? document.documentElement.dataset.ui : '';
+  const resolveDisplay = s => (typeof getDisplaySrc === 'function' ? getDisplaySrc(s) : s);
+  const galUrls = valid.map(resolveDisplay);
+  const galKey = uiMode + '||' + galUrls.join('\n');
+  const top3 = valid.slice(0, 3);
+  const top3Key = uiMode + '||' + (top3.length ? top3.map(resolveDisplay).join('\n') : '__empty__');
+  const expectedTop3Count = top3.length ? top3.length : 3;
+
+  // Update Phone Mockup Carousels only when screenshot contents change (prevent reload/flicker across store switches in Dual mode)
   $$('[data-shots=gal]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === galKey && c.children && c.children.length === valid.length) return;
     c.innerHTML = '';
-    SHOTS.filter(s => s.trim()).forEach((s, i) => c.appendChild(mk(s, 'Screenshot ' + (i + 1))));
+    valid.forEach((s, i) => c.appendChild(mk(s, 'Screenshot ' + (i + 1))));
+    if(c.dataset) c.dataset.shotsKey = galKey;
   });
   $$('[data-shots=shots]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === top3Key && c.children && c.children.length === expectedTop3Count) return;
     c.innerHTML = '';
-    const valid = SHOTS.filter(s => s && typeof s === 'string' && s.trim());
     if(valid.length === 0){
       for(let i = 0; i < 3; i++){
         const sk = document.createElement('div');
@@ -4510,12 +5635,13 @@ function renderShots(){
         c.appendChild(sk);
       }
     } else {
-      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+      top3.forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
     }
+    if(c.dataset) c.dataset.shotsKey = top3Key;
   });
   $$('[data-shots=gp-search]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === top3Key && c.children && c.children.length === expectedTop3Count) return;
     c.innerHTML = '';
-    const valid = SHOTS.filter(s => s && typeof s === 'string' && s.trim());
     if(valid.length === 0){
       for(let i = 0; i < 3; i++){
         const sk = document.createElement('div');
@@ -4523,8 +5649,9 @@ function renderShots(){
         c.appendChild(sk);
       }
     } else {
-      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+      top3.forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
     }
+    if(c.dataset) c.dataset.shotsKey = top3Key;
   });
 
   // Validate screenshots count & aspect ratios
@@ -4535,7 +5662,28 @@ function renderShots(){
   // Update Editor Screenshot List with Drag & Drop Sorting
   const L = $('slist');
   if(!L) return;
+  const listShotsKey = uiMode + '||' + SHOTS.map(s => resolveDisplay(s || '')).join('\n');
+  if(L.dataset && L.dataset.slistShotsKey === listShotsKey && L.children && L.children.length === SHOTS.length && L.querySelectorAll && L.querySelectorAll('.shot-row-head').length === SHOTS.length){
+    SHOTS.forEach((_, i) => {
+      const row = L.children[i];
+      const head = row && row.querySelector ? row.querySelector('.shot-row-head') : null;
+      if(!head) return;
+      const shouldHavePill = store === 'apple' && i < 3;
+      const existingPill = head.querySelector('.shot-preview-pill');
+      if(shouldHavePill && !existingPill){
+        const pill = document.createElement('span');
+        pill.className = 'shot-preview-pill';
+        pill.title = 'Image appears on App Store search/product page';
+        pill.textContent = 'App Preview';
+        head.appendChild(pill);
+      } else if(!shouldHavePill && existingPill){
+        if(existingPill.parentNode) existingPill.parentNode.removeChild(existingPill);
+      }
+    });
+    return;
+  }
   L.innerHTML = '';
+  if(L.dataset) L.dataset.slistShotsKey = listShotsKey;
   SHOTS.forEach((s, i) => {
     const r = document.createElement('div');
     r.className = 'srow';
@@ -5146,18 +6294,25 @@ function renderIpadShots(){
   const hasDedicatedIpadShots = SUPPORTS_IPAD && validIpadShots.length > 0;
   const effectiveShots = hasDedicatedIpadShots ? validIpadShots : validPhoneShots;
 
-  // Update iPad Mockup Carousel
+  const uiMode = (typeof document !== 'undefined' && document.documentElement && document.documentElement.dataset && document.documentElement.dataset.ui) ? document.documentElement.dataset.ui : '';
+  const resolveDisplay = s => (typeof getDisplaySrc === 'function' ? getDisplaySrc(s) : s);
+  const ipadGalKey = uiMode + '|' + (hasDedicatedIpadShots ? '1' : '0') + '||' + effectiveShots.map(resolveDisplay).join('\n');
+
+  // Update iPad Mockup Carousel (skip DOM rebuild if screenshots haven't changed)
   $$('[data-shots=ipad-gal]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === ipadGalKey && c.children && c.children.length === effectiveShots.length) return;
     c.innerHTML = '';
     effectiveShots.forEach((s, i) => {
       const img = mk(s, 'iPad Screenshot ' + (i + 1));
       if(hasDedicatedIpadShots) img.classList.add('ipad-shot');
       c.appendChild(img);
     });
+    if(c.dataset) c.dataset.shotsKey = ipadGalKey;
   });
 
   // Update iPad Search Result 2-Column Grid Card
   $$('[data-shots=ipad-shots]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === ipadGalKey && c.children && c.children.length > 0) return;
     c.innerHTML = '';
     const searchView = c.closest('.ipad-search-view') || $('.ipad-search-view');
     const valid = effectiveShots.filter(s => s && typeof s === 'string' && s.trim());
@@ -5210,6 +6365,7 @@ function renderIpadShots(){
         c.appendChild(sk);
       }
     }
+    if(c.dataset) c.dataset.shotsKey = ipadGalKey;
   });
 
   // Render iPad Editor list and status
@@ -5830,12 +6986,45 @@ if(ipadSlistArea){
       titleEl.textContent = _activeModalTitle;
     }
 
+    const isIconType = (_activeModalType === 'icon');
+    const tabNav = $('iconModalTabNav');
+    const storeSwitch = $('iconModalStoreSwitch');
+
+    if (tabNav) tabNav.style.display = isIconType ? 'inline-flex' : 'none';
+    if (storeSwitch) storeSwitch.style.display = 'none';
+
+    if (isIconType) {
+      if (typeof global.IconInspector !== 'undefined' && typeof global.IconInspector.init === 'function') {
+        global.IconInspector.init();
+      }
+      if (typeof global.IconResizer !== 'undefined') {
+        if (typeof global.IconResizer.init === 'function') global.IconResizer.init();
+        if (typeof global.IconResizer.setSource === 'function') global.IconResizer.setSource(_activeModalAsset || (typeof ICON !== 'undefined' ? ICON : ''));
+      }
+      if (typeof global.IconLog !== 'undefined') {
+        if (typeof global.IconLog.init === 'function') global.IconLog.init();
+        if (typeof global.IconLog.setTargetStore === 'function') global.IconLog.setTargetStore(_activeModalStore);
+      } else if (typeof setTargetStore === 'function') {
+        setTargetStore(_activeModalStore);
+      }
+    } else if (typeof initIconResizer === 'function') {
+      initIconResizer();
+    }
+
+    const primaryActionBtn = $('iconActionPrimaryBtn');
+    if (primaryActionBtn) {
+      primaryActionBtn.style.display = isIconType ? 'inline-flex' : 'none';
+    }
+
     const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
     if (_activeModalType === 'icon' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
       const targetDim = (_activeModalStore === 'google' ? 512 : 1024);
       rasterizeSvgToStorePng(_activeModalAsset, targetDim, pngDataUrl => {
         _activeModalAsset = pngDataUrl;
         if (imgEl) imgEl.src = pngDataUrl;
+        if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.setSource === 'function') {
+          global.IconResizer.setSource(pngDataUrl);
+        }
         inspectModalAsset(pngDataUrl, null);
       });
     } else if (_activeModalType === 'feature' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
@@ -5892,6 +7081,11 @@ if(ipadSlistArea){
   }
 
   function inspectModalAsset(src, file) {
+    if (_activeModalType === 'icon' && typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
+      global.IconLog.inspectIcon(src, file, _activeModalStore);
+      return;
+    }
+
     const dimEl = $('msIconModalDim') || $('imageDetailModalDim');
     const ratioEl = $('msIconModalRatio') || $('imageDetailModalRatio');
     const sizeEl = $('msIconModalSize') || $('imageDetailModalSize');
@@ -6576,6 +7770,17 @@ if(ipadSlistArea){
       });
     }
 
+    // Fix & Resize Icon button
+    const resizeBtn = $('msIconModalResizeBtn');
+    if (resizeBtn) {
+      resizeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (typeof openIconResizerModal === 'function') {
+          openIconResizerModal({ src: _activeModalAsset, store: _activeModalStore });
+        }
+      });
+    }
+
     // Drag and Drop on Modal and Art Container
     const artContainer = $('msIconModalArt') || $('imageDetailModalArt');
     const modalCanvas = $('msIconModalCanvas') || $('imageDetailModalCanvas');
@@ -7175,40 +8380,52 @@ function renderTablets(){
       ? valid.map(it => it.src)
       : (otherTabShots.length > 0 ? otherTabShots : phoneShots);
 
+    const uiMode = (typeof document !== 'undefined' && document.documentElement && document.documentElement.dataset && document.documentElement.dataset.ui) ? document.documentElement.dataset.ui : '';
+    const resolveDisplay = src => (typeof getDisplaySrc === 'function' ? getDisplaySrc(src) : src);
+    const tabGalKey = uiMode + '|' + tabOrient[key] + '|' + (hasDedicatedTabShots ? 'd' : hasCrossTabShots ? 'c' : 'p') + '||' + effectiveShots.map(resolveDisplay).join('\n');
+
     const g = $(c.gal);
     if(g){
-      g.innerHTML = '';
-      if(effectiveShots.length){
-        effectiveShots.forEach((src, i) => {
-          const label = hasDedicatedTabShots
-            ? `${c.name} Screenshot ${i + 1}`
-            : hasCrossTabShots
-              ? `${TAB_CFG[otherKey].name} Screenshot ${i + 1}`
-              : `Phone Screenshot ${i + 1}`;
-          const img = mk(src, label);
-          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
-          g.appendChild(img);
-        });
-      } else {
-        for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      const expectedGalLen = effectiveShots.length ? effectiveShots.length : 3;
+      if(!(g.dataset && g.dataset.shotsKey === tabGalKey && g.children && g.children.length === expectedGalLen)){
+        g.innerHTML = '';
+        if(effectiveShots.length){
+          effectiveShots.forEach((src, i) => {
+            const label = hasDedicatedTabShots
+              ? `${c.name} Screenshot ${i + 1}`
+              : hasCrossTabShots
+                ? `${TAB_CFG[otherKey].name} Screenshot ${i + 1}`
+                : `Phone Screenshot ${i + 1}`;
+            const img = mk(src, label);
+            if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+            g.appendChild(img);
+          });
+        } else {
+          for(let i = 1; i <= 3; i++) g.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+        }
+        if(g.dataset) g.dataset.shotsKey = tabGalKey;
       }
     }
     const sg = $('srch' + key.charAt(0).toUpperCase() + key.slice(1));
     if(sg){
-      sg.innerHTML = '';
-      if(effectiveShots.length){
-        effectiveShots.slice(0, 3).forEach((src, i) => {
-          const label = hasDedicatedTabShots
-            ? `${c.name} Result ${i + 1}`
-            : hasCrossTabShots
-              ? `${TAB_CFG[otherKey].name} Result ${i + 1}`
-              : `Phone Result ${i + 1}`;
-          const img = mk(src, label);
-          if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
-          sg.appendChild(img);
-        });
-      } else {
-        for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+      const expectedSrchLen = effectiveShots.length ? Math.min(3, effectiveShots.length) : 3;
+      if(!(sg.dataset && sg.dataset.shotsKey === tabGalKey && sg.children && sg.children.length === expectedSrchLen)){
+        sg.innerHTML = '';
+        if(effectiveShots.length){
+          effectiveShots.slice(0, 3).forEach((src, i) => {
+            const label = hasDedicatedTabShots
+              ? `${c.name} Result ${i + 1}`
+              : hasCrossTabShots
+                ? `${TAB_CFG[otherKey].name} Result ${i + 1}`
+                : `Phone Result ${i + 1}`;
+            const img = mk(src, label);
+            if(!hasDedicatedTabShots) img.classList.add('tab-fallback-shot');
+            sg.appendChild(img);
+          });
+        } else {
+          for(let i = 1; i <= 3; i++) sg.appendChild(mk(tabPlaceholder(key, tabOrient[key], i), 'Placeholder ' + i));
+        }
+        if(sg.dataset) sg.dataset.shotsKey = tabGalKey;
       }
     }
   });
@@ -7275,9 +8492,18 @@ function applyGoogleDevice(){
   document.body.dataset.googleDevice = isDual ? 'phone' : googleDevice;
   document.body.dataset.dual = isDual ? 'true' : 'false';
   const selGoogle = (isDual || googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
-  const selApple = (isDual || appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+  const selApple = isDual ? 'dual' : ((appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice);
+  if (typeof syncGoogleTabButtons === 'function') {
+    syncGoogleTabButtons(isDual ? 'dual' : googleDevice, isDual);
+  } else {
+    const selGoogle = (isDual || googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
+  }
+  if (typeof syncAppleTabButtons === 'function') {
+    syncAppleTabButtons(selApple, isDual);
+  } else {
+    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+  }
   if (!isDual && typeof store !== 'undefined' && store) {
     $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === store));
   } else if (!isDual) {
@@ -7295,7 +8521,7 @@ function applyGoogleDevice(){
 function setGoogleDevice(d, animate = true){
   const stageMenu = $('menuGoogleDevice');
   if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
-  const nextDev = (d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone';
+  const nextDev = (d === 'tablet') ? (googleDevice === 'tab7' ? 'tab7' : 'tab10') : ((d === 'tab7' || d === 'tab10' || d === 'dual') ? d : 'phone');
   const wasDual = document.body.dataset.dual === 'true';
   const nextDual = nextDev === 'dual';
   if(googleDevice === nextDev && document.body.dataset.googleDevice === (nextDual ? 'phone' : nextDev) && wasDual === nextDual){
@@ -7311,14 +8537,18 @@ function setGoogleDevice(d, animate = true){
     if(nextDual){
       appleDevice = 'dual';
       document.body.dataset.appleDevice = 'iphone';
-    } else if(wasDual && appleDevice === 'dual'){
+    } else if(appleDevice === 'dual'){
       appleDevice = 'iphone';
       document.body.dataset.appleDevice = 'iphone';
     }
     document.body.dataset.googleDevice = nextDual ? 'phone' : nextDev;
     applyGoogleDevice();
-    const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
-    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+    if (typeof syncGoogleTabButtons === 'function') {
+      syncGoogleTabButtons(nextDev, nextDual);
+    } else {
+      const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
+      $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+    }
     if (typeof renderTablets === 'function') renderTablets();
     if (typeof update === 'function') update();
     if(curCardId){
@@ -7338,20 +8568,17 @@ function setGoogleDevice(d, animate = true){
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);
   };
-  if(nextDual || wasDual){
-    clearDevTransitions();
-    applyState();
-    fit();
-    syncAllVtPills();
-    return;
-  }
   transitionDevice('google', nextDev, applyState, animate);
-  const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
-  $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+  if (typeof syncGoogleTabButtons === 'function') {
+    syncGoogleTabButtons(nextDev, nextDual);
+  } else {
+    const selBtn = (nextDev === 'dual' || !nextDev) ? 'phone' : nextDev;
+    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selBtn));
+  }
   if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   syncAllVtPills();
 }
-$$('#gdt [data-gd]').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));
+$$('#gdt [data-gd]:not(#btnGoogleDevice)').forEach(b => b.onclick = () => setGoogleDevice(b.dataset.gd));
 function tabStatus(key){
   const v = TABS[key].filter(i => i.src), bad = v.filter(i => tabIssues(key, i).length).length;
   if(!v.length) return 'None uploaded (optional)';
@@ -9401,7 +10628,7 @@ function computeDeviceZoom(s, d){
   const isBbVis = bb && bb.offsetHeight > 0 && (!bb.style.display || bb.style.display !== 'none');
   const bbH = isBbVis ? bb.offsetHeight + 4 : 0;
   const vt = (tb ? tb.offsetHeight : 38) + bbH + (m ? 12 : 20) + 40;
-  const isDual = d === 'dual' || document.body.dataset.dual === 'true';
+  const isDual = d === 'dual' || (!d && document.body.dataset.dual === 'true');
   let baseW = 416, baseH = 870;
   if(isDual){
     const isLand = !!document.querySelector('.dev.apple.single.landscape');
@@ -9450,9 +10677,23 @@ function syncVtPill(container){
       pill.style.height = activeBtn.offsetHeight + 'px';
       pill.style.transform = 'translateY(' + activeBtn.offsetTop + 'px)';
     } else {
+      let left = activeBtn.offsetLeft;
+      if (activeBtn.offsetParent && activeBtn.offsetParent !== container) {
+        if (typeof activeBtn.getBoundingClientRect === 'function' && typeof container.getBoundingClientRect === 'function') {
+          const btnRect = activeBtn.getBoundingClientRect();
+          const contRect = container.getBoundingClientRect();
+          if (contRect.width > 0) {
+            left = btnRect.left - contRect.left;
+          } else if (activeBtn.parentElement && typeof activeBtn.parentElement.offsetLeft === 'number') {
+            left = activeBtn.offsetLeft + activeBtn.parentElement.offsetLeft;
+          }
+        } else if (activeBtn.parentElement && typeof activeBtn.parentElement.offsetLeft === 'number') {
+          left = activeBtn.offsetLeft + activeBtn.parentElement.offsetLeft;
+        }
+      }
       pill.style.width = activeBtn.offsetWidth + 'px';
       pill.style.height = '';
-      pill.style.transform = 'translateX(' + activeBtn.offsetLeft + 'px)';
+      pill.style.transform = 'translateX(' + left + 'px)';
     }
     pill.style.opacity = '1';
   } else {
@@ -9490,32 +10731,102 @@ function syncAllVtPills(){
   });
 }
 
-function syncDeviceDropdowns() {
-  const curA = (typeof appleDevice !== 'undefined' && appleDevice && appleDevice !== 'dual') ? appleDevice : 'iphone';
-  const curG = (typeof googleDevice !== 'undefined' && googleDevice && googleDevice !== 'dual') ? googleDevice : 'phone';
+function syncAppleTabButtons(activeKey, isDualParam) {
+  const isDual = (typeof isDualParam === 'boolean')
+    ? isDualParam
+    : (activeKey === 'dual' || (activeKey !== 'ipad' && typeof document !== 'undefined' && document.body && (document.body.dataset.dual === 'true' || (typeof appleDevice !== 'undefined' && appleDevice === 'dual'))));
 
-  const lblA = $('appleDeviceLabel');
-  if (lblA) lblA.textContent = curA === 'ipad' ? 'iPad' : 'iPhone';
-  const icoA = $('appleDeviceIco');
-  if (icoA) {
-    if (curA === 'ipad') {
-      icoA.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
-    } else {
-      icoA.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"></rect><line x1="10.5" y1="5" x2="13.5" y2="5"></line><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+  const buttons = typeof $$ === 'function' ? $$('#dt [data-d]') : (typeof document !== 'undefined' ? document.querySelectorAll('#dt [data-d]') : []);
+  const hasDualBtn = buttons.some(b => b.dataset && b.dataset.d === 'dual');
+
+  const phoneBtn = typeof $ === 'function' ? $('optAppleIphone') : (typeof document !== 'undefined' ? document.getElementById('optAppleIphone') : null);
+  if (phoneBtn) {
+    const labelEl = (typeof phoneBtn.querySelector === 'function') ? phoneBtn.querySelector('.s-label') : (phoneBtn.sLabel || null);
+    const targetLabel = labelEl || (phoneBtn.sLabel ? phoneBtn.sLabel : null);
+    const nextText = (!hasDualBtn && isDual) ? 'Phone' : 'iPhone';
+    if (targetLabel && targetLabel.textContent !== nextText) {
+      targetLabel.textContent = nextText;
     }
   }
 
-  const lblG = $('googleDeviceLabel');
-  if (lblG) lblG.textContent = curG === 'tab7' ? '7" Tablet' : (curG === 'tab10' ? '10" Tablet' : 'Phone');
-  const icoG = $('googleDeviceIco');
+  const targetKey = isDual ? (hasDualBtn ? 'dual' : 'iphone') : ((activeKey && activeKey !== 'dual') ? activeKey : ((typeof appleDevice !== 'undefined' && appleDevice && appleDevice !== 'dual') ? appleDevice : 'iphone'));
+
+  buttons.forEach(b => {
+    const isOn = b.dataset && b.dataset.d === targetKey;
+    if (b.classList && typeof b.classList.toggle === 'function') {
+      b.classList.toggle('on', isOn);
+    }
+    if (typeof b.setAttribute === 'function') {
+      b.setAttribute('aria-selected', isOn ? 'true' : 'false');
+    }
+  });
+
+  const dt = typeof $ === 'function' ? $('dt') : (typeof document !== 'undefined' ? document.getElementById('dt') : null);
+  if (dt && typeof syncVtPill === 'function' && typeof document !== 'undefined' && typeof document.createElement === 'function') {
+    syncVtPill(dt);
+  }
+}
+
+function syncDeviceDropdowns() {
+  syncAppleTabButtons();
+  syncGoogleTabButtons();
+}
+
+function syncGoogleTabButtons(activeKey, isDualParam) {
+  const isDual = (typeof isDualParam === 'boolean')
+    ? isDualParam
+    : (activeKey === 'dual' || (typeof document !== 'undefined' && document.body && (document.body.dataset.dual === 'true' || (typeof googleDevice !== 'undefined' && googleDevice === 'dual'))));
+
+  const curG = isDual ? 'dual' : ((activeKey && activeKey !== 'dual') ? activeKey : ((typeof googleDevice !== 'undefined' && googleDevice && googleDevice !== 'dual') ? googleDevice : 'phone'));
+  const isTablet = curG === 'tab7' || curG === 'tab10';
+
+  const buttons = typeof $$ === 'function' ? $$('#gdt [data-gd]') : (typeof document !== 'undefined' ? document.querySelectorAll('#gdt [data-gd]') : []);
+  buttons.forEach(b => {
+    const gd = b.dataset ? b.dataset.gd : '';
+    let isOn = false;
+    if (isDual) {
+      isOn = (gd === 'dual');
+    } else if (isTablet) {
+      isOn = (gd === 'tablet' || gd === curG);
+    } else {
+      isOn = (gd === 'phone');
+    }
+    if (b.classList && typeof b.classList.toggle === 'function') {
+      b.classList.toggle('on', isOn);
+    }
+    if (typeof b.setAttribute === 'function') {
+      b.setAttribute('aria-selected', isOn ? 'true' : 'false');
+    }
+  });
+
+  const lblG = typeof $ === 'function' ? $('googleDeviceLabel') : null;
+  if (lblG) {
+    lblG.textContent = curG === 'tab7' ? '7" Tablet' : (curG === 'tab10' ? '10" Tablet' : 'Tablet');
+  }
+
+  const icoG = typeof $ === 'function' ? $('googleDeviceIco') : null;
   if (icoG) {
     if (curG === 'tab10') {
       icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><line x1="10" y1="17" x2="14" y2="17"></line></svg>';
     } else if (curG === 'tab7') {
       icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
     } else {
-      icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+      icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><line x1="10" y1="17" x2="14" y2="17"></line></svg>';
     }
+  }
+
+  const menuItems = typeof $$ === 'function' ? $$('#menuGoogleDevice [data-gd]') : (typeof document !== 'undefined' ? document.querySelectorAll('#menuGoogleDevice [data-gd]') : []);
+  menuItems.forEach(mi => {
+    const gd = mi.dataset ? mi.dataset.gd : '';
+    const isOn = (gd === curG);
+    if (mi.classList && typeof mi.classList.toggle === 'function') {
+      mi.classList.toggle('on', isOn);
+    }
+  });
+
+  const gdt = typeof $ === 'function' ? $('gdt') : (typeof document !== 'undefined' ? document.getElementById('gdt') : null);
+  if (gdt && typeof syncVtPill === 'function' && typeof document !== 'undefined' && typeof document.createElement === 'function') {
+    syncVtPill(gdt);
   }
 }
 if (typeof window !== 'undefined') {
@@ -9523,10 +10834,31 @@ if (typeof window !== 'undefined') {
 }
 
 function transitionDevice(targetStore, targetDev, onApply, animate = true){
-  const fromEl = getActiveDeviceEl(store, store === 'apple' ? appleDevice : googleDevice);
-  const toEl = getActiveDeviceEl(targetStore, targetDev);
+  const wasDual = typeof document !== 'undefined' && document.body && document.body.dataset.dual === 'true';
+  const nextDual = targetDev === 'dual';
+  const rawCurDev = store === 'apple' ? appleDevice : googleDevice;
+  const phoneDev = targetStore === 'apple' ? 'iphone' : 'phone';
+  const isMobile = typeof isM === 'function' && isM();
 
-  if(!animate || !fromEl || fromEl === toEl || fromEl.offsetParent === null){
+  if (animate && wasDual && !nextDual && targetDev === phoneDev && !isMobile && typeof transitionStoreMode === 'function') {
+    transitionStoreMode('dual', targetStore, onApply, animate);
+    return;
+  }
+  if (animate && nextDual && !wasDual && rawCurDev === phoneDev && !isMobile && typeof transitionStoreMode === 'function') {
+    transitionStoreMode(targetStore, 'dual', onApply, animate);
+    return;
+  }
+
+  const fromEl = getActiveDeviceEl(store, rawCurDev);
+  const toEl = getActiveDeviceEl(targetStore, targetDev);
+  const dualPair = [document.querySelector('.dev.apple.single'), document.querySelector('.dev.google')]
+    .filter((el, idx, arr) => el && arr.indexOf(el) === idx);
+  const fromEls = wasDual
+    ? dualPair.filter(el => el.offsetParent !== null)
+    : (fromEl && fromEl.offsetParent !== null ? [fromEl] : []);
+  const toEls = nextDual ? dualPair : (toEl ? [toEl] : []);
+
+  if(!animate || (wasDual && nextDual) || !fromEls.length || (!wasDual && !nextDual && fromEl === toEl)){
     clearDevTransitions();
     onApply();
     fit();
@@ -9534,8 +10866,9 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
     return;
   }
 
-  const curDev = store === 'apple' ? appleDevice : googleDevice;
-  const dir = getTransitionDirection(store, curDev, targetStore, targetDev);
+  const fromStore = wasDual ? targetStore : store;
+  const curDev = (wasDual || rawCurDev === 'dual') ? phoneDev : rawCurDev;
+  const dir = getTransitionDirection(fromStore, curDev, targetStore, nextDual ? phoneDev : targetDev);
   const exitClass = 'dev-exit-' + dir;
   const enterClass = 'dev-enter-' + dir;
 
@@ -9543,22 +10876,24 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
 
   // Pre-calculate target zoom synchronously so target device NEVER renders unscaled
   const targetZoom = computeDeviceZoom(targetStore, targetDev);
-  if(toEl) {
-    toEl.style.zoom = targetZoom;
-    toEl.style.setProperty('--dev-zoom', targetZoom);
-  }
-  document.documentElement.style.setProperty('--dev-zoom', targetZoom);
+  toEls.forEach(el => {
+    el.style.zoom = targetZoom;
+    el.style.setProperty('--dev-zoom', targetZoom);
+  });
 
-  fromEl.classList.add(exitClass);
+  fromEls.forEach(el => el.classList.add(exitClass));
 
   devExitTimer = setTimeout(() => {
-    fromEl.classList.remove(exitClass);
+    fromEls.forEach(el => el.classList.remove(exitClass));
+    document.documentElement.style.setProperty('--dev-zoom', targetZoom);
     onApply();
-    if(toEl){
-      toEl.classList.add(enterClass);
-      toEl.style.zoom = targetZoom;
+    if(toEls.length){
+      toEls.forEach(el => {
+        el.classList.add(enterClass);
+        el.style.zoom = targetZoom;
+      });
       devEnterTimer = setTimeout(() => {
-        toEl.classList.remove(enterClass);
+        toEls.forEach(el => el.classList.remove(enterClass));
       }, 370);
     }
     requestAnimationFrame(() => {
@@ -9851,8 +11186,15 @@ function setStore(s, animate = true, preserveDual = true){
   const isTablet = (s === 'apple' && appleDevice === 'ipad') || (s === 'google' && (googleDevice === 'tab7' || googleDevice === 'tab10'));
   if (isTablet) preserveDual = false;
   const isDual = !isTablet && document.body.dataset.dual === 'true';
+  const keepDual = isDual && preserveDual && !isTablet;
+  if (setStore._initialized && !(typeof restoring !== 'undefined' && restoring) &&
+      store === s && document.body.dataset.store === s && document.body.dataset.uiStore === s &&
+      document.body.dataset.dual === (keepDual ? 'true' : 'false')) {
+    syncAllVtPills();
+    return;
+  }
   const fromMode = isDual ? 'dual' : store;
-  const toMode = (isDual && preserveDual) ? 'dual' : s;
+  const toMode = keepDual ? 'dual' : s;
 
   if (isDual && !preserveDual) {
     document.body.dataset.dual = 'false';
@@ -9914,8 +11256,8 @@ function setStore(s, animate = true, preserveDual = true){
   let targetAppleDev = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
   let targetGoogleDev = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
 
-  // Immediately toggle active class on device selector buttons
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === targetAppleDev));
+  // Immediately toggle active class on device selector controls
+  syncAppleTabButtons(targetAppleDev, keepDual);
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === targetGoogleDev));
 
   // Show/hide device selector tabview immediately
@@ -9955,7 +11297,7 @@ function setStore(s, animate = true, preserveDual = true){
   });
 
   const applyStoreMode = () => {
-    if (!preserveDual || isTablet) {
+    if (!keepDual) {
       document.body.dataset.dual = 'false';
       if(appleDevice === 'dual') appleDevice = 'iphone';
       if(googleDevice === 'dual') googleDevice = 'phone';
@@ -9965,6 +11307,7 @@ function setStore(s, animate = true, preserveDual = true){
       googleDevice = 'dual';
     }
     store = s;
+    setStore._initialized = true;
     document.body.dataset.store = s;
     document.body.dataset.appleDevice = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
     document.body.dataset.googleDevice = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
@@ -10072,7 +11415,7 @@ function setStore(s, animate = true, preserveDual = true){
     if(typeof saveState === 'function') saveState(false);
   };
 
-  if(fromMode === toMode || (isDual && preserveDual)){
+  if(fromMode === toMode || keepDual){
     applyStoreMode();
     syncAllVtPills();
     return;
@@ -10103,9 +11446,11 @@ function setView(v, force = false){
 
   syncAllVtPills();
 
-  // Sync stage view dropdown label and icon
+  // Sync stage view dropdown label (desktop & compact) and icon
   const lbl = $('stageViewLabel');
   if(lbl) lbl.textContent = v === 'search' ? 'Search Result' : 'Detail View';
+  const lblShort = $('stageViewLabelShort');
+  if(lblShort) lblShort.textContent = v === 'search' ? 'Search' : 'Detail';
   const ico = $('stageViewIco');
   if(ico){
     if(v === 'search'){
@@ -10201,8 +11546,12 @@ function toggleDualPhone(forceState, animate = true) {
     if (badge) badge.style.display = nextDual ? 'inline-flex' : 'none';
 
     // Auto select Phone on device selector
-    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
-    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === 'phone'));
+    syncAppleTabButtons(nextDual ? 'dual' : 'iphone', nextDual);
+    if (typeof syncGoogleTabButtons === 'function') {
+      syncGoogleTabButtons(nextDual ? 'dual' : 'phone', nextDual);
+    } else {
+      $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (nextDual ? 'dual' : 'phone')));
+    }
 
     // Keep the active device selector visible
     if (activeStore === 'apple') {
@@ -10240,6 +11589,10 @@ function toggleDualPhone(forceState, animate = true) {
   // Immediate device selector update (<1ms)
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === 'phone'));
+  syncAppleTabButtons(nextDual ? 'dual' : 'iphone', nextDual);
+  if (typeof syncGoogleTabButtons === 'function') {
+    syncGoogleTabButtons(nextDual ? 'dual' : 'phone', nextDual);
+  }
   if (activeStore === 'apple') {
     if ($('dt')) $('dt').style.display = 'flex';
     if ($('gdt')) $('gdt').style.display = 'none';
@@ -10268,43 +11621,60 @@ function setupHoverDropdown(containerId, btnId, menuId) {
   const menu = $(menuId);
   if (!container || !menu) return;
 
+  const canHoverOpen = () =>
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
   let closeTimer = null;
+  let lastHoverOpenTime = 0;
 
   container.addEventListener('mouseenter', () => {
+    if (!canHoverOpen()) return;
+    lastHoverOpenTime = Date.now();
     clearTimeout(closeTimer);
     $$('.menu').forEach(m => { if (m !== menu) m.classList.remove('show'); });
     menu.classList.add('show');
     if (btn) btn.setAttribute('aria-expanded', 'true');
+    if (typeof fitDropdownMenu === 'function') fitDropdownMenu(menu);
   });
 
   container.addEventListener('mouseleave', () => {
+    if (!canHoverOpen()) return;
     closeTimer = setTimeout(() => {
       menu.classList.remove('show');
       if (btn) btn.setAttribute('aria-expanded', 'false');
     }, 150);
   });
 
-  menu.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      // If user hovers and clicks within 400ms, ensure it stays open rather than toggling off
+      if (canHoverOpen() && Date.now() - lastHoverOpenTime < 400) {
+        e.stopPropagation();
+        menu.classList.add('show');
+        btn.setAttribute('aria-expanded', 'true');
+        if (typeof fitDropdownMenu === 'function') fitDropdownMenu(menu);
+      }
+    });
+  }
+
+  menu.addEventListener('click', (e) => {
+    if (e.target && e.target.closest && e.target.closest('.menu-item')) {
       menu.classList.remove('show');
       if (btn) btn.setAttribute('aria-expanded', 'false');
-    });
+    }
   });
 }
 
 if ($('btnStageView')) {
-  setupDropdown('btnStageView', 'vt');
+  if (typeof setupDropdown === 'function') setupDropdown('btnStageView', 'vt');
   setupHoverDropdown('stageViewDropdown', 'btnStageView', 'vt');
 }
 
-if ($('btnAppleDevice')) {
-  setupDropdown('btnAppleDevice', 'menuAppleDevice');
-  setupHoverDropdown('dt', 'btnAppleDevice', 'menuAppleDevice');
-}
-
 if ($('btnGoogleDevice')) {
-  setupDropdown('btnGoogleDevice', 'menuGoogleDevice');
-  setupHoverDropdown('gdt', 'btnGoogleDevice', 'menuGoogleDevice');
+  if (typeof setupDropdown === 'function') setupDropdown('btnGoogleDevice', 'menuGoogleDevice');
+  setupHoverDropdown('googleTabletDropdown', 'btnGoogleDevice', 'menuGoogleDevice');
 }
 
 if ($('btnExport')) {
@@ -10314,8 +11684,12 @@ if ($('btnExport')) {
 if ($('btnDualPhone')) {
   $('btnDualPhone').onclick = () => {
     toggleDualPhone();
-    const stageMenu = $('vt');
-    if (stageMenu) stageMenu.classList.remove('show');
+  };
+}
+
+if ($('btnGoogleDual')) {
+  $('btnGoogleDual').onclick = () => {
+    toggleDualPhone(true);
   };
 }
 
@@ -10327,14 +11701,7 @@ $$('#vt .menu-item').forEach(item => {
   });
 });
 
-// Auto-close Apple & Google device dropdowns when item is clicked
-$$('#dt .menu-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const stageMenu = $('menuAppleDevice');
-    if (stageMenu) stageMenu.classList.remove('show');
-  });
-});
-
+// Auto-close Google device dropdown when item is clicked
 $$('#gdt .menu-item').forEach(item => {
   item.addEventListener('click', () => {
     const stageMenu = $('menuGoogleDevice');
@@ -10389,8 +11756,6 @@ setTimeout(initDeviceTheme, 0);
 let appleDevice = 'dual'; // 'iphone' | 'ipad' | 'dual'
 
 function setAppleDevice(d, animate = true, preserveDual = false){
-  const stageMenu = $('menuAppleDevice');
-  if(stageMenu && stageMenu.classList.contains('show')) stageMenu.classList.remove('show');
   if(d !== 'ipad' && d !== 'dual') d = 'iphone';
   const wasDual = document.body.dataset.dual === 'true';
   const nextDual = preserveDual ? true : (d === 'dual');
@@ -10407,13 +11772,17 @@ function setAppleDevice(d, animate = true, preserveDual = false){
     document.body.dataset.dual = nextDual ? 'true' : 'false';
     if(nextDual){
       googleDevice = 'dual';
-    } else if(wasDual && googleDevice === 'dual'){
+    } else if(googleDevice === 'dual'){
       googleDevice = 'phone';
       document.body.dataset.googleDevice = 'phone';
     }
-    const selApple = (d === 'dual' || !d) ? 'iphone' : d;
+    const selApple = (d === 'dual' || nextDual) ? 'dual' : ((!d) ? 'iphone' : d);
     const selGoogle = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
-    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+    if (typeof syncAppleTabButtons === 'function') {
+      syncAppleTabButtons(selApple, nextDual);
+    } else {
+      $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === selApple));
+    }
     $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === selGoogle));
     $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.s === 'apple'));
     const btn = $('btnDualPhone');
@@ -10445,15 +11814,13 @@ function setAppleDevice(d, animate = true, preserveDual = false){
     if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
     if(typeof saveState === 'function') saveState(false);
   };
-  if(nextDual || wasDual){
-    clearDevTransitions();
-    applyState();
-    fit();
-    syncAllVtPills();
-    return;
-  }
   transitionDevice('apple', d, applyState, animate);
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === d));
+  const activeAppleBtn = (d === 'dual' || nextDual) ? 'dual' : d;
+  if (typeof syncAppleTabButtons === 'function') {
+    syncAppleTabButtons(activeAppleBtn, nextDual);
+  } else {
+    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === activeAppleBtn));
+  }
   if(typeof syncDeviceDropdowns === 'function') syncDeviceDropdowns();
   syncAllVtPills();
 }
@@ -11565,6 +12932,7 @@ function applyStateObject(s, restoreLayout = false){
   // 2. Set Store and Devices without animation or icon interference
   const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
   if(restoreLayout){
+    if(document.body) document.body.dataset.dual = isSavedDual ? 'true' : 'false';
     if(s.store) setStore(s.store, false, isSavedDual);
     if(s.appleDevice) setAppleDevice(s.appleDevice, false, isSavedDual);
     else if(document.body) document.body.dataset.appleDevice = appleDevice;
@@ -11864,6 +13232,7 @@ function saveDraftToStorage(){
 
 function loadDraftFromStorage(){
   try{
+    let demoSessionDraft = null;
     if(typeof localStorage !== 'undefined'){
       const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
       if(raw){
@@ -11881,11 +13250,25 @@ function loadDraftFromStorage(){
         }
       }
     }
+    if(demoSessionDraft){
+      if(!userDraft || (demoSessionDraft._savedAt || 0) > (userDraft._savedAt || 0)){
+        userDraft = demoSessionDraft;
+      }
+    }
+    if(userDraft && (userDraft.appId || userDraft.appleId)){
+      CURRENT_APP_ID = String(userDraft.appId || userDraft.appleId);
+      if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+    }
   }catch(e){}
 
   if(typeof idbGet === 'function'){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
+        const curActiveId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID) ? String(CURRENT_APP_ID).trim() : '';
+        const idbAppId = String(idbDraft.appId || idbDraft.appleId || '').trim();
+        if(curActiveId && idbAppId && idbAppId !== curActiveId){
+          return;
+        }
         // A complete localStorage copy newer than IndexedDB means the last IDB write failed:
         // keep the newer copy and heal IndexedDB instead of rolling back to stale data.
         const lsFullTs = (userDraft && !userDraft._partial) ? (userDraft._savedAt || 0) : 0;
@@ -11894,6 +13277,10 @@ function loadDraftFromStorage(){
           return;
         }
         userDraft = idbDraft;
+        if(userDraft.appId || userDraft.appleId){
+          CURRENT_APP_ID = String(userDraft.appId || userDraft.appleId);
+          if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+        }
         if(!userDraft.icon || (!userDraft.isCustomIcon && (userDraft.icon.includes('bp-bg') || userDraft.icon.includes('BLUEPRINT GRID') || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || (typeof STUDIO_ICON !== 'undefined' && (userDraft.icon === STUDIO_ICON || userDraft.icon.includes('std-sq-bg'))) || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)))){
           userDraft.icon = BLANK_ICON;
           userDraft.isCustomIcon = false;
@@ -11964,6 +13351,15 @@ function resetDraftWorkspace(){
   try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
+  if(typeof localStorage !== 'undefined'){
+    try{
+      localStorage.removeItem('sps_demo_last_appid');
+      for(let i = localStorage.length - 1; i >= 0; i--){
+        const k = localStorage.key(i);
+        if(k && k.startsWith('sps_store_app_')) localStorage.removeItem(k);
+      }
+    }catch(_){}
+  }
   if(typeof sessionStorage !== 'undefined'){
     try{
       sessionStorage.removeItem(DRAFT_STORAGE_KEY);
@@ -12030,6 +13426,7 @@ function updateDraftPill(){
         presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
           '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
           '<small id="presetBtnBadge">Preset</small>' +
+          '<span class="preset-pill-chev" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>' +
           '<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</span>';
       }
 
@@ -15027,12 +16424,35 @@ async function fetchStoreAppData(target) {
   return await fetchAppleAppData(target.id, target.country);
 }
 
+function setStageImportLoading(visible, text = 'Loading app listing from App Store...') {
+  if (typeof document === 'undefined') return;
+  const stage = document.querySelector('.stage');
+  if (!stage) return;
+  let overlay = $('stageImportLoading');
+  if (!visible) {
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    return;
+  }
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'stageImportLoading';
+    overlay.className = 'stage-loading-overlay';
+    overlay.setAttribute('role', 'status');
+    overlay.setAttribute('aria-live', 'polite');
+    overlay.innerHTML = '<div class="stage-loading-pill"><span class="stage-loading-spinner" aria-hidden="true"></span><span id="stageImportLoadingText"></span></div>';
+    stage.appendChild(overlay);
+  }
+  const textEl = $('stageImportLoadingText') || (overlay.querySelector && overlay.querySelector('#stageImportLoadingText'));
+  if (textEl) textEl.textContent = text;
+}
+
 /**
  * Applies imported store app state to Studio, re-renders, and saves draft
  * @param {object} state 
  * @returns {boolean}
  */
 function applyImportedStoreApp(state) {
+  setStageImportLoading(false);
   if (!state) return false;
 
   if (state.appId || state.appleId) {
@@ -15141,6 +16561,17 @@ function applyImportedStoreApp(state) {
     try {
       sessionStorage.setItem('sps_store_app_' + targetId, JSON.stringify(userDraft || state));
     } catch (_) {}
+  }
+  if (targetId && typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem('sps_store_app_' + targetId, JSON.stringify(userDraft || state));
+    } catch (_) {
+      try {
+        if (typeof sanitizeStateForLocalStorage === 'function') {
+          localStorage.setItem('sps_store_app_' + targetId, JSON.stringify(sanitizeStateForLocalStorage(userDraft || state)));
+        }
+      } catch (__) {}
+    }
   }
 
   const appName = state.form && state.form.name ? state.form.name : 'App';
@@ -15374,9 +16805,13 @@ function setStoreImportStatus(type, message) {
 
 async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false) {
   const input = $('storeImportInput');
-  if (!input) return;
+  if (!input) {
+    setStageImportLoading(false);
+    return;
+  }
   const val = input.value.trim();
   if (!val) {
+    setStageImportLoading(false);
     setStoreImportStatus('error', 'Please enter an App Store link or Apple App ID.');
     input.focus();
     return;
@@ -15384,22 +16819,25 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
 
   const target = parseStoreInput(val);
   if (!target) {
-    if (val.includes('play.google.com') || /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]+)+$/.test(val)) {
-      setStoreImportStatus('error', 'Google Play does not provide a public API. Please enter an Apple App Store link or numeric App ID (e.g. 324684580).');
-    } else {
-      setStoreImportStatus('error', 'Unrecognized App Store link or ID format. Try an Apple App Store URL or numeric App ID (e.g. 324684580).');
-    }
+    setStageImportLoading(false);
+    const badFormatMsg = (val.includes('play.google.com') || /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]+)+$/.test(val))
+      ? 'Google Play does not provide a public API. Please enter an Apple App Store link or numeric App ID (e.g. 324684580).'
+      : 'Unrecognized App Store link or ID format. Try an Apple App Store URL or numeric App ID (e.g. 324684580).';
+    setStoreImportStatus('error', badFormatMsg);
+    if (isAutoFromUrl && typeof showToast === 'function') showToast(badFormatMsg, 'error');
     return;
   }
 
   // 1. Check network connection first
   if (!isNetworkOnline()) {
+    setStageImportLoading(false);
+    const offlineMsg = 'No internet connection detected. Please turn on your Wi-Fi or internet connection to import from Apple App Store.';
     updateStoreImportNetworkStatus();
     showNetworkConfirmModal({
       onConfirm: () => handleStoreImportSubmit(true),
       onCancel: () => setStoreImportStatus('info', 'Kept in 100% offline mode.')
     });
-    setStoreImportStatus('error', 'No internet connection detected. Please turn on your Wi-Fi or internet connection to import from Apple App Store.');
+    setStoreImportStatus('error', offlineMsg);
     return;
   }
 
@@ -15419,6 +16857,10 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
   }
 
   setStoreImportStatus('info', 'Connecting to Apple App Store API...');
+  const _importModalEl = $('storeImportModal');
+  if (isAutoFromUrl && (!_importModalEl || !_importModalEl.classList.contains('open')) && !(typeof hasLiveUserContent === 'function' && hasLiveUserContent())) {
+    setStageImportLoading(true);
+  }
 
   try {
     const importedState = await fetchStoreAppData(target);
@@ -15466,6 +16908,7 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
       showToast(errMsg, 'error');
     }
   } finally {
+    setStageImportLoading(false);
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Clone App';
@@ -15594,13 +17037,24 @@ function initStoreImportEvents() {
 function checkAndLoadStoreParams() {
   if (typeof window === 'undefined') return;
   let searchStr = (window.location && window.location.search) ? window.location.search : '';
-  if (!searchStr || searchStr === '?embed=true' || searchStr === '?embed=1' || searchStr === '?embed=true&') {
-    if (window.parent && window.parent !== window) {
-      try {
-        const parentSearch = window.parent.location.search;
-        if (parentSearch) searchStr = parentSearch;
-      } catch (_) {}
-    }
+  let hasExplicitStoreQuery = false;
+  try {
+    const spInit = new URLSearchParams(searchStr);
+    hasExplicitStoreQuery = !!(spInit.get('appid') || spInit.get('apple') || spInit.get('app_id') || spInit.get('apple_id') || spInit.get('id') || spInit.get('app') || spInit.get('url') || spInit.get('store_url') || spInit.get('link') || spInit.get('itunes'));
+  } catch (_) {}
+  if (!hasExplicitStoreQuery && window.parent && window.parent !== window) {
+    try {
+      const parentSearch = window.parent.location.search;
+      if (parentSearch) {
+        searchStr = parentSearch;
+        const spParent = new URLSearchParams(searchStr);
+        hasExplicitStoreQuery = !!(spParent.get('appid') || spParent.get('apple') || spParent.get('app_id') || spParent.get('apple_id') || spParent.get('id') || spParent.get('app') || spParent.get('url') || spParent.get('store_url') || spParent.get('link') || spParent.get('itunes'));
+      }
+    } catch (_) {}
+  }
+  if (!hasExplicitStoreQuery) {
+    let demoFallbackSearch = '';
+    if (demoFallbackSearch) searchStr = demoFallbackSearch;
   }
   if (!searchStr) return;
   try {
@@ -15663,6 +17117,7 @@ if (typeof window !== 'undefined') {
   window.checkAndLoadStoreParams = checkAndLoadStoreParams;
   window.isNetworkOnline = isNetworkOnline;
   window.showNetworkConfirmModal = showNetworkConfirmModal;
+  window.setStageImportLoading = setStageImportLoading;
 }
 
 // Node.js CommonJS export for testing
@@ -15827,21 +17282,33 @@ try {
 
 if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
 
-// If URL has appid, try restoring from sessionStorage cache for instant reload without network latency
-if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
+// If URL has appid, try restoring from sessionStorage/localStorage cache for instant reload without network latency
+if (initialUrlAppId) {
   try {
-    const cachedRaw = sessionStorage.getItem('sps_store_app_' + initialUrlAppId);
-    if (cachedRaw) {
-      const cachedState = JSON.parse(cachedRaw);
-      if (cachedState && typeof cachedState === 'object') {
-        userDraft = cachedState;
-        CURRENT_APP_ID = initialUrlAppId;
-        if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
-      }
+    const ssRaw = (typeof sessionStorage !== 'undefined') ? sessionStorage.getItem('sps_store_app_' + initialUrlAppId) : null;
+    const lsRaw = (typeof localStorage !== 'undefined') ? localStorage.getItem('sps_store_app_' + initialUrlAppId) : null;
+    const candidates = [ssRaw, lsRaw].map(r => {
+      if (!r) return null;
+      try {
+        const parsed = JSON.parse(r);
+        return (parsed && typeof parsed === 'object') ? parsed : null;
+      } catch (_) { return null; }
+    }).filter(Boolean);
+    if (userDraft && String(userDraft.appId || userDraft.appleId || '').trim() === initialUrlAppId) {
+      candidates.push(userDraft);
+    }
+    if (candidates.length) {
+      candidates.sort((a, b) => (b._savedAt || 0) - (a._savedAt || 0));
+      userDraft = candidates[0];
+      CURRENT_APP_ID = initialUrlAppId;
+      if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
     }
   } catch (_) {}
 }
- else if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
+
+let __bootHandled = false;
+if (__bootHandled) {
+} else if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
   try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
   isPresetModified = false;
   userDraft = null;

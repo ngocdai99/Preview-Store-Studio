@@ -96,7 +96,7 @@ function computeDeviceZoom(s, d){
   const isBbVis = bb && bb.offsetHeight > 0 && (!bb.style.display || bb.style.display !== 'none');
   const bbH = isBbVis ? bb.offsetHeight + 4 : 0;
   const vt = (tb ? tb.offsetHeight : 38) + bbH + (m ? 12 : 20) + 40;
-  const isDual = d === 'dual' || document.body.dataset.dual === 'true';
+  const isDual = d === 'dual' || (!d && document.body.dataset.dual === 'true');
   let baseW = 416, baseH = 870;
   if(isDual){
     const isLand = !!document.querySelector('.dev.apple.single.landscape');
@@ -145,9 +145,23 @@ function syncVtPill(container){
       pill.style.height = activeBtn.offsetHeight + 'px';
       pill.style.transform = 'translateY(' + activeBtn.offsetTop + 'px)';
     } else {
+      let left = activeBtn.offsetLeft;
+      if (activeBtn.offsetParent && activeBtn.offsetParent !== container) {
+        if (typeof activeBtn.getBoundingClientRect === 'function' && typeof container.getBoundingClientRect === 'function') {
+          const btnRect = activeBtn.getBoundingClientRect();
+          const contRect = container.getBoundingClientRect();
+          if (contRect.width > 0) {
+            left = btnRect.left - contRect.left;
+          } else if (activeBtn.parentElement && typeof activeBtn.parentElement.offsetLeft === 'number') {
+            left = activeBtn.offsetLeft + activeBtn.parentElement.offsetLeft;
+          }
+        } else if (activeBtn.parentElement && typeof activeBtn.parentElement.offsetLeft === 'number') {
+          left = activeBtn.offsetLeft + activeBtn.parentElement.offsetLeft;
+        }
+      }
       pill.style.width = activeBtn.offsetWidth + 'px';
       pill.style.height = '';
-      pill.style.transform = 'translateX(' + activeBtn.offsetLeft + 'px)';
+      pill.style.transform = 'translateX(' + left + 'px)';
     }
     pill.style.opacity = '1';
   } else {
@@ -185,32 +199,102 @@ function syncAllVtPills(){
   });
 }
 
-function syncDeviceDropdowns() {
-  const curA = (typeof appleDevice !== 'undefined' && appleDevice && appleDevice !== 'dual') ? appleDevice : 'iphone';
-  const curG = (typeof googleDevice !== 'undefined' && googleDevice && googleDevice !== 'dual') ? googleDevice : 'phone';
+function syncAppleTabButtons(activeKey, isDualParam) {
+  const isDual = (typeof isDualParam === 'boolean')
+    ? isDualParam
+    : (activeKey === 'dual' || (activeKey !== 'ipad' && typeof document !== 'undefined' && document.body && (document.body.dataset.dual === 'true' || (typeof appleDevice !== 'undefined' && appleDevice === 'dual'))));
 
-  const lblA = $('appleDeviceLabel');
-  if (lblA) lblA.textContent = curA === 'ipad' ? 'iPad' : 'iPhone';
-  const icoA = $('appleDeviceIco');
-  if (icoA) {
-    if (curA === 'ipad') {
-      icoA.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
-    } else {
-      icoA.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"></rect><line x1="10.5" y1="5" x2="13.5" y2="5"></line><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+  const buttons = typeof $$ === 'function' ? $$('#dt [data-d]') : (typeof document !== 'undefined' ? document.querySelectorAll('#dt [data-d]') : []);
+  const hasDualBtn = buttons.some(b => b.dataset && b.dataset.d === 'dual');
+
+  const phoneBtn = typeof $ === 'function' ? $('optAppleIphone') : (typeof document !== 'undefined' ? document.getElementById('optAppleIphone') : null);
+  if (phoneBtn) {
+    const labelEl = (typeof phoneBtn.querySelector === 'function') ? phoneBtn.querySelector('.s-label') : (phoneBtn.sLabel || null);
+    const targetLabel = labelEl || (phoneBtn.sLabel ? phoneBtn.sLabel : null);
+    const nextText = (!hasDualBtn && isDual) ? 'Phone' : 'iPhone';
+    if (targetLabel && targetLabel.textContent !== nextText) {
+      targetLabel.textContent = nextText;
     }
   }
 
-  const lblG = $('googleDeviceLabel');
-  if (lblG) lblG.textContent = curG === 'tab7' ? '7" Tablet' : (curG === 'tab10' ? '10" Tablet' : 'Phone');
-  const icoG = $('googleDeviceIco');
+  const targetKey = isDual ? (hasDualBtn ? 'dual' : 'iphone') : ((activeKey && activeKey !== 'dual') ? activeKey : ((typeof appleDevice !== 'undefined' && appleDevice && appleDevice !== 'dual') ? appleDevice : 'iphone'));
+
+  buttons.forEach(b => {
+    const isOn = b.dataset && b.dataset.d === targetKey;
+    if (b.classList && typeof b.classList.toggle === 'function') {
+      b.classList.toggle('on', isOn);
+    }
+    if (typeof b.setAttribute === 'function') {
+      b.setAttribute('aria-selected', isOn ? 'true' : 'false');
+    }
+  });
+
+  const dt = typeof $ === 'function' ? $('dt') : (typeof document !== 'undefined' ? document.getElementById('dt') : null);
+  if (dt && typeof syncVtPill === 'function' && typeof document !== 'undefined' && typeof document.createElement === 'function') {
+    syncVtPill(dt);
+  }
+}
+
+function syncDeviceDropdowns() {
+  syncAppleTabButtons();
+  syncGoogleTabButtons();
+}
+
+function syncGoogleTabButtons(activeKey, isDualParam) {
+  const isDual = (typeof isDualParam === 'boolean')
+    ? isDualParam
+    : (activeKey === 'dual' || (typeof document !== 'undefined' && document.body && (document.body.dataset.dual === 'true' || (typeof googleDevice !== 'undefined' && googleDevice === 'dual'))));
+
+  const curG = isDual ? 'dual' : ((activeKey && activeKey !== 'dual') ? activeKey : ((typeof googleDevice !== 'undefined' && googleDevice && googleDevice !== 'dual') ? googleDevice : 'phone'));
+  const isTablet = curG === 'tab7' || curG === 'tab10';
+
+  const buttons = typeof $$ === 'function' ? $$('#gdt [data-gd]') : (typeof document !== 'undefined' ? document.querySelectorAll('#gdt [data-gd]') : []);
+  buttons.forEach(b => {
+    const gd = b.dataset ? b.dataset.gd : '';
+    let isOn = false;
+    if (isDual) {
+      isOn = (gd === 'dual');
+    } else if (isTablet) {
+      isOn = (gd === 'tablet' || gd === curG);
+    } else {
+      isOn = (gd === 'phone');
+    }
+    if (b.classList && typeof b.classList.toggle === 'function') {
+      b.classList.toggle('on', isOn);
+    }
+    if (typeof b.setAttribute === 'function') {
+      b.setAttribute('aria-selected', isOn ? 'true' : 'false');
+    }
+  });
+
+  const lblG = typeof $ === 'function' ? $('googleDeviceLabel') : null;
+  if (lblG) {
+    lblG.textContent = curG === 'tab7' ? '7" Tablet' : (curG === 'tab10' ? '10" Tablet' : 'Tablet');
+  }
+
+  const icoG = typeof $ === 'function' ? $('googleDeviceIco') : null;
   if (icoG) {
     if (curG === 'tab10') {
       icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><line x1="10" y1="17" x2="14" y2="17"></line></svg>';
     } else if (curG === 'tab7') {
       icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2.5"></rect><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
     } else {
-      icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"></rect><circle cx="12" cy="5" r="0.8" fill="currentColor"></circle><line x1="10" y1="19" x2="14" y2="19"></line></svg>';
+      icoG.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><line x1="10" y1="17" x2="14" y2="17"></line></svg>';
     }
+  }
+
+  const menuItems = typeof $$ === 'function' ? $$('#menuGoogleDevice [data-gd]') : (typeof document !== 'undefined' ? document.querySelectorAll('#menuGoogleDevice [data-gd]') : []);
+  menuItems.forEach(mi => {
+    const gd = mi.dataset ? mi.dataset.gd : '';
+    const isOn = (gd === curG);
+    if (mi.classList && typeof mi.classList.toggle === 'function') {
+      mi.classList.toggle('on', isOn);
+    }
+  });
+
+  const gdt = typeof $ === 'function' ? $('gdt') : (typeof document !== 'undefined' ? document.getElementById('gdt') : null);
+  if (gdt && typeof syncVtPill === 'function' && typeof document !== 'undefined' && typeof document.createElement === 'function') {
+    syncVtPill(gdt);
   }
 }
 if (typeof window !== 'undefined') {
@@ -218,10 +302,31 @@ if (typeof window !== 'undefined') {
 }
 
 function transitionDevice(targetStore, targetDev, onApply, animate = true){
-  const fromEl = getActiveDeviceEl(store, store === 'apple' ? appleDevice : googleDevice);
-  const toEl = getActiveDeviceEl(targetStore, targetDev);
+  const wasDual = typeof document !== 'undefined' && document.body && document.body.dataset.dual === 'true';
+  const nextDual = targetDev === 'dual';
+  const rawCurDev = store === 'apple' ? appleDevice : googleDevice;
+  const phoneDev = targetStore === 'apple' ? 'iphone' : 'phone';
+  const isMobile = typeof isM === 'function' && isM();
 
-  if(!animate || !fromEl || fromEl === toEl || fromEl.offsetParent === null){
+  if (animate && wasDual && !nextDual && targetDev === phoneDev && !isMobile && typeof transitionStoreMode === 'function') {
+    transitionStoreMode('dual', targetStore, onApply, animate);
+    return;
+  }
+  if (animate && nextDual && !wasDual && rawCurDev === phoneDev && !isMobile && typeof transitionStoreMode === 'function') {
+    transitionStoreMode(targetStore, 'dual', onApply, animate);
+    return;
+  }
+
+  const fromEl = getActiveDeviceEl(store, rawCurDev);
+  const toEl = getActiveDeviceEl(targetStore, targetDev);
+  const dualPair = [document.querySelector('.dev.apple.single'), document.querySelector('.dev.google')]
+    .filter((el, idx, arr) => el && arr.indexOf(el) === idx);
+  const fromEls = wasDual
+    ? dualPair.filter(el => el.offsetParent !== null)
+    : (fromEl && fromEl.offsetParent !== null ? [fromEl] : []);
+  const toEls = nextDual ? dualPair : (toEl ? [toEl] : []);
+
+  if(!animate || (wasDual && nextDual) || !fromEls.length || (!wasDual && !nextDual && fromEl === toEl)){
     clearDevTransitions();
     onApply();
     fit();
@@ -229,8 +334,9 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
     return;
   }
 
-  const curDev = store === 'apple' ? appleDevice : googleDevice;
-  const dir = getTransitionDirection(store, curDev, targetStore, targetDev);
+  const fromStore = wasDual ? targetStore : store;
+  const curDev = (wasDual || rawCurDev === 'dual') ? phoneDev : rawCurDev;
+  const dir = getTransitionDirection(fromStore, curDev, targetStore, nextDual ? phoneDev : targetDev);
   const exitClass = 'dev-exit-' + dir;
   const enterClass = 'dev-enter-' + dir;
 
@@ -238,22 +344,24 @@ function transitionDevice(targetStore, targetDev, onApply, animate = true){
 
   // Pre-calculate target zoom synchronously so target device NEVER renders unscaled
   const targetZoom = computeDeviceZoom(targetStore, targetDev);
-  if(toEl) {
-    toEl.style.zoom = targetZoom;
-    toEl.style.setProperty('--dev-zoom', targetZoom);
-  }
-  document.documentElement.style.setProperty('--dev-zoom', targetZoom);
+  toEls.forEach(el => {
+    el.style.zoom = targetZoom;
+    el.style.setProperty('--dev-zoom', targetZoom);
+  });
 
-  fromEl.classList.add(exitClass);
+  fromEls.forEach(el => el.classList.add(exitClass));
 
   devExitTimer = setTimeout(() => {
-    fromEl.classList.remove(exitClass);
+    fromEls.forEach(el => el.classList.remove(exitClass));
+    document.documentElement.style.setProperty('--dev-zoom', targetZoom);
     onApply();
-    if(toEl){
-      toEl.classList.add(enterClass);
-      toEl.style.zoom = targetZoom;
+    if(toEls.length){
+      toEls.forEach(el => {
+        el.classList.add(enterClass);
+        el.style.zoom = targetZoom;
+      });
       devEnterTimer = setTimeout(() => {
-        toEl.classList.remove(enterClass);
+        toEls.forEach(el => el.classList.remove(enterClass));
       }, 370);
     }
     requestAnimationFrame(() => {
@@ -546,8 +654,15 @@ function setStore(s, animate = true, preserveDual = true){
   const isTablet = (s === 'apple' && appleDevice === 'ipad') || (s === 'google' && (googleDevice === 'tab7' || googleDevice === 'tab10'));
   if (isTablet) preserveDual = false;
   const isDual = !isTablet && document.body.dataset.dual === 'true';
+  const keepDual = isDual && preserveDual && !isTablet;
+  if (setStore._initialized && !(typeof restoring !== 'undefined' && restoring) &&
+      store === s && document.body.dataset.store === s && document.body.dataset.uiStore === s &&
+      document.body.dataset.dual === (keepDual ? 'true' : 'false')) {
+    syncAllVtPills();
+    return;
+  }
   const fromMode = isDual ? 'dual' : store;
-  const toMode = (isDual && preserveDual) ? 'dual' : s;
+  const toMode = keepDual ? 'dual' : s;
 
   if (isDual && !preserveDual) {
     document.body.dataset.dual = 'false';
@@ -609,8 +724,8 @@ function setStore(s, animate = true, preserveDual = true){
   let targetAppleDev = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
   let targetGoogleDev = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
 
-  // Immediately toggle active class on device selector buttons
-  $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === targetAppleDev));
+  // Immediately toggle active class on device selector controls
+  syncAppleTabButtons(targetAppleDev, keepDual);
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === targetGoogleDev));
 
   // Show/hide device selector tabview immediately
@@ -650,7 +765,7 @@ function setStore(s, animate = true, preserveDual = true){
   });
 
   const applyStoreMode = () => {
-    if (!preserveDual || isTablet) {
+    if (!keepDual) {
       document.body.dataset.dual = 'false';
       if(appleDevice === 'dual') appleDevice = 'iphone';
       if(googleDevice === 'dual') googleDevice = 'phone';
@@ -660,6 +775,7 @@ function setStore(s, animate = true, preserveDual = true){
       googleDevice = 'dual';
     }
     store = s;
+    setStore._initialized = true;
     document.body.dataset.store = s;
     document.body.dataset.appleDevice = (appleDevice === 'dual' || !appleDevice) ? 'iphone' : appleDevice;
     document.body.dataset.googleDevice = (googleDevice === 'dual' || !googleDevice) ? 'phone' : googleDevice;
@@ -767,7 +883,7 @@ function setStore(s, animate = true, preserveDual = true){
     if(typeof saveState === 'function') saveState(false);
   };
 
-  if(fromMode === toMode || (isDual && preserveDual)){
+  if(fromMode === toMode || keepDual){
     applyStoreMode();
     syncAllVtPills();
     return;
@@ -798,9 +914,11 @@ function setView(v, force = false){
 
   syncAllVtPills();
 
-  // Sync stage view dropdown label and icon
+  // Sync stage view dropdown label (desktop & compact) and icon
   const lbl = $('stageViewLabel');
   if(lbl) lbl.textContent = v === 'search' ? 'Search Result' : 'Detail View';
+  const lblShort = $('stageViewLabelShort');
+  if(lblShort) lblShort.textContent = v === 'search' ? 'Search' : 'Detail';
   const ico = $('stageViewIco');
   if(ico){
     if(v === 'search'){
@@ -896,8 +1014,12 @@ function toggleDualPhone(forceState, animate = true) {
     if (badge) badge.style.display = nextDual ? 'inline-flex' : 'none';
 
     // Auto select Phone on device selector
-    $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
-    $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === 'phone'));
+    syncAppleTabButtons(nextDual ? 'dual' : 'iphone', nextDual);
+    if (typeof syncGoogleTabButtons === 'function') {
+      syncGoogleTabButtons(nextDual ? 'dual' : 'phone', nextDual);
+    } else {
+      $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === (nextDual ? 'dual' : 'phone')));
+    }
 
     // Keep the active device selector visible
     if (activeStore === 'apple') {
@@ -935,6 +1057,10 @@ function toggleDualPhone(forceState, animate = true) {
   // Immediate device selector update (<1ms)
   $$('#dt [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === 'iphone'));
   $$('#gdt [data-gd]').forEach(b => b.classList.toggle('on', b.dataset.gd === 'phone'));
+  syncAppleTabButtons(nextDual ? 'dual' : 'iphone', nextDual);
+  if (typeof syncGoogleTabButtons === 'function') {
+    syncGoogleTabButtons(nextDual ? 'dual' : 'phone', nextDual);
+  }
   if (activeStore === 'apple') {
     if ($('dt')) $('dt').style.display = 'flex';
     if ($('gdt')) $('gdt').style.display = 'none';
@@ -963,43 +1089,60 @@ function setupHoverDropdown(containerId, btnId, menuId) {
   const menu = $(menuId);
   if (!container || !menu) return;
 
+  const canHoverOpen = () =>
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
   let closeTimer = null;
+  let lastHoverOpenTime = 0;
 
   container.addEventListener('mouseenter', () => {
+    if (!canHoverOpen()) return;
+    lastHoverOpenTime = Date.now();
     clearTimeout(closeTimer);
     $$('.menu').forEach(m => { if (m !== menu) m.classList.remove('show'); });
     menu.classList.add('show');
     if (btn) btn.setAttribute('aria-expanded', 'true');
+    if (typeof fitDropdownMenu === 'function') fitDropdownMenu(menu);
   });
 
   container.addEventListener('mouseleave', () => {
+    if (!canHoverOpen()) return;
     closeTimer = setTimeout(() => {
       menu.classList.remove('show');
       if (btn) btn.setAttribute('aria-expanded', 'false');
     }, 150);
   });
 
-  menu.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      // If user hovers and clicks within 400ms, ensure it stays open rather than toggling off
+      if (canHoverOpen() && Date.now() - lastHoverOpenTime < 400) {
+        e.stopPropagation();
+        menu.classList.add('show');
+        btn.setAttribute('aria-expanded', 'true');
+        if (typeof fitDropdownMenu === 'function') fitDropdownMenu(menu);
+      }
+    });
+  }
+
+  menu.addEventListener('click', (e) => {
+    if (e.target && e.target.closest && e.target.closest('.menu-item')) {
       menu.classList.remove('show');
       if (btn) btn.setAttribute('aria-expanded', 'false');
-    });
+    }
   });
 }
 
 if ($('btnStageView')) {
-  setupDropdown('btnStageView', 'vt');
+  if (typeof setupDropdown === 'function') setupDropdown('btnStageView', 'vt');
   setupHoverDropdown('stageViewDropdown', 'btnStageView', 'vt');
 }
 
-if ($('btnAppleDevice')) {
-  setupDropdown('btnAppleDevice', 'menuAppleDevice');
-  setupHoverDropdown('dt', 'btnAppleDevice', 'menuAppleDevice');
-}
-
 if ($('btnGoogleDevice')) {
-  setupDropdown('btnGoogleDevice', 'menuGoogleDevice');
-  setupHoverDropdown('gdt', 'btnGoogleDevice', 'menuGoogleDevice');
+  if (typeof setupDropdown === 'function') setupDropdown('btnGoogleDevice', 'menuGoogleDevice');
+  setupHoverDropdown('googleTabletDropdown', 'btnGoogleDevice', 'menuGoogleDevice');
 }
 
 if ($('btnExport')) {
@@ -1009,8 +1152,12 @@ if ($('btnExport')) {
 if ($('btnDualPhone')) {
   $('btnDualPhone').onclick = () => {
     toggleDualPhone();
-    const stageMenu = $('vt');
-    if (stageMenu) stageMenu.classList.remove('show');
+  };
+}
+
+if ($('btnGoogleDual')) {
+  $('btnGoogleDual').onclick = () => {
+    toggleDualPhone(true);
   };
 }
 
@@ -1022,14 +1169,7 @@ $$('#vt .menu-item').forEach(item => {
   });
 });
 
-// Auto-close Apple & Google device dropdowns when item is clicked
-$$('#dt .menu-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const stageMenu = $('menuAppleDevice');
-    if (stageMenu) stageMenu.classList.remove('show');
-  });
-});
-
+// Auto-close Google device dropdown when item is clicked
 $$('#gdt .menu-item').forEach(item => {
   item.addEventListener('click', () => {
     const stageMenu = $('menuGoogleDevice');

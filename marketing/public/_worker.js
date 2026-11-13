@@ -87,6 +87,17 @@ export default {
       });
     }
 
+    // Canonical 301 Redirect: store-preview-studio.pages.dev & www.storepreviewstudio.com -> storepreviewstudio.com
+    // Preserves path + query params (e.g. ?appid=...) for existing outreach links and transfers SEO signals.
+    // Preview deployments (*.store-preview-studio.pages.dev) are excluded so deploy previews remain directly accessible.
+    if (
+      url.hostname === 'store-preview-studio.pages.dev' ||
+      url.hostname === 'www.storepreviewstudio.com'
+    ) {
+      const target = new URL(url.pathname + url.search, 'https://storepreviewstudio.com');
+      return Response.redirect(target.toString(), 301);
+    }
+
     // Redirect direct top-level browser visits to /try-studio(.html) back to /try
     if (
       (url.pathname === '/try-studio' || url.pathname === '/try-studio.html') &&

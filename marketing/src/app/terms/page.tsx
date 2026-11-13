@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
-import { siteConfig } from "@/config/site";
+import { createPageMetadata, siteConfig } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: `Terms of Service & Refund Policy — ${siteConfig.name}`,
   description:
     "Review the terms of service, software licensing terms, and 14-day refund policy for Store Preview Studio.",
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

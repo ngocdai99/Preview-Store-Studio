@@ -88,11 +88,13 @@ Nghiêm cấm tự tiện tạo các badge/pill dạng viền màu + nền màu 
 
 ---
 
-## 6. Quy tắc giới hạn thời gian gỡ lỗi & Chống lặp vô nghĩa (10-Minute Debug Cap & Solution Re-evaluation)
+## 6. Quy tắc giới hạn thời gian gỡ lỗi & Chống lặp vô nghĩa (Time & Step Cap)
 
 Để tránh lãng phí thời gian, sa đà vào các vòng lặp đo đạc/debug ngầm hoặc xử lý triệu chứng ở ngọn thay vì gốc rễ:
 
-* **Ngưỡng kích hoạt:** Khi một vấn đề kỹ thuật/bug được phân tích, điều tra hoặc thử nghiệm quá **10 phút** (hoặc sau tối đa 2-3 lần thử mà không ra kết quả thực tế):
+* **Ưu tiên tuyệt đối (Highest Priority):** Quy tắc này có hiệu lực tối cao, đè bẹp (override) mọi cơ chế tự trị/tự động retry khác. Tuyệt đối không để một lượt phản hồi chạy kéo dài quá 3-5 phút.
+* **Giới hạn số bước (Hard Step Cap):** Tối đa **2 lần thử (retries)** đối với một lỗi kỹ thuật trực tiếp. Sau 2 lần không khắc phục được, **bắt buộc phải dừng ngay lập tức** và xuất text báo cáo người dùng.
+* **Ngưỡng kích hoạt:** Khi phát hiện một lỗi/bug kéo dài quá **5-10 phút** hoặc đã qua 2 lần retry:
 * **Hành động bắt buộc:**
   1. **Dừng ngay lập tức (Immediate Stop):** Lập tức dừng toàn bộ các tiến trình command chạy nền, script thử nghiệm, và các chuỗi giả định phức tạp.
   2. **Nhìn lại giải pháp (Step Back & Re-evaluate):** Đặt lại câu hỏi về giả định gốc rễ: *Có đang chữa triệu chứng thay vì căn nguyên không? Vấn đề này có thể giải quyết dứt điểm bằng cách đơn giản, trực diện hơn ở tầng nào?*
@@ -100,7 +102,21 @@ Nghiêm cấm tự tiện tạo các badge/pill dạng viền màu + nền màu 
 
 ---
 
-## 7. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
+## 7. Quy tắc kiểm thử đúng phạm vi (Scoped Verification & Anti-Overkill)
+
+Nghiêm cấm việc "dùng búa tạ đập hạt dẻ" gây lãng phí thời gian và context window:
+
+1. **Phân loại tác vụ (Task Scoping):**
+   - **Tác vụ CSS, UI hiển thị, Copy, Typography, Color:** CHỈ cập nhật đúng file, chạy lệnh build nhanh tương ứng (`node build.js` ~30ms), kiểm tra trực tiếp target cần sửa và trả kết quả ngay trong vài chục giây.
+   - **CẤM:** Tuyệt đối không tự ý chạy full test suite (1,749 test cases) hay build Next.js marketing production (`next build`) cho các thay đổi thuần CSS/UI nhỏ.
+2. **Khi nào mới chạy Full Test Suite?**
+   - Chỉ chạy full test runner khi: thay đổi cấu trúc state management cốt lõi (`app.js`, `storage.js`), sửa export engine (`png.js`), import/export JSON, refactor lớn, hoặc khi người dùng yêu cầu rõ ràng.
+3. **Cô lập lỗi ngoài phạm vi (Isolate Out-of-Scope Failures):**
+   - Nếu trong quá trình chạy test phát hiện một lỗi ở tính năng khác (không liên quan đến file/yêu cầu hiện tại của người dùng): **KHÔNG ĐƯỢC tự ý nhảy vào debug ngầm lỗi đó**. Phải báo cáo rõ: *"Yêu cầu của bạn đã hoàn tất, nhưng phát hiện lỗi tồn dư ở module X (Suite Y). Cần xử lý riêng module đó không?"*
+
+---
+
+## 8. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
 
 Mỗi khi agent cập nhật copy, metadata, tour steps, hoặc landing page:
 1. [ ] Đã quét và loại bỏ toàn bộ `pixel-perfect`, `production-ready`, `zero server lock-in`, `with confidence` chưa?
@@ -108,4 +124,5 @@ Mỗi khi agent cập nhật copy, metadata, tour steps, hoặc landing page:
 3. [ ] Các icon/hình ảnh đại diện store có phải là custom/neutral không vi phạm bản quyền logo chính thức của Apple/Google không?
 4. [ ] Tuyệt đối không vẽ badge/pill màu mè kiểu AI-slop (viền xanh + nền mờ xanh + chữ xanh)? Dùng plain text hoặc neutral pill chưa?
 5. [ ] Quota hệ thống còn trên mức an toàn (> 2%), nếu chạm ngưỡng ≤ 2% đã thực hiện quy trình dừng an toàn và chuyển trạng thái `HOLD` chưa?
-6. [ ] Nếu điều tra lỗi kỹ thuật: đã tuân thủ ngưỡng tối đa 10 phút, dừng lại nhìn lại giải pháp nếu không có kết quả chưa?
+6. [ ] Kiểm thử có đúng phạm vi không (không chạy full test / Next.js build cho task CSS nhỏ)?
+7. [ ] Tuân thủ giới hạn tối đa 2 lần retry và không chạy ngầm quá thời gian quy định?

@@ -11,6 +11,7 @@
   padding:4px 16px;
   box-sizing:border-box;
   gap:12px;
+  container-type:inline-size;
 }
 .stage-toolbar-left{
   display:flex;
@@ -76,8 +77,13 @@
   transition: all .2s ease;
 }
 
-.stage-view-label {
+.stage-view-label,
+.stage-view-label-short {
   font-weight: 500;
+}
+
+.stage-view-label-short {
+  display: none;
 }
 
 .stage-view-btn:hover {
@@ -378,6 +384,10 @@
   color: #C4C5C4 !important;
 }
 
+#vt .mi-name-short {
+  display: none;
+}
+
 /* Standalone Bare Icon (No container box) */
 #vt .mi-ico,
 :root[data-ui=light] #vt .mi-ico {
@@ -553,7 +563,8 @@
   box-shadow: none !important;
 }
 
-:root[data-ui=light] .stage-view-label {
+:root[data-ui=light] .stage-view-label,
+:root[data-ui=light] .stage-view-label-short {
   color: #1F2937 !important;
   font-weight: 500 !important;
 }
@@ -737,10 +748,12 @@
 
 /* Button & Dropdown Synchronization */
 #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #C4C5C4; }
-#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-label { color: #C4C5C4; }
+#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-label,
+#stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-label-short { color: #C4C5C4; }
 #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-arr { color: #C4C5C4; }
 :root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-ico { color: #1F2937 !important; }
-:root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-label { color: #1F2937 !important; }
+:root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-label,
+:root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-label-short { color: #1F2937 !important; }
 :root[data-ui=light] #stageViewDropdown:has(#vt .menu-item.on) #btnStageView .stage-view-arr { color: #6B7280 !important; }
 
 #stageViewDropdown:has(.menu.show) .stage-view-btn {
@@ -752,19 +765,15 @@
   box-shadow: none !important;
 }
 
-/* Tablet hiding for comparison section in stage view menu */
 body[data-store="apple"][data-apple-device="ipad"] #dualPhoneWrap,
 body[data-store="apple"][data-apple-device="ipad"] #dualPhoneDiv,
 body[data-store="apple"][data-apple-device="ipad"] #dualPhoneLabel,
-body[data-store="apple"][data-apple-device="ipad"] #btnDualPhone,
 body[data-store="google"][data-google-device="tab7"] #dualPhoneWrap,
 body[data-store="google"][data-google-device="tab7"] #dualPhoneDiv,
 body[data-store="google"][data-google-device="tab7"] #dualPhoneLabel,
-body[data-store="google"][data-google-device="tab7"] #btnDualPhone,
 body[data-store="google"][data-google-device="tab10"] #dualPhoneWrap,
 body[data-store="google"][data-google-device="tab10"] #dualPhoneDiv,
-body[data-store="google"][data-google-device="tab10"] #dualPhoneLabel,
-body[data-store="google"][data-google-device="tab10"] #btnDualPhone {
+body[data-store="google"][data-google-device="tab10"] #dualPhoneLabel {
   display: none !important;
 }
 #dt, #gdt { display: none !important; }
@@ -772,6 +781,151 @@ body[data-ui-store="apple"] #dt,
 body[data-store="apple"]:not([data-ui-store="google"]) #dt { display: inline-flex !important; }
 body[data-ui-store="google"] #gdt,
 body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-flex !important; }
+
+/* Apple & Google Device 3-Button Capsule Tabview (#dt & #gdt) */
+#stageToolbarCenter #dt.apple-device-tabview,
+#stageToolbarCenter #gdt.google-device-tabview {
+  display: none !important;
+  position: relative;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+}
+
+#stageToolbarCenter #gdt.google-device-tabview {
+  overflow: visible !important;
+}
+
+body[data-ui-store="apple"] #stageToolbarCenter #dt.apple-device-tabview,
+body[data-store="apple"]:not([data-ui-store="google"]) #stageToolbarCenter #dt.apple-device-tabview {
+  display: inline-flex !important;
+}
+
+body[data-ui-store="google"] #stageToolbarCenter #gdt.google-device-tabview,
+body[data-store="google"]:not([data-ui-store="apple"]) #stageToolbarCenter #gdt.google-device-tabview {
+  display: inline-flex !important;
+}
+
+#stageToolbarCenter #dt.apple-device-tabview .vt-pill,
+#stageToolbarCenter #gdt.google-device-tabview .vt-pill {
+  background: #1D1E1D !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+:root[data-ui=light] #stageToolbarCenter #dt.apple-device-tabview .vt-pill,
+:root[data-ui=light] #stageToolbarCenter #gdt.google-device-tabview .vt-pill {
+  background: #ECEDF0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+#stageToolbarCenter #dt.apple-device-tabview .stage-device-tab,
+#stageToolbarCenter #gdt.google-device-tabview .stage-device-tab {
+  padding: 0 12px 0 10px !important;
+  gap: 6px;
+}
+
+#googleTabletDropdown {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+#googleTabletDropdown #menuGoogleDevice,
+#gdt.google-device-tabview #menuGoogleDevice {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  right: 0 !important;
+  left: auto !important;
+  transform: none !important;
+  transform-origin: top right !important;
+  width: 176px !important;
+  background: #141514;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid #282928;
+  border-radius: 12px;
+  padding: 4px 0;
+  gap: 0;
+  overflow: hidden;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  z-index: 250 !important;
+  display: none !important;
+}
+
+#googleTabletDropdown #menuGoogleDevice::before,
+#gdt.google-device-tabview #menuGoogleDevice::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -12px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 14px !important;
+  pointer-events: auto !important;
+}
+
+#googleTabletDropdown #menuGoogleDevice.show,
+#gdt.google-device-tabview #menuGoogleDevice.show {
+  display: flex !important;
+  animation: stage-menu-right-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes stage-menu-right-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Compact Stage View Dropdown Trigger & Menu Items ("Detail / Search / Dual") on Narrow Stage / Mobile */
+@container (max-width: 720px) {
+  #btnStageView {
+    padding: 0 10px;
+    gap: 6px;
+  }
+  #btnStageView .stage-view-label {
+    display: none;
+  }
+  #btnStageView .stage-view-label-short {
+    display: inline;
+  }
+  #vt.stage-view-menu {
+    width: 152px !important;
+  }
+  #vt .mi-name-full {
+    display: none;
+  }
+  #vt .mi-name-short {
+    display: inline;
+  }
+}
+
+@media (max-width: 980px) {
+  #btnStageView {
+    padding: 0 10px;
+    gap: 6px;
+  }
+  #btnStageView .stage-view-label {
+    display: none;
+  }
+  #btnStageView .stage-view-label-short {
+    display: inline;
+  }
+  #vt.stage-view-menu {
+    width: 152px !important;
+  }
+  #vt .mi-name-full {
+    display: none;
+  }
+  #vt .mi-name-short {
+    display: inline;
+  }
+}
 
 /* Stage Device Dropdown Menus */
 .stage-device-dropdown {
@@ -790,8 +944,7 @@ body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-fl
   }
 }
 
-#menuAppleDevice,
-#menuGoogleDevice {
+#menuAppleDevice {
   position: absolute;
   top: calc(100% + 6px);
   left: 50%;
@@ -813,8 +966,7 @@ body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-fl
 }
 
 /* Invisible hover bridge */
-#menuAppleDevice::before,
-#menuGoogleDevice::before {
+#menuAppleDevice::before {
   content: "" !important;
   position: absolute !important;
   top: -12px !important;
@@ -824,8 +976,7 @@ body[data-store="google"]:not([data-ui-store="apple"]) #gdt { display: inline-fl
   pointer-events: auto !important;
 }
 
-#menuAppleDevice.show,
-#menuGoogleDevice.show {
+#menuAppleDevice.show {
   display: flex !important;
   animation: stage-menu-center-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }

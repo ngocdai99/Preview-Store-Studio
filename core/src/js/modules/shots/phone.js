@@ -5,14 +5,25 @@ function renderShots(){
   // Sanitize SHOTS array to ensure strings only
   SHOTS = SHOTS.filter(s => typeof s === 'string');
 
-  // Update Phone Mockup Carousels
+  const valid = SHOTS.filter(s => s && typeof s === 'string' && s.trim());
+  const uiMode = (typeof document !== 'undefined' && document.documentElement && document.documentElement.dataset && document.documentElement.dataset.ui) ? document.documentElement.dataset.ui : '';
+  const resolveDisplay = s => (typeof getDisplaySrc === 'function' ? getDisplaySrc(s) : s);
+  const galUrls = valid.map(resolveDisplay);
+  const galKey = uiMode + '||' + galUrls.join('\n');
+  const top3 = valid.slice(0, 3);
+  const top3Key = uiMode + '||' + (top3.length ? top3.map(resolveDisplay).join('\n') : '__empty__');
+  const expectedTop3Count = top3.length ? top3.length : 3;
+
+  // Update Phone Mockup Carousels only when screenshot contents change (prevent reload/flicker across store switches in Dual mode)
   $$('[data-shots=gal]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === galKey && c.children && c.children.length === valid.length) return;
     c.innerHTML = '';
-    SHOTS.filter(s => s.trim()).forEach((s, i) => c.appendChild(mk(s, 'Screenshot ' + (i + 1))));
+    valid.forEach((s, i) => c.appendChild(mk(s, 'Screenshot ' + (i + 1))));
+    if(c.dataset) c.dataset.shotsKey = galKey;
   });
   $$('[data-shots=shots]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === top3Key && c.children && c.children.length === expectedTop3Count) return;
     c.innerHTML = '';
-    const valid = SHOTS.filter(s => s && typeof s === 'string' && s.trim());
     if(valid.length === 0){
       for(let i = 0; i < 3; i++){
         const sk = document.createElement('div');
@@ -20,12 +31,13 @@ function renderShots(){
         c.appendChild(sk);
       }
     } else {
-      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+      top3.forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
     }
+    if(c.dataset) c.dataset.shotsKey = top3Key;
   });
   $$('[data-shots=gp-search]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === top3Key && c.children && c.children.length === expectedTop3Count) return;
     c.innerHTML = '';
-    const valid = SHOTS.filter(s => s && typeof s === 'string' && s.trim());
     if(valid.length === 0){
       for(let i = 0; i < 3; i++){
         const sk = document.createElement('div');
@@ -33,8 +45,9 @@ function renderShots(){
         c.appendChild(sk);
       }
     } else {
-      valid.slice(0, 3).forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
+      top3.forEach((s, i) => c.appendChild(mk(s || PH, 'Result ' + (i + 1))));
     }
+    if(c.dataset) c.dataset.shotsKey = top3Key;
   });
 
   // Validate screenshots count & aspect ratios
@@ -45,7 +58,28 @@ function renderShots(){
   // Update Editor Screenshot List with Drag & Drop Sorting
   const L = $('slist');
   if(!L) return;
+  const listShotsKey = uiMode + '||' + SHOTS.map(s => resolveDisplay(s || '')).join('\n');
+  if(L.dataset && L.dataset.slistShotsKey === listShotsKey && L.children && L.children.length === SHOTS.length && L.querySelectorAll && L.querySelectorAll('.shot-row-head').length === SHOTS.length){
+    SHOTS.forEach((_, i) => {
+      const row = L.children[i];
+      const head = row && row.querySelector ? row.querySelector('.shot-row-head') : null;
+      if(!head) return;
+      const shouldHavePill = store === 'apple' && i < 3;
+      const existingPill = head.querySelector('.shot-preview-pill');
+      if(shouldHavePill && !existingPill){
+        const pill = document.createElement('span');
+        pill.className = 'shot-preview-pill';
+        pill.title = 'Image appears on App Store search/product page';
+        pill.textContent = 'App Preview';
+        head.appendChild(pill);
+      } else if(!shouldHavePill && existingPill){
+        if(existingPill.parentNode) existingPill.parentNode.removeChild(existingPill);
+      }
+    });
+    return;
+  }
   L.innerHTML = '';
+  if(L.dataset) L.dataset.slistShotsKey = listShotsKey;
   SHOTS.forEach((s, i) => {
     const r = document.createElement('div');
     r.className = 'srow';

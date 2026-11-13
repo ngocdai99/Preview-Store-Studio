@@ -212,6 +212,29 @@ export const en = {
     ],
   },
 
+  testimonials: {
+    title: "What developers are saying",
+    items: [
+      {
+        id: "t1",
+        quote:
+          "Great tool! Easy to use, clean interface, and excellent features. It saves me a lot of time creating professional app store screenshots. Definitely worth the purchase. Highly recommended!",
+        rating: 5,
+      },
+      {
+        id: "t2",
+        quote:
+          "Saved me hours of design work. Fast, lightweight. Highly recommend.",
+        rating: 5,
+      },
+      {
+        id: "t3",
+        quote: "Nice tool, keep it up",
+        rating: 5,
+      },
+    ],
+  },
+
   pricing: {
     title: "One-time purchase. No subscription.",
     description:
@@ -351,6 +374,7 @@ export const en = {
         links: [
           { label: "Free ASO Cheatsheet", href: "https://kaidevlabs.gumroad.com/l/aso-cheatsheet" },
           { label: "Gumroad Store", href: "https://kaidevlabs.gumroad.com/" },
+          { label: "Kai DevLabs", href: "https://kaidevlabs.pages.dev/" },
           { label: "Privacy Policy", href: "/privacy" },
           { label: "Terms & Refunds", href: "/terms" },
         ],

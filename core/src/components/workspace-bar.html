@@ -17,7 +17,11 @@
     </button>
     <script>
       try {
-        if (localStorage.getItem('sps_tour_completed') === 'true') {
+        var _isDemoMobile = (
+          document.body.classList.contains('sps-demo-mode') ||
+          Boolean(document.querySelector('.brand-try-mode'))
+        ) && window.innerWidth <= 980;
+        if (localStorage.getItem('sps_tour_completed') === 'true' || _isDemoMobile) {
           var _b = document.getElementById('btnStartTour');
           var _hr = document.querySelector('header .right');
           var _ui = document.getElementById('btnUi');
@@ -38,6 +42,9 @@
       <img alt="" id="presetBtnThumb" src="">
       <span id="presetBtnTitle">Store Preview Studio</span>
       <small id="presetBtnBadge">Preset</small>
+      <span class="preset-pill-chev" aria-hidden="true">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </span>
       <span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" aria-label="Close preset">&times;</span>
     </button>
 

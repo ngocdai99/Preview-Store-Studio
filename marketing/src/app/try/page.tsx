@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/config/site";
 import { Navbar } from "@/components/sections/Navbar";
 import { MiniStudioToast } from "@/components/MiniStudioToast";
 import { TryStudioIframe } from "@/components/TryStudioIframe";
 import { AgencySandboxBanner } from "@/components/AgencySandboxBanner";
 
-export const metadata: Metadata = {
-  title: "Live Interactive Demo · Store Preview Studio",
+export const metadata: Metadata = createPageMetadata({
+  title: "Live Demo - Store Preview Studio",
   description:
     "App Store & Google Play mockup studio for agencies. Preview and verify your listings on realistic device frames.",
-};
+  path: "/try",
+});
 
 export default function TryPage() {
   return (

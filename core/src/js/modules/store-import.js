@@ -305,12 +305,35 @@ async function fetchStoreAppData(target) {
   return await fetchAppleAppData(target.id, target.country);
 }
 
+function setStageImportLoading(visible, text = 'Loading app listing from App Store...') {
+  if (typeof document === 'undefined') return;
+  const stage = document.querySelector('.stage');
+  if (!stage) return;
+  let overlay = $('stageImportLoading');
+  if (!visible) {
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    return;
+  }
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'stageImportLoading';
+    overlay.className = 'stage-loading-overlay';
+    overlay.setAttribute('role', 'status');
+    overlay.setAttribute('aria-live', 'polite');
+    overlay.innerHTML = '<div class="stage-loading-pill"><span class="stage-loading-spinner" aria-hidden="true"></span><span id="stageImportLoadingText"></span></div>';
+    stage.appendChild(overlay);
+  }
+  const textEl = $('stageImportLoadingText') || (overlay.querySelector && overlay.querySelector('#stageImportLoadingText'));
+  if (textEl) textEl.textContent = text;
+}
+
 /**
  * Applies imported store app state to Studio, re-renders, and saves draft
  * @param {object} state 
  * @returns {boolean}
  */
 function applyImportedStoreApp(state) {
+  setStageImportLoading(false);
   if (!state) return false;
 
   if (state.appId || state.appleId) {
@@ -419,6 +442,21 @@ function applyImportedStoreApp(state) {
     try {
       sessionStorage.setItem('sps_store_app_' + targetId, JSON.stringify(userDraft || state));
     } catch (_) {}
+  }
+  if (targetId && typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem('sps_store_app_' + targetId, JSON.stringify(userDraft || state));
+    } catch (_) {
+      try {
+        if (typeof sanitizeStateForLocalStorage === 'function') {
+          localStorage.setItem('sps_store_app_' + targetId, JSON.stringify(sanitizeStateForLocalStorage(userDraft || state)));
+        }
+      } catch (__) {}
+    }
+    if (typeof isDemoMode === 'function' && isDemoMode()) {
+      try { localStorage.removeItem('sps_demo_dismissed_draft'); } catch (_) {}
+      try { localStorage.setItem('sps_demo_last_appid', String(targetId)); } catch (_) {}
+    }
   }
 
   const appName = state.form && state.form.name ? state.form.name : 'App';
@@ -660,9 +698,13 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
     return;
   }
   const input = $('storeImportInput');
-  if (!input) return;
+  if (!input) {
+    setStageImportLoading(false);
+    return;
+  }
   const val = input.value.trim();
   if (!val) {
+    setStageImportLoading(false);
     setStoreImportStatus('error', 'Please enter an App Store link or Apple App ID.');
     input.focus();
     return;
@@ -670,22 +712,42 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
 
   const target = parseStoreInput(val);
   if (!target) {
-    if (val.includes('play.google.com') || /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]+)+$/.test(val)) {
-      setStoreImportStatus('error', 'Google Play does not provide a public API. Please enter an Apple App Store link or numeric App ID (e.g. 324684580).');
-    } else {
-      setStoreImportStatus('error', 'Unrecognized App Store link or ID format. Try an Apple App Store URL or numeric App ID (e.g. 324684580).');
+    setStageImportLoading(false);
+    const badFormatMsg = (val.includes('play.google.com') || /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]+)+$/.test(val))
+      ? 'Google Play does not provide a public API. Please enter an Apple App Store link or numeric App ID (e.g. 324684580).'
+      : 'Unrecognized App Store link or ID format. Try an Apple App Store URL or numeric App ID (e.g. 324684580).';
+    setStoreImportStatus('error', badFormatMsg);
+    if (isAutoFromUrl && typeof showToast === 'function') showToast(badFormatMsg, 'error');
+    if (typeof isDemoMode === 'function' && isDemoMode()) {
+      if (isAutoFromUrl && CURRENT_PRESET_KEY === 'draft' && !(typeof hasLiveUserContent === 'function' && hasLiveUserContent()) && typeof loadPreset === 'function') {
+        isPresetModified = false;
+        userDraft = null;
+        loadPreset('studio');
+      }
     }
     return;
   }
 
   // 1. Check network connection first
   if (!isNetworkOnline()) {
+    setStageImportLoading(false);
+    const offlineMsg = 'No internet connection detected. Please turn on your Wi-Fi or internet connection to import from Apple App Store.';
+    if (typeof isDemoMode === 'function' && isDemoMode()) {
+      setStoreImportStatus('error', offlineMsg);
+      if (isAutoFromUrl && typeof showToast === 'function') showToast(offlineMsg, 'error');
+      if (isAutoFromUrl && CURRENT_PRESET_KEY === 'draft' && !(typeof hasLiveUserContent === 'function' && hasLiveUserContent()) && typeof loadPreset === 'function') {
+        isPresetModified = false;
+        userDraft = null;
+        loadPreset('studio');
+      }
+      return;
+    }
     updateStoreImportNetworkStatus();
     showNetworkConfirmModal({
       onConfirm: () => handleStoreImportSubmit(true),
       onCancel: () => setStoreImportStatus('info', 'Kept in 100% offline mode.')
     });
-    setStoreImportStatus('error', 'No internet connection detected. Please turn on your Wi-Fi or internet connection to import from Apple App Store.');
+    setStoreImportStatus('error', offlineMsg);
     return;
   }
 
@@ -705,6 +767,10 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
   }
 
   setStoreImportStatus('info', 'Connecting to Apple App Store API...');
+  const _importModalEl = $('storeImportModal');
+  if (isAutoFromUrl && (!_importModalEl || !_importModalEl.classList.contains('open')) && !(typeof hasLiveUserContent === 'function' && hasLiveUserContent())) {
+    setStageImportLoading(true);
+  }
 
   try {
     const importedState = await fetchStoreAppData(target);
@@ -751,7 +817,17 @@ async function handleStoreImportSubmit(confirmed = false, isAutoFromUrl = false)
     if (isAutoFromUrl && (!modal || !modal.classList.contains('open')) && typeof showToast === 'function') {
       showToast(errMsg, 'error');
     }
+    if (typeof isDemoMode === 'function' && isDemoMode()) {
+      if (isAutoFromUrl && CURRENT_PRESET_KEY === 'draft' && !(typeof hasLiveUserContent === 'function' && hasLiveUserContent())) {
+        if (typeof loadPreset === 'function') {
+          isPresetModified = false;
+          userDraft = null;
+          loadPreset('studio');
+        }
+      }
+    }
   } finally {
+    setStageImportLoading(false);
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Clone App';
@@ -880,13 +956,35 @@ function initStoreImportEvents() {
 function checkAndLoadStoreParams() {
   if (typeof window === 'undefined') return;
   let searchStr = (window.location && window.location.search) ? window.location.search : '';
-  if (!searchStr || searchStr === '?embed=true' || searchStr === '?embed=1' || searchStr === '?embed=true&') {
-    if (window.parent && window.parent !== window) {
+  let hasExplicitStoreQuery = false;
+  try {
+    const spInit = new URLSearchParams(searchStr);
+    hasExplicitStoreQuery = !!(spInit.get('appid') || spInit.get('apple') || spInit.get('app_id') || spInit.get('apple_id') || spInit.get('id') || spInit.get('app') || spInit.get('url') || spInit.get('store_url') || spInit.get('link') || spInit.get('itunes'));
+  } catch (_) {}
+  if (!hasExplicitStoreQuery && window.parent && window.parent !== window) {
+    try {
+      const parentSearch = window.parent.location.search;
+      if (parentSearch) {
+        searchStr = parentSearch;
+        const spParent = new URLSearchParams(searchStr);
+        hasExplicitStoreQuery = !!(spParent.get('appid') || spParent.get('apple') || spParent.get('app_id') || spParent.get('apple_id') || spParent.get('id') || spParent.get('app') || spParent.get('url') || spParent.get('store_url') || spParent.get('link') || spParent.get('itunes'));
+      }
+    } catch (_) {}
+  }
+  if (!hasExplicitStoreQuery) {
+    let demoFallbackSearch = '';
+    if (typeof isDemoMode === 'function' && isDemoMode()) {
       try {
-        const parentSearch = window.parent.location.search;
-        if (parentSearch) searchStr = parentSearch;
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('sps_demo_dismissed_draft') !== '1') {
+          const savedDemoId = (localStorage.getItem('sps_demo_last_appid') || '').trim();
+          const vipIdRaw = (localStorage.getItem('sps_agency_vip') || '').trim();
+          const vipAppId = (vipIdRaw && vipIdRaw !== '39' && vipIdRaw !== 'agency39') ? vipIdRaw : '';
+          const fallbackId = savedDemoId || vipAppId;
+          if (fallbackId) demoFallbackSearch = '?appid=' + encodeURIComponent(fallbackId);
+        }
       } catch (_) {}
     }
+    if (demoFallbackSearch) searchStr = demoFallbackSearch;
   }
   if (!searchStr) return;
   try {
@@ -953,6 +1051,7 @@ if (typeof window !== 'undefined') {
   window.checkAndLoadStoreParams = checkAndLoadStoreParams;
   window.isNetworkOnline = isNetworkOnline;
   window.showNetworkConfirmModal = showNetworkConfirmModal;
+  window.setStageImportLoading = setStageImportLoading;
 }
 
 // Node.js CommonJS export for testing

@@ -23,11 +23,15 @@
   display: contents;
 }
 
+#btnDraft { order: 1; }
+#btnPresetPill { order: 2; }
+#btnStartTour { order: 3; }
+.preset-banner { order: 4; }
+.workspace-export-dropdown { order: 5; }
+
 @media (min-width: 823px) {
-  #btnDraft { order: 1; }
-  #btnPresetPill { order: 2; }
-  .preset-banner { order: 3; margin-left: 8px; }
-  .workspace-export-dropdown { order: 4; margin-left: auto; }
+  .preset-banner { margin-left: 8px; }
+  .workspace-export-dropdown { margin-left: auto; }
 }
 
 :root[data-ui=light] .workspace-bar {

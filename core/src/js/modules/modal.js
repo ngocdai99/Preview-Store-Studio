@@ -191,12 +191,45 @@
       titleEl.textContent = _activeModalTitle;
     }
 
+    const isIconType = (_activeModalType === 'icon');
+    const tabNav = $('iconModalTabNav');
+    const storeSwitch = $('iconModalStoreSwitch');
+
+    if (tabNav) tabNav.style.display = isIconType ? 'inline-flex' : 'none';
+    if (storeSwitch) storeSwitch.style.display = 'none';
+
+    if (isIconType) {
+      if (typeof global.IconInspector !== 'undefined' && typeof global.IconInspector.init === 'function') {
+        global.IconInspector.init();
+      }
+      if (typeof global.IconResizer !== 'undefined') {
+        if (typeof global.IconResizer.init === 'function') global.IconResizer.init();
+        if (typeof global.IconResizer.setSource === 'function') global.IconResizer.setSource(_activeModalAsset || (typeof ICON !== 'undefined' ? ICON : ''));
+      }
+      if (typeof global.IconLog !== 'undefined') {
+        if (typeof global.IconLog.init === 'function') global.IconLog.init();
+        if (typeof global.IconLog.setTargetStore === 'function') global.IconLog.setTargetStore(_activeModalStore);
+      } else if (typeof setTargetStore === 'function') {
+        setTargetStore(_activeModalStore);
+      }
+    } else if (typeof initIconResizer === 'function') {
+      initIconResizer();
+    }
+
+    const primaryActionBtn = $('iconActionPrimaryBtn');
+    if (primaryActionBtn) {
+      primaryActionBtn.style.display = isIconType ? 'inline-flex' : 'none';
+    }
+
     const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
     if (_activeModalType === 'icon' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
       const targetDim = (_activeModalStore === 'google' ? 512 : 1024);
       rasterizeSvgToStorePng(_activeModalAsset, targetDim, pngDataUrl => {
         _activeModalAsset = pngDataUrl;
         if (imgEl) imgEl.src = pngDataUrl;
+        if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.setSource === 'function') {
+          global.IconResizer.setSource(pngDataUrl);
+        }
         inspectModalAsset(pngDataUrl, null);
       });
     } else if (_activeModalType === 'feature' && typeof _activeModalAsset === 'string' && (_activeModalAsset.startsWith('data:image/svg+xml') || _activeModalAsset.includes('<svg'))) {
@@ -253,6 +286,11 @@
   }
 
   function inspectModalAsset(src, file) {
+    if (_activeModalType === 'icon' && typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
+      global.IconLog.inspectIcon(src, file, _activeModalStore);
+      return;
+    }
+
     const dimEl = $('msIconModalDim') || $('imageDetailModalDim');
     const ratioEl = $('msIconModalRatio') || $('imageDetailModalRatio');
     const sizeEl = $('msIconModalSize') || $('imageDetailModalSize');
@@ -951,6 +989,17 @@
           handleFileReplacement(e.target.files[0]);
         }
         e.target.value = '';
+      });
+    }
+
+    // Fix & Resize Icon button
+    const resizeBtn = $('msIconModalResizeBtn');
+    if (resizeBtn) {
+      resizeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (typeof openIconResizerModal === 'function') {
+          openIconResizerModal({ src: _activeModalAsset, store: _activeModalStore });
+        }
       });
     }
 

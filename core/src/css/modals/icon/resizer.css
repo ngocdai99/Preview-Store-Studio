@@ -1,0 +1,263 @@
+/* ─── App Icon Studio: Resizer Tab Styles ───────────────────────────────── */
+.icon-resizer-inner-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  padding: 20px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.icon-resizer-canvas-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #141414;
+  border: 1px solid #282828;
+  border-radius: 14px;
+  padding: 18px 20px;
+  min-height: 320px;
+  flex: 1 1 auto;
+}
+
+.icon-resizer-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8B8F98;
+  margin-bottom: 12px;
+  align-self: flex-start;
+}
+
+.icon-resizer-canvas-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 440px;
+  max-height: 440px;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.65);
+  background:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.04) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+  background-color: #1F1F1F;
+}
+
+.icon-resizer-live-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Aspect Ratio Fit Strategy Options */
+.icon-resizer-fit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.icon-resizer-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.icon-resizer-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8B8F98;
+}
+
+.icon-resizer-fit-options {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #171817;
+  border: 1px solid #282928;
+  border-radius: 9999px;
+  padding: 3px;
+  gap: 3px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Sliding Indicator Pill */
+.icon-resizer-fit-pill {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  height: calc(100% - 6px);
+  border-radius: 9999px;
+  background: #1D1E1D;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, width;
+}
+
+.icon-resizer-fit-card {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.icon-resizer-fit-card input[type="radio"] {
+  display: none;
+}
+
+.icon-resizer-fit-card:hover:not(.active) {
+  background: transparent !important;
+}
+
+.icon-resizer-fit-card:active {
+  transform: scale(0.96);
+}
+
+/* Inactive items: dimmed / muted like the stage tabview */
+.icon-resizer-fit-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: #8E8E93;
+  opacity: 0.75;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.icon-resizer-fit-icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.icon-resizer-fit-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #8E8E93;
+  line-height: 1;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.icon-resizer-fit-card:hover:not(.active) .icon-resizer-fit-icon {
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.icon-resizer-fit-card:hover:not(.active) .icon-resizer-fit-title {
+  color: #FFFFFF;
+}
+
+/* Selected item: active text and icon contrast */
+.icon-resizer-fit-card.active {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.icon-resizer-fit-card.active .icon-resizer-fit-icon {
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.icon-resizer-fit-card.active .icon-resizer-fit-title {
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* Light Theme Overrides */
+[data-ui="light"] .icon-resizer-canvas-card,
+[data-theme="light"] .icon-resizer-canvas-card {
+  background: #F8F9FA;
+  border-color: #E1E3E8;
+}
+
+[data-ui="light"] .icon-resizer-canvas-wrap,
+[data-theme="light"] .icon-resizer-canvas-wrap {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  background-color: #ECEEF2;
+}
+
+[data-ui="light"] .icon-resizer-fit-options,
+[data-theme="light"] .icon-resizer-fit-options {
+  background: #FFFFFF;
+  border: 1px solid #D9DCE1;
+  box-shadow: none;
+}
+
+[data-ui="light"] .icon-resizer-fit-pill,
+[data-theme="light"] .icon-resizer-fit-pill {
+  background: #0F172A;
+  border: 1px solid #0F172A;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-ui="light"] .icon-resizer-fit-card,
+[data-theme="light"] .icon-resizer-fit-card {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+[data-ui="light"] .icon-resizer-fit-card:hover:not(.active),
+[data-theme="light"] .icon-resizer-fit-card:hover:not(.active) {
+  background: transparent !important;
+}
+
+[data-ui="light"] .icon-resizer-fit-card.active,
+[data-theme="light"] .icon-resizer-fit-card.active {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+[data-ui="light"] .icon-resizer-fit-card.active .icon-resizer-fit-icon,
+[data-theme="light"] .icon-resizer-fit-card.active .icon-resizer-fit-icon,
+[data-ui="light"] .icon-resizer-fit-card.active .icon-resizer-fit-title,
+[data-theme="light"] .icon-resizer-fit-card.active .icon-resizer-fit-title {
+  color: #FFFFFF;
+}
+
+[data-ui="light"] .icon-resizer-fit-title,
+[data-theme="light"] .icon-resizer-fit-title,
+[data-ui="light"] .icon-resizer-fit-icon,
+[data-theme="light"] .icon-resizer-fit-icon {
+  color: #64748B;
+}

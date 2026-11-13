@@ -138,30 +138,51 @@ try {
 
 if(typeof loadDraftFromStorage === 'function') loadDraftFromStorage();
 
-// If URL has appid, try restoring from sessionStorage cache for instant reload without network latency
-if (initialUrlAppId && typeof sessionStorage !== 'undefined') {
+// If URL has appid, try restoring from sessionStorage/localStorage cache for instant reload without network latency
+if (initialUrlAppId) {
   try {
-    const cachedRaw = sessionStorage.getItem('sps_store_app_' + initialUrlAppId);
-    if (cachedRaw) {
-      const cachedState = JSON.parse(cachedRaw);
-      if (cachedState && typeof cachedState === 'object') {
-        userDraft = cachedState;
-        CURRENT_APP_ID = initialUrlAppId;
-        if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
-      }
+    const ssRaw = (typeof sessionStorage !== 'undefined') ? sessionStorage.getItem('sps_store_app_' + initialUrlAppId) : null;
+    const lsRaw = (typeof localStorage !== 'undefined') ? localStorage.getItem('sps_store_app_' + initialUrlAppId) : null;
+    const candidates = [ssRaw, lsRaw].map(r => {
+      if (!r) return null;
+      try {
+        const parsed = JSON.parse(r);
+        return (parsed && typeof parsed === 'object') ? parsed : null;
+      } catch (_) { return null; }
+    }).filter(Boolean);
+    if (userDraft && String(userDraft.appId || userDraft.appleId || '').trim() === initialUrlAppId) {
+      candidates.push(userDraft);
+    }
+    if (candidates.length) {
+      candidates.sort((a, b) => (b._savedAt || 0) - (a._savedAt || 0));
+      userDraft = candidates[0];
+      CURRENT_APP_ID = initialUrlAppId;
+      if (typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
     }
   } catch (_) {}
 }
 
+let __bootHandled = false;
 if (typeof isDemoMode === 'function' && isDemoMode()) {
+  __bootHandled = true;
   if (initialUrlAppId) {
-    if (userDraft && (String(userDraft.appId || userDraft.appleId).trim() === initialUrlAppId)) {
+    if (typeof localStorage !== 'undefined') {
+      try { localStorage.removeItem('sps_demo_dismissed_draft'); } catch (_) {}
+      try { localStorage.setItem('sps_demo_last_appid', initialUrlAppId); } catch (_) {}
+    }
+    if (userDraft && (String(userDraft.appId || userDraft.appleId || '').trim() === initialUrlAppId)) {
+      CURRENT_APP_ID = initialUrlAppId;
+      if (typeof window !== 'undefined') window.CURRENT_APP_ID = initialUrlAppId;
       CURRENT_PRESET_KEY = 'draft';
       CURRENT_ACTIVE_PRESET = 'studio';
       loadPreset('draft');
     } else {
+      userDraft = null;
+      CURRENT_APP_ID = initialUrlAppId;
+      if (typeof window !== 'undefined') window.CURRENT_APP_ID = initialUrlAppId;
       CURRENT_PRESET_KEY = 'draft';
       loadPreset('none');
+      if (typeof setStageImportLoading === 'function') setStageImportLoading(true);
       CURRENT_PRESET_KEY = 'draft';
       CURRENT_ACTIVE_PRESET = 'studio';
     }
@@ -169,21 +190,76 @@ if (typeof isDemoMode === 'function' && isDemoMode()) {
       toggleDualPhone(true, false);
     }
   } else {
-    // In demo mode (/try), if not navigating with appid, default auto-pick Store Preview Studio
-    isPresetModified = false;
-    userDraft = null;
-    CURRENT_PRESET_KEY = 'studio';
-    CURRENT_ACTIVE_PRESET = 'studio';
-    restoring = true;
-    try {
-      loadPreset('studio');
-      if (typeof toggleDualPhone === 'function') {
-        toggleDualPhone(true, false);
+    let restoredFromAppId = false;
+    const dismissedDraft = (typeof localStorage !== 'undefined') && localStorage.getItem('sps_demo_dismissed_draft') === '1';
+    if (!dismissedDraft && typeof localStorage !== 'undefined') {
+      const savedDemoId = (localStorage.getItem('sps_demo_last_appid') || '').trim();
+      const vipIdRaw = (localStorage.getItem('sps_agency_vip') || '').trim();
+      const vipAppId = (vipIdRaw && vipIdRaw !== '39' && vipIdRaw !== 'agency39') ? vipIdRaw.replace(/^id/i, '').trim() : '';
+      const targetDemoId = savedDemoId || vipAppId;
+
+      if (targetDemoId) {
+        CURRENT_APP_ID = targetDemoId;
+        if (typeof window !== 'undefined') window.CURRENT_APP_ID = targetDemoId;
+        const curDraftId = (userDraft && (userDraft.appId || userDraft.appleId))
+          ? String(userDraft.appId || userDraft.appleId).trim()
+          : '';
+        if (!userDraft || curDraftId !== targetDemoId) {
+          try {
+            const ssRaw = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('sps_store_app_' + targetDemoId) : null;
+            const lsRaw = localStorage.getItem('sps_store_app_' + targetDemoId);
+            const rawCache = ssRaw || lsRaw;
+            if (rawCache) {
+              const parsedCache = JSON.parse(rawCache);
+              if (parsedCache && typeof parsedCache === 'object') {
+                userDraft = parsedCache;
+              }
+            }
+          } catch (_) {}
+        }
       }
-    } finally {
-      restoring = false;
+
+      if (typeof hasUserDraft === 'function' && hasUserDraft()) {
+        CURRENT_PRESET_KEY = 'draft';
+        CURRENT_ACTIVE_PRESET = 'studio';
+        loadPreset('draft');
+        if (typeof toggleDualPhone === 'function') {
+          toggleDualPhone(true, false);
+        }
+        restoredFromAppId = true;
+      } else if (targetDemoId) {
+        userDraft = null;
+        CURRENT_PRESET_KEY = 'draft';
+        loadPreset('none');
+        if (typeof setStageImportLoading === 'function') setStageImportLoading(true);
+        CURRENT_PRESET_KEY = 'draft';
+        CURRENT_ACTIVE_PRESET = 'studio';
+        if (typeof toggleDualPhone === 'function') {
+          toggleDualPhone(true, false);
+        }
+        restoredFromAppId = true;
+      }
+    }
+
+    if (!restoredFromAppId) {
+      // In demo mode (/try), if not navigating with appid and no saved appid, default auto-pick Store Preview Studio
+      isPresetModified = false;
+      userDraft = null;
+      CURRENT_PRESET_KEY = 'studio';
+      CURRENT_ACTIVE_PRESET = 'studio';
+      restoring = true;
+      try {
+        loadPreset('studio');
+        if (typeof toggleDualPhone === 'function') {
+          toggleDualPhone(true, false);
+        }
+      } finally {
+        restoring = false;
+      }
     }
   }
+}
+if (__bootHandled) {
 } else if(typeof sessionStorage !== 'undefined' && sessionStorage.getItem('sps_reset_to_blank')){
   try{ sessionStorage.removeItem('sps_reset_to_blank'); }catch(_){}
   isPresetModified = false;

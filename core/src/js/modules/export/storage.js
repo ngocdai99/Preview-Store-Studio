@@ -89,6 +89,7 @@ function applyStateObject(s, restoreLayout = false){
   // 2. Set Store and Devices without animation or icon interference
   const isSavedDual = s.appleDevice === 'dual' || s.googleDevice === 'dual';
   if(restoreLayout){
+    if(document.body) document.body.dataset.dual = isSavedDual ? 'true' : 'false';
     if(s.store) setStore(s.store, false, isSavedDual);
     if(s.appleDevice) setAppleDevice(s.appleDevice, false, isSavedDual);
     else if(document.body) document.body.dataset.appleDevice = appleDevice;
@@ -350,6 +351,9 @@ function ensureDraft(){
 // Throttled so a failing storage layer does not spam a toast on every debounced save.
 let lastStorageWarnAt = 0;
 function notifyStorageNotPersisted(){
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    return;
+  }
   const now = Date.now();
   if(now - lastStorageWarnAt < 30000) return;
   lastStorageWarnAt = now;
@@ -358,17 +362,28 @@ function notifyStorageNotPersisted(){
 
 // Resolves true when a FULL (non-sanitized) copy of the draft was persisted somewhere.
 function saveDraftToStorage(){
+  if(!userDraft) return Promise.resolve(true);
+  // Timestamp lets loadDraftFromStorage() pick the newest copy if one store missed a write.
+  userDraft._savedAt = Date.now();
   if(typeof isDemoMode === 'function' && isDemoMode()){
-    if(userDraft && typeof sessionStorage !== 'undefined'){
+    if(typeof sessionStorage !== 'undefined'){
       try{
         sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(sanitizeStateForLocalStorage(userDraft)));
       }catch(_){}
     }
-    return Promise.resolve(true);
+    const activeDemoAppId = String(userDraft.appId || userDraft.appleId || (typeof CURRENT_APP_ID !== 'undefined' ? CURRENT_APP_ID : '') || '').trim();
+    if(activeDemoAppId && typeof localStorage !== 'undefined'){
+      try{ localStorage.removeItem('sps_demo_dismissed_draft'); }catch(_){}
+      try{ localStorage.setItem('sps_demo_last_appid', activeDemoAppId); }catch(_){}
+      try{
+        localStorage.setItem('sps_store_app_' + activeDemoAppId, JSON.stringify(userDraft));
+      }catch(_){
+        try{
+          localStorage.setItem('sps_store_app_' + activeDemoAppId, JSON.stringify(sanitizeStateForLocalStorage(userDraft)));
+        }catch(__){}
+      }
+    }
   }
-  if(!userDraft) return Promise.resolve(true);
-  // Timestamp lets loadDraftFromStorage() pick the newest copy if one store missed a write.
-  userDraft._savedAt = Date.now();
   const idbPromise = (typeof idbSave === 'function') ? idbSave(DRAFT_STORAGE_KEY, userDraft) : Promise.resolve(false);
   if(userDraft.isCustomFeature && userDraft.featureGraphic && userDraft.featureGraphic !== (typeof BLANK_FEATURE !== 'undefined' ? BLANK_FEATURE : '')){
     if(typeof THUMB_CACHE !== 'undefined' && THUMB_CACHE.has(userDraft.featureGraphic)){
@@ -396,17 +411,13 @@ function saveDraftToStorage(){
 
 function loadDraftFromStorage(){
   try{
+    let demoSessionDraft = null;
     if(typeof isDemoMode === 'function' && isDemoMode() && typeof sessionStorage !== 'undefined'){
       const rawDemo = sessionStorage.getItem(DRAFT_STORAGE_KEY);
       if(rawDemo){
         const parsedDemo = JSON.parse(rawDemo);
         if(parsedDemo && typeof parsedDemo === 'object'){
-          userDraft = parsedDemo;
-          if(userDraft.appId || userDraft.appleId){
-            CURRENT_APP_ID = String(userDraft.appId || userDraft.appleId);
-            if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
-          }
-          return;
+          demoSessionDraft = parsedDemo;
         }
       }
     }
@@ -427,11 +438,39 @@ function loadDraftFromStorage(){
         }
       }
     }
+    if(demoSessionDraft){
+      if(!userDraft || (demoSessionDraft._savedAt || 0) > (userDraft._savedAt || 0)){
+        userDraft = demoSessionDraft;
+      }
+    }
+    if(typeof isDemoMode === 'function' && isDemoMode() && !userDraft && typeof localStorage !== 'undefined'){
+      if(localStorage.getItem('sps_demo_dismissed_draft') !== '1'){
+        const lastDemoId = (localStorage.getItem('sps_demo_last_appid') || '').trim();
+        if(lastDemoId){
+          const cachedRaw = localStorage.getItem('sps_store_app_' + lastDemoId);
+          if(cachedRaw){
+            const parsedCached = JSON.parse(cachedRaw);
+            if(parsedCached && typeof parsedCached === 'object'){
+              userDraft = parsedCached;
+            }
+          }
+        }
+      }
+    }
+    if(userDraft && (userDraft.appId || userDraft.appleId)){
+      CURRENT_APP_ID = String(userDraft.appId || userDraft.appleId);
+      if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+    }
   }catch(e){}
 
   if(typeof idbGet === 'function'){
     idbGet(DRAFT_STORAGE_KEY).then(idbDraft => {
       if(idbDraft && typeof idbDraft === 'object'){
+        const curActiveId = (typeof CURRENT_APP_ID !== 'undefined' && CURRENT_APP_ID) ? String(CURRENT_APP_ID).trim() : '';
+        const idbAppId = String(idbDraft.appId || idbDraft.appleId || '').trim();
+        if(curActiveId && idbAppId && idbAppId !== curActiveId){
+          return;
+        }
         // A complete localStorage copy newer than IndexedDB means the last IDB write failed:
         // keep the newer copy and heal IndexedDB instead of rolling back to stale data.
         const lsFullTs = (userDraft && !userDraft._partial) ? (userDraft._savedAt || 0) : 0;
@@ -440,6 +479,10 @@ function loadDraftFromStorage(){
           return;
         }
         userDraft = idbDraft;
+        if(userDraft.appId || userDraft.appleId){
+          CURRENT_APP_ID = String(userDraft.appId || userDraft.appleId);
+          if(typeof window !== 'undefined') window.CURRENT_APP_ID = CURRENT_APP_ID;
+        }
         if(!userDraft.icon || (!userDraft.isCustomIcon && (userDraft.icon.includes('bp-bg') || userDraft.icon.includes('BLUEPRINT GRID') || userDraft.icon.includes('bfd1fd') || userDraft.icon.includes('d2c7fc') || (typeof STUDIO_ICON !== 'undefined' && (userDraft.icon === STUDIO_ICON || userDraft.icon.includes('std-sq-bg'))) || (typeof LEGACY_BLANK_ICON !== 'undefined' && userDraft.icon === LEGACY_BLANK_ICON)))){
           userDraft.icon = BLANK_ICON;
           userDraft.isCustomIcon = false;
@@ -510,6 +553,18 @@ function resetDraftWorkspace(){
   try{ localStorage.removeItem(DRAFT_STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
   try{ localStorage.removeItem(DRAFT_FEATURE_THUMB_KEY); }catch(e){}
+  if(typeof localStorage !== 'undefined'){
+    try{
+      localStorage.removeItem('sps_demo_last_appid');
+      for(let i = localStorage.length - 1; i >= 0; i--){
+        const k = localStorage.key(i);
+        if(k && k.startsWith('sps_store_app_')) localStorage.removeItem(k);
+      }
+    }catch(_){}
+  }
+  if(typeof isDemoMode === 'function' && isDemoMode()){
+    try{ localStorage.setItem('sps_demo_dismissed_draft', '1'); }catch(_){}
+  }
   if(typeof sessionStorage !== 'undefined'){
     try{
       sessionStorage.removeItem(DRAFT_STORAGE_KEY);
@@ -576,6 +631,7 @@ function updateDraftPill(){
         presetPill.innerHTML = '<img alt="" id="presetBtnThumb" src="' + pIcon + '">' +
           '<span id="presetBtnTitle">' + escapeHtml(dispName) + '</span>' +
           '<small id="presetBtnBadge">Preset</small>' +
+          '<span class="preset-pill-chev" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>' +
           '<span role="button" class="ms-pill-reset-btn" id="presetPillCloseBtn" title="Close preset" aria-label="Close preset">&times;</span>';
       }
 

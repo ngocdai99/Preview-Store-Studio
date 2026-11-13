@@ -196,18 +196,17 @@ function showMiniStudioToast(item) {
     t.innerHTML = `
       <div class="ms-toast-body">
         <div class="ms-toast-header-row">
-          <span class="ms-tag plus buy" id="msToastTag">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <span class="ms-toast-lock" id="msToastLock" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
-            BUY
           </span>
           <b id="msToastTitle">Exclusive Feature</b>
         </div>
         <span id="msToastDesc">Available in Plus Edition &amp; Pro Studio</span>
       </div>
-      <a href="/#pricing" class="ms-toast-cta" id="msToastCta">
+      <a href="/#pricing" target="_top" class="ms-toast-cta" id="msToastCta">
         <span>Buy Now</span>
       </a>
       <button type="button" class="ms-toast-close" id="msToastClose" aria-label="Close notification">
@@ -314,6 +313,32 @@ function initDemoGuard() {
     document.body.classList.add('sps-demo-mode');
     const closeBtn = document.getElementById('presetPillCloseBtn');
     if (closeBtn) closeBtn.remove();
+
+    const DEMO_LOCK_SVG = '<svg width="11.5" height="11.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
+    const appendLockIcon = (el, className = 'demo-lock-ico', title = 'Available in Full Studio', prepend = false) => {
+      if (!el || typeof el.querySelector !== 'function' || el.querySelector('.' + className)) return null;
+      const ico = document.createElement('span');
+      ico.className = className;
+      ico.setAttribute('aria-hidden', 'true');
+      if (title) ico.title = title;
+      ico.innerHTML = DEMO_LOCK_SVG;
+      if (prepend && typeof el.insertBefore === 'function') {
+        el.insertBefore(ico, el.firstChild || null);
+      } else {
+        el.appendChild(ico);
+      }
+      return ico;
+    };
+    const attachCardHeaderLock = (card, title = 'Available in Full Studio') => {
+      if (!card || typeof card.querySelector !== 'function') return;
+      const headerRight = card.querySelector('.card-header-right');
+      if (headerRight) appendLockIcon(headerRight, 'demo-lock-ico', title, true);
+    };
+    const syncDynamicUploadLocks = () => {
+      $$('.shot-upload-btn').forEach(btn => appendLockIcon(btn, 'demo-lock-corner', 'Custom uploads require Full Studio'));
+    };
+    const modalUploadBtn = $('msIconModalUploadBtn') || $('imageDetailModalUploadBtn');
+    if (modalUploadBtn) appendLockIcon(modalUploadBtn, 'demo-lock-ico', 'Replacing assets requires Full Studio');
 
     // Demo Mode: Reorder Editor Cards 2, 3, 4 -> Metrics (2), Description (3), Phone Screenshots (4)
     {
@@ -495,7 +520,7 @@ function initDemoGuard() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
               <span>Unlock Full Studio</span>
             </div>
-            <p class="ms-side-card-desc">Export pristine 4K print-ready mockups, iPad &amp; tablet previews &amp; instant store submission bundles.</p>
+            <p class="ms-side-card-desc">Export pristine 4K print-ready mockups, Android tablet previews &amp; instant store submission bundles.</p>
           </div>
 
           <div class="ms-side-highlights">
@@ -505,7 +530,7 @@ function initDemoGuard() {
               <svg class="ms-side-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
             <div class="ms-side-link" id="btnHlTablet" role="button" tabindex="0">
-              <span>iPad &amp; Tablet Layouts</span>
+              <span>Android Tablet Layouts</span>
               <svg class="ms-side-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
             <div class="ms-side-link" id="btnHlOffline" role="button" tabindex="0">
@@ -516,16 +541,83 @@ function initDemoGuard() {
         </div>
       `;
 
-      // 1. Download Mockup 2x PNG with Watermark
+      // Shared Demo 2x Retina Mockup export runner (with watermark + busy button state)
+      const runDemoRetinaExport = async (triggerBtn) => {
+        if (menuExport) menuExport.classList.remove('show');
+        try {
+          if (typeof window.clarity === 'function') {
+            window.clarity('event', 'demo_export_retina_click');
+          }
+        } catch (_) {}
+        if (typeof exportPNG !== 'function') return;
+
+        if (triggerBtn && triggerBtn.classList && triggerBtn.classList.contains('demo-export-retina-btn')) {
+          if (triggerBtn.disabled) return;
+          const fullLbl = triggerBtn.querySelector('.demo-export-lbl-full');
+          const shortLbl = triggerBtn.querySelector('.demo-export-lbl-short');
+          const origFull = fullLbl ? fullLbl.textContent : '';
+          const origShort = shortLbl ? shortLbl.textContent : '';
+          triggerBtn.disabled = true;
+          triggerBtn.classList.add('is-exporting');
+          if (fullLbl) fullLbl.textContent = 'Rendering...';
+          if (shortLbl) shortLbl.textContent = 'Exporting...';
+          try {
+            await exportPNG(2, { watermark: true, allowDemo: true });
+          } finally {
+            triggerBtn.disabled = false;
+            triggerBtn.classList.remove('is-exporting');
+            if (fullLbl && origFull) fullLbl.textContent = origFull;
+            if (shortLbl && origShort) shortLbl.textContent = origShort;
+          }
+        } else {
+          await exportPNG(2, { watermark: true, allowDemo: true });
+        }
+      };
+
+      // 0. Direct 1-click "Download Mockup [Retina]" button next to the Menu button
+      const exportDropdownEl = $('workspaceExportDropdown');
+      if (exportDropdownEl && exportDropdownEl.parentNode && !$('btnDemoExportRetina')) {
+        const directExportBtn = document.createElement('button');
+        directExportBtn.type = 'button';
+        directExportBtn.className = 'demo-export-retina-btn';
+        directExportBtn.id = 'btnDemoExportRetina';
+        directExportBtn.setAttribute('aria-label', 'Download Mockup Retina PNG');
+        directExportBtn.title = 'Download live device mockup in 2x Retina HD';
+        directExportBtn.innerHTML = `
+          <span class="btn-spinner demo-export-spinner" aria-hidden="true"></span>
+          <span class="demo-export-ico demo-export-ico-img" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </span>
+          <span class="demo-export-ico demo-export-ico-dl" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </span>
+          <span class="demo-export-lbl-full">Download Mockup</span>
+          <span class="demo-export-lbl-short">Export</span>
+          <span class="mi-supa-tag demo-export-retina-tag">Retina</span>
+        `;
+        directExportBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          runDemoRetinaExport(directExportBtn);
+        };
+        exportDropdownEl.parentNode.insertBefore(directExportBtn, exportDropdownEl);
+      }
+
+      // 1. Download Mockup 2x PNG with Watermark (Menu item fallback)
       const btnExportMockup = $('btnExportMockup4K');
       if (btnExportMockup) {
         btnExportMockup.onclick = (e) => {
           e.preventDefault();
           e.stopPropagation();
-          menuExport.classList.remove('show');
-          if (typeof exportPNG === 'function') {
-            exportPNG(2, { watermark: true, allowDemo: true });
-          }
+          runDemoRetinaExport(btnExportMockup);
         };
       }
 
@@ -574,17 +666,12 @@ function initDemoGuard() {
       }
     }
 
-    // Add Buy badges and click locks to Google 7" and 10" Tablet selectors
+    // Add consistent lock icons and click locks to Google 7" and 10" Tablet selectors
     const tabletGatedIds = ['optGoogleTab7', 'optGoogleTab10'];
     tabletGatedIds.forEach(id => {
       const item = $(id);
       if (item) {
-        if (!item.querySelector('.demo-locked-badge')) {
-          const badge = document.createElement('span');
-          badge.className = 'demo-locked-badge btn-primary';
-          badge.textContent = 'Buy';
-          item.appendChild(badge);
-        }
+        appendLockIcon(item, 'demo-lock-ico', 'Android tablet previews require Full Studio');
         item.addEventListener('click', e => {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -595,21 +682,23 @@ function initDemoGuard() {
       }
     });
 
-    // Add Buy badge on Phone Screenshots header to indicate Pro capability limit
+    // Add lock icon on Phone Screenshots header & lock upload buttons / hide delete actions
     const shotsCard = $('shotsCard');
     if (shotsCard) {
-      const headerRight = shotsCard.querySelector('.card-header-right');
-      if (headerRight && !headerRight.querySelector('.demo-locked-badge')) {
-        const badge = document.createElement('span');
-        badge.className = 'demo-locked-badge btn-primary';
-        badge.textContent = 'Buy';
-        badge.style.pointerEvents = 'none';
-        headerRight.insertBefore(badge, headerRight.firstChild);
-      }
+      attachCardHeaderLock(shotsCard, 'Custom screenshot uploads require Full Studio');
 
-      // Intercept upload and add slot triggers on Phone Screenshots card
+      const addShotBtn = $('addShot');
+      if (addShotBtn) appendLockIcon(addShotBtn, 'demo-lock-ico', 'Custom screenshot uploads require Full Studio');
+
+      // Intercept upload, add slot, and remove triggers on Phone Screenshots card (keep header collapse, tooltips, inspect)
       shotsCard.addEventListener('click', e => {
-        if (e.target.closest('.card-header, .info-tip-btn, .shot-remove-btn, .shot-inspect-btn')) return;
+        if (e.target.closest('.card-header, .info-tip-btn, .shot-inspect-btn')) return;
+        if (e.target.closest('.shot-remove-btn')) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          requireFullVersion('upload-shots');
+          return;
+        }
         const addBtn = e.target.closest('#addShot');
         if (addBtn) {
           e.preventDefault();
@@ -654,45 +743,45 @@ function initDemoGuard() {
       }
     }
 
-    // Gated Editor Form Cards: Allow normal expand/collapse, but intercept and block uploads
+    // Gated Editor Form Cards: Allow normal expand/collapse, but intercept and block uploads/deletions
     const gatedUploadCards = [
       {
         cardId: 'ipadCard',
         paywallKey: 'ipad-screenshots',
-        uploadSelectors: ['#addIpadShot', '.shot-upload-btn'],
+        uploadSelectors: ['#addIpadShot', '.shot-upload-btn', '.shot-remove-btn'],
+        lockBtnIds: ['addIpadShot'],
         fileInputIds: ['ipadShotFile']
       },
       {
         cardId: 'tabCard',
         paywallKey: 'tablet-screenshots',
-        uploadSelectors: ['#tab7Add', '#tab10Add', '.shot-upload-btn'],
+        uploadSelectors: ['#tab7Add', '#tab10Add', '.shot-upload-btn', '.shot-remove-btn'],
+        lockBtnIds: ['tab7Add', 'tab10Add'],
         fileInputIds: ['tab7File', 'tab10File']
       },
       {
         cardId: 'featureCard',
         paywallKey: 'feature-graphic',
-        uploadSelectors: ['#featureUp', '#featureDropZone', '#featurePrev'],
+        uploadSelectors: ['#featureUp', '#featureDropZone', '#featurePrev', '#featureRemove'],
+        lockBtnIds: [],
         fileInputIds: ['featureFile']
       }
     ];
 
-    gatedUploadCards.forEach(({ cardId, paywallKey, uploadSelectors, fileInputIds }) => {
+    gatedUploadCards.forEach(({ cardId, paywallKey, uploadSelectors, lockBtnIds, fileInputIds }) => {
       const card = $(cardId);
       if (card) {
-        // Add subtle Buy badge on header right without blocking expand/collapse
-        const headerRight = card.querySelector('.card-header-right');
-        if (headerRight && !headerRight.querySelector('.demo-locked-badge')) {
-          const badge = document.createElement('span');
-          badge.className = 'demo-locked-badge btn-primary';
-          badge.textContent = 'Buy';
-          badge.style.pointerEvents = 'none';
-          headerRight.insertBefore(badge, headerRight.firstChild);
-        }
+        attachCardHeaderLock(card, 'Available in Full Studio');
 
-        // Intercept upload trigger clicks inside card body only
+        (lockBtnIds || []).forEach(btnId => {
+          const b = $(btnId);
+          if (b) appendLockIcon(b, 'demo-lock-ico', 'Available in Full Studio');
+        });
+
+        // Intercept upload & irreversible delete trigger clicks inside card body only
         card.addEventListener('click', e => {
-          // Allow normal header collapse/expand, tooltips, inspection, and removal
-          if (e.target.closest('.card-header, .info-tip-btn, #featureRemove, #featureInspect')) return;
+          // Allow normal header collapse/expand, tooltips, and inspection
+          if (e.target.closest('.card-header, .info-tip-btn, #featureInspect')) return;
 
           const isUploadTrigger = uploadSelectors.some(sel => e.target.closest(sel));
           if (isUploadTrigger) {
@@ -734,7 +823,20 @@ function initDemoGuard() {
       }
     });
 
-    // 6. Gated Metadata Input Fields (Card 1 Identity inputs stay editable; Description card fields locked with live focus-link highlight)
+    // Keep dynamic screenshot row upload buttons badged with lock corner icon across preset/store switches
+    syncDynamicUploadLocks();
+    if (typeof MutationObserver === 'function') {
+      ['slist', 'ipadSlist', 'tab7List', 'tab10List'].forEach(listId => {
+        const listEl = $(listId);
+        if (listEl) {
+          new MutationObserver(syncDynamicUploadLocks).observe(listEl, { childList: true });
+        }
+      });
+    }
+
+    // 6. Gated Metadata Input Fields (Card 1 Identity inputs stay editable; Description card fields locked with live focus-link highlight & lock icons)
+    attachCardHeaderLock($('contentCard'), 'Description & Release Notes editing requires Full Studio');
+
     const lockedFieldIds = ['f-promo', 'f-new', 'f-desc'];
     const lockedFieldKeys = {
       'f-promo': 'promo',
@@ -772,9 +874,11 @@ function initDemoGuard() {
           triggerPaywallAndHighlight();
         });
 
-        // Also allow clicking the parent .fg label/wrapper to trigger highlight & paywall
+        // Also allow clicking the parent .fg label/wrapper to trigger highlight & paywall, and show field lock icon
         const fg = el.closest('.fg');
         if (fg) {
+          const lblEl = fg.querySelector('.lr label');
+          if (lblEl) appendLockIcon(lblEl, 'demo-lock-ico', 'Locked in Demo Mode');
           fg.style.cursor = 'pointer';
           fg.addEventListener('click', e => {
             if (e.target.closest('.info-tip-btn, .tag, input, textarea')) return;
@@ -796,7 +900,27 @@ function initDemoGuard() {
     if (icoUpBtn) {
       icoUpBtn.classList.add('disabled', 'demo-disabled-btn');
       icoUpBtn.removeAttribute('title');
+      appendLockIcon(icoUpBtn, 'demo-lock-ico', 'Custom App Icon upload requires Full Studio');
       icoUpBtn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        triggerIconPaywallAndHighlight();
+      }, true);
+    }
+
+    const featureRemoveBtn = $('featureRemove');
+    if (featureRemoveBtn) {
+      featureRemoveBtn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        requireFullVersion('feature-graphic');
+      }, true);
+    }
+
+    // Add lock icon on Card 1 identity upload & dropzone
+    const icoRemoveBtn = $('icoRemove');
+    if (icoRemoveBtn) {
+      icoRemoveBtn.addEventListener('click', e => {
         e.preventDefault();
         e.stopImmediatePropagation();
         triggerIconPaywallAndHighlight();
@@ -807,15 +931,17 @@ function initDemoGuard() {
     if (icoDropZone) {
       icoDropZone.classList.add('demo-disabled-dropzone');
       icoDropZone.removeAttribute('title');
+      const icoOv = icoDropZone.querySelector('.ico-ov');
+      if (icoOv) icoOv.innerHTML = DEMO_LOCK_SVG;
       icoDropZone.addEventListener('click', e => {
-        if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
+        if (e.target.closest('#icoInspect, .info-tip-btn')) return;
         e.preventDefault();
         e.stopImmediatePropagation();
         triggerIconPaywallAndHighlight();
       }, true);
 
       icoDropZone.addEventListener('keydown', e => {
-        if (e.target.closest('#icoRemove, #icoInspect, .info-tip-btn')) return;
+        if (e.target.closest('#icoInspect, .info-tip-btn')) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -854,6 +980,15 @@ function initDemoGuard() {
     // 8. Gated "+ Your App" Custom Draft Button (Intercept ONLY "+ Your App", allow viewing existing draft)
     const btnDraft = $('btnDraft');
     if (btnDraft) {
+      const syncDraftLock = () => {
+        if (!btnDraft.classList.contains('has-draft')) {
+          appendLockIcon(btnDraft, 'demo-lock-ico', 'Custom app drafts require Full Studio');
+        }
+      };
+      syncDraftLock();
+      if (typeof MutationObserver === 'function') {
+        new MutationObserver(syncDraftLock).observe(btnDraft, { childList: true, attributes: true, attributeFilter: ['class'] });
+      }
       btnDraft.addEventListener('click', e => {
         if (e.target.closest('#msPillResetBtn')) return;
         // If user already has an active or saved draft (e.g. via ?appid=... or store import), allow viewing their draft

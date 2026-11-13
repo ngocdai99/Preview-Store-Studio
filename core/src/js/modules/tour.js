@@ -239,18 +239,27 @@ function relocateTourButton() {
   const headerRight = document.querySelector('header .right');
   if (!btn || !headerRight) return;
 
+  if (typeof window !== 'undefined' && !relocateTourButton._resizeBound) {
+    relocateTourButton._resizeBound = true;
+    window.addEventListener('resize', relocateTourButton);
+  }
+
   try {
     const completed = localStorage.getItem('sps_tour_completed') === 'true';
-    if (completed) {
+    let isDemoMobile = false;
+    if (typeof isDemoMode === 'function' && isDemoMode()) {
+      isDemoMobile = typeof window !== 'undefined' && window.innerWidth <= 980;
+    }
+
+    if (completed || isDemoMobile) {
       if (btnUi && btnUi.parentNode === headerRight) {
         if (btn.nextElementSibling !== btnUi || btn.parentNode !== headerRight) {
           headerRight.insertBefore(btn, btnUi);
-          btn.classList.add('in-header');
         }
       } else if (btn.parentNode !== headerRight) {
         headerRight.appendChild(btn);
-        btn.classList.add('in-header');
       }
+      btn.classList.add('in-header');
     } else {
       const navMain = document.querySelector('.workspace-nav-main');
       const presetPill = $('btnPresetPill');
@@ -263,6 +272,7 @@ function relocateTourButton() {
         }
       }
     }
+    if (typeof syncAllVtPills === 'function') syncAllVtPills();
   } catch (_) {}
 }
 

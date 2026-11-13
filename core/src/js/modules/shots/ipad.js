@@ -65,18 +65,25 @@ function renderIpadShots(){
   const hasDedicatedIpadShots = SUPPORTS_IPAD && validIpadShots.length > 0;
   const effectiveShots = hasDedicatedIpadShots ? validIpadShots : validPhoneShots;
 
-  // Update iPad Mockup Carousel
+  const uiMode = (typeof document !== 'undefined' && document.documentElement && document.documentElement.dataset && document.documentElement.dataset.ui) ? document.documentElement.dataset.ui : '';
+  const resolveDisplay = s => (typeof getDisplaySrc === 'function' ? getDisplaySrc(s) : s);
+  const ipadGalKey = uiMode + '|' + (hasDedicatedIpadShots ? '1' : '0') + '||' + effectiveShots.map(resolveDisplay).join('\n');
+
+  // Update iPad Mockup Carousel (skip DOM rebuild if screenshots haven't changed)
   $$('[data-shots=ipad-gal]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === ipadGalKey && c.children && c.children.length === effectiveShots.length) return;
     c.innerHTML = '';
     effectiveShots.forEach((s, i) => {
       const img = mk(s, 'iPad Screenshot ' + (i + 1));
       if(hasDedicatedIpadShots) img.classList.add('ipad-shot');
       c.appendChild(img);
     });
+    if(c.dataset) c.dataset.shotsKey = ipadGalKey;
   });
 
   // Update iPad Search Result 2-Column Grid Card
   $$('[data-shots=ipad-shots]').forEach(c => {
+    if(c.dataset && c.dataset.shotsKey === ipadGalKey && c.children && c.children.length > 0) return;
     c.innerHTML = '';
     const searchView = c.closest('.ipad-search-view') || $('.ipad-search-view');
     const valid = effectiveShots.filter(s => s && typeof s === 'string' && s.trim());
@@ -129,6 +136,7 @@ function renderIpadShots(){
         c.appendChild(sk);
       }
     }
+    if(c.dataset) c.dataset.shotsKey = ipadGalKey;
   });
 
   // Render iPad Editor list and status

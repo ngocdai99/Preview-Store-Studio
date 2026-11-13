@@ -58,3 +58,62 @@
 :root[data-ui=light] .dev-label.g .dev-title{
   color:#0f172a;
 }
+
+.stage-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(12, 13, 12, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 60;
+  padding: 20px;
+}
+
+:root[data-ui=light] .stage-loading-overlay {
+  background: rgba(248, 250, 252, 0.82);
+}
+
+.stage-loading-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  background: #141514;
+  border: 1px solid #282928;
+  color: #EDEDED;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-ui=light] .stage-loading-pill {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #0f172a;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+}
+
+.stage-loading-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #00D085;
+  animation: sps-stage-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+:root[data-ui=light] .stage-loading-spinner {
+  border-color: rgba(15, 23, 42, 0.14);
+  border-top-color: #006636;
+}
+
+@keyframes sps-stage-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
