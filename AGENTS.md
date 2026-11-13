@@ -116,7 +116,23 @@ Nghiêm cấm việc "dùng búa tạ đập hạt dẻ" gây lãng phí thời 
 
 ---
 
-## 8. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
+## 8. Quy tắc thao tác Git & Release tinh gọn (Fast Streamlined Git Operations)
+
+Nghiêm cấm biến lệnh `git push` đơn giản thành một chuỗi kiểm thử nặng gây lãng phí thời gian:
+
+1. **Cấm tự ý chạy lại Full Test / Build khi Push:**
+   - Khi người dùng yêu cầu `git push` hoặc `commit`, nếu các lượt trước vừa build/test hoặc chỉ vừa sửa các thay đổi CSS/UI/copy nhỏ: **CẤM TUYỆT ĐỐI** việc tự kích hoạt lại toàn bộ full test suite (1,749 tests) hay build Next.js production.
+2. **Gom lệnh dứt điểm (Single-Shot Execution & Minimal Approval Friction):**
+   - Không chẻ nhỏ thành chuỗi lệnh rải rác (`git status` -> `test` -> `build` -> `diff` -> `add` -> sandbox error -> `add` lại -> `commit` -> `push`) làm xuất hiện nhiều lần popup xin quyền sandbox gây gián đoạn và cộng dồn thời gian chờ của người dùng.
+   - Gom thành một chuỗi thực thi trực diện duy nhất:
+     `git add -A && git commit -m "..." && git push origin <branch>`
+     với `BypassSandbox: true` ngay từ đầu để người dùng chỉ cần bấm Approve một lần duy nhất.
+3. **Giới hạn thời gian thực thi:**
+   - Tác vụ git push phải hoàn tất trong vòng **15–30 giây**, không để biến thành phiên chờ đợi kéo dài nhiều phút.
+
+---
+
+## 9. Tóm tắt nhanh quy tắc kiểm tra (Pre-Commit Checklist)
 
 Mỗi khi agent cập nhật copy, metadata, tour steps, hoặc landing page:
 1. [ ] Đã quét và loại bỏ toàn bộ `pixel-perfect`, `production-ready`, `zero server lock-in`, `with confidence` chưa?
@@ -126,3 +142,4 @@ Mỗi khi agent cập nhật copy, metadata, tour steps, hoặc landing page:
 5. [ ] Quota hệ thống còn trên mức an toàn (> 2%), nếu chạm ngưỡng ≤ 2% đã thực hiện quy trình dừng an toàn và chuyển trạng thái `HOLD` chưa?
 6. [ ] Kiểm thử có đúng phạm vi không (không chạy full test / Next.js build cho task CSS nhỏ)?
 7. [ ] Tuân thủ giới hạn tối đa 2 lần retry và không chạy ngầm quá thời gian quy định?
+8. [ ] Task git push: đã gom lệnh dứt điểm, không tự ý chạy lại full test/build thừa thãi chưa?
