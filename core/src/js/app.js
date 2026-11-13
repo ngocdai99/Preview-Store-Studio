@@ -6564,9 +6564,9 @@ function validateIpadScreenshots(){
       const tag = $('ipadShotDimTag_' + idx);
 
       const isExactIpad = (
-        // iPad 13" / 12.9" display
+        // iPad 13" / 12.9" display (accepts 2731/2732 px due to mathematical 4:3 rounding on Apple CDN & design tools)
         (w === 2064 && h === 2752) || (w === 2752 && h === 2064) ||
-        (w === 2048 && h === 2732) || (w === 2732 && h === 2048) ||
+        (w === 2048 && (h === 2732 || h === 2731)) || ((w === 2732 || w === 2731) && h === 2048) ||
         // iPad 11" display
         (w === 1488 && h === 2266) || (w === 2266 && h === 1488) ||
         (w === 1668 && h === 2420) || (w === 2420 && h === 1668) ||
@@ -7511,12 +7511,12 @@ if(ipadSlistArea){
           level = 'err';
           badgeText = `App Store Rejection Risk: 1:1 Square (${w}×${h} px)`;
           detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Apple App Store requires 3:4 portrait (2048×2732 px) or 4:3 landscape (2732×2048 px) for iPad screenshots. Square (1:1) screenshots will be rejected by App Store Connect.</p><p class="icon-modal-warn-hint">Export a standard iPad screenshot (2048×2732 px) from Figma or Sketch.</p>';
-        } else if (w === 2048 && h === 2732) {
+        } else if (w === 2048 && (h === 2732 || h === 2731)) {
           level = 'ok';
-          badgeText = '2048×2732 px · iPad Compliant';
-        } else if (w === 2732 && h === 2048) {
+          badgeText = `${w}×${h} px · iPad Compliant`;
+        } else if ((w === 2732 || w === 2731) && h === 2048) {
           level = 'ok';
-          badgeText = '2732×2048 px · iPad Landscape Compliant';
+          badgeText = `${w}×${h} px · iPad Landscape Compliant`;
         } else if (isIpadPortrait || isIpadLandscape) {
           level = 'ok';
           badgeText = `${w}×${h} px · Standard iPad Compliant`;
@@ -17410,4 +17410,17 @@ window.addEventListener('load', syncAllVtPills);
 if (typeof checkAndLoadStoreParams === 'function') {
   checkAndLoadStoreParams();
 }
+
+// Signal parent frame (e.g. Next.js /try page) that studio initialization is complete
+if (typeof window !== 'undefined' && window.self !== window.top) {
+  try {
+    window.parent.postMessage({ type: 'sps-studio-ready' }, '*');
+  } catch (_) {}
+  window.addEventListener('load', () => {
+    try {
+      window.parent.postMessage({ type: 'sps-studio-ready' }, '*');
+    } catch (_) {}
+  });
+}
+
 

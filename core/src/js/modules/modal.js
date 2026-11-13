@@ -740,12 +740,12 @@
           level = 'err';
           badgeText = `App Store Rejection Risk: 1:1 Square (${w}×${h} px)`;
           detailsHtml = '<p><strong>App Store Rejection Risk:</strong> Apple App Store requires 3:4 portrait (2048×2732 px) or 4:3 landscape (2732×2048 px) for iPad screenshots. Square (1:1) screenshots will be rejected by App Store Connect.</p><p class="icon-modal-warn-hint">Export a standard iPad screenshot (2048×2732 px) from Figma or Sketch.</p>';
-        } else if (w === 2048 && h === 2732) {
+        } else if (w === 2048 && (h === 2732 || h === 2731)) {
           level = 'ok';
-          badgeText = '2048×2732 px · iPad Compliant';
-        } else if (w === 2732 && h === 2048) {
+          badgeText = `${w}×${h} px · iPad Compliant`;
+        } else if ((w === 2732 || w === 2731) && h === 2048) {
           level = 'ok';
-          badgeText = '2732×2048 px · iPad Landscape Compliant';
+          badgeText = `${w}×${h} px · iPad Landscape Compliant`;
         } else if (isIpadPortrait || isIpadLandscape) {
           level = 'ok';
           badgeText = `${w}×${h} px · Standard iPad Compliant`;

@@ -352,3 +352,16 @@ if (typeof checkAndLoadStoreParams === 'function') {
   checkAndLoadStoreParams();
 }
 
+// Signal parent frame (e.g. Next.js /try page) that studio initialization is complete
+if (typeof window !== 'undefined' && window.self !== window.top) {
+  try {
+    window.parent.postMessage({ type: 'sps-studio-ready' }, '*');
+  } catch (_) {}
+  window.addEventListener('load', () => {
+    try {
+      window.parent.postMessage({ type: 'sps-studio-ready' }, '*');
+    } catch (_) {}
+  });
+}
+
+

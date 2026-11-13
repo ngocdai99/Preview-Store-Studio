@@ -363,9 +363,9 @@ function validateIpadScreenshots(){
       const tag = $('ipadShotDimTag_' + idx);
 
       const isExactIpad = (
-        // iPad 13" / 12.9" display
+        // iPad 13" / 12.9" display (accepts 2731/2732 px due to mathematical 4:3 rounding on Apple CDN & design tools)
         (w === 2064 && h === 2752) || (w === 2752 && h === 2064) ||
-        (w === 2048 && h === 2732) || (w === 2732 && h === 2048) ||
+        (w === 2048 && (h === 2732 || h === 2731)) || ((w === 2732 || w === 2731) && h === 2048) ||
         // iPad 11" display
         (w === 1488 && h === 2266) || (w === 2266 && h === 1488) ||
         (w === 1668 && h === 2420) || (w === 2420 && h === 1668) ||
