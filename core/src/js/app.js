@@ -4769,6 +4769,9 @@ if(icoRemoveBtn){
   let _testTransformed1024 = '';
   let _testTransformed512 = '';
   let _testTransformedCurrent = '';
+  let _savedTransformed1024 = '';
+  let _savedTransformed512 = '';
+  let _savedTransformedCurrent = '';
   let _currentAssetKey = 'preset';
   let _assetStates = {}; // key -> { fitMode, isResized, transformed1024, transformed512, transformedCurrent, statusMsg, sourceUrl }
 
@@ -4880,6 +4883,12 @@ if(icoRemoveBtn){
   }
 
   function setFitMode(mode) {
+    const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
+    const isSquare = (_sourceWidth === _sourceHeight && _sourceWidth > 0);
+    if (isCurrentResized || isSquare) {
+      return; // Locked once already compliant or resized
+    }
+
     const newMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
     _fitMode = newMode;
     updateFitContainerVisibility();
@@ -4907,6 +4916,9 @@ if(icoRemoveBtn){
     _testTransformed1024 = '';
     _testTransformed512 = '';
     _testTransformedCurrent = '';
+    _savedTransformed1024 = '';
+    _savedTransformed512 = '';
+    _savedTransformedCurrent = '';
     _bothStoresDone = false;
     if (_currentAssetKey && _assetStates[_currentAssetKey]) {
       _assetStates[_currentAssetKey].isResized = false;
@@ -5009,9 +5021,7 @@ if(icoRemoveBtn){
     const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
     const transformedSrc = (_isTestPreviewMode && _testTransformedCurrent)
       ? _testTransformedCurrent
-      : ((_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].transformedCurrent)
-          ? _assetStates[_currentAssetKey].transformedCurrent
-          : '');
+      : (_savedTransformedCurrent || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].transformedCurrent) || '');
 
     if (isCurrentResized && transformedSrc) {
       if (_transformedImg && _transformedImg.src === transformedSrc && _transformedImg.complete) {
@@ -5134,7 +5144,18 @@ if(icoRemoveBtn){
       userDraft.isCustomIcon = true;
     }
 
-    // DO NOT overwrite _sourceDataUrl — keep original source so fit mode changes still work
+    _savedTransformed1024 = dataUrl1024;
+    _savedTransformed512 = dataUrl512;
+    _savedTransformedCurrent = transformedDataUrl;
+
+    saveCurrentAssetState({
+      isResized: true,
+      fitMode: _fitMode,
+      transformed1024: dataUrl1024,
+      transformed512: dataUrl512,
+      transformedCurrent: transformedDataUrl
+    });
+
     _bothStoresDone = true;
 
     // Re-render editor icons and save state
@@ -5151,6 +5172,17 @@ if(icoRemoveBtn){
     if (typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
       global.IconLog.inspectIcon(transformedDataUrl, null, targetStore);
     }
+
+    // Synchronously update liveCanvas with resized 1:1 image
+    const liveCanvas = $('appIconResizeLiveCanvas');
+    if (liveCanvas) {
+      liveCanvas.width = 1024;
+      liveCanvas.height = 1024;
+      const liveCtx = liveCanvas.getContext('2d');
+      if (liveCtx) liveCtx.drawImage(cv1024, 0, 0);
+    }
+    _transformedImg = new Image();
+    _transformedImg.src = transformedDataUrl;
 
     updateLivePreview();
 
@@ -5175,6 +5207,7 @@ if(icoRemoveBtn){
 
   function updateFitContainerVisibility() {
     const fitSection = $('appIconFitContainer') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-fit-container') : null);
+    const fitOptions = $('appIconFitOptions');
     const placeholder = $('appIconFitPlaceholder');
     const primaryBtn = $('iconActionPrimaryBtn');
     const statusMsg = $('iconResizeStatusMsg');
@@ -5188,10 +5221,15 @@ if(icoRemoveBtn){
     const isSquare = (_sourceWidth === _sourceHeight && _sourceWidth > 0);
     const isPassed = !!(isCurrentResized || isSquare);
 
-    // Show note when image has already passed or is 1:1 square (ratio changes won't make an effect)
+    // Disable ratio cards and show note when image has already passed or is 1:1 square
     if (passNote) {
       passNote.textContent = '1:1 square · Ratio changes have no effect';
       passNote.style.display = isPassed ? 'inline-block' : 'none';
+    }
+
+    if (fitOptions) {
+      fitOptions.style.pointerEvents = isPassed ? 'none' : '';
+      fitOptions.style.opacity = isPassed ? '0.5' : '';
     }
 
 
