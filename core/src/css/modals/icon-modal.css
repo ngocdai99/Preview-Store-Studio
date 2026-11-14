@@ -283,24 +283,27 @@
 @media (max-width: 980px) {
   .icon-modal-backdrop {
     padding: 8px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    align-items: center;
+    justify-content: center;
   }
 
   .icon-modal-canvas {
     width: 96vw;
     max-width: 100%;
     height: 94vh;
+    height: 94dvh;
     max-height: 94vh;
     max-height: 94dvh;
     border-radius: 16px;
-    touch-action: pan-y;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
   }
 
   .icon-modal-header {
     height: 52px;
     padding: 0 14px;
-    flex-shrink: 0;
+    flex-shrink: 0 !important;
   }
 
   .icon-modal-title {
@@ -313,70 +316,73 @@
   }
 
   .icon-modal-body {
-    flex: 1 1 auto !important;
+    display: block !important;
+    flex: 1 1 0% !important;
     min-height: 0 !important;
-    height: auto !important;
-    flex-direction: column !important;
+    width: 100% !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
-    touch-action: pan-y !important;
     overscroll-behavior-y: contain;
   }
 
   .icon-modal-stage-panel,
   .icon-modal-tab-viewport {
-    flex: 0 0 auto !important;
+    display: block !important;
     width: 100% !important;
     height: auto !important;
     min-height: auto !important;
+    max-height: none !important;
     overflow: visible !important;
-    touch-action: pan-y !important;
   }
 
   .icon-resizer-inner-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
     height: auto !important;
-    min-height: unset !important;
+    min-height: auto !important;
+    max-height: none !important;
     padding: 14px !important;
     gap: 12px !important;
-    overflow-y: visible !important;
-    touch-action: pan-y !important;
+    overflow: visible !important;
+    overscroll-behavior: auto !important;
   }
 
   .icon-resizer-canvas-card {
     min-height: auto !important;
     padding: 14px !important;
-    touch-action: pan-y !important;
   }
 
   .icon-resizer-canvas-wrap {
-    width: 220px !important;
-    height: 220px !important;
-    max-width: 220px !important;
-    max-height: 220px !important;
-    touch-action: pan-y !important;
+    width: 200px !important;
+    height: 200px !important;
+    max-width: 200px !important;
+    max-height: 200px !important;
+    margin: 0 auto !important;
   }
 
   .icon-resizer-live-canvas {
     pointer-events: none !important;
-    touch-action: pan-y !important;
   }
 
   .icon-demo-sample-slider {
-    touch-action: pan-x pan-y !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
   .icon-modal-info-panel {
+    display: flex !important;
+    flex-direction: column !important;
     width: 100% !important;
     max-width: 100% !important;
-    flex: 0 0 auto !important;
     height: auto !important;
+    min-height: auto !important;
     max-height: none !important;
-    overflow-y: visible !important;
-    padding: 14px 16px 24px 16px !important;
+    overflow: visible !important;
+    overscroll-behavior: auto !important;
+    padding: 14px 16px 36px 16px !important;
     border-top: 1px solid #282928 !important;
-    touch-action: pan-y !important;
+    border-left: none !important;
   }
 
   .icon-resizer-fit-card {
