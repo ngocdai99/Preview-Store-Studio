@@ -4797,6 +4797,11 @@ if(icoRemoveBtn){
     if (primaryBtn) {
       primaryBtn.onclick = () => {
         if (primaryBtn.disabled) return;
+        const isNonSquare = (_sourceWidth !== _sourceHeight && _sourceWidth > 0 && _sourceHeight > 0);
+        if (_fitMode === 'original' && isNonSquare) {
+          promptChooseFitMode();
+          return;
+        }
         applyTransformation();
       };
     }
@@ -4806,6 +4811,27 @@ if(icoRemoveBtn){
     setTimeout(updateFitPill, 100);
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', updateFitPill);
+    }
+  }
+
+  function promptChooseFitMode() {
+    const fitOptions = $('appIconFitOptions');
+    if (fitOptions) {
+      fitOptions.classList.remove('attention-pulse');
+      void fitOptions.offsetWidth; // trigger reflow
+      fitOptions.classList.add('attention-pulse');
+      setTimeout(() => fitOptions.classList.remove('attention-pulse'), 800);
+      try {
+        fitOptions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (e) {}
+    }
+    const statusMsg = $('iconResizeStatusMsg');
+    if (statusMsg) {
+      statusMsg.textContent = 'Please choose an Aspect Ratio: Crop, Padding, or Stretch.';
+      statusMsg.style.display = 'block';
+    }
+    if (typeof showToast === 'function') {
+      showToast('Please choose Crop, Padding, or Stretch to fit store spec', 'info');
     }
   }
 
@@ -5051,10 +5077,11 @@ if(icoRemoveBtn){
     _transformedImg = null;
 
 
-    // If on original view, switch to center-crop for 1:1 store compliance
-    if (_fitMode === 'original') {
-      _fitMode = 'center-crop';
-      syncFitModeUI('center-crop');
+    // Non-square images in original view require user to explicitly choose a fit ratio
+    const isNonSquare = (_sourceWidth !== _sourceHeight && _sourceWidth > 0 && _sourceHeight > 0);
+    if (_fitMode === 'original' && isNonSquare) {
+      promptChooseFitMode();
+      return;
     }
 
     // Render 1024×1024 for Apple App Store
@@ -5203,15 +5230,19 @@ if(icoRemoveBtn){
     }
 
 
+    const isNonSquare = (_sourceWidth !== _sourceHeight && _sourceWidth > 0 && _sourceHeight > 0);
+    const needsRatioChoice = (_fitMode === 'original' && isNonSquare);
+
+    const btnText = $('iconActionPrimaryText');
+    if (btnText) {
+      btnText.textContent = needsRatioChoice ? 'Choose Aspect Ratio to Fix' : 'Fix & Resize to Store Spec';
+    }
+
     if (_isTestPreviewMode) {
       removePrimaryBtnLock();
       if (primaryBtn) {
         primaryBtn.disabled = (_fitMode === 'original') ? false : !!isCurrentResized;
         primaryBtn.style.display = 'inline-flex';
-        const btnText = $('iconActionPrimaryText');
-        if (btnText) {
-          btnText.textContent = 'Fix & Resize to Store Spec';
-        }
       }
       return;
     }

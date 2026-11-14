@@ -140,6 +140,28 @@
   display: none;
 }
 
+@keyframes fitOptionsPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.45);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1);
+  }
+  30% {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+    border-color: #FFFFFF;
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    border-color: #282928;
+    transform: scale(1);
+  }
+}
+
+.icon-resizer-fit-options.attention-pulse {
+  animation: fitOptionsPulse 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Sliding Indicator Pill */
 .icon-resizer-fit-pill {
   position: absolute;
