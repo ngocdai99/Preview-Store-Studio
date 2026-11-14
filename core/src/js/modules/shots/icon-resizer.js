@@ -10,7 +10,7 @@
   let _transformedImg = null;
   let _sourceWidth = 0;
   let _sourceHeight = 0;
-  let _fitMode = 'center-crop';
+  let _fitMode = 'original';
   let _bothStoresDone = false; // Track if resize has been applied for both stores
   let _isTestPreviewMode = false; // Test preview only: does not mutate studio draft until explicit user confirmation
   let _testTransformed1024 = '';
@@ -28,10 +28,12 @@
     _resizerInitialized = true;
 
     // Fit Mode Selection Cards
+    const cardOrig = $('appIconFitCardOrig');
     const cardCrop = $('appIconFitCardCrop');
     const cardPad = $('appIconFitCardPad');
     const cardStretch = $('appIconFitCardStretch');
 
+    if (cardOrig) cardOrig.onclick = () => setFitMode('original');
     if (cardCrop) cardCrop.onclick = () => setFitMode('center-crop');
     if (cardPad) cardPad.onclick = () => setFitMode('pad');
     if (cardStretch) cardStretch.onclick = () => setFitMode('stretch');
@@ -119,10 +121,13 @@
   }
 
   function syncFitModeUI(mode) {
-    const targetMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
+    const validModes = ['original', 'center-crop', 'pad', 'stretch'];
+    const targetMode = validModes.includes(mode) ? mode : 'original';
+    const cardOrig = $('appIconFitCardOrig');
     const cardCrop = $('appIconFitCardCrop');
     const cardPad = $('appIconFitCardPad');
     const cardStretch = $('appIconFitCardStretch');
+    if (cardOrig) cardOrig.classList.toggle('active', targetMode === 'original');
     if (cardCrop) cardCrop.classList.toggle('active', targetMode === 'center-crop');
     if (cardPad) cardPad.classList.toggle('active', targetMode === 'pad');
     if (cardStretch) cardStretch.classList.toggle('active', targetMode === 'stretch');
@@ -136,7 +141,8 @@
   }
 
   function setFitMode(mode) {
-    const newMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
+    const validModes = ['original', 'center-crop', 'pad', 'stretch'];
+    const newMode = validModes.includes(mode) ? mode : 'original';
     _fitMode = newMode;
     updateFitContainerVisibility();
     syncFitModeUI(_fitMode);
@@ -224,9 +230,21 @@
     const srcW = _sourceWidth || (_sourceImg ? (_sourceImg.naturalWidth || _sourceImg.width) : 1024) || 1024;
     const srcH = _sourceHeight || (_sourceImg ? (_sourceImg.naturalHeight || _sourceImg.height) : 1024) || 1024;
 
-    if (_fitMode === 'stretch') {
+    if (_fitMode === 'original') {
+      // In original view: draw uncropped, preserving true aspect ratio and transparent background (checkerboard shows)
+      const scale = Math.min(targetSize / srcW, targetSize / srcH);
+      const drawW = srcW * scale;
+      const drawH = srcH * scale;
+      const drawX = (targetSize - drawW) / 2;
+      const drawY = (targetSize - drawH) / 2;
+      ctx.drawImage(_sourceImg, drawX, drawY, drawW, drawH);
+    } else if (_fitMode === 'stretch') {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, targetSize, targetSize);
       ctx.drawImage(_sourceImg, 0, 0, targetSize, targetSize);
     } else if (_fitMode === 'pad') {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, targetSize, targetSize);
       const scale = Math.min(targetSize / srcW, targetSize / srcH);
       const drawW = srcW * scale;
       const drawH = srcH * scale;
@@ -235,6 +253,8 @@
       ctx.drawImage(_sourceImg, drawX, drawY, drawW, drawH);
     } else {
       // center-crop (default recommended)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, targetSize, targetSize);
       const scale = Math.max(targetSize / srcW, targetSize / srcH);
       const drawW = srcW * scale;
       const drawH = srcH * scale;
@@ -249,7 +269,7 @@
     if (!liveCanvas) return;
 
     // If current asset is already resized/compliant, live preview MUST reflect the resized 1:1 image
-    // This ensures ratio selections show no visual changes while pass message is active
+    // when in a crop/pad/stretch mode. When in 'original' view mode, always show the original source image!
     const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
     const transformedSrc = (_isTestPreviewMode && _testTransformedCurrent)
       ? _testTransformedCurrent
@@ -257,7 +277,7 @@
           ? _assetStates[_currentAssetKey].transformedCurrent
           : '');
 
-    if (isCurrentResized && transformedSrc) {
+    if (isCurrentResized && transformedSrc && _fitMode !== 'original') {
       if (_transformedImg && _transformedImg.src === transformedSrc && _transformedImg.complete) {
         liveCanvas.width = 1024;
         liveCanvas.height = 1024;
@@ -297,6 +317,12 @@
         requireFullVersion('icon-resize');
       }
       return;
+    }
+
+    // If on original view, switch to center-crop for 1:1 store compliance
+    if (_fitMode === 'original') {
+      _fitMode = 'center-crop';
+      syncFitModeUI('center-crop');
     }
 
     // Render 1024×1024 for Apple App Store
@@ -458,7 +484,7 @@
     if (_isTestPreviewMode) {
       removePrimaryBtnLock();
       if (primaryBtn) {
-        primaryBtn.disabled = !!isCurrentResized;
+        primaryBtn.disabled = (_fitMode === 'original') ? false : !!isCurrentResized;
         primaryBtn.style.display = 'inline-flex';
         const btnText = $('iconActionPrimaryText');
         if (btnText) {
@@ -470,12 +496,16 @@
 
     if (isCurrentResized) {
       if (primaryBtn) {
-        primaryBtn.disabled = true;
+        primaryBtn.disabled = (_fitMode === 'original') ? false : true;
         primaryBtn.style.display = 'inline-flex';
       }
       if (statusMsg) {
-        statusMsg.textContent = 'Icon already meets store size requirements.';
-        statusMsg.style.display = 'block';
+        if (_fitMode === 'original') {
+          statusMsg.style.display = 'none';
+        } else {
+          statusMsg.textContent = 'Icon already meets store size requirements.';
+          statusMsg.style.display = 'block';
+        }
       }
     } else {
       if (primaryBtn) {
@@ -657,7 +687,7 @@
     const state = _assetStates[sampleKey];
 
     if (state && state.isResized && state.transformedCurrent) {
-      _fitMode = state.fitMode || 'center-crop';
+      _fitMode = state.fitMode || 'original';
       _sourceDataUrl = rawDataUrl;
       _originalSourceDataUrl = rawDataUrl;
       _testTransformed1024 = state.transformed1024 || '';
@@ -682,17 +712,17 @@
       _testTransformed1024 = '';
       _testTransformed512 = '';
       _testTransformedCurrent = '';
-    _transformedImg = null;
+      _transformedImg = null;
       _bothStoresDone = false;
 
       syncFitModeUI(_fitMode);
       setSource(rawDataUrl);
     } else {
-      _fitMode = 'center-crop';
+      _fitMode = 'original';
       _testTransformed1024 = '';
       _testTransformed512 = '';
       _testTransformedCurrent = '';
-    _transformedImg = null;
+      _transformedImg = null;
       _bothStoresDone = false;
 
       syncFitModeUI(_fitMode);
@@ -710,9 +740,9 @@
     _testTransformedCurrent = '';
     _transformedImg = null;
 
-    // Reset fit mode to default center-crop
-    _fitMode = 'center-crop';
-    syncFitModeUI('center-crop');
+    // Reset fit mode to default original
+    _fitMode = 'original';
+    syncFitModeUI('original');
 
 
     const statusMsg = $('iconResizeStatusMsg');

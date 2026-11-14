@@ -130,7 +130,14 @@
   box-sizing: border-box;
   width: auto;
   max-width: fit-content;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.icon-resizer-fit-options::-webkit-scrollbar {
+  display: none;
 }
 
 /* Sliding Indicator Pill */
