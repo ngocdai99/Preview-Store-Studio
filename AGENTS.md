@@ -129,6 +129,9 @@ Nghiêm cấm biến lệnh `git push` đơn giản thành một chuỗi kiểm 
      với `BypassSandbox: true` ngay từ đầu để người dùng chỉ cần bấm Approve một lần duy nhất.
 3. **Giới hạn thời gian thực thi:**
    - Tác vụ git push phải hoàn tất trong vòng **15–30 giây**, không để biến thành phiên chờ đợi kéo dài nhiều phút.
+4. **Cấm tự ý revert code đã commit (No Unauthorized Git Revert):**
+   - **TUYỆT ĐỐI CẤM** tự ý chạy bất kỳ lệnh hoàn tác nào làm mất/ghi đè code đã commit trong cây git (`git reset`, `git checkout .`, `git restore`, `git revert`, `git clean -fd`, v.v.).
+   - Mọi thao tác loại bỏ hay sửa đổi lịch sử commit/code đã lưu trữ bắt buộc phải có yêu cầu hoặc xác nhận rõ ràng bằng văn bản từ người dùng.
 
 ---
 
@@ -143,3 +146,4 @@ Mỗi khi agent cập nhật copy, metadata, tour steps, hoặc landing page:
 6. [ ] Kiểm thử có đúng phạm vi không (không chạy full test / Next.js build cho task CSS nhỏ)?
 7. [ ] Tuân thủ giới hạn tối đa 2 lần retry và không chạy ngầm quá thời gian quy định?
 8. [ ] Task git push: đã gom lệnh dứt điểm, không tự ý chạy lại full test/build thừa thãi chưa?
+9. [ ] Tuyệt đối không tự ý chạy revert/reset/restore làm mất mã nguồn đã commit trong cây git?

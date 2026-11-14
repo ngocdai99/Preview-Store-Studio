@@ -350,16 +350,28 @@
   }
 
   .icon-resizer-canvas-card {
-    min-height: auto !important;
+    flex: 0 0 auto !important;
+    min-height: 250px !important;
+    height: auto !important;
     padding: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .icon-resizer-canvas-wrap {
+    flex: 0 0 200px !important;
     width: 200px !important;
     height: 200px !important;
+    min-width: 200px !important;
+    min-height: 200px !important;
     max-width: 200px !important;
     max-height: 200px !important;
+    aspect-ratio: 1 / 1 !important;
     margin: 0 auto !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
   }
 
   .icon-resizer-live-canvas {
@@ -397,14 +409,26 @@
 @media (max-width: 480px) {
   .icon-modal-canvas {
     width: 98vw;
-    height: 96vh;
-    max-height: 96vh;
+    height: 94vh;
+    height: 94dvh;
+    max-height: 94vh;
+    max-height: 94dvh;
     border-radius: 12px;
   }
 
+  .icon-resizer-canvas-card {
+    min-height: 220px !important;
+    padding: 12px !important;
+  }
+
   .icon-resizer-canvas-wrap {
-    max-width: 200px !important;
-    max-height: 200px !important;
+    flex: 0 0 170px !important;
+    width: 170px !important;
+    height: 170px !important;
+    min-width: 170px !important;
+    min-height: 170px !important;
+    max-width: 170px !important;
+    max-height: 170px !important;
   }
 
   .icon-resizer-fit-card {
