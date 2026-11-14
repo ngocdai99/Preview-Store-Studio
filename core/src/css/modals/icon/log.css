@@ -443,12 +443,12 @@
 }
 
 .icon-demo-sample-card {
-  flex: 1 1 0;
-  min-width: 84px;
-  max-width: 130px;
-  height: 72px;
+  flex: 0 0 76px;
+  width: 76px;
+  height: 76px;
+  aspect-ratio: 1 / 1;
   position: relative;
-  border-radius: 9px;
+  border-radius: 10px;
   padding: 0;
   overflow: hidden;
   background: #141514;
