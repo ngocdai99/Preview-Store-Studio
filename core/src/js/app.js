@@ -4753,12 +4753,11 @@ if(icoRemoveBtn){
   let _resizerInitialized = false;
   let _sourceDataUrl = '';
   let _originalSourceDataUrl = ''; // Always the user-uploaded original, never overwritten by resize output
-  let _originalMeta = null;
   let _sourceImg = null;
   let _transformedImg = null;
   let _sourceWidth = 0;
   let _sourceHeight = 0;
-  let _fitMode = 'original';
+  let _fitMode = 'center-crop';
   let _bothStoresDone = false; // Track if resize has been applied for both stores
   let _isTestPreviewMode = false; // Test preview only: does not mutate studio draft until explicit user confirmation
   let _testTransformed1024 = '';
@@ -4776,12 +4775,10 @@ if(icoRemoveBtn){
     _resizerInitialized = true;
 
     // Fit Mode Selection Cards
-    const cardOrig = $('appIconFitCardOrig');
     const cardCrop = $('appIconFitCardCrop');
     const cardPad = $('appIconFitCardPad');
     const cardStretch = $('appIconFitCardStretch');
 
-    if (cardOrig) cardOrig.onclick = () => setFitMode('original');
     if (cardCrop) cardCrop.onclick = () => setFitMode('center-crop');
     if (cardPad) cardPad.onclick = () => setFitMode('pad');
     if (cardStretch) cardStretch.onclick = () => setFitMode('stretch');
@@ -4798,11 +4795,6 @@ if(icoRemoveBtn){
     if (primaryBtn) {
       primaryBtn.onclick = () => {
         if (primaryBtn.disabled) return;
-        const isNonSquare = (_sourceWidth !== _sourceHeight && _sourceWidth > 0 && _sourceHeight > 0);
-        if (_fitMode === 'original' && isNonSquare) {
-          promptChooseFitMode();
-          return;
-        }
         applyTransformation();
       };
     }
@@ -4812,27 +4804,6 @@ if(icoRemoveBtn){
     setTimeout(updateFitPill, 100);
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', updateFitPill);
-    }
-  }
-
-  function promptChooseFitMode() {
-    const fitOptions = $('appIconFitOptions');
-    if (fitOptions) {
-      fitOptions.classList.remove('attention-pulse');
-      void fitOptions.offsetWidth; // trigger reflow
-      fitOptions.classList.add('attention-pulse');
-      setTimeout(() => fitOptions.classList.remove('attention-pulse'), 800);
-      try {
-        fitOptions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      } catch (e) {}
-    }
-    const statusMsg = $('iconResizeStatusMsg');
-    if (statusMsg) {
-      statusMsg.textContent = 'Please choose an Aspect Ratio: Crop, Padding, or Stretch.';
-      statusMsg.style.display = 'block';
-    }
-    if (typeof showToast === 'function') {
-      showToast('Please choose Crop, Padding, or Stretch to fit store spec', 'info');
     }
   }
 
@@ -4886,13 +4857,10 @@ if(icoRemoveBtn){
   }
 
   function syncFitModeUI(mode) {
-    const validModes = ['original', 'center-crop', 'pad', 'stretch'];
-    const targetMode = validModes.includes(mode) ? mode : 'original';
-    const cardOrig = $('appIconFitCardOrig');
+    const targetMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
     const cardCrop = $('appIconFitCardCrop');
     const cardPad = $('appIconFitCardPad');
     const cardStretch = $('appIconFitCardStretch');
-    if (cardOrig) cardOrig.classList.toggle('active', targetMode === 'original');
     if (cardCrop) cardCrop.classList.toggle('active', targetMode === 'center-crop');
     if (cardPad) cardPad.classList.toggle('active', targetMode === 'pad');
     if (cardStretch) cardStretch.classList.toggle('active', targetMode === 'stretch');
@@ -4906,8 +4874,7 @@ if(icoRemoveBtn){
   }
 
   function setFitMode(mode) {
-    const validModes = ['original', 'center-crop', 'pad', 'stretch'];
-    const newMode = validModes.includes(mode) ? mode : 'original';
+    const newMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
     _fitMode = newMode;
     updateFitContainerVisibility();
     syncFitModeUI(_fitMode);
@@ -4920,87 +4887,21 @@ if(icoRemoveBtn){
       _assetStates[_currentAssetKey].fitMode = _fitMode;
       syncCardStateDots();
     }
-
-    // Synchronize IconLog validation audit messages with the active fit mode
-    syncValidationMessages();
-  }
-
-  function syncValidationMessages() {
-    if (typeof global.IconLog === 'undefined' || typeof global.IconLog.inspectIcon !== 'function') return;
-
-    let targetStore = 'apple';
-    try {
-      if (typeof global.IconLog.getTargetStore === 'function') {
-        targetStore = global.IconLog.getTargetStore();
-      }
-    } catch (e) {}
-
-    const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
-    const transformedSrc = (_isTestPreviewMode && _testTransformedCurrent)
-      ? _testTransformedCurrent
-      : ((_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].transformedCurrent)
-          ? _assetStates[_currentAssetKey].transformedCurrent
-          : '');
-
-    const modalImg = $('msIconModalImg') || $('imageDetailModalImg');
-
-    if (_fitMode === 'original') {
-      // Switched back to ORIGINAL view: re-inspect original source image and reflect true original validation state
-      const origSrc = _originalSourceDataUrl || _sourceDataUrl;
-      const origMeta = (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].origMeta)
-        ? _assetStates[_currentAssetKey].origMeta
-        : _originalMeta;
-
-      if (origSrc) {
-        if (modalImg) modalImg.src = origSrc;
-        if (typeof global._activeModalAsset !== 'undefined') {
-          global._activeModalAsset = origSrc;
-        }
-        global.IconLog.inspectIcon(origSrc, origMeta, targetStore);
-      }
-    } else {
-      // Switched to a fit strategy (Crop, Padding, Stretch)
-      if (isCurrentResized && transformedSrc) {
-        // Asset has already been resized: show compliant 1:1 metrics & pass checks
-        if (modalImg) modalImg.src = transformedSrc;
-        if (typeof global._activeModalAsset !== 'undefined') {
-          global._activeModalAsset = transformedSrc;
-        }
-        global.IconLog.inspectIcon(transformedSrc, null, targetStore);
-      } else {
-        // Asset has not yet been resized: re-inspect original source so checklist accurately reflects remaining issues
-        const origSrc = _originalSourceDataUrl || _sourceDataUrl;
-        const origMeta = (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].origMeta)
-          ? _assetStates[_currentAssetKey].origMeta
-          : _originalMeta;
-
-        if (origSrc) {
-          if (modalImg) modalImg.src = origSrc;
-          global.IconLog.inspectIcon(origSrc, origMeta, targetStore);
-        }
-      }
-    }
   }
 
   function getFitMode() {
     return _fitMode;
   }
 
-  function setSource(src, meta) {
+  function setSource(src) {
     if (!src) return;
     _sourceDataUrl = src;
     _originalSourceDataUrl = src; // Lock original — never overwritten by resize output
-    if (meta) {
-      _originalMeta = meta;
-    } else if (global.IconLog && typeof global.IconLog.getLastMeta === 'function') {
-      _originalMeta = global.IconLog.getLastMeta();
-    }
     _bothStoresDone = false;
     ensureSourceLoaded(() => {
       checkAlreadyCompliant();
       updateLivePreview();
       updateFitContainerVisibility();
-      syncValidationMessages();
     });
   }
 
@@ -5061,21 +4962,9 @@ if(icoRemoveBtn){
     const srcW = _sourceWidth || (_sourceImg ? (_sourceImg.naturalWidth || _sourceImg.width) : 1024) || 1024;
     const srcH = _sourceHeight || (_sourceImg ? (_sourceImg.naturalHeight || _sourceImg.height) : 1024) || 1024;
 
-    if (_fitMode === 'original') {
-      // In original view: draw uncropped, preserving true aspect ratio and transparent background (checkerboard shows)
-      const scale = Math.min(targetSize / srcW, targetSize / srcH);
-      const drawW = srcW * scale;
-      const drawH = srcH * scale;
-      const drawX = (targetSize - drawW) / 2;
-      const drawY = (targetSize - drawH) / 2;
-      ctx.drawImage(_sourceImg, drawX, drawY, drawW, drawH);
-    } else if (_fitMode === 'stretch') {
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, targetSize, targetSize);
+    if (_fitMode === 'stretch') {
       ctx.drawImage(_sourceImg, 0, 0, targetSize, targetSize);
     } else if (_fitMode === 'pad') {
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, targetSize, targetSize);
       const scale = Math.min(targetSize / srcW, targetSize / srcH);
       const drawW = srcW * scale;
       const drawH = srcH * scale;
@@ -5084,8 +4973,6 @@ if(icoRemoveBtn){
       ctx.drawImage(_sourceImg, drawX, drawY, drawW, drawH);
     } else {
       // center-crop (default recommended)
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, targetSize, targetSize);
       const scale = Math.max(targetSize / srcW, targetSize / srcH);
       const drawW = srcW * scale;
       const drawH = srcH * scale;
@@ -5100,7 +4987,7 @@ if(icoRemoveBtn){
     if (!liveCanvas) return;
 
     // If current asset is already resized/compliant, live preview MUST reflect the resized 1:1 image
-    // when in a crop/pad/stretch mode. When in 'original' view mode, always show the original source image!
+    // This ensures ratio selections show no visual changes while pass message is active
     const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
     const transformedSrc = (_isTestPreviewMode && _testTransformedCurrent)
       ? _testTransformedCurrent
@@ -5108,7 +4995,7 @@ if(icoRemoveBtn){
           ? _assetStates[_currentAssetKey].transformedCurrent
           : '');
 
-    if (isCurrentResized && transformedSrc && _fitMode !== 'original') {
+    if (isCurrentResized && transformedSrc) {
       if (_transformedImg && _transformedImg.src === transformedSrc && _transformedImg.complete) {
         liveCanvas.width = 1024;
         liveCanvas.height = 1024;
@@ -5143,13 +5030,6 @@ if(icoRemoveBtn){
     if (!_sourceImg) return;
     _transformedImg = null;
 
-
-    // Non-square images in original view require user to explicitly choose a fit ratio
-    const isNonSquare = (_sourceWidth !== _sourceHeight && _sourceWidth > 0 && _sourceHeight > 0);
-    if (_fitMode === 'original' && isNonSquare) {
-      promptChooseFitMode();
-      return;
-    }
 
     // Render 1024×1024 for Apple App Store
     const cv1024 = document.createElement('canvas');
@@ -5297,35 +5177,27 @@ if(icoRemoveBtn){
     }
 
 
-    const isNonSquare = (_sourceWidth !== _sourceHeight && _sourceWidth > 0 && _sourceHeight > 0);
-    const needsRatioChoice = (_fitMode === 'original' && isNonSquare);
-
-    const btnText = $('iconActionPrimaryText');
-    if (btnText) {
-      btnText.textContent = needsRatioChoice ? 'Choose Aspect Ratio to Fix' : 'Fix & Resize to Store Spec';
-    }
-
     if (_isTestPreviewMode) {
       removePrimaryBtnLock();
       if (primaryBtn) {
-        primaryBtn.disabled = (_fitMode === 'original') ? false : !!isCurrentResized;
+        primaryBtn.disabled = !!isCurrentResized;
         primaryBtn.style.display = 'inline-flex';
+        const btnText = $('iconActionPrimaryText');
+        if (btnText) {
+          btnText.textContent = 'Fix & Resize to Store Spec';
+        }
       }
       return;
     }
 
     if (isCurrentResized) {
       if (primaryBtn) {
-        primaryBtn.disabled = (_fitMode === 'original') ? false : true;
+        primaryBtn.disabled = true;
         primaryBtn.style.display = 'inline-flex';
       }
       if (statusMsg) {
-        if (_fitMode === 'original') {
-          statusMsg.style.display = 'none';
-        } else {
-          statusMsg.textContent = 'Icon already meets store size requirements.';
-          statusMsg.style.display = 'block';
-        }
+        statusMsg.textContent = 'Icon already meets store size requirements.';
+        statusMsg.style.display = 'block';
       }
     } else {
       if (primaryBtn) {
@@ -5491,7 +5363,6 @@ if(icoRemoveBtn){
       transformedCurrent: _testTransformedCurrent || existing.transformedCurrent || '',
       statusMsg: (statusMsgEl && statusMsgEl.style.display !== 'none' && statusMsgEl.textContent) ? statusMsgEl.textContent : (existing.statusMsg || ''),
       sourceUrl: _originalSourceDataUrl || _sourceDataUrl,
-      origMeta: _originalMeta || existing.origMeta || null,
       width: _sourceWidth || existing.width || 0,
       height: _sourceHeight || existing.height || 0
     }, overrides || {});
@@ -5502,18 +5373,13 @@ if(icoRemoveBtn){
     return _assetStates[key] || null;
   }
 
-  function restoreAssetState(sampleKey, rawDataUrl, meta) {
+  function restoreAssetState(sampleKey, rawDataUrl) {
     _currentAssetKey = sampleKey;
     _isTestPreviewMode = (sampleKey !== 'preset');
     const state = _assetStates[sampleKey];
-    if (meta) {
-      if (!_assetStates[sampleKey]) _assetStates[sampleKey] = {};
-      _assetStates[sampleKey].origMeta = meta;
-      _originalMeta = meta;
-    }
 
     if (state && state.isResized && state.transformedCurrent) {
-      _fitMode = state.fitMode || 'original';
+      _fitMode = state.fitMode || 'center-crop';
       _sourceDataUrl = rawDataUrl;
       _originalSourceDataUrl = rawDataUrl;
       _testTransformed1024 = state.transformed1024 || '';
@@ -5526,16 +5392,11 @@ if(icoRemoveBtn){
       ensureSourceLoaded(() => {
         updateLivePreview();
         updateFitContainerVisibility();
-        syncValidationMessages();
 
         const statusMsg = $('iconResizeStatusMsg');
-        if (statusMsg) {
-          if (_fitMode === 'original') {
-            statusMsg.style.display = 'none';
-          } else if (state.statusMsg) {
-            statusMsg.textContent = state.statusMsg;
-            statusMsg.style.display = 'block';
-          }
+        if (statusMsg && state.statusMsg) {
+          statusMsg.textContent = state.statusMsg;
+          statusMsg.style.display = 'block';
         }
       });
     } else if (state && state.fitMode) {
@@ -5543,21 +5404,21 @@ if(icoRemoveBtn){
       _testTransformed1024 = '';
       _testTransformed512 = '';
       _testTransformedCurrent = '';
-      _transformedImg = null;
+    _transformedImg = null;
       _bothStoresDone = false;
 
       syncFitModeUI(_fitMode);
-      setSource(rawDataUrl, meta);
+      setSource(rawDataUrl);
     } else {
-      _fitMode = 'original';
+      _fitMode = 'center-crop';
       _testTransformed1024 = '';
       _testTransformed512 = '';
       _testTransformedCurrent = '';
-      _transformedImg = null;
+    _transformedImg = null;
       _bothStoresDone = false;
 
       syncFitModeUI(_fitMode);
-      setSource(rawDataUrl, meta);
+      setSource(rawDataUrl);
     }
     syncCardStateDots();
   }
@@ -5571,9 +5432,9 @@ if(icoRemoveBtn){
     _testTransformedCurrent = '';
     _transformedImg = null;
 
-    // Reset fit mode to default original
-    _fitMode = 'original';
-    syncFitModeUI('original');
+    // Reset fit mode to default center-crop
+    _fitMode = 'center-crop';
+    syncFitModeUI('center-crop');
 
 
     const statusMsg = $('iconResizeStatusMsg');
@@ -6111,9 +5972,7 @@ if(icoRemoveBtn){
     init: initIconLog,
     getTargetStore,
     setTargetStore,
-    inspectIcon,
-    getLastMeta: () => _lastAuditedMeta,
-    getLastSrc: () => _lastAuditedSrc
+    inspectIcon
   };
 
   // Global helper aliases

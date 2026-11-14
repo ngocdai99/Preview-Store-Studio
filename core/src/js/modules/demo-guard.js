@@ -414,9 +414,9 @@ function initDemoGuard() {
 
         // 6. Restore asset state in IconResizer (or set source if first time)
         if (typeof _g.IconResizer !== 'undefined' && typeof _g.IconResizer.restoreAssetState === 'function') {
-          _g.IconResizer.restoreAssetState(sampleKey, dataUrl, { size: Math.round((w || 800) * (h || 600) * 0.4), type: mime, name: label });
+          _g.IconResizer.restoreAssetState(sampleKey, dataUrl);
         } else if (typeof _g.IconResizer !== 'undefined' && typeof _g.IconResizer.setSource === 'function') {
-          _g.IconResizer.setSource(dataUrl, { size: Math.round((w || 800) * (h || 600) * 0.4), type: mime, name: label });
+          _g.IconResizer.setSource(dataUrl);
         }
 
         // 7. Configure action button for test preview mode: disabled once already resized, no lock icon
