@@ -6,6 +6,7 @@
   let _resizerInitialized = false;
   let _sourceDataUrl = '';
   let _originalSourceDataUrl = ''; // Always the user-uploaded original, never overwritten by resize output
+  let _originalMeta = null;
   let _sourceImg = null;
   let _transformedImg = null;
   let _sourceWidth = 0;
@@ -181,21 +182,87 @@
       _assetStates[_currentAssetKey].fitMode = _fitMode;
       syncCardStateDots();
     }
+
+    // Synchronize IconLog validation audit messages with the active fit mode
+    syncValidationMessages();
+  }
+
+  function syncValidationMessages() {
+    if (typeof global.IconLog === 'undefined' || typeof global.IconLog.inspectIcon !== 'function') return;
+
+    let targetStore = 'apple';
+    try {
+      if (typeof global.IconLog.getTargetStore === 'function') {
+        targetStore = global.IconLog.getTargetStore();
+      }
+    } catch (e) {}
+
+    const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
+    const transformedSrc = (_isTestPreviewMode && _testTransformedCurrent)
+      ? _testTransformedCurrent
+      : ((_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].transformedCurrent)
+          ? _assetStates[_currentAssetKey].transformedCurrent
+          : '');
+
+    const modalImg = $('msIconModalImg') || $('imageDetailModalImg');
+
+    if (_fitMode === 'original') {
+      // Switched back to ORIGINAL view: re-inspect original source image and reflect true original validation state
+      const origSrc = _originalSourceDataUrl || _sourceDataUrl;
+      const origMeta = (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].origMeta)
+        ? _assetStates[_currentAssetKey].origMeta
+        : _originalMeta;
+
+      if (origSrc) {
+        if (modalImg) modalImg.src = origSrc;
+        if (typeof global._activeModalAsset !== 'undefined') {
+          global._activeModalAsset = origSrc;
+        }
+        global.IconLog.inspectIcon(origSrc, origMeta, targetStore);
+      }
+    } else {
+      // Switched to a fit strategy (Crop, Padding, Stretch)
+      if (isCurrentResized && transformedSrc) {
+        // Asset has already been resized: show compliant 1:1 metrics & pass checks
+        if (modalImg) modalImg.src = transformedSrc;
+        if (typeof global._activeModalAsset !== 'undefined') {
+          global._activeModalAsset = transformedSrc;
+        }
+        global.IconLog.inspectIcon(transformedSrc, null, targetStore);
+      } else {
+        // Asset has not yet been resized: re-inspect original source so checklist accurately reflects remaining issues
+        const origSrc = _originalSourceDataUrl || _sourceDataUrl;
+        const origMeta = (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].origMeta)
+          ? _assetStates[_currentAssetKey].origMeta
+          : _originalMeta;
+
+        if (origSrc) {
+          if (modalImg) modalImg.src = origSrc;
+          global.IconLog.inspectIcon(origSrc, origMeta, targetStore);
+        }
+      }
+    }
   }
 
   function getFitMode() {
     return _fitMode;
   }
 
-  function setSource(src) {
+  function setSource(src, meta) {
     if (!src) return;
     _sourceDataUrl = src;
     _originalSourceDataUrl = src; // Lock original — never overwritten by resize output
+    if (meta) {
+      _originalMeta = meta;
+    } else if (global.IconLog && typeof global.IconLog.getLastMeta === 'function') {
+      _originalMeta = global.IconLog.getLastMeta();
+    }
     _bothStoresDone = false;
     ensureSourceLoaded(() => {
       checkAlreadyCompliant();
       updateLivePreview();
       updateFitContainerVisibility();
+      syncValidationMessages();
     });
   }
 
@@ -702,6 +769,7 @@
       transformedCurrent: _testTransformedCurrent || existing.transformedCurrent || '',
       statusMsg: (statusMsgEl && statusMsgEl.style.display !== 'none' && statusMsgEl.textContent) ? statusMsgEl.textContent : (existing.statusMsg || ''),
       sourceUrl: _originalSourceDataUrl || _sourceDataUrl,
+      origMeta: _originalMeta || existing.origMeta || null,
       width: _sourceWidth || existing.width || 0,
       height: _sourceHeight || existing.height || 0
     }, overrides || {});
@@ -712,10 +780,15 @@
     return _assetStates[key] || null;
   }
 
-  function restoreAssetState(sampleKey, rawDataUrl) {
+  function restoreAssetState(sampleKey, rawDataUrl, meta) {
     _currentAssetKey = sampleKey;
     _isTestPreviewMode = (sampleKey !== 'preset');
     const state = _assetStates[sampleKey];
+    if (meta) {
+      if (!_assetStates[sampleKey]) _assetStates[sampleKey] = {};
+      _assetStates[sampleKey].origMeta = meta;
+      _originalMeta = meta;
+    }
 
     if (state && state.isResized && state.transformedCurrent) {
       _fitMode = state.fitMode || 'original';
@@ -731,11 +804,16 @@
       ensureSourceLoaded(() => {
         updateLivePreview();
         updateFitContainerVisibility();
+        syncValidationMessages();
 
         const statusMsg = $('iconResizeStatusMsg');
-        if (statusMsg && state.statusMsg) {
-          statusMsg.textContent = state.statusMsg;
-          statusMsg.style.display = 'block';
+        if (statusMsg) {
+          if (_fitMode === 'original') {
+            statusMsg.style.display = 'none';
+          } else if (state.statusMsg) {
+            statusMsg.textContent = state.statusMsg;
+            statusMsg.style.display = 'block';
+          }
         }
       });
     } else if (state && state.fitMode) {
@@ -747,7 +825,7 @@
       _bothStoresDone = false;
 
       syncFitModeUI(_fitMode);
-      setSource(rawDataUrl);
+      setSource(rawDataUrl, meta);
     } else {
       _fitMode = 'original';
       _testTransformed1024 = '';
@@ -757,7 +835,7 @@
       _bothStoresDone = false;
 
       syncFitModeUI(_fitMode);
-      setSource(rawDataUrl);
+      setSource(rawDataUrl, meta);
     }
     syncCardStateDots();
   }

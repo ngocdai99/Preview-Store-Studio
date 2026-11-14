@@ -427,7 +427,9 @@
     init: initIconLog,
     getTargetStore,
     setTargetStore,
-    inspectIcon
+    inspectIcon,
+    getLastMeta: () => _lastAuditedMeta,
+    getLastSrc: () => _lastAuditedSrc
   };
 
   // Global helper aliases

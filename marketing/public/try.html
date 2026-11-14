@@ -6447,9 +6447,9 @@ _g.IconLog.inspectIcon(dataUrl, { size: Math.round((w || 800) * (h || 600) * 0.4
 _g.inspectModalAsset(currentAsset, { size: Math.round((w || 800) * (h || 600) * 0.4), type: mime, name: label });
 }
 if (typeof _g.IconResizer !== 'undefined' && typeof _g.IconResizer.restoreAssetState === 'function') {
-_g.IconResizer.restoreAssetState(sampleKey, dataUrl);
+_g.IconResizer.restoreAssetState(sampleKey, dataUrl, { size: Math.round((w || 800) * (h || 600) * 0.4), type: mime, name: label });
 } else if (typeof _g.IconResizer !== 'undefined' && typeof _g.IconResizer.setSource === 'function') {
-_g.IconResizer.setSource(dataUrl);
+_g.IconResizer.setSource(dataUrl, { size: Math.round((w || 800) * (h || 600) * 0.4), type: mime, name: label });
 }
 const primaryBtn = $('iconActionPrimaryBtn');
 if (primaryBtn) {
@@ -8116,6 +8116,7 @@ initIconInspector();
 let _resizerInitialized = false;
 let _sourceDataUrl = '';
 let _originalSourceDataUrl = ''; // Always the user-uploaded original, never overwritten by resize output
+let _originalMeta = null;
 let _sourceImg = null;
 let _transformedImg = null;
 let _sourceWidth = 0;
@@ -8271,19 +8272,72 @@ if (!_assetStates[_currentAssetKey]) _assetStates[_currentAssetKey] = {};
 _assetStates[_currentAssetKey].fitMode = _fitMode;
 syncCardStateDots();
 }
+syncValidationMessages();
+}
+function syncValidationMessages() {
+if (typeof global.IconLog === 'undefined' || typeof global.IconLog.inspectIcon !== 'function') return;
+let targetStore = 'apple';
+try {
+if (typeof global.IconLog.getTargetStore === 'function') {
+targetStore = global.IconLog.getTargetStore();
+}
+} catch (e) {}
+const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
+const transformedSrc = (_isTestPreviewMode && _testTransformedCurrent)
+? _testTransformedCurrent
+: ((_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].transformedCurrent)
+? _assetStates[_currentAssetKey].transformedCurrent
+: '');
+const modalImg = $('msIconModalImg') || $('imageDetailModalImg');
+if (_fitMode === 'original') {
+const origSrc = _originalSourceDataUrl || _sourceDataUrl;
+const origMeta = (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].origMeta)
+? _assetStates[_currentAssetKey].origMeta
+: _originalMeta;
+if (origSrc) {
+if (modalImg) modalImg.src = origSrc;
+if (typeof global._activeModalAsset !== 'undefined') {
+global._activeModalAsset = origSrc;
+}
+global.IconLog.inspectIcon(origSrc, origMeta, targetStore);
+}
+} else {
+if (isCurrentResized && transformedSrc) {
+if (modalImg) modalImg.src = transformedSrc;
+if (typeof global._activeModalAsset !== 'undefined') {
+global._activeModalAsset = transformedSrc;
+}
+global.IconLog.inspectIcon(transformedSrc, null, targetStore);
+} else {
+const origSrc = _originalSourceDataUrl || _sourceDataUrl;
+const origMeta = (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].origMeta)
+? _assetStates[_currentAssetKey].origMeta
+: _originalMeta;
+if (origSrc) {
+if (modalImg) modalImg.src = origSrc;
+global.IconLog.inspectIcon(origSrc, origMeta, targetStore);
+}
+}
+}
 }
 function getFitMode() {
 return _fitMode;
 }
-function setSource(src) {
+function setSource(src, meta) {
 if (!src) return;
 _sourceDataUrl = src;
 _originalSourceDataUrl = src; // Lock original — never overwritten by resize output
+if (meta) {
+_originalMeta = meta;
+} else if (global.IconLog && typeof global.IconLog.getLastMeta === 'function') {
+_originalMeta = global.IconLog.getLastMeta();
+}
 _bothStoresDone = false;
 ensureSourceLoaded(() => {
 checkAlreadyCompliant();
 updateLivePreview();
 updateFitContainerVisibility();
+syncValidationMessages();
 });
 }
 function ensureSourceLoaded(callback) {
@@ -8688,6 +8742,7 @@ transformed512: _testTransformed512 || existing.transformed512 || '',
 transformedCurrent: _testTransformedCurrent || existing.transformedCurrent || '',
 statusMsg: (statusMsgEl && statusMsgEl.style.display !== 'none' && statusMsgEl.textContent) ? statusMsgEl.textContent : (existing.statusMsg || ''),
 sourceUrl: _originalSourceDataUrl || _sourceDataUrl,
+origMeta: _originalMeta || existing.origMeta || null,
 width: _sourceWidth || existing.width || 0,
 height: _sourceHeight || existing.height || 0
 }, overrides || {});
@@ -8696,10 +8751,15 @@ syncCardStateDots();
 function getAssetState(key) {
 return _assetStates[key] || null;
 }
-function restoreAssetState(sampleKey, rawDataUrl) {
+function restoreAssetState(sampleKey, rawDataUrl, meta) {
 _currentAssetKey = sampleKey;
 _isTestPreviewMode = (sampleKey !== 'preset');
 const state = _assetStates[sampleKey];
+if (meta) {
+if (!_assetStates[sampleKey]) _assetStates[sampleKey] = {};
+_assetStates[sampleKey].origMeta = meta;
+_originalMeta = meta;
+}
 if (state && state.isResized && state.transformedCurrent) {
 _fitMode = state.fitMode || 'original';
 _sourceDataUrl = rawDataUrl;
@@ -8712,10 +8772,15 @@ syncFitModeUI(_fitMode);
 ensureSourceLoaded(() => {
 updateLivePreview();
 updateFitContainerVisibility();
+syncValidationMessages();
 const statusMsg = $('iconResizeStatusMsg');
-if (statusMsg && state.statusMsg) {
+if (statusMsg) {
+if (_fitMode === 'original') {
+statusMsg.style.display = 'none';
+} else if (state.statusMsg) {
 statusMsg.textContent = state.statusMsg;
 statusMsg.style.display = 'block';
+}
 }
 });
 } else if (state && state.fitMode) {
@@ -8726,7 +8791,7 @@ _testTransformedCurrent = '';
 _transformedImg = null;
 _bothStoresDone = false;
 syncFitModeUI(_fitMode);
-setSource(rawDataUrl);
+setSource(rawDataUrl, meta);
 } else {
 _fitMode = 'original';
 _testTransformed1024 = '';
@@ -8735,7 +8800,7 @@ _testTransformedCurrent = '';
 _transformedImg = null;
 _bothStoresDone = false;
 syncFitModeUI(_fitMode);
-setSource(rawDataUrl);
+setSource(rawDataUrl, meta);
 }
 syncCardStateDots();
 }
@@ -9187,7 +9252,9 @@ global.IconLog = {
 init: initIconLog,
 getTargetStore,
 setTargetStore,
-inspectIcon
+inspectIcon,
+getLastMeta: () => _lastAuditedMeta,
+getLastSrc: () => _lastAuditedSrc
 };
 global.setTargetStore = setTargetStore;
 global.inspectIconAsset = inspectIcon;
