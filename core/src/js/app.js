@@ -4469,6 +4469,9 @@ if($('icoFile')){
       renderIcons();
       saveState();
       if(typeof updateDraftPill === 'function') updateDraftPill();
+      if(typeof global !== 'undefined' && global.IconResizer && typeof global.IconResizer.setSource === 'function'){
+        global.IconResizer.setSource(d);
+      }
       showToast('App icon updated!', 'ok');
     });
     e.target.value = '';
@@ -4514,6 +4517,9 @@ if(icoDropZone){
         renderIcons();
         saveState();
         if(typeof updateDraftPill === 'function') updateDraftPill();
+        if(typeof global !== 'undefined' && global.IconResizer && typeof global.IconResizer.setSource === 'function'){
+          global.IconResizer.setSource(d);
+        }
         showToast('App icon dropped & applied!', 'ok');
       });
     }
@@ -4897,7 +4903,19 @@ if(icoRemoveBtn){
     if (!src) return;
     _sourceDataUrl = src;
     _originalSourceDataUrl = src; // Lock original — never overwritten by resize output
+    _transformedImg = null;
+    _testTransformed1024 = '';
+    _testTransformed512 = '';
+    _testTransformedCurrent = '';
     _bothStoresDone = false;
+    if (_currentAssetKey && _assetStates[_currentAssetKey]) {
+      _assetStates[_currentAssetKey].isResized = false;
+      _assetStates[_currentAssetKey].transformedCurrent = '';
+      _assetStates[_currentAssetKey].transformed1024 = '';
+      _assetStates[_currentAssetKey].transformed512 = '';
+      _assetStates[_currentAssetKey].statusMsg = '';
+    }
+    syncCardStateDots();
     ensureSourceLoaded(() => {
       checkAlreadyCompliant();
       updateLivePreview();
@@ -8126,22 +8144,74 @@ if(ipadSlistArea){
         }
         handleIconUpload(storeKey, _activeModalStore, dataUrl);
       } else if (_activeModalType === 'icon') {
-        // Core studio fallback
+        // Core studio icon update
+        if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
+        if (typeof ICON_FILE_SIZE !== 'undefined') ICON_FILE_SIZE = file.size || 0;
+        if (typeof ICON_FILE_TYPE !== 'undefined') ICON_FILE_TYPE = file.type || '';
+        if (typeof ICON_FILE_NAME !== 'undefined') ICON_FILE_NAME = file.name || '';
+
         if (typeof ICON !== 'undefined') {
           ICON = dataUrl;
           if (_activeModalStore === 'google') {
             if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = dataUrl;
+            if (typeof CUSTOM_ICON_1024 === 'undefined' || !CUSTOM_ICON_1024) CUSTOM_ICON_1024 = dataUrl;
           } else {
             if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = dataUrl;
             if (typeof downscaleIconTo512 === 'function') {
               downscaleIconTo512(dataUrl, d512 => {
                 if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = d512;
               });
+            } else {
+              if (typeof CUSTOM_ICON_512 === 'undefined' || !CUSTOM_ICON_512) CUSTOM_ICON_512 = dataUrl;
             }
           }
+          if (typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft') {
+            userDraft.icon = dataUrl;
+            if (_activeModalStore === 'google') userDraft.icon512 = dataUrl;
+            else userDraft.icon1024 = dataUrl;
+            userDraft.isCustomIcon = true;
+          }
           if (typeof renderIcons === 'function') renderIcons();
+          if (typeof validateAppIcon === 'function') validateAppIcon();
+          if (typeof updateDraftPill === 'function') updateDraftPill();
           if (typeof saveState === 'function') saveState();
         }
+
+        // Synchronize modal preview & IconResizer
+        if (typeof global.IconResizer !== 'undefined') {
+          if (typeof global.IconResizer.setTestPreviewMode === 'function') {
+            global.IconResizer.setTestPreviewMode(false);
+          }
+          if (typeof global.IconResizer.setCurrentAssetKey === 'function') {
+            global.IconResizer.setCurrentAssetKey('preset');
+          }
+          if (typeof global.IconResizer.setSource === 'function') {
+            global.IconResizer.setSource(dataUrl);
+          } else if (typeof global.onResizerSourceChanged === 'function') {
+            global.onResizerSourceChanged(dataUrl);
+          }
+          if (typeof global.IconResizer.updateLivePreview === 'function') {
+            global.IconResizer.updateLivePreview();
+          }
+        } else if (typeof global.onResizerSourceChanged === 'function') {
+          global.onResizerSourceChanged(dataUrl);
+        }
+
+        // Update demo carousel preset thumbnail & active state
+        const presetThumb = $('demoSamplePresetThumb');
+        if (presetThumb) presetThumb.src = dataUrl;
+        const allCards = (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function')
+          ? document.querySelectorAll('.icon-demo-sample-card')
+          : [];
+        allCards.forEach(c => c.classList.remove('active'));
+        const presetCard = $('demoSampleCardPreset');
+        if (presetCard) presetCard.classList.add('active');
+
+        const secTitle = $('appIconResizeSectionTitle');
+        if (secTitle) secTitle.textContent = 'Your App Icon';
+
+        const statusMsg = $('iconResizeStatusMsg');
+        if (statusMsg) statusMsg.style.display = 'none';
       } else if (_activeModalType === 'feature') {
         if (typeof FEATURE_GRAPHIC !== 'undefined') {
           FEATURE_GRAPHIC = dataUrl;

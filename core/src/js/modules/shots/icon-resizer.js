@@ -159,7 +159,19 @@
     if (!src) return;
     _sourceDataUrl = src;
     _originalSourceDataUrl = src; // Lock original — never overwritten by resize output
+    _transformedImg = null;
+    _testTransformed1024 = '';
+    _testTransformed512 = '';
+    _testTransformedCurrent = '';
     _bothStoresDone = false;
+    if (_currentAssetKey && _assetStates[_currentAssetKey]) {
+      _assetStates[_currentAssetKey].isResized = false;
+      _assetStates[_currentAssetKey].transformedCurrent = '';
+      _assetStates[_currentAssetKey].transformed1024 = '';
+      _assetStates[_currentAssetKey].transformed512 = '';
+      _assetStates[_currentAssetKey].statusMsg = '';
+    }
+    syncCardStateDots();
     ensureSourceLoaded(() => {
       checkAlreadyCompliant();
       updateLivePreview();

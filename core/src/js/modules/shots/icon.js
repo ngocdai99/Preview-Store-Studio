@@ -423,6 +423,9 @@ if($('icoFile')){
       renderIcons();
       saveState();
       if(typeof updateDraftPill === 'function') updateDraftPill();
+      if(typeof global !== 'undefined' && global.IconResizer && typeof global.IconResizer.setSource === 'function'){
+        global.IconResizer.setSource(d);
+      }
       showToast('App icon updated!', 'ok');
     });
     e.target.value = '';
@@ -468,6 +471,9 @@ if(icoDropZone){
         renderIcons();
         saveState();
         if(typeof updateDraftPill === 'function') updateDraftPill();
+        if(typeof global !== 'undefined' && global.IconResizer && typeof global.IconResizer.setSource === 'function'){
+          global.IconResizer.setSource(d);
+        }
         showToast('App icon dropped & applied!', 'ok');
       });
     }
