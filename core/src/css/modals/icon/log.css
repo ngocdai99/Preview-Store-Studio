@@ -533,6 +533,15 @@
   display: inline-flex;
 }
 
+#demoSampleCardPreset .icon-demo-card-check,
+.icon-demo-sample-card.is-preset .icon-demo-card-check {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  margin-left: 0;
+  z-index: 2;
+}
+
 
 
 
