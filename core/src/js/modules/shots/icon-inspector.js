@@ -121,10 +121,7 @@
       if (_currentTab === 'resize') {
         primaryText.textContent = 'Apply & Validate Icon';
       } else {
-        // Look at current badge state or default to fix
-        const badge = $('msIconModalBadge');
-        const isOk = badge && badge.classList.contains('ok');
-        primaryText.textContent = isOk ? 'Re-fit / Resize Icon' : 'Fix & Resize to Store Spec';
+        primaryText.textContent = 'Fix & Resize to Store Spec';
       }
     }
 

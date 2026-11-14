@@ -410,8 +410,8 @@ function buildMarketingVi() {
     "if (m === 'apple') edTitle.textContent = 'Nội dung App Store';\n          else if (m === 'google') edTitle.textContent = 'Nội dung Google Play';\n          else edTitle.textContent = 'Nội dung trang giới thiệu ứng dụng';"
   );
   html = rep(html,
-    "if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';",
-    "if (uploadBtnText) uploadBtnText.textContent = 'Tải icon app';"
+    "if (uploadBtnText) uploadBtnText.textContent = 'Upload';",
+    "if (uploadBtnText) uploadBtnText.textContent = 'Tải lên';"
   );
   html = rep(html,
     "if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';",
@@ -457,7 +457,7 @@ function buildMarketingVi() {
   html = rep(html, '<span class="icon-metric-lbl">File Size</span>', '<span class="icon-metric-lbl">Dung lượng file</span>');
   html = rep(html, '<span class="icon-metric-lbl">Format / Alpha</span>', '<span class="icon-metric-lbl">Định dạng / Alpha</span>');
   html = rep(html, '<span class="icon-modal-field-label">Status</span>', '<span class="icon-modal-field-label">Trạng thái</span>');
-  html = rep(html, '<span id="msIconModalUploadText">Upload New Icon</span>', '<span id="msIconModalUploadText">Tải icon app</span>');
+  html = rep(html, '<span id="msIconModalUploadText">Upload</span>', '<span id="msIconModalUploadText">Tải lên</span>');
   html = rep(html, '<span class="icon-modal-disclaimer-title">Store Review Disclaimer</span>', '<span class="icon-modal-disclaimer-title">Lưu Ý Kiểm Duyệt của Store</span>');
   html = rep(html, 
     '<p class="icon-modal-disclaimer-desc">Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels on iOS, or file size limits).</p>',

@@ -331,13 +331,15 @@
   }
 
   .icon-resizer-canvas-card {
-    min-height: 220px !important;
+    min-height: auto !important;
     padding: 14px !important;
   }
 
   .icon-resizer-canvas-wrap {
-    max-width: 250px !important;
-    max-height: 250px !important;
+    width: 220px !important;
+    height: 220px !important;
+    max-width: 220px !important;
+    max-height: 220px !important;
   }
 
   .icon-modal-info-panel {

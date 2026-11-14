@@ -1,12 +1,7 @@
 <!-- App Icon Studio: Log & Specifications Panel Component -->
 <div class="icon-modal-info-panel" id="msIconModalInfo">
-  <!-- Target Store Tag (Only 1 badge reflecting active store, no in-modal store switching) -->
-  <div class="icon-spec-row">
-    <span id="msIconModalStoreBadge" class="icon-modal-store-tag a">Apple</span>
-    <div id="iconModalStoreSwitch" style="display: none !important;" aria-hidden="true"></div>
-  </div>
-
   <!-- Target Store Requirement (ID preserved for test runner assertions) -->
+  <div id="iconModalStoreSwitch" style="display: none !important;" aria-hidden="true"></div>
   <span id="iconTargetSpecBadge" style="display: none;" aria-hidden="true">1024 × 1024 px · 100% Opaque Solid</span>
 
   <!-- Source vs Target Comparison Capsule (Hidden for clean UI parity) -->
@@ -70,49 +65,13 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
       </svg>
-      <span id="msIconModalUploadText">Upload New Icon</span>
+      <span id="msIconModalUploadText">Upload</span>
     </button>
     <input type="file" id="msIconModalInput" accept="image/*" hidden>
-
-    <!-- Demo Mode Sample Testing Strip (Enabled in Demo Mode) -->
-    <div class="icon-demo-sample-bar" id="iconDemoSampleBar" style="display: none;">
-      <div class="icon-demo-sample-label">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="16" x2="12" y2="12"></line>
-          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-        </svg>
-        <span>Test Fix &amp; Resize with sample non-compliant assets:</span>
-      </div>
-      <div class="icon-demo-sample-actions">
-        <button type="button" class="icon-demo-sample-btn" id="demoSample1Btn" title="assets/doraemon1.jpg (1200×675 Landscape)">
-          <span>Sample 1 (1200×675)</span>
-        </button>
-        <button type="button" class="icon-demo-sample-btn" id="demoSample2Btn" title="assets/doraemon2.jpg (735×416 Landscape)">
-          <span>Sample 2 (735×416)</span>
-        </button>
-        <button type="button" class="icon-demo-sample-btn" id="demoSample3Btn" title="assets/doraemon3.png (686×914 Portrait)">
-          <span>Sample 3 (686×914)</span>
-        </button>
-        <button type="button" class="icon-demo-sample-btn reset" id="demoSampleResetBtn" title="Restore default preset icon">
-          <span>Reset Preset</span>
-        </button>
-      </div>
-    </div>
   </div>
 
   <!-- Store Review Disclaimer (Popup Tooltip) -->
   <div class="icon-modal-disclaimer" id="iconModalDisclaimer" role="button" tabindex="0" aria-label="Store Review Disclaimer">
-    <div class="icon-modal-disclaimer-left">
-      <div class="icon-modal-disclaimer-icon">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="16" x2="12" y2="12"></line>
-          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-        </svg>
-      </div>
-      <span class="icon-modal-disclaimer-title">Store Review Disclaimer</span>
-    </div>
     <span class="info-tip-btn" data-tip-title="Store Review Disclaimer" data-tip-desc="Validation checks help catch mechanical formatting mistakes (such as incorrect dimensions, transparent alpha channels on iOS, or file size limits).&#10;&#10;However, passing these checks does not guarantee store approval — final acceptance is decided solely by Apple and Google review teams based on your complete submission and store guidelines." tabindex="0" role="button" aria-label="Store Review Disclaimer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
@@ -120,5 +79,6 @@
         <line x1="12" y1="8" x2="12.01" y2="8"></line>
       </svg>
     </span>
+    <span class="icon-modal-disclaimer-title">Store Review Disclaimer</span>
   </div>
 </div>

@@ -33,6 +33,12 @@
             tipBtn.click();
           }
         });
+        disclaimer.addEventListener('mouseenter', () => {
+          tipBtn.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+        });
+        disclaimer.addEventListener('mouseleave', () => {
+          tipBtn.dispatchEvent(new MouseEvent('mouseout', { bubbles: true }));
+        });
       }
     }
   }
@@ -197,14 +203,18 @@
     const isPng = mimeType === 'image/png';
     const sizeBytes = meta.size || 0;
 
+    const isDataUri = typeof src === 'string' && src.startsWith('data:');
     const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const w = img.naturalWidth || img.width || 1024;
-      const h = img.naturalHeight || img.height || 1024;
+    if (!isDataUri) {
+      img.crossOrigin = 'anonymous';
+    }
+
+    const processImg = (activeImg) => {
+      const w = activeImg.naturalWidth || activeImg.width || 1024;
+      const h = activeImg.naturalHeight || activeImg.height || 1024;
       const isSq = (w === h) || ((Math.abs(w - h) / Math.max(w, h)) < 0.05);
-      const hasAlpha = detectImageAlpha(img);
-      const hasPreRoundedCorners = detectPreRoundedCorners(img);
+      const hasAlpha = detectImageAlpha(activeImg);
+      const hasPreRoundedCorners = detectPreRoundedCorners(activeImg);
 
       // 1. Update Comparison Capsule
       if (compareSourceVal) {
@@ -397,11 +407,16 @@
           : 'inspect';
 
         if (activeTab === 'inspect') {
-          primaryBtnText.textContent = (overallLevel === 'ok')
-            ? 'Re-fit / Resize Icon'
-            : 'Fix & Resize to Store Spec';
+          primaryBtnText.textContent = 'Fix & Resize to Store Spec';
         }
       }
+    };
+
+    img.onload = () => processImg(img);
+    img.onerror = () => {
+      const fallbackImg = new Image();
+      fallbackImg.onload = () => processImg(fallbackImg);
+      fallbackImg.src = src;
     };
 
     img.src = src;

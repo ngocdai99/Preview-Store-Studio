@@ -4536,13 +4536,13 @@ asyncSuites.push((async () => {
       appendedById['shotsHeaderRight'].some(c => c.className === 'demo-lock-ico') &&
       appendedById['contentHeaderRight'].some(c => c.className === 'demo-lock-ico') &&
       appendedById['lblPromo'].some(c => c.className === 'demo-lock-ico') &&
-      appendedById['icoUp'].some(c => c.className === 'demo-lock-ico') &&
+      (!appendedById['icoUp'] || !appendedById['icoUp'].length) &&
       appendedById['addShot'].some(c => c.className === 'demo-lock-ico') &&
       appendedById['btnDraft'].some(c => c.className === 'demo-lock-ico') &&
       appendedById['msIconModalUploadBtn'].some(c => c.className === 'demo-lock-ico') &&
       appendedById['shotUploadRowBtn'].some(c => c.className === 'demo-lock-corner') &&
-      richEls['icoOv'].innerHTML.includes('rect x="3" y="11"'),
-      'Runtime: demo-guard attaches uniform lock icons across tablet dropdown, card headers, locked fields, icon upload, screenshot buttons, draft pill, modal upload, and hover overlay'
+      !richEls['icoOv'].innerHTML.includes('rect x="3" y="11"'),
+      'Runtime: demo-guard attaches uniform lock icons across tablet dropdown, card headers, locked fields, screenshot buttons, draft pill, modal upload, while leaving form app icon accessible for sample testing'
     );
 
     lockToasts.length = 0;

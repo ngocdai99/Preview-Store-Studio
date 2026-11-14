@@ -102,7 +102,11 @@ function getDemoBundledJs() {
   const jsFiles = CORE_JS_MODULES.slice();
   const resizerIdx = jsFiles.indexOf('core/resizer.js');
   const insertIdx = resizerIdx >= 0 ? resizerIdx + 1 : 3;
-  jsFiles.splice(insertIdx, 0, 'modules/demo-guard.js');
+  if (fs.existsSync(path.join(jsDir, 'modules/demo-sample-assets.js'))) {
+    jsFiles.splice(insertIdx, 0, 'modules/demo-sample-assets.js', 'modules/demo-guard.js');
+  } else {
+    jsFiles.splice(insertIdx, 0, 'modules/demo-guard.js');
+  }
 
   const contents = jsFiles.map(f => {
     const header = `/* =========================================================================\n   Module: src/js/${f}\n   ========================================================================= */`;

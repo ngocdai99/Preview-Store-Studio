@@ -4675,10 +4675,7 @@ if(icoRemoveBtn){
       if (_currentTab === 'resize') {
         primaryText.textContent = 'Apply & Validate Icon';
       } else {
-        // Look at current badge state or default to fix
-        const badge = $('msIconModalBadge');
-        const isOk = badge && badge.classList.contains('ok');
-        primaryText.textContent = isOk ? 'Re-fit / Resize Icon' : 'Fix & Resize to Store Spec';
+        primaryText.textContent = 'Fix & Resize to Store Spec';
       }
     }
 
@@ -4757,10 +4754,17 @@ if(icoRemoveBtn){
   let _sourceDataUrl = '';
   let _originalSourceDataUrl = ''; // Always the user-uploaded original, never overwritten by resize output
   let _sourceImg = null;
+  let _transformedImg = null;
   let _sourceWidth = 0;
   let _sourceHeight = 0;
   let _fitMode = 'center-crop';
   let _bothStoresDone = false; // Track if resize has been applied for both stores
+  let _isTestPreviewMode = false; // Test preview only: does not mutate studio draft until explicit user confirmation
+  let _testTransformed1024 = '';
+  let _testTransformed512 = '';
+  let _testTransformedCurrent = '';
+  let _currentAssetKey = 'preset';
+  let _assetStates = {}; // key -> { fitMode, isResized, transformed1024, transformed512, transformedCurrent, statusMsg, sourceUrl }
 
   function $(id) {
     return document.getElementById(id);
@@ -4790,6 +4794,7 @@ if(icoRemoveBtn){
     const primaryBtn = $('iconActionPrimaryBtn');
     if (primaryBtn) {
       primaryBtn.onclick = () => {
+        if (primaryBtn.disabled) return;
         applyTransformation();
       };
     }
@@ -4800,6 +4805,24 @@ if(icoRemoveBtn){
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', updateFitPill);
     }
+  }
+
+  function ensurePrimaryBtnLock() {
+    const primaryBtn = $('iconActionPrimaryBtn');
+    if (!primaryBtn || primaryBtn.querySelector('.demo-lock-ico')) return;
+    const lockSpan = document.createElement('span');
+    lockSpan.className = 'demo-lock-ico';
+    lockSpan.setAttribute('aria-hidden', 'true');
+    lockSpan.title = 'Available in Plus & Pro Edition';
+    lockSpan.innerHTML = '<svg width="11.5" height="11.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
+    primaryBtn.appendChild(lockSpan);
+  }
+
+  function removePrimaryBtnLock() {
+    const primaryBtn = $('iconActionPrimaryBtn');
+    if (!primaryBtn) return;
+    const lock = primaryBtn.querySelector('.demo-lock-ico');
+    if (lock) lock.remove();
   }
 
   function updateFitPill() {
@@ -4833,26 +4856,37 @@ if(icoRemoveBtn){
     }
   }
 
-  function setFitMode(mode) {
-    _fitMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
-    _bothStoresDone = false; // Fit mode changed — pending re-apply
-    updateFitContainerVisibility();
+  function syncFitModeUI(mode) {
+    const targetMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
     const cardCrop = $('appIconFitCardCrop');
     const cardPad = $('appIconFitCardPad');
     const cardStretch = $('appIconFitCardStretch');
-
-    if (cardCrop) cardCrop.classList.toggle('active', _fitMode === 'center-crop');
-    if (cardPad) cardPad.classList.toggle('active', _fitMode === 'pad');
-    if (cardStretch) cardStretch.classList.toggle('active', _fitMode === 'stretch');
+    if (cardCrop) cardCrop.classList.toggle('active', targetMode === 'center-crop');
+    if (cardPad) cardPad.classList.toggle('active', targetMode === 'pad');
+    if (cardStretch) cardStretch.classList.toggle('active', targetMode === 'stretch');
 
     const radio = (typeof document !== 'undefined' && typeof document.querySelector === 'function')
-      ? document.querySelector(`input[name="appIconFitMode"][value="${_fitMode}"]`)
+      ? document.querySelector(`input[name="appIconFitMode"][value="${targetMode}"]`)
       : null;
     if (radio) radio.checked = true;
 
     updateFitPill();
+  }
+
+  function setFitMode(mode) {
+    const newMode = (mode === 'pad' || mode === 'stretch') ? mode : 'center-crop';
+    _fitMode = newMode;
+    updateFitContainerVisibility();
+    syncFitModeUI(_fitMode);
     updateLivePreview();
     updateActionBtn();
+
+    // Persist fitMode into active asset state without wiping isResized or transformed images
+    if (_currentAssetKey) {
+      if (!_assetStates[_currentAssetKey]) _assetStates[_currentAssetKey] = {};
+      _assetStates[_currentAssetKey].fitMode = _fitMode;
+      syncCardStateDots();
+    }
   }
 
   function getFitMode() {
@@ -4880,8 +4914,11 @@ if(icoRemoveBtn){
       return;
     }
 
+    const isDataUri = typeof rawSrc === 'string' && rawSrc.startsWith('data:');
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    if (!isDataUri) {
+      img.crossOrigin = 'anonymous';
+    }
     img.onload = () => {
       _sourceImg = img;
       _sourceWidth = img.naturalWidth || img.width;
@@ -4922,8 +4959,8 @@ if(icoRemoveBtn){
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, targetSize, targetSize);
 
-    const srcW = _sourceWidth;
-    const srcH = _sourceHeight;
+    const srcW = _sourceWidth || (_sourceImg ? (_sourceImg.naturalWidth || _sourceImg.width) : 1024) || 1024;
+    const srcH = _sourceHeight || (_sourceImg ? (_sourceImg.naturalHeight || _sourceImg.height) : 1024) || 1024;
 
     if (_fitMode === 'stretch') {
       ctx.drawImage(_sourceImg, 0, 0, targetSize, targetSize);
@@ -4947,12 +4984,52 @@ if(icoRemoveBtn){
 
   function updateLivePreview() {
     const liveCanvas = $('appIconResizeLiveCanvas');
-    if (!liveCanvas || !_sourceImg) return;
+    if (!liveCanvas) return;
+
+    // If current asset is already resized/compliant, live preview MUST reflect the resized 1:1 image
+    // This ensures ratio selections show no visual changes while pass message is active
+    const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
+    const transformedSrc = (_isTestPreviewMode && _testTransformedCurrent)
+      ? _testTransformedCurrent
+      : ((_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].transformedCurrent)
+          ? _assetStates[_currentAssetKey].transformedCurrent
+          : '');
+
+    if (isCurrentResized && transformedSrc) {
+      if (_transformedImg && _transformedImg.src === transformedSrc && _transformedImg.complete) {
+        liveCanvas.width = 1024;
+        liveCanvas.height = 1024;
+        const ctx = liveCanvas.getContext('2d');
+        if (ctx) {
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, 1024, 1024);
+          ctx.drawImage(_transformedImg, 0, 0, 1024, 1024);
+        }
+        return;
+      }
+      const tImg = new Image();
+      tImg.onload = () => {
+        _transformedImg = tImg;
+        liveCanvas.width = 1024;
+        liveCanvas.height = 1024;
+        const ctx = liveCanvas.getContext('2d');
+        if (!ctx) return;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, 1024, 1024);
+        ctx.drawImage(tImg, 0, 0, 1024, 1024);
+      };
+      tImg.src = transformedSrc;
+      return;
+    }
+
+    if (!_sourceImg) return;
     renderToCanvas(liveCanvas, 1024);
   }
 
   function applyTransformation() {
     if (!_sourceImg) return;
+    _transformedImg = null;
+
 
     // Render 1024×1024 for Apple App Store
     const cv1024 = document.createElement('canvas');
@@ -4969,6 +5046,58 @@ if(icoRemoveBtn){
       ? global.IconLog.getTargetStore()
       : 'apple';
     const transformedDataUrl = (targetStore === 'google') ? dataUrl512 : dataUrl1024;
+
+    // Test Preview Mode: update modal preview, status message & inspector, but DO NOT mutate global ICON or userDraft!
+    if (_isTestPreviewMode) {
+      _testTransformed1024 = dataUrl1024;
+      _testTransformed512 = dataUrl512;
+      _testTransformedCurrent = transformedDataUrl;
+
+      // DO NOT overwrite _sourceDataUrl — keep original source so fit mode changes still work
+      _bothStoresDone = true;
+
+      // Update Image in Inspector tab
+      const modalImg = $('msIconModalImg');
+      if (modalImg) modalImg.src = transformedDataUrl;
+
+      // Re-inspect using active store
+      if (typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
+        global.IconLog.inspectIcon(transformedDataUrl, null, targetStore);
+      }
+
+      // Synchronously update liveCanvas so preview reflects the new fitMode immediately
+      const liveCanvas = $('appIconResizeLiveCanvas');
+      if (liveCanvas) {
+        liveCanvas.width = 1024;
+        liveCanvas.height = 1024;
+        const liveCtx = liveCanvas.getContext('2d');
+        if (liveCtx) liveCtx.drawImage(cv1024, 0, 0);
+      }
+      _transformedImg = new Image();
+      _transformedImg.src = transformedDataUrl;
+
+      updateLivePreview();
+      _bothStoresDone = true;
+      updateFitContainerVisibility();
+
+      const statusMsg = $('iconResizeStatusMsg');
+      const msgText = `Test Preview: Resized to ${targetStore === 'google' ? '512×512' : '1024×1024'} px (Draft untouched)`;
+      if (statusMsg) {
+        statusMsg.textContent = msgText;
+        statusMsg.style.display = 'block';
+      }
+
+      // Persist to asset state map so switching assets remembers this resize
+      saveCurrentAssetState({
+        isResized: true,
+        fitMode: _fitMode,
+        transformed1024: dataUrl1024,
+        transformed512: dataUrl512,
+        transformedCurrent: transformedDataUrl,
+        statusMsg: msgText
+      });
+      return;
+    }
 
     // Update global state — both sizes always saved
     if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
@@ -5028,19 +5157,53 @@ if(icoRemoveBtn){
 
   function updateFitContainerVisibility() {
     const fitSection = $('appIconFitContainer') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-fit-container') : null);
+    const placeholder = $('appIconFitPlaceholder');
     const primaryBtn = $('iconActionPrimaryBtn');
     const statusMsg = $('iconResizeStatusMsg');
+    const passNote = $('appIconFitPassNote');
 
-    if (_bothStoresDone) {
-      if (fitSection) fitSection.style.display = 'none';
-      if (primaryBtn) primaryBtn.disabled = true;
+    // Always keep aspect ratio options visible for app icon selection
+    if (fitSection) fitSection.style.display = 'flex';
+    if (placeholder) placeholder.style.display = 'none';
+
+    const isCurrentResized = _bothStoresDone || (_currentAssetKey && _assetStates[_currentAssetKey] && _assetStates[_currentAssetKey].isResized);
+    const isSquare = (_sourceWidth === _sourceHeight && _sourceWidth > 0);
+    const isPassed = !!(isCurrentResized || isSquare);
+
+    // Show note when image has already passed or is 1:1 square (ratio changes won't make an effect)
+    if (passNote) {
+      passNote.textContent = '1:1 square · Ratio changes have no effect';
+      passNote.style.display = isPassed ? 'inline-block' : 'none';
+    }
+
+
+    if (_isTestPreviewMode) {
+      removePrimaryBtnLock();
+      if (primaryBtn) {
+        primaryBtn.disabled = !!isCurrentResized;
+        primaryBtn.style.display = 'inline-flex';
+        const btnText = $('iconActionPrimaryText');
+        if (btnText) {
+          btnText.textContent = 'Fix & Resize to Store Spec';
+        }
+      }
+      return;
+    }
+
+    if (isCurrentResized) {
+      if (primaryBtn) {
+        primaryBtn.disabled = true;
+        primaryBtn.style.display = 'inline-flex';
+      }
       if (statusMsg) {
         statusMsg.textContent = 'Icon already meets store size requirements.';
         statusMsg.style.display = 'block';
       }
     } else {
-      if (fitSection) fitSection.style.display = '';
-      if (primaryBtn) primaryBtn.disabled = false;
+      if (primaryBtn) {
+        primaryBtn.disabled = false;
+        primaryBtn.style.display = 'inline-flex';
+      }
       if (statusMsg) statusMsg.style.display = 'none';
     }
   }
@@ -5108,6 +5271,233 @@ if(icoRemoveBtn){
     }
   }
 
+  function setTestPreviewMode(isTest) {
+    _isTestPreviewMode = !!isTest;
+    const secTitle = $('appIconResizeSectionTitle');
+    if (secTitle) {
+      secTitle.textContent = _isTestPreviewMode ? 'Test Asset Preview' : 'Your App Icon';
+    }
+  }
+
+  function isTestPreviewMode() {
+    return _isTestPreviewMode;
+  }
+
+  function commitTestAssetToDraft() {
+    const final1024 = _testTransformed1024 || _sourceDataUrl;
+    const final512 = _testTransformed512 || _sourceDataUrl;
+    const finalCurrent = _testTransformedCurrent || _sourceDataUrl;
+
+    if (typeof IS_CUSTOM_ICON !== 'undefined') IS_CUSTOM_ICON = true;
+    if (typeof CUSTOM_ICON_1024 !== 'undefined') CUSTOM_ICON_1024 = final1024;
+    if (typeof CUSTOM_ICON_512 !== 'undefined') CUSTOM_ICON_512 = final512;
+    if (typeof ICON !== 'undefined') ICON = finalCurrent;
+    if (typeof ICON_FILE_TYPE !== 'undefined') ICON_FILE_TYPE = 'image/png';
+    if (typeof ICON_FILE_SIZE !== 'undefined') ICON_FILE_SIZE = 0;
+
+    if (typeof userDraft !== 'undefined' && userDraft && CURRENT_PRESET_KEY === 'draft') {
+      userDraft.icon = finalCurrent;
+      userDraft.icon1024 = final1024;
+      userDraft.icon512 = final512;
+      userDraft.isCustomIcon = true;
+    }
+
+    if (typeof renderIcons === 'function') renderIcons();
+    if (typeof validateAppIcon === 'function') validateAppIcon();
+    if (typeof saveState === 'function') saveState();
+    if (typeof updateDraftPill === 'function') updateDraftPill();
+
+    _isTestPreviewMode = false;
+    const secTitle = $('appIconResizeSectionTitle');
+    if (secTitle) secTitle.textContent = 'Your App Icon';
+
+    // Update preset card thumbnail to newly committed icon
+    const presetThumb = $('demoSamplePresetThumb');
+    if (presetThumb) presetThumb.src = finalCurrent;
+
+    const statusMsg = $('iconResizeStatusMsg');
+    if (statusMsg) {
+      statusMsg.textContent = 'Saved and applied to your app icon!';
+      statusMsg.style.display = 'block';
+    }
+    if (typeof showToast === 'function') {
+      showToast('Applied test image to your app icon!', 'ok');
+    }
+  }
+
+  function syncCardStateDots() {
+    const cardIdMap = {
+      preset: 'demoSampleCardPreset',
+      doraemon1: 'demoSampleCard1',
+      doraemon2: 'demoSampleCard2',
+      doraemon3: 'demoSampleCard3'
+    };
+    Object.keys(cardIdMap).forEach(key => {
+      const card = $(cardIdMap[key]);
+      if (!card) return;
+      const state = _assetStates[key];
+      const hasState = !!(state && state.isResized);
+      card.classList.toggle('has-state', !!hasState);
+    });
+  }
+
+  function getCurrentAssetKey() {
+    return _currentAssetKey;
+  }
+
+  function setCurrentAssetKey(key) {
+    saveCurrentAssetState();
+    _currentAssetKey = key || 'preset';
+  }
+
+  function saveCurrentAssetState(overrides) {
+    if (!_currentAssetKey) return;
+    const existing = _assetStates[_currentAssetKey] || {};
+    const statusMsgEl = $('iconResizeStatusMsg');
+    const isNowResized = (overrides && overrides.isResized !== undefined) ? overrides.isResized : (existing.isResized || _bothStoresDone);
+    _assetStates[_currentAssetKey] = Object.assign(existing, {
+      fitMode: _fitMode,
+      isResized: isNowResized,
+      transformed1024: _testTransformed1024 || existing.transformed1024 || '',
+      transformed512: _testTransformed512 || existing.transformed512 || '',
+      transformedCurrent: _testTransformedCurrent || existing.transformedCurrent || '',
+      statusMsg: (statusMsgEl && statusMsgEl.style.display !== 'none' && statusMsgEl.textContent) ? statusMsgEl.textContent : (existing.statusMsg || ''),
+      sourceUrl: _originalSourceDataUrl || _sourceDataUrl,
+      width: _sourceWidth || existing.width || 0,
+      height: _sourceHeight || existing.height || 0
+    }, overrides || {});
+    syncCardStateDots();
+  }
+
+  function getAssetState(key) {
+    return _assetStates[key] || null;
+  }
+
+  function restoreAssetState(sampleKey, rawDataUrl) {
+    _currentAssetKey = sampleKey;
+    _isTestPreviewMode = (sampleKey !== 'preset');
+    const state = _assetStates[sampleKey];
+
+    if (state && state.isResized && state.transformedCurrent) {
+      _fitMode = state.fitMode || 'center-crop';
+      _sourceDataUrl = rawDataUrl;
+      _originalSourceDataUrl = rawDataUrl;
+      _testTransformed1024 = state.transformed1024 || '';
+      _testTransformed512 = state.transformed512 || '';
+      _testTransformedCurrent = state.transformedCurrent || '';
+      _bothStoresDone = true;
+
+      syncFitModeUI(_fitMode);
+
+      ensureSourceLoaded(() => {
+        updateLivePreview();
+        updateFitContainerVisibility();
+
+        const statusMsg = $('iconResizeStatusMsg');
+        if (statusMsg && state.statusMsg) {
+          statusMsg.textContent = state.statusMsg;
+          statusMsg.style.display = 'block';
+        }
+      });
+    } else if (state && state.fitMode) {
+      _fitMode = state.fitMode;
+      _testTransformed1024 = '';
+      _testTransformed512 = '';
+      _testTransformedCurrent = '';
+    _transformedImg = null;
+      _bothStoresDone = false;
+
+      syncFitModeUI(_fitMode);
+      setSource(rawDataUrl);
+    } else {
+      _fitMode = 'center-crop';
+      _testTransformed1024 = '';
+      _testTransformed512 = '';
+      _testTransformedCurrent = '';
+    _transformedImg = null;
+      _bothStoresDone = false;
+
+      syncFitModeUI(_fitMode);
+      setSource(rawDataUrl);
+    }
+    syncCardStateDots();
+  }
+
+  function resetTestState() {
+    _assetStates = {}; // Wipes all per-asset state on modal close
+    _currentAssetKey = 'preset';
+    _isTestPreviewMode = false;
+    _testTransformed1024 = '';
+    _testTransformed512 = '';
+    _testTransformedCurrent = '';
+    _transformedImg = null;
+
+    // Reset fit mode to default center-crop
+    _fitMode = 'center-crop';
+    syncFitModeUI('center-crop');
+
+
+    const statusMsg = $('iconResizeStatusMsg');
+    if (statusMsg) {
+      statusMsg.style.display = 'none';
+      statusMsg.textContent = '';
+    }
+
+    const secTitle = $('appIconResizeSectionTitle');
+    if (secTitle) secTitle.textContent = 'Your App Icon';
+
+    // Reset active sample card back to Card 01 (preset)
+    const cards = (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function')
+      ? document.querySelectorAll('.icon-demo-sample-card')
+      : [];
+    cards.forEach(c => {
+      c.classList.toggle('active', c.id === 'demoSampleCardPreset');
+      c.classList.remove('has-state');
+    });
+
+    // Reset real app icon as active source
+    let actualIcon = '';
+    let tStore = 'apple';
+    try {
+      if (global.IconLog && typeof global.IconLog.getTargetStore === 'function') {
+        tStore = global.IconLog.getTargetStore();
+      }
+    } catch (e) {}
+
+    if (typeof IS_CUSTOM_ICON !== 'undefined' && IS_CUSTOM_ICON) {
+      if (tStore === 'google' && typeof CUSTOM_ICON_512 !== 'undefined' && CUSTOM_ICON_512) {
+        actualIcon = CUSTOM_ICON_512;
+      } else if (typeof CUSTOM_ICON_1024 !== 'undefined' && CUSTOM_ICON_1024) {
+        actualIcon = CUSTOM_ICON_1024;
+      }
+    }
+    if (!actualIcon && typeof ICON !== 'undefined' && ICON) {
+      actualIcon = ICON;
+    }
+
+    if (actualIcon) {
+      setSource(actualIcon);
+
+      const modalImg = $('msIconModalImg') || $('imageDetailModalImg');
+      if (modalImg) modalImg.src = actualIcon;
+
+      const presetThumb = $('demoSamplePresetThumb');
+      if (presetThumb) presetThumb.src = actualIcon;
+
+      if (typeof global._activeModalAsset !== 'undefined') {
+        global._activeModalAsset = actualIcon;
+      }
+
+      if (typeof global.IconLog !== 'undefined' && typeof global.IconLog.inspectIcon === 'function') {
+        global.IconLog.inspectIcon(actualIcon, null, tStore);
+      } else if (typeof global.inspectModalAsset === 'function') {
+        global.inspectModalAsset(actualIcon, null);
+      }
+    }
+
+    updateFitContainerVisibility();
+  }
+
   // Export to global scope
   global.IconResizer = {
     init: initIconResizer,
@@ -5117,7 +5507,16 @@ if(icoRemoveBtn){
     updateLivePreview,
     applyTransformation,
     ensureSourceLoaded,
-    syncPill: updateFitPill
+    syncPill: updateFitPill,
+    setTestPreviewMode,
+    isTestPreviewMode,
+    commitTestAssetToDraft,
+    resetTestState,
+    getCurrentAssetKey,
+    setCurrentAssetKey,
+    saveCurrentAssetState,
+    getAssetState,
+    restoreAssetState
   };
 
   global.initIconResizer = initIconResizer;
@@ -5126,6 +5525,8 @@ if(icoRemoveBtn){
   global.openIconResizerModal = openIconResizerModal;
   global.closeIconResizerModal = closeIconResizerModal;
   global.ensureResizerSourceLoaded = ensureSourceLoaded;
+  global.commitTestAssetToDraft = commitTestAssetToDraft;
+  global.resetIconTestState = resetTestState;
 
   // Auto-init on load or DOMContentLoaded
   if (typeof document !== 'undefined') {
@@ -5176,6 +5577,12 @@ if(icoRemoveBtn){
             e.preventDefault();
             tipBtn.click();
           }
+        });
+        disclaimer.addEventListener('mouseenter', () => {
+          tipBtn.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+        });
+        disclaimer.addEventListener('mouseleave', () => {
+          tipBtn.dispatchEvent(new MouseEvent('mouseout', { bubbles: true }));
         });
       }
     }
@@ -5341,14 +5748,18 @@ if(icoRemoveBtn){
     const isPng = mimeType === 'image/png';
     const sizeBytes = meta.size || 0;
 
+    const isDataUri = typeof src === 'string' && src.startsWith('data:');
     const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const w = img.naturalWidth || img.width || 1024;
-      const h = img.naturalHeight || img.height || 1024;
+    if (!isDataUri) {
+      img.crossOrigin = 'anonymous';
+    }
+
+    const processImg = (activeImg) => {
+      const w = activeImg.naturalWidth || activeImg.width || 1024;
+      const h = activeImg.naturalHeight || activeImg.height || 1024;
       const isSq = (w === h) || ((Math.abs(w - h) / Math.max(w, h)) < 0.05);
-      const hasAlpha = detectImageAlpha(img);
-      const hasPreRoundedCorners = detectPreRoundedCorners(img);
+      const hasAlpha = detectImageAlpha(activeImg);
+      const hasPreRoundedCorners = detectPreRoundedCorners(activeImg);
 
       // 1. Update Comparison Capsule
       if (compareSourceVal) {
@@ -5541,11 +5952,16 @@ if(icoRemoveBtn){
           : 'inspect';
 
         if (activeTab === 'inspect') {
-          primaryBtnText.textContent = (overallLevel === 'ok')
-            ? 'Re-fit / Resize Icon'
-            : 'Fix & Resize to Store Spec';
+          primaryBtnText.textContent = 'Fix & Resize to Store Spec';
         }
       }
+    };
+
+    img.onload = () => processImg(img);
+    img.onerror = () => {
+      const fallbackImg = new Image();
+      fallbackImg.onload = () => processImg(fallbackImg);
+      fallbackImg.src = src;
     };
 
     img.src = src;
@@ -6879,6 +7295,13 @@ if(ipadSlistArea){
     }
     document.body.style.overflow = '';
     document.documentElement.style.overflow = '';
+
+    // Reset uncommitted test asset state on Inspector close
+    if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.resetTestState === 'function') {
+      global.IconResizer.resetTestState();
+    } else if (typeof resetIconTestState === 'function') {
+      resetIconTestState();
+    }
   }
 
   function openIconModal(arg1, arg2) {
@@ -6951,7 +7374,7 @@ if(ipadSlistArea){
 
     if (_activeModalType === 'icon') {
       if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';
-      if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';
+      if (uploadBtnText) uploadBtnText.textContent = 'Upload';
     } else if (_activeModalType === 'ipad') {
       if (titleEl) titleEl.textContent = 'Apple iPad Screenshot Inspector';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New iPad Screenshot';
@@ -7015,8 +7438,13 @@ if(ipadSlistArea){
       const secTitle = $('appIconResizeSectionTitle') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-section-title') : null);
       const fitBox = $('appIconFitContainer') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-fit-container') : null);
       if (liveCv) liveCv.style.display = isIconType ? '' : 'none';
-      if (secTitle) secTitle.style.display = isIconType ? '' : 'none';
-      if (fitBox && !isIconType) fitBox.style.display = 'none';
+      if (secTitle) {
+        secTitle.style.display = isIconType ? '' : 'none';
+        if (isIconType) secTitle.textContent = 'Your App Icon';
+      }
+      if (fitBox) fitBox.style.display = isIconType ? 'flex' : 'none';
+      const fitPlaceholder = $('appIconFitPlaceholder');
+      if (fitPlaceholder) fitPlaceholder.style.display = 'none';
       if (imgEl) imgEl.style.display = isIconType ? 'none' : 'block';
       const wrap = $('msIconModalImgWrap');
       if (wrap) {
@@ -7026,6 +7454,7 @@ if(ipadSlistArea){
         wrap.style.aspectRatio = isIconType ? '' : 'auto';
         wrap.style.maxWidth = isIconType ? '' : '100%';
         wrap.style.maxHeight = isIconType ? '' : '100%';
+        wrap.style.width = isIconType ? '' : 'auto';
         wrap.style.height = isIconType ? '' : '100%';
       }
     }

@@ -108,6 +108,13 @@
     }
     document.body.style.overflow = '';
     document.documentElement.style.overflow = '';
+
+    // Reset uncommitted test asset state on Inspector close
+    if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.resetTestState === 'function') {
+      global.IconResizer.resetTestState();
+    } else if (typeof resetIconTestState === 'function') {
+      resetIconTestState();
+    }
   }
 
   function openIconModal(arg1, arg2) {
@@ -180,7 +187,7 @@
 
     if (_activeModalType === 'icon') {
       if (titleEl) titleEl.textContent = _activeModalStore === 'apple' ? 'Apple App Icon Inspector' : 'Google Play Icon Inspector';
-      if (uploadBtnText) uploadBtnText.textContent = 'Upload New Icon';
+      if (uploadBtnText) uploadBtnText.textContent = 'Upload';
     } else if (_activeModalType === 'ipad') {
       if (titleEl) titleEl.textContent = 'Apple iPad Screenshot Inspector';
       if (uploadBtnText) uploadBtnText.textContent = 'Upload New iPad Screenshot';
@@ -237,10 +244,36 @@
     }
 
     if (typeof isDemoMode === 'function' && isDemoMode()) {
+      if (primaryActionBtn && isIconType) {
+        primaryActionBtn.style.display = 'inline-flex';
+        primaryActionBtn.disabled = false;
+      }
+      const fitContainer = $('appIconFitContainer');
+      const placeholder = $('appIconFitPlaceholder');
+      if (fitContainer) {
+        fitContainer.style.display = isIconType ? 'flex' : 'none';
+      }
+      if (placeholder) {
+        placeholder.style.display = 'none';
+      }
       const sampleBar = $('iconDemoSampleBar');
       if (sampleBar) {
         sampleBar.style.display = isIconType ? 'flex' : 'none';
       }
+      const presetThumb = $('demoSamplePresetThumb');
+      if (presetThumb) {
+        presetThumb.src = _activeModalAsset || (typeof ICON !== 'undefined' ? ICON : '');
+      }
+      if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.setTestPreviewMode === 'function') {
+        global.IconResizer.setTestPreviewMode(false);
+      }
+
+      const allCards = (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function')
+        ? document.querySelectorAll('.icon-demo-sample-card')
+        : [];
+      allCards.forEach(c => c.classList.remove('active'));
+      const presetCard = $('demoSampleCardPreset');
+      if (presetCard) presetCard.classList.add('active');
     }
 
     const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
@@ -250,8 +283,13 @@
       const secTitle = $('appIconResizeSectionTitle') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-section-title') : null);
       const fitBox = $('appIconFitContainer') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-fit-container') : null);
       if (liveCv) liveCv.style.display = isIconType ? '' : 'none';
-      if (secTitle) secTitle.style.display = isIconType ? '' : 'none';
-      if (fitBox && !isIconType) fitBox.style.display = 'none';
+      if (secTitle) {
+        secTitle.style.display = isIconType ? '' : 'none';
+        if (isIconType) secTitle.textContent = 'Your App Icon';
+      }
+      if (fitBox) fitBox.style.display = isIconType ? 'flex' : 'none';
+      const fitPlaceholder = $('appIconFitPlaceholder');
+      if (fitPlaceholder) fitPlaceholder.style.display = 'none';
       if (imgEl) imgEl.style.display = isIconType ? 'none' : 'block';
       const wrap = $('msIconModalImgWrap');
       if (wrap) {
@@ -261,6 +299,7 @@
         wrap.style.aspectRatio = isIconType ? '' : 'auto';
         wrap.style.maxWidth = isIconType ? '' : '100%';
         wrap.style.maxHeight = isIconType ? '' : '100%';
+        wrap.style.width = isIconType ? '' : 'auto';
         wrap.style.height = isIconType ? '' : '100%';
       }
     }

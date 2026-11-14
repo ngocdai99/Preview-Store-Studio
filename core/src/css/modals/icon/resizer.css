@@ -2,12 +2,13 @@
 .icon-resizer-inner-layout {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
   height: 100%;
-  padding: 20px 24px;
+  padding: 16px 20px;
   overflow-y: auto;
   overscroll-behavior: contain;
+  box-sizing: border-box;
 }
 
 .icon-resizer-canvas-card {
@@ -18,18 +19,22 @@
   background: #141414;
   border: 1px solid #282828;
   border-radius: 14px;
-  padding: 18px 20px;
-  min-height: 320px;
-  flex: 1 1 auto;
+  padding: 16px 20px;
+  flex: 1 1 0;
+  min-height: 200px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 .icon-resizer-section-title {
   font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
   color: #8B8F98;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   align-self: flex-start;
 }
 
@@ -38,10 +43,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 440px;
-  max-height: 440px;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 320px;
   aspect-ratio: 1 / 1;
+  flex-shrink: 0;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.65);
@@ -62,12 +69,22 @@
   display: block;
 }
 
-/* Aspect Ratio Fit Strategy Options */
-.icon-resizer-fit-container {
+/* Aspect Ratio Fit Strategy Options (Fixed Height Section) */
+.icon-resizer-fit-container,
+.icon-resizer-fit-placeholder {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  height: 64px;
+  min-height: 64px;
+  max-height: 64px;
   flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.icon-resizer-fit-placeholder {
+  background: transparent;
+  border: none;
 }
 
 .icon-resizer-group-header {
@@ -75,20 +92,35 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .icon-resizer-group-label {
   font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
   color: #8B8F98;
+}
+
+.icon-resizer-fit-note {
+  font-size: 11px;
+  font-weight: 500;
+  color: #FBBF24;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+[data-ui="light"] .icon-resizer-fit-note,
+[data-theme="light"] .icon-resizer-fit-note {
+  color: #D97706;
 }
 
 .icon-resizer-fit-options {
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   background: #171817;
   border: 1px solid #282928;
   border-radius: 9999px;
@@ -96,7 +128,8 @@
   gap: 3px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
-  width: 100%;
+  width: auto;
+  max-width: fit-content;
   overflow: hidden;
 }
 
@@ -120,13 +153,13 @@
 .icon-resizer-fit-card {
   position: relative;
   z-index: 2;
-  flex: 1 1 0;
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   height: 30px;
-  padding: 0 12px;
+  padding: 0 14px;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -135,6 +168,7 @@
   transition: color 0.2s ease, transform 0.15s ease;
   user-select: none;
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .icon-resizer-fit-card input[type="radio"] {
@@ -204,6 +238,11 @@
 }
 
 /* Light Theme Overrides */
+[data-ui="light"] .icon-resizer-section-title,
+[data-theme="light"] .icon-resizer-section-title {
+  color: #64748B;
+}
+
 [data-ui="light"] .icon-resizer-canvas-card,
 [data-theme="light"] .icon-resizer-canvas-card {
   background: #F8F9FA;
