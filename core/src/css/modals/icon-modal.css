@@ -279,10 +279,12 @@
   color: #111827;
 }
 
-/* ─── Responsive Mobile Layout (<= 860px) ────────────────────────────────── */
-@media (max-width: 860px) {
+/* ─── Responsive Mobile Layout (<= 980px) ────────────────────────────────── */
+@media (max-width: 980px) {
   .icon-modal-backdrop {
     padding: 8px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .icon-modal-canvas {
@@ -290,12 +292,15 @@
     max-width: 100%;
     height: 94vh;
     max-height: 94vh;
+    max-height: 94dvh;
     border-radius: 16px;
+    touch-action: pan-y;
   }
 
   .icon-modal-header {
     height: 52px;
     padding: 0 14px;
+    flex-shrink: 0;
   }
 
   .icon-modal-title {
@@ -308,9 +313,15 @@
   }
 
   .icon-modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
     flex-direction: column !important;
     overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    overscroll-behavior-y: contain;
   }
 
   .icon-modal-stage-panel,
@@ -320,6 +331,7 @@
     height: auto !important;
     min-height: auto !important;
     overflow: visible !important;
+    touch-action: pan-y !important;
   }
 
   .icon-resizer-inner-layout {
@@ -328,11 +340,13 @@
     padding: 14px !important;
     gap: 12px !important;
     overflow-y: visible !important;
+    touch-action: pan-y !important;
   }
 
   .icon-resizer-canvas-card {
     min-height: auto !important;
     padding: 14px !important;
+    touch-action: pan-y !important;
   }
 
   .icon-resizer-canvas-wrap {
@@ -340,6 +354,17 @@
     height: 220px !important;
     max-width: 220px !important;
     max-height: 220px !important;
+    touch-action: pan-y !important;
+  }
+
+  .icon-resizer-live-canvas {
+    pointer-events: none !important;
+    touch-action: pan-y !important;
+  }
+
+  .icon-demo-sample-slider {
+    touch-action: pan-x pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .icon-modal-info-panel {
@@ -351,6 +376,7 @@
     overflow-y: visible !important;
     padding: 14px 16px 24px 16px !important;
     border-top: 1px solid #282928 !important;
+    touch-action: pan-y !important;
   }
 
   .icon-resizer-fit-card {

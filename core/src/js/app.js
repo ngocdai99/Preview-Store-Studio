@@ -7294,7 +7294,6 @@ if(ipadSlistArea){
       modal.setAttribute('aria-hidden', 'true');
     }
     document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
 
     // Reset uncommitted test asset state on Inspector close
     if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.resetTestState === 'function') {
@@ -7516,7 +7515,6 @@ if(ipadSlistArea){
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
 
     initModalEventListeners();
   }
