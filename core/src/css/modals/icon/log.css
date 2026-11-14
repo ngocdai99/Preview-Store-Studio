@@ -405,10 +405,9 @@
 /* Demo Sample Testing Carousel (Slide Scroll UI) */
 .icon-demo-sample-carousel-wrap {
   margin-top: 0;
-  padding: 10px 12px;
-  background: #141514;
-  border: 1px solid #282928;
-  border-radius: 12px;
+  padding: 0;
+  background: transparent;
+  border: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -445,43 +444,30 @@
 
 .icon-demo-sample-card {
   flex: 1 1 0;
-  min-width: 82px;
+  min-width: 84px;
   max-width: 130px;
+  height: 72px;
+  position: relative;
   border-radius: 9px;
-  padding: 6px;
-  background: #1A1B1A;
+  padding: 0;
+  overflow: hidden;
+  background: #141514;
   border: 1px solid #2B2C2B;
   cursor: pointer;
   text-align: left;
   transition: all 0.16s ease;
   scroll-snap-align: start;
   user-select: none;
-  display: flex;
-  flex-direction: column;
+  display: block;
 }
 
 .icon-demo-sample-card:hover {
-  background: #222322;
   border-color: #3D3E3D;
 }
 
 .icon-demo-sample-card.active {
-  background: #222322;
-  border-color: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
-}
-
-.icon-demo-card-thumb-wrap {
-  position: relative;
-  width: 100%;
-  height: 48px;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #0E0F0E;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 .icon-demo-card-thumb {
@@ -493,46 +479,39 @@
 
 .icon-demo-card-tag {
   position: absolute;
-  top: 3px;
-  right: 3px;
+  top: 4px;
+  right: 4px;
   font-size: 8.5px;
   font-weight: 600;
-  padding: 1px 3.5px;
-  border-radius: 3px;
+  padding: 1px 4px;
+  border-radius: 3.5px;
   background: rgba(0, 0, 0, 0.72);
-  color: #D1D5DB;
+  color: #EDEDED;
   backdrop-filter: blur(4px);
-  line-height: 1;
+  line-height: 1.1;
+  z-index: 2;
+  pointer-events: none;
 }
 
-.icon-demo-card-footer {
+.icon-demo-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 5px;
-  padding: 0 1px;
-}
-
-.icon-demo-card-info {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.icon-demo-card-idx {
-  font-size: 10px;
-  font-weight: 600;
-  color: #6B7280;
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
+  padding: 14px 6px 4px 6px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .icon-demo-card-name {
   font-size: 10px;
-  font-weight: 500;
-  color: #EDEDED;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -545,8 +524,9 @@
   width: 12px;
   height: 12px;
   color: #34D399;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9));
   flex-shrink: 0;
-  margin-left: auto;
+  margin-left: 4px;
 }
 
 .icon-demo-sample-card.has-state .icon-demo-card-check {
@@ -712,8 +692,8 @@
 
 [data-ui="light"] .icon-demo-sample-carousel-wrap,
 [data-theme="light"] .icon-demo-sample-carousel-wrap {
-  background: #F9FAFB;
-  border-color: #E5E7EB;
+  background: transparent;
+  border: none;
 }
 
 [data-ui="light"] .icon-demo-sample-title,
@@ -723,36 +703,24 @@
 
 [data-ui="light"] .icon-demo-sample-card,
 [data-theme="light"] .icon-demo-sample-card {
-  background: #FFFFFF;
-  border-color: #E5E7EB;
+  background: #F8FAFC;
+  border-color: #E2E8F0;
 }
 
 [data-ui="light"] .icon-demo-sample-card:hover,
 [data-theme="light"] .icon-demo-sample-card:hover {
-  background: #F8FAFC;
-  border-color: #CBD5E1;
+  border-color: #94A3B8;
 }
 
 [data-ui="light"] .icon-demo-sample-card.active,
 [data-theme="light"] .icon-demo-sample-card.active {
-  background: #FFFFFF;
   border-color: #0F172A;
   box-shadow: 0 0 0 1px #0F172A;
 }
 
-[data-ui="light"] .icon-demo-card-name,
-[data-theme="light"] .icon-demo-card-name {
-  color: #0F172A;
-}
-
-[data-ui="light"] .icon-demo-card-idx,
-[data-theme="light"] .icon-demo-card-idx {
-  color: #94A3B8;
-}
-
 [data-ui="light"] .icon-demo-card-check,
 [data-theme="light"] .icon-demo-card-check {
-  color: #059669;
+  color: #10B981;
 }
 
 

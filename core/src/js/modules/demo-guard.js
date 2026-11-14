@@ -458,7 +458,7 @@ function initDemoGuard() {
           ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(600, 310, 150, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#0284c7'; ctx.beginPath(); ctx.arc(600, 310, 75, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#ffffff'; ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-          ctx.textAlign = 'center'; ctx.fillText('Sample 1 (1200×675)', 600, 560);
+          ctx.textAlign = 'center'; ctx.fillText('Test 1', 600, 560);
           return { url: c.toDataURL('image/jpeg'), w: 1200, h: 675, type: 'image/jpeg' };
         } else if (type === 'doraemon2') {
           c.width = 735; c.height = 416;
@@ -468,7 +468,7 @@ function initDemoGuard() {
           ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(367, 190, 95, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#4f46e5'; ctx.beginPath(); ctx.arc(367, 190, 48, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#ffffff'; ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-          ctx.textAlign = 'center'; ctx.fillText('Sample 2 (735×416)', 367, 350);
+          ctx.textAlign = 'center'; ctx.fillText('Test 2', 367, 350);
           return { url: c.toDataURL('image/jpeg'), w: 735, h: 416, type: 'image/jpeg' };
         } else if (type === 'doraemon3') {
           c.width = 686; c.height = 914;
@@ -478,7 +478,7 @@ function initDemoGuard() {
           ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(343, 400, 140, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#0d9488'; ctx.beginPath(); ctx.arc(343, 400, 70, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#ffffff'; ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-          ctx.textAlign = 'center'; ctx.fillText('Sample 3 (686×914)', 343, 680);
+          ctx.textAlign = 'center'; ctx.fillText('Test 3', 343, 680);
           return { url: c.toDataURL('image/png'), w: 686, h: 914, type: 'image/png' };
         }
         return null;
@@ -503,7 +503,7 @@ function initDemoGuard() {
         card1.addEventListener('click', e => {
           e.preventDefault();
           e.stopPropagation();
-          loadSample('doraemon1', 'Sample 1 (1200×675)', 1200, 675, 'image/jpeg', 'demoSampleCard1');
+          loadSample('doraemon1', 'Test 1', 1200, 675, 'image/jpeg', 'demoSampleCard1');
         });
       }
 
@@ -512,7 +512,7 @@ function initDemoGuard() {
         card2.addEventListener('click', e => {
           e.preventDefault();
           e.stopPropagation();
-          loadSample('doraemon2', 'Sample 2 (735×416)', 735, 416, 'image/jpeg', 'demoSampleCard2');
+          loadSample('doraemon2', 'Test 2', 735, 416, 'image/jpeg', 'demoSampleCard2');
         });
       }
 
@@ -521,7 +521,7 @@ function initDemoGuard() {
         card3.addEventListener('click', e => {
           e.preventDefault();
           e.stopPropagation();
-          loadSample('doraemon3', 'Sample 3 (686×914)', 686, 914, 'image/png', 'demoSampleCard3');
+          loadSample('doraemon3', 'Test 3', 686, 914, 'image/png', 'demoSampleCard3');
         });
       }
 
