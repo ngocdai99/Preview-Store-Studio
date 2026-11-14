@@ -402,6 +402,63 @@
   stroke: #D1D5DB;
 }
 
+/* Demo Sample Testing Strip (Neutral Minimalist) */
+.icon-demo-sample-bar {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #161716;
+  border: 1px solid #282928;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.icon-demo-sample-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #989A99;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-demo-sample-label svg {
+  stroke: #989A99;
+  flex-shrink: 0;
+}
+
+.icon-demo-sample-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.icon-demo-sample-btn {
+  flex: 1 1 auto;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #EDEDED;
+  background: #202120;
+  border: 1px solid #333433;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.icon-demo-sample-btn:hover {
+  background: #2A2B2A;
+  border-color: #444544;
+  color: #FFFFFF;
+}
+
+.icon-demo-sample-btn:active {
+  transform: translateY(0.5px);
+}
+
 /* Disclaimer (Popup Tooltip Trigger Bar) */
 .icon-modal-disclaimer {
   display: flex;
@@ -538,3 +595,33 @@
 
 .icon-modal-warn-msg.err-mode strong { color: #F87171; }
 .icon-modal-warn-msg.warn-mode strong { color: #FBBF24; }
+
+[data-ui="light"] .icon-demo-sample-bar,
+[data-theme="light"] .icon-demo-sample-bar {
+  background: #F9FAFB;
+  border-color: #E5E7EB;
+}
+
+[data-ui="light"] .icon-demo-sample-label,
+[data-theme="light"] .icon-demo-sample-label {
+  color: #6B7280;
+}
+
+[data-ui="light"] .icon-demo-sample-label svg,
+[data-theme="light"] .icon-demo-sample-label svg {
+  stroke: #6B7280;
+}
+
+[data-ui="light"] .icon-demo-sample-btn,
+[data-theme="light"] .icon-demo-sample-btn {
+  background: #FFFFFF;
+  border-color: #D1D5DB;
+  color: #1F2937;
+}
+
+[data-ui="light"] .icon-demo-sample-btn:hover,
+[data-theme="light"] .icon-demo-sample-btn:hover {
+  background: #F3F4F6;
+  border-color: #9CA3AF;
+  color: #111827;
+}

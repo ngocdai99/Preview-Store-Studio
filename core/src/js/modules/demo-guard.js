@@ -340,6 +340,143 @@ function initDemoGuard() {
     const modalUploadBtn = $('msIconModalUploadBtn') || $('imageDetailModalUploadBtn');
     if (modalUploadBtn) appendLockIcon(modalUploadBtn, 'demo-lock-ico', 'Replacing assets requires Full Studio');
 
+    // App Icon Studio Demo Sample Testing (Safe non-compliant presets for live testing)
+    const initDemoIconSamples = () => {
+      const applySampleToModal = (dataUrl, w, h, mime, label) => {
+        if (!dataUrl) return;
+        if (typeof global.inspectModalAsset === 'function') {
+          global.inspectModalAsset(dataUrl, { size: Math.round((w || 800) * (h || 600) * 0.4), type: mime, name: label });
+        }
+        if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.setSource === 'function') {
+          global.IconResizer.setSource(dataUrl);
+        }
+        if (typeof showToast === 'function') {
+          showToast(`Loaded ${label}. Try 'Fix & Resize to Store Spec'!`, 'ok');
+        }
+      };
+
+      const createFallbackAsset = (type) => {
+        if (typeof document === 'undefined') return null;
+        const c = document.createElement('canvas');
+        const ctx = c.getContext('2d');
+        if (!ctx) return null;
+        if (type === 'doraemon1') {
+          c.width = 1200; c.height = 675;
+          const grad = ctx.createLinearGradient(0, 0, 1200, 675);
+          grad.addColorStop(0, '#0284c7'); grad.addColorStop(1, '#0369a1');
+          ctx.fillStyle = grad; ctx.fillRect(0, 0, 1200, 675);
+          ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(600, 310, 150, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#0284c7'; ctx.beginPath(); ctx.arc(600, 310, 75, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#ffffff'; ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+          ctx.textAlign = 'center'; ctx.fillText('Sample 1 (1200×675 Landscape)', 600, 560);
+          return { url: c.toDataURL('image/jpeg'), w: 1200, h: 675, type: 'image/jpeg' };
+        } else if (type === 'doraemon2') {
+          c.width = 735; c.height = 416;
+          const grad = ctx.createLinearGradient(0, 0, 735, 416);
+          grad.addColorStop(0, '#4f46e5'); grad.addColorStop(1, '#7c3aed');
+          ctx.fillStyle = grad; ctx.fillRect(0, 0, 735, 416);
+          ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(367, 190, 95, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#4f46e5'; ctx.beginPath(); ctx.arc(367, 190, 48, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#ffffff'; ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+          ctx.textAlign = 'center'; ctx.fillText('Sample 2 (735×416 Landscape)', 367, 350);
+          return { url: c.toDataURL('image/jpeg'), w: 735, h: 416, type: 'image/jpeg' };
+        } else if (type === 'doraemon3') {
+          c.width = 686; c.height = 914;
+          const grad = ctx.createLinearGradient(0, 0, 686, 914);
+          grad.addColorStop(0, '#0d9488'); grad.addColorStop(1, '#059669');
+          ctx.fillStyle = grad; ctx.fillRect(0, 0, 686, 914);
+          ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(343, 400, 140, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#0d9488'; ctx.beginPath(); ctx.arc(343, 400, 70, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#ffffff'; ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+          ctx.textAlign = 'center'; ctx.fillText('Sample 3 (686×914 Portrait)', 343, 680);
+          return { url: c.toDataURL('image/png'), w: 686, h: 914, type: 'image/png' };
+        }
+        return null;
+      };
+
+      const loadSampleFromUrl = (url, label, fallbackType) => {
+        const tryLoad = (srcUrl, onErr) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            try {
+              const cv = document.createElement('canvas');
+              cv.width = img.naturalWidth || 800;
+              cv.height = img.naturalHeight || 600;
+              const ctx = cv.getContext('2d');
+              ctx.drawImage(img, 0, 0);
+              const mime = srcUrl.endsWith('.png') ? 'image/png' : 'image/jpeg';
+              const dataUrl = cv.toDataURL(mime);
+              applySampleToModal(dataUrl, img.naturalWidth, img.naturalHeight, mime, label);
+            } catch (err) {
+              if (typeof onErr === 'function') onErr();
+            }
+          };
+          img.onerror = () => {
+            if (typeof onErr === 'function') onErr();
+          };
+          img.src = srcUrl;
+        };
+
+        tryLoad(url, () => {
+          tryLoad('/' + url, () => {
+            const fallbackData = createFallbackAsset(fallbackType);
+            if (fallbackData) {
+              applySampleToModal(fallbackData.url, fallbackData.w, fallbackData.h, fallbackData.type, label);
+            }
+          });
+        });
+      };
+
+      const btn1 = $('demoSample1Btn');
+      if (btn1) {
+        btn1.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          loadSampleFromUrl('assets/doraemon1.jpg', 'Sample 1 (1200×675 Landscape)', 'doraemon1');
+        });
+      }
+
+      const btn2 = $('demoSample2Btn');
+      if (btn2) {
+        btn2.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          loadSampleFromUrl('assets/doraemon2.jpg', 'Sample 2 (735×416 Landscape)', 'doraemon2');
+        });
+      }
+
+      const btn3 = $('demoSample3Btn');
+      if (btn3) {
+        btn3.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          loadSampleFromUrl('assets/doraemon3.png', 'Sample 3 (686×914 Portrait)', 'doraemon3');
+        });
+      }
+
+      const btnReset = $('demoSampleResetBtn');
+      if (btnReset) {
+        btnReset.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          const orig = (typeof ICON !== 'undefined' && ICON) ? ICON : '';
+          if (orig) {
+            if (typeof global.inspectModalAsset === 'function') {
+              global.inspectModalAsset(orig, null);
+            }
+            if (typeof global.IconResizer !== 'undefined' && typeof global.IconResizer.setSource === 'function') {
+              global.IconResizer.setSource(orig);
+            }
+            if (typeof showToast === 'function') {
+              showToast('Restored preset icon', 'ok');
+            }
+          }
+        });
+      }
+    };
+    initDemoIconSamples();
+
     // Demo Mode: Reorder Editor Cards 2, 3, 4 -> Metrics (2), Description (3), Phone Screenshots (4)
     {
       const editorPanel = $('editorPanel');
@@ -898,13 +1035,20 @@ function initDemoGuard() {
 
     const icoUpBtn = $('icoUp');
     if (icoUpBtn) {
-      icoUpBtn.classList.add('disabled', 'demo-disabled-btn');
-      icoUpBtn.removeAttribute('title');
+      icoUpBtn.classList.add('demo-sample-guided-btn');
+      icoUpBtn.title = 'Test Fix & Resize with sample non-compliant assets';
       appendLockIcon(icoUpBtn, 'demo-lock-ico', 'Custom App Icon upload requires Full Studio');
       icoUpBtn.addEventListener('click', e => {
         e.preventDefault();
         e.stopImmediatePropagation();
-        triggerIconPaywallAndHighlight();
+        if (typeof openImageDetailModal === 'function') {
+          openImageDetailModal({ src: (typeof ICON !== 'undefined' ? ICON : ''), type: 'icon', store: (typeof store !== 'undefined' ? store : 'apple') });
+          if (typeof showToast === 'function') {
+            showToast('Custom icon upload requires Full Studio ($39). Test Fix & Resize with sample non-compliant assets below!', 'info');
+          }
+        } else {
+          triggerIconPaywallAndHighlight();
+        }
       }, true);
     }
 

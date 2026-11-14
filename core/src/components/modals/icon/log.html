@@ -73,6 +73,32 @@
       <span id="msIconModalUploadText">Upload New Icon</span>
     </button>
     <input type="file" id="msIconModalInput" accept="image/*" hidden>
+
+    <!-- Demo Mode Sample Testing Strip (Enabled in Demo Mode) -->
+    <div class="icon-demo-sample-bar" id="iconDemoSampleBar" style="display: none;">
+      <div class="icon-demo-sample-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>Test Fix &amp; Resize with sample non-compliant assets:</span>
+      </div>
+      <div class="icon-demo-sample-actions">
+        <button type="button" class="icon-demo-sample-btn" id="demoSample1Btn" title="assets/doraemon1.jpg (1200×675 Landscape)">
+          <span>Sample 1 (1200×675)</span>
+        </button>
+        <button type="button" class="icon-demo-sample-btn" id="demoSample2Btn" title="assets/doraemon2.jpg (735×416 Landscape)">
+          <span>Sample 2 (735×416)</span>
+        </button>
+        <button type="button" class="icon-demo-sample-btn" id="demoSample3Btn" title="assets/doraemon3.png (686×914 Portrait)">
+          <span>Sample 3 (686×914)</span>
+        </button>
+        <button type="button" class="icon-demo-sample-btn reset" id="demoSampleResetBtn" title="Restore default preset icon">
+          <span>Reset Preset</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Store Review Disclaimer (Popup Tooltip) -->

@@ -277,7 +277,7 @@
   }
 
   function updateFitContainerVisibility() {
-    const fitSection = document.querySelector('.icon-resizer-fit-container');
+    const fitSection = $('appIconFitContainer') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-fit-container') : null);
     const primaryBtn = $('iconActionPrimaryBtn');
     const statusMsg = $('iconResizeStatusMsg');
 

@@ -4073,6 +4073,8 @@ asyncSuites.push((async () => {
       document: {
         documentElement: { style: {} },
         getElementById: (id) => modalEls[id] || null,
+        querySelector: () => null,
+        querySelectorAll: () => [],
         body: makeDomNode('body'),
         addEventListener: () => {}
       },

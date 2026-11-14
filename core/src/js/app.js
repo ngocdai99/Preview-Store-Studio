@@ -5027,7 +5027,7 @@ if(icoRemoveBtn){
   }
 
   function updateFitContainerVisibility() {
-    const fitSection = document.querySelector('.icon-resizer-fit-container');
+    const fitSection = $('appIconFitContainer') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-fit-container') : null);
     const primaryBtn = $('iconActionPrimaryBtn');
     const statusMsg = $('iconResizeStatusMsg');
 
@@ -7007,12 +7007,13 @@ if(ipadSlistArea){
       primaryActionBtn.style.display = isIconType ? 'inline-flex' : 'none';
     }
 
+
     const imgEl = $('msIconModalImg') || $('imageDetailModalImg');
     // Icon uses the live 1:1 canvas + fit strategy; every other asset shows its own image as-is
     {
       const liveCv = $('appIconResizeLiveCanvas');
-      const secTitle = document.querySelector('.icon-resizer-section-title');
-      const fitBox = document.querySelector('.icon-resizer-fit-container');
+      const secTitle = $('appIconResizeSectionTitle') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-section-title') : null);
+      const fitBox = $('appIconFitContainer') || (typeof document !== 'undefined' && typeof document.querySelector === 'function' ? document.querySelector('.icon-resizer-fit-container') : null);
       if (liveCv) liveCv.style.display = isIconType ? '' : 'none';
       if (secTitle) secTitle.style.display = isIconType ? '' : 'none';
       if (fitBox && !isIconType) fitBox.style.display = 'none';
@@ -7839,6 +7840,7 @@ if(ipadSlistArea){
   global.openImageDetailModal = openIconModal;
   global.closeIconModal = closeIconModal;
   global.closeImageDetailModal = closeIconModal;
+  global.inspectModalAsset = inspectModalAsset;
 
 })(typeof window !== 'undefined' ? window : this);
 
